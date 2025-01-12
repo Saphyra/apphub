@@ -9,7 +9,6 @@ import java.util.function.Supplier;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
-//TODO unit test
 class DefaultChecker implements Checker {
     private final Object newValue;
     private final Supplier<Object> currentValueProvider;

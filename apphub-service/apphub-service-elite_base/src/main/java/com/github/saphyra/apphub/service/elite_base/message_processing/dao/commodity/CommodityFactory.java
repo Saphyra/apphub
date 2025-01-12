@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity;
 
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -12,8 +11,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class CommodityFactory {
-    private final IdGenerator idGenerator;
-
     public Commodity create(
         LocalDateTime timestamp,
         CommodityType type,
@@ -28,7 +25,6 @@ public class CommodityFactory {
         Integer averagePrice
     ) {
         return Commodity.builder()
-            .id(idGenerator.randomUuid())
             .lastUpdate(timestamp)
             .type(type)
             .commodityLocation(commodityLocation)

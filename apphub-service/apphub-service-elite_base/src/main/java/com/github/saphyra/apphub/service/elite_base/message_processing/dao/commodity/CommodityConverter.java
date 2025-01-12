@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -28,12 +26,13 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
         commodityAveragePriceDao.save(commodityAveragePriceFactory.create(domain.getLastUpdate(), domain.getCommodityName(), domain.getAveragePrice()));
 
         return CommodityEntity.builder()
-            .id(uuidConverter.convertDomain(domain.getId()))
+            .id(CommodityEntityId.builder()
+                .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
+                .commodityName(domain.getCommodityName())
+                .build())
             .type(domain.getType())
             .commodityLocation(domain.getCommodityLocation())
-            .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .marketId(domain.getMarketId())
-            .commodityName(domain.getCommodityName())
             .buyPrice(domain.getBuyPrice())
             .sellPrice(domain.getSellPrice())
             .demand(domain.getDemand())
@@ -43,25 +42,25 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
 
     @Override
     protected Commodity processEntityConversion(CommodityEntity entity) {
-        UUID externalReference = uuidConverter.convertEntity(entity.getExternalReference());
+        String externalReference = entity.getId().getExternalReference();
+        String commodityName = entity.getId().getCommodityName();
         return Commodity.builder()
-            .id(uuidConverter.convertEntity(entity.getId()))
             .lastUpdate(lastUpdateDao.findById(LastUpdateId.builder()
-                    .externalReference(entity.getExternalReference())
+                    .externalReference(externalReference)
                     .type(entity.getType().get())
                     .build())
                 .map(LastUpdate::getLastUpdate)
                 .orElse(null))
             .type(entity.getType())
             .commodityLocation(entity.getCommodityLocation())
-            .externalReference(externalReference)
+            .externalReference( uuidConverter.convertEntity(externalReference))
             .marketId(entity.getMarketId())
-            .commodityName(entity.getCommodityName())
+            .commodityName(commodityName)
             .buyPrice(entity.getBuyPrice())
             .sellPrice(entity.getSellPrice())
             .demand(entity.getDemand())
             .stock(entity.getStock())
-            .averagePrice(commodityAveragePriceDao.findById(entity.getCommodityName()).map(CommodityAveragePrice::getAveragePrice).orElse(null))
+            .averagePrice(commodityAveragePriceDao.findById(commodityName).map(CommodityAveragePrice::getAveragePrice).orElse(null))
             .build();
     }
 }

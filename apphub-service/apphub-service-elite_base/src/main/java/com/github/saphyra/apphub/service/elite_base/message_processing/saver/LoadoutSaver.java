@@ -23,7 +23,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LoadoutSaver {
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
@@ -32,7 +31,7 @@ public class LoadoutSaver {
 
     public synchronized void save(LocalDateTime timestamp, LoadoutType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<String> items) {
         if ((isNull(commodityLocation) || isNull(externalReference)) && isNull(marketId)) {
-            throw new IllegalStateException("Both commodityLocation or externalReference and marketId is null");
+            throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));

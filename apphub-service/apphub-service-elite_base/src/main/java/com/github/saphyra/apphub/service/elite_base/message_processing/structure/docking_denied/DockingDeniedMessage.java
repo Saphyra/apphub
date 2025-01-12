@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.structure.docking_denied;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +10,8 @@ import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class DockingDeniedMessage {
     private String event;
     private LocalDateTime timestamp;

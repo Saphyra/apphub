@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.structur
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.Signal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
+@AllArgsConstructor
+@Builder
 public class FssBodySignalsMessage {
     private String event;
     private LocalDateTime timestamp;

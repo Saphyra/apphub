@@ -6,6 +6,7 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 
 public enum StarType {
     A,
+    AEBE,
     B,
     D,
     DA,
@@ -19,6 +20,7 @@ public enum StarType {
     L,
     M,
     N,
+    O,
     Y,
     T,
     TTS,

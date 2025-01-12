@@ -39,7 +39,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class JournalMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final StarSystemSaver starSystemSaver;
@@ -85,7 +84,7 @@ class JournalMessageProcessor implements MessageProcessor {
                 SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
                 processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
             }
-            default -> throw new RuntimeException("Unhandled event: " + event);
+            default -> throw new IllegalArgumentException("Unhandled event: " + event);
         }
     }
 

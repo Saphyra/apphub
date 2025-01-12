@@ -26,7 +26,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MinorFactionSaver {
     private final MinorFactionDao minorFactionDao;
     private final MinorFactionFactory minorFactionFactory;
@@ -59,7 +58,7 @@ public class MinorFactionSaver {
         return save(timestamp, factionName, economicState, null, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
     }
 
-    public synchronized MinorFaction save(
+    private synchronized MinorFaction save(
         LocalDateTime timestamp,
         String factionName,
         FactionStateEnum economicState,
@@ -70,9 +69,6 @@ public class MinorFactionSaver {
         List<FactionState> recoveringStates
     ) {
         MinorFaction minorFaction = minorFactionDao.findByFactionName(factionName)
-            .stream()
-            .peek(ss -> log.debug("Found: {}", ss))
-            .findAny()
             .orElseGet(() -> {
                 MinorFaction created = minorFactionFactory.create(
                     timestamp,

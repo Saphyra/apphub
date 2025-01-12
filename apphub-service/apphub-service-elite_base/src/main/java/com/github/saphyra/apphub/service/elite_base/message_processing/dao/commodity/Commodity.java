@@ -12,15 +12,14 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Data
-@EqualsAndHashCode(exclude = {"id", "lastUpdate"})
+@EqualsAndHashCode(exclude = {"lastUpdate"})
 public class Commodity {
-    private final UUID id;
+    private UUID externalReference; //CarrierId/StationId
+    private final String commodityName;
     private LocalDateTime lastUpdate;
     private CommodityType type;
     private CommodityLocation commodityLocation;
-    private UUID externalReference; //CarrierId/StationId
     private Long marketId; //Storing it, because it might not be guaranteed the station with the given marketId already exists
-    private final String commodityName;
     private Integer buyPrice;
     private Integer sellPrice;
     private Integer demand;

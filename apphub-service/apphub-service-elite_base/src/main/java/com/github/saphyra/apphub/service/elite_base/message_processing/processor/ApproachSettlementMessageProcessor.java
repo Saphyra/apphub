@@ -25,7 +25,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ApproachSettlementMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final StarSystemSaver starSystemSaver;
@@ -62,10 +61,10 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
             .ifPresent(controllingFaction -> minorFactionSaver.save(
                 approachSettlementMessage.getTimestamp(),
                 approachSettlementMessage.getControllingFaction().getFactionName(),
-                FactionStateEnum.parse(approachSettlementMessage.getControllingFaction().getEconomicState())
+                FactionStateEnum.parse(approachSettlementMessage.getControllingFaction().getState())
             ));
 
-        if (nonNull(approachSettlementMessage.getStationServices())) {
+        if (nonNull(approachSettlementMessage.getServices())) {
             stationSaver.save(
                 approachSettlementMessage.getTimestamp(),
                 starSystem.getId(),
@@ -74,7 +73,7 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
                 approachSettlementMessage.getMarketId(),
                 Allegiance.parse(approachSettlementMessage.getAllegiance()),
                 EconomyEnum.parse(approachSettlementMessage.getEconomy()),
-                approachSettlementMessage.getStationServices(),
+                approachSettlementMessage.getServices(),
                 approachSettlementMessage.getEconomies()
             );
         }

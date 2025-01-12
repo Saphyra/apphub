@@ -23,6 +23,8 @@ class CommodityRepositoryTest {
     private static final String EXTERNAL_REFERENCE_2 = "external-reference-2";
     private static final Long MARKET_ID_1 = 1L;
     private static final Long MARKET_ID_2 = 2L;
+    private static final String COMMODITY_NAME_1 = "commodity-name-1";
+    private static final String COMMODITY_NAME_2 = "commodity-name-2";
 
     @Autowired
     private CommodityRepository underTest;
@@ -35,30 +37,38 @@ class CommodityRepositoryTest {
     @Test
     void getByExternalReferenceOrMarketId() {
         CommodityEntity entity1 = CommodityEntity.builder()
-            .id(ID_1)
-            .externalReference(EXTERNAL_REFERENCE_1)
+            .id(CommodityEntityId.builder()
+                .externalReference(EXTERNAL_REFERENCE_1)
+                .commodityName(COMMODITY_NAME_1)
+                .build())
             .marketId(MARKET_ID_1)
             .build();
         underTest.save(entity1);
         CommodityEntity entity2 = CommodityEntity.builder()
-            .id(ID_2)
-            .externalReference(EXTERNAL_REFERENCE_2)
+            .id(CommodityEntityId.builder()
+                .externalReference(EXTERNAL_REFERENCE_2)
+                .commodityName(COMMODITY_NAME_1)
+                .build())
             .marketId(MARKET_ID_1)
             .build();
         underTest.save(entity2);
         CommodityEntity entity3 = CommodityEntity.builder()
-            .id(ID_3)
-            .externalReference(EXTERNAL_REFERENCE_1)
+            .id(CommodityEntityId.builder()
+                .externalReference(EXTERNAL_REFERENCE_1)
+                .commodityName(COMMODITY_NAME_2)
+                .build())
             .marketId(MARKET_ID_2)
             .build();
         underTest.save(entity3);
         CommodityEntity entity4 = CommodityEntity.builder()
-            .id(ID_4)
-            .externalReference(EXTERNAL_REFERENCE_2)
+            .id(CommodityEntityId.builder()
+                .externalReference(EXTERNAL_REFERENCE_2)
+                .commodityName(COMMODITY_NAME_2)
+                .build())
             .marketId(MARKET_ID_2)
             .build();
         underTest.save(entity4);
 
-        assertThat(underTest.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE_1, MARKET_ID_1)).containsExactlyInAnyOrder(entity1, entity2, entity3);
+        assertThat(underTest.getByIdExternalReferenceOrMarketId(EXTERNAL_REFERENCE_1, MARKET_ID_1)).containsExactlyInAnyOrder(entity1, entity2, entity3);
     }
 }

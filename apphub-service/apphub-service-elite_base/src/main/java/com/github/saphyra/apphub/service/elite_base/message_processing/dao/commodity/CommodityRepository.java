@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-interface CommodityRepository extends CrudRepository<CommodityEntity, String> {
-    List<CommodityEntity> getByExternalReferenceOrMarketId(String externalReference, Long marketId);
+interface CommodityRepository extends CrudRepository<CommodityEntity, CommodityEntityId> {
+    List<CommodityEntity> getByIdExternalReferenceOrMarketId(String externalReference, Long marketId);
 }

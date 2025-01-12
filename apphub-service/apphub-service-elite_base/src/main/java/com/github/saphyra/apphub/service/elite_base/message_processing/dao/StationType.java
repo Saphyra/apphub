@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -23,6 +24,7 @@ public enum StationType {
     SURFACE_STATION("SurfaceStation"),
     ;
 
+    @Getter
     private final String value;
 
     public static StationType parse(String in) {

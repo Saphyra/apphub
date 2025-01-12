@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -22,6 +23,8 @@ public enum Power {
     ZEMINA_TORVAL("Zemina Torval"),
     ZACHARY_HUDSON("Zachary Hudson"),
     ;
+
+    @Getter
     private final String value;
 
     public static Power parse(String in) {

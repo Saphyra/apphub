@@ -10,6 +10,8 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.saver.Com
 import com.github.saphyra.apphub.service.elite_base.message_processing.saver.FleetCarrierSaver;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.fc_materials_capi.FcMaterialCapiItems;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.fc_materials_capi.FcMaterialsCapiMessage;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +27,10 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
+@Builder
 class FcMaterialsCapiMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapperWrapper objectMapperWrapper2;
     private final FleetCarrierSaver fleetCarrierSaver;
     private final CommoditySaver commoditySaver;
 
@@ -58,7 +61,7 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
             TypeReference<List<Purchase>> typeReference = new TypeReference<>() {
             };
 
-            List<Purchase> purchaseList = objectMapperWrapper.convertValue(items.getPurchases(), typeReference);
+            List<Purchase> purchaseList = objectMapperWrapper2.convertValue(items.getPurchases(), typeReference);
 
             purchaseList.stream()
                 .map(purchase -> CommoditySaver.CommodityData.builder()
@@ -74,7 +77,7 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
             TypeReference<Map<Long, Sale>> typeReference = new TypeReference<>() {
             };
 
-            Map<Long, Sale> saleMap = objectMapperWrapper.convertValue(items.getSales(), typeReference);
+            Map<Long, Sale> saleMap = objectMapperWrapper2.convertValue(items.getSales(), typeReference);
 
             saleMap.values()
                 .stream()
@@ -91,7 +94,9 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
 
     @NoArgsConstructor
     @Data
-    private static class Purchase {
+    @AllArgsConstructor
+    @Builder
+    static class Purchase {
         private String name;
         private Integer price;
         private Integer outstanding;
@@ -100,7 +105,9 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
 
     @NoArgsConstructor
     @Data
-    private static class Sale {
+    @AllArgsConstructor
+    @Builder
+    static class Sale {
         private Long id;
         private String name;
         private Integer price;

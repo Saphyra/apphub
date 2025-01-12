@@ -52,7 +52,7 @@ class StarSystemDataFactoryTest {
         given(minorFaction.getFactionName()).willReturn(FACTION_NAME);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
         given(controllingFaction.getFactionName()).willReturn(FACTION_NAME);
-        given(controllingFaction.getEconomicState()).willReturn("Retreat");
+        given(controllingFaction.getState()).willReturn("Retreat");
 
         assertThat(underTest.create(
             STAR_SYSTEM_ID,
@@ -90,7 +90,7 @@ class StarSystemDataFactoryTest {
         given(minorFaction.getFactionName()).willReturn("asd");
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
         given(controllingFaction.getFactionName()).willReturn(FACTION_NAME);
-        given(controllingFaction.getEconomicState()).willReturn("Retreat");
+        given(controllingFaction.getState()).willReturn("Retreat");
         given(minorFactionSaver.save(LAST_UPDATE, FACTION_NAME, FactionStateEnum.RETREAT)).willReturn(newMinorFaction);
         given(newMinorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
 

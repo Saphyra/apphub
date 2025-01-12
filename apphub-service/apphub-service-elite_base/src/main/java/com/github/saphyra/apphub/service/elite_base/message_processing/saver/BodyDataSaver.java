@@ -24,7 +24,6 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BodyDataSaver {
     private final BodyDataDao bodyDataDao;
     private final BodyDataFactory bodyDataFactory;
@@ -56,7 +55,7 @@ public class BodyDataSaver {
                 new UpdateHelper(reserveLevel, bodyData::getReserveLevel, () -> bodyData.setReserveLevel(reserveLevel)),
                 new UpdateHelper(hasRing, bodyData::getHasRing, () -> bodyData.setHasRing(hasRing)),
                 new UpdateHelper(
-                    () -> !isTrue(bodyData.getLandable()) || Objects.equals(CollectionUtils.size(materials), CollectionUtils.size(bodyData.getMaterials())),
+                    () -> !isTrue(landable) || Objects.equals(CollectionUtils.size(materials), CollectionUtils.size(bodyData.getMaterials())),
                     () -> bodyData.setMaterials(LazyLoadedField.loaded(bodyMaterialFactory.create(bodyData.getBodyId(), materials)))
                 ),
                 new UpdateHelper(

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.dao.Stati
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.station.station_service.StationServiceEnum;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @Slf4j
 public class StationFactory {
     public Station create(
-        UUID stationId,
+        @NonNull UUID stationId,
         LocalDateTime timestamp,
         UUID starSystemId,
         UUID bodyId,

@@ -40,7 +40,7 @@ class CommodityDaoTest {
     @Test
     void getByExternalReferenceOrMarketId() {
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
-        given(repository.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE_STRING, MARKET_ID)).willReturn(List.of(entity));
+        given(repository.getByIdExternalReferenceOrMarketId(EXTERNAL_REFERENCE_STRING, MARKET_ID)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         assertThat(underTest.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE, MARKET_ID)).containsExactly(domain);

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -14,6 +15,7 @@ public enum SecurityLevel {
     HIGH("$SYSTEM_SECURITY_high;"),
     ;
 
+    @Getter
     private final String value;
 
     public static SecurityLevel parse(String in) {

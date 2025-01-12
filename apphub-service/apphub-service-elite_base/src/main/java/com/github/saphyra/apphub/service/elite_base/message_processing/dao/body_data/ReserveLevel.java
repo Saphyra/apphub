@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.body_data;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -15,6 +16,7 @@ public enum ReserveLevel {
     PRISTINE("PristineResources"),
     ;
 
+    @Getter
     private final String value;
 
     public static ReserveLevel parse(String in) {

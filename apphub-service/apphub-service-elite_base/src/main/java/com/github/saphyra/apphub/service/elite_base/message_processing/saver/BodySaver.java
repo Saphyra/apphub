@@ -21,7 +21,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class BodySaver {
     private final BodyDao bodyDao;
     private final BodyFactory bodyFactory;
@@ -30,7 +29,7 @@ public class BodySaver {
         return save(timestamp, starSystemId, bodyType, bodyId, bodyName, null);
     }
 
-    public synchronized Optional<Body> saveOptional(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
+    public Optional<Body> saveOptional(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
         if ((isNull(starSystemId) || isNull(bodyId)) && isNull(bodyName)) {
             return Optional.empty();
         }

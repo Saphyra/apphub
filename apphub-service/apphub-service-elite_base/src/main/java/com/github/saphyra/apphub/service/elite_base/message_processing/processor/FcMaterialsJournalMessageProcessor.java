@@ -19,7 +19,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FcMaterialsJournalMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final FleetCarrierSaver fleetCarrierSaver;

@@ -15,17 +15,16 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.MinorFactionConflict;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.WarStatus;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.WarType;
-import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.minor_faction.ConflictingMinorFaction;
-import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ConflictFaction;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.EdConflict;
+import com.github.saphyra.apphub.service.elite_base.message_processing.util.MinorFactionIdResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -40,7 +39,8 @@ public class StarSystemDataSaver {
     private final StarSystemDataDao starSystemDataDao;
     private final StarSystemDataFactory starSystemDataFactory;
     private final IdGenerator idGenerator;
-    private final MinorFactionSaver minorFactionSaver;
+    private final ConflictingMinorFactionFactory conflictingMinorFactionFactory;
+    private final MinorFactionIdResolver minorFactionIdResolver;
 
     public synchronized void save(
         UUID starSystemId,
@@ -109,10 +109,10 @@ public class StarSystemDataSaver {
             .orElse(null);
         UUID controllingFactionId = Optional.ofNullable(controllingFaction)
             .map(ControllingFaction::getFactionName)
-            .map(controllingFactionName -> getMinorFactionId(timestamp, controllingFactionName, minorFactions))
+            .map(controllingFactionName -> minorFactionIdResolver.getMinorFactionId(timestamp, controllingFactionName, minorFactions))
             .orElse(null);
         FactionStateEnum controllingFactionState = Optional.ofNullable(controllingFaction)
-            .map(ControllingFaction::getEconomicState)
+            .map(ControllingFaction::getState)
             .map(FactionStateEnum::parse)
             .orElse(null);
 
@@ -155,28 +155,9 @@ public class StarSystemDataSaver {
             .status(WarStatus.parse(edConflict.getStatus()))
             .warType(WarType.parse(edConflict.getWarType()))
             .conflictingMinorFactions(List.of(
-                mapFaction(timestamp, conflictId, edConflict.getFaction1(), minorFactions),
-                mapFaction(timestamp, conflictId, edConflict.getFaction2(), minorFactions)
+                conflictingMinorFactionFactory.create(timestamp, conflictId, edConflict.getFaction1(), minorFactions),
+                conflictingMinorFactionFactory.create(timestamp, conflictId, edConflict.getFaction2(), minorFactions)
             ))
             .build();
-    }
-
-    private ConflictingMinorFaction mapFaction(LocalDateTime timestamp, UUID conflictId, ConflictFaction faction, List<MinorFaction> minorFactions) {
-        return ConflictingMinorFaction.builder()
-            .conflictId(conflictId)
-            .factionId(getMinorFactionId(timestamp, faction.getFactionName(), minorFactions))
-            .wonDays(faction.getWonDays())
-            .stake(faction.getStake())
-            .build();
-    }
-
-    private UUID getMinorFactionId(LocalDateTime timestamp, String factionName, List<MinorFaction> minorFactions) {
-        minorFactions = isNull(minorFactions) ? Collections.emptyList() : minorFactions;
-
-        return minorFactions.stream()
-            .filter(minorFaction -> minorFaction.getFactionName().equalsIgnoreCase(factionName))
-            .findAny()
-            .map(MinorFaction::getId)
-            .orElseGet(() -> minorFactionSaver.save(timestamp, factionName, null).getId());
     }
 }

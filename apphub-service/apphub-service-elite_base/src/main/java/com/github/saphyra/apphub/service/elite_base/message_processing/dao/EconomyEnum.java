@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -27,6 +28,7 @@ public enum EconomyEnum {
     NONE("None"),
     ;
 
+    @Getter
     private final String value;
 
     public static EconomyEnum parse(String in) {

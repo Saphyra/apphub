@@ -17,14 +17,13 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SettlementSaver {
     private final SettlementDao settlementDao;
     private final SettlementFactory settlementFactory;
 
-    public synchronized Settlement save(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String settlementName, Long marketId, Double longitude, Double latitude) {
+    public synchronized void save(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String settlementName, Long marketId, Double longitude, Double latitude) {
         if (isNull(starSystemId) || isBlank(settlementName)) {
-            throw new IllegalStateException("starSystemId and settlementName must not be null");
+            throw new IllegalArgumentException("starSystemId and settlementName must not be null");
         }
 
         Settlement settlement = settlementDao.findByStarSystemIdAndSettlementName(starSystemId, settlementName)
@@ -36,8 +35,6 @@ public class SettlementSaver {
             });
 
         updateFields(timestamp, settlement, bodyId, marketId, longitude, latitude);
-
-        return settlement;
     }
 
     private void updateFields(LocalDateTime timestamp, Settlement settlement, UUID bodyId, Long marketId, Double longitude, Double latitude) {

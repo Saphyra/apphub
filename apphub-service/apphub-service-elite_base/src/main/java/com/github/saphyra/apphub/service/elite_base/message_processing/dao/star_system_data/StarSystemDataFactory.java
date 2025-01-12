@@ -53,7 +53,7 @@ public class StarSystemDataFactory {
             .controllingPower(power)
             .powerplayState(powerplayState)
             .controllingFactionId(getControllingFaction(timestamp, controllingFaction, minorFactions))
-            .controllingFactionState(Optional.ofNullable(controllingFaction).map(cf -> FactionStateEnum.parse(cf.getEconomicState())).orElse(null))
+            .controllingFactionState(Optional.ofNullable(controllingFaction).map(cf -> FactionStateEnum.parse(cf.getState())).orElse(null))
             .minorFactions(LazyLoadedField.loaded(Optional.ofNullable(minorFactions).map(factions -> factions.stream().map(MinorFaction::getId).toList()).orElse(null)))
             .powers(LazyLoadedField.loaded(powers))
             .conflicts(LazyLoadedField.loaded(conflicts))
@@ -75,6 +75,6 @@ public class StarSystemDataFactory {
             .filter(minorFaction -> minorFaction.getFactionName().equalsIgnoreCase(controllingFaction.getFactionName()))
             .findAny()
             .map(MinorFaction::getId)
-            .orElseGet(() -> minorFactionSaver.save(timestamp, controllingFaction.getFactionName(), FactionStateEnum.parse(controllingFaction.getEconomicState())).getId());
+            .orElseGet(() -> minorFactionSaver.save(timestamp, controllingFaction.getFactionName(), FactionStateEnum.parse(controllingFaction.getState())).getId());
     }
 }

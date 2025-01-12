@@ -17,7 +17,6 @@ import static io.micrometer.common.util.StringUtils.isBlank;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FleetCarrierSaver {
     private final FleetCarrierDao fleetCarrierDao;
     private final FleetCarrierFactory fleetCarrierFactory;
@@ -62,5 +61,7 @@ public class FleetCarrierSaver {
                 new UpdateHelper(marketId, carrier::getMarketId, () -> carrier.setMarketId(marketId))
             )
             .forEach(UpdateHelper::modify);
+
+        fleetCarrierDao.save(carrier);
     }
 }

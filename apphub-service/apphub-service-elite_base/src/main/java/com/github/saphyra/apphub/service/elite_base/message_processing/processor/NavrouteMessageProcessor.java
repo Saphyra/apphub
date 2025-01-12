@@ -14,7 +14,6 @@ import java.util.Arrays;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class NavrouteMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final StarSystemSaver starSystemSaver;

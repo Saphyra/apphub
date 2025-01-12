@@ -24,7 +24,6 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class CommodityConverterTest {
-    private static final UUID ID = UUID.randomUUID();
     private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Long MARKET_ID = 32143L;
@@ -34,7 +33,6 @@ class CommodityConverterTest {
     private static final Integer DEMAND = 6;
     private static final Integer STOCK = 56;
     private static final Integer AVERAGE_PRICE = 546;
-    private static final String ID_STRING = "id";
     private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
 
     @Mock
@@ -58,7 +56,6 @@ class CommodityConverterTest {
     @Test
     void convertDomain() {
         Commodity domain = Commodity.builder()
-            .id(ID)
             .lastUpdate(LAST_UPDATE)
             .type(CommodityType.COMMODITY)
             .commodityLocation(CommodityLocation.FLEET_CARRIER)
@@ -72,17 +69,15 @@ class CommodityConverterTest {
             .averagePrice(AVERAGE_PRICE)
             .build();
 
-        given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(commodityAveragePriceFactory.create(LAST_UPDATE, COMMODITY_NAME, AVERAGE_PRICE)).willReturn(averagePrice);
 
         assertThat(underTest.convertDomain(domain))
-            .returns(ID_STRING, CommodityEntity::getId)
             .returns(CommodityType.COMMODITY, CommodityEntity::getType)
             .returns(CommodityLocation.FLEET_CARRIER, CommodityEntity::getCommodityLocation)
-            .returns(EXTERNAL_REFERENCE_STRING, CommodityEntity::getExternalReference)
+            .returns(EXTERNAL_REFERENCE_STRING, commodityEntity -> commodityEntity.getId().getExternalReference())
             .returns(MARKET_ID, CommodityEntity::getMarketId)
-            .returns(COMMODITY_NAME, CommodityEntity::getCommodityName)
+            .returns(COMMODITY_NAME, commodityEntity -> commodityEntity.getId().getCommodityName())
             .returns(BUY_PRICE, CommodityEntity::getBuyPrice)
             .returns(SELL_PRICE, CommodityEntity::getSellPrice)
             .returns(STOCK, CommodityEntity::getStock)
@@ -94,26 +89,25 @@ class CommodityConverterTest {
     @Test
     void convertEntity() {
         CommodityEntity entity = CommodityEntity.builder()
-            .id(ID_STRING)
+            .id(CommodityEntityId.builder()
+                .externalReference(EXTERNAL_REFERENCE_STRING)
+                .commodityName(COMMODITY_NAME)
+                .build())
             .type(CommodityType.COMMODITY)
             .commodityLocation(CommodityLocation.FLEET_CARRIER)
-            .externalReference(EXTERNAL_REFERENCE_STRING)
             .marketId(MARKET_ID)
-            .commodityName(COMMODITY_NAME)
             .buyPrice(BUY_PRICE)
             .sellPrice(SELL_PRICE)
             .demand(DEMAND)
             .stock(STOCK)
             .build();
 
-        given(uuidConverter.convertEntity(ID_STRING)).willReturn(ID);
         given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
         given(lastUpdateDao.findById(LastUpdateId.builder().externalReference(EXTERNAL_REFERENCE_STRING).type(EntityType.COMMODITY).build())).willReturn(Optional.of(LastUpdate.builder().lastUpdate(LAST_UPDATE).build()));
         given(commodityAveragePriceDao.findById(COMMODITY_NAME)).willReturn(Optional.of(averagePrice));
         given(averagePrice.getAveragePrice()).willReturn(AVERAGE_PRICE);
 
         assertThat(underTest.convertEntity(entity))
-            .returns(ID, Commodity::getId)
             .returns(CommodityType.COMMODITY, Commodity::getType)
             .returns(CommodityLocation.FLEET_CARRIER, Commodity::getCommodityLocation)
             .returns(EXTERNAL_REFERENCE, Commodity::getExternalReference)

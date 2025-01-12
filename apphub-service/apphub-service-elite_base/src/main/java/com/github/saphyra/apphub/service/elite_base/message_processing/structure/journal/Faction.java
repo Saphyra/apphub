@@ -1,11 +1,15 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Faction {
     @JsonProperty("Name")
     private String name;

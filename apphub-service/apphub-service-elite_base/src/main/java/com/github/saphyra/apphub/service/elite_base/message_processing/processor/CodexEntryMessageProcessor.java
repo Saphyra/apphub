@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CodexEntryMessageProcessor implements MessageProcessor {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final StarSystemSaver starSystemSaver;

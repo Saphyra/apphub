@@ -24,7 +24,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StationSaverUtil {
     private final CommodityLocationFetcher commodityLocationFetcher;
     private final FleetCarrierSaver fleetCarrierSaver;
@@ -81,16 +80,26 @@ public class StationSaverUtil {
         StationType stationType = StationType.parse(stationTypeStr);
 
         CommodityLocation commodityLocation;
-        if (StationType.FLEET_CARRIER == stationType) {
-            commodityLocation = CommodityLocation.FLEET_CARRIER;
-        } else if (EconomyEnum.CARRIER == economy) {
-            commodityLocation = CommodityLocation.FLEET_CARRIER;
-        } else if (nonNull(economies) && Arrays.stream(economies).map(e -> EconomyEnum.parse(e.getName())).anyMatch(r -> r == EconomyEnum.CARRIER)) {
-            commodityLocation = CommodityLocation.FLEET_CARRIER;
+        if (nonNull(stationType)) {
+            if (StationType.FLEET_CARRIER == stationType) {
+                commodityLocation = CommodityLocation.FLEET_CARRIER;
+            } else {
+                commodityLocation = CommodityLocation.STATION;
+            }
+        } else if (nonNull(economy)) {
+            if (EconomyEnum.CARRIER == economy) {
+                commodityLocation = CommodityLocation.FLEET_CARRIER;
+            } else {
+                commodityLocation = CommodityLocation.STATION;
+            }
+        } else if (nonNull(economies)) {
+            if (Arrays.stream(economies).map(e -> EconomyEnum.parse(e.getName())).anyMatch(r -> r == EconomyEnum.CARRIER)) {
+                commodityLocation = CommodityLocation.FLEET_CARRIER;
+            } else {
+                commodityLocation = CommodityLocation.STATION;
+            }
         } else {
-            commodityLocation = Optional.ofNullable(stationType)
-                .map(st -> st == StationType.FLEET_CARRIER ? CommodityLocation.FLEET_CARRIER : CommodityLocation.STATION)
-                .orElseGet(() -> commodityLocationFetcher.fetchCommodityLocationByMarketId(marketId));
+            commodityLocation = commodityLocationFetcher.fetchCommodityLocationByMarketId(marketId);
         }
 
         UUID externalReference = switch (commodityLocation) {
@@ -114,7 +123,7 @@ public class StationSaverUtil {
                 stationServices,
                 economies,
                 Optional.ofNullable(controllingFaction).map(ControllingFaction::getFactionName).orElse(null),
-                Optional.ofNullable(controllingFaction).map(ControllingFaction::getEconomicState).map(FactionStateEnum::parse).orElse(null)
+                Optional.ofNullable(controllingFaction).map(ControllingFaction::getState).map(FactionStateEnum::parse).orElse(null)
             ).getId();
             case UNKNOWN -> null;
             default -> throw new IllegalStateException("Unhandled " + CommodityLocation.class.getSimpleName() + ": " + commodityLocation);

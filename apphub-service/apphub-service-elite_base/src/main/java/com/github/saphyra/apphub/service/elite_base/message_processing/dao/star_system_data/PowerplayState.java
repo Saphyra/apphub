@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -14,6 +15,8 @@ public enum PowerplayState {
     STRONGHOLD("Stronghold"),
     CONTESTED("Contested"),
     ;
+
+    @Getter
     private final String value;
 
     public static PowerplayState parse(String in) {

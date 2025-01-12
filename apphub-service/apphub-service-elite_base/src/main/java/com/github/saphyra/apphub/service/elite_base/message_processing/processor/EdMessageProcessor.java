@@ -10,6 +10,8 @@ import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDela
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageStatus;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
+@Builder(access = AccessLevel.PACKAGE)
 public class EdMessageProcessor {
     private final EliteBaseProperties properties;
     private final MessageDao messageDao;

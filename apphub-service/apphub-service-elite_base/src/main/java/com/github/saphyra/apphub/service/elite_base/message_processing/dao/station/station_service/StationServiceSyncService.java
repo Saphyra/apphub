@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.station.station_service;
 
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +19,7 @@ public class StationServiceSyncService {
     private final StationServiceFactory stationServiceFactory;
 
     @Transactional
-    public void sync(UUID stationId, List<StationServiceEnum> services) {
+    public void sync(@NonNull UUID stationId, List<StationServiceEnum> services) {
         if (isNull(services)) {
             return;
         }
