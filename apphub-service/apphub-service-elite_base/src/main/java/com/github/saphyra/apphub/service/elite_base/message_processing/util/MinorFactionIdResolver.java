@@ -16,7 +16,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MinorFactionIdResolver {
     private final MinorFactionSaver minorFactionSaver;
 

@@ -19,7 +19,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StarSystemSaver {
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;
@@ -47,7 +46,7 @@ public class StarSystemSaver {
             .peek(ss -> log.debug("Found: {}", ss))
             .findAny()
             .orElseGet(() -> {
-                StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition);
+                StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition, starType);
                 log.debug("Saving new {}", created);
                 starSystemDao.save(created);
                 return created;

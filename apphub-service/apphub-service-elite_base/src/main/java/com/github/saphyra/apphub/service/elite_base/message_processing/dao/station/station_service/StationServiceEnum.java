@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.station.station_service;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -48,6 +49,7 @@ public enum StationServiceEnum {
     CARRIER_VENDOR("carriervendor"),
     ;
 
+    @Getter
     private final String value;
 
     public static StationServiceEnum parse(String in) {

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -12,6 +13,7 @@ public enum WarStatus {
     PENDING("pending"),
     ;
 
+    @Getter
     private final String value;
 
     public static WarStatus parse(String in) {

@@ -13,13 +13,14 @@ import java.time.LocalDateTime;
 public class StarSystemFactory {
     private final IdGenerator idGenerator;
 
-    public StarSystem create(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition) {
+    public StarSystem create(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition, StarType starType) {
         return StarSystem.builder()
             .id(idGenerator.randomUuid())
             .lastUpdate(timestamp)
             .starId(starId)
             .starName(starName)
             .position(StarSystemPosition.parse(starPosition))
+            .starType(starType)
             .build();
     }
 }

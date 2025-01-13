@@ -32,7 +32,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unite test
 public class StationSaver {
     private final StationDao stationDao;
     private final StationFactory stationFactory;
@@ -59,7 +58,7 @@ public class StationSaver {
         FactionStateEnum controllingFactionState
     ) {
         if ((isNull(starSystemId) || isBlank(stationName)) && isNull(marketId)) {
-            throw new RuntimeException("StarSystemId or Station name and marketId must not be blank.");
+            throw new IllegalArgumentException("StarSystemId or Station name and marketId must not be blank.");
         }
 
         if (EconomyEnum.CARRIER == economy || StationType.FLEET_CARRIER == stationType) {

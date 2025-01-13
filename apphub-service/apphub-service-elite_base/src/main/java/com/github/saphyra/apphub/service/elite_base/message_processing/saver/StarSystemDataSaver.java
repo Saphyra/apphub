@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.Allegiance;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.EconomyEnum;
@@ -13,34 +12,27 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.StarSystemDataDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.StarSystemDataFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.MinorFactionConflict;
-import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.WarStatus;
-import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.WarType;
-import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionFactory;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.EdConflict;
+import com.github.saphyra.apphub.service.elite_base.message_processing.util.ConflictMapper;
 import com.github.saphyra.apphub.service.elite_base.message_processing.util.MinorFactionIdResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StarSystemDataSaver {
     private final StarSystemDataDao starSystemDataDao;
     private final StarSystemDataFactory starSystemDataFactory;
-    private final IdGenerator idGenerator;
-    private final ConflictingMinorFactionFactory conflictingMinorFactionFactory;
     private final MinorFactionIdResolver minorFactionIdResolver;
+    private final ConflictMapper conflictMapper;
 
     public synchronized void save(
         UUID starSystemId,
@@ -57,7 +49,7 @@ public class StarSystemDataSaver {
         List<Power> powers,
         EdConflict[] conflictsArr
     ) {
-        List<MinorFactionConflict> conflicts = mapConflicts(timestamp, starSystemId, conflictsArr, minorFactions);
+        List<MinorFactionConflict> conflicts = conflictMapper.mapConflicts(timestamp, starSystemId, conflictsArr, minorFactions);
 
         StarSystemData starSystemData = starSystemDataDao.findById(starSystemId)
             .orElseGet(() -> {
@@ -125,7 +117,6 @@ public class StarSystemDataSaver {
                 new UpdateHelper(securityLevel, starSystemData::getSecurityLevel, () -> starSystemData.setSecurityLevel(securityLevel)),
                 new UpdateHelper(power, starSystemData::getControllingPower, () -> starSystemData.setControllingPower(power)),
                 new UpdateHelper(powerplayState, starSystemData::getPowerplayState, () -> starSystemData.setPowerplayState(powerplayState)),
-                new UpdateHelper(powerplayState, starSystemData::getPowerplayState, () -> starSystemData.setPowerplayState(powerplayState)),
                 new UpdateHelper(minorFactionIds, starSystemData::getMinorFactions, () -> starSystemData.setMinorFactions(LazyLoadedField.loaded(minorFactionIds))),
                 new UpdateHelper(controllingFactionId, starSystemData::getControllingFactionId, () -> starSystemData.setControllingFactionId(controllingFactionId)),
                 new UpdateHelper(controllingFactionState, starSystemData::getControllingFactionState, () -> starSystemData.setControllingFactionState(controllingFactionState)),
@@ -135,29 +126,5 @@ public class StarSystemDataSaver {
             .forEach(UpdateHelper::modify);
 
         starSystemDataDao.save(starSystemData);
-    }
-
-    private List<MinorFactionConflict> mapConflicts(LocalDateTime timestamp, UUID starSystemId, EdConflict[] conflictsArr, List<MinorFaction> minorFactions) {
-        if (isNull(conflictsArr)) {
-            return null;
-        }
-
-        return Arrays.stream(conflictsArr)
-            .map(edConflict -> mapConflict(timestamp, starSystemId, edConflict, minorFactions))
-            .toList();
-    }
-
-    private MinorFactionConflict mapConflict(LocalDateTime timestamp, UUID starSystemId, EdConflict edConflict, List<MinorFaction> minorFactions) {
-        UUID conflictId = idGenerator.randomUuid();
-        return MinorFactionConflict.builder()
-            .id(conflictId)
-            .starSystemId(starSystemId)
-            .status(WarStatus.parse(edConflict.getStatus()))
-            .warType(WarType.parse(edConflict.getWarType()))
-            .conflictingMinorFactions(List.of(
-                conflictingMinorFactionFactory.create(timestamp, conflictId, edConflict.getFaction1(), minorFactions),
-                conflictingMinorFactionFactory.create(timestamp, conflictId, edConflict.getFaction2(), minorFactions)
-            ))
-            .build();
     }
 }

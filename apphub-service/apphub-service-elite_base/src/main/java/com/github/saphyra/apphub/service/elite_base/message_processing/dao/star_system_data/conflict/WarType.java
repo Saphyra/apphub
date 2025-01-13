@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system_data.conflict;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
@@ -13,6 +14,7 @@ public enum WarType {
     WAR("war"),
     ;
 
+    @Getter
     private final String value;
 
     public static WarType parse(String in) {
