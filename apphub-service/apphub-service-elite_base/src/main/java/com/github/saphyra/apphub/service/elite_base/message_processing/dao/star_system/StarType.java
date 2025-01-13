@@ -1,16 +1,25 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system;
 
+import lombok.RequiredArgsConstructor;
+
 import java.util.Arrays;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 
+@RequiredArgsConstructor
 public enum StarType {
     A,
     AEBE,
     B,
+    C,
+    CN,
     D,
     DA,
     DAB,
+    DAV,
+    DAZ,
+    DB,
+    DCV,
     DC,
     DQ,
     F,
@@ -19,12 +28,24 @@ public enum StarType {
     K,
     L,
     M,
+    MS,
     N,
     O,
+    S,
     Y,
     T,
     TTS,
+    W,
+    WN,
+    WO,
+    SUPERMASSIVE_BLACK_HOLE("SupermassiveBlackHole"),
     ;
+
+    private final String value;
+
+    StarType() {
+        this.value = this.name();
+    }
 
     public static StarType parse(String in) {
         if (isBlank(in)) {
@@ -34,7 +55,7 @@ public enum StarType {
         String parsed = in.split("_")[0];
 
         return Arrays.stream(values())
-            .filter(e -> e.name().equalsIgnoreCase(parsed))
+            .filter(e -> e.value.equalsIgnoreCase(parsed))
             .findAny()
             .orElseThrow(() -> new IllegalArgumentException("Could not parse " + in + " to " + StarType.class.getSimpleName() + " Parsed: " + parsed));
     }

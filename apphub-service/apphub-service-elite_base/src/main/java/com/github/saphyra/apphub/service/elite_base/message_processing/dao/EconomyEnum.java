@@ -38,6 +38,10 @@ public enum EconomyEnum {
 
         String parsed = in.contains("_") ? in.split("_")[1].split(";")[0] : in;
 
+        if (parsed.equalsIgnoreCase("Undefined")) {
+            return EconomyEnum.NONE;
+        }
+
         return Arrays.stream(values())
             .filter(allegiance -> allegiance.value.equalsIgnoreCase(parsed))
             .findAny()

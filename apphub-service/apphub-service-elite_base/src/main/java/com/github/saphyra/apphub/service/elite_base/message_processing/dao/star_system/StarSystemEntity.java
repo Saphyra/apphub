@@ -25,6 +25,6 @@ class StarSystemEntity {
     private Double xPos;
     private Double yPos;
     private Double zPos;
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private StarType starType;
 }

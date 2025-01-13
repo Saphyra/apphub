@@ -28,4 +28,4 @@ interval:
   eliteBase:
     processMessages: PT1S
     resetUnhandledMessages: P7D
-    deleteExpiredMessages: P1D
+    deleteExpiredMessages: PT1H

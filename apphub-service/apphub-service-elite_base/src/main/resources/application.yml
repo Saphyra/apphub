@@ -12,7 +12,7 @@ elite-base:
   messageExpiration: P30D
   processedMessageExpiration: P7D
   messageProcessorBatchSize: 100
-  messageProcessorSublistSize: 25
+  messageProcessorSublistSize: 10
   executor:
     threadCount: 4
   retryDelay: PT2H

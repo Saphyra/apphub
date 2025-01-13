@@ -16,6 +16,8 @@ interface MessageRepository extends CrudRepository<MessageEntity, String> {
     void resetUnhandled(@Param("currentStatus") MessageStatus currentStatus, @Param("updatedStatus") MessageStatus updatedStatus);
 
     @Transactional
+    @Query("DELETE MessageEntity e WHERE e.createdAt < :createdAt AND e.status in :statuses")
+    @Modifying
     void deleteByCreatedAtBeforeAndStatusIn(String createdAt, List<MessageStatus> statuses);
 
     List<MessageEntity> getByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(String createdAt, MessageStatus status, Pageable page);

@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    EliteBase
+        Missing enum elements
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

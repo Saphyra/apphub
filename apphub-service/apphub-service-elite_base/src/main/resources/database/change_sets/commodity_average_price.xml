@@ -7,7 +7,7 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="commodity_average_price">
-            <column name="commodity_name" type="varchar(37)">
+            <column name="commodity_name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="last_update" type="text"/>

@@ -11,6 +11,7 @@ public enum FleetCarrierDockingAccess {
     ALL("all"),
     SQUADRON_AND_FRIENDS("squadronfriends"),
     FRIENDS("friends"),
+    SQUADRON("squadron"),
     NONE("none"),
     ;
 

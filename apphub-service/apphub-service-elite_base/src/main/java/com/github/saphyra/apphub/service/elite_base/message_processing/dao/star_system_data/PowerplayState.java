@@ -14,6 +14,7 @@ public enum PowerplayState {
     FORTIFIED("Fortified"),
     STRONGHOLD("Stronghold"),
     CONTESTED("Contested"),
+    CONTROLLED("Controlled"),
     ;
 
     @Getter

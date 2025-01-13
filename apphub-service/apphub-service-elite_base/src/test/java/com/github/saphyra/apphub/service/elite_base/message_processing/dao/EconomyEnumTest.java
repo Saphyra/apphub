@@ -20,6 +20,11 @@ class EconomyEnumTest {
     }
 
     @Test
+    void parse_undefined() {
+        assertThat(EconomyEnum.parse("Undefined")).isEqualTo(EconomyEnum.NONE);
+    }
+
+    @Test
     void parse() {
         assertThat(EconomyEnum.parse("Refinery")).isEqualTo(EconomyEnum.REFINERY);
     }
