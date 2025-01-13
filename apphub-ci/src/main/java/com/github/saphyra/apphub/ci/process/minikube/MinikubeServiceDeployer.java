@@ -19,7 +19,7 @@ public class MinikubeServiceDeployer {
     private final Services services;
     private final MinikubePodStartupWaiter minikubePodStartupWaiter;
 
-    public void deploy(String namespaceName, String serviceDir, List<String> servicesToStart) {
+    public void deploy(String namespaceName, String serviceDir, List<String> servicesToStart, int waitCount) {
         services.getServices()
             .stream()
             .filter(service -> servicesToStart.contains(service.getName()))
@@ -27,25 +27,25 @@ public class MinikubeServiceDeployer {
             .entrySet()
             .stream()
             .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> deploy(namespaceName, serviceDir, entry.getKey(), entry.getValue()));
+            .forEach(entry -> deploy(namespaceName, serviceDir, entry.getKey(), entry.getValue(), waitCount));
     }
 
-    public void deploy(String namespaceName, String serviceDir) {
+    public void deploy(String namespaceName, String serviceDir, int waitCount) {
         Stream.concat(services.getServices().stream(), Stream.of(Services.FRONTEND))
             .collect(Collectors.groupingBy(Service::getGroup))
             .entrySet()
             .stream()
             .sorted(Map.Entry.comparingByKey())
-            .forEach(entry -> deploy(namespaceName, serviceDir, entry.getKey(), entry.getValue()));
+            .forEach(entry -> deploy(namespaceName, serviceDir, entry.getKey(), entry.getValue(), waitCount));
     }
 
-    private void deploy(String namespaceName, String serviceDir, Integer group, List<Service> serviceList) {
+    private void deploy(String namespaceName, String serviceDir, Integer group, List<Service> serviceList, int waitCount) {
         log.info("");
         log.info("Starting up serviceGroup {}", group);
 
         serviceList.forEach(service -> deploy(namespaceName, serviceDir, service));
 
-        minikubePodStartupWaiter.waitForPods(namespaceName);
+        minikubePodStartupWaiter.waitForPods(namespaceName, waitCount);
     }
 
     @SneakyThrows

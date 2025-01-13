@@ -4,7 +4,7 @@ spring:
   datasource:
     initialize: false
 
-initialDelay: 30000
+initialDelay: 1000
 
 interval:
   user:

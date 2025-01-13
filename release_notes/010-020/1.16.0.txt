@@ -5,6 +5,7 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+    Update Heap size for k8s pods
 
 ===TECHNICAL DEBTS===
 
