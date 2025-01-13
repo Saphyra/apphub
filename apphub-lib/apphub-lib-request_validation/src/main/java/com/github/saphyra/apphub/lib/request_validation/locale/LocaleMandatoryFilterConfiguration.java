@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.lib.request_validation.locale;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.common.FilterOrder;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
 import lombok.Data;
@@ -34,12 +32,6 @@ class LocaleMandatoryFilterConfiguration {
     @ConditionalOnMissingBean(AntPathMatcher.class)
     AntPathMatcher antPathMatcher() {
         return new AntPathMatcher();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(ObjectMapperWrapper.class)
-    ObjectMapperWrapper objectMapperWrapper(ObjectMapper objectMapper) {
-        return new ObjectMapperWrapper(objectMapper);
     }
 
     @Bean

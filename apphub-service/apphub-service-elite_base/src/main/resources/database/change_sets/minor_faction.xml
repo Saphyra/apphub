@@ -1,0 +1,26 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-minor_faction" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="minor_faction"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="minor_faction">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="faction_name" type="varchar(255)"/>
+            <column name="state" type="varchar(255)"/>
+            <column name="influence" type="numeric"/>
+            <column name="allegiance" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="minor_faction" columnNames="id" constraintName="minor_faction-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="minor_faction" indexName="index-minor_faction-faction_name">
+            <column name="faction_name"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

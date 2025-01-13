@@ -2,9 +2,10 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -14,11 +15,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Slf4j
 public class ObjectMapperWrapper {
     @Getter
     private final ObjectMapper objectMapper;
+
+    public ObjectMapperWrapper(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     public <T> T readValue(InputStream in, TypeReference<T> type) {
         try {
@@ -78,5 +82,14 @@ public class ObjectMapperWrapper {
 
     public <T> T convertValue(Object o, Class<T> clazz) {
         return objectMapper.convertValue(o, clazz);
+    }
+
+    public <T> T convertValue(Object o, TypeReference<T> typeReference) {
+        return objectMapper.convertValue(o, typeReference);
+    }
+
+    @SneakyThrows
+    public JsonNode readTree(String message) {
+        return objectMapper.readTree(message);
     }
 }

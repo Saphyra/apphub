@@ -59,7 +59,7 @@ public class ProductionReleaseProcess {
 
         minikubeNamespaceSetupTask.createNamespace(Constants.NAMESPACE_NAME_PRODUCTION);
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION);
+        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
 
         startProductionProxyProcess.startProductionProxy();
     }

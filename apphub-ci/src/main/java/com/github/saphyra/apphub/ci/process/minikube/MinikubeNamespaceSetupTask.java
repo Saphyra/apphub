@@ -12,7 +12,7 @@ public class MinikubeNamespaceSetupTask {
     public void setupNamespace(String namespaceName) {
         createNamespace(namespaceName);
         deployPostgres(namespaceName);
-        minikubePodStartupWaiter.waitForPods(namespaceName);
+        minikubePodStartupWaiter.waitForPods(namespaceName, 10);
     }
 
     @SneakyThrows

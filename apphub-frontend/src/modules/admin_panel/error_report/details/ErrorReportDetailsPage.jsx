@@ -98,7 +98,7 @@ const ErrorReportDetailsPage = () => {
                             <div className="error-report-details-value">{errorReport.exception.thread}</div>
                         </fieldset>
 
-                        <fieldset>
+                        <fieldset className="selectable">
                             <legend>{localizationHandler.get("stack-trace")}</legend>
                             <StackTraceException
                                 exception={errorReport.exception}

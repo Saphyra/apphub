@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.platform.storage.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -43,5 +45,10 @@ public class StorageBeanConfig {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

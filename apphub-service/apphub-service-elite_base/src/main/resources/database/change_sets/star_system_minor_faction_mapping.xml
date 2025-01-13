@@ -1,0 +1,24 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-star_system_minor_faction_mapping" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="star_system_minor_faction_mapping"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="star_system_minor_faction_mapping">
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="minor_faction_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="star_system_minor_faction_mapping" columnNames="star_system_id,minor_faction_id" constraintName="star_system_minor_faction_mapping-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="star_system_minor_faction_mapping" indexName="index-star_system_minor_faction_mapping-star_system_id">
+            <column name="star_system_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

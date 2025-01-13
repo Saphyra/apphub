@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_data" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_data"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_data">
+            <column name="body_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+            <column name="landable" type="boolean"/>
+            <column name="surface_gravity" type="numeric"/>
+            <column name="reserve_level" type="varchar(255)"/>
+            <column name="has_ring" type="boolean"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_data" columnNames="body_id" constraintName="body_data-pk"/>
+    </changeSet>
+</databaseChangeLog>

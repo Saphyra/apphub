@@ -1,0 +1,24 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_material" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_material"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_material">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body_id" type="varchar(37)"/>
+            <column name="material" type="text"/>
+            <column name="percent" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_material" columnNames="id" constraintName="body_material-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="body_material" indexName="index-body_material-body_id">
+            <column name="body_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

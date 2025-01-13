@@ -1,0 +1,25 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-station_economy" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="station_economy"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="station_economy">
+            <column name="station_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="economy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="proportion" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="station_economy" columnNames="station_id,economy" constraintName="station_economy-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="station_economy" indexName="index-station_economy-station_id">
+            <column name="station_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

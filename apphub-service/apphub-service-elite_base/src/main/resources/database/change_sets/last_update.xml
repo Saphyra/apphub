@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-last_update" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="last_update"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="last_update">
+            <column name="external_reference" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="last_update" columnNames="external_reference,type" constraintName="last_update-pk"/>
+    </changeSet>
+</databaseChangeLog>

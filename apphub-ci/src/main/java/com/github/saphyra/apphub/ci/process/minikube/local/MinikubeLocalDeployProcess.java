@@ -38,7 +38,7 @@ public class MinikubeLocalDeployProcess {
 
         String namespaceName = namespaceNameProvider.getNamespaceName();
 
-        minikubeServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, servicesToStart);
+        minikubeServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, servicesToStart, 15);
 
         portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
         portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
@@ -60,7 +60,7 @@ public class MinikubeLocalDeployProcess {
 
         minikubeNamespaceSetupTask.setupNamespace(namespaceName);
 
-        minikubeServiceDeployer.deploy(namespaceName, "develop");
+        minikubeServiceDeployer.deploy(namespaceName, "develop", 15);
 
         portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
         portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);

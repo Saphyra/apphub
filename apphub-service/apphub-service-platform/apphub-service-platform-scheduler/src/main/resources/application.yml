@@ -4,7 +4,7 @@ spring:
   datasource:
     initialize: false
 
-initialDelay: 30000
+initialDelay: 1000
 
 interval:
   user:
@@ -25,3 +25,7 @@ interval:
       connectionCleanup: 600000
   storage:
     storedFileCleanup: 300000 #5 minutes
+  eliteBase:
+    processMessages: PT1S
+    resetUnhandledMessages: P7D
+    deleteExpiredMessages: P1D

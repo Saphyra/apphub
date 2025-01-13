@@ -1,0 +1,27 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_ring" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_ring"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_ring">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="body_id" type="varchar(37)"/>
+            <column name="name" type="text"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="inner_radius" type="numeric"/>
+            <column name="outer_radius" type="numeric"/>
+            <column name="mass" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_ring" columnNames="id" constraintName="body_ring-pk"/>
+
+        <createIndex schemaName="elite_base" tableName="body_ring" indexName="index-body_ring-body_id">
+            <column name="body_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

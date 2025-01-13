@@ -1,8 +1,12 @@
 server:
   port: 8082
 
+initialDelay: 10000
+
 interval:
   skyxplore:
     game:
       gameCleanup: 30000 #30 sec
       deletion: 10000 #10 sec
+  eliteBase:
+    processMessages: PT5S

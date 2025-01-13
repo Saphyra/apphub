@@ -16,7 +16,7 @@ public class ProductionStartProcess {
     public void startServer() {
         minikubeStartProcess.startMinikube();
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION);
+        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
 
         startProductionProxyProcess.startProductionProxy();
     }

@@ -22,7 +22,7 @@ public class StartProductionProxyProcess {
 
     @SneakyThrows
     public void startProductionProxy() {
-        minikubePodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PRODUCTION);
+        minikubePodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PRODUCTION, 5);
         processKiller.killByPort(platformProperties.getMinikubeProdServerPort());
 
         Process process = new ProcessBuilder("cmd", "/c", "cd", "apphub-proxy", "&&", "mvn", "clean", "package")

@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.FilterOrder;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
@@ -51,5 +53,10 @@ public class SkyXploreLobbyBeanConfiguration {
     @Bean
     ApplicationContextProxy applicationContextProxy(ApplicationContext applicationContext) {
         return new ApplicationContextProxy(applicationContext);
+    }
+
+    @Bean
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

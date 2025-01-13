@@ -10,4 +10,25 @@
     </changeSet>
 
     <include file="database/change_sets/message.xml"/>
+    <include file="database/change_sets/star_system.xml"/>
+    <include file="database/change_sets/body.xml"/>
+    <include file="database/change_sets/minor_faction.xml"/>
+    <include file="database/change_sets/station.xml"/>
+    <include file="database/change_sets/station_economy.xml"/>
+    <include file="database/change_sets/station_service.xml"/>
+    <include file="database/change_sets/settlement.xml"/>
+    <include file="database/change_sets/fleet_carrier.xml"/>
+    <include file="database/change_sets/commodity.xml"/>
+    <include file="database/change_sets/commodity_average_price.xml"/>
+    <include file="database/change_sets/last_update.xml"/>
+    <include file="database/change_sets/body_data.xml"/>
+    <include file="database/change_sets/body_ring.xml"/>
+    <include file="database/change_sets/body_material.xml"/>
+    <include file="database/change_sets/star_system_minor_faction_mapping.xml"/>
+    <include file="database/change_sets/star_system_power_mapping.xml"/>
+    <include file="database/change_sets/minor_faction_state.xml"/>
+    <include file="database/change_sets/minor_faction_conflict.xml"/>
+    <include file="database/change_sets/conflicting_minor_faction.xml"/>
+    <include file="database/change_sets/star_system_data.xml"/>
+    <include file="database/change_sets/loadout.xml"/>
 </databaseChangeLog>

@@ -1,6 +1,19 @@
 spring:
   application:
     name: elite-base
+  datasource:
+    hikari:
+      maximumPoolSize: 20
 
 liquibase:
   schema: elite_base
+
+elite-base:
+  messageExpiration: P30D
+  processedMessageExpiration: P7D
+  messageProcessorBatchSize: 100
+  messageProcessorSublistSize: 25
+  executor:
+    threadCount: 4
+  retryDelay: PT2H
+  maxRetryCount: 50
