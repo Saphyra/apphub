@@ -16,6 +16,8 @@ public enum PowerplayState {
     CONTESTED("Contested"),
     CONTROLLED("Controlled"),
     HOME_SYSTEM("HomeSystem"),
+    PREPARED("Prepared"),
+    IN_PREPARE_RADIUS("InPrepareRadius"),
     ;
 
     @Getter
