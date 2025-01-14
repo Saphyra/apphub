@@ -99,12 +99,16 @@ public class EdMessageProcessor {
 
     private void handleException(MessageStatus status, EdMessage edMessage, Exception e) {
         UUID exceptionId = idGenerator.randomUuid();
-        String errorMessage = "Failed processing message. ExceptionId: %s. Schema: %s".formatted(
+        String errorMessage = "Failed processing message %s: %s. ExceptionId: %s. Schema: %s".formatted(
+            edMessage.getMessageId(),
+            e.getMessage(),
             exceptionId,
             edMessage.getSchemaRef()
         );
         log.error(errorMessage, e);
-        errorReporterService.report(errorMessage, e);
+        if(status != MessageStatus.PROCESSING_ERROR){
+            errorReporterService.report(errorMessage, e);
+        }
         edMessage.setStatus(status);
         edMessage.setExceptionId(exceptionId);
         messageDao.save(edMessage);

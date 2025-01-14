@@ -114,7 +114,7 @@ class EdMessageProcessorTest {
     }
 
     @Test
-    void delayedException_limitReached(){
+    void delayedException_limitReached() {
         given(messageDao.getMessages(CURRENT_TIME, MESSAGE_PROCESSOR_BATCH_SIZE)).willReturn(List.of(edMessage));
         given(messageProcessor.canProcess(edMessage)).willThrow(new MessageProcessingDelayedException("asd"));
         given(idGenerator.randomUuid()).willReturn(EXCEPTION_ID);
@@ -126,11 +126,11 @@ class EdMessageProcessorTest {
         then(edMessage).should().setStatus(MessageStatus.PROCESSING_ERROR);
         then(edMessage).should().setExceptionId(EXCEPTION_ID);
         then(messageDao).should().save(edMessage);
-        then(errorReporterService).should().report(any(), any());
+        then(errorReporterService).shouldHaveNoInteractions();
     }
 
     @Test
-    void delayedException(){
+    void delayedException() {
         given(messageDao.getMessages(CURRENT_TIME, MESSAGE_PROCESSOR_BATCH_SIZE)).willReturn(List.of(edMessage));
         given(messageProcessor.canProcess(edMessage)).willThrow(new MessageProcessingDelayedException("asd"));
         given(properties.getMaxRetryCount()).willReturn(MAX_RETRY_COUNT);
@@ -148,7 +148,7 @@ class EdMessageProcessorTest {
     }
 
     @Test
-    void processMessages(){
+    void processMessages() {
         given(messageDao.getMessages(CURRENT_TIME, MESSAGE_PROCESSOR_BATCH_SIZE)).willReturn(List.of(edMessage, unhandledMessage, edMessage));
         given(messageProcessor.canProcess(edMessage)).willReturn(true);
         given(messageProcessor.canProcess(unhandledMessage)).willReturn(false);

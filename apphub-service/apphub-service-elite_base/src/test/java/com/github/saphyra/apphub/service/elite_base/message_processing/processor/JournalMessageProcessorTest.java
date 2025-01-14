@@ -32,6 +32,7 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.structure
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.SaaSignalFoundJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.ScanJournalMessage;
+import com.github.saphyra.apphub.service.elite_base.message_processing.util.ControllingFactionParser;
 import com.github.saphyra.apphub.service.elite_base.message_processing.util.StationSaverUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -89,6 +90,9 @@ class JournalMessageProcessorTest {
 
     @Mock
     private StationSaverUtil stationSaverUtil;
+
+    @Mock
+    private ControllingFactionParser controllingFactionParser;
 
     @InjectMocks
     private JournalMessageProcessor underTest;
@@ -210,10 +214,67 @@ class JournalMessageProcessorTest {
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
+        given(controllingFactionParser.parse(controllingFaction)).willReturn(controllingFaction);
 
         underTest.processMessage(edMessage);
 
         then(bodySaver).should().save(TIMESTAMP, STAR_SYSTEM_ID, BodyType.STAR, BODY_ID, BODY_NAME);
+        then(starSystemDataSaver).should().save(
+            STAR_SYSTEM_ID,
+            TIMESTAMP,
+            POPULATION,
+            Allegiance.ALLIANCE,
+            EconomyEnum.AGRICULTURE,
+            EconomyEnum.COLONY,
+            SecurityLevel.ANARCHY,
+            Power.AISLING_DUVAL,
+            PowerplayState.FORTIFIED,
+            List.of(minorFaction),
+            controllingFaction,
+            List.of(Power.NAKATO_KAINE),
+            conflicts
+        );
+    }
+
+    @Test
+    void processMessage_fsdJump_nullBodyIdentifiers() {
+        given(edMessage.getMessage()).willReturn(MESSAGE);
+        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(jsonNode.get("event")).willReturn(jsonNode);
+        given(jsonNode.asText()).willReturn("FSDJump");
+
+        Faction[] factions = new Faction[]{faction};
+        EdConflict[] conflicts = new EdConflict[]{edConflict};
+
+        FsdJumpJournalMessage fsdJumpJournalMessage = new FsdJumpJournalMessage();
+        fsdJumpJournalMessage.setTimestamp(TIMESTAMP);
+        fsdJumpJournalMessage.setStarId(STAR_ID);
+        fsdJumpJournalMessage.setStarName(STAR_NAME);
+        fsdJumpJournalMessage.setStarPosition(STAR_POSITION);
+        fsdJumpJournalMessage.setBodyId(null);
+        fsdJumpJournalMessage.setBodyName(null);
+        fsdJumpJournalMessage.setFactions(factions);
+        fsdJumpJournalMessage.setPopulation(POPULATION);
+        fsdJumpJournalMessage.setAllegiance(Allegiance.ALLIANCE.getValue());
+        fsdJumpJournalMessage.setEconomy(EconomyEnum.AGRICULTURE.getValue());
+        fsdJumpJournalMessage.setSecondEconomy(EconomyEnum.COLONY.getValue());
+        fsdJumpJournalMessage.setSecurityLevel(SecurityLevel.ANARCHY.getValue());
+        fsdJumpJournalMessage.setControllingPower(Power.AISLING_DUVAL.getValue());
+        fsdJumpJournalMessage.setPowerplayState(PowerplayState.FORTIFIED.getValue());
+        fsdJumpJournalMessage.setFactions(factions);
+        fsdJumpJournalMessage.setControllingFaction(controllingFaction);
+        fsdJumpJournalMessage.setPowers(new String[]{Power.NAKATO_KAINE.getValue()});
+        fsdJumpJournalMessage.setConflicts(conflicts);
+
+        given(objectMapperWrapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
+        given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
+        given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
+        given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
+        given(controllingFactionParser.parse(controllingFaction)).willReturn(controllingFaction);
+
+        underTest.processMessage(edMessage);
+
+        then(bodySaver).shouldHaveNoInteractions();
         then(starSystemDataSaver).should().save(
             STAR_SYSTEM_ID,
             TIMESTAMP,
@@ -375,6 +436,7 @@ class JournalMessageProcessorTest {
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
+        given(controllingFactionParser.parse(controllingFaction)).willReturn(controllingFaction);
 
         underTest.processMessage(edMessage);
 

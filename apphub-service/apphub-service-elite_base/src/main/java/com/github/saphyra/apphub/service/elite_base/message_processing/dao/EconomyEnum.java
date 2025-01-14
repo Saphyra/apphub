@@ -25,6 +25,7 @@ public enum EconomyEnum {
     PRISON("Prison"),
     RESCUE("Rescue"),
     MEGA_SHIP("MegaShip"),
+    DAMAGED("Damaged"),
     NONE("None"),
     ;
 

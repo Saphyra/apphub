@@ -15,6 +15,7 @@ public enum PowerplayState {
     STRONGHOLD("Stronghold"),
     CONTESTED("Contested"),
     CONTROLLED("Controlled"),
+    HOME_SYSTEM("HomeSystem"),
     ;
 
     @Getter

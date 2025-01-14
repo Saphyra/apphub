@@ -71,29 +71,29 @@ const ErrorReportDetailsPage = () => {
             <Header label={errorReportId} />
 
             <main>
-                <fieldset>
+                <fieldset className="selectable">
                     <legend>{localizationHandler.get("created-at")}</legend>
                     <div className="error-report-details-value">{errorReport.createdAt}</div>
                 </fieldset>
 
-                <fieldset>
+                <fieldset className="selectable">
                     <legend>{localizationHandler.get("service")}</legend>
                     <div className="error-report-details-value">{errorReport.service}</div>
                 </fieldset>
 
-                <fieldset>
+                <fieldset className="selectable">
                     <legend>{localizationHandler.get("message")}</legend>
                     <div className="error-report-details-value">{errorReport.message}</div>
                 </fieldset>
 
-                <fieldset>
+                <fieldset className="selectable">
                     <legend>{localizationHandler.get("response")}</legend>
                     <div className="error-report-details-value">{errorReport.responseBody}</div>
                 </fieldset>
 
                 {hasValue(errorReport.exception) &&
                     <div>
-                        <fieldset>
+                        <fieldset className="selectable">
                             <legend>{localizationHandler.get("thread")}</legend>
                             <div className="error-report-details-value">{errorReport.exception.thread}</div>
                         </fieldset>

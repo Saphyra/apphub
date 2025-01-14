@@ -24,6 +24,7 @@ import com.github.saphyra.apphub.service.elite_base.message_processing.structure
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.SaaSignalFoundJournalMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.message.ScanJournalMessage;
+import com.github.saphyra.apphub.service.elite_base.message_processing.util.ControllingFactionParser;
 import com.github.saphyra.apphub.service.elite_base.message_processing.util.StationSaverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +48,7 @@ class JournalMessageProcessor implements MessageProcessor {
     private final StarSystemDataSaver starSystemDataSaver;
     private final MinorFactionSaver minorFactionSaver;
     private final StationSaverUtil stationSaverUtil;
+    private final ControllingFactionParser controllingFactionParser;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -127,7 +129,7 @@ class JournalMessageProcessor implements MessageProcessor {
             Power.parse(message.getControllingPower()),
             PowerplayState.parse(message.getPowerplayState()),
             minorFactions,
-            message.getControllingFaction(),
+            controllingFactionParser.parse(message.getControllingFaction()),
             Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
             message.getConflicts()
         );
@@ -145,7 +147,7 @@ class JournalMessageProcessor implements MessageProcessor {
                 message.getStationServices(),
                 message.getStationEconomies(),
                 null,
-                message.getControllingFaction()
+                controllingFactionParser.parse(message.getControllingFaction())
             );
         }
     }
@@ -226,13 +228,16 @@ class JournalMessageProcessor implements MessageProcessor {
             message.getStarPosition()
         );
 
-        bodySaver.save(
-            message.getTimestamp(),
-            starSystem.getId(),
-            BodyType.STAR,
-            message.getBodyId(),
-            message.getBodyName()
-        );
+        if (nonNull(message.getBodyId()) || nonNull(message.getBodyName())) {
+            bodySaver.save(
+                message.getTimestamp(),
+                starSystem.getId(),
+                BodyType.STAR,
+                message.getBodyId(),
+                message.getBodyName()
+            );
+        }
+
 
         List<MinorFaction> minorFactions = minorFactionSaver.save(message.getTimestamp(), message.getFactions());
 
@@ -247,7 +252,7 @@ class JournalMessageProcessor implements MessageProcessor {
             Power.parse(message.getControllingPower()),
             PowerplayState.parse(message.getPowerplayState()),
             minorFactions,
-            message.getControllingFaction(),
+            controllingFactionParser.parse(message.getControllingFaction()),
             Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
             message.getConflicts()
         );

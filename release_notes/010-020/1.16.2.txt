@@ -1,0 +1,16 @@
+===FEATURES===
+
+===BUGFIXES===
+    EliteBase
+        Missing enum elements
+    AdminPanel
+        ErrorReport
+            Selectable values
+
+===PLATFORM CHANGES===
+    EliteBase
+        More memory
+
+===TECHNICAL DEBTS===
+
+===ETC===

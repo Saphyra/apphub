@@ -48,7 +48,7 @@ public class LocationJournalMessage extends JournalMessage {
     private String secondEconomy;
 
     @JsonProperty("SystemFaction")
-    private ControllingFaction controllingFaction;
+    private Object controllingFaction;
 
     @JsonProperty("SystemSecurity")
     private String securityLevel;
@@ -101,4 +101,7 @@ public class LocationJournalMessage extends JournalMessage {
 
     @JsonProperty("ThargoidWar")
     private ThargoidWar thargoidWar;
+
+    @JsonProperty("FactionState")
+    private String factionState;
 }

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.structur
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.EdConflict;
-import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.elite_base.message_processing.structure.journal.ThargoidWar;
 import lombok.Data;
@@ -44,7 +43,7 @@ public class FsdJumpJournalMessage extends JournalMessage {
     private String secondEconomy;
 
     @JsonProperty("SystemFaction")
-    private ControllingFaction controllingFaction;
+    private Object controllingFaction;
 
     @JsonProperty("SystemSecurity")
     private String securityLevel;
@@ -61,4 +60,7 @@ public class FsdJumpJournalMessage extends JournalMessage {
 
     @JsonProperty("ThargoidWar")
     private ThargoidWar thargoidWar;
+
+    @JsonProperty("FactionState")
+    private String factionState;
 }

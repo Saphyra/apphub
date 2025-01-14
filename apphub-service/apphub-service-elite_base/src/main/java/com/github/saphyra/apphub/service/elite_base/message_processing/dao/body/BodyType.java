@@ -12,6 +12,7 @@ public enum BodyType {
     STATION(List.of("Station")),
     PLANETARY_RING(List.of("PlanetaryRing")),
     STELLAR_RING(List.of("StellarRing")),
+    ASTEROID_CLUSTER(List.of("AsteroidCluster")),
     ;
 
     private final List<String> values;

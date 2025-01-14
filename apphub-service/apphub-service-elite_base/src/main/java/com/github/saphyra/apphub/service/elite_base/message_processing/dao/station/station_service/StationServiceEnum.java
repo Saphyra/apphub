@@ -1,13 +1,10 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.station.station_service;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.Arrays;
+import java.util.List;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 
-@RequiredArgsConstructor
 public enum StationServiceEnum {
     DOCK("Dock"),
     AUTO_DOCK("autodock"),
@@ -26,7 +23,7 @@ public enum StationServiceEnum {
     FACILITATOR("facilitator"),
     FLIGHT_CONTROLLER("flightcontroller"),
     STATION_OPERATIONS("stationoperations"),
-    SEARCH_AND_RESCUE("searchrescue"),
+    SEARCH_AND_RESCUE(List.of("searchrescue", "SearchAndRescue")),
     STATION_MENU("stationMenu"),
     SHOP("shop"),
     LIVERY("livery"),
@@ -47,10 +44,24 @@ public enum StationServiceEnum {
     CARRIER_FUEL("carrierfuel"),
     VOUCHER_REDEMPTION("voucherredemption"),
     CARRIER_VENDOR("carriervendor"),
+    WORKSHOP("Workshop"),
     ;
 
-    @Getter
-    private final String value;
+    private final List<String> value;
+
+    StationServiceEnum(String value) {
+        this.value = List.of(value.toLowerCase());
+    }
+
+    StationServiceEnum(List<String> values) {
+        this.value = values.stream()
+            .map(String::toLowerCase)
+            .toList();
+    }
+
+    public String getValue() {
+        return value.get(0);
+    }
 
     public static StationServiceEnum parse(String in) {
         if (isBlank(in)) {
@@ -58,7 +69,7 @@ public enum StationServiceEnum {
         }
 
         return Arrays.stream(values())
-            .filter(e -> e.value.equalsIgnoreCase(in))
+            .filter(e -> e.value.contains(in.toLowerCase()))
             .findAny()
             .orElseThrow(() -> new IllegalArgumentException("Could not parse " + in + " to " + StationServiceEnum.class.getSimpleName()));
     }
