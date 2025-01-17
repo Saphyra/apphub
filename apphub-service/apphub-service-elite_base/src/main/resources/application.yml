@@ -10,7 +10,7 @@ liquibase:
 
 elite-base:
   messageExpiration: P30D
-  processedMessageExpiration: P7D
+  processedMessageExpiration: P3D
   messageProcessorBatchSize: 100
   messageProcessorSublistSize: 10
   executor:

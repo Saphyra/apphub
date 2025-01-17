@@ -18,6 +18,7 @@ public enum PowerplayState {
     HOME_SYSTEM("HomeSystem"),
     PREPARED("Prepared"),
     IN_PREPARE_RADIUS("InPrepareRadius"),
+    TURMOIL("Turmoil"),
     ;
 
     @Getter
