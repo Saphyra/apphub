@@ -36,6 +36,7 @@ spring:
             /web/admin-panel/error-report/*,\
             /web/admin-panel/ban,\
             /web/admin-panel/ban/*,\
+            /web/admin-panel/performance-reporting,\
             /web/villany-atesz,\
             /web/villany-atesz/**,\
             /web/utils/base64,\

@@ -1,12 +1,15 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.FixedExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageStatus;
@@ -36,11 +39,16 @@ public class EdMessageProcessor {
     private final ErrorReporterService errorReporterService;
     private final List<MessageProcessor> messageProcessors;
     private final DateTimeUtil dateTimeUtil;
+    private final PerformanceReporter performanceReporter;
 
     @SneakyThrows
     public synchronized void processMessages() {
         StopWatch stopWatch = StopWatch.createStarted();
-        List<EdMessage> messages = messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize());
+        List<EdMessage> messages = performanceReporter.wrap(
+            () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
+        );
         log.info("Processing {} messages.", messages.size());
 
         List<List<EdMessage>> partitions = ListUtils.partition(messages, properties.getMessageProcessorSublistSize());
@@ -66,21 +74,11 @@ public class EdMessageProcessor {
 
     private void processMessage(EdMessage edMessage) {
         try {
-            messageProcessors.stream()
-                .filter(messageProcessor -> messageProcessor.canProcess(edMessage))
-                .findAny()
-                .ifPresentOrElse(
-                    messageProcessor -> {
-                        messageProcessor.processMessage(edMessage);
-                        edMessage.setStatus(MessageStatus.PROCESSED);
-                        messageDao.save(edMessage);
-                    },
-                    () -> {
-                        log.info("Unhandled message: {}", edMessage);
-                        edMessage.setStatus(MessageStatus.UNHANDLED);
-                        messageDao.save(edMessage);
-                    }
-                );
+            performanceReporter.wrap(
+                () -> doProcessMessage(edMessage),
+                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                PerformanceReportingKey.PROCESS_MESSAGE.formatted(edMessage.getSchemaRef())
+            );
         } catch (MessageProcessingDelayedException e) {
             if (edMessage.getRetryCount() < properties.getMaxRetryCount()) {
                 edMessage.setRetryCount(edMessage.getRetryCount() + 1);
@@ -97,6 +95,24 @@ public class EdMessageProcessor {
         }
     }
 
+    private void doProcessMessage(EdMessage edMessage) {
+        messageProcessors.stream()
+            .filter(messageProcessor -> messageProcessor.canProcess(edMessage))
+            .findAny()
+            .ifPresentOrElse(
+                messageProcessor -> {
+                    messageProcessor.processMessage(edMessage);
+                    edMessage.setStatus(MessageStatus.PROCESSED);
+                    messageDao.save(edMessage);
+                },
+                () -> {
+                    log.info("Unhandled message: {}", edMessage);
+                    edMessage.setStatus(MessageStatus.UNHANDLED);
+                    messageDao.save(edMessage);
+                }
+            );
+    }
+
     private void handleException(MessageStatus status, EdMessage edMessage, Exception e) {
         UUID exceptionId = idGenerator.randomUuid();
         String errorMessage = "Failed processing message %s: %s. ExceptionId: %s. Schema: %s".formatted(
@@ -106,7 +122,7 @@ public class EdMessageProcessor {
             edMessage.getSchemaRef()
         );
         log.error(errorMessage, e);
-        if(status != MessageStatus.PROCESSING_ERROR){
+        if (status != MessageStatus.PROCESSING_ERROR) {
             errorReporterService.report(errorMessage, e);
         }
         edMessage.setStatus(status);

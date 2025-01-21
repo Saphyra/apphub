@@ -46,6 +46,7 @@ import VillanyAteszToolboxPage from './modules/custom/villany_atesz/toolbox/Vill
 import Constants from './common/js/Constants';
 import Redirection from './Redirection';
 import ErrorPage from './modules/error/ErorPage';
+import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
 
 
 
@@ -285,6 +286,10 @@ const router = createBrowserRouter([
   {
     path: "/web/utils/json-formatter",
     element: <JsonFormatterPage />
+  },
+  {
+    path: "/web/admin-panel/performance-reporting",
+    element: <PerformanceReporting />
   },
 ]);
 

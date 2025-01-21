@@ -151,3 +151,15 @@ export const numberOfDigits = (input) => {
 export const roundPercent = (input) => {
     return Math.round(input * 100) / 100;
 }
+
+export const formatDuration = (nanoseconds) => {
+    const milliseconds = nanoseconds / 1_000_000;
+
+    if (milliseconds < 1000) {
+        return milliseconds.toFixed(3).toLocaleString() + " ms";
+    }
+
+    const seconds = milliseconds / 1000;
+
+    return seconds.toFixed(3).toLocaleString() + " s";
+}

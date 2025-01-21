@@ -1,4 +1,6 @@
 ===FEATURES===
+    Admin Panel
+        Performance reporting
 
 ===BUGFIXES===
 

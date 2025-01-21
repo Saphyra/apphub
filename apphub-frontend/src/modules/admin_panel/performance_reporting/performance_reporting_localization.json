@@ -1,0 +1,102 @@
+{
+    "title": {
+        "en": "Performance reporting - Apphub",
+        "hu": "Teljesítmény - Apphub"
+    },
+    "page-title": {
+        "en": "Performance reporting",
+        "hu": "Teljesítmény"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "confirm-enable-topic-title": {
+        "en": "Enable topic?",
+        "hu": "Téma engedélyezése?"
+    },
+    "confirm-enable-topic-detail": {
+        "en": "Are you sure you want to enable topic {topic}? Increased memory consumption might cause instability.",
+        "hu": "Biztosan engedélyezni szeretnéd a(z) {topic} témát? A megnövekedett memóriahasználat instabilitáshoz vezethet."
+    },
+    "enable": {
+        "en": "Enable",
+        "hu": "Engedélyezés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "confirm-disable-topic-title": {
+        "en": "Disable topic?",
+        "hu": "Téma kikapcsolása?"
+    },
+    "confirm-disable-topic-detail": {
+        "en": "Are you sure you want to disable topic {topic}? History will be deleted.",
+        "hu": "Biztosan ki szeretnéd kapcsolni a(z) {topic} témát? Az előzmények törlődni fognak."
+    },
+    "disable": {
+        "en": "Disable",
+        "hu": "Kikapcsolás"
+    },
+    "refresh-interval": {
+        "en": "Refresh interval",
+        "hu": "Frissítés gyakorisága"
+    },
+    "off": {
+        "en": "No refresh",
+        "hu": "Nincs frissítés"
+    },
+    "1s": {
+        "en": "Every second",
+        "hu": "Másodpercenként"
+    },
+    "5s": {
+        "en": "Every 5 seconds",
+        "hu": "5 másodpercenként"
+    },
+    "10s": {
+        "en": "Every 10 seconds",
+        "hu": "10 másodpercenként"
+    },
+    "15s": {
+        "en": "Every 15 seconds",
+        "hu": "15 másodpercenként"
+    },
+    "30s": {
+        "en": "Every 30 seconds",
+        "hu": "30 másodpercenként"
+    },
+    "1m": {
+        "en": "Every minute",
+        "hu": "Percenként"
+    },
+    "5m": {
+        "en": "Every 5 minutes",
+        "hu": "5 percenként"
+    },
+    "refresh": {
+        "en": "Refresh",
+        "hu": "Újratöltés"
+    },
+    "min": {
+        "en": "Minimum",
+        "hu": "Minimum"
+    },
+    "max": {
+        "en": "Maxiumum",
+        "hu": "Maxiumum"
+    },
+    "avg": {
+        "en": "Average",
+        "hu": "Átlag"
+    },
+    "count": {
+        "en": "Count",
+        "hu": "Darabszám"
+    },
+    "extend": {
+        "en": "Extend expiration",
+        "hu": "Lejárat újraindítása"
+    }
+}

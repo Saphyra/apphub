@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReportingConfiguration;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +28,8 @@ import org.springframework.context.annotation.Import;
 @Import({
     AccessTokenFilterConfiguration.class,
     CommonConfigProperties.class,
-    DefaultExecutorServiceBeanConfig.class
+    DefaultExecutorServiceBeanConfig.class,
+    PerformanceReportingConfiguration.class
 })
 @EnableEventProcessor
 @EnableErrorHandler

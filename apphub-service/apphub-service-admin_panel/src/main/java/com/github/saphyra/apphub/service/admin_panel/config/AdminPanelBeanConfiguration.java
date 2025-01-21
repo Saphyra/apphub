@@ -6,6 +6,9 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
@@ -21,7 +24,8 @@ import org.springframework.context.annotation.Import;
 @Import({
     AccessTokenFilterConfiguration.class,
     CommonConfigProperties.class,
-    WebSocketConfiguration.class
+    WebSocketConfiguration.class,
+    DefaultExecutorServiceBeanConfig.class
 })
 @EnableErrorHandler
 @EnableLocaleMandatoryRequestValidation
@@ -46,5 +50,10 @@ public class AdminPanelBeanConfiguration {
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
         return new ObjectMapperWrapper(new ObjectMapper());
+    }
+
+    @Bean
+    ScheduledExecutorServiceBean scheduledExecutorServiceBean(ExecutorServiceBeanFactory executorServiceBeanFactory) {
+        return executorServiceBeanFactory.createScheduled(1);
     }
 }

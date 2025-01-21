@@ -19,6 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-concurrency</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-web_socket</artifactId>
             <version>${project.version}</version>
         </dependency>

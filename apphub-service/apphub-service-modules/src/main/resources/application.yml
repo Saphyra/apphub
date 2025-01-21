@@ -41,6 +41,10 @@ modules:
       url: /web/admin-panel/migration-tasks
       roles:
       - ADMIN
+    - name: performance-reporting
+      url: /web/admin-panel/performance-reporting
+      roles:
+      - ADMIN
     accounts:
     - name: account
       url: /web/user/account

@@ -77,6 +77,12 @@
             <artifactId>spring-integration-zeromq</artifactId>
             <version>6.4.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-performance_reporting</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
