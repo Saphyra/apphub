@@ -20,4 +20,12 @@ public class AdminPanelEndpoints {
     public static final String ADMIN_PANEL_MARK_ERROR_REPORTS = "/api/admin-panel/error-report/mark/{status}";
     public static final String ADMIN_PANEL_DELETE_READ_ERROR_REPORTS = "/api/admin-panel/error-report/read";
     public static final String ADMIN_PANEL_ERROR_REPORT_DELETE_ALL = "/api/admin-panel/error-report/all";
+
+    //Performance reporting
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPIC_STATUS = "/api/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_ENABLE_TOPIC = "/api/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_DISABLE_TOPIC = "/api/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS = "/api/admin-panel/performance-reporting/topics/{topic}/reports";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_REPORT = "/allowed-internal/api/admin-panel/performance-reporting/topics/reports";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_EVENT_TOPIC_STATUS_MODIFIED = "/event/admin-panel/performance-reporting/topics";
 }

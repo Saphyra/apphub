@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.elite_base.message_handling;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.MessageFactory;
@@ -24,6 +27,7 @@ public class EdMessageHandler implements MessageHandler {
     private final MessageFactory messageFactory;
     private final MessageDao messageDao;
     private final ErrorReporterService errorReporterService;
+    private final PerformanceReporter performanceReporter;
 
     @Override
     @ServiceActivator(inputChannel = "zeroMqChannel")
@@ -37,7 +41,7 @@ public class EdMessageHandler implements MessageHandler {
             String outputString = new String(output, 0, outputLength, StandardCharsets.UTF_8);
             log.debug("{}", outputString);
             EdMessage edMessage = messageFactory.create(outputString);
-            messageDao.save(edMessage);
+            performanceReporter.wrap(() -> messageDao.save(edMessage), PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING, PerformanceReportingKey.SAVE_NEW_MESSAGE.name());
         } catch (Exception e) {
             errorReporterService.report("Failed processing message", e);
             log.error("Failed processing message", e);

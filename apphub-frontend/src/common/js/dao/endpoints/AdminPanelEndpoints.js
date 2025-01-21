@@ -11,3 +11,8 @@ export const ADMIN_PANEL_DELETE_ERROR_REPORTS = new Endpoint(RequestMethod.DELET
 export const ADMIN_PANEL_MARK_ERROR_REPORTS = new Endpoint(RequestMethod.POST, "/api/admin-panel/error-report/mark/{status}");
 export const ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE = new Endpoint(RequestMethod.GET, "/web/admin-panel/error-report/{id}");
 export const ADMIN_PANEL_GET_ERROR_REPORT = new Endpoint(RequestMethod.GET, "/api/admin-panel/error-report/{id}");
+
+export const ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPICS = new Endpoint(RequestMethod.GET, "/api/admin-panel/performance-reporting/topics");
+export const ADMIN_PANEL_PERFORMANCE_REPORTING_ENABLE_TOPIC = new Endpoint(RequestMethod.POST, "/api/admin-panel/performance-reporting/topics");
+export const ADMIN_PANEL_PERFORMANCE_REPORTING_DISABLE_TOPIC = new Endpoint(RequestMethod.DELETE, "/api/admin-panel/performance-reporting/topics");
+export const ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS = new Endpoint(RequestMethod.GET, "/api/admin-panel/performance-reporting/topics/{topic}/reports");

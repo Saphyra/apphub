@@ -15,4 +15,11 @@ public class AdminPanelEndpoints {
     public static final String ADMIN_PANEL_MIGRATION_GET_TASKS = "/api/admin-panel/migration";
     public static final String ADMIN_PANEL_MIGRATION_TRIGGER_TASK = "/api/admin-panel/migration/{event}";
     public static final String ADMIN_PANEL_MIGRATION_DELETE_TASK = "/api/admin-panel/migration/{event}";
+
+    //Performance reporting
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPIC_STATUS = "/api/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_ENABLE_TOPIC = "/api/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_DISABLE_TOPIC = "/api/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS = "/api/admin-panel/performance-reporting/topics/{topic}/reports";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_PAGE = "/web/admin-panel/performance-reporting";
 }

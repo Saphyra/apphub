@@ -4,3 +4,8 @@ spring:
 
 liquibase:
   schema: admin_panel
+
+performanceReporting:
+  cleanupRateSeconds: 10
+  reportExpiration: PT10M
+  topicExpiration: PT10M

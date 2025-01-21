@@ -1,0 +1,11 @@
+===FEATURES===
+    Admin Panel
+        Performance reporting
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
