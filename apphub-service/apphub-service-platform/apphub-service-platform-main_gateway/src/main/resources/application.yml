@@ -149,6 +149,10 @@ spring:
 nonSessionExtendingUris:
 - pattern: /api/user/authentication/session
   method: GET
+- pattern: /api/admin-panel/performance-reporting/topics/*/reports
+  method: GET
+- pattern: /api/admin-panel/error-report
+  method: GET
 
 role:
   settings:

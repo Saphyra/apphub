@@ -1,6 +1,7 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    Make polling endpoints for error reports and performance reporting non-session-extending
 
 ===PLATFORM CHANGES===
 
