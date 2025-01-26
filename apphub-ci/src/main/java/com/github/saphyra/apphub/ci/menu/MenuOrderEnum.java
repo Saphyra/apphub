@@ -22,6 +22,7 @@ public enum MenuOrderEnum implements MenuOrder {
     RUN_TESTS(100),
     RUN_TEST_GROUPS(101),
     STOP_SERVICES(1000),
+    PORT_FORWARD(5000),
     APPHUB_PROXY(10_000),
     DELETE_NAMESPACE(100_000),
     STOP_VM(1_000_000),

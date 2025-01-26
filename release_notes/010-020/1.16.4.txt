@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Port forward option to local minikube and preprod
 
 ===BUGFIXES===
     Make polling endpoints for error reports and performance reporting non-session-extending

@@ -73,6 +73,7 @@ public enum LocalizedText implements LocalizationProvider {
     BROWSER_STARTUP_LIMIT("Hany bongeszo induljon egyszerre?", "How many browsers can be started at once?"),
     PREPROD("Preprod szerver", "Preprod server"),
     SCALE_DOWN("Leállítás", "Scale down"),
+    PORT_FORWARD("Port tovabbitas", "Port forward"),
     ;
 
     private final String hu;
