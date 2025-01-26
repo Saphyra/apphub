@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,8 +50,17 @@ public class SurfaceResponseQueryServiceTest {
     private Surfaces surfaces;
 
     @Test
+    public void gameNotFound() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
+
+        List<SurfaceResponse> result = underTest.getSurfaceOfPlanet(USER_ID, PLANET_ID);
+
+        assertThat(result).isEmpty();
+    }
+
+    @Test
     public void getSurfaceOfPlanet() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.getByPlanetId(PLANET_ID)).willReturn(List.of(surface));

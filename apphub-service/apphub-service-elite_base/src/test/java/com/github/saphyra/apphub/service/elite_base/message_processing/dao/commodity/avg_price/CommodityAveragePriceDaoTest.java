@@ -24,6 +24,9 @@ class CommodityAveragePriceDaoTest {
     @Mock
     private CommodityAveragePriceRepository repository;
 
+    @Mock
+    private CommodityAveragePriceCache cache;
+
     @InjectMocks
     private CommodityAveragePriceDao underTest;
 

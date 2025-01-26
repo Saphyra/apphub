@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.lib.common_util;
 
+import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> extends AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY> {
-    protected Map<ID, DOMAIN> cache = new ConcurrentHashMap<>();
+public abstract class CachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> extends AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY> {
+    protected final AbstractCache<ID, DOMAIN> cache;
 
-    protected StaticCachedDao(Converter<ENTITY, DOMAIN> converter, REPOSITORY repository, boolean preLoad) {
+    protected CachedDao(Converter<ENTITY, DOMAIN> converter, REPOSITORY repository, boolean preLoad, AbstractCache<ID, DOMAIN> cache) {
         super(converter, repository);
+        this.cache = cache;
         if (preLoad) {
             findAll();
         }
@@ -21,7 +21,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
 
     @Override
     public void delete(DOMAIN domain) {
-        cache.remove(extractId(domain));
+        cache.invalidate(extractId(domain));
         super.delete(domain);
     }
 
@@ -33,14 +33,14 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
 
     @Override
     public void deleteAll(List<DOMAIN> domains) {
-        domains.forEach(domain -> cache.remove(extractId(domain)));
+        domains.forEach(domain -> cache.invalidate(extractId(domain)));
 
         super.deleteAll(domains);
     }
 
     @Override
     public void deleteById(ID id) {
-        cache.remove(id);
+        cache.invalidate(id);
         super.deleteById(id);
     }
 
@@ -57,7 +57,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
         List<DOMAIN> result = new ArrayList<>();
         List<ID> missing = new ArrayList<>();
 
-        ids.forEach(id -> Optional.ofNullable(cache.get(id))
+        ids.forEach(id -> cache.getIfPresent(id)
             .ifPresentOrElse(
                 result::add,
                 () -> missing.add(id)
@@ -76,7 +76,7 @@ public abstract class StaticCachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends Cru
 
     @Override
     public Optional<DOMAIN> findById(ID id) {
-        Optional<DOMAIN> result = Optional.ofNullable(cache.get(id));
+        Optional<DOMAIN> result = cache.getIfPresent(id);
 
         if (result.isEmpty()) {
             result = super.findById(id);
