@@ -2,6 +2,9 @@
 
 ===BUGFIXES===
     Make polling endpoints for error reports and performance reporting non-session-extending
+    Notebook
+        Keep the add checklist item dialog open if saved by hitting enter. Close if saved by clicking "Save"
+        Pressing "Esc" should close the add checklist item dialog
 
 ===PLATFORM CHANGES===
 

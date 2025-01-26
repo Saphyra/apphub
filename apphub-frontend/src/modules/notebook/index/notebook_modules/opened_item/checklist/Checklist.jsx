@@ -53,15 +53,22 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     }
 
     const addItemIfEnter = (e) => {
-        if (e.which === 13) {
-            addItem();
+        if (e.which === 27) {
+            setNewItemContent("");
+            setNewItemIndex(null);
+        } else if (e.which === 13) {
+            addItem(false);
         }
     }
 
-    const addItem = () => {
+    const addItem = (closeDialog = true) => {
         addItemToTheEdge(openedListItem.id, newItemIndex, newItemContent, setDataFromResponse);
         addItemToEdge(lastIndexRange, items, editingEnabled, setItems, setNewItemIndex);
         setNewItemContent("");
+
+        if (closeDialog) {
+            setNewItemIndex(null);
+        }
     }
 
     const getNewItemConfirmationDialog = () => {
