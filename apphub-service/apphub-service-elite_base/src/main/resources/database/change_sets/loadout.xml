@@ -27,4 +27,16 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="replace-composite-index-for-loadout-external_reference-and-market_id" author="Saphyra">
+        <dropIndex schemaName="elite_base" tableName="loadout" indexName="index-loadout-external_reference-market_id"/>
+
+        <createIndex schemaName="elite_base" tableName="loadout" indexName="index-loadout-external_reference">
+            <column name="external_reference"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="loadout" indexName="index-loadout-market_id">
+            <column name="market_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

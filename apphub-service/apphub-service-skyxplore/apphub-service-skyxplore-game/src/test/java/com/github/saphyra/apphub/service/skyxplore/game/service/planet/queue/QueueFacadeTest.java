@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,8 +72,15 @@ public class QueueFacadeTest {
     }
 
     @Test
+    void getQueueOfPlanet_gameNotFound() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
+
+        assertThat(underTest.getQueueOfPlanet(USER_ID, PLANET_ID)).isEmpty();
+    }
+
+    @Test
     public void getQueueOfPlanet() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getData()).willReturn(gameData);
         given(queueService.getQueue(gameData, PLANET_ID)).willReturn(List.of(queueItem));
         given(converter.convert(queueItem, gameData, PLANET_ID)).willReturn(queueResponse);

@@ -29,4 +29,16 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="replace-composite-index-for-commodity-external_reference-and-market_id" author="Saphyra">
+        <dropIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-external_reference-market_id"/>
+
+        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-external_reference">
+            <column name="external_reference"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="commodity" indexName="index-commodity-market_id">
+            <column name="market_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
