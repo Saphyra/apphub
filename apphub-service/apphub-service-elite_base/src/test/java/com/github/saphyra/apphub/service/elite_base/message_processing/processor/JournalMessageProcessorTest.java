@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.elite_base.message_processing.processo
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.Allegiance;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.EconomyEnum;
@@ -47,8 +48,10 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(MockitoExtension.class)
 class JournalMessageProcessorTest {
@@ -93,6 +96,9 @@ class JournalMessageProcessorTest {
 
     @Mock
     private ControllingFactionParser controllingFactionParser;
+
+    @Mock
+    private PerformanceReporter performanceReporter;
 
     @InjectMocks
     private JournalMessageProcessor underTest;
@@ -140,6 +146,10 @@ class JournalMessageProcessorTest {
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asText()).willReturn("asdfaf");
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         assertThat(catchThrowable(() -> underTest.processMessage(edMessage))).isInstanceOf(IllegalArgumentException.class);
     }
@@ -174,6 +184,10 @@ class JournalMessageProcessorTest {
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(bodySaver.save(TIMESTAMP, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(body);
         given(body.getId()).willReturn(INTERNAL_BODY_ID);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -209,6 +223,10 @@ class JournalMessageProcessorTest {
         fsdJumpJournalMessage.setControllingFaction(controllingFaction);
         fsdJumpJournalMessage.setPowers(new String[]{Power.NAKATO_KAINE.getValue()});
         fsdJumpJournalMessage.setConflicts(conflicts);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         given(objectMapperWrapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
@@ -265,6 +283,10 @@ class JournalMessageProcessorTest {
         fsdJumpJournalMessage.setControllingFaction(controllingFaction);
         fsdJumpJournalMessage.setPowers(new String[]{Power.NAKATO_KAINE.getValue()});
         fsdJumpJournalMessage.setConflicts(conflicts);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         given(objectMapperWrapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
@@ -325,6 +347,10 @@ class JournalMessageProcessorTest {
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(bodySaver.saveOptional(TIMESTAMP, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(Optional.of(body));
         given(body.getId()).willReturn(INTERNAL_BODY_ID);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -379,6 +405,10 @@ class JournalMessageProcessorTest {
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -437,6 +467,10 @@ class JournalMessageProcessorTest {
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
         given(controllingFactionParser.parse(controllingFaction)).willReturn(controllingFaction);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -487,6 +521,10 @@ class JournalMessageProcessorTest {
         saaSignalFoundJournalMessage.setStarPosition(STAR_POSITION);
 
         given(objectMapperWrapper.readValue(MESSAGE, SaaSignalFoundJournalMessage.class)).willReturn(saaSignalFoundJournalMessage);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 

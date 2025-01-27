@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
@@ -24,6 +27,7 @@ class CommodityMessageProcessor implements MessageProcessor {
     private final StarSystemSaver starSystemSaver;
     private final CommoditySaver commoditySaver;
     private final StationSaverUtil stationSaverUtil;
+    private final PerformanceReporter performanceReporter;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -34,37 +38,49 @@ class CommodityMessageProcessor implements MessageProcessor {
     public void processMessage(EdMessage message) {
         CommodityMessage commodityMessage = objectMapperWrapper.readValue(message.getMessage(), CommodityMessage.class);
 
-        StarSystem starSystem = starSystemSaver.save(
-            commodityMessage.getTimestamp(),
-            commodityMessage.getSystemName()
+        StarSystem starSystem = performanceReporter.wrap(
+            () -> starSystemSaver.save(
+                commodityMessage.getTimestamp(),
+                commodityMessage.getSystemName()
+            ),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_COMMODITY_MESSAGE_SAVE_STAR_SYSTEM.name()
         );
 
-        StationSaveResult saveResult = stationSaverUtil.saveStationOrFleetCarrier(
-            commodityMessage.getTimestamp(),
-            starSystem.getId(),
-            null,
-            commodityMessage.getStationType(),
-            commodityMessage.getMarketId(),
-            commodityMessage.getStationName(),
-            null,
-            null,
-            null,
-            null,
-            commodityMessage.getCarrierDockingAccess(),
-            null
+        StationSaveResult saveResult = performanceReporter.wrap(
+            () -> stationSaverUtil.saveStationOrFleetCarrier(
+                commodityMessage.getTimestamp(),
+                starSystem.getId(),
+                null,
+                commodityMessage.getStationType(),
+                commodityMessage.getMarketId(),
+                commodityMessage.getStationName(),
+                null,
+                null,
+                null,
+                null,
+                commodityMessage.getCarrierDockingAccess(),
+                null
+            ),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_COMMODITY_MESSAGE_SAVE_STATION.name()
         );
 
         if (isNull(saveResult.getExternalReference())) {
             throw new MessageProcessingDelayedException("ExternalReference is null.");
         }
 
-        commoditySaver.saveAll(
-            commodityMessage.getTimestamp(),
-            CommodityType.COMMODITY,
-            saveResult.getCommodityLocation(),
-            saveResult.getExternalReference(),
-            commodityMessage.getMarketId(),
-            commodityMessage.getCommodities()
+        performanceReporter.wrap(
+            () -> commoditySaver.saveAll(
+                commodityMessage.getTimestamp(),
+                CommodityType.COMMODITY,
+                saveResult.getCommodityLocation(),
+                saveResult.getExternalReference(),
+                commodityMessage.getMarketId(),
+                commodityMessage.getCommodities()
+            ),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_COMMODITY_MESSAGE_SAVE_COMMODITIES.name()
         );
     }
 }

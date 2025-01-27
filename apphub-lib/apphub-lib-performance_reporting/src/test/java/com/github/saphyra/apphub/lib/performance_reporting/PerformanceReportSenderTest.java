@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.lib.performance_reporting;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -29,8 +32,19 @@ class PerformanceReportSenderTest {
     @Mock
     private PerformanceReportingProxy performanceReportingProxy;
 
+    @Mock
+    private ExecutorServiceBean executorServiceBean;
+
     @InjectMocks
     private PerformanceReportSender underTest;
+
+    @BeforeEach
+    void setUp() {
+        given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        });
+    }
 
     @Test
     void error() {

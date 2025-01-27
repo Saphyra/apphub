@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.loadout.LoadoutType;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.elite_base.message_handling.dao.EdMessage;
@@ -25,6 +28,7 @@ class OutfittingMessageProcessor implements MessageProcessor {
     private final StarSystemSaver starSystemSaver;
     private final StationSaverUtil stationSaverUtil;
     private final LoadoutSaver loadoutSaver;
+    private final PerformanceReporter performanceReporter;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -35,26 +39,38 @@ class OutfittingMessageProcessor implements MessageProcessor {
     public void processMessage(EdMessage message) {
         OutfittingMessage outfittingMessage = objectMapperWrapper.readValue(message.getMessage(), OutfittingMessage.class);
 
-        StarSystem starSystem = starSystemSaver.save(outfittingMessage.getTimestamp(), outfittingMessage.getSystemName());
+        StarSystem starSystem = performanceReporter.wrap(
+            () -> starSystemSaver.save(outfittingMessage.getTimestamp(), outfittingMessage.getSystemName()),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_OUTFITTING_MESSAGE_SAVE_SYSTEM.name()
+        );
 
-        StationSaveResult saveResult = stationSaverUtil.saveStationOrFleetCarrier(
-            outfittingMessage.getTimestamp(),
-            starSystem.getId(),
-            outfittingMessage.getMarketId(),
-            outfittingMessage.getStationName()
+        StationSaveResult saveResult = performanceReporter.wrap(
+            () -> stationSaverUtil.saveStationOrFleetCarrier(
+                outfittingMessage.getTimestamp(),
+                starSystem.getId(),
+                outfittingMessage.getMarketId(),
+                outfittingMessage.getStationName()
+            ),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_OUTFITTING_MESSAGE_SAVE_STATION.name()
         );
 
         if (isNull(saveResult.getExternalReference())) {
             throw new MessageProcessingDelayedException("ExternalReference is null.");
         }
 
-        loadoutSaver.save(
-            outfittingMessage.getTimestamp(),
-            LoadoutType.OUTFITTING,
-            saveResult.getCommodityLocation(),
-            saveResult.getExternalReference(),
-            outfittingMessage.getMarketId(),
-            CollectionUtils.toList(outfittingMessage.getModules())
+        performanceReporter.wrap(
+            () -> loadoutSaver.save(
+                outfittingMessage.getTimestamp(),
+                LoadoutType.OUTFITTING,
+                saveResult.getCommodityLocation(),
+                saveResult.getExternalReference(),
+                outfittingMessage.getMarketId(),
+                CollectionUtils.toList(outfittingMessage.getModules())
+            ),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_OUTFITTING_MESSAGE_SAVE_LOADOUT.name()
         );
     }
 }

@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.processor;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.Allegiance;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.SecurityLevel;
@@ -49,6 +52,7 @@ class JournalMessageProcessor implements MessageProcessor {
     private final MinorFactionSaver minorFactionSaver;
     private final StationSaverUtil stationSaverUtil;
     private final ControllingFactionParser controllingFactionParser;
+    private final PerformanceReporter performanceReporter;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -61,33 +65,39 @@ class JournalMessageProcessor implements MessageProcessor {
             .get("event")
             .asText();
 
-        switch (event) {
-            case "Scan" -> {
-                ScanJournalMessage scanJournalMessage = objectMapperWrapper.readValue(message.getMessage(), ScanJournalMessage.class);
-                processScanJournalMessage(scanJournalMessage);
-            }
-            case "FSDJump" -> {
-                FsdJumpJournalMessage fsdJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), FsdJumpJournalMessage.class);
-                processFsdJumpJournalMessage(fsdJumpJournalMessage);
-            }
-            case "Docked" -> {
-                DockedJournalMessage dockedJournalMessage = objectMapperWrapper.readValue(message.getMessage(), DockedJournalMessage.class);
-                processDockedJournalMessage(dockedJournalMessage);
-            }
-            case "CarrierJump" -> {
-                CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
-                processCarrierJumpJournalMessage(carrierJumpJournalMessage);
-            }
-            case "Location" -> {
-                LocationJournalMessage locationJournalMessage = objectMapperWrapper.readValue(message.getMessage(), LocationJournalMessage.class);
-                processLocationJournalMessage(locationJournalMessage);
-            }
-            case "SAASignalsFound" -> {
-                SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
-                processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
-            }
-            default -> throw new IllegalArgumentException("Unhandled event: " + event);
-        }
+        performanceReporter.wrap(
+            () -> {
+                switch (event) {
+                    case "Scan" -> {
+                        ScanJournalMessage scanJournalMessage = objectMapperWrapper.readValue(message.getMessage(), ScanJournalMessage.class);
+                        processScanJournalMessage(scanJournalMessage);
+                    }
+                    case "FSDJump" -> {
+                        FsdJumpJournalMessage fsdJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), FsdJumpJournalMessage.class);
+                        processFsdJumpJournalMessage(fsdJumpJournalMessage);
+                    }
+                    case "Docked" -> {
+                        DockedJournalMessage dockedJournalMessage = objectMapperWrapper.readValue(message.getMessage(), DockedJournalMessage.class);
+                        processDockedJournalMessage(dockedJournalMessage);
+                    }
+                    case "CarrierJump" -> {
+                        CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
+                        processCarrierJumpJournalMessage(carrierJumpJournalMessage);
+                    }
+                    case "Location" -> {
+                        LocationJournalMessage locationJournalMessage = objectMapperWrapper.readValue(message.getMessage(), LocationJournalMessage.class);
+                        processLocationJournalMessage(locationJournalMessage);
+                    }
+                    case "SAASignalsFound" -> {
+                        SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
+                        processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
+                    }
+                    default -> throw new IllegalArgumentException("Unhandled event: " + event);
+                }
+            },
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_JOURNAL_MESSAGE.formatted(event)
+        );
     }
 
     private void processSaaSignalFoundJournalMessage(SaaSignalFoundJournalMessage message) {
