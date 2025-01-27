@@ -4,6 +4,14 @@ spring:
   datasource:
     hikari:
       maximumPoolSize: 20
+  jpa:
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        jdbc:
+          batch_size: 50
 
 liquibase:
   schema: elite_base

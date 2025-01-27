@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityLocation;
@@ -34,6 +37,7 @@ public class CommoditySaver {
     private final CommodityDataTransformer commodityDataTransformer;
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
+    private final PerformanceReporter performanceReporter;
 
     public void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, EdCommodity[] commodities) {
         List<CommodityData> commodityDataList = Arrays.stream(commodities)
@@ -57,7 +61,11 @@ public class CommoditySaver {
 
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-        Map<String, Commodity> existingCommodities = commodityDao.getByExternalReferenceOrMarketId(externalReference, marketId)
+        Map<String, Commodity> existingCommodities = performanceReporter.wrap(
+                () -> commodityDao.getByExternalReferenceOrMarketId(externalReference, marketId),
+                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                PerformanceReportingKey.SAVE_COMMODITIES_QUERY.name()
+            )
             .stream()
             .collect(Collectors.toMap(Commodity::getCommodityName, Function.identity()));
 
@@ -74,8 +82,16 @@ public class CommoditySaver {
             .filter(c -> !newCommodityNames.contains(c.getCommodityName()))
             .toList();
 
-        commodityDao.deleteAll(deletedCommodities);
-        commodityDao.saveAll(modifiedCommodities);
+        performanceReporter.wrap(
+            () -> commodityDao.deleteAll(deletedCommodities),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.SAVE_COMMODITIES_DELETE_ALL.name()
+        );
+        performanceReporter.wrap(
+            () -> commodityDao.saveAll(modifiedCommodities),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.SAVE_COMMODITIES_SAVE_ALL.name()
+        );
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

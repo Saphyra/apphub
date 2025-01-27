@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.elite_base.message_processing.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.elite_base.message_processing.dao.last_update.LastUpdateFactory;
 import org.junit.jupiter.api.Test;
@@ -16,11 +18,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(MockitoExtension.class)
 class CommoditySaverTest {
@@ -43,6 +48,9 @@ class CommoditySaverTest {
 
     @Mock
     private LastUpdateFactory lastUpdateFactory;
+
+    @Mock
+    private PerformanceReporter performanceReporter;
 
     @InjectMocks
     private CommoditySaver underTest;
@@ -67,6 +75,9 @@ class CommoditySaverTest {
 
     @Mock
     private Commodity modifiedCommodity;
+
+    @Mock
+    private LastUpdate lastUpdate;
 
     @Test
     void nullMarketIdAndCommodityLocation() {
@@ -93,10 +104,16 @@ class CommoditySaverTest {
         given(existingCommodityData.getName()).willReturn(EXISTING_COMMODITY);
         given(modifiedCommodityData.getName()).willReturn(MODIFIED_COMMODITY);
         given(newCommodityData.getName()).willReturn(NEW_COMMODITY);
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, CommodityType.COMMODITY, LAST_UPDATE)).willReturn(lastUpdate);
+        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
         underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(existingCommodityData, newCommodityData, modifiedCommodityData));
 
-        then(lastUpdateFactory).should().create(EXTERNAL_REFERENCE, CommodityType.COMMODITY, LAST_UPDATE);
+        then(lastUpdateDao).should().save(lastUpdate);
         then(commodityDao).should().deleteAll(List.of(deprecatedCommodity));
         then(commodityDao).should().saveAll(List.of(newCommodity, modifiedCommodity));
     }

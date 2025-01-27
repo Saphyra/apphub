@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+import static java.util.Objects.isNull;
+
 @RequiredArgsConstructor
 public abstract class AbstractCache<K, T> {
     @NonNull
@@ -20,6 +22,16 @@ public abstract class AbstractCache<K, T> {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public Optional<T> getIfPresent(K key) {
+        Optional<T> result = cache.getIfPresent(key);
+
+        if (isNull(result)) {
+            return Optional.empty();
+        }
+
+        return result;
     }
 
     public void invalidate(K key) {

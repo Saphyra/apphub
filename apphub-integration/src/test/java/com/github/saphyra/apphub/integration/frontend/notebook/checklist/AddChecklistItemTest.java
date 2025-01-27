@@ -50,7 +50,6 @@ public class AddChecklistItemTest extends SeleniumTest {
 
         ViewChecklistActions.addItem(driver);
         ViewChecklistActions.setNewChecklistItemContent(driver, LAST_CONTENT);
-        ViewChecklistActions.cancelAddItem(driver);
 
         List<ChecklistItem> items = AwaitilityWrapper.getListWithWait(() -> ViewChecklistActions.getItems(driver), checklistItems -> checklistItems.size() == 2);
         assertThat(items).hasSize(2);
@@ -58,7 +57,6 @@ public class AddChecklistItemTest extends SeleniumTest {
 
         ViewChecklistActions.addItemToTheStart(driver);
         ViewChecklistActions.setNewChecklistItemContent(driver, FIRST_CONTENT);
-        ViewChecklistActions.cancelAddItem(driver);
 
         items = AwaitilityWrapper.getListWithWait(() -> ViewChecklistActions.getItems(driver), checklistItems -> checklistItems.size() == 3);
         assertThat(items).hasSize(3);

@@ -12,8 +12,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService.DEFAULT_RESPONSE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -47,9 +49,17 @@ public class PlanetStorageOverviewQueryServiceTest {
     private StorageDetailsResponse bulkStorageDetailsResponse;
 
     @Test
+    void gameNotFound() {
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
+        PlanetStorageResponse result = underTest.getStorage(USER_ID, PLANET_ID);
+
+        assertThat(result).isEqualTo(DEFAULT_RESPONSE);
+    }
+
+    @Test
     public void getStorage() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getData()).willReturn(gameData);
 
         given(planetStorageDetailQueryService.getStorageDetails(gameData, PLANET_ID, StorageType.CONTAINER)).willReturn(bulkStorageDetailsResponse);

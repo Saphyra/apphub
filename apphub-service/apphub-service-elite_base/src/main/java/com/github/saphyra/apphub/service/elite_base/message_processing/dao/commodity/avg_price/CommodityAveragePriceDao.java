@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.elite_base.message_processing.dao.commodity.avg_price;
 
-import com.github.saphyra.apphub.lib.common_util.StaticCachedDao;
+import com.github.saphyra.apphub.lib.common_util.CachedDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -11,9 +11,9 @@ import static java.util.Objects.isNull;
 
 @Component
 @Slf4j
-public class CommodityAveragePriceDao extends StaticCachedDao<CommodityAveragePriceEntity, CommodityAveragePrice, String, CommodityAveragePriceRepository> {
-    CommodityAveragePriceDao(CommodityAveragePriceConverter converter, CommodityAveragePriceRepository repository) {
-        super(converter, repository, true);
+public class CommodityAveragePriceDao extends CachedDao<CommodityAveragePriceEntity, CommodityAveragePrice, String, CommodityAveragePriceRepository> {
+    CommodityAveragePriceDao(CommodityAveragePriceConverter converter, CommodityAveragePriceRepository repository, CommodityAveragePriceCache cache) {
+        super(converter, repository, true, cache);
     }
 
     @Override

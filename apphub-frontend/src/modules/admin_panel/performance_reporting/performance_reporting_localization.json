@@ -32,8 +32,8 @@
         "hu": "Téma kikapcsolása?"
     },
     "confirm-disable-topic-detail": {
-        "en": "Are you sure you want to disable topic {topic}? History will be deleted.",
-        "hu": "Biztosan ki szeretnéd kapcsolni a(z) {topic} témát? Az előzmények törlődni fognak."
+        "en": "Are you sure you want to disable topic {topic}?",
+        "hu": "Biztosan ki szeretnéd kapcsolni a(z) {topic} témát?"
     },
     "disable": {
         "en": "Disable",
