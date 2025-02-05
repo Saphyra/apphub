@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: elite-base
-        image: saphyra/apphub-service-elite_base:latest
+        image: saphyra/apphub-service-custom-elite_base:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server,preprod

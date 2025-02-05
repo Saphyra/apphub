@@ -3,6 +3,7 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+    EliteBase is moved under Custom group
 
 ===TECHNICAL DEBTS===
 

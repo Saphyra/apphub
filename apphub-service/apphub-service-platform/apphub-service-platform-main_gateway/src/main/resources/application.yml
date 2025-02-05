@@ -41,6 +41,7 @@ spring:
             /web/villany-atesz/**,\
             /web/utils/base64,\
             /web/utils/json-formatter,\
+            
             /web/user/account"
         filters:
         - StripPrefix=10

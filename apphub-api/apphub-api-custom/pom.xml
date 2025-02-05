@@ -20,5 +20,6 @@
 
     <modules>
         <module>apphub-api-custom-villany_atesz</module>
+        <module>apphub-api-custom-elite_base</module>
     </modules>
 </project>

@@ -45,6 +45,5 @@
         <module>apphub-api-community</module>
         <module>apphub-api-calendar</module>
         <module>apphub-api-custom</module>
-        <module>apphub-api-elite_base</module>
     </modules>
 </project>
