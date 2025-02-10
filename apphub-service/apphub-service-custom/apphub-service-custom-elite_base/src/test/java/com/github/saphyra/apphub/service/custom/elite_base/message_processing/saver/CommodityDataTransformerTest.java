@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

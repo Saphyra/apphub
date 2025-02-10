@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system.StarType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarType;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.navroute.NavrouteMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.navroute.Waypoint;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.MinorFactionSaver;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

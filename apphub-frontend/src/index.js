@@ -47,7 +47,7 @@ import Constants from './common/js/Constants';
 import Redirection from './Redirection';
 import ErrorPage from './modules/error/ErorPage';
 import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
-import EliteBasePage from './modules/custom/elite_base/EliteBasePage';
+import EliteBase from './modules/custom/elite_base/EliteBase';
 
 
 
@@ -294,7 +294,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/web/elite-base",
-    element: <EliteBasePage />
+    element: <EliteBase />
   },
 ]);
 

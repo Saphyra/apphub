@@ -14,6 +14,8 @@ public class EliteBaseProperties {
     private Duration processedMessageExpiration;
     private Integer messageProcessorBatchSize;
     private Integer messageProcessorSublistSize;
-    private Duration retryDelay;
-    private Integer maxRetryCount;
+    private Duration messageProcessorRetryDelay;
+    private Integer messageProcessorMaxRetryCount;
+    private Integer starSystemSuggestionListSize;
+    private Integer searchPageSize;
 }

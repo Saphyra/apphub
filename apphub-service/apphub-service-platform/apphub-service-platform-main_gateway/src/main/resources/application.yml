@@ -341,3 +341,17 @@ role:
     - PUT
     requiredRoles:
     - VILLANY_ATESZ
+  #EliteBase
+  - pattern: /web/elite-base/**
+    methods:
+    - GET
+    requiredRoles:
+    - ELITE_BASE
+  - pattern: /api/elite-base/**
+    methods:
+    - GET
+    - DELETE
+    - POST
+    - PUT
+    requiredRoles:
+    - ELITE_BASE

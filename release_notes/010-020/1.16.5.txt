@@ -1,4 +1,6 @@
 ===FEATURES===
+    EliteBase
+        Nearest material traders
 
 ===BUGFIXES===
 

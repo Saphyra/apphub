@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.fleet_carrier.FleetCarrier;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.fleet_carrier.FleetCarrierDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.station.Station;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.station.StationDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

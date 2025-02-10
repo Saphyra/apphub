@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body.Body;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body.BodyDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body.BodyFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body.BodyType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

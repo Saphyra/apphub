@@ -139,7 +139,7 @@ class EdMessageProcessorTest {
         given(messageDao.getMessages(CURRENT_TIME, MESSAGE_PROCESSOR_BATCH_SIZE)).willReturn(List.of(edMessage));
         given(messageProcessor.canProcess(edMessage)).willThrow(new MessageProcessingDelayedException("asd"));
         given(idGenerator.randomUuid()).willReturn(EXCEPTION_ID);
-        given(properties.getMaxRetryCount()).willReturn(MAX_RETRY_COUNT);
+        given(properties.getMessageProcessorMaxRetryCount()).willReturn(MAX_RETRY_COUNT);
         given(edMessage.getRetryCount()).willReturn(MAX_RETRY_COUNT);
 
         underTest.processMessages();
@@ -154,9 +154,9 @@ class EdMessageProcessorTest {
     void delayedException() {
         given(messageDao.getMessages(CURRENT_TIME, MESSAGE_PROCESSOR_BATCH_SIZE)).willReturn(List.of(edMessage));
         given(messageProcessor.canProcess(edMessage)).willThrow(new MessageProcessingDelayedException("asd"));
-        given(properties.getMaxRetryCount()).willReturn(MAX_RETRY_COUNT);
+        given(properties.getMessageProcessorMaxRetryCount()).willReturn(MAX_RETRY_COUNT);
         given(edMessage.getRetryCount()).willReturn(RETRY_COUNT);
-        given(properties.getRetryDelay()).willReturn(RETRY_DELAY);
+        given(properties.getMessageProcessorRetryDelay()).willReturn(RETRY_DELAY);
         given(edMessage.getCreatedAt()).willReturn(CURRENT_TIME);
         given(edMessage.getSchemaRef()).willReturn(SCHEMA_REF);
 

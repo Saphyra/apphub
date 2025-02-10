@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

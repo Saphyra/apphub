@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFactionDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFactionFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.state.MinorFactionStateFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFactionDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFactionFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.state.MinorFactionStateFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.FactionState;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

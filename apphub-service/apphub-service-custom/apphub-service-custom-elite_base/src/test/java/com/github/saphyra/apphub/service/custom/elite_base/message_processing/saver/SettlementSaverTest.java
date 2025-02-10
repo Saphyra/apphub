@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.settlement.Settlement;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.settlement.SettlementDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.settlement.SettlementFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.settlement.Settlement;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.settlement.SettlementDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.settlement.SettlementFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system.StarSystemDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system.StarSystemFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system.StarSystemPosition;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system.StarType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemPosition;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

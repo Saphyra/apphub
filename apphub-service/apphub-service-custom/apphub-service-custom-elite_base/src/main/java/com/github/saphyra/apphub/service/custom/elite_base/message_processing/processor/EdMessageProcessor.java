@@ -80,11 +80,11 @@ public class EdMessageProcessor {
                 PerformanceReportingKey.PROCESS_MESSAGE.formatted(edMessage.getSchemaRef())
             );
         } catch (MessageProcessingDelayedException e) {
-            if (edMessage.getRetryCount() < properties.getMaxRetryCount()) {
+            if (edMessage.getRetryCount() < properties.getMessageProcessorMaxRetryCount()) {
                 edMessage.setRetryCount(edMessage.getRetryCount() + 1);
                 log.warn("Processing of message {} is delayed: {}", edMessage, e.getMessage());
                 edMessage.setStatus(MessageStatus.ARRIVED);
-                edMessage.setCreatedAt(edMessage.getCreatedAt().plus(properties.getRetryDelay()));
+                edMessage.setCreatedAt(edMessage.getCreatedAt().plus(properties.getMessageProcessorRetryDelay()));
                 messageDao.save(edMessage);
             } else {
                 log.warn("Retry count limit of message {} is reached.", edMessage);

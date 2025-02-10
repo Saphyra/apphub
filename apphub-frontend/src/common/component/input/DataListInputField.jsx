@@ -8,7 +8,8 @@ const DataListInputField = ({
     value = new DataListInputEntry(),
     setValue,
     options = [],
-    placeholder
+    placeholder,
+    onKeyUp = () =>{}
 }) => {
     const [dataListId] = useState(generateRandomId());
 
@@ -44,8 +45,10 @@ const DataListInputField = ({
                 className={className}
                 value={value.value}
                 onChange={updateValue}
+                onSelect={updateValue}
                 list={dataListId}
                 placeholder={placeholder}
+                onKeyUp={onKeyUp}
             />
             <datalist id={dataListId}>
                 {getOptions()}

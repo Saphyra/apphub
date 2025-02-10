@@ -31,4 +31,5 @@
     <include file="database/change_sets/conflicting_minor_faction.xml"/>
     <include file="database/change_sets/star_system_data.xml"/>
     <include file="database/change_sets/loadout.xml"/>
+    <include file="database/change_sets/material_trader_override.xml"/>
 </databaseChangeLog>

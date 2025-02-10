@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system_data.conflict.MinorFactionConflict;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system_data.conflict.WarStatus;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system_data.conflict.WarType;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system_data.conflict.minor_faction.ConflictingMinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.WarStatus;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.WarType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ConflictFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.test.common.CustomAssertions;

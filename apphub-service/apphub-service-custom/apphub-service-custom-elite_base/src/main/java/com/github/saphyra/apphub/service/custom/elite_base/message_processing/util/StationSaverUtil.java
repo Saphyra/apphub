@@ -1,15 +1,15 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.fleet_carrier.FleetCarrierDockingAccess;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StationSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.FactionStateEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.StationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

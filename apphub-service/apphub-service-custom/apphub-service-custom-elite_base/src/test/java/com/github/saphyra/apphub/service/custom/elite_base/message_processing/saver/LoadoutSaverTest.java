@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.last_update.LastUpdate;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.last_update.LastUpdateDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.last_update.LastUpdateFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.loadout.Loadout;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.loadout.LoadoutDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.loadout.LoadoutFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.loadout.LoadoutType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.Loadout;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

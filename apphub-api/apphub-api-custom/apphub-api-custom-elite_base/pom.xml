@@ -20,5 +20,6 @@
 
     <modules>
         <module>apphub-api-custom-elite_base-server</module>
+        <module>apphub-api-custom-elite_base-model</module>
     </modules>
 </project>

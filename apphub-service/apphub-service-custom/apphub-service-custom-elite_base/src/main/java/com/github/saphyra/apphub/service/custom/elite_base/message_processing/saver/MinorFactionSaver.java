@@ -2,15 +2,15 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.s
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFactionDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.MinorFactionFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.state.MinorFactionStateFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.minor_faction.state.StateStatus;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFactionDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFactionFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.state.MinorFactionStateFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.state.StateStatus;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.FactionState;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

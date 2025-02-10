@@ -9,5 +9,5 @@ elite-base:
   messageProcessorSublistSize: 50
   executor:
     threadCount: 10
-  retryDelay: PT2M
-  maxRetryCount: 10
+  messageProcessorRetryDelay: PT2M
+  messageProcessorMaxRetryCount: 10

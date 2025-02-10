@@ -18,5 +18,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-custom-elite_base-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

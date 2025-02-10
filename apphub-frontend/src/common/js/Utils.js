@@ -163,3 +163,23 @@ export const formatDuration = (nanoseconds) => {
 
     return seconds.toFixed(3).toLocaleString() + " s";
 }
+
+export const formatNumber = (number, digits)=>{
+    if(!hasValue(number)){
+        return number;
+    }
+
+    return number.toFixed(digits).toLocaleString();
+}
+
+export const isArrayEmpty = (input) => {
+    if (!hasValue(input)) {
+        return true;
+    }
+
+    if (!Array.isArray(input)) {
+        throwException("IllegalArgument", "Input must be an array");
+    }
+
+    return input.length == 0;
+}

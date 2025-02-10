@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.BodyData;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.BodyDataDao;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.BodyDataFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.ReserveLevel;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.body_material.BodyMaterial;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.body_material.BodyMaterialFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.body_ring.BodyRing;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.dao.body_data.body_ring.BodyRingFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.BodyData;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.BodyDataDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.BodyDataFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.ReserveLevel;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.body_material.BodyMaterial;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.body_material.BodyMaterialFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.body_ring.BodyRing;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body_data.body_ring.BodyRingFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.NamePercentPair;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Ring;
 import org.junit.jupiter.api.Test;
