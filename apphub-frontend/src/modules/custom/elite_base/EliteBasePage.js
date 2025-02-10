@@ -1,0 +1,7 @@
+const EliteBasePage = {
+    INDEX: "INDEX",
+    SEARCH_NEAREST: "SEARCH_NEAREST",
+    SEARCH_NEAREST_MATERIAL_TRADER: "SEARCH_NEAREST_MATERIAL_TRADER",
+}
+
+export default EliteBasePage;

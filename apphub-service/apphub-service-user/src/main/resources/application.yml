@@ -23,6 +23,7 @@ registration:
   - UTILS
   - COMMUNITY
   - CALENDAR
+  - ELITE_BASE
 
 rolesCanBeDisabled:
 - NOTEBOOK
@@ -33,6 +34,7 @@ rolesCanBeDisabled:
 - COMMUNITY
 - CALENDAR
 - VILLANY_ATESZ
+- ELITE_BASE
 
 add-role-to-all:
   restrictedRoles:

@@ -1,0 +1,13 @@
+server:
+  port: 8087
+
+elite-base:
+  messageHandler:
+    enabled: true
+  messageExpiration: P30D
+  messageProcessorBatchSize: 1000
+  messageProcessorSublistSize: 50
+  executor:
+    threadCount: 10
+  messageProcessorRetryDelay: PT2M
+  messageProcessorMaxRetryCount: 10

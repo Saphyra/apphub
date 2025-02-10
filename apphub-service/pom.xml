@@ -109,6 +109,5 @@
         <module>apphub-service-admin_panel</module>
         <module>apphub-service-training</module>
         <module>apphub-service-calendar</module>
-        <module>apphub-service-elite_base</module>
     </modules>
 </project>

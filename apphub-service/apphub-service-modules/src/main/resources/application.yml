@@ -100,3 +100,8 @@ modules:
       mobileAllowed: false
       roles:
       - VILLANY_ATESZ
+    - name: elite-base
+      url: /web/elite-base
+      mobileAllowed: false
+      roles:
+      - ELITE_BASE

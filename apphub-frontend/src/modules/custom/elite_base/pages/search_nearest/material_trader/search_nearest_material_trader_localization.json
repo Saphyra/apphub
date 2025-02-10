@@ -1,0 +1,42 @@
+{
+    "material-type": {
+        "en": "Material type",
+        "hu": "Material típus"
+    },
+    "parameters": {
+        "en": "Parameters",
+        "hu": "Paraméterek"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "star-not-selected": {
+        "en": "Please select reference star system!",
+        "hu": "Válassz referencia csillagrendszert!"
+    },
+    "load-more": {
+        "en": "Load more",
+        "hu": "Továbbiak keresése"
+    },
+    "no-more-result":{
+        "en": "No more results found.",
+        "hu": "Nem található több eredmény."
+    },
+    "distance-from-reference": {
+        "en": "SS Dist",
+        "hu": "Táv."
+    },
+    "star-system-name": {
+        "en": "System",
+        "hu": "Csillagrendszer"
+    },
+    "station-name": {
+        "en": "Station",
+        "hu": "Űrállomás"
+    },
+    "station-distance": {
+        "en": "St Dist",
+        "hu": "Állomás táv."
+    }
+}

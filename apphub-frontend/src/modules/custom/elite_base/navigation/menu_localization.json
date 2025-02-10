@@ -1,0 +1,14 @@
+{
+    "INDEX": {
+        "en": "I would like to...",
+        "hu": "Szeretném..."
+    },
+    "SEARCH_NEAREST": {
+        "en": "Serch the nearest...",
+        "hu": "Megtalálni a legközelebbi..."
+    },
+    "SEARCH_NEAREST_MATERIAL_TRADER": {
+        "en": "Material trader",
+        "hu": "Mat kereskedőt"
+    }
+}

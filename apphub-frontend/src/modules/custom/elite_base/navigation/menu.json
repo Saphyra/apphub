@@ -1,0 +1,18 @@
+[
+    {
+        "id": "INDEX",
+        "clickable": true,
+        "items": [
+            {
+                "id": "SEARCH_NEAREST",
+                "clickable": false,
+                "items": [
+                    {
+                        "id": "SEARCH_NEAREST_MATERIAL_TRADER",
+                        "clickable": true
+                    }
+                ]
+            }
+        ]
+    }
+]
