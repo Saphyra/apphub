@@ -28,6 +28,7 @@ public enum EconomyEnum {
     MEGA_SHIP("MegaShip"),
     DAMAGED("Damaged"),
     NONE("None"),
+    UNKNOWN("UNKNOWN"),
     ;
 
     @Getter

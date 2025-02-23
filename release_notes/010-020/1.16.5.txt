@@ -1,6 +1,7 @@
 ===FEATURES===
     EliteBase
         Nearest material traders
+        Missing EconomyEnum "UNKNOWN"
 
 ===BUGFIXES===
 
@@ -10,3 +11,6 @@
 ===TECHNICAL DEBTS===
 
 ===ETC===
+    AdminPanel
+        ErrorReport
+            Delete all does not delete marked reports

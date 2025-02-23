@@ -141,6 +141,6 @@ public class ErrorReporterControllerImplTest {
     public void deleteAll() {
         underTest.deleteAll(accessTokenHeader);
 
-        verify(errorReportDao).deleteAll();
+        verify(errorReportDao).deleteAllExceptStatus(List.of(ErrorReportStatus.MARKED));
     }
 }

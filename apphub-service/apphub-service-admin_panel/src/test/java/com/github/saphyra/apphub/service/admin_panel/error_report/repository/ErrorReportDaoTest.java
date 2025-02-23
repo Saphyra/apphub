@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,5 +100,12 @@ public class ErrorReportDaoTest {
         underTest.deleteByStatus(ErrorReportStatus.READ);
 
         verify(repository).deleteByStatus(ErrorReportStatus.READ.name());
+    }
+
+    @Test
+    void deleteAllExceptStatus() {
+        underTest.deleteAllExceptStatus(List.of(ErrorReportStatus.UNREAD));
+
+        then(repository).should().deleteByStatusNotIn(List.of(ErrorReportStatus.UNREAD.name()));
     }
 }
