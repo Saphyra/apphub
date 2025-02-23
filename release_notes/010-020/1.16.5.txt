@@ -4,6 +4,8 @@
         Missing EconomyEnum "UNKNOWN"
 
 ===BUGFIXES===
+    Notebook
+        New link page displayed New text as title
 
 ===PLATFORM CHANGES===
     EliteBase is moved under Custom group
