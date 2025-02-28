@@ -18,4 +18,5 @@ public class EliteBaseProperties {
     private Integer messageProcessorMaxRetryCount;
     private Integer starSystemSuggestionListSize;
     private Integer searchPageSize;
+    private Duration incomingMessageTimeout;
 }

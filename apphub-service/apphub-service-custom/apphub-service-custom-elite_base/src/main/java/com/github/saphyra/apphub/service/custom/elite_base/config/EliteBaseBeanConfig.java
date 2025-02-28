@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.concurrency.FixedExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
@@ -19,6 +21,7 @@ import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReportingC
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConfiguration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -63,8 +66,21 @@ class EliteBaseBeanConfig {
     @Bean
     FixedExecutorServiceBean fixedExecutorServiceBean(
         ExecutorServiceBeanFactory factory,
-        @Value("${elite-base.executor.threadCount}") int threadCount
-    ){
+        @Value("${elite-base.executor.fixed.threadCount}") int threadCount
+    ) {
         return factory.createFixed(threadCount);
+    }
+
+    @Bean
+    ScheduledExecutorServiceBean scheduledExecutorServiceBean(
+        ExecutorServiceBeanFactory factory,
+        @Value("${elite-base.executor.scheduled.threadCount}") int threadCount
+    ) {
+        return factory.createScheduled(threadCount);
+    }
+
+    @Bean
+    ApplicationContextProxy applicationContextProxy(ConfigurableApplicationContext applicationContext) {
+        return new ApplicationContextProxy(applicationContext);
     }
 }

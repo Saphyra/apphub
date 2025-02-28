@@ -22,8 +22,12 @@ elite-base:
   messageProcessorBatchSize: 100
   messageProcessorSublistSize: 10
   executor:
-    threadCount: 4
+    fixed:
+      threadCount: 4
+    scheduled:
+      threadCount: 2
   messageProcessorRetryDelay: PT2H
   messageProcessorMaxRetryCount: 50
   starSystemSuggestionListSize: 10
   searchPageSize: 30
+  incomingMessageTimeout: PT10M

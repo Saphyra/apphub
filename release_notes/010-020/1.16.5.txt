@@ -3,6 +3,7 @@
         Nearest material traders
         Missing enum values
         Reset Error messages migration task
+        Restart service if no incoming messages
     AdminPanel
         Repeatable migration tasks
 
