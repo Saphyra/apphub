@@ -15,6 +15,7 @@ class MigrationTaskConverter extends ConverterBase<MigrationTaskEntity, Migratio
             .event(domain.getEvent())
             .name(domain.getName())
             .completed(domain.getCompleted())
+            .repeatable(domain.getRepeatable())
             .build();
     }
 
@@ -24,6 +25,7 @@ class MigrationTaskConverter extends ConverterBase<MigrationTaskEntity, Migratio
             .event(entity.getEvent())
             .name(entity.getName())
             .completed(entity.getCompleted())
+            .repeatable(entity.getRepeatable())
             .build();
     }
 }

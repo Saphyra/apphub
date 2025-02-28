@@ -32,6 +32,7 @@ public class MigrationTaskControllerImpl implements MigrationTaskController {
                 .event(migrationTask.getEvent())
                 .name(migrationTask.getName())
                 .completed(migrationTask.getCompleted())
+                .repeatable(migrationTask.getRepeatable())
                 .build())
             .toList();
     }
@@ -42,7 +43,7 @@ public class MigrationTaskControllerImpl implements MigrationTaskController {
         MigrationTask migrationTask = migrationTaskDao.findById(event)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "MigrationTask not found with event " + event));
 
-        if (migrationTask.getCompleted()) {
+        if (migrationTask.getCompleted() && !migrationTask.getRepeatable()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.GONE, ErrorCode.GENERAL_ERROR, "MigrationTask with event " + event + " is already completed.");
         }
 

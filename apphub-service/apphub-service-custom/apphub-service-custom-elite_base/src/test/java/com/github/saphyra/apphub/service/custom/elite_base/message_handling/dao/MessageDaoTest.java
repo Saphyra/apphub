@@ -43,7 +43,7 @@ class MessageDaoTest {
     void resetUnhandled() {
         underTest.resetUnhandled();
 
-        then(repository).should().resetUnhandled(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
+        then(repository).should().setStatus(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
     }
 
     @Test
@@ -62,5 +62,12 @@ class MessageDaoTest {
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         assertThat(underTest.getMessages(CURRENT_TIME, BATCH_SIZE)).containsExactly(domain);
+    }
+
+    @Test
+    void resetError() {
+        underTest.resetError();
+
+        then(repository).should().setStatus(MessageStatus.ERROR, MessageStatus.ARRIVED);
     }
 }

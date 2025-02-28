@@ -13,4 +13,5 @@ public class MigrationTasksResponse {
     private String event;
     private String name;
     private Boolean completed;
+    private Boolean repeatable;
 }

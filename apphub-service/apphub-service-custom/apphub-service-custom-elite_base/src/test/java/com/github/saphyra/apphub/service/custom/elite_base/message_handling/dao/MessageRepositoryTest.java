@@ -47,7 +47,7 @@ class MessageRepositoryTest {
             .build();
         underTest.save(entity2);
 
-        underTest.resetUnhandled(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
+        underTest.setStatus(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
 
         assertThat(underTest.findById(MESSAGE_ID_1).get().getStatus()).isEqualTo(MessageStatus.PROCESSED);
         assertThat(underTest.findById(MESSAGE_ID_2).get().getStatus()).isEqualTo(MessageStatus.ARRIVED);

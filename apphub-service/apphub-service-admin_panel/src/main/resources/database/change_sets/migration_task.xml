@@ -21,4 +21,24 @@
 
         <addPrimaryKey schemaName="admin_panel" tableName="migration_task" columnNames="event" constraintName="migration_task-pk"/>
     </changeSet>
+
+    <changeSet id="add-column-repeatable-to-migration_task" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="admin_panel" tableName="migration_task" columnName="repeatable"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="admin_panel" tableName="migration_task">
+            <column name="repeatable" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="create-migration_task-elite_base_reset_message_status_error" author="Saphyra">
+        <insert schemaName="admin_panel" tableName="migration_task">
+            <column name="event" value="ELITE_BASE_RESET_MESSAGE_STATUS_ERROR"/>
+            <column name="name" value="EliteBase - Reset message status ERROR"/>
+            <column name="repeatable" valueBoolean="true"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

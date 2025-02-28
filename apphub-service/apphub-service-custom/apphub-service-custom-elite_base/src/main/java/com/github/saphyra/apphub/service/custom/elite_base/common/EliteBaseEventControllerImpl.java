@@ -48,4 +48,10 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
             .minus(properties.getMessageExpiration());
         messageDao.deleteExpired(expiration, Arrays.asList(MessageStatus.values()));
     }
+
+    @Override
+    public void resetError() {
+        log.info("resetError event arrived");
+        messageDao.resetError();
+    }
 }

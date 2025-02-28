@@ -13,7 +13,7 @@ interface MessageRepository extends CrudRepository<MessageEntity, String> {
     @Modifying
     @Query("UPDATE MessageEntity e SET e.status=:updatedStatus WHERE e.status=:currentStatus")
     @Transactional
-    void resetUnhandled(@Param("currentStatus") MessageStatus currentStatus, @Param("updatedStatus") MessageStatus updatedStatus);
+    void setStatus(@Param("currentStatus") MessageStatus currentStatus, @Param("updatedStatus") MessageStatus updatedStatus);
 
     @Transactional
     @Query("DELETE MessageEntity e WHERE e.createdAt < :createdAt AND e.status in :statuses")

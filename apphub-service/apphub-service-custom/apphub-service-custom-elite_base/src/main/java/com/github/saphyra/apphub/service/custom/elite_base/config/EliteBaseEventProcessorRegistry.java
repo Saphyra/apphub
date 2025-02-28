@@ -36,6 +36,11 @@ class EliteBaseEventProcessorRegistry implements EventProcessorRegistry {
                 .host(host)
                 .eventName(EmptyEvent.ELITE_BASE_DELETE_EXPIRED_MESSAGES)
                 .url(EliteBaseEndpoints.EVENT_DELETE_EXPIRED_MESSAGES)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .host(host)
+                .eventName(EmptyEvent.MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR)
+                .url(EliteBaseEndpoints.EVENT_MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR)
                 .build()
         );
     }

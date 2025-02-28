@@ -35,7 +35,7 @@ public class MigrationTasksTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-        DatabaseUtil.insertMigrationTask(EVENT, NAME, false);
+        DatabaseUtil.insertMigrationTask(EVENT, NAME, false, false);
         SleepUtil.sleep(3000);
         driver.navigate().refresh();
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MIGRATION_TASKS);

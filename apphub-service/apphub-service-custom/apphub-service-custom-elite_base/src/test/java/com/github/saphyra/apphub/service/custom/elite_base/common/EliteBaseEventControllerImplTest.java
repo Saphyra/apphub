@@ -75,4 +75,11 @@ class EliteBaseEventControllerImplTest {
         then(messageDao).should().deleteExpired(CURRENT_TIME.minus(PROCESSED_MESSAGE_EXPIRATION), List.of(MessageStatus.PROCESSED));
         then(messageDao).should().deleteExpired(CURRENT_TIME.minus(MESSAGE_EXPIRATION), Arrays.asList(MessageStatus.values()));
     }
+
+    @Test
+    void resetError() {
+        underTest.resetError();
+
+        then(messageDao).should().resetError();
+    }
 }

@@ -51,12 +51,13 @@ class MigrationTaskControllerImplTest {
             .name(NAME)
             .event(EVENT)
             .completed(true)
+            .repeatable(false)
             .build();
         given(migrationTaskDao.findAll()).willReturn(List.of(task));
 
         List<MigrationTaskResponse> result = underTest.getMigrationTasks(accessTokenHeader);
 
-        assertThat(result).containsExactly(MigrationTaskResponse.builder().name(NAME).event(EVENT).completed(true).build());
+        assertThat(result).containsExactly(MigrationTaskResponse.builder().name(NAME).event(EVENT).completed(true).repeatable(false).build());
     }
 
     @Test
@@ -72,6 +73,7 @@ class MigrationTaskControllerImplTest {
             .name(NAME)
             .event(EVENT)
             .completed(true)
+            .repeatable(false)
             .build();
         given(migrationTaskDao.findById(EVENT)).willReturn(Optional.of(task));
 
@@ -81,11 +83,12 @@ class MigrationTaskControllerImplTest {
     }
 
     @Test
-    void triggerMigrationTask() {
+    void triggerMigrationTask_repeatable() {
         MigrationTask task = MigrationTask.builder()
             .name(NAME)
             .event(EVENT)
-            .completed(false)
+            .completed(true)
+            .repeatable(true)
             .build();
         given(migrationTaskDao.findById(EVENT)).willReturn(Optional.of(task));
         given(migrationTaskDao.findAll()).willReturn(List.of(task));
@@ -97,7 +100,28 @@ class MigrationTaskControllerImplTest {
 
         then(migrationTaskDao).should().save(task);
 
-        assertThat(result).containsExactly(MigrationTaskResponse.builder().name(NAME).event(EVENT).completed(true).build());
+        assertThat(result).containsExactly(MigrationTaskResponse.builder().name(NAME).event(EVENT).completed(true).repeatable(true).build());
+    }
+
+    @Test
+    void triggerMigrationTask() {
+        MigrationTask task = MigrationTask.builder()
+            .name(NAME)
+            .event(EVENT)
+            .completed(false)
+            .repeatable(false)
+            .build();
+        given(migrationTaskDao.findById(EVENT)).willReturn(Optional.of(task));
+        given(migrationTaskDao.findAll()).willReturn(List.of(task));
+
+        List<MigrationTaskResponse> result = underTest.triggerMigrationTask(EVENT, accessTokenHeader);
+
+        then(eventGatewayProxy).should().sendEvent(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(EVENT);
+
+        then(migrationTaskDao).should().save(task);
+
+        assertThat(result).containsExactly(MigrationTaskResponse.builder().name(NAME).event(EVENT).completed(true).repeatable(false).build());
     }
 
     @Test

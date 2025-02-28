@@ -18,7 +18,7 @@ public class MessageDao extends AbstractDao<MessageEntity, EdMessage, String, Me
     }
 
     public void resetUnhandled() {
-        repository.resetUnhandled(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
+        repository.setStatus(MessageStatus.UNHANDLED, MessageStatus.ARRIVED);
     }
 
     public void deleteExpired(LocalDateTime expiration, List<MessageStatus> statuses) {
@@ -27,5 +27,9 @@ public class MessageDao extends AbstractDao<MessageEntity, EdMessage, String, Me
 
     public List<EdMessage> getMessages(LocalDateTime timeLimit, Integer messageProcessorBatchSize) {
         return converter.convertEntity(repository.getByCreatedAtBeforeAndStatusOrderByCreatedAtAsc(dateTimeConverter.convertDomain(timeLimit), MessageStatus.ARRIVED, PageRequest.of(0, messageProcessorBatchSize)));
+    }
+
+    public void resetError() {
+        repository.setStatus(MessageStatus.ERROR, MessageStatus.ARRIVED);
     }
 }

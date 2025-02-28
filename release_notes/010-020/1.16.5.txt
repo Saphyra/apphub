@@ -2,6 +2,9 @@
     EliteBase
         Nearest material traders
         Missing enum values
+        Reset Error messages migration task
+    AdminPanel
+        Repeatable migration tasks
 
 ===BUGFIXES===
     Notebook
