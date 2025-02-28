@@ -45,6 +45,9 @@ public enum StationServiceEnum {
     VOUCHER_REDEMPTION("voucherredemption"),
     CARRIER_VENDOR("carriervendor"),
     WORKSHOP("Workshop"),
+    REGISTERING_COLONIZATION("registeringcolonisation"),
+    COLONISATION_CONTRIBUTION("colonisationcontribution"),
+    REFINERY("refinery"),
     ;
 
     private final List<String> value;

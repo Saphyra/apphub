@@ -1,7 +1,7 @@
 ===FEATURES===
     EliteBase
         Nearest material traders
-        Missing EconomyEnum "UNKNOWN"
+        Missing enum values
 
 ===BUGFIXES===
     Notebook

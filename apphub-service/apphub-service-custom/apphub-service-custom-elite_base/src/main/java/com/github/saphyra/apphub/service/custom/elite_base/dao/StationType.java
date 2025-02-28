@@ -22,6 +22,9 @@ public enum StationType {
     MEGA_SHIP("MegaShip"),
     OCELLUS("Ocellus"),
     SURFACE_STATION("SurfaceStation"),
+    PLANETARY_CONSTRUCTION_DEPOT("PlanetaryConstructionDepot"),
+    UNKNOWN("Unknown"),
+    SPACE_CONSTRUCTION_DEPOT("SpaceConstructionDepot"),
     ;
 
     @Getter
