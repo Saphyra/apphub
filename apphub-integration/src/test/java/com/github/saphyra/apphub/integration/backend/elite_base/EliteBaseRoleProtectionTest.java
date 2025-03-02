@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class EliteBaseRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "elite-base"})
-    public void notebookRoleProtection(String role) {
+    public void eliteBaseRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
