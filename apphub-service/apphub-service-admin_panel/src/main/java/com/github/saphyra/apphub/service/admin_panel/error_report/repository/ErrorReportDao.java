@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -43,5 +44,10 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReportDt
 
     public void deleteByStatus(ErrorReportStatus status) {
         repository.deleteByStatus(status.name());
+    }
+
+    @Transactional
+    public void deleteAllExceptStatus(List<ErrorReportStatus> statuses){
+        repository.deleteByStatusNotIn(statuses.stream().map(Enum::name).toList());
     }
 }

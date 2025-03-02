@@ -1,0 +1,22 @@
+===FEATURES===
+    EliteBase
+        Nearest material traders
+        Missing enum values
+        Reset Error messages migration task
+        Restart service if no incoming messages
+    AdminPanel
+        Repeatable migration tasks
+
+===BUGFIXES===
+    Notebook
+        New link page displayed New text as title
+
+===PLATFORM CHANGES===
+    EliteBase is moved under Custom group
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    AdminPanel
+        ErrorReport
+            Delete all does not delete marked reports

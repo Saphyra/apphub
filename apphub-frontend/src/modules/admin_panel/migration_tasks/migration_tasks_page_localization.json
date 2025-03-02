@@ -54,5 +54,9 @@
     "confirm-trigger-detail": {
         "en": "Are you sure you want to trigger Migration Task \"{event}\"? It does \"{name}\".",
         "hu": "Biztosan el szeretnéd indítani a \"{event}\" Migrációs Feladatot? Ez a következőt csinálja: \"{name}\"."
+    },
+    "migration-triggered": {
+        "en": "Migration triggered.",
+        "hu": "Migrációs feladat elindítva."
     }
 }

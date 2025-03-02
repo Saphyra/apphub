@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: elite-base
+  datasource:
+    hikari:
+      maximumPoolSize: 20
+  jpa:
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        batch_versioned_data: true
+        jdbc:
+          batch_size: 50
+
+liquibase:
+  schema: elite_base
+
+elite-base:
+  messageExpiration: P30D
+  processedMessageExpiration: P3D
+  messageProcessorBatchSize: 100
+  messageProcessorSublistSize: 10
+  executor:
+    fixed:
+      threadCount: 4
+    scheduled:
+      threadCount: 2
+  messageProcessorRetryDelay: PT2H
+  messageProcessorMaxRetryCount: 50
+  starSystemSuggestionListSize: 10
+  searchPageSize: 30
+  incomingMessageTimeout: PT10M

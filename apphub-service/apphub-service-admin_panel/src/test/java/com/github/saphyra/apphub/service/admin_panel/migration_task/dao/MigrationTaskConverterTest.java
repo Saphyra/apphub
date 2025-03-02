@@ -21,6 +21,7 @@ class MigrationTaskConverterTest {
             .event(EVENT)
             .name(NAME)
             .completed(true)
+            .repeatable(false)
             .build();
 
         MigrationTaskEntity result = underTest.convertDomain(domain);
@@ -28,6 +29,7 @@ class MigrationTaskConverterTest {
         assertThat(result.getEvent()).isEqualTo(EVENT);
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getCompleted()).isTrue();
+        assertThat(result.getRepeatable()).isFalse();
     }
 
     @Test
@@ -36,6 +38,7 @@ class MigrationTaskConverterTest {
             .event(EVENT)
             .name(NAME)
             .completed(true)
+            .repeatable(false)
             .build();
 
         MigrationTask result = underTest.convertEntity(domain);
@@ -43,5 +46,6 @@ class MigrationTaskConverterTest {
         assertThat(result.getEvent()).isEqualTo(EVENT);
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getCompleted()).isTrue();
+        assertThat(result.getRepeatable()).isFalse();
     }
 }

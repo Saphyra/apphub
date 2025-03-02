@@ -1,0 +1,14 @@
+#elite-base-main {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+#elite-base-navigation {
+    overflow: auto;
+}
+
+.elite-base-page {
+    flex-grow: 2;
+    overflow: auto;
+}

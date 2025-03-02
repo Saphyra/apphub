@@ -9,19 +9,31 @@ import com.github.saphyra.apphub.integration.structure.api.admin_panel.Migration
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MigrationTasksTest extends BackEndTest {
     private static final String EVENT = "backend-migration-tasks-event";
     private static final String NAME = "Event for BE test";
+    private static final Semaphore SEMAPHORE = new Semaphore(1);
+
+    @BeforeMethod(alwaysRun = true)
+    public void beforeMethod() throws InterruptedException {
+        SEMAPHORE.acquire();
+    }
 
     @AfterMethod(alwaysRun = true)
     public void deleteEvent() {
-        DatabaseUtil.deleteMigrationTaskByEvent(EVENT);
+        try {
+            DatabaseUtil.deleteMigrationTaskByEvent(EVENT);
+        } finally {
+            SEMAPHORE.release();
+        }
     }
 
     @Test(groups = {"be", "admin-panel"})
@@ -30,7 +42,7 @@ public class MigrationTasksTest extends BackEndTest {
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
-        DatabaseUtil.insertMigrationTask(EVENT, NAME, false);
+        DatabaseUtil.insertMigrationTask(EVENT, NAME, false, false);
 
         MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
         assertThat(task.getCompleted()).isFalse();
@@ -41,6 +53,28 @@ public class MigrationTasksTest extends BackEndTest {
 
         Response response = MigrationTasksActions.getTriggerTaskResponse(getServerPort(), accessTokenId, EVENT);
         assertThat(response.getStatusCode()).isEqualTo(410);
+
+        MigrationTasksActions.deleteTask(getServerPort(), accessTokenId, EVENT);
+
+        assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessTokenId, EVENT)).isEmpty();
+    }
+
+    @Test(groups = {"be", "admin-panel"})
+    public void repeatableMigrationTasksTest() {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+
+        DatabaseUtil.insertMigrationTask(EVENT, NAME, false, true);
+
+        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
+        assertThat(task.getCompleted()).isFalse();
+
+        MigrationTasksActions.triggerTask(getServerPort(), accessTokenId, EVENT);
+        task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
+        assertThat(task.getCompleted()).isTrue();
+
+        MigrationTasksActions.triggerTask(getServerPort(), accessTokenId, EVENT);
 
         MigrationTasksActions.deleteTask(getServerPort(), accessTokenId, EVENT);
 

@@ -1,0 +1,44 @@
+#elite-base-navigation {
+    border-right: 3px ridge white;
+}
+
+.elite-base-navigation-menu-item .elite-base-navigation-menu-item {
+    margin-left: 32px;
+}
+
+.elite-base-navigation-menu-item .button {
+    text-align: left;
+    padding: 2px;
+    border-radius: 0;
+    border-top: 0;
+    margin-top: 0;
+}
+
+.elite-base-navigation-menu-item .button.disabled {
+    border-color: darkgray !important;
+}
+
+.elite-base-navigation-menu-item .button.opened {
+    border-color: lime;
+}
+
+.elite-base-navigation-menu-item .button:not(.disabled) .menu-item-label {
+    cursor: pointer;
+}
+
+.elite-base-navigation-menu-item .button button {
+    font-size: 16px;
+    height: 24px;
+    margin: 0;
+    padding: 2px;
+    width: 20px;
+    border-width: 2px;
+}
+
+.elite-base-navigation-menu-item .menu-item-label {
+    font-size: 24px;
+}
+
+.elite-base-navigation-menu-item .menu-item-label {
+    margin-left: 12px;
+}

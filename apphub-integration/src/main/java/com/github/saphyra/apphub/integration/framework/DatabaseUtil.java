@@ -30,7 +30,7 @@ public class DatabaseUtil {
     private static final String SET_MARKED_FOR_DELETION_BY_EMAIL_LIKE = "UPDATE apphub_user.apphub_user SET marked_for_deletion=true WHERE email LIKE '%s'";
     private static final String GET_CALENDAR_OCCURRENCES_BY_USER_ID = "SELECT * FROM calendar.occurrence WHERE user_id='%s'";
     private static final String UNLOCK_USER_BY_EMAIL = "UPDATE apphub_user.apphub_user SET locked_until = null WHERE email='%s'";
-    private static final String INSERT_MIGRATION_TASK = "INSERT INTO admin_panel.migration_task(event, name, completed) VALUES ('%s', '%s', '%s');";
+    private static final String INSERT_MIGRATION_TASK = "INSERT INTO admin_panel.migration_task(event, name, completed, repeatable) VALUES ('%s', '%s', '%s', '%s');";
     private static final String DELETE_MIGRATION_TASK_BY_EVENT = "DELETE FROM admin_panel.migration_task WHERE event='%s'";
     private static final String GET_ROLE_COUNT = "SELECT count(*) from apphub_user.apphub_role WHERE apphub_role='%s'";
     private static final String GET_ENCRYPTED_DATA_FROM_CHECKED_ITEM = "SELECT checked FROM notebook.checked_item WHERE user_id='%s' LIMIT 1";
@@ -97,9 +97,9 @@ public class DatabaseUtil {
         }
     }
 
-    public static void insertMigrationTask(String event, String name, boolean completed) {
+    public static void insertMigrationTask(String event, String name, boolean completed, boolean repeatable) {
         try {
-            String sql = INSERT_MIGRATION_TASK.formatted(event, name, completed);
+            String sql = INSERT_MIGRATION_TASK.formatted(event, name, completed, repeatable);
             execute(sql);
         } catch (Exception e) {
             throw new RuntimeException("Failed inserting new Migration Task", e);

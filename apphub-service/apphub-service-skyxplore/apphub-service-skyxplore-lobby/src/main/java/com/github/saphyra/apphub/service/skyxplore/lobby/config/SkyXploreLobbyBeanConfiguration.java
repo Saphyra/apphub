@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConf
 import com.github.saphyra.apphub.lib.web_socket.WebSocketConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.lobby.controller.filter.LobbyLastAccessInterceptorFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -51,7 +51,7 @@ public class SkyXploreLobbyBeanConfiguration {
     }
 
     @Bean
-    ApplicationContextProxy applicationContextProxy(ApplicationContext applicationContext) {
+    ApplicationContextProxy applicationContextProxy(ConfigurableApplicationContext applicationContext) {
         return new ApplicationContextProxy(applicationContext);
     }
 

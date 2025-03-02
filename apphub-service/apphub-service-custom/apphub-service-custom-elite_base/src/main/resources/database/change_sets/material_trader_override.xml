@@ -1,0 +1,18 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-material_trader_override" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="material_trader_override"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="material_trader_override">
+            <column name="station_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="material_type" type="varchar(255)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="material_trader_override" columnNames="station_id" constraintName="material_trader_override-pk"/>
+    </changeSet>
+</databaseChangeLog>

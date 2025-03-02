@@ -12,6 +12,7 @@ import MigrationTask from "./MigrationTask";
 import "./migration_tasks.css";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { ADMIN_PANEL_MIGRATION_DELETE_TASK, ADMIN_PANEL_MIGRATION_GET_TASKS, ADMIN_PANEL_MIGRATION_TRIGGER_TASK } from "../../../common/js/dao/endpoints/AdminPanelEndpoints";
+import { ToastContainer } from "react-toastify";
 
 const MigrationTasksPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -108,6 +109,7 @@ const MigrationTasksPage = () => {
 
         setMigrationTasks(response);
         setConfirmationDialogData(null)
+        NotificationService.showSuccess(localizationHandler.get("migration-triggered"))
     }
 
     return (
@@ -152,6 +154,8 @@ const MigrationTasksPage = () => {
                     choices={confirmationDialogData.choices}
                 />
             }
+
+            <ToastContainer />
         </div>
     );
 }

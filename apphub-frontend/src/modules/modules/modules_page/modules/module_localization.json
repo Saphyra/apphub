@@ -82,5 +82,9 @@
     "performance-reporting": {
         "en": "Performance reporting",
         "hu": "Teljesítmény"
+    },
+    "elite-base": {
+        "en": "EliteBase",
+        "hu": "EliteBase"
     }
 }

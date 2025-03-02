@@ -16,14 +16,17 @@ const MigrationTask = ({ localizationHandler, data, deleteCallback, triggerCallb
                 />
             </td>
             <td className="migration-task-commands">
-                <Button
-                    className="migration-task-delete-button"
-                    label={localizationHandler.get("delete")}
-                    onclick={deleteCallback}
-                />
+                {
+                    !data.repeatable &&
+                    <Button
+                        className="migration-task-delete-button"
+                        label={localizationHandler.get("delete")}
+                        onclick={deleteCallback}
+                    />
+                }
 
                 {
-                    !data.completed &&
+                    (!data.completed || data.repeatable) &&
 
                     <Button
                         className="migration-task-trigger-button"

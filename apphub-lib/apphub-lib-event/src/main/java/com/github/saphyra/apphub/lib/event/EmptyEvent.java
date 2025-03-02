@@ -15,4 +15,6 @@ public class EmptyEvent {
     public static final String ELITE_BASE_PROCESS_MESSAGES = "elite-base-process-messages";
     public static final String ELITE_BASE_RESET_UNHANDLED_MESSAGES = "elite-base-reset-unhandled-messages";
     public static final String ELITE_BASE_DELETE_EXPIRED_MESSAGES = "elite-base-delete-expired-messages";
+
+    public static final String MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR = "ELITE_BASE_RESET_MESSAGE_STATUS_ERROR";
 }

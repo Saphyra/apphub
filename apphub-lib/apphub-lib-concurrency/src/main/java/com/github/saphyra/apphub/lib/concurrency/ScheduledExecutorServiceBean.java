@@ -26,12 +26,20 @@ public class ScheduledExecutorServiceBean {
         return executor.scheduleWithFixedDelay(wrap(task), initialDelay, delay, timeUnit);
     }
 
+    public ScheduledFuture<?> scheduleFixedRate(Runnable task, Duration duration) {
+        return scheduleFixedRate(task, duration.getSeconds(), TimeUnit.SECONDS);
+    }
+
     public ScheduledFuture<?> scheduleFixedRate(Runnable task, long rate, TimeUnit timeUnit) {
         return executor.scheduleAtFixedRate(wrap(task), 0, rate, timeUnit);
     }
 
     public ScheduledFuture<?> schedule(Runnable task, Duration delay) {
         return executor.schedule(wrap(task), delay.getSeconds(), TimeUnit.SECONDS);
+    }
+
+    public void shutdown(){
+        executor.shutdown();
     }
 
     private Runnable wrap(Runnable command) {

@@ -24,7 +24,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.SkyXploreDataConfig;
 import com.github.saphyra.apphub.lib.web_socket.WebSocketConfiguration;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -83,7 +83,7 @@ public class SkyXploreGameBeanConfiguration {
     }
 
     @Bean
-    ApplicationContextProxy applicationContextProxy(ApplicationContext applicationContext) {
+    ApplicationContextProxy applicationContextProxy(ConfigurableApplicationContext applicationContext) {
         return new ApplicationContextProxy(applicationContext);
     }
 
