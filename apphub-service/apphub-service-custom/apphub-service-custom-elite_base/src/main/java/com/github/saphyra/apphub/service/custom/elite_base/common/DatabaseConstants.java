@@ -8,6 +8,7 @@ public class DatabaseConstants {
     public static final String TABLE_STATION_SERVICE = "station_service";
     public static final String TABLE_BODY = "body";
     public static final String TABLE_MATERIAL_TRADER_OVERRIDE = "material_trader_override";
+    public static final String TABLE_COMMODITY = "commodity";
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";
@@ -23,5 +24,6 @@ public class DatabaseConstants {
     public static final String COLUMN_SERVICE = "service";
     public static final String COLUMN_ECONOMY = "economy";
     public static final String COLUMN_MATERIAL_TYPE = "material_type";
+    public static final String COLUMN_COMMODITY_NAME = "commodity_name";
 }
 

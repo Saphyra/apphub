@@ -14,6 +14,7 @@ public class SelectQuery implements SqlBuilder {
     private final List<Column> columns = new ArrayList<>();
     private Table from;
     private final List<Join> joins = new ArrayList<>();
+    private Column groupBy;
     private final List<SegmentProvider> conditions = new ArrayList<>();
     private OrderBy orderBy = null;
     private Integer limit = null;
@@ -34,6 +35,10 @@ public class SelectQuery implements SqlBuilder {
         segments.add(from.get());
 
         joins.forEach(join -> segments.add(join.get()));
+
+        if(nonNull(groupBy)){
+            segments.add(groupBy.get());
+        }
 
         if(!conditions.isEmpty()){
             segments.add("WHERE");
@@ -119,6 +124,12 @@ public class SelectQuery implements SqlBuilder {
 
     public SelectQuery offset(int offset) {
         this.offset = offset;
+
+        return this;
+    }
+
+    public SqlBuilder groupBy(Column column) {
+        this.groupBy = column;
 
         return this;
     }

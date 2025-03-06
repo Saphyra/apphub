@@ -8,4 +8,6 @@ public class EliteBaseEndpoints {
 
     public static final String ELITE_BASE_STAR_SYSTEMS_SEARCH = "/api/elite-base/star-systems/search";
     public static final String ELITE_BASE_NEAREST_MATERIAL_TRADERS = "/api/elite-base/nearest/{starId}/material-traders/{materialType}/{page}";
+    public static final String ELITE_BASE_COMMODITY_TRADING_BUY = "/api/elite-base/commodity-trading/buy";
+    public static final String ELITE_BASE_COMMODITY_TRADING_SELL = "/api/elite-base/commodity-trading/sell";
 }

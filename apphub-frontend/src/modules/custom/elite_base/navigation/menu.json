@@ -12,6 +12,20 @@
                         "clickable": true
                     }
                 ]
+            },
+            {
+                "id": "TRADE",
+                "clickable": false,
+                "items": [
+                    {
+                        "id": "BUY_COMMODITIES",
+                        "clickable": true
+                    },
+                    {
+                        "id": "SELL_COMMODITIES",
+                        "clickable": true
+                    }
+                ]
             }
         ]
     }

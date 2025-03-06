@@ -1,7 +1,7 @@
 {
     "INDEX": {
         "en": "I would like to...",
-        "hu": "Szeretném..."
+        "hu": "Szeretnék/m..."
     },
     "SEARCH_NEAREST": {
         "en": "Serch the nearest...",
@@ -10,5 +10,17 @@
     "SEARCH_NEAREST_MATERIAL_TRADER": {
         "en": "Material trader",
         "hu": "Mat kereskedőt"
+    },
+    "TRADE": {
+        "en": "Trade",
+        "hu": "Kereskedni"
+    },
+    "BUY_COMMODITIES": {
+        "en": "Buy commodities",
+        "hu": "Vásárlás"
+    },
+    "SELL_COMMODITIES": {
+        "en": "Sell commodities",
+        "hu": "Eladás"
     }
 }
