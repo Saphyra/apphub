@@ -164,8 +164,8 @@ export const formatDuration = (nanoseconds) => {
     return seconds.toFixed(3).toLocaleString() + " s";
 }
 
-export const formatNumber = (number, digits)=>{
-    if(!hasValue(number)){
+export const formatNumber = (number, digits) => {
+    if (!hasValue(number)) {
         return number;
     }
 

@@ -37,7 +37,9 @@ public class SelectQuery implements SqlBuilder {
         joins.forEach(join -> segments.add(join.get()));
 
         if(nonNull(groupBy)){
-            segments.add(groupBy.get());
+            segments.add("GROUP BY");
+            String groupBySegment = groupBy.get();
+            segments.add(groupBySegment);
         }
 
         if(!conditions.isEmpty()){

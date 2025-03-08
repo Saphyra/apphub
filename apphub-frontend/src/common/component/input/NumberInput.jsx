@@ -9,7 +9,7 @@ const NumberInput = ({
     value,
     onkeyupCallback = () => { },
     min,
-    max,
+    max = 2_147_483_647,
     step = 1,
     disabled = false,
     autoFocus = false

@@ -30,7 +30,9 @@ public class NDimensionDistanceCalculator {
 
         double sum = 0d;
         for (int i = 0; i < coordinate1.numberOfDimensions(); i++) {
-            sum += Math.pow(coordinate1.getPoints().get(i) - coordinate2.getPoints().get(i), 2);
+            Double c1 = coordinate1.getPoints().get(i);
+            Double c2 = coordinate2.getPoints().get(i);
+            sum += Math.pow(c1 - c2, 2);
         }
 
         return Math.sqrt(sum);

@@ -14,15 +14,15 @@
                 ]
             },
             {
-                "id": "TRADE",
+                "id": "COMMODITY_TRADING",
                 "clickable": false,
                 "items": [
                     {
-                        "id": "BUY_COMMODITIES",
+                        "id": "COMMODITY_TRADING_BUY_COMMODITIES",
                         "clickable": true
                     },
                     {
-                        "id": "SELL_COMMODITIES",
+                        "id": "COMMODITY_TRADING_SELL_COMMODITIES",
                         "clickable": true
                     }
                 ]

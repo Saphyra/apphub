@@ -11,6 +11,8 @@ public enum Relation {
     ANY_MATCH((required, current) -> required.stream().anyMatch(current::contains)),
     ALL_MATCH((required, current) -> new HashSet<>(current).containsAll(required)),
     NONE_MATCH((required, current) -> required.stream().noneMatch(current::contains)),
+    EMPTY((required, current) -> current.isEmpty()),
+    ANY((required, current) -> true),
     ;
 
     private final BiFunction<List<String>, List<String>,Boolean> function;

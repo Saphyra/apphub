@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.geometry.n_dimension.NDimensionCoordinate;
 import com.github.saphyra.apphub.lib.geometry.n_dimension.NDimensionDistanceCalculator;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
@@ -10,7 +11,6 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
+//TODO split
 public class CommodityTradingService {
     private final CommodityTradingRequestValidator commodityTradingRequestValidator;
     private final CommodityDao commodityDao;
@@ -55,27 +57,75 @@ public class CommodityTradingService {
     private final LastUpdateDao lastUpdateDao;
     private final DateTimeUtil dateTimeUtil;
 
-    public List<CommodityTradingResponse> getTradeOffers(TradeMode tradeMode, CommodityTradingRequest request) {
+    public List<CommodityTradingResponse> getTradeOffers(CommodityTradingRequest request) {
         commodityTradingRequestValidator.validate(request);
+        TradeMode tradeMode = ValidationUtil.convertToEnumChecked(request.getTradeMode(), TradeMode::valueOf, "tradeMode");
 
         StarSystem referenceSystem = starSystemDao.findByIdValidated(request.getReferenceStarId());
 
         List<Commodity> offers = tradeMode.getOfferProvider().apply(commodityDao, request);
+        log.info("Offers found: {}", offers.size());
 
         LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
             .minus(request.getMaxTimeSinceLastUpdated());
 
-        return assembleResponses(tradeMode, referenceSystem, offers, request.getIncludeFleetCarriers())
+        List<CommodityTradingResponse> result = assembleResponses(tradeMode, referenceSystem, offers, request.getIncludeFleetCarriers())
             .stream()
-            .filter(commodityTradingResponse -> commodityTradingResponse.getStarSystemDistance() <= request.getMaxStarSystemDistance())
+            .filter(systemDistanceFilter(request))
             .filter(stationDistanceFilter(request))
             .filter(landingPadFilter(request))
             .filter(lastUpdateFilter(expiration))
             .filter(surfaceStationFilter(request))
-            .filter(commodityTradingResponse -> request.getPowerRelation().apply(request.getControllingPowers(), List.of(commodityTradingResponse.getControllingPower())))
-            .filter(commodityTradingResponse -> isNull(request.getPowerplayState()) || commodityTradingResponse.getPowerplayState().equals(request.getPowerplayState()))
-            .filter(commodityTradingResponse -> commodityTradingResponse.getTradeAmount() >= request.getMinTradeAmount())
+            .filter(controllingFactionFilter(request))
+            .filter(powerplayStateFilter(request))
+            .filter(tradeAmountFilter(request))
             .toList();
+        log.info("Remaining offers after filtering: {}", result.size());
+        return result;
+    }
+
+    private static Predicate<CommodityTradingResponse> tradeAmountFilter(CommodityTradingRequest request) {
+        return commodityTradingResponse -> {
+            boolean result = commodityTradingResponse.getTradeAmount() >= request.getMinTradeAmount();
+            if (!result) {
+                log.info("Filtering offer with amount too low {}", commodityTradingResponse);
+            }
+            return result;
+        };
+    }
+
+    private static Predicate<CommodityTradingResponse> powerplayStateFilter(CommodityTradingRequest request) {
+        return commodityTradingResponse -> {
+            if (isNull(request.getPowerplayState())) {
+                return true;
+            }
+
+            boolean result = commodityTradingResponse.getPowerplayState().equals(request.getPowerplayState());
+            if (!result) {
+                log.info("Filtering offer from system with incorrect powerplayState {}", commodityTradingResponse);
+            }
+            return result;
+        };
+    }
+
+    private static Predicate<CommodityTradingResponse> controllingFactionFilter(CommodityTradingRequest request) {
+        return commodityTradingResponse -> {
+            boolean result = request.getPowersRelation().apply(request.getControllingPowers(), Optional.ofNullable(commodityTradingResponse.getControllingPower()).map(List::of).orElse(Collections.emptyList()));
+            if (!result) {
+                log.info("Filtered offer with incorrect controllingFaction: {}", commodityTradingResponse);
+            }
+            return result;
+        };
+    }
+
+    private static Predicate<CommodityTradingResponse> systemDistanceFilter(CommodityTradingRequest request) {
+        return commodityTradingResponse -> {
+            boolean result = commodityTradingResponse.getStarSystemDistance() <= request.getMaxStarSystemDistance();
+            if (!result) {
+                log.info("Filtered offer because system is too far: {}", commodityTradingResponse);
+            }
+            return result;
+        };
     }
 
     private Predicate<CommodityTradingResponse> surfaceStationFilter(CommodityTradingRequest request) {
@@ -86,31 +136,57 @@ public class CommodityTradingService {
 
             StationType stationType = StationType.valueOf(commodityTradingResponse.getLocationType());
 
-            return stationType != StationType.SURFACE_STATION && stationType != StationType.ON_FOOT_SETTLEMENT;
+            boolean result = stationType != StationType.SURFACE_STATION && stationType != StationType.ON_FOOT_SETTLEMENT;
+            if (!result) {
+                log.info("Filtered offer at surface station: {}", commodityTradingResponse);
+            }
+            return result;
         };
     }
 
     private Predicate<CommodityTradingResponse> lastUpdateFilter(LocalDateTime expiration) {
-        return commodityTradingResponse -> commodityTradingResponse.getLastUpdated().isAfter(expiration);
+        return commodityTradingResponse -> {
+            boolean result = commodityTradingResponse.getLastUpdated().isAfter(expiration);
+            if (!result) {
+                log.info("Filtered offer based on expired data. Expiration: {}. {}", expiration, commodityTradingResponse);
+            }
+            return result;
+        };
     }
 
     private Predicate<CommodityTradingResponse> landingPadFilter(CommodityTradingRequest request) {
         return commodityTradingResponse -> {
-            if (isNull(commodityTradingResponse.getLandingPad()) && !request.getIncludeUnknownLandingPad()) {
-                return false;
+            if (isNull(commodityTradingResponse.getLandingPad())) {
+                boolean result = request.getIncludeUnknownLandingPad();
+                if (!result) {
+                    log.info("Filtered offer from station with unknown landing pad: {}", commodityTradingResponse);
+                }
+                return result;
             }
 
-            return commodityTradingResponse.getLandingPad().isLargeEnough(request.getMinLandingPad());
+            boolean result = commodityTradingResponse.getLandingPad().isLargeEnough(request.getMinLandingPad());
+            if (!result) {
+                log.info("Filtered offer from station with too small landing pad: {}", commodityTradingResponse);
+            }
+            return result;
         };
     }
 
     private static Predicate<CommodityTradingResponse> stationDistanceFilter(CommodityTradingRequest request) {
         return commodityTradingResponse -> {
-            if (isNull(commodityTradingResponse.getStationDistance()) && !request.getIncludeUnknownStationDistance()) {
-                return false;
+            if (isNull(commodityTradingResponse.getStationDistance())) {
+                Boolean result = request.getIncludeUnknownStationDistance();
+                if (!result) {
+                    log.info("Filtered offer from station with unknown distance: {}", commodityTradingResponse);
+                }
+                return result;
             }
 
-            return commodityTradingResponse.getStationDistance() <= request.getMaxStationDistance();
+            boolean result = commodityTradingResponse.getStationDistance() <= request.getMaxStationDistance();
+            if (!result) {
+                log.info("Filtered offer from too far station: {}", commodityTradingResponse);
+            }
+            return result;
         };
     }
 
@@ -118,11 +194,10 @@ public class CommodityTradingService {
         Map<UUID, CommodityLocationData> commodityLocationDatas = new HashMap<>();
 
         //Fetch stations for commodities
-        List<UUID> stationIds = offers.stream()
-            .filter(commodity -> commodity.getCommodityLocation() == CommodityLocation.STATION)
+        List<UUID> locationIds = offers.stream()
             .map(Commodity::getExternalReference)
             .toList();
-        stationDao.findAllById(stationIds)
+        stationDao.findAllById(locationIds)
             .stream()
             .map(station -> CommodityLocationData.builder()
                 .externalReference(station.getId())
@@ -135,17 +210,12 @@ public class CommodityTradingService {
 
         //Fetch Fleet carriers for commodities, if client requests it
         if (includeFleetCarriers) {
-            List<UUID> fleetCarrierIds = offers.stream()
-                .filter(commodity -> commodity.getCommodityLocation() == CommodityLocation.FLEET_CARRIER)
-                .map(Commodity::getExternalReference)
-                .toList();
-
-            fleetCarrierDao.findAllById(fleetCarrierIds)
+            fleetCarrierDao.findAllById(locationIds)
                 .stream()
                 .map(fleetCarrier -> CommodityLocationData.builder()
                     .externalReference(fleetCarrier.getId())
                     .starSystemId(fleetCarrier.getStarSystemId())
-                    .locationName(fleetCarrier.getCarrierName())
+                    .locationName(String.join(" - ", fleetCarrier.getCarrierId(), fleetCarrier.getCarrierName()))
                     .build())
                 .forEach(commodityLocationData -> commodityLocationDatas.put(commodityLocationData.getExternalReference(), commodityLocationData));
         }
@@ -154,6 +224,7 @@ public class CommodityTradingService {
         List<UUID> starIds = commodityLocationDatas.values()
             .stream()
             .map(CommodityLocationData::getStarSystemId)
+            .filter(Objects::nonNull)
             .toList();
         Map<UUID, StarSystem> stars = starSystemDao.findAllById(starIds)
             .stream()
@@ -176,35 +247,56 @@ public class CommodityTradingService {
 
         //Convert fetched data to response
         return offers.stream()
-            .map(commodity -> {
-                CommodityLocationData commodityLocationData = commodityLocationDatas.get(commodity.getExternalReference());
-                StarSystem starSystem = stars.get(commodityLocationData.getStarSystemId());
-                Double stationDistance = Optional.ofNullable(commodityLocationData.getBodyId())
-                    .map(bodies::get)
-                    .map(Body::getDistanceFromStar)
-                    .orElse(null);
-                StarSystemData starSystemData = systemDatas.get(starSystem.getId());
-                return CommodityTradingResponse.builder()
-                    .starId(starSystem.getId())
-                    .starName(starSystem.getStarName())
-                    .starSystemDistance(getDistanceFromStar(referenceSystem.getPosition(), starSystem.getPosition()))
-                    .externalReference(commodityLocationData.getExternalReference())
-                    .locationName(commodityLocationData.getLocationName())
-                    .locationType(commodityLocationData.getStationType().name())
-                    .stationDistance(stationDistance)
-                    .landingPad(commodityLocationData.getStationType().getLandingPad())
-                    .tradeAmount(tradeMode.getTradeAmountExtractor().apply(commodity))
-                    .price(tradeMode.getPriceExtractor().apply(commodity))
-                    .controllingPower(Optional.ofNullable(starSystemData).map(StarSystemData::getControllingPower).map(Enum::name).orElse(null))
-                    .powers(Optional.ofNullable(starSystemData).map(StarSystemData::getPowers).map(powers -> powers.stream().map(Enum::name).toList()).orElse(null))
-                    .powerplayState(Optional.ofNullable(starSystemData).map(StarSystemData::getPowerplayState).map(Enum::name).orElse(null))
-                    .lastUpdated(lastUpdateDao.findByIdValidated(commodityLocationData.getExternalReference(), commodity.getType().get()).getLastUpdate()) //LastUpdateDao is cached
-                    .build();
-            })
+            .map(commodity -> mapCommodities(tradeMode, referenceSystem, commodityLocationDatas, stars, systemDatas, bodies, commodity))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .toList();
     }
 
-    private double getDistanceFromStar(StarSystemPosition referencePosition, StarSystemPosition position) {
+    private Optional<CommodityTradingResponse> mapCommodities(TradeMode tradeMode, StarSystem referenceSystem, Map<UUID, CommodityLocationData> commodityLocationDatas, Map<UUID, StarSystem> stars, Map<UUID, StarSystemData> systemDatas, Map<UUID, Body> bodies, Commodity commodity) {
+        CommodityLocationData commodityLocationData = commodityLocationDatas.get(commodity.getExternalReference());
+        if (isNull(commodityLocationData)) {
+            log.info("CommodityLocationData not found for externalReference {}", commodity.getExternalReference());
+            return Optional.empty();
+        }
+
+        StarSystem starSystem = stars.get(commodityLocationData.getStarSystemId());
+        if (isNull(starSystem)) {
+            log.info("StarSystem not found for {}", commodityLocationData);
+            return Optional.empty();
+        }
+
+        Double stationDistance = Optional.ofNullable(commodityLocationData.getBodyId())
+            .map(bodies::get)
+            .map(Body::getDistanceFromStar)
+            .orElse(null);
+        StarSystemData starSystemData = systemDatas.get(starSystem.getId());
+        Double distanceFromStar = getDistanceFromStar(referenceSystem.getPosition(), starSystem.getPosition());
+
+        CommodityTradingResponse result = CommodityTradingResponse.builder()
+            .starId(starSystem.getId())
+            .starName(starSystem.getStarName())
+            .starSystemDistance(distanceFromStar)
+            .externalReference(commodityLocationData.getExternalReference())
+            .locationName(commodityLocationData.getLocationName())
+            .locationType(commodityLocationData.getStationType().name())
+            .stationDistance(stationDistance)
+            .landingPad(commodityLocationData.getStationType().getLandingPad())
+            .tradeAmount(tradeMode.getTradeAmountExtractor().apply(commodity))
+            .price(tradeMode.getPriceExtractor().apply(commodity))
+            .controllingPower(Optional.ofNullable(starSystemData).map(StarSystemData::getControllingPower).map(Enum::name).orElse(null))
+            .powers(Optional.ofNullable(starSystemData).map(StarSystemData::getPowers).map(powers -> powers.stream().map(Enum::name).toList()).orElse(null))
+            .powerplayState(Optional.ofNullable(starSystemData).map(StarSystemData::getPowerplayState).map(Enum::name).orElse(null))
+            .lastUpdated(lastUpdateDao.findByIdValidated(commodityLocationData.getExternalReference(), commodity.getType().get()).getLastUpdate()) //LastUpdateDao is cached
+            .build();
+        return Optional.of(result);
+    }
+
+    private Double getDistanceFromStar(StarSystemPosition referencePosition, StarSystemPosition position) {
+        if (!referencePosition.isFilled() || !position.isFilled()) {
+            return 100_000D;
+        }
+
         return distanceCalculator.calculateDistance(
             new NDimensionCoordinate(referencePosition.getX(), referencePosition.getY(), referencePosition.getZ()),
             new NDimensionCoordinate(position.getX(), position.getY(), position.getZ())

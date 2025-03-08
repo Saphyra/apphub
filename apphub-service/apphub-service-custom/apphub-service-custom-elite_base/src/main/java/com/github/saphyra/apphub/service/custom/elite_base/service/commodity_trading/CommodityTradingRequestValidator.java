@@ -27,19 +27,23 @@ class CommodityTradingRequestValidator {
         ValidationUtil.notNull(request.getMaxTimeSinceLastUpdated(), "maxTimeSinceLastUpdated");
         ValidationUtil.notNull(request.getIncludeSurfaceStations(), "includeSurfaceStations");
         ValidationUtil.notNull(request.getIncludeFleetCarriers(), "includeFleetCarriers");
-        ValidationUtil.notNull(request.getMinPrice(), "minPrice");
+        ValidationUtil.atLeast(request.getMinPrice(), 1, "minPrice");
         ValidationUtil.notNull(request.getMaxPrice(), "maxPrice");
         ValidationUtil.atLeast(request.getMaxPrice(), request.getMinPrice(), "maxPrice");
 
-        if (nonNull(request.getControllingPowers())) {
+        ValidationUtil.notNull(request.getControllingPowers(), "controllingPowers");
+        if (!request.getControllingPowers().isEmpty()) {
             ValidationUtil.notNull(request.getControllingPowerRelation(), "controllingPowerRelation");
         }
 
-        if (nonNull(request.getPowers())) {
-            ValidationUtil.notNull(request.getPowerRelation(), "powerRelation");
+        ValidationUtil.notNull(request.getPowers(), "powers");
+        if (!request.getPowers().isEmpty()) {
+            ValidationUtil.notNull(request.getPowersRelation(), "powersRelation");
         }
 
-        ValidationUtil.convertToEnumChecked(request.getPowerplayState(), PowerplayState::valueOf, "powerplayState");
+        if (nonNull(request.getPowerplayState())) {
+            ValidationUtil.convertToEnumChecked(request.getPowerplayState(), PowerplayState::valueOf, "powerplayState");
+        }
 
         ValidationUtil.notNull(request.getMinTradeAmount(), "minTradeAmount");
     }

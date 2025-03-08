@@ -15,6 +15,7 @@ public enum PerformanceReportingKey {
     SAVE_COMMODITIES_QUERY,
     SAVE_COMMODITIES_DELETE_ALL,
     SAVE_COMMODITIES_SAVE_ALL,
+    API_BEST_TRADE_LOCATIONS,
     ;
     public static final String PROCESS_MESSAGE = "PROCESS_MESSAGE_%s";
     public static final String PROCESS_JOURNAL_MESSAGE = "PROCESS_JOURNAL_MESSAGE_%s";

@@ -25,5 +25,13 @@ public class DatabaseConstants {
     public static final String COLUMN_ECONOMY = "economy";
     public static final String COLUMN_MATERIAL_TYPE = "material_type";
     public static final String COLUMN_COMMODITY_NAME = "commodity_name";
+    public static final String COLUMN_DEMAND = "demand";
+    public static final String COLUMN_STOCK = "stock";
+    public static final String COLUMN_BUY_PRICE = "buy_price";
+    public static final String COLUMN_SELL_PRICE = "sell_price";
+    public static final String COLUMN_EXTERNAL_REFERENCE = "external_reference";
+    public static final String COLUMN_COMMODITY_LOCATION = "commodity_location";
+    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_MARKET_ID = "market_id";
 }
 

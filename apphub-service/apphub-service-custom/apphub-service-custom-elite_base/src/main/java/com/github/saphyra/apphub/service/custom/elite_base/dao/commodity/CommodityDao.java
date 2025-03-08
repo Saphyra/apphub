@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_COMMODITY;
 
 @Component
+@Slf4j
 public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, CommodityEntityId, CommodityRepository> {
     private final UuidConverter uuidConverter;
     private final JdbcTemplate jdbcTemplate;
@@ -39,6 +41,8 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
             .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))
             .groupBy(new DefaultColumn(COLUMN_COMMODITY_NAME))
             .build();
+        log.debug(sql);
+
         return jdbcTemplate.query(sql, rs -> {
             List<String> result = new ArrayList<>();
 
@@ -52,11 +56,11 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
 
     //TODO unit test
     public List<Commodity> findSuppliers(String commodityName, Integer minStock, Integer minPrice, Integer maxPrice) {
-        return converter.convertEntity(repository.getByIdCommodityNameAndStockGreaterThanAndSellPriceBetween(commodityName, minStock, minPrice, maxPrice));
+        return converter.convertEntity(repository.getSellOffers(commodityName, minStock, minPrice, maxPrice));
     }
 
     //TODO unit test
     public List<Commodity> findConsumers(String commodityName, Integer minDemand, Integer minPrice, Integer maxPrice) {
-        return converter.convertEntity(repository.getByIdCommodityNameAndDemandGreaterThanAndBuyPriceBetween(commodityName, minDemand, minPrice, maxPrice));
+        return converter.convertEntity(repository.getBuyOffers(commodityName, minDemand, minPrice, maxPrice));
     }
 }

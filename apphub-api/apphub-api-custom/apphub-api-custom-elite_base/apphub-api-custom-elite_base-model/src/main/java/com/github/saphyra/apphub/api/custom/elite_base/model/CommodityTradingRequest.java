@@ -14,6 +14,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class CommodityTradingRequest {
+    private String tradeMode;
     private UUID referenceStarId;
     private String commodity;
     private Integer minPrice;
@@ -29,7 +30,7 @@ public class CommodityTradingRequest {
     private List<String> controllingPowers;
     private Relation controllingPowerRelation;
     private List<String> powers;
-    private Relation powerRelation;
+    private Relation powersRelation;
     private String powerplayState;
     private Integer minTradeAmount;
 }
