@@ -49,7 +49,7 @@ public class EdMessageProcessor {
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
         );
-        log.info("Processing {} messages.", messages.size());
+        log.debug("Processing {} messages.", messages.size());
 
         List<List<EdMessage>> partitions = ListUtils.partition(messages, properties.getMessageProcessorSublistSize());
 
