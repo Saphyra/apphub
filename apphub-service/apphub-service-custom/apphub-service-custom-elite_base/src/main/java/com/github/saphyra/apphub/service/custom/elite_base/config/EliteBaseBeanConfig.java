@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.event.processor.EnableEventProcessor;
+import com.github.saphyra.apphub.lib.geometry.n_dimension.NDimensionDistanceCalculator;
 import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReportingConfiguration;
 import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
@@ -82,5 +83,10 @@ class EliteBaseBeanConfig {
     @Bean
     ApplicationContextProxy applicationContextProxy(ConfigurableApplicationContext applicationContext) {
         return new ApplicationContextProxy(applicationContext);
+    }
+
+    @Bean
+    NDimensionDistanceCalculator nDimensionDistanceCalculator() {
+        return new NDimensionDistanceCalculator();
     }
 }

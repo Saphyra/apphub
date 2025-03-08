@@ -1,4 +1,6 @@
 ===FEATURES===
+    EliteBase
+        Buy and Sell commodities
 
 ===BUGFIXES===
 

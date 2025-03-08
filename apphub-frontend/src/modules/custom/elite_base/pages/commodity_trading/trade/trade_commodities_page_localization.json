@@ -1,0 +1,126 @@
+{
+    "location": {
+        "en": "Location",
+        "hu": "Hely"
+    },
+    "offer": {
+        "en": "Offer",
+        "hu": "Ajánlat"
+    },
+    "min-price": {
+        "en": "Minimum price",
+        "hu": "Minimum ár"
+    },
+    "max-price": {
+        "en": "Maximum price",
+        "hu": "Maximum ár"
+    },
+    "max-star-system-distance": {
+        "en": "Maximum star system distance from reference star system",
+        "hu": "Maximum csillagrendszer távolság a referencia csillagrendszertől"
+    },
+    "max-station-distance": {
+        "en": "Maximum station distance from central star",
+        "hu": "Maximum állomás távolság a központi csillagtól"
+    },
+    "include-unknown-station-distance": {
+        "en": "Include stations with unknown distance from star",
+        "hu": "Tartalmazza azokat az állomásokat, amiknek ismeretlen a távolsága"
+    },
+    "include-unknown-landing-pad": {
+        "en": "Include stations with unknown landing pad",
+        "hu": "Tartalmazza azokat az állomásokat, amiknek ismeretlen a leszállópályája"
+    },
+    "include-surface-stations": {
+        "en": "Include surface stations",
+        "hu": "Tartalmazza a felszíni állomásokat"
+    },
+    "include-fleet-carriers": {
+        "en": "Include fleet carriers",
+        "hu": "Tartalmazza a flottaszállítókat"
+    },
+    "min-trade-amount": {
+        "en": "Minimum trade amount",
+        "hu": "Ajánlat minimum mennyisége"
+    },
+    "controlling-power": {
+        "en": "Controlling power",
+        "hu": "Vezető hatalom"
+    },
+    "powers": {
+        "en": "Powers",
+        "hu": "Hatalmak"
+    },
+    "powerplay-state": {
+        "en": "Powerplay state",
+        "hu": "Powerplay státusz"
+    },
+    "any": {
+        "en": "Any",
+        "hu": "Bármelyik"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "order-by": {
+        "en": "Order by",
+        "hu": "Sorba rendezés"
+    },
+    "SYSTEM_DISTANCE": {
+        "en": "Star system distance",
+        "hu": "Csillagrendszer távolsága"
+    },
+    "ASCENDING": {
+        "en": "Ascending",
+        "hu": "Növekvő"
+    },
+    "DESCENDING": {
+        "en": "Descending",
+        "hu": "Csökkenő"
+    },
+    "star-system-distance": {
+        "en": "SS Dist",
+        "hu": "Táv"
+    },
+    "star-system-name": {
+        "en": "System",
+        "hu": "Csillagrendszer"
+    },
+    "station-name": {
+        "en": "Station",
+        "hu": "Űrállomás"
+    },
+    "station-distance": {
+        "en": "St Dist",
+        "hu": "Állomás táv."
+    },
+    "station-type": {
+        "en": "St type",
+        "hu": "Állomás típus"
+    },
+    "landing-pad": {
+        "en": "Pad",
+        "hu": "Lesz.Pálya"
+    },
+    "trade-amount": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "price": {
+        "en": "Price",
+        "hu": "Ár"
+    },
+    "last-updated": {
+        "en": "Last updated",
+        "hu": "Frissítve"
+    },
+    "controlling-power-short": {
+        "en": "Cont. Power",
+        "hu": "Vez. Hat."
+    },
+    "powerplay-state-short": {
+        "en": "Pp state",
+        "hu": "Pp státusz"
+    }
+}

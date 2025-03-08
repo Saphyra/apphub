@@ -18,6 +18,10 @@
     border-color: darkgray !important;
 }
 
+.disabled .menu-item-label{
+    cursor: no-drop;
+}
+
 .elite-base-navigation-menu-item .button.opened {
     border-color: lime;
 }

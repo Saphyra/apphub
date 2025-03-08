@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Component
 public class StarSystemDao extends AbstractDao<StarSystemEntity, StarSystem, String, StarSystemRepository> {
@@ -43,5 +44,13 @@ public class StarSystemDao extends AbstractDao<StarSystemEntity, StarSystem, Str
 
     private Optional<StarSystem> findById(UUID id) {
         return findById(uuidConverter.convertDomain(id));
+    }
+
+    //TODO unit test
+    public List<StarSystem> findAllById(List<UUID> starIds) {
+        List<StarSystemEntity> entities = StreamSupport.stream(repository.findAllById(starIds.stream().map(uuidConverter::convertDomain).toList()).spliterator(), false)
+            .toList();
+
+        return converter.convertEntity(entities);
     }
 }
