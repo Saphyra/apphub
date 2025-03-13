@@ -115,6 +115,10 @@
         "en": "Last updated",
         "hu": "Frissítve"
     },
+    "LAST_UPDATED": {
+        "en": "Last updated",
+        "hu": "Frissítve"
+    },
     "controlling-power-short": {
         "en": "Cont. Power",
         "hu": "Vez. Hat."
@@ -130,5 +134,33 @@
     "PRICE": {
         "en": "Price",
         "hu": "Ár"
+    },
+    "just-now": {
+        "en": "Just now",
+        "hu": "Éppen most"
+    },
+    "days": {
+        "en": "{value} day(s)",
+        "hu": "{value} nappal"
+    },
+    "hours": {
+        "en": "{value} hour(s)",
+        "hu": "{value} órával"
+    },
+    "minutes": {
+        "en": "{value} minute(s)",
+        "hu": "{value} perccel"
+    },
+    "seconds": {
+        "en": "{value} second(s)",
+        "hu": "{value} másodperccel"
+    },
+    "ago-suffix": {
+        "en": "ago",
+        "hu": "ezelőtt"
+    },
+    "and": {
+        "en": "and",
+        "hu": "és"
     }
 }

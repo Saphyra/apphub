@@ -22,6 +22,8 @@ import Button from "../../../../../../common/component/input/Button";
 import "./trade_commodities_page.css";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import PowerNames from "../../../common/localization/PowerNames";
+import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
+import Entry from "../../../../../../common/js/collection/Entry";
 
 //TODO split
 const TradeCommoditiesPage = ({ tradeMode }) => {
@@ -40,7 +42,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     const [maxTimeSinceLastUpdated, setMaxTimeSinceLastUpdated] = useState("P3650D");
     const [includeSurfaceStations, setIncludeSurfaceStations] = useState(false);
     const [includeFleetCarriers, setIncludeFleetCarriers] = useState(false);
-    const [minTradeAmount, setMinTradeAmount] = useState(0);
+    const [minTradeAmount, setMinTradeAmount] = useState(1);
 
     //Powerplay
     const [controllingPowers, setControllingPowers] = useState([]);
@@ -271,7 +273,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
             {searchResult.length > 0 &&
                 <div>
-                    <table id="elite-base-ct-trade-commodities-search-result-table" className="formatted-table">
+                    <table id="elite-base-ct-trade-commodities-search-result-table" className="formatted-table selectable">
                         <thead>
                             <tr>
                                 <td>{localizationHandler.get("star-system-distance")}</td>
@@ -363,7 +365,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         <td>{offer.landingPad}</td>
                         <td>{offer.tradeAmount} T</td>
                         <td>{offer.price} Cr.</td>
-                        <td>{offer.lastUpdated}</td>
+                        <td>{getLastUpdated(offer.lastUpdated)}</td>
                         <td>{PowerNames[offer.controllingPower]}</td>
                         <td>{new Stream(offer.powers).map(power => PowerNames[power]).join(", ")}</td>
                         <td>{offer.powerplayState}</td>
@@ -371,6 +373,46 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 )
             })
             .toList();
+
+        function getLastUpdated(lastUpdated) {
+            const luldt = LocalDateTime.fromLocalDateTime(lastUpdated);
+            const deltaMs = LocalDateTime.now().getEpoch() - luldt.getEpoch();
+
+            let seconds = Math.floor(deltaMs / 1000);
+            let minutes = Math.floor(seconds / 60);
+            let hours = Math.floor(minutes / 60);
+            let days = Math.floor(hours / 24);
+
+            hours = hours % 24;
+            minutes = minutes % 60;
+            seconds = seconds % 60;
+
+            const arr = [
+                new Entry("days", days),
+                new Entry("hours", hours),
+                new Entry("minutes", minutes),
+                new Entry("seconds", seconds),
+            ];
+
+            const displayedArr = new Stream(arr)
+                .filter(e => e.value > 0)
+                .limit(2)
+                .toList();
+
+            if (displayedArr.length == 0) {
+                return localizationHandler.get("just-now");
+            } else if (displayedArr.length == 1) {
+                return localizationHandler.get(displayedArr[0].key, { value: displayedArr[0].value }) + " " + localizationHandler.get("ago-suffix");
+            } else {
+                return new Stream([
+                    localizationHandler.get(displayedArr[0].key, { value: displayedArr[0].value }),
+                    localizationHandler.get("and"),
+                    localizationHandler.get(displayedArr[1].key, { value: displayedArr[1].value }),
+                    localizationHandler.get("ago-suffix"),
+                ])
+                    .join(" ");
+            }
+        }
     }
 }
 
@@ -386,6 +428,10 @@ const OrderBy = {
     PRICE: {
         key: "PRICE",
         compare: (a, b) => a.price - b.price
+    },
+    LAST_UPDATED: {
+        key: "LAST_UPDATED",
+        compare: (a, b) => b.lastUpdated.localeCompare(a.lastUpdated)
     }
 }
 

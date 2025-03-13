@@ -7,6 +7,10 @@ const fromEpochSeconds = (epoch) => {
     return new LocalDateTimeObj(d);
 }
 
+const fromLocalDateTime = (localDateTime) => {
+    return create(new Date(localDateTime));
+}
+
 const create = (date) => {
     return new LocalDateTimeObj(date);
 }
@@ -84,7 +88,8 @@ class LocalDateTimeObj {
 
 const LocalDateTime = {
     fromEpochSeconds: fromEpochSeconds,
-    now: now
+    now: now,
+    fromLocalDateTime: fromLocalDateTime,
 }
 
 export default LocalDateTime;
