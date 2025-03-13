@@ -122,5 +122,13 @@
     "powerplay-state-short": {
         "en": "Pp state",
         "hu": "Pp státusz"
+    },
+    "TRADE_AMOUNT": {
+        "en": "Amount",
+        "hu": "Mennyiség"
+    },
+    "PRICE": {
+        "en": "Price",
+        "hu": "Ár"
     }
 }

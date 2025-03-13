@@ -31,7 +31,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     const [commodity, setCommodity] = useState(null);
     const [minPrice, setMinPrice] = useState(1);
     const [maxPrice, setMaxPrice] = useState(1_000_000);
-    const [maxStarSystemDistance, setMaxStarSystemDistance] = useState(300);
+    const [maxStarSystemDistance, setMaxStarSystemDistance] = useState(100);
     const [maxStationDistance, setMaxStationDistance] = useState(1_000_000);
     const [includeUnknownStationDistance, setIncludeUnknownStationDistance] = useState(true);
     const [minLandingPad, setMinLandingPad] = useState(LandingPad.MEDIUM);
@@ -377,6 +377,14 @@ const OrderBy = {
     SYSTEM_DISTANCE: {
         key: "SYSTEM_DISTANCE",
         compare: (a, b) => a.starSystemDistance - b.starSystemDistance
+    },
+    TRADE_AMOUNT: {
+        key: "TRADE_AMOUNT",
+        compare: (a, b) => a.tradeAmount - b.tradeAmount
+    },
+    PRICE: {
+        key: "PRICE",
+        compare: (a, b) => a.price - b.price
     }
 }
 
