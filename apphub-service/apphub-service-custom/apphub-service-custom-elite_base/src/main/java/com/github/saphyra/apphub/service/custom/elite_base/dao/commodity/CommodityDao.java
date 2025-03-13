@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.SCHEMA;
@@ -20,6 +22,9 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 @Component
 @Slf4j
 public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, CommodityEntityId, CommodityRepository> {
+    private final Set<String> commodityCache = ConcurrentHashMap.newKeySet();
+    private volatile boolean loaded = false;
+
     private final UuidConverter uuidConverter;
     private final JdbcTemplate jdbcTemplate;
 
@@ -34,8 +39,11 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
     }
 
     //TODO unit test
-    //TODO cache
     public List<String> getCommodities() {
+        if (loaded) {
+            return new ArrayList<>(commodityCache);
+        }
+
         String sql = SqlBuilder.select()
             .column(new DefaultColumn(COLUMN_COMMODITY_NAME))
             .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))
@@ -43,15 +51,20 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
             .build();
         log.debug(sql);
 
-        return jdbcTemplate.query(sql, rs -> {
-            List<String> result = new ArrayList<>();
+        List<String> result = jdbcTemplate.query(sql, rs -> {
+            List<String> r = new ArrayList<>();
 
             while (rs.next()) {
-                result.add(rs.getString(COLUMN_COMMODITY_NAME));
+                r.add(rs.getString(COLUMN_COMMODITY_NAME));
             }
 
-            return result;
+            return r;
         });
+
+        commodityCache.addAll(result);
+        loaded = true;
+
+        return result;
     }
 
     //TODO unit test
@@ -62,5 +75,20 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
     //TODO unit test
     public List<Commodity> findConsumers(String commodityName, Integer minDemand, Integer minPrice, Integer maxPrice) {
         return converter.convertEntity(repository.getBuyOffers(commodityName, minDemand, minPrice, maxPrice));
+    }
+
+    @Override
+    //TODO unit test
+    public void save(Commodity domain) {
+        commodityCache.add(domain.getCommodityName());
+        super.save(domain);
+    }
+
+    @Override
+    //TODO unit test
+    public void saveAll(List<Commodity> domains) {
+        commodityCache.addAll(domains.stream().map(Commodity::getCommodityName).toList());
+
+        super.saveAll(domains);
     }
 }

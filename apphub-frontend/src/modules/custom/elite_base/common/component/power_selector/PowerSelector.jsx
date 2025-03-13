@@ -8,6 +8,7 @@ import useCache from "../../../../../../common/hook/Cache";
 import Stream from "../../../../../../common/js/collection/Stream";
 import { ELITE_BASE_GET_POWERS } from "../../EliteBaseEndpoints";
 import "./power_selector.css";
+import PowerNames from "../../localization/PowerNames";
 
 const PowerSelector = ({ label, relation, setRelation, selectedPowers, setSelectedPowers }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -15,22 +16,6 @@ const PowerSelector = ({ label, relation, setRelation, selectedPowers, setSelect
     const [powers, setPowers] = useState([]);
 
     useCache("elite-base-powers", ELITE_BASE_GET_POWERS.createRequest(), setPowers);
-
-    const powerValues = {
-        ARCHON_DELAINE: "Archon Delaine",
-        ARISSA_LAVIGNY_DUVAL: "Arissa Lavigny-Duval",
-        AISLING_DUVAL: "Aisling Duval",
-        DENTON_PATREUS: "Denton Patreus",
-        EDMUND_MAHON: "Edmund Mahon",
-        YURI_GROM: "Yuri Grom",
-        FELICIA_WINTERS: "Felicia Winters",
-        LOQ_YONG_RUI: "Li Yong-Rui",
-        JEROME_ARCHER: "Jerome Archer",
-        NAKATO_KAINE: "Nakato Kaine",
-        PRANAV_ANTAL: "Pranav Antal",
-        ZEMINA_TORVAL: "Zemina Torval",
-        ZACHARY_HUDSON: "Zachary Hudson",
-    };
 
     return (
         <div className="elite-base-power-selector">
@@ -48,7 +33,7 @@ const PowerSelector = ({ label, relation, setRelation, selectedPowers, setSelect
                 <MultiSelect
                     value={selectedPowers}
                     onchangeCallback={setSelectedPowers}
-                    options={new Stream(powers).map(power => new SelectOption(powerValues[power], power)).toList()}
+                    options={new Stream(powers).map(power => new SelectOption(PowerNames[power], power)).toList()}
                 />
             }
         </div>

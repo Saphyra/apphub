@@ -21,6 +21,7 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import Button from "../../../../../../common/component/input/Button";
 import "./trade_commodities_page.css";
 import MapStream from "../../../../../../common/js/collection/MapStream";
+import PowerNames from "../../../common/localization/PowerNames";
 
 //TODO split
 const TradeCommoditiesPage = ({ tradeMode }) => {
@@ -363,8 +364,8 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         <td>{offer.tradeAmount} T</td>
                         <td>{offer.price} Cr.</td>
                         <td>{offer.lastUpdated}</td>
-                        <td>{offer.controllingPower}</td>
-                        <td>{new Stream(offer.powers).join(", ")}</td>
+                        <td>{PowerNames[offer.controllingPower]}</td>
+                        <td>{new Stream(offer.powers).map(power => PowerNames[power]).join(", ")}</td>
                         <td>{offer.powerplayState}</td>
                     </tr>
                 )
