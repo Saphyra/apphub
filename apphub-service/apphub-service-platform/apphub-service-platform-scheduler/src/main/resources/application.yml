@@ -26,6 +26,6 @@ interval:
   storage:
     storedFileCleanup: 300000 #5 minutes
   eliteBase:
-    processMessages: PT1S
+    processMessages: PT5S
     resetUnhandledMessages: P7D
     deleteExpiredMessages: PT1H
