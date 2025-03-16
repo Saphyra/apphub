@@ -100,7 +100,9 @@ public class CommodityTradingService {
                 return true;
             }
 
-            boolean result = commodityTradingResponse.getPowerplayState().equals(request.getPowerplayState());
+            boolean result = Optional.ofNullable(commodityTradingResponse.getPowerplayState())
+                .filter(powerplayState -> powerplayState.equals(request.getPowerplayState()))
+                .isPresent();
             if (!result) {
                 log.info("Filtering offer from system with incorrect powerplayState {}", commodityTradingResponse);
             }

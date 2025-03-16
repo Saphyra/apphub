@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./trade_commodities_page_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import StarSelector from "../../../common/component/star_selector/StarSelector";
-import { formatNumber, hasValue } from "../../../../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, formatNumber, hasValue } from "../../../../../../common/js/Utils";
 import CommoditySelector from "../../../common/component/commodity_selector/CommoditySelector";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import NumberInput from "../../../../../../common/component/input/NumberInput";
@@ -24,40 +24,63 @@ import MapStream from "../../../../../../common/js/collection/MapStream";
 import PowerNames from "../../../common/localization/PowerNames";
 import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
 import Entry from "../../../../../../common/js/collection/Entry";
+import Spinner from "../../../../../../common/component/Spinner";
+import ErrorHandler from "../../../../../../common/js/dao/ErrorHandler";
 
 //TODO split
 const TradeCommoditiesPage = ({ tradeMode }) => {
+    const CACHE_KEY_MIN_PRICE = "eliteBaseCommodityTradingMinPrice";
+    const CACHE_KEY_MAX_PRICE = "eliteBaseCommodityTradingMaxPrice";
+    const CACHE_KEY_MAX_STAR_SYSTEM_DISTANCE = "eliteBaseCommodityTradingMaxStarSystemDistance";
+    const CACHE_KEY_MAX_STATION_DISTANCE = "eliteBaseCommodityTradingMaxStationDistance";
+    const CACHE_KEY_INCLUDE_UNKNOWN_STATION_DISTANCE = "eliteBaseCommodityTradingIncludeUnknownStationDistance";
+    const CACHE_KEY_INCLUDE_UNKNOWN_LANDING_PAD = "eliteBaseCommodityTradingIncludeUnknownLandingPad";
+    const CACHE_KEY_MIN_LANDING_PAD = "eliteBaseCommodityTradingMinLandingPad";
+    const CACHE_KEY_MAX_TIME_SINCE_LAST_UPDATED = "eliteBaseCommodityTradingMaxTimeSinceLastUpdated";
+    const CACHE_KEY_INCLUDE_SURFACE_STATIONS = "eliteBaseCommodityTradingIncludeSurfaceStations";
+    const CACHE_KEY_INCLUDE_FLEET_CARRIERS = "eliteBaseCommodityTradingIncludeFleetCarriers";
+    const CACHE_KEY_MIN_TRADE_AMOUNT = "eliteBaseCommodityTradingMinTradeAmount";
+    const CACHE_KEY_CONTROLLING_POWER = "eliteBaseCommodityTradingControllingPower";
+    const CACHE_KEY_CONTROLLING_POWER_RELATION = "eliteBaseCommodityTradingControllingPowerRelation";
+    const CACHE_KEY_POWERS = "eliteBaseCommodityTradingPowers";
+    const CACHE_KEY_POWERS_RELATION = "eliteBaseCommodityTradingPowersRelation";
+    const CACHE_KEY_POWERPLAY_STATE = "eliteBaseCommodityTradingPowerplayState";
+    const PAGE_SIZE = 20;
+
     const localizationHandler = new LocalizationHandler(localizationData);
     const [powerplayStates, setPowerplayStates] = useState([]);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [starId, setStarId] = useState(null);
     const [commodity, setCommodity] = useState(null);
-    const [minPrice, setMinPrice] = useState(1);
-    const [maxPrice, setMaxPrice] = useState(1_000_000);
-    const [maxStarSystemDistance, setMaxStarSystemDistance] = useState(100);
-    const [maxStationDistance, setMaxStationDistance] = useState(1_000_000);
-    const [includeUnknownStationDistance, setIncludeUnknownStationDistance] = useState(true);
-    const [minLandingPad, setMinLandingPad] = useState(LandingPad.MEDIUM);
-    const [includeUnknownLandingPad, setIncludeUnknownLandingPad] = useState(true);
-    const [maxTimeSinceLastUpdated, setMaxTimeSinceLastUpdated] = useState("P3650D");
-    const [includeSurfaceStations, setIncludeSurfaceStations] = useState(false);
-    const [includeFleetCarriers, setIncludeFleetCarriers] = useState(false);
-    const [minTradeAmount, setMinTradeAmount] = useState(1);
+    const [minPrice, setMinPrice] = useState(cachedOrDefault(CACHE_KEY_MIN_PRICE, 1));
+    const [maxPrice, setMaxPrice] = useState(cachedOrDefault(CACHE_KEY_MAX_PRICE, 1_000_000));
+    const [maxStarSystemDistance, setMaxStarSystemDistance] = useState(cachedOrDefault(CACHE_KEY_MAX_STAR_SYSTEM_DISTANCE, 100));
+    const [maxStationDistance, setMaxStationDistance] = useState(cachedOrDefault(CACHE_KEY_MAX_STATION_DISTANCE, 1_000_000));
+    const [includeUnknownStationDistance, setIncludeUnknownStationDistance] = useState(cachedOrDefault(CACHE_KEY_INCLUDE_UNKNOWN_STATION_DISTANCE, true, v => v === "true"));
+    const [minLandingPad, setMinLandingPad] = useState(cachedOrDefault(CACHE_KEY_MIN_LANDING_PAD, LandingPad.MEDIUM));
+    const [includeUnknownLandingPad, setIncludeUnknownLandingPad] = useState(cachedOrDefault(CACHE_KEY_INCLUDE_UNKNOWN_LANDING_PAD, true, v => v === "true"));
+    const [maxTimeSinceLastUpdated, setMaxTimeSinceLastUpdated] = useState(cachedOrDefault(CACHE_KEY_MAX_TIME_SINCE_LAST_UPDATED, "P3650D"));
+    const [includeSurfaceStations, setIncludeSurfaceStations] = useState(cachedOrDefault(CACHE_KEY_INCLUDE_SURFACE_STATIONS, false, v => v === "true"));
+    const [includeFleetCarriers, setIncludeFleetCarriers] = useState(cachedOrDefault(CACHE_KEY_INCLUDE_FLEET_CARRIERS, false, v => v === "true"));
+    const [minTradeAmount, setMinTradeAmount] = useState(cachedOrDefault(CACHE_KEY_MIN_TRADE_AMOUNT, 1));
 
     //Powerplay
-    const [controllingPowers, setControllingPowers] = useState([]);
-    const [controllingPowerRelation, setControllingPowerRelation] = useState(PowerRelation.ANY);
-    const [powers, setPowers] = useState([]);
-    const [powersRelation, setPowersRelation] = useState(PowerRelation.ANY);
-    const [powerplayState, setPowerplayState] = useState("");
+    const [controllingPowers, setControllingPowers] = useState(cachedOrDefault(CACHE_KEY_CONTROLLING_POWER, [], v => JSON.parse(v)));
+    const [controllingPowerRelation, setControllingPowerRelation] = useState(cachedOrDefault(CACHE_KEY_CONTROLLING_POWER_RELATION, PowerRelation.ANY));
+    const [powers, setPowers] = useState(cachedOrDefault(CACHE_KEY_POWERS, [], v => JSON.parse(v)));
+    const [powersRelation, setPowersRelation] = useState(cachedOrDefault(CACHE_KEY_POWERS_RELATION, PowerRelation.ANY));
+    const [powerplayState, setPowerplayState] = useState(cachedOrDefault(CACHE_KEY_POWERPLAY_STATE, ""));
 
     //Search result
-    const [searchResult, setSearchResult] = useState([]);
+    const [searchResult, setSearchResult] = useState(null);
     const [orderBy, setOrderBy] = useState(OrderBy.SYSTEM_DISTANCE.key);
     const [order, setOrder] = useState(Order.ASCENDING.key);
-
+    const [displayed, setDisplayed] = useState(PAGE_SIZE);
 
     useCache("elite-base-powerplay-states", ELITE_BASE_GET_POWERPLAY_STATES.createRequest(), setPowerplayStates);
+
+    useEffect(() => setDisplayed(PAGE_SIZE), [searchResult]);
 
     return (
         <div className="elite-base-page">
@@ -71,7 +94,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
                 <LastUpdateSelector
                     lastUpdate={maxTimeSinceLastUpdated}
-                    setLastUpdate={setMaxTimeSinceLastUpdated}
+                    setLastUpdate={v => cacheAndUpdate(CACHE_KEY_MAX_TIME_SINCE_LAST_UPDATED, v, setMaxTimeSinceLastUpdated)}
                 />
             </fieldset>
 
@@ -81,7 +104,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 <StarSelector
                     starId={starId}
                     setStarId={setStarId}
-                    locked={hasValue(starId)}
                 />
 
                 <div>
@@ -91,7 +113,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         inputField={<NumberInput
                             placeholder={localizationHandler.get("max-star-system-distance")}
                             value={maxStarSystemDistance}
-                            onchangeCallback={setMaxStarSystemDistance}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MAX_STAR_SYSTEM_DISTANCE, v, setMaxStarSystemDistance)}
                             min={0}
                         />
                         }
@@ -105,7 +127,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         inputField={<NumberInput
                             placeholder={localizationHandler.get("max-station-distance")}
                             value={maxStationDistance}
-                            onchangeCallback={setMaxStationDistance}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MAX_STATION_DISTANCE, v, setMaxStationDistance)}
                             min={0}
                         />
                         }
@@ -114,7 +136,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
                 <LandingPadSelector
                     landingPad={minLandingPad}
-                    setLandingPad={setMinLandingPad}
+                    setLandingPad={v => cacheAndUpdate(CACHE_KEY_MIN_LANDING_PAD, v, setMinLandingPad)}
                 />
 
                 <div>
@@ -123,7 +145,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<InputField
                             type="checkbox"
                             checked={includeSurfaceStations}
-                            onchangeCallback={setIncludeSurfaceStations}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_INCLUDE_SURFACE_STATIONS, v, setIncludeSurfaceStations)}
                         />
                         }
                     />
@@ -135,7 +157,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<InputField
                             type="checkbox"
                             checked={includeFleetCarriers}
-                            onchangeCallback={setIncludeFleetCarriers}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_INCLUDE_FLEET_CARRIERS, v, setIncludeFleetCarriers)}
                         />
                         }
                     />
@@ -147,7 +169,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<InputField
                             type="checkbox"
                             checked={includeUnknownStationDistance}
-                            onchangeCallback={setIncludeUnknownStationDistance}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_INCLUDE_UNKNOWN_STATION_DISTANCE, v, setIncludeUnknownStationDistance)}
                         />
                         }
                     />
@@ -159,7 +181,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<InputField
                             type="checkbox"
                             checked={includeUnknownLandingPad}
-                            onchangeCallback={setIncludeUnknownLandingPad}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_INCLUDE_UNKNOWN_LANDING_PAD, v, setIncludeUnknownLandingPad)}
                         />
                         }
                     />
@@ -177,7 +199,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<NumberInput
                             placeholder={localizationHandler.get("min-price")}
                             value={minPrice}
-                            onchangeCallback={setMinPrice}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_PRICE, v, setMinPrice)}
                             min={0}
                             max={maxPrice}
                         />
@@ -189,7 +211,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<NumberInput
                             placeholder={localizationHandler.get("max-price")}
                             value={maxPrice}
-                            onchangeCallback={setMaxPrice}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MAX_PRICE, v, setMaxPrice)}
                             min={minPrice}
                         />
                         }
@@ -202,7 +224,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         input={<NumberInput
                             placeholder={localizationHandler.get("min-trade-amount")}
                             value={minTradeAmount}
-                            onchangeCallback={setMinTradeAmount}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_TRADE_AMOUNT, v, setMinTradeAmount)}
                             min={0}
                         />
                         }
@@ -217,9 +239,9 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                     <PowerSelector
                         label={localizationHandler.get("controlling-power")}
                         relation={controllingPowerRelation}
-                        setRelation={setControllingPowerRelation}
+                        setRelation={v => cacheAndUpdate(CACHE_KEY_CONTROLLING_POWER_RELATION, v, setControllingPowerRelation)}
                         selectedPowers={controllingPowers}
-                        setSelectedPowers={setControllingPowers}
+                        setSelectedPowers={v => cacheAndUpdate(CACHE_KEY_CONTROLLING_POWER, v, setControllingPowers, v => JSON.stringify(v))}
                     />
                 </div>
 
@@ -227,9 +249,9 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                     <PowerSelector
                         label={localizationHandler.get("powers")}
                         relation={powersRelation}
-                        setRelation={setPowersRelation}
+                        setRelation={v => cacheAndUpdate(CACHE_KEY_POWERS_RELATION, v, setPowersRelation)}
                         selectedPowers={powers}
-                        setSelectedPowers={setPowers}
+                        setSelectedPowers={v => cacheAndUpdate(CACHE_KEY_POWERS, v, setPowers, v => JSON.stringify(v))}
                     />
                 </div>
 
@@ -238,7 +260,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                         label={localizationHandler.get("powerplay-state") + ":"}
                         input={<SelectInput
                             value={powerplayState}
-                            onchangeCallback={setPowerplayState}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_POWERPLAY_STATE, v, setPowerplayState)}
                             options={getPowerplayStateOptions()}
                         />
                         }
@@ -271,10 +293,18 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 />
             </div>
 
-            {searchResult.length > 0 &&
+            {hasValue(searchResult) &&
                 <div>
                     <table id="elite-base-ct-trade-commodities-search-result-table" className="formatted-table selectable">
                         <thead>
+                            <tr>
+                                <td
+                                    colSpan={12}
+                                    id="elite-base-ct-trade-commodities-search-result-number-of-result"
+                                >
+                                    {localizationHandler.get("number-of-results", { amount: searchResult.length })}
+                                </td>
+                            </tr>
                             <tr>
                                 <td>{localizationHandler.get("star-system-distance")}</td>
                                 <td>{localizationHandler.get("star-system-name")}</td>
@@ -291,9 +321,24 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                             </tr>
                         </thead>
                         <tbody>{getSearchResult()}</tbody>
+                        {
+                            searchResult.length > displayed &&
+                            <tfoot>
+                                <tr>
+                                    <td colSpan={12}>
+                                        <Button
+                                            label={localizationHandler.get("load-more")}
+                                            onclick={() => setDisplayed(displayed + PAGE_SIZE)}
+                                        />
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        }
                     </table>
                 </div>
             }
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 
@@ -306,7 +351,12 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
             .toList();
     }
 
-    async function search() {
+    function search() {
+        setDisplaySpinner(true);
+        doSearch();
+    }
+
+    async function doSearch() {
         //TODO validate input
 
         const request = {
@@ -332,9 +382,11 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
         }
 
         const response = await ELITE_BASE_COMMODITY_TRADING_TRADE.createRequest(request)
+            .addErrorHandler(new ErrorHandler(() => true, () => setDisplaySpinner(false)))
             .send();
 
         setSearchResult(response);
+        setDisplaySpinner(false);
     }
 
     function getOrderByOptions() {
@@ -354,6 +406,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     function getSearchResult() {
         return new Stream(searchResult)
             .sorted((a, b) => Order[order].sorter(OrderBy[orderBy].compare(a, b)))
+            .limit(displayed)
             .map((offer, index) => {
                 return (
                     <tr key={index}>

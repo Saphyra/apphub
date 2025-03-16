@@ -183,3 +183,12 @@ export const isArrayEmpty = (input) => {
 
     return input.length == 0;
 }
+
+export const cacheAndUpdate = (key, value, callback, convertValue = v => v) => {
+    sessionStorage[key] = convertValue(value);
+    callback(value);
+}
+
+export const cachedOrDefault = (key, defaultValue = "", convertValue = v => v) => {
+    return hasValue(sessionStorage[key]) ? convertValue(sessionStorage[key]) : defaultValue;
+}

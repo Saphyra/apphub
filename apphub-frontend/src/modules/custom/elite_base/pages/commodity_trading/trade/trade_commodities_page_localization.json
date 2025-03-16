@@ -162,5 +162,13 @@
     "and": {
         "en": "and",
         "hu": "és"
+    },
+    "number-of-results": {
+        "en": "Found: {amount}",
+        "hu": "Találatok száma: {amount}"
+    },
+    "load-more": {
+        "en": "Load more",
+        "hu": "Továbbiak betöltése"
     }
 }
