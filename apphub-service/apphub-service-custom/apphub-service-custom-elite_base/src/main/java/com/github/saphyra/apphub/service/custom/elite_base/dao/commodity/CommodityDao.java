@@ -38,7 +38,6 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
         return converter.convertEntity(repository.getByIdExternalReferenceOrMarketId(uuidConverter.convertDomain(externalReference), marketId));
     }
 
-    //TODO unit test
     public List<String> getCommodities() {
         if (loaded) {
             return new ArrayList<>(commodityCache);
@@ -67,25 +66,21 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
         return result;
     }
 
-    //TODO unit test
     public List<Commodity> findSuppliers(String commodityName, Integer minStock, Integer minPrice, Integer maxPrice) {
         return converter.convertEntity(repository.getSellOffers(commodityName, minStock, minPrice, maxPrice));
     }
 
-    //TODO unit test
     public List<Commodity> findConsumers(String commodityName, Integer minDemand, Integer minPrice, Integer maxPrice) {
         return converter.convertEntity(repository.getBuyOffers(commodityName, minDemand, minPrice, maxPrice));
     }
 
     @Override
-    //TODO unit test
     public void save(Commodity domain) {
         commodityCache.add(domain.getCommodityName());
         super.save(domain);
     }
 
     @Override
-    //TODO unit test
     public void saveAll(List<Commodity> domains) {
         commodityCache.addAll(domains.stream().map(Commodity::getCommodityName).toList());
 

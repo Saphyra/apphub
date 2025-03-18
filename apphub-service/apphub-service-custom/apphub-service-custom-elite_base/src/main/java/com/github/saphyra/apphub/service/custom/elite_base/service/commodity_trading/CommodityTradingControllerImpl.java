@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommodityTradingControllerImpl implements CommodityTradingController {
     private final CommodityTradingService commodityTradingService;
     private final CommodityDao commodityDao;

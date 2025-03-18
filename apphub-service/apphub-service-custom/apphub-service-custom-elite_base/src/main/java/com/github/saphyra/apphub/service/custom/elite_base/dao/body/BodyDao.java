@@ -26,9 +26,8 @@ public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepositor
         return converter.convertEntity(repository.findByBodyName(bodyName));
     }
 
-    //TODO unit test
     public List<Body> findAllById(List<UUID> bodyIds) {
-        List<BodyEntity> entities = StreamSupport.stream(repository.findAllById(bodyIds.stream().map(uuidConverter::convertDomain).toList()).spliterator(), false)
+        List<BodyEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(bodyIds)).spliterator(), false)
             .toList();
 
         return converter.convertEntity(entities);

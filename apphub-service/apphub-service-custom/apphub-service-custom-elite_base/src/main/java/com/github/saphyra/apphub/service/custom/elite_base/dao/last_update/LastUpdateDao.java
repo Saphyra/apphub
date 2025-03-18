@@ -34,7 +34,6 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
         return maybeLastUpdate.isEmpty() || !maybeLastUpdate.get().getLastUpdate().equals(lastUpdate.getLastUpdate());
     }
 
-    //TODO unit test
     public LastUpdate findByIdValidated(UUID externalReference, EntityType entityType) {
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(uuidConverter.convertDomain(externalReference))

@@ -46,9 +46,8 @@ public class StarSystemDao extends AbstractDao<StarSystemEntity, StarSystem, Str
         return findById(uuidConverter.convertDomain(id));
     }
 
-    //TODO unit test
     public List<StarSystem> findAllById(List<UUID> starIds) {
-        List<StarSystemEntity> entities = StreamSupport.stream(repository.findAllById(starIds.stream().map(uuidConverter::convertDomain).toList()).spliterator(), false)
+        List<StarSystemEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(starIds)).spliterator(), false)
             .toList();
 
         return converter.convertEntity(entities);

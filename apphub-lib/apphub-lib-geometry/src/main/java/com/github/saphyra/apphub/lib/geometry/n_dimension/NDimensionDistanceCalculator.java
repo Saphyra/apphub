@@ -2,12 +2,17 @@ package com.github.saphyra.apphub.lib.geometry.n_dimension;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static java.util.Objects.isNull;
+
 @Slf4j
-//TODO unit test
 public class NDimensionDistanceCalculator {
     public Double calculateDistance(NDimensionCoordinate... coordinates) {
+        if (isNull(coordinates)) {
+            return null;
+        }
+
         if (coordinates.length == 0) {
-            throw new IllegalArgumentException("Provide at least 1 coordinate");
+            return null;
         }
 
         double distance = 0d;

@@ -26,9 +26,8 @@ public class FleetCarrierDao extends AbstractDao<FleetCarrierEntity, FleetCarrie
         return converter.convertEntity(repository.findByMarketId(marketId));
     }
 
-    //TODO unit test
     public List<FleetCarrier> findAllById(List<UUID> fleetCarrierIds) {
-        List<FleetCarrierEntity> entities = StreamSupport.stream(repository.findAllById(fleetCarrierIds.stream().map(uuidConverter::convertDomain).toList()).spliterator(), false)
+        List<FleetCarrierEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(fleetCarrierIds)).spliterator(), false)
             .toList();
         return converter.convertEntity(entities);
     }

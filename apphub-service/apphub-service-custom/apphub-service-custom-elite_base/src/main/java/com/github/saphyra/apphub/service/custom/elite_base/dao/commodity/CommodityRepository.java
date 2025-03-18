@@ -9,7 +9,6 @@ import java.util.List;
 interface CommodityRepository extends CrudRepository<CommodityEntity, CommodityEntityId> {
     List<CommodityEntity> getByIdExternalReferenceOrMarketId(String externalReference, Long marketId);
 
-    //TODO unit test
     @Query("SELECT e FROM CommodityEntity e WHERE e.id.commodityName=:commodityName AND e.stock >= :stock AND e.sellPrice BETWEEN :minPrice AND :maxPrice")
     List<CommodityEntity> getSellOffers(
         @Param("commodityName") String commodityName,
@@ -18,7 +17,6 @@ interface CommodityRepository extends CrudRepository<CommodityEntity, CommodityE
         @Param("maxPrice") Integer maxPrice
     );
 
-    //TODO unit test
     @Query("SELECT e FROM CommodityEntity e WHERE e.id.commodityName=:commodityName AND e.demand >= :demand AND e.buyPrice BETWEEN :minPrice AND :maxPrice")
     List<CommodityEntity> getBuyOffers(
         @Param("commodityName") String commodityName,

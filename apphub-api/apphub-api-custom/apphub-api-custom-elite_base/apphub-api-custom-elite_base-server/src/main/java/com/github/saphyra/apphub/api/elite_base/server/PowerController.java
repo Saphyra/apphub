@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-//TODO role protection test
 public interface PowerController {
     @GetMapping(EliteBaseEndpoints.ELITE_BASE_GET_POWERS)
     List<String> getPowers(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

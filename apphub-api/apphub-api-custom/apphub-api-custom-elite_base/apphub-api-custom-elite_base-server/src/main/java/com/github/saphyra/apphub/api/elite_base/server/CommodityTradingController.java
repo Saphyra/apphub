@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-//TODO Role protection test
 public interface CommodityTradingController {
     @PostMapping(EliteBaseEndpoints.ELITE_BASE_COMMODITY_TRADING_TRADE)
     List<CommodityTradingResponse> bestTradeLocations(@RequestBody CommodityTradingRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

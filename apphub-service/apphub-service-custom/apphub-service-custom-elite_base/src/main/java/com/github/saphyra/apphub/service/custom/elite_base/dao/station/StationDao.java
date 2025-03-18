@@ -26,9 +26,8 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
         return converter.convertEntity(repository.findByMarketId(marketId));
     }
 
-    //TODO unit test
     public List<Station> findAllById(List<UUID> stationIds) {
-        List<StationEntity> entities = StreamSupport.stream(repository.findAllById(stationIds.stream().map(uuidConverter::convertDomain).toList()).spliterator(), false)
+        List<StationEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(stationIds)).spliterator(), false)
             .toList();
         return converter.convertEntity(entities);
     }

@@ -1,17 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.body;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +20,8 @@ class BodyDaoTest {
     private static final Long BODY_ID = 234L;
     private static final String STAR_SYSTEM_ID_STRING = "star-system-id";
     private static final String BODY_NAME = "body-name";
+    private static final UUID ID = UUID.randomUUID();
+    private static final String ID_STRING = "id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -58,5 +56,14 @@ class BodyDaoTest {
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         assertThat(underTest.findByBodyName(BODY_NAME)).contains(domain);
+    }
+
+    @Test
+    void findAllById(){
+        given(uuidConverter.convertDomain(List.of(ID))).willReturn(List.of(ID_STRING));
+        given(repository.findAllById(List.of(ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.findAllById(List.of(ID))).containsExactly(domain);
     }
 }
