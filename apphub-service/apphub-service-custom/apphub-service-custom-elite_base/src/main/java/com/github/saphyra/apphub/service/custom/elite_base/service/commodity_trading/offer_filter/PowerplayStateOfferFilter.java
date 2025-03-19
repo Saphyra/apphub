@@ -13,7 +13,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PowerplayStateOfferFilter implements OfferFilter {
     @Override
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./trade_commodities_page_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import StarSelector from "../../../common/component/star_selector/StarSelector";
-import { cacheAndUpdate, cachedOrDefault, formatNumber, hasValue } from "../../../../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../../../../common/js/Utils";
 import CommoditySelector from "../../../common/component/commodity_selector/CommoditySelector";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import NumberInput from "../../../../../../common/component/input/NumberInput";
@@ -20,12 +20,11 @@ import SelectInput, { SelectOption } from "../../../../../../common/component/in
 import Stream from "../../../../../../common/js/collection/Stream";
 import Button from "../../../../../../common/component/input/Button";
 import "./trade_commodities_page.css";
-import MapStream from "../../../../../../common/js/collection/MapStream";
-import PowerNames from "../../../common/localization/PowerNames";
-import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
-import Entry from "../../../../../../common/js/collection/Entry";
 import Spinner from "../../../../../../common/component/Spinner";
 import ErrorHandler from "../../../../../../common/js/dao/ErrorHandler";
+import TradeCommoditiesResult from "./TradeCommoditiesResult";
+
+export const PAGE_SIZE = 20;
 
 //TODO split
 const TradeCommoditiesPage = ({ tradeMode }) => {
@@ -45,7 +44,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     const CACHE_KEY_POWERS = "eliteBaseCommodityTradingPowers";
     const CACHE_KEY_POWERS_RELATION = "eliteBaseCommodityTradingPowersRelation";
     const CACHE_KEY_POWERPLAY_STATE = "eliteBaseCommodityTradingPowerplayState";
-    const PAGE_SIZE = 20;
+
 
     const localizationHandler = new LocalizationHandler(localizationData);
     const [powerplayStates, setPowerplayStates] = useState([]);
@@ -74,8 +73,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
     //Search result
     const [searchResult, setSearchResult] = useState(null);
-    const [orderBy, setOrderBy] = useState(OrderBy.SYSTEM_DISTANCE.key);
-    const [order, setOrder] = useState(Order.ASCENDING.key);
     const [displayed, setDisplayed] = useState(PAGE_SIZE);
 
     useCache("elite-base-powerplay-states", ELITE_BASE_GET_POWERPLAY_STATES.createRequest(), setPowerplayStates);
@@ -85,12 +82,52 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     return (
         <div className="elite-base-page">
             <fieldset>
-                <legend>todo</legend>
+                <legend>{localizationHandler.get("offer")}</legend>
 
                 <CommoditySelector
                     commodity={commodity}
                     setCommodity={setCommodity}
                 />
+
+                <div>TODO Display galactic average</div>
+
+                <div>
+                    <PreLabeledInputField
+                        label={localizationHandler.get("min-price") + ":"}
+                        input={<NumberInput
+                            placeholder={localizationHandler.get("min-price")}
+                            value={minPrice}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_PRICE, v, setMinPrice)}
+                            min={0}
+                            max={maxPrice}
+                        />
+                        }
+                    />
+
+                    <PreLabeledInputField
+                        label={localizationHandler.get("max-price") + ":"}
+                        input={<NumberInput
+                            placeholder={localizationHandler.get("max-price")}
+                            value={maxPrice}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MAX_PRICE, v, setMaxPrice)}
+                            min={minPrice}
+                        />
+                        }
+                    />
+                </div>
+
+                <div>
+                    <PreLabeledInputField
+                        label={localizationHandler.get("min-trade-amount") + ":"}
+                        input={<NumberInput
+                            placeholder={localizationHandler.get("min-trade-amount")}
+                            value={minTradeAmount}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_TRADE_AMOUNT, v, setMinTradeAmount)}
+                            min={0}
+                        />
+                        }
+                    />
+                </div>
 
                 <LastUpdateSelector
                     lastUpdate={maxTimeSinceLastUpdated}
@@ -189,50 +226,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
             </fieldset>
 
             <fieldset>
-                <legend>{localizationHandler.get("offer")}</legend>
-
-                <div>Display galactic average</div>
-
-                <div>
-                    <PreLabeledInputField
-                        label={localizationHandler.get("min-price") + ":"}
-                        input={<NumberInput
-                            placeholder={localizationHandler.get("min-price")}
-                            value={minPrice}
-                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_PRICE, v, setMinPrice)}
-                            min={0}
-                            max={maxPrice}
-                        />
-                        }
-                    />
-
-                    <PreLabeledInputField
-                        label={localizationHandler.get("max-price") + ":"}
-                        input={<NumberInput
-                            placeholder={localizationHandler.get("max-price")}
-                            value={maxPrice}
-                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MAX_PRICE, v, setMaxPrice)}
-                            min={minPrice}
-                        />
-                        }
-                    />
-                </div>
-
-                <div>
-                    <PreLabeledInputField
-                        label={localizationHandler.get("min-trade-amount") + ":"}
-                        input={<NumberInput
-                            placeholder={localizationHandler.get("min-trade-amount")}
-                            value={minTradeAmount}
-                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_TRADE_AMOUNT, v, setMinTradeAmount)}
-                            min={0}
-                        />
-                        }
-                    />
-                </div>
-            </fieldset>
-
-            <fieldset>
                 <legend>Powerplay</legend>
 
                 <div>
@@ -275,67 +268,13 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 />
             </div>
 
-            <div id="elite-base-ct-trade-commodities-order-buttons-wrapper">
-                <PreLabeledInputField
-                    label={localizationHandler.get("order-by")}
-                    input={<SelectInput
-                        value={orderBy}
-                        onchangeCallback={setOrderBy}
-                        options={getOrderByOptions()}
-                    />
-                    }
-                />
-
-                <SelectInput
-                    value={order}
-                    onchangeCallback={setOrder}
-                    options={getOrderOptions()}
-                />
-            </div>
-
             {hasValue(searchResult) &&
-                <div>
-                    <table id="elite-base-ct-trade-commodities-search-result-table" className="formatted-table selectable">
-                        <thead>
-                            <tr>
-                                <td
-                                    colSpan={12}
-                                    id="elite-base-ct-trade-commodities-search-result-number-of-result"
-                                >
-                                    {localizationHandler.get("number-of-results", { amount: searchResult.length })}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>{localizationHandler.get("star-system-distance")}</td>
-                                <td>{localizationHandler.get("star-system-name")}</td>
-                                <td>{localizationHandler.get("station-name")}</td>
-                                <td>{localizationHandler.get("station-distance")}</td>
-                                <td>{localizationHandler.get("station-type")}</td>
-                                <td>{localizationHandler.get("landing-pad")}</td>
-                                <td>{localizationHandler.get("trade-amount")}</td>
-                                <td>{localizationHandler.get("price")}</td>
-                                <td>{localizationHandler.get("last-updated")}</td>
-                                <td>{localizationHandler.get("controlling-power-short")}</td>
-                                <td>{localizationHandler.get("powers")}</td>
-                                <td>{localizationHandler.get("powerplay-state-short")}</td>
-                            </tr>
-                        </thead>
-                        <tbody>{getSearchResult()}</tbody>
-                        {
-                            searchResult.length > displayed &&
-                            <tfoot>
-                                <tr>
-                                    <td colSpan={12}>
-                                        <Button
-                                            label={localizationHandler.get("load-more")}
-                                            onclick={() => setDisplayed(displayed + PAGE_SIZE)}
-                                        />
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        }
-                    </table>
-                </div>
+                <TradeCommoditiesResult
+                    localizationHandler={localizationHandler}
+                    searchResult={searchResult}
+                    displayed={displayed}
+                    setDisplayed={setDisplayed}
+                />
             }
 
             {displaySpinner && <Spinner />}
@@ -352,6 +291,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     }
 
     function search() {
+        setDisplayed(PAGE_SIZE);
         setDisplaySpinner(true);
         doSearch();
     }
@@ -387,115 +327,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
         setSearchResult(response);
         setDisplaySpinner(false);
-    }
-
-    function getOrderByOptions() {
-        return new MapStream(OrderBy)
-            .toListStream()
-            .map(o => new SelectOption(localizationHandler.get(o.key), o.key))
-            .toList();
-    }
-
-    function getOrderOptions() {
-        return new MapStream(Order)
-            .toListStream()
-            .map(o => new SelectOption(localizationHandler.get(o.key), o.key))
-            .toList();
-    }
-
-    function getSearchResult() {
-        return new Stream(searchResult)
-            .sorted((a, b) => Order[order].sorter(OrderBy[orderBy].compare(a, b)))
-            .limit(displayed)
-            .map((offer, index) => {
-                return (
-                    <tr key={index}>
-                        <td>{formatNumber(offer.starSystemDistance, 2)} ly</td>
-                        <td>{offer.starName}</td>
-                        <td>{offer.locationName}</td>
-                        <td>{formatNumber(offer.stationDistance, 2)} ls</td>
-                        <td>{offer.locationType}</td>
-                        <td>{offer.landingPad}</td>
-                        <td>{offer.tradeAmount} T</td>
-                        <td>{offer.price} Cr.</td>
-                        <td>{getLastUpdated(offer.lastUpdated)}</td>
-                        <td>{PowerNames[offer.controllingPower]}</td>
-                        <td>{new Stream(offer.powers).map(power => PowerNames[power]).join(", ")}</td>
-                        <td>{offer.powerplayState}</td>
-                    </tr>
-                )
-            })
-            .toList();
-
-        function getLastUpdated(lastUpdated) {
-            const luldt = LocalDateTime.fromLocalDateTime(lastUpdated);
-            const deltaMs = LocalDateTime.now().getEpoch() - luldt.getEpoch();
-
-            let seconds = Math.floor(deltaMs / 1000);
-            let minutes = Math.floor(seconds / 60);
-            let hours = Math.floor(minutes / 60);
-            let days = Math.floor(hours / 24);
-
-            hours = hours % 24;
-            minutes = minutes % 60;
-            seconds = seconds % 60;
-
-            const arr = [
-                new Entry("days", days),
-                new Entry("hours", hours),
-                new Entry("minutes", minutes),
-                new Entry("seconds", seconds),
-            ];
-
-            const displayedArr = new Stream(arr)
-                .filter(e => e.value > 0)
-                .limit(2)
-                .toList();
-
-            if (displayedArr.length == 0) {
-                return localizationHandler.get("just-now");
-            } else if (displayedArr.length == 1) {
-                return localizationHandler.get(displayedArr[0].key, { value: displayedArr[0].value }) + " " + localizationHandler.get("ago-suffix");
-            } else {
-                return new Stream([
-                    localizationHandler.get(displayedArr[0].key, { value: displayedArr[0].value }),
-                    localizationHandler.get("and"),
-                    localizationHandler.get(displayedArr[1].key, { value: displayedArr[1].value }),
-                    localizationHandler.get("ago-suffix"),
-                ])
-                    .join(" ");
-            }
-        }
-    }
-}
-
-const OrderBy = {
-    SYSTEM_DISTANCE: {
-        key: "SYSTEM_DISTANCE",
-        compare: (a, b) => a.starSystemDistance - b.starSystemDistance
-    },
-    TRADE_AMOUNT: {
-        key: "TRADE_AMOUNT",
-        compare: (a, b) => a.tradeAmount - b.tradeAmount
-    },
-    PRICE: {
-        key: "PRICE",
-        compare: (a, b) => a.price - b.price
-    },
-    LAST_UPDATED: {
-        key: "LAST_UPDATED",
-        compare: (a, b) => b.lastUpdated.localeCompare(a.lastUpdated)
-    }
-}
-
-const Order = {
-    ASCENDING: {
-        key: "ASCENDING",
-        sorter: i => i
-    },
-    DESCENDING: {
-        key: "DESCENDING",
-        sorter: i => -1 * i
     }
 }
 

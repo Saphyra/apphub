@@ -11,7 +11,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StationDistanceOfferFilter implements OfferFilter {
     @Override
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {

@@ -11,7 +11,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LandingPadOfferFilter implements OfferFilter {
     @Override
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {
@@ -23,7 +22,8 @@ public class LandingPadOfferFilter implements OfferFilter {
             return result;
         }
 
-        boolean result = response.getLandingPad().isLargeEnough(request.getMinLandingPad());
+        boolean result = response.getLandingPad()
+            .isLargeEnough(request.getMinLandingPad());
         if (!result) {
             log.info("Filtered offer from station with too small landing pad: {}", response);
         }

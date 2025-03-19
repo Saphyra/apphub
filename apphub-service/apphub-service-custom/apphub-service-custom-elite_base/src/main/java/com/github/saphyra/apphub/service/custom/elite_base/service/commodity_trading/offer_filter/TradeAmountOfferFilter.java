@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TradeAmountOfferFilter implements OfferFilter {
     @Override
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {

@@ -6,15 +6,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class SystemDistanceOfferFilter implements OfferFilter {
+class PowersOfferFilter implements OfferFilter {
     @Override
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {
-        boolean result = response.getStarSystemDistance() <= request.getMaxStarSystemDistance();
+        boolean result = request.getPowersRelation()
+            .apply(
+                request.getPowers(),
+                Optional.ofNullable(response.getPowers())
+                    .orElse(Collections.emptyList())
+            );
         if (!result) {
-            log.info("Filtered offer because system is too far: {}", response);
+            log.info("Filtered offer with incorrect controllingFaction: {}", response);
         }
         return result;
     }

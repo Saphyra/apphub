@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @Slf4j
-//TODO unit test
 public class PowerControllerImpl implements PowerController {
     @Override
     public List<String> getPowers(AccessTokenHeader accessTokenHeader) {

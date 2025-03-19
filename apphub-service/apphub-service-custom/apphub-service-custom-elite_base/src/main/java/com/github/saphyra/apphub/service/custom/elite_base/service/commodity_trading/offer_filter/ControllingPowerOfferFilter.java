@@ -13,11 +13,10 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class ControllingFactionOfferFilter implements OfferFilter {
+class ControllingPowerOfferFilter implements OfferFilter {
     @Override
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {
-        boolean result = request.getPowersRelation()
+        boolean result = request.getControllingPowerRelation()
             .apply(
                 request.getControllingPowers(),
                 Optional.ofNullable(response.getControllingPower())

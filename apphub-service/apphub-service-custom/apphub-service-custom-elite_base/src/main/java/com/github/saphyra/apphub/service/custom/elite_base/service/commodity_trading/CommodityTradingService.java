@@ -17,7 +17,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CommodityTradingService {
     private final CommodityTradingRequestValidator commodityTradingRequestValidator;
     private final CommodityDao commodityDao;
