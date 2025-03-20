@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OfferDetailsFetcher {
     private final StarSystemDao starSystemDao;
     private final StationDao stationDao;
@@ -92,7 +91,7 @@ class OfferDetailsFetcher {
 
         //Convert fetched data to response
         return offers.stream()
-            .map(commodity -> offerMapper.mapCommodities(tradeMode, referenceSystem, commodityLocationDatas, stars, systemDatas, bodies, commodity))
+            .map(commodity -> offerMapper.mapOffer(tradeMode, referenceSystem, commodityLocationDatas, stars, systemDatas, bodies, commodity))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .toList();

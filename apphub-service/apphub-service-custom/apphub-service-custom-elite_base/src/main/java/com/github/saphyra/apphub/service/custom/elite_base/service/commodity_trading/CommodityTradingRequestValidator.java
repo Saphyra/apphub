@@ -13,11 +13,10 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommodityTradingRequestValidator {
     private final CommodityDao commodityDao;
 
-    public void validate(CommodityTradingRequest request) {
+    void validate(CommodityTradingRequest request) {
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
         ValidationUtil.contains(request.getCommodity(), commodityDao.getCommodities(), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
@@ -28,7 +27,6 @@ class CommodityTradingRequestValidator {
         ValidationUtil.notNull(request.getIncludeSurfaceStations(), "includeSurfaceStations");
         ValidationUtil.notNull(request.getIncludeFleetCarriers(), "includeFleetCarriers");
         ValidationUtil.atLeast(request.getMinPrice(), 1, "minPrice");
-        ValidationUtil.notNull(request.getMaxPrice(), "maxPrice");
         ValidationUtil.atLeast(request.getMaxPrice(), request.getMinPrice(), "maxPrice");
 
         ValidationUtil.notNull(request.getControllingPowers(), "controllingPowers");

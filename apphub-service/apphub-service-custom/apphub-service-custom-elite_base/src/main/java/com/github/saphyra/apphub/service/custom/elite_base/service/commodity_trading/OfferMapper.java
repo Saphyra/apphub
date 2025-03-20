@@ -22,12 +22,11 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OfferMapper {
     private final NDimensionDistanceCalculator distanceCalculator;
     private final LastUpdateDao lastUpdateDao;
 
-    Optional<CommodityTradingResponse> mapCommodities(
+    Optional<CommodityTradingResponse> mapOffer(
         TradeMode tradeMode,
         StarSystem referenceSystem,
         Map<UUID, CommodityLocationData> commodityLocationDatas,

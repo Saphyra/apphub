@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 @RequiredArgsConstructor
-//TODO unit test
 public enum Relation {
     ANY_MATCH((required, current) -> required.stream().anyMatch(current::contains)),
     ALL_MATCH((required, current) -> new HashSet<>(current).containsAll(required)),

@@ -26,7 +26,6 @@ import TradeCommoditiesResult from "./TradeCommoditiesResult";
 
 export const PAGE_SIZE = 20;
 
-//TODO split
 const TradeCommoditiesPage = ({ tradeMode }) => {
     const CACHE_KEY_MIN_PRICE = "eliteBaseCommodityTradingMinPrice";
     const CACHE_KEY_MAX_PRICE = "eliteBaseCommodityTradingMaxPrice";
@@ -88,8 +87,6 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                     commodity={commodity}
                     setCommodity={setCommodity}
                 />
-
-                <div>TODO Display galactic average</div>
 
                 <div>
                     <PreLabeledInputField
