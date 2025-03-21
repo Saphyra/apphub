@@ -133,17 +133,38 @@ button,
 .button,
 a,
 select,
-footer label {
+footer label,
+.multi-select {
     margin: 4px;
     background: var(--background-color);
     border: 3px outset white;
     border-radius: 5px;
     padding: 3px;
-    ;
     cursor: pointer;
     color: white;
     white-space: nowrap;
     text-align: center;
+}
+
+.multi-select {
+    display: inline-block;
+    padding: 0;
+}
+
+.multi-select-operations {
+    border-bottom: 2px inset white;
+}
+
+.multi-select-options {
+    text-align: left;
+}
+
+.multi-select-option {
+    margin: 4px;
+}
+
+.multi-select-option input[type=checkbox]{
+    transform: scale(1.5);
 }
 
 select option {
@@ -448,6 +469,6 @@ textarea {
     background-color: orange !important;
 }
 
-.resizable{
+.resizable {
     resize: both;
 }

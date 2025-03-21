@@ -25,7 +25,7 @@ class StarSystemDaoTest {
     private static final String STAR_NAME = "star-name";
     private static final Integer PAGE_SIZE = 32;
     private static final UUID ID = UUID.randomUUID();
-    private static final String IS_STRING = "id";
+    private static final String ID_STRING = "id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -75,18 +75,27 @@ class StarSystemDaoTest {
 
     @Test
     void findByIdValidated_notFound() {
-        given(uuidConverter.convertDomain(ID)).willReturn(IS_STRING);
-        given(repository.findById(IS_STRING)).willReturn(Optional.empty());
+        given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
+        given(repository.findById(ID_STRING)).willReturn(Optional.empty());
 
         ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(ID), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test
     void findByIdValidated() {
-        given(uuidConverter.convertDomain(ID)).willReturn(IS_STRING);
-        given(repository.findById(IS_STRING)).willReturn(Optional.of(entity));
+        given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
+        given(repository.findById(ID_STRING)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         assertThat(underTest.findByIdValidated(ID)).isEqualTo(domain);
+    }
+
+    @Test
+    void findAllById() {
+        given(uuidConverter.convertDomain(List.of(ID))).willReturn(List.of(ID_STRING));
+        given(repository.findAllById(List.of(ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.findAllById(List.of(ID))).containsExactly(domain);
     }
 }

@@ -5,7 +5,7 @@ import { formatNumber } from "../../../../../../common/js/Utils";
 const SearchNearestMaterialTraderResult = ({ localizationHandler, searchResult }) => {
     return (
         <div id="elite-base-sn-material-trader-search-result">
-            <table className="formatted-table">
+            <table className="formatted-table selectable">
                 <thead>
                     <tr>
                         <th>{localizationHandler.get("material-type")}</th>

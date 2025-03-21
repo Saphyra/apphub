@@ -12,6 +12,20 @@
                         "clickable": true
                     }
                 ]
+            },
+            {
+                "id": "COMMODITY_TRADING",
+                "clickable": false,
+                "items": [
+                    {
+                        "id": "COMMODITY_TRADING_BUY_COMMODITIES",
+                        "clickable": true
+                    },
+                    {
+                        "id": "COMMODITY_TRADING_SELL_COMMODITIES",
+                        "clickable": true
+                    }
+                ]
             }
         ]
     }

@@ -4,8 +4,10 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Component
 public class StationDao extends AbstractDao<StationEntity, Station, String, StationRepository> {
@@ -22,5 +24,11 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
 
     public Optional<Station> findByMarketId(Long marketId) {
         return converter.convertEntity(repository.findByMarketId(marketId));
+    }
+
+    public List<Station> findAllById(List<UUID> stationIds) {
+        List<StationEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(stationIds)).spliterator(), false)
+            .toList();
+        return converter.convertEntity(entities);
     }
 }

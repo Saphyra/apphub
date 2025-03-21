@@ -43,8 +43,8 @@ public class CommoditySaver {
         List<CommodityData> commodityDataList = Arrays.stream(commodities)
             .map(edCommodity -> CommodityData.builder()
                 .name(edCommodity.getName())
-                .buyPrice(edCommodity.getBuyPrice())
-                .sellPrice(edCommodity.getSellPrice())
+                .buyPrice(edCommodity.getSellPrice()) //Have to reverse data because broker follows opposite logic
+                .sellPrice(edCommodity.getBuyPrice()) //Have to reverse data because broker follows opposite logic
                 .stock(edCommodity.getStock())
                 .demand(edCommodity.getDemand())
                 .averagePrice(edCommodity.getAveragePrice())
@@ -101,10 +101,10 @@ public class CommoditySaver {
         private final String name;
 
         @Builder.Default
-        private final Integer buyPrice = 0;
+        private final Integer buyPrice = 0; //The price the station buys
 
         @Builder.Default
-        private final Integer sellPrice = 0;
+        private final Integer sellPrice = 0; //The price the station sells
 
         @Builder.Default
         private final Integer stock = 0;
@@ -114,5 +114,12 @@ public class CommoditySaver {
 
         @Builder.Default
         private final Integer averagePrice = 0;
+
+        public static class CommodityDataBuilder {
+            public CommodityDataBuilder name(String name) {
+                this.name = name.replace("$", "").replace("_name;", "");
+                return this;
+            }
+        }
     }
 }
