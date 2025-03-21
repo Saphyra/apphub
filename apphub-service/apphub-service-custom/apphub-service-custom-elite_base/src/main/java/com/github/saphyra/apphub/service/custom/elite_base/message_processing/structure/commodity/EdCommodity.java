@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class EdCommodity {
     private String name;
-    private Integer buyPrice;
-    private Integer sellPrice;
+    private Integer buyPrice; //The price the player can buy
+    private Integer sellPrice; //The price the player can sell
     private Integer demand;
     private Integer stock;
 
