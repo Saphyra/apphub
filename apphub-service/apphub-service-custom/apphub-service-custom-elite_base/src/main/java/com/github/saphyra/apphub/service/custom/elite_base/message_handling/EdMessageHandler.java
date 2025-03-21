@@ -41,7 +41,7 @@ public class EdMessageHandler implements MessageHandler {
     private final ScheduledExecutorServiceBean scheduledExecutorServiceBean;
     private final ApplicationContextProxy applicationContextProxy;
 
-    private volatile long lastMessage;
+    private volatile LocalDateTime lastMessage;
 
     public EdMessageHandler(
         MessageFactory messageFactory,
@@ -58,7 +58,7 @@ public class EdMessageHandler implements MessageHandler {
         this.errorReporterService = errorReporterService;
         this.performanceReporter = performanceReporter;
         this.dateTimeUtil = dateTimeUtil;
-        lastMessage = dateTimeUtil.getCurrentTimeEpochMillis();
+        lastMessage = dateTimeUtil.getCurrentDateTime();
         this.eliteBaseProperties = eliteBaseProperties;
         this.scheduledExecutorServiceBean = scheduledExecutorServiceBean;
         this.applicationContextProxy = applicationContextProxy;
@@ -72,7 +72,7 @@ public class EdMessageHandler implements MessageHandler {
         Inflater inflater = new Inflater();
         inflater.setInput(payload);
         try {
-            lastMessage = dateTimeUtil.getCurrentTimeEpochMillis();
+            lastMessage = dateTimeUtil.getCurrentDateTime();
             int outputLength = inflater.inflate(output);
             String outputString = new String(output, 0, outputLength, StandardCharsets.UTF_8);
             log.debug("{}", outputString);
@@ -95,10 +95,11 @@ public class EdMessageHandler implements MessageHandler {
         log.info("Checking connection...");
         LocalDateTime expirationTime = dateTimeUtil.getCurrentDateTime()
             .minus(eliteBaseProperties.getIncomingMessageTimeout());
-        long expiration = dateTimeUtil.toEpochSecond(expirationTime);
 
-        if (expiration > lastMessage) {
-            log.error("Last message came at {}. Shutting down service...", lastMessage);
+        log.info("Last message arrived at {}. Current time: {}", lastMessage, expirationTime);
+
+        if (expirationTime.isAfter(lastMessage)) {
+            log.error("Last message arrived at {}. Shutting down service...", lastMessage);
             errorReporterService.report(String.format("Last message came at %s. Shutting down service...", lastMessage));
             shutdown();
         }
