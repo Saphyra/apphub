@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import localizationData from "./trade_commodities_page_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import StarSelector from "../../../common/component/star_selector/StarSelector";
-import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, hasValue, validate, validateAll } from "../../../../../../common/js/Utils";
 import CommoditySelector from "../../../common/component/commodity_selector/CommoditySelector";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import NumberInput from "../../../../../../common/component/input/NumberInput";
@@ -23,6 +23,7 @@ import "./trade_commodities_page.css";
 import Spinner from "../../../../../../common/component/Spinner";
 import ErrorHandler from "../../../../../../common/js/dao/ErrorHandler";
 import TradeCommoditiesResult from "./TradeCommoditiesResult";
+import NotificationService from "../../../../../../common/js/notification/NotificationService";
 
 export const PAGE_SIZE = 20;
 
@@ -43,7 +44,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     const CACHE_KEY_POWERS = "eliteBaseCommodityTradingPowers";
     const CACHE_KEY_POWERS_RELATION = "eliteBaseCommodityTradingPowersRelation";
     const CACHE_KEY_POWERPLAY_STATE = "eliteBaseCommodityTradingPowerplayState";
-
+    const MIN_PRICE = 1;
 
     const localizationHandler = new LocalizationHandler(localizationData);
     const [powerplayStates, setPowerplayStates] = useState([]);
@@ -51,7 +52,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
 
     const [starId, setStarId] = useState(null);
     const [commodity, setCommodity] = useState(null);
-    const [minPrice, setMinPrice] = useState(cachedOrDefault(CACHE_KEY_MIN_PRICE, 1));
+    const [minPrice, setMinPrice] = useState(cachedOrDefault(CACHE_KEY_MIN_PRICE, MIN_PRICE));
     const [maxPrice, setMaxPrice] = useState(cachedOrDefault(CACHE_KEY_MAX_PRICE, 1_000_000));
     const [maxStarSystemDistance, setMaxStarSystemDistance] = useState(cachedOrDefault(CACHE_KEY_MAX_STAR_SYSTEM_DISTANCE, 100));
     const [maxStationDistance, setMaxStationDistance] = useState(cachedOrDefault(CACHE_KEY_MAX_STATION_DISTANCE, 1_000_000));
@@ -95,7 +96,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                             placeholder={localizationHandler.get("min-price")}
                             value={minPrice}
                             onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MIN_PRICE, v, setMinPrice)}
-                            min={0}
+                            min={MIN_PRICE}
                             max={maxPrice}
                         />
                         }
@@ -294,36 +295,51 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     }
 
     async function doSearch() {
-        //TODO validate input
+        try {
+            const validationResult = validateAll(
+                [
+                    () => validate(() => hasValue(starId), localizationHandler.get("star-not-selected")),
+                    () => validate(() => hasValue(commodity), localizationHandler.get("commodity-not-selected")),
+                    () => validate(() => minPrice >= MIN_PRICE, localizationHandler.get("min-price-too-low")),
+                    () => validate(() => maxPrice >= minPrice, localizationHandler.get("max-price-too-low")),
+                ]
+            );
 
-        const request = {
-            tradeMode: tradeMode,
-            referenceStarId: starId,
-            commodity: commodity,
-            minPrice: minPrice,
-            maxPrice: maxPrice,
-            maxStarSystemDistance: maxStarSystemDistance,
-            maxStationDistance: maxStationDistance,
-            includeUnknownStationDistance: includeUnknownStationDistance,
-            minLandingPad: minLandingPad,
-            includeUnknownLandingPad: includeUnknownLandingPad,
-            maxTimeSinceLastUpdated: maxTimeSinceLastUpdated,
-            includeSurfaceStations: includeSurfaceStations,
-            includeFleetCarriers: includeFleetCarriers,
-            controllingPowers: controllingPowers,
-            controllingPowerRelation: controllingPowerRelation,
-            powers: powers,
-            powersRelation: powersRelation,
-            powerplayState: powerplayState == "" ? null : powerplayState,
-            minTradeAmount: minTradeAmount,
+            if (hasValue(validationResult)) {
+                NotificationService.showError(validationResult);
+                return;
+            }
+
+            const request = {
+                tradeMode: tradeMode,
+                referenceStarId: starId,
+                commodity: commodity,
+                minPrice: minPrice,
+                maxPrice: maxPrice,
+                maxStarSystemDistance: maxStarSystemDistance,
+                maxStationDistance: maxStationDistance,
+                includeUnknownStationDistance: includeUnknownStationDistance,
+                minLandingPad: minLandingPad,
+                includeUnknownLandingPad: includeUnknownLandingPad,
+                maxTimeSinceLastUpdated: maxTimeSinceLastUpdated,
+                includeSurfaceStations: includeSurfaceStations,
+                includeFleetCarriers: includeFleetCarriers,
+                controllingPowers: controllingPowers,
+                controllingPowerRelation: controllingPowerRelation,
+                powers: powers,
+                powersRelation: powersRelation,
+                powerplayState: powerplayState == "" ? null : powerplayState,
+                minTradeAmount: minTradeAmount,
+            }
+
+            const response = await ELITE_BASE_COMMODITY_TRADING_TRADE.createRequest(request)
+                .addErrorHandler(new ErrorHandler(() => true, () => setDisplaySpinner(false)))
+                .send();
+
+            setSearchResult(response);
+        } finally {
+            setDisplaySpinner(false);
         }
-
-        const response = await ELITE_BASE_COMMODITY_TRADING_TRADE.createRequest(request)
-            .addErrorHandler(new ErrorHandler(() => true, () => setDisplaySpinner(false)))
-            .send();
-
-        setSearchResult(response);
-        setDisplaySpinner(false);
     }
 }
 

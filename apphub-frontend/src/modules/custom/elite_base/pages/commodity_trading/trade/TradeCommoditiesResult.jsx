@@ -86,8 +86,8 @@ const TradeCommoditiesResult = ({ localizationHandler, searchResult, displayed, 
                         <td>{formatNumber(offer.stationDistance, 2)} ls</td>
                         <td>{offer.locationType}</td>
                         <td>{offer.landingPad}</td>
-                        <td>{offer.tradeAmount} T</td>
-                        <td>{offer.price} Cr.</td>
+                        <td>{formatNumber(offer.tradeAmount)} T</td>
+                        <td>{formatNumber(offer.price)} Cr.</td>
                         <td>{getLastUpdated(offer.lastUpdated)}</td>
                         <td>{PowerNames[offer.controllingPower]}</td>
                         <td>{new Stream(offer.powers).map(power => PowerNames[power]).join(", ")}</td>

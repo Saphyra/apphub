@@ -169,7 +169,7 @@ export const formatNumber = (number, digits) => {
         return number;
     }
 
-    return number.toFixed(digits).toLocaleString();
+    return number.toFixed(digits).toLocaleString("").replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 export const isArrayEmpty = (input) => {
@@ -191,4 +191,20 @@ export const cacheAndUpdate = (key, value, callback, convertValue = v => v) => {
 
 export const cachedOrDefault = (key, defaultValue = "", convertValue = v => v) => {
     return hasValue(sessionStorage[key]) ? convertValue(sessionStorage[key]) : defaultValue;
+}
+
+export const validate = (predicate, errorMessage) => {
+    if (!predicate()) {
+        return errorMessage;
+    }
+
+    return null;
+}
+
+export const validateAll = (validations = []) => {
+    return new Stream(validations)
+        .map(validation => validation())
+        .filter(validationResult => hasValue(validationResult))
+        .findFirst()
+        .orElse(null);
 }

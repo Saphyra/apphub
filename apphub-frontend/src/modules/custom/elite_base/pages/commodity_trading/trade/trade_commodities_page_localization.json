@@ -170,5 +170,21 @@
     "load-more": {
         "en": "Load more",
         "hu": "Továbbiak betöltése"
+    },
+    "star-not-selected": {
+        "en": "Please select reference star system!",
+        "hu": "Válassz referencia csillagrendszert!"
+    },
+    "commodity-not-selected": {
+        "en": "Please select commodity!",
+        "hu": "Válassz terméket!"
+    },
+    "min-price-too-low": {
+        "en": "Minimum price too low." ,
+        "hu": "Minimum ár túl alacsony."
+    },
+    "max-price-too-low": {
+        "en": "Maximum price too low." ,
+        "hu": "Maximum ár túl alacsony."
     }
 }
