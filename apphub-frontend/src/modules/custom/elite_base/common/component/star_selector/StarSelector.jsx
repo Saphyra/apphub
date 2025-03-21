@@ -9,10 +9,10 @@ import MapStream from "../../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./star_selector.css";
 
-const StarSelector = ({ starId, setStarId, locked }) => {
+const StarSelector = ({ starId, setStarId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
-    const [selectedStar, setSelectedStar] = useState(new DataListInputEntry(starId, ""));
+    const [selectedStar, setSelectedStar] = useState(new DataListInputEntry(starId, hasValue(sessionStorage.eliteBaseStarSelectorStarName) ? sessionStorage.eliteBaseStarSelectorStarName : ""));
     const [queryResult, setQueryResult] = useState([]);
     const [timeout, sTimeout] = useState(null);
 
@@ -25,7 +25,7 @@ const StarSelector = ({ starId, setStarId, locked }) => {
                 preLabel={localizationHandler.get("pre-label")}
                 postLabel={localizationHandler.get("post-label")}
                 inputField={<DataListInputField
-                    className={"elite-base-star-selector" + (locked ? " locked" : "")}
+                    className={"elite-base-star-selector" + (hasValue(starId) ? " locked" : "")}
                     value={selectedStar}
                     setValue={setSelectedStar}
                     options={queryResult}
@@ -70,6 +70,7 @@ const StarSelector = ({ starId, setStarId, locked }) => {
     function updateStarId() {
         if (hasValue(selectedStar.key)) {
             setStarId(selectedStar.key);
+            sessionStorage.eliteBaseStarSelectorStarName = selectedStar.value;
         } else {
             new Stream(queryResult)
                 .filter(star => star.value.toLowerCase() === selectedStar.value.toLowerCase())
@@ -77,6 +78,7 @@ const StarSelector = ({ starId, setStarId, locked }) => {
                 .ifPresent(star => {
                     setStarId(star.key);
                     setSelectedStar(star);
+                    sessionStorage.eliteBaseStarSelectorStarName = star.value;
                 });
         }
     }

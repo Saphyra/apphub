@@ -131,7 +131,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void contains(Object obj, Collection<Object> collection, String field) {
+    public static void contains(Object obj, Collection<?> collection, String field) {
         notNull(obj, field);
 
         if (!collection.contains(obj)) {

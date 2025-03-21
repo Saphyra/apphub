@@ -1,0 +1,11 @@
+===FEATURES===
+    EliteBase
+        Buy and Sell commodities
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

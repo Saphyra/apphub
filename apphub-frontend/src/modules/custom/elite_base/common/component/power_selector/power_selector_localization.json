@@ -1,0 +1,22 @@
+{
+    "ANY_MATCH": {
+        "en": "Any of the selected",
+        "hu": "Bármelyik a kiválasztottak közül"
+    },
+    "ALL_MATCH": {
+        "en": "All of the selected",
+        "hu": "Az összes a kiválasztottak közül"
+    },
+    "NONE_MATCH": {
+        "en": "None of the selected",
+        "hu": "Egyik sem a kiválasztottak közül"
+    },
+    "EMPTY": {
+        "en": "None",
+        "hu": "Egy sem"
+    },
+    "ANY": {
+        "en": "Any",
+        "hu": "Bármelyik"
+    }
+}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import StarSelector from "../../../common/component/star_selector/StarSelector";
-import { hasValue } from "../../../../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../../../../common/js/Utils";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import MaterialType from "./MaterialType";
@@ -15,10 +15,12 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import "./search_nearest_material_trader.css";
 
 const SearchNearestMaterialTraderPage = ({ }) => {
+    const CACHE_KEY_MATERIAL_TYPE = "eliteBaseNearestMaterialTraderMaterialType";
+
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [starId, setStarId] = useState(null);
-    const [materialType, setMaterialType] = useState(MaterialType.ANY);
+    const [materialType, setMaterialType] = useState(cachedOrDefault(CACHE_KEY_MATERIAL_TYPE, MaterialType.ANY));
     const [searchResult, setSearchResult] = useState([]);
     const [page, setPage] = useState(0);
 
@@ -33,7 +35,6 @@ const SearchNearestMaterialTraderPage = ({ }) => {
                 <StarSelector
                     starId={starId}
                     setStarId={setStarId}
-                    locked={hasValue(starId)}
                 />
 
                 <div>
@@ -42,7 +43,7 @@ const SearchNearestMaterialTraderPage = ({ }) => {
                         input={<SelectInput
                             id="elite-base-sn-material-trader-select-mattype"
                             value={materialType}
-                            onchangeCallback={setMaterialType}
+                            onchangeCallback={v => cacheAndUpdate(CACHE_KEY_MATERIAL_TYPE, v, setMaterialType)}
                             options={getOptions()}
                         />}
                     />
