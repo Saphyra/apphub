@@ -2,6 +2,8 @@
     EliteBase
         Buy and Sell commodities
         New Powerplay details in Journal messages
+    ApphubCI
+        Remember latest services
 
 ===BUGFIXES===
 

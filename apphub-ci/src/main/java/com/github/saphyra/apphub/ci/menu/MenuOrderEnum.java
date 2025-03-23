@@ -19,6 +19,7 @@ public enum MenuOrderEnum implements MenuOrder {
     START_VM(1),
     DEPLOY(10),
     DEPLOY_SERVICES(20),
+    DEPLOY_LATEST_SERVICES(30),
     RUN_TESTS(100),
     RUN_TEST_GROUPS(101),
     STOP_SERVICES(1000),

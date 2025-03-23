@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,22 +25,22 @@ public class LocalBuildTask {
         List<String> moduleNames = services.getServices().stream()
             .filter(service -> !disabledServices.contains(service.getName())).map(Service::getModuleName)
             .toList();
-        return buildServices(moduleNames);
+        return buildModules(moduleNames);
     }
 
-    public boolean buildServices(String[] serviceNames) {
-        List<String> moduleNames = Arrays.stream(serviceNames)
+    public boolean buildServices(List<String> serviceNames) {
+        List<String> moduleNames = serviceNames.stream()
             .map(services::findByNameValidated)
             .map(Service::getModuleName)
             .toList();
 
-        return buildServices(moduleNames);
+        return buildModules(moduleNames);
     }
 
     /**
      * @return true, if maven build is successful, false otherwise.
      */
-    public boolean buildServices(List<String> moduleNames) {
+    private boolean buildModules(List<String> moduleNames) {
         DeployMode deployMode = propertyDao.getLocalDeployMode();
         if (deployMode == DeployMode.SKIP_BUILD) {
             return true;

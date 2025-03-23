@@ -40,6 +40,7 @@ public enum LocalizedText implements LocalizationProvider {
     INVALID_COMMAND("Ervenytelen parancs.", "Invalid command."),
     WHAT_WOULD_YOU_LIKE_TO_DO("Mit szeretnel csinalni?", "What would you like to do?"),
     LOCAL_START_SERVICES("Komponensek inditasa", "Start services"),
+    LOCAL_START_LATEST_SERVICES("Legutobbi komponensek inditasa (%s)", "Start latest services (%s)"),
     SERVICES_TO_START("Inditando komponensek:", "Services to start:"),
     SERVICE_NOT_FOUND("%s nevu komponens nem talalhato.", "Service with name %s not found."),
     MINIKUBE("Minikube", "Minikube"),
