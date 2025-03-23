@@ -92,4 +92,17 @@ public class CarrierJumpJournalMessage extends JournalMessage {
 
     @JsonProperty("Taxi")
     private Boolean taxi;
+
+    //New
+    @JsonProperty("PowerplayConflictProgress")
+    private PowerplayConflictProgress[] powerplayConflictProgresses;
+
+    @JsonProperty("PowerplayStateControlProgress")
+    private Double powerplayStateControlProgress;
+
+    @JsonProperty("PowerplayStateReinforcement")
+    private Double powerplayStateReinforcement;
+
+    @JsonProperty("PowerplayStateUndermining")
+    private Double powerplayStateUndermining;
 }
