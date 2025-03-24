@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -30,8 +31,12 @@ public class CartDao extends AbstractDao<CartEntity, Cart, String, CartRepositor
     }
 
     public Cart findByIdValidated(UUID cartId) {
-        return findById(uuidConverter.convertDomain(cartId))
+        return findById(cartId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Cart not found by id " + cartId));
+    }
+
+    public Optional<Cart> findById(UUID cartId) {
+        return findById(uuidConverter.convertDomain(cartId));
     }
 
     public void deleteByUserIdAndCartId(UUID userId, UUID cartId) {

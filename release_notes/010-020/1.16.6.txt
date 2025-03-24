@@ -8,6 +8,8 @@
             Deploy services
             Deploy latest services
             Run test groups
+    VillanyAtesz
+        Commissions
 
 ===BUGFIXES===
 

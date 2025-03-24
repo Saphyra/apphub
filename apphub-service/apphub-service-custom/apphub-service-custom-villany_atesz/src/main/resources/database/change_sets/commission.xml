@@ -1,0 +1,27 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-commission" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="villany_atesz" tableName="commission"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="villany_atesz" tableName="commission">
+            <column name="commission_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="cart_id" type="varchar(37)"/>
+            <column name="days_of_work" type="text"/>
+            <column name="hours_per_day" type="text"/>
+            <column name="departure_fee" type="text"/>
+            <column name="hourly_wage" type="text"/>
+            <column name="extra_cost" type="text"/>
+            <column name="deposit" type="text"/>
+            <column name="multiplier" type="text"/>
+            <column name="last_update" type="timestamp"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="villany_atesz" tableName="commission" columnNames="commission_id"/>
+    </changeSet>
+</databaseChangeLog>

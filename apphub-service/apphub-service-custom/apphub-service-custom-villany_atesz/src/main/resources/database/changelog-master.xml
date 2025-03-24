@@ -19,4 +19,5 @@
     <include file="database/change_sets/tool.xml"/>
     <include file="database/change_sets/tool_type.xml"/>
     <include file="database/change_sets/storage_box.xml"/>
+    <include file="database/change_sets/commission.xml"/>
 </databaseChangeLog>
