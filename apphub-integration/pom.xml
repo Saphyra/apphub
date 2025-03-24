@@ -21,7 +21,7 @@
         <versions.assertj-core>3.24.1</versions.assertj-core>
         <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
         <versions.rest-assured>5.3.0</versions.rest-assured>
-        <versions.selenium>4.29.0</versions.selenium>
+        <versions.selenium>4.30.0</versions.selenium>
         <versions.testng>7.7.1</versions.testng>
         <versions.logback>1.2.3</versions.logback>
         <versions.awaitility>4.2.0</versions.awaitility>

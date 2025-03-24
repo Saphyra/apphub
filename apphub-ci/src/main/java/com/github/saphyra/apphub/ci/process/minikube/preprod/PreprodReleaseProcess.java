@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -54,5 +55,21 @@ public class PreprodReleaseProcess {
             platformProperties.getProdDisabledRoles()
                 .forEach(role -> DatabaseUtil.insertDisabledRoleIfNotPresent(connection, role));
         }
+    }
+
+    public void deployServices(List<String> serviceNames) {
+        localStopProcess.stopServices();
+
+        if (!minikubeBuildTask.installServices(serviceNames)) {
+            log.error("Build failed. Startup sequence stopped.");
+            return;
+        }
+
+        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_DEVELOP, serviceNames, 15);
+
+        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+
+        log.info("Deployment finished.");
     }
 }

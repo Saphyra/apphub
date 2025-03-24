@@ -4,6 +4,10 @@
         New Powerplay details in Journal messages
     ApphubCI
         Remember latest services
+        Preprod
+            Deploy services
+            Deploy latest services
+            Run test groups
 
 ===BUGFIXES===
 

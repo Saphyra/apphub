@@ -23,6 +23,10 @@ public class PreprodRunTestsProcess {
     private final RunTestsTask runTestsTask;
 
     public void runTests() {
+        runTests("");
+    }
+
+    public void runTests(String testGroups) {
         try {
             log.info("");
 
@@ -36,7 +40,7 @@ public class PreprodRunTestsProcess {
 
             integrationServerStarter.start();
 
-            runTestsTask.preprodRunTests();
+            runTestsTask.preprodRunTests(testGroups);
         } catch (Exception e) {
             log.error("Test run failed.", e);
         }
