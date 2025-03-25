@@ -36,6 +36,7 @@ const Constants = {
     VILLANY_ATESZ_CONTACTS_PAGE: "/web/villany-atesz/contacts",
     VILLANY_ATESZ_STOCK_PAGE: "/web/villany-atesz/stock",
     VILLANY_ATESZ_TOOLBOX_PAGE: "/web/villany-atesz/toolbox",
+    VILLANY_ATESZ_COMMISSIONS_PAGE: "/web/villany-atesz/commissions",
 
     //SkyXplore Lobby Settings limits
     MIN_PLAYERS_PER_SOLAR_SYSTEM: 1,

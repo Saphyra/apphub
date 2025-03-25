@@ -3,8 +3,10 @@ import InputField from "./InputField";
 import { hasValue } from "../../js/Utils";
 
 const ScheduledInputField = ({
+    id,
     className,
-    type, value,
+    type,
+    value,
     onchangeCallback,
     scheduledCallback,
     timeout = 1000,
@@ -31,6 +33,7 @@ const ScheduledInputField = ({
     }
 
     return <InputField
+        id={id}
         type={type}
         className={className + (hasValue(schedule) ? " scheduled" : "")}
         onchangeCallback={scheduleCallback}

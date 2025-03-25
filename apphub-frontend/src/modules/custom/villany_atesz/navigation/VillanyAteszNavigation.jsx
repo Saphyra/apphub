@@ -39,6 +39,13 @@ const VillanyAteszNavigation = ({ page, customs }) => {
                     label={localizationHandler.get("toolbox")}
                     className={page === VillanyAteszPage.TOOLBOX ? "opened" : ""}
                 />
+
+                <Button
+                    id="villany-atesz-commissions"
+                    onclick={() => window.location.href = Constants.VILLANY_ATESZ_COMMISSIONS_PAGE}
+                    label={localizationHandler.get("commissions")}
+                    className={page === VillanyAteszPage.COMMISSIONS ? "opened" : ""}
+                />
             </span>
 
             <span id="villany-atesz-navigation-customs">{customs}</span>

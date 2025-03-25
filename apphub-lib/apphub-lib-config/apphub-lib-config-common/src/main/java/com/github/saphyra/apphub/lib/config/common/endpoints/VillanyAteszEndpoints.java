@@ -86,5 +86,6 @@ public class VillanyAteszEndpoints {
     //Commission
     public static final String VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE = "/api/villany-atesz/commissions";
     public static final String VILLANY_ATESZ_COMMISSION_DELETE = "/api/villany-atesz/commissions/{commissionId}";
-    public static final String VILLANY_ATESZ_COMMISSION_GET = "/api/villany-atesz/commissions";
+    public static final String VILLANY_ATESZ_COMMISSIONS_GET = "/api/villany-atesz/commissions";
+    public static final String VILLANY_ATESZ_COMMISSION_GET = "/api/villany-atesz/commissions/{commissionId}";
 }

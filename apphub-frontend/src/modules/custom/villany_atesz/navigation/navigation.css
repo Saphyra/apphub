@@ -11,6 +11,10 @@
     float: right;
 }
 
+#villany-atesz-navigation-customs * {
+    display: inline;
+}
+
 #villany-atesz-navigation .opened {
     background-color: #FF9800;
 }

@@ -22,9 +22,12 @@ public interface CommissionController {
     @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE)
     CommissionResponse createOrUpdateCommission(@RequestBody CommissionRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_GET)
+    CommissionResponse getCommission(@PathVariable("commissionId") UUID commissionId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @DeleteMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_DELETE)
     List<CommissionView> deleteCommission(@PathVariable("commissionId") UUID commissionId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_GET)
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSIONS_GET)
     List<CommissionView> getCommissions(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

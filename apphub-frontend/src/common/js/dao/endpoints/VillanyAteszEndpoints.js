@@ -62,3 +62,9 @@ export const VILLANY_ATESZ_DELETE_TOOL_TYPE = new Endpoint(RequestMethod.DELETE,
 export const VILLANY_ATESZ_EDIT_TOOL_TYPE = new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/tool-type/{toolTypeId}");
 export const VILLANY_ATESZ_DELETE_STORAGE_BOX = new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/tool/storage-box/{storageBoxId}");
 export const VILLANY_ATESZ_EDIT_STORAGE_BOX = new Endpoint(RequestMethod.POST, "/api/villany-atesz/tool/storage-box/{storageBoxId}");
+
+//Commissions
+export const VILLANY_ATESZ_COMMISSIONS_GET = new Endpoint(RequestMethod.GET, "/api/villany-atesz/commissions");
+export const VILLANY_ATESZ_COMMISSION_GET = new Endpoint(RequestMethod.GET, "/api/villany-atesz/commissions/{commissionId}");
+export const VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE = new Endpoint(RequestMethod.POST, "/api/villany-atesz/commissions");
+export const VILLANY_ATESZ_COMMISSION_DELETE = new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/commissions/{commissionId}");

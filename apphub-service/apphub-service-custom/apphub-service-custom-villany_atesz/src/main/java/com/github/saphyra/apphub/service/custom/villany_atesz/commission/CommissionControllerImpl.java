@@ -41,6 +41,15 @@ class CommissionControllerImpl implements CommissionController {
     }
 
     @Override
+    public CommissionResponse getCommission(UUID commissionId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get commission {}", accessTokenHeader.getUserId(), commissionId);
+
+        Commission commission = commissionDao.findByIdValidated(commissionId);
+
+        return commissionToResponseConverter.convert(commission);
+    }
+
+    @Override
     public List<CommissionView> deleteCommission(UUID commissionId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete commission {}", accessTokenHeader.getUserId(), commissionId);
 
