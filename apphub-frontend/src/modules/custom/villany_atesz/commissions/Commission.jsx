@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ScheduledInputField from "../../../../common/component/input/ScheduledInputField";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
-import { VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE, VILLANY_ATESZ_GET_CARTS } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
+import { VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE, VILLANY_ATESZ_COMMISSION_GET, VILLANY_ATESZ_COMMISSION_GET_CART, VILLANY_ATESZ_GET_CARTS } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 import MapStream from "../../../../common/js/collection/MapStream";
 import PostLabeledInputField from "../../../../common/component/input/PostLabeledInputField";
 import LabelWrappedInputField from "../../../../common/component/input/LabelWrappedInputField";
@@ -11,19 +11,55 @@ import useLoader from "../../../../common/hook/Loader";
 import SelectInput, { SelectOption } from "../../../../common/component/input/SelectInput";
 import Stream from "../../../../common/js/collection/Stream";
 
-const Commission = ({ localizationHandler, commission, setCommission }) => {
+const DEFAULT_COMMISSION = {
+    commissionId: null,
+    cartId: null,
+    daysOfWork: 0,
+    hoursPerDay: 0,
+    departureFee: 0,
+    hourlyWage: 0,
+    extraCost: 0,
+    deposit: 0,
+    margin: 1,
+    lastUpdate: null
+};
+
+const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId, setCartId }) => {
+    const [commission, setCommission] = useState(DEFAULT_COMMISSION);
+    const [cart, setCart] = useState(null);
     const [carts, setCarts] = useState([]);
 
+    useLoader(
+        VILLANY_ATESZ_COMMISSION_GET.createRequest(null, { commissionId: commissionId }),
+        setCommission,
+        [commissionId],
+        () => hasValue(commissionId),
+        DEFAULT_COMMISSION
+    );
     useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
+    useLoader(
+        VILLANY_ATESZ_COMMISSION_GET_CART.createRequest(null, { cartId: commission.cartId }),
+        response => {
+            setCart(response);
+            if (hasValue(response)) {
+                setCartId(response.cartId)
+            } else {
+                setCartId(null);
+            }
+        },
+        [commission.cartId],
+        () => hasValue(commission.cartId),
+        null
+    )
 
     const totalWage = commission.daysOfWork * commission.hoursPerDay * commission.hourlyWage + Number(commission.departureFee);
-    const cartCost = hasValue(commission.cart) ? commission.cart.cartCost * commission.cart.margin : 0;
+    const cartCost = hasValue(cart) ? cart.cartCost * cart.margin : 0;
     const materialCost = cartCost + Number(commission.extraCost);
-    const totalCost = totalWage + materialCost;
-    const toBePaid = totalCost * commission.margin;
+    const totalMaterialCost = materialCost * commission.margin;
+    const toBePaid = totalWage + totalMaterialCost;
 
     return (
-        <div id="villany-atesz-commissions-commission">
+        <div id="villany-atesz-commissions-commission" className="selectable">
             <fieldset>
                 <legend>{localizationHandler.get("wage")}</legend>
 
@@ -77,7 +113,7 @@ const Commission = ({ localizationHandler, commission, setCommission }) => {
                     />}
                 />
 
-                <div>
+                <div className="villany-atesz-commission-highlighted-red">
                     <span>{localizationHandler.get("total-wage")}: </span>
                     <span>{formatNumber(totalWage)}</span>
                     <span> Ft</span>
@@ -103,13 +139,13 @@ const Commission = ({ localizationHandler, commission, setCommission }) => {
                 <div>
                     <SelectInput
                         id="villany-atesz-commission-cart-selector"
-                        value={hasValue(commission.cart) ? commission.cart.cartId : ""}
+                        value={hasValue(commission.cartId) ? commission.cartId : ""}
                         options={getCartOptions()}
                         onchangeCallback={v => saveCommission("cartId", v)}
                     />
                 </div>
 
-                {hasValue(commission.cart) &&
+                {hasValue(cart) &&
                     <div>
                         <span>{localizationHandler.get("cart-price")}: </span>
                         <span>{cartCost}</span>
@@ -120,16 +156,6 @@ const Commission = ({ localizationHandler, commission, setCommission }) => {
                 <div>
                     <span>{localizationHandler.get("material-cost")}: </span>
                     <span>{formatNumber(materialCost)}</span>
-                    <span> Ft</span>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>{localizationHandler.get("payment")}</legend>
-
-                <div>
-                    <span>{localizationHandler.get("total-cost")}: </span>
-                    <span>{formatNumber(totalCost)}</span>
                     <span> Ft</span>
                 </div>
 
@@ -173,7 +199,17 @@ const Commission = ({ localizationHandler, commission, setCommission }) => {
                     </div>
                 </fieldset>
 
-                <div>
+                <div className="villany-atesz-commission-highlighted-red">
+                    <span>{localizationHandler.get("total-material-cost")}: </span>
+                    <span>{formatNumber(totalMaterialCost)}</span>
+                    <span> Ft</span>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>{localizationHandler.get("payment")}</legend>
+
+                <div className="villany-atesz-commission-highlighted-blue">
                     <span>{localizationHandler.get("to-be-paid")}: </span>
                     <span>{formatNumber(toBePaid)}</span>
                     <span> Ft</span>
@@ -192,7 +228,7 @@ const Commission = ({ localizationHandler, commission, setCommission }) => {
                     />}
                 />
 
-                <div>
+                <div className="villany-atesz-commission-highlighted-red">
                     <span>{localizationHandler.get("remaining")}: </span>
                     <span>{formatNumber(toBePaid - commission.deposit)}</span>
                     <span> Ft</span>
@@ -221,11 +257,10 @@ const Commission = ({ localizationHandler, commission, setCommission }) => {
     async function saveCommission(property, value) {
         commission[property] = value;
 
-        console.log(commission);
-
         const response = await VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE.createRequest(commission)
             .send();
 
+        setCommissionId(response.commissionId);
         setCommission(response);
 
         return true;

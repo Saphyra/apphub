@@ -3,8 +3,8 @@ import InputField from "./InputField";
 import { hasValue } from "../../js/Utils";
 
 const ScheduledInputField = ({
-    id,
-    className,
+    id = "",
+    className = "",
     type,
     value,
     onchangeCallback,

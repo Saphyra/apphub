@@ -10,36 +10,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommissionCartQueryService {
     private final CartDao cartDao;
     private final ContactDao contactDao;
     private final CartItemDao cartItemDao;
     private final CartQueryService cartQueryService;
 
-    public Optional<CommissionCartResponse> getCart(UUID cartId) {
-        Optional<Cart> maybeCart = cartDao.findById(cartId);
-        if (maybeCart.isEmpty()) {
-            return Optional.empty();
-        }
-        Cart cart = maybeCart.get();
+    public CommissionCartResponse getCart(UUID cartId) {
+        Cart cart = cartDao.findByIdValidated(cartId);
 
-        CommissionCartResponse result = CommissionCartResponse.builder()
+        return CommissionCartResponse.builder()
             .cartId(cartId)
             .contactName(contactDao.findByIdValidated(cart.getContactId()).getName())
-            .cartCost(calculateCartCost(cart))
+            .cartCost(calculateCartCost(cartId))
             .margin(cart.getMargin())
             .build();
-        return Optional.of(result);
     }
 
-    private Integer calculateCartCost(Cart cart) {
-        return cartQueryService.getTotalPrice(cartItemDao.getByCartId(cart.getCartId()));
+    private Integer calculateCartCost(UUID cartId) {
+        return cartQueryService.getTotalPrice(cartItemDao.getByCartId(cartId));
     }
 }

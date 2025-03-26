@@ -68,3 +68,4 @@ export const VILLANY_ATESZ_COMMISSIONS_GET = new Endpoint(RequestMethod.GET, "/a
 export const VILLANY_ATESZ_COMMISSION_GET = new Endpoint(RequestMethod.GET, "/api/villany-atesz/commissions/{commissionId}");
 export const VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE = new Endpoint(RequestMethod.POST, "/api/villany-atesz/commissions");
 export const VILLANY_ATESZ_COMMISSION_DELETE = new Endpoint(RequestMethod.DELETE, "/api/villany-atesz/commissions/{commissionId}");
+export const VILLANY_ATESZ_COMMISSION_GET_CART = new Endpoint(RequestMethod.GET, "/api/villany-atesz/commissions/{cartId}/cart");

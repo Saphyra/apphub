@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.custom.villany_atesz.server;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionRequest;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionCartResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -20,10 +20,13 @@ import java.util.UUID;
 //TODO BE test
 public interface CommissionController {
     @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE)
-    CommissionResponse createOrUpdateCommission(@RequestBody CommissionRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    CommissionModel createOrUpdateCommission(@RequestBody CommissionModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_GET)
-    CommissionResponse getCommission(@PathVariable("commissionId") UUID commissionId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    CommissionModel getCommission(@PathVariable("commissionId") UUID commissionId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_GET_CART)
+    CommissionCartResponse getCart(@PathVariable("cartId") UUID cartId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_DELETE)
     List<CommissionView> deleteCommission(@PathVariable("commissionId") UUID commissionId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

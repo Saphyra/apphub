@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface CommissionRepository extends CrudRepository<CommissionEntity, String> {
     List<CommissionEntity> getByUserId(String userId);
 

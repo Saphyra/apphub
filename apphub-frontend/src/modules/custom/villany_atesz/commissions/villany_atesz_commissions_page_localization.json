@@ -40,8 +40,8 @@
         "hu": "Megbízás törlése?"
     },
     "delete-commission-confirmation-detail": {
-        "en": "Are you sure you want to delete commission {commissionName}?",
-        "hu": "Biztosan törölni szeretnéd a(z) {commissionName} megbízást?"
+        "en": "Are you sure you want to delete the commission?",
+        "hu": "Biztosan törölni szeretnéd a megbízást?"
     },
     "cancel": {
         "en": "Cancel",
@@ -106,5 +106,9 @@
     "cart-price": {
         "en": "Cart price",
         "hu": "Kosár értéke"
+    },
+    "total-material-cost": {
+        "en": "Total material cost",
+        "hu": "Teljes anyagár"
     }
 }

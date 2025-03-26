@@ -29,14 +29,20 @@
     flex-wrap: wrap;
     column-gap: 10px;
     padding: 10px;
+    justify-content: center;
 }
 
 #villany-atesz-commissions-commission fieldset {
     line-height: 1.5;
+    text-align: center;
 }
 
 #villany-atesz-commissions-commission label {
     display: block;
+}
+
+#villany-atesz-commissions-commission input.scheduled {
+    background-color: red;
 }
 
 #villany-atesz-commission-days-of-work,
@@ -52,4 +58,16 @@
 
 #villany-atesz-commission-deposit {
     width: 93px;
+}
+
+.villany-atesz-commission-highlighted-red {
+    font-weight: bold;
+    font-size: 20px;
+    color: red;
+}
+
+.villany-atesz-commission-highlighted-blue {
+    font-weight: bold;
+    font-size: 20px;
+    color: blue;
 }

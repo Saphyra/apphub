@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.commission;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.custom.villany_atesz.commission.dao.Commission;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommissionFactory {
     private final IdGenerator idGenerator;
 
-    public Commission create(UUID userId, CommissionRequest request) {
+    public Commission create(UUID userId, CommissionModel request) {
         return Commission.builder()
             .commissionId(Optional.ofNullable(request.getCommissionId()).orElseGet(idGenerator::randomUuid))
             .userId(userId)

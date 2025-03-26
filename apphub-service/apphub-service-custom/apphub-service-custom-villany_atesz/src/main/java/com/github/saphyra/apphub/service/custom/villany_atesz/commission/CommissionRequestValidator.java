@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.commission;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionRequest;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.custom.villany_atesz.commission.dao.CommissionDao;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,10 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommissionRequestValidator {
     private final CommissionDao commissionDao;
 
-    public void validate(CommissionRequest request) {
+    public void validate(CommissionModel request) {
         if (nonNull(request.getCommissionId())) {
             commissionDao.findByIdValidated(request.getCommissionId());
         }
@@ -26,6 +25,6 @@ class CommissionRequestValidator {
         ValidationUtil.notNull(request.getHourlyWage(), "hourlyWage");
         ValidationUtil.notNull(request.getExtraCost(), "extraCost");
         ValidationUtil.notNull(request.getDeposit(), "deposit");
-        ValidationUtil.notNull(request.getMargin(), "multiplier");
+        ValidationUtil.notNull(request.getMargin(), "margin");
     }
 }

@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(schema = "villany_atesz", name = "commission")
+@EqualsAndHashCode(exclude = "lastUpdate")
 class CommissionEntity {
     @Id
     private String commissionId;
@@ -28,7 +30,7 @@ class CommissionEntity {
     private String hourlyWage;
     private String extraCost;
     private String deposit;
-    private String multiplier;
+    private String margin;
 
     @UpdateTimestamp
     private LocalDateTime lastUpdate;

@@ -12,15 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommissionConverter extends ConverterBase<CommissionEntity, Commission> {
-    private static final String COLUMN_DAYS_OF_WORK = "days-of-work";
-    private static final String COLUMN_HOURS_PER_DAY = "hours-per-day";
-    private static final String COLUMN_DEPARTURE_FEE = "departure-fee";
-    private static final String COLUMN_HOURLY_WAGE = "hourly-wage";
-    private static final String COLUMN_EXTRA_COST = "extra-cost";
-    private static final String COLUMN_DEPOSIT = "deposit";
-    private static final String COLUMN_MULTIPLIER = "multiplier";
+    static final String COLUMN_DAYS_OF_WORK = "days-of-work";
+    static final String COLUMN_HOURS_PER_DAY = "hours-per-day";
+    static final String COLUMN_DEPARTURE_FEE = "departure-fee";
+    static final String COLUMN_HOURLY_WAGE = "hourly-wage";
+    static final String COLUMN_EXTRA_COST = "extra-cost";
+    static final String COLUMN_DEPOSIT = "deposit";
+    static final String COLUMN_MARGIN = "margin";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;
@@ -42,7 +41,7 @@ class CommissionConverter extends ConverterBase<CommissionEntity, Commission> {
             .hourlyWage(integerEncryptor.encrypt(domain.getHourlyWage(), uidFromAccessToken, commissionId, COLUMN_HOURLY_WAGE))
             .extraCost(integerEncryptor.encrypt(domain.getExtraCost(), uidFromAccessToken, commissionId, COLUMN_EXTRA_COST))
             .deposit(integerEncryptor.encrypt(domain.getDeposit(), uidFromAccessToken, commissionId, COLUMN_DEPOSIT))
-            .multiplier(doubleEncryptor.encrypt(domain.getMargin(), uidFromAccessToken, commissionId, COLUMN_MULTIPLIER))
+            .margin(doubleEncryptor.encrypt(domain.getMargin(), uidFromAccessToken, commissionId, COLUMN_MARGIN))
             .build();
     }
 
@@ -60,7 +59,7 @@ class CommissionConverter extends ConverterBase<CommissionEntity, Commission> {
             .hourlyWage(integerEncryptor.decrypt(entity.getHourlyWage(), uidFromAccessToken, entity.getCommissionId(), COLUMN_HOURLY_WAGE))
             .extraCost(integerEncryptor.decrypt(entity.getExtraCost(), uidFromAccessToken, entity.getCommissionId(), COLUMN_EXTRA_COST))
             .deposit(integerEncryptor.decrypt(entity.getDeposit(), uidFromAccessToken, entity.getCommissionId(), COLUMN_DEPOSIT))
-            .margin(doubleEncryptor.decrypt(entity.getMultiplier(), uidFromAccessToken, entity.getCommissionId(), COLUMN_MULTIPLIER))
+            .margin(doubleEncryptor.decrypt(entity.getMargin(), uidFromAccessToken, entity.getCommissionId(), COLUMN_MARGIN))
             .lastUpdate(entity.getLastUpdate())
             .build();
     }

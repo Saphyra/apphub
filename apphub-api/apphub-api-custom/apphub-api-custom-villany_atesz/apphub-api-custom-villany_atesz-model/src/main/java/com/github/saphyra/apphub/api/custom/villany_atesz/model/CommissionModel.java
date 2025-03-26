@@ -5,13 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class CommissionRequest {
+public class CommissionModel {
     private UUID commissionId;
     private UUID cartId;
     private Integer daysOfWork;
@@ -21,4 +22,5 @@ public class CommissionRequest {
     private Integer extraCost;
     private Integer deposit;
     private Double margin;
+    private LocalDateTime lastUpdate;
 }

@@ -1,24 +1,19 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.commission;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.service.custom.villany_atesz.commission.dao.Commission;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommissionToResponseConverter {
-    private final CommissionCartQueryService commissionCartQueryService;
-
-    CommissionResponse convert(Commission commission) {
-        return CommissionResponse.builder()
+    CommissionModel convert(Commission commission) {
+        return CommissionModel.builder()
             .commissionId(commission.getCommissionId())
-            .cart(Optional.ofNullable(commission.getCartId()).flatMap(commissionCartQueryService::getCart).orElse(null))
+            .cartId(commission.getCartId())
             .daysOfWork(commission.getDaysOfWork())
             .hoursPerDay(commission.getHoursPerDay())
             .departureFee(commission.getDepartureFee())

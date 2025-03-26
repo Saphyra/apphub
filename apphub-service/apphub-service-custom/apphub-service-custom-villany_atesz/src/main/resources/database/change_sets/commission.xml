@@ -18,7 +18,7 @@
             <column name="hourly_wage" type="text"/>
             <column name="extra_cost" type="text"/>
             <column name="deposit" type="text"/>
-            <column name="multiplier" type="text"/>
+            <column name="margin" type="text"/>
             <column name="last_update" type="timestamp"/>
         </createTable>
 

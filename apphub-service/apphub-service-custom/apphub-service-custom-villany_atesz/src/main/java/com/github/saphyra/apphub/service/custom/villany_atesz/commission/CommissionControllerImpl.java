@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.commission;
 
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionRequest;
-import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionCartResponse;
+import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionView;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.CommissionController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
@@ -20,7 +20,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommissionControllerImpl implements CommissionController {
     private final CommissionRequestValidator commissionRequestValidator;
     private final CommissionFactory commissionFactory;
@@ -28,9 +27,10 @@ class CommissionControllerImpl implements CommissionController {
     private final CommissionToResponseConverter commissionToResponseConverter;
     private final CartDao cartDao;
     private final ContactDao contactDao;
+    private final CommissionCartQueryService commissionCartQueryService;
 
     @Override
-    public CommissionResponse createOrUpdateCommission(CommissionRequest request, AccessTokenHeader accessTokenHeader) {
+    public CommissionModel createOrUpdateCommission(CommissionModel request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create/edit commission {}", accessTokenHeader.getUserId(), request.getCommissionId());
 
         commissionRequestValidator.validate(request);
@@ -41,7 +41,7 @@ class CommissionControllerImpl implements CommissionController {
     }
 
     @Override
-    public CommissionResponse getCommission(UUID commissionId, AccessTokenHeader accessTokenHeader) {
+    public CommissionModel getCommission(UUID commissionId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to get commission {}", accessTokenHeader.getUserId(), commissionId);
 
         Commission commission = commissionDao.findByIdValidated(commissionId);
@@ -50,10 +50,17 @@ class CommissionControllerImpl implements CommissionController {
     }
 
     @Override
+    public CommissionCartResponse getCart(UUID cartId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get commissionCart for cartId {}", accessTokenHeader.getUserId(), cartId);
+
+        return commissionCartQueryService.getCart(cartId);
+    }
+
+    @Override
     public List<CommissionView> deleteCommission(UUID commissionId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete commission {}", accessTokenHeader.getUserId(), commissionId);
 
-        Commission commission = commissionDao.findByIdValidated(commissionId);
+        Commission commission = commissionDao.findByIdValidated(commissionId); //Query is needed for uid validation
 
         commissionDao.delete(commission);
 

@@ -12,29 +12,13 @@ import Button from "../../../../common/component/input/Button";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import "./villany_atesz_commissions.css";
-import useLoader from "../../../../common/hook/Loader";
-import { VILLANY_ATESZ_COMMISSION_DELETE, VILLANY_ATESZ_COMMISSION_GET, VILLANY_ATESZ_COMMISSIONS_GET } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
+import { VILLANY_ATESZ_COMMISSION_DELETE, VILLANY_ATESZ_COMMISSIONS_GET } from "../../../../common/js/dao/endpoints/VillanyAteszEndpoints";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../../common/js/Utils";
 import Commission from "./Commission";
 import CommissionSelector from "./CommissionSelector";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import LocalDateTime from "../../../../common/js/date/LocalDateTime";
-import Optional from "../../../../common/js/collection/Optional";
 
 const CACHE_KEY_COMMISSION_ID = "villanyAteszCommissionId";
-
-const DEFAULT_COMMISSION = {
-    commissionId: null,
-    cart: null,
-    daysOfWork: 0,
-    hoursPerDay: 0,
-    departureFee: 0,
-    hourlyWage: 0,
-    extraCost: 0,
-    deposit: 0,
-    margin: 1,
-    lastUpdate: null
-};
 
 const VillanyAteszCommissionsPage = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -44,26 +28,11 @@ const VillanyAteszCommissionsPage = ({ }) => {
 
     const [commissionId, setCommissionId] = useState(cachedOrDefault(CACHE_KEY_COMMISSION_ID, null, v => v === "null" ? null : v));
     const [commissions, setCommissions] = useState([]);
-    const [commission, setCommission] = useState(null);
     const [cartId, setCartId] = useState(null);
-
-    useLoader(
-        VILLANY_ATESZ_COMMISSION_GET.createRequest(null, { commissionId: commissionId }),
-        setCommission,
-        [commissionId],
-        () => hasValue(commissionId),
-        DEFAULT_COMMISSION
-    );
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useEffect(() => {
-        if (hasValue(commission)) {
-            updateCommissionId(commission.commissionId);
-            setCartId(hasValue(commission.cart) ? commission.cart.cartId : null);
-        }
-    }, [commission]);
-    useEffect(loadCommissions, [cartId]);
+    useEffect(loadCommissions, [commissionId, cartId]);
 
     return (
         <div id="villany-atesz-commissions" className="main-page villany-atesz-main-page">
@@ -76,13 +45,13 @@ const VillanyAteszCommissionsPage = ({ }) => {
                 />
 
                 <div id="villany-atesz-commissions-content">
-                    {hasValue(commission) &&
-                        <Commission
-                            localizationHandler={localizationHandler}
-                            commission={commission}
-                            setCommission={setCommission}
-                        />
-                    }
+                    <Commission
+                        localizationHandler={localizationHandler}
+                        commissionId={commissionId}
+                        setCommissionId={updateCommissionId}
+                        cartId={cartId}
+                        setCartId={setCartId}
+                    />
                 </div>
             </main>
 
@@ -119,7 +88,7 @@ const VillanyAteszCommissionsPage = ({ }) => {
                     localizationHandler={localizationHandler}
                     commissions={commissions}
                     commissionId={commissionId}
-                    setCommissionId={setCommissionId}
+                    setCommissionId={updateCommissionId}
                 />
             );
         }
@@ -129,7 +98,7 @@ const VillanyAteszCommissionsPage = ({ }) => {
                 key="create-new-button"
                 id="villany-atesz-commissions-new-button"
                 label={localizationHandler.get("new-commission")}
-                onclick={() => setCommission(DEFAULT_COMMISSION)}
+                onclick={() => updateCommissionId(null)}
             />
         );
 
@@ -166,7 +135,7 @@ const VillanyAteszCommissionsPage = ({ }) => {
         setConfirmationDialogData(new ConfirmationDialogData(
             "villany-atesz-commission-deletion-confirmation",
             localizationHandler.get("delete-commission-confirmation-title"),
-            localizationHandler.get("delete-commission-confirmation-detail", { commissionName: getCommissionName() }),
+            localizationHandler.get("delete-commission-confirmation-detail"),
             [
                 <Button
                     key="confirm"
@@ -183,23 +152,13 @@ const VillanyAteszCommissionsPage = ({ }) => {
             ]
         ));
 
-        function getCommissionName() {
-            const lastUpdate = LocalDateTime.fromLocalDateTime(commission.lastUpdate).formatWithoutSeconds();
-            const contactName = new Optional(commission.cart)
-                .map(cart => cart.contactName)
-                .orElseGet(() => localizationHandler.get("unknown-contact"))
-
-            return lastUpdate + " - " + contactName;
-        }
-
         async function deleteCommission() {
-            const response = VILLANY_ATESZ_COMMISSION_DELETE.createRequest(null, { commissionId: commissionId })
+            const response = await VILLANY_ATESZ_COMMISSION_DELETE.createRequest(null, { commissionId: commissionId })
                 .send();
 
-            setCommissionId(null);
+            updateCommissionId(null);
             setCommissions(response);
             setConfirmationDialogData(null);
-            setCommission(DEFAULT_COMMISSION);
         }
     }
 }

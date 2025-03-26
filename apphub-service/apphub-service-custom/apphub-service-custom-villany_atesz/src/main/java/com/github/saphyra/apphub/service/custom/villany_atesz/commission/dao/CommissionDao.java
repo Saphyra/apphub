@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class CommissionDao extends AbstractDao<CommissionEntity, Commission, String, CommissionRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
@@ -27,7 +26,7 @@ public class CommissionDao extends AbstractDao<CommissionEntity, Commission, Str
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Commission not found by id " + commissionId));
     }
 
-    private Optional<Commission> findById(UUID commissionId) {
+    public Optional<Commission> findById(UUID commissionId) {
         return findById(uuidConverter.convertDomain(commissionId));
     }
 
