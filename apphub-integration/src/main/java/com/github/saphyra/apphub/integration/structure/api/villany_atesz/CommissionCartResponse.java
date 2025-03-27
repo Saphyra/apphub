@@ -1,19 +1,19 @@
-package com.github.saphyra.apphub.api.custom.villany_atesz.model;
+package com.github.saphyra.apphub.integration.structure.api.villany_atesz;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class CommissionView {
-    private UUID commissionId;
+public class CommissionCartResponse {
+    private UUID cartId;
     private String contactName;
-    private LocalDateTime lastUpdate;
+    private Integer cartCost;
+    private Double margin;
 }

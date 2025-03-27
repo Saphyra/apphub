@@ -5,6 +5,7 @@ public class VillanyAteszEndpoints {
     public static final String VILLANY_ATESZ_CONTACTS_PAGE = "/web/villany-atesz/contacts";
     public static final String VILLANY_ATESZ_STOCK_PAGE = "/web/villany-atesz/stock";
     public static final String VILLANY_ATESZ_TOOLBOX_PAGE = "/web/villany-atesz/toolbox";
+    public static final String VILLANY_ATESZ_COMMISSIONS_PAGE = "/web/villany-atesz/commissions";
 
     //Contact
     public static final String VILLANY_ATESZ_CREATE_CONTACT = "/api/villany-atesz/contact";
@@ -87,4 +88,11 @@ public class VillanyAteszEndpoints {
     public static final String VILLANY_ATESZ_GET_STORAGE_BOXES = "/api/villany-atesz/toolbox/storage-box";
     public static final String VILLANY_ATESZ_EDIT_STORAGE_BOX = "/api/villany-atesz/tool/storage-box/{storageBoxId}";
     public static final String VILLANY_ATESZ_DELETE_STORAGE_BOX = "/api/villany-atesz/tool/storage-box/{storageBoxId}";
+
+    //Commission
+    public static final String VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE = "/api/villany-atesz/commissions";
+    public static final String VILLANY_ATESZ_COMMISSION_DELETE = "/api/villany-atesz/commissions/{commissionId}";
+    public static final String VILLANY_ATESZ_COMMISSIONS_GET = "/api/villany-atesz/commissions";
+    public static final String VILLANY_ATESZ_COMMISSION_GET = "/api/villany-atesz/commissions/{commissionId}";
+    public static final String VILLANY_ATESZ_COMMISSION_GET_CART = "/api/villany-atesz/commissions/{cartId}/cart";
 }

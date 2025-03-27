@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.api.custom.villany_atesz.model;
+package com.github.saphyra.apphub.integration.structure.api.villany_atesz;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

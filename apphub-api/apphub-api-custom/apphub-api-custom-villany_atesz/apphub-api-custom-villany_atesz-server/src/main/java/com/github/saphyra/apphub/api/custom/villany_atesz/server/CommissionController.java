@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO role protection test
-//TODO BE test
 public interface CommissionController {
     @PostMapping(VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSION_CREATE_OR_UPDATE)
     CommissionModel createOrUpdateCommission(@RequestBody CommissionModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
