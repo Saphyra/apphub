@@ -25,7 +25,7 @@ public class WebElementUtils {
     }
 
     public static void clearAndFill(WebElement webElement, String text) {
-        for(int i = 0; i < 3 && !webElement.getAttribute("value").equals(text); i++){
+        for (int i = 0; i < 3 && !webElement.getAttribute("value").equals(text); i++) {
             webElement.clear();
             webElement.sendKeys(text);
         }
@@ -197,5 +197,13 @@ public class WebElementUtils {
         return new Select(element)
             .getFirstSelectedOption()
             .getText();
+    }
+
+    public static List<String> getSelectOptions(WebElement element) {
+        return new Select(element)
+            .getOptions()
+            .stream()
+            .map(WebElement::getText)
+            .toList();
     }
 }

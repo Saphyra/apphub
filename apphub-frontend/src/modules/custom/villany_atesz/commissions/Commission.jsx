@@ -115,7 +115,7 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
 
                 <div className="villany-atesz-commission-highlighted-red">
                     <span>{localizationHandler.get("total-wage")}: </span>
-                    <span>{formatNumber(totalWage)}</span>
+                    <span id="villany-atesz-commission-total-wage">{formatNumber(totalWage)}</span>
                     <span> Ft</span>
                 </div>
             </fieldset>
@@ -148,21 +148,21 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
                 {hasValue(cart) &&
                     <div>
                         <span>{localizationHandler.get("cart-price")}: </span>
-                        <span>{cartCost}</span>
+                        <span id="villany-atesz-commission-cart-cost">{cartCost}</span>
                         <span> Ft</span>
                     </div>
                 }
 
                 <div>
                     <span>{localizationHandler.get("material-cost")}: </span>
-                    <span>{formatNumber(materialCost)}</span>
+                    <span id="villany-atesz-commission-material-cost">{formatNumber(materialCost)}</span>
                     <span> Ft</span>
                 </div>
 
                 <fieldset>
                     <div>
                         <span>{localizationHandler.get("margin")}: </span>
-                        <span>{formatNumber(commission.margin * 100)}</span>
+                        <span id="villany-atesz-commission-margin-percent">{formatNumber(commission.margin * 100)}</span>
                         <span>%</span>
                     </div>
 
@@ -201,7 +201,7 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
 
                 <div className="villany-atesz-commission-highlighted-red">
                     <span>{localizationHandler.get("total-material-cost")}: </span>
-                    <span>{formatNumber(totalMaterialCost)}</span>
+                    <span id="villany-atesz-commission-total-material-cost">{formatNumber(totalMaterialCost)}</span>
                     <span> Ft</span>
                 </div>
             </fieldset>
@@ -211,7 +211,7 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
 
                 <div className="villany-atesz-commission-highlighted-blue">
                     <span>{localizationHandler.get("to-be-paid")}: </span>
-                    <span>{formatNumber(toBePaid)}</span>
+                    <span id="villany-atesz-commission-to-be-paid">{formatNumber(toBePaid)}</span>
                     <span> Ft</span>
                 </div>
 
@@ -230,7 +230,7 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
 
                 <div className="villany-atesz-commission-highlighted-red">
                     <span>{localizationHandler.get("remaining")}: </span>
-                    <span>{formatNumber(toBePaid - commission.deposit)}</span>
+                    <span id="villany-atesz-commission-remaining">{formatNumber(toBePaid - commission.deposit)}</span>
                     <span> Ft</span>
                 </div>
             </fieldset>

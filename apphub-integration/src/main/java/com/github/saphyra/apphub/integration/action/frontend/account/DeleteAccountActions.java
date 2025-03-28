@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.delete_account.DeleteAccountPasswordValidationResult;
@@ -31,6 +32,7 @@ public class DeleteAccountActions {
     }
 
     public static void verifyDeleteAccountForm(WebDriver driver, DeleteAccountPasswordValidationResult validationResult) {
+        SleepUtil.sleep(500);
         verifyInvalidFieldState(
             driver,
             By.id("account-delete-account-password-input-validation"),
