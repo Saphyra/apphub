@@ -64,6 +64,10 @@ class LocalDateTimeObj {
         return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
     }
 
+    formatWithoutSeconds() {
+        return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + " " + this.getHours() + ":" + this.getMinutes();
+    }
+
     equals(obj) {
         if (!hasValue(obj)) {
             return false;

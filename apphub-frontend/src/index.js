@@ -48,6 +48,7 @@ import Redirection from './Redirection';
 import ErrorPage from './modules/error/ErorPage';
 import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
 import EliteBase from './modules/custom/elite_base/EliteBase';
+import VillanyAteszCommissionsPage from './modules/custom/villany_atesz/commissions/VillanyAteszCommissionsPage';
 
 
 
@@ -279,6 +280,10 @@ const router = createBrowserRouter([
   {
     path: "/web/villany-atesz/toolbox",
     element: <VillanyAteszToolboxPage />
+  },
+  {
+    path: "/web/villany-atesz/commissions",
+    element: <VillanyAteszCommissionsPage />
   },
   {
     path: "/web/utils/base64",

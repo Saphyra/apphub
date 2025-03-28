@@ -53,7 +53,7 @@ public class CartQueryService {
             .build();
     }
 
-    private Integer getTotalPrice(List<CartItem> items) {
+    public Integer getTotalPrice(List<CartItem> items) {
         return summarizeByStockItemId(items)
             .mapToInt(entry -> stockItemPriceQueryService.getPriceOf(entry.getKey()) * entry.getValue())
             .sum();

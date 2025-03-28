@@ -3,6 +3,7 @@ const VillanyAteszPage = {
     CONTACTS: "CONTACTS",
     STOCK: "STOCK",
     TOOLBOX: "TOOLBOX",
+    COMMISSIONS: "COMMISSIONS",
 }
 
 export default VillanyAteszPage;

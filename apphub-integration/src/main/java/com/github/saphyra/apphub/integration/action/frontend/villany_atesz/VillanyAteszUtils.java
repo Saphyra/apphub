@@ -39,4 +39,12 @@ public class VillanyAteszUtils {
             .until(() -> !VillanyAteszContactsPageActions.getContacts(driver).isEmpty())
             .assertTrue();
     }
+
+    public static void createCart(WebDriver driver, String contactName) {
+        VillanyAteszNavigation.openContacts(driver);
+
+        VillanyAteszContactsPageActions.getContacts(driver)
+            .get(0)
+            .createCart(driver);
+    }
 }

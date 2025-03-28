@@ -30,6 +30,7 @@ public class VillanyAteszRoleProtectionTest extends SeleniumTest {
         CommonUtils.verifyMissingRole(getServerPort(), driver, VillanyAteszEndpoints.VILLANY_ATESZ_CONTACTS_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, VillanyAteszEndpoints.VILLANY_ATESZ_STOCK_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, VillanyAteszEndpoints.VILLANY_ATESZ_TOOLBOX_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, VillanyAteszEndpoints.VILLANY_ATESZ_COMMISSIONS_PAGE);
     }
 
     @DataProvider(parallel = true)

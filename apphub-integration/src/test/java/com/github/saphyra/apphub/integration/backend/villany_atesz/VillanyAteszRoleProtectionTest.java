@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.backend.villany_atesz;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszAcquisitionActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszCartActions;
+import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszCommissionActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszContactActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszIndexActions;
 import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockCategoryActions;
@@ -17,6 +18,7 @@ import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToCartRequest;
+import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CommissionModel;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ContactModel;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateStockItemRequest;
 import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
@@ -118,6 +120,13 @@ public class VillanyAteszRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditScrappedAtResponse(getServerPort(), accessTokenId, UUID.randomUUID(), null));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getEditInventoriedResponse(getServerPort(), accessTokenId, UUID.randomUUID(), null));
         CommonUtils.verifyMissingRole(() -> VillanyAteszToolboxInventoryActions.getResetInventoriedResponse(getServerPort(), accessTokenId));
+
+        //Commission
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCommissionActions.getCreateOrUpdateCommissionResponse(getServerPort(), accessTokenId, new CommissionModel()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCommissionActions.getCommissionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCommissionActions.getCartResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCommissionActions.getDeleteResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> VillanyAteszCommissionActions.getCommissionsResponse(getServerPort(), accessTokenId));
     }
 
     @DataProvider(parallel = true)

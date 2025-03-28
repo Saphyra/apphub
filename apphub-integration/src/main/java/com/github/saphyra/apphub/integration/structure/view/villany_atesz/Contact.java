@@ -57,6 +57,6 @@ public class Contact {
         webElement.findElement(By.className("villany-atesz-contacts-contact-create-cart-button"))
             .click();
 
-        AwaitilityWrapper.awaitAssert(() -> VillanyAteszStockOverviewPageActions.getActiveCartLabel(driver), cartLabel -> assertThat(cartLabel).isEqualTo(String.format("%s - %s", code, name)));
+        AwaitilityWrapper.awaitAssert(() -> VillanyAteszStockOverviewPageActions.getActiveCartLabel(driver), cartLabel -> assertThat(cartLabel).isEqualTo(String.format("%s - %s", code, name).trim()));
     }
 }
