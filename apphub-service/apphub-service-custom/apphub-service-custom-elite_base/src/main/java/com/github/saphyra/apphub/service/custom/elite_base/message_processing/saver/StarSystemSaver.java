@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemFactory;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
 
 @Component
@@ -22,6 +24,7 @@ import static java.util.Objects.isNull;
 public class StarSystemSaver {
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;
+    private final ErrorReporterService errorReporterService;
 
     public StarSystem save(LocalDateTime timestamp, String systemName) {
         return save(timestamp, null, systemName, null);
@@ -68,7 +71,20 @@ public class StarSystemSaver {
         List.of(
                 new UpdateHelper(new DefaultChecker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
                 new UpdateHelper(new DefaultChecker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
-                new UpdateHelper(new DefaultChecker(starName, starSystem::getStarName), () -> starSystem.setStarName(starName)),
+                new UpdateHelper(
+                    new DefaultChecker(starName, starSystem::getStarName),
+                    () -> {
+                        if(!isBlank(starSystem.getStarName())){
+                            errorReporterService.report(
+                                "Overwriting not-blank star name. New starName: %s. Object: %s".formatted(
+                                    starName,
+                                    starSystem
+                                )
+                            );
+                        }
+                        starSystem.setStarName(starName);
+                    }
+                ),
                 new UpdateHelper(new DefaultChecker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition)),
                 new UpdateHelper(new DefaultChecker(starType, starSystem::getStarType), () -> starSystem.setStarType(starType))
             )

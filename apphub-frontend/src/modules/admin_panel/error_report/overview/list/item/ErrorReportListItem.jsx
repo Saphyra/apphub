@@ -58,7 +58,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
     }
 
     return (
-        <tr className={"error-report-list-item " + errorReport.status.toLowerCase()}>
+        <tr className={"error-report-list-item selectable " + errorReport.status.toLowerCase()}>
             <td className="error-report-list-item-checked-cell">
                 <InputField
                     className={"error-report-list-item-checked"}

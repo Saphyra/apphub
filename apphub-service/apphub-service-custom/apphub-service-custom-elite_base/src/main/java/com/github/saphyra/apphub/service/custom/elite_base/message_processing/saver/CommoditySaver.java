@@ -59,6 +59,10 @@ public class CommoditySaver {
             throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
+        commodities = commodities.stream()
+            .filter(commodityData -> commodityData.getStock() > 0 || commodityData.getDemand() > 0)
+            .toList();
+
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
         Map<String, Commodity> existingCommodities = performanceReporter.wrap(

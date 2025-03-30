@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarT
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CodexEntryJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.FsdJumpJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
@@ -92,11 +93,24 @@ class JournalMessageProcessor implements MessageProcessor {
                         SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
                         processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
                     }
+                    case "CodexEntry" -> {
+                        CodexEntryJournalMessage codexEntryJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CodexEntryJournalMessage.class);
+                        processCodexEntryMessage(codexEntryJournalMessage);
+                    }
                     default -> throw new IllegalArgumentException("Unhandled event: " + event);
                 }
             },
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_JOURNAL_MESSAGE.formatted(event)
+        );
+    }
+
+    private void processCodexEntryMessage(CodexEntryJournalMessage message) {
+        starSystemSaver.save(
+            message.getTimestamp(),
+            message.getStarId(),
+            message.getStarName(),
+            message.getStarPosition()
         );
     }
 

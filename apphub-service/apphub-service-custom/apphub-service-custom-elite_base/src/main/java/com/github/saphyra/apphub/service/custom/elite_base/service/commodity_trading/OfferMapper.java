@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.geometry.n_dimension.NDimensionCoordinate;
 import com.github.saphyra.apphub.lib.geometry.n_dimension.NDimensionDistanceCalculator;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
@@ -60,9 +61,9 @@ class OfferMapper {
             .starSystemDistance(distanceFromStar)
             .externalReference(commodityLocationData.getExternalReference())
             .locationName(commodityLocationData.getLocationName())
-            .locationType(commodityLocationData.getStationType().name())
+            .locationType(Optional.ofNullable(commodityLocationData.getStationType()).map(Enum::name).orElse(null))
             .stationDistance(stationDistance)
-            .landingPad(commodityLocationData.getStationType().getLandingPad())
+            .landingPad(Optional.ofNullable(commodityLocationData.getStationType()).map(StationType::getLandingPad).orElse(null))
             .tradeAmount(tradeMode.getTradeAmountExtractor().apply(commodity))
             .price(tradeMode.getPriceExtractor().apply(commodity))
             .controllingPower(Optional.ofNullable(starSystemData).map(StarSystemData::getControllingPower).map(Enum::name).orElse(null))

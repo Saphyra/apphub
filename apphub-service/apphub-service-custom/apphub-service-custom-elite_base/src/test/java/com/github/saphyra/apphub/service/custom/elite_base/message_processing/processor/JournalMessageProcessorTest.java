@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.message_processing.st
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.NamePercentPair;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Ring;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CodexEntryJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.FsdJumpJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
@@ -521,6 +522,30 @@ class JournalMessageProcessorTest {
         saaSignalFoundJournalMessage.setStarPosition(STAR_POSITION);
 
         given(objectMapperWrapper.readValue(MESSAGE, SaaSignalFoundJournalMessage.class)).willReturn(saaSignalFoundJournalMessage);
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+
+        underTest.processMessage(edMessage);
+
+        then(starSystemSaver).should().save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION);
+    }
+
+    @Test
+    void codexEntry() {
+        given(edMessage.getMessage()).willReturn(MESSAGE);
+        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(jsonNode.get("event")).willReturn(jsonNode);
+        given(jsonNode.asText()).willReturn("CodexEntry");
+
+        CodexEntryJournalMessage codexEntryJournalMessage = new CodexEntryJournalMessage();
+        codexEntryJournalMessage.setTimestamp(TIMESTAMP);
+        codexEntryJournalMessage.setStarId(STAR_ID);
+        codexEntryJournalMessage.setStarName(STAR_NAME);
+        codexEntryJournalMessage.setStarPosition(STAR_POSITION);
+
+        given(objectMapperWrapper.readValue(MESSAGE, CodexEntryJournalMessage.class)).willReturn(codexEntryJournalMessage);
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;

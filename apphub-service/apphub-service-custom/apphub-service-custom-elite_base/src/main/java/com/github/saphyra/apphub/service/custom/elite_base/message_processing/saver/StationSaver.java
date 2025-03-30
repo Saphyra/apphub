@@ -106,7 +106,7 @@ public class StationSaver {
                 return created;
             });
 
-        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId);
+        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId);
 
         return station;
     }
@@ -120,7 +120,8 @@ public class StationSaver {
         List<StationServiceEnum> stationServices,
         List<StationEconomy> economies,
         StationType stationType,
-        UUID controllingFactionId
+        UUID controllingFactionId,
+        Long marketId
     ) {
         if (timestamp.isBefore(station.getLastUpdate())) {
             log.debug("Station {} has newer data than {}", station.getId(), timestamp);
@@ -128,6 +129,7 @@ public class StationSaver {
         }
 
         List.of(
+                new UpdateHelper(marketId, station::getMarketId, () -> station.setMarketId(marketId)),
                 new UpdateHelper(timestamp, station::getLastUpdate, () -> station.setLastUpdate(timestamp)),
                 new UpdateHelper(bodyId, station::getBodyId, () -> station.setBodyId(bodyId)),
                 new UpdateHelper(allegiance, station::getAllegiance, () -> station.setAllegiance(allegiance)),

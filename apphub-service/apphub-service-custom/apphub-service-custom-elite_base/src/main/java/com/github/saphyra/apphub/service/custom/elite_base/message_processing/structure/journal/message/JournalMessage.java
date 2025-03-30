@@ -17,6 +17,7 @@ public abstract class JournalMessage {
     private Long starId;
 
     @JsonProperty("StarSystem")
+    @JsonAlias("System")
     private String starName;
 
     @JsonProperty("StarPos")

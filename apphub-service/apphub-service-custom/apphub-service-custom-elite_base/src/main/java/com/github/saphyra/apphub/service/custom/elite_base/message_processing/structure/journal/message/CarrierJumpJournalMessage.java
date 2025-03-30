@@ -60,6 +60,9 @@ public class CarrierJumpJournalMessage extends JournalMessage {
     private EdConflict[] conflicts;
 
     //Unused
+    @JsonProperty("StationAllegiance")
+    private String stationAllegiance;
+
     @JsonProperty("Docked")
     private Boolean docked;
 

@@ -14,7 +14,7 @@ import java.util.UUID;
 public class FleetCarrier {
     private final UUID id;
     private LocalDateTime lastUpdate;
-    private final String carrierId;
+    private String carrierId;
     private String carrierName;
     private UUID starSystemId;
     private FleetCarrierDockingAccess dockingAccess;

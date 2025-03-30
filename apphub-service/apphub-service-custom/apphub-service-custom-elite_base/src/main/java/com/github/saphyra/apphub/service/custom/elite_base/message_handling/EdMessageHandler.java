@@ -93,10 +93,11 @@ public class EdMessageHandler implements MessageHandler {
 
     private void shutdownIfTimeout() {
         log.info("Checking connection...");
-        LocalDateTime expirationTime = dateTimeUtil.getCurrentDateTime()
+        LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
+        LocalDateTime expirationTime = currentTime
             .minus(eliteBaseProperties.getIncomingMessageTimeout());
 
-        log.info("Last message arrived at {}. Current time: {}", lastMessage, expirationTime);
+        log.info("Last message arrived at {}. Current time: {}, Expiration time: {}", lastMessage, currentTime, expirationTime);
 
         if (expirationTime.isAfter(lastMessage)) {
             log.error("Last message arrived at {}. Shutting down service...", lastMessage);

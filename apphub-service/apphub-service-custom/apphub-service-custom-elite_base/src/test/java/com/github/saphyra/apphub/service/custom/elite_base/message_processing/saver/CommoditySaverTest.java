@@ -110,6 +110,9 @@ class CommoditySaverTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        given(existingCommodityData.getDemand()).willReturn(1);
+        given(newCommodityData.getDemand()).willReturn(1);
+        given(modifiedCommodityData.getDemand()).willReturn(1);
 
         underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(existingCommodityData, newCommodityData, modifiedCommodityData));
 

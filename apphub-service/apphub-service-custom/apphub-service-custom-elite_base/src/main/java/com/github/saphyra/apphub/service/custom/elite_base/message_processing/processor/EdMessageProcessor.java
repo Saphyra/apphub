@@ -106,8 +106,14 @@ public class EdMessageProcessor {
                     messageDao.save(edMessage);
                 },
                 () -> {
-                    log.info("Unhandled message: {}", edMessage);
-                    edMessage.setStatus(MessageStatus.UNHANDLED);
+                    if (edMessage.getSchemaRef().endsWith("/test")) {
+                        log.info("Processing test message: {}", edMessage);
+                        edMessage.setStatus(MessageStatus.PROCESSED);
+                    } else {
+                        log.info("Unhandled message: {}", edMessage);
+                        edMessage.setStatus(MessageStatus.UNHANDLED);
+                    }
+
                     messageDao.save(edMessage);
                 }
             );

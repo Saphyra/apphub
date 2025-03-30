@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 
@@ -34,7 +36,15 @@ public class FleetCarrierSaver {
             throw new IllegalArgumentException("CarrierId must not be blank");
         }
 
-        FleetCarrier carrier = fleetCarrierDao.findByCarrierId(carrierId)
+        FleetCarrier carrier = Stream.of(
+                new SearchHelper<>(carrierId, () -> fleetCarrierDao.findByCarrierId(carrierId)),
+                new SearchHelper<>(marketId, () -> fleetCarrierDao.findByMarketId(marketId))
+            )
+            .map(SearchHelper::search)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .peek(ss -> log.debug("Found: {}", ss))
+            .findAny()
             .orElseGet(() -> {
                 FleetCarrier created = fleetCarrierFactory.create(carrierId, timestamp, carrierName, starSystemId, dockingAccess, marketId);
                 log.debug("Saving new {}", created);
@@ -42,18 +52,19 @@ public class FleetCarrierSaver {
                 return created;
             });
 
-        updateFields(timestamp, carrier, starSystemId, carrierName, dockingAccess, marketId);
+        updateFields(timestamp, carrier, starSystemId, carrierName, dockingAccess, marketId, carrierId);
 
         return carrier;
     }
 
-    private void updateFields(LocalDateTime timestamp, FleetCarrier carrier, UUID starSystemId, String carrierName, FleetCarrierDockingAccess dockingAccess, Long marketId) {
+    private void updateFields(LocalDateTime timestamp, FleetCarrier carrier, UUID starSystemId, String carrierName, FleetCarrierDockingAccess dockingAccess, Long marketId, String carrierId) {
         if (timestamp.isBefore(carrier.getLastUpdate())) {
             log.debug("FleetCarrier {} has newer data than {}", carrier.getId(), timestamp);
             return;
         }
 
         List.of(
+                new UpdateHelper(carrierId, carrier::getCarrierId, () -> carrier.setCarrierId(carrierId)),
                 new UpdateHelper(timestamp, carrier::getLastUpdate, () -> carrier.setLastUpdate(timestamp)),
                 new UpdateHelper(starSystemId, carrier::getStarSystemId, () -> carrier.setStarSystemId(starSystemId)),
                 new UpdateHelper(carrierName, carrier::getCarrierName, () -> carrier.setCarrierName(carrierName)),

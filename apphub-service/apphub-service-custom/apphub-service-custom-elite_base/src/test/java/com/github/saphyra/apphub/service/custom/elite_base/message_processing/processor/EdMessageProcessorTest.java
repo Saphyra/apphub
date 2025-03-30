@@ -176,6 +176,7 @@ class EdMessageProcessorTest {
         given(messageProcessor.canProcess(edMessage)).willReturn(true);
         given(messageProcessor.canProcess(unhandledMessage)).willReturn(false);
         given(edMessage.getSchemaRef()).willReturn(SCHEMA_REF);
+        given(unhandledMessage.getSchemaRef()).willReturn("asd");
 
         underTest.processMessages();
 

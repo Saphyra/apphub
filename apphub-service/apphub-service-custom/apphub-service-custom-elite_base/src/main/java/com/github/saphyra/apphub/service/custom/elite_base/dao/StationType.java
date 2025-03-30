@@ -27,6 +27,8 @@ public enum StationType {
     PLANETARY_CONSTRUCTION_DEPOT("PlanetaryConstructionDepot", LandingPad.LARGE),
     UNKNOWN("Unknown", null),
     SPACE_CONSTRUCTION_DEPOT("SpaceConstructionDepot", LandingPad.LARGE),
+    DOCKABLE_PLANET_STATION("DockablePlanetStation", null),
+    GAMEPLAY_POI("GameplayPOI", null),
     ;
 
     @Getter
