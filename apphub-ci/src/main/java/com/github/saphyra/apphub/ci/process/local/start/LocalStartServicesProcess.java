@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.ci.process.local.start;
 
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -19,9 +23,11 @@ public class LocalStartServicesProcess {
     private final LocalBuildTask localBuildTask;
     private final ProcessKiller processKiller;
     private final ServiceStarter serviceStarter;
+    private final PropertyDao propertyDao;
+    private final ObjectMapperWrapper objectMapperWrapper;
 
     public void start() {
-        String[] servicesToStart = validatingInputReader.getInput(
+        String[] servicesToStartArr = validatingInputReader.getInput(
             LocalizedText.SERVICES_TO_START,
             input -> input.split(","),
             input -> Arrays.stream(input)
@@ -30,8 +36,19 @@ public class LocalStartServicesProcess {
                 .map(serviceName -> language -> LocalizedText.SERVICE_NOT_FOUND.getLocalizedText(language).formatted(serviceName))
         );
 
-        Arrays.stream(servicesToStart)
-            .forEach(processKiller::killByServiceName);
+        List<String> servicesToStart = Arrays.asList(servicesToStartArr);
+
+        startServices(servicesToStart);
+
+        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapperWrapper.writeValueAsString(servicesToStart));
+    }
+
+    public void startLatestServices() {
+        startServices(propertyDao.getLatestServices());
+    }
+
+    private void startServices(List<String> servicesToStart) {
+        servicesToStart.forEach(processKiller::killByServiceName);
 
         if (!localBuildTask.buildServices(servicesToStart)) {
             log.error("Build failed. Startup sequence stopped.");

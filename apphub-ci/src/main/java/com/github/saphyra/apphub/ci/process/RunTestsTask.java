@@ -59,17 +59,17 @@ public class RunTestsTask {
         }
     }
 
-    public void preprodRunTests() {
+    public void preprodRunTests(String enabledGroups) {
         log.info("Running preprod tests. Disabled test groups: {}", platformProperties.getProdDisabledTestGroups().isEmpty() ? "None" : platformProperties.getProdDisabledTestGroups());
         try {
             runTests(
-                "",
+                enabledGroups,
                 propertyDao.getRemoteRunTestsThreadCount(),
                 platformProperties.getMinikubeTestServerPort(),
                 platformProperties.getMinikubeTestDatabasePort(),
                 platformProperties.getMinikubeDatabaseName(),
                 String.join(",", platformProperties.getProdDisabledTestGroups()),
-                propertyDao.getRemoteRunPreCreateDriverCount(),
+                enabledGroups.equals("") ? propertyDao.getRemoteRunPreCreateDriverCount() : 0,
                 true,
                 true,
                 Constants.NAMESPACE_NAME_PREPROD

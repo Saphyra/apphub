@@ -104,4 +104,17 @@ public class LocationJournalMessage extends JournalMessage {
 
     @JsonProperty("FactionState")
     private String factionState;
+
+    //New
+    @JsonProperty("PowerplayConflictProgress")
+    private PowerplayConflictProgress[] powerplayConflictProgresses;
+
+    @JsonProperty("PowerplayStateControlProgress")
+    private Double powerplayStateControlProgress;
+
+    @JsonProperty("PowerplayStateReinforcement")
+    private Double powerplayStateReinforcement;
+
+    @JsonProperty("PowerplayStateUndermining")
+    private Double powerplayStateUndermining;
 }

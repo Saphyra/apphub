@@ -62,6 +62,10 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
         repository.save(converter.convertDomain(domain));
     }
 
+    public DOMAIN saveAndReturn(DOMAIN domain) {
+        return converter.convertEntity(repository.save(converter.convertDomain(domain)));
+    }
+
     public void saveAll(List<DOMAIN> domains) {
         if (domains.isEmpty()) {
             return;

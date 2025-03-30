@@ -1,0 +1,73 @@
+#villany-atesz-commissions main {
+    padding: 0;
+}
+
+#villany-atesz-commissions select {
+    text-align: left;
+}
+
+#villany-atesz-commissions #villany-atesz-navigation {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+#villany-atesz-commissions-content {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 25px;
+    overflow: auto;
+}
+
+#villany-atesz-commissions-commission {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    padding: 10px;
+    justify-content: center;
+}
+
+#villany-atesz-commissions-commission fieldset {
+    line-height: 1.5;
+    text-align: center;
+}
+
+#villany-atesz-commissions-commission label {
+    display: block;
+}
+
+#villany-atesz-commissions-commission input.scheduled {
+    background-color: red;
+}
+
+#villany-atesz-commission-days-of-work,
+#villany-atesz-commission-hours-per-day {
+    width: 50px;
+}
+
+#villany-atesz-commission-hourly-wage,
+#villany-atesz-commission-departure-fee,
+#villany-atesz-commission-extra-cost {
+    width: 65px;
+}
+
+#villany-atesz-commission-deposit {
+    width: 93px;
+}
+
+.villany-atesz-commission-highlighted-red {
+    font-weight: bold;
+    font-size: 20px;
+    color: red;
+}
+
+.villany-atesz-commission-highlighted-blue {
+    font-weight: bold;
+    font-size: 20px;
+    color: blue;
+}

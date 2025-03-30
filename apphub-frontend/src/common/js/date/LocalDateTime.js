@@ -7,6 +7,10 @@ const fromEpochSeconds = (epoch) => {
     return new LocalDateTimeObj(d);
 }
 
+const fromLocalDateTime = (localDateTime) => {
+    return create(new Date(localDateTime));
+}
+
 const create = (date) => {
     return new LocalDateTimeObj(date);
 }
@@ -60,6 +64,10 @@ class LocalDateTimeObj {
         return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
     }
 
+    formatWithoutSeconds() {
+        return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + " " + this.getHours() + ":" + this.getMinutes();
+    }
+
     equals(obj) {
         if (!hasValue(obj)) {
             return false;
@@ -84,7 +92,8 @@ class LocalDateTimeObj {
 
 const LocalDateTime = {
     fromEpochSeconds: fromEpochSeconds,
-    now: now
+    now: now,
+    fromLocalDateTime: fromLocalDateTime,
 }
 
 export default LocalDateTime;

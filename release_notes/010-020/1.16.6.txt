@@ -1,0 +1,21 @@
+===FEATURES===
+    EliteBase
+        Buy and Sell commodities
+        New Powerplay details in Journal messages
+    ApphubCI
+        Remember latest services
+        Preprod
+            Deploy services
+            Deploy latest services
+            Run test groups
+    VillanyAtesz
+        Commissions
+    Random direction
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

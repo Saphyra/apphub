@@ -1,0 +1,50 @@
+{
+    "time-since-last-updated": {
+        "en": "Maximum time since last updated",
+        "hu": "Legutóbbi frissítés óta eltelt idő"
+    },
+    "10-minutes-ago": {
+        "en": "10 minutes ago",
+        "hu": "10 perce"
+    },
+    "30-minutes-ago": {
+        "en": "30 minutes ago",
+        "hu": "30 perce"
+    },
+    "1-hour-ago": {
+        "en": "1 hour ago",
+        "hu": "1 órája"
+    },
+    "4-hours-ago": {
+        "en": "4 hours ago",
+        "hu": "4 órája"
+    },
+    "12-hours-ago": {
+        "en": "12 hours ago",
+        "hu": "12 órája"
+    },
+    "1-day-ago": {
+        "en": "1 day ago",
+        "hu": "1 napja"
+    },
+    "1-week-ago": {
+        "en": "1 week ago",
+        "hu": "1 hete"
+    },
+    "1-month-ago": {
+        "en": "1 month ago",
+        "hu": "1 hónapja"
+    },
+    "6-months-ago": {
+        "en": "6 months ago",
+        "hu": "6 hónapja"
+    },
+    "1-year-ago": {
+        "en": "1 year ago",
+        "hu": "1 éve"
+    },
+    "unlimited": {
+        "en": "Unlimited",
+        "hu": "Korlátlan"
+    }
+}

@@ -47,7 +47,6 @@ const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, cate
             return displayedModules;
         }
 
-        console.log(categoryId, collapsed);
         if (collapsed) {
             return null;
         }

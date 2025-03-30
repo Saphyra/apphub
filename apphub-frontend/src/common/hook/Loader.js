@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { hasValue } from "../js/Utils";
 
-const useLoader = (request, mapper, listener = [], condition = () => true, alternativeResult = null, errorHandler) => {
+const useLoader = (request, mapper, listener = [], condition = () => true, alternativeResult = undefined, errorHandler) => {
     useEffect(() => loader(), listener);
 
     const loader = () => {
@@ -14,7 +14,7 @@ const useLoader = (request, mapper, listener = [], condition = () => true, alter
                 mapper(response);
             }
             fetch();
-        } else {
+        } else if (alternativeResult !== undefined) {
             mapper(alternativeResult);
         }
     }

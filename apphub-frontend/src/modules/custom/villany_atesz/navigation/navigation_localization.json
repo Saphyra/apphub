@@ -14,5 +14,9 @@
     "toolbox": {
         "en": "Toolbox",
         "hu": "Szerszámok"
+    },
+    "commissions": {
+        "en": "Commissions",
+        "hu": "Megbízások"
     }
 }

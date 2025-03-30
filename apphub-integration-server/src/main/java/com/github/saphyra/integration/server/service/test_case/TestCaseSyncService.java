@@ -1,10 +1,10 @@
 package com.github.saphyra.integration.server.service.test_case;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.integration.server.api.test_case.request.TestCaseRequest;
 import com.github.saphyra.integration.server.domain.test_case.TestCase;
 import com.github.saphyra.integration.server.domain.test_case.TestCaseRepository;
+import com.github.saphyra.integration.server.util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

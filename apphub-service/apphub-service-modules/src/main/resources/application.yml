@@ -105,3 +105,5 @@ modules:
       mobileAllowed: false
       roles:
       - ELITE_BASE
+    - name: random-direction
+      url: /web/random-direction

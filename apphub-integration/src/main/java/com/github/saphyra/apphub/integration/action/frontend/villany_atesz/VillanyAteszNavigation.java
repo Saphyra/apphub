@@ -124,4 +124,9 @@ public class VillanyAteszNavigation {
         driver.findElement(By.id("villany-atesz-toolbox-navigation-manage-button"))
             .click();
     }
+
+    public static void openCommodities(WebDriver driver) {
+        driver.findElement(By.id("villany-atesz-commissions"))
+            .click();
+    }
 }

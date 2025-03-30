@@ -86,5 +86,9 @@
     "elite-base": {
         "en": "EliteBase",
         "hu": "EliteBase"
+    },
+    "random-direction": {
+        "en": "Random direction",
+        "hu": "Véletlenszerű irány"
     }
 }

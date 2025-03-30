@@ -121,4 +121,11 @@ public class PropertyDao {
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getBrowserStartupLimit);
     }
+
+    public List<String> getLatestServices() {
+        return propertyRepository.findById(PropertyName.LATEST_SERVICES)
+            .map(Property::getValue)
+            .map(s -> objectMapperWrapper.readArrayValue(s, String[].class))
+            .orElse(Collections.emptyList());
+    }
 }

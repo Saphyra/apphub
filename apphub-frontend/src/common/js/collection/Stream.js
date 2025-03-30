@@ -90,6 +90,10 @@ const Stream = class {
         return new Optional(this.items[this.items.length - 1]);
     }
 
+    limit(l) {
+        return new Stream(this.items.slice(0, l));
+    }
+
     map(mapper) {
         return new Stream(this.items.map(mapper));
     }

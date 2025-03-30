@@ -1,7 +1,5 @@
 package com.github.saphyra.integration.server;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import liquibase.integration.spring.SpringLiquibase;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,16 +27,6 @@ public class ApphubIntegrationServer {
 
     public static void main(String[] args) {
         SpringApplication.run(ApphubIntegrationServer.class, args);
-    }
-
-    @Bean
-    IdGenerator idGenerator() {
-        return new IdGenerator();
-    }
-
-    @Bean
-    DateTimeUtil dateTimeUtil() {
-        return new DateTimeUtil();
     }
 
     @Bean

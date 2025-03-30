@@ -1,0 +1,114 @@
+{
+    "title": {
+        "en": "Commissions - VillanyAtesz - Apphub",
+        "hu": "Megbízások - VillanyAtesz - Apphub"
+    },
+    "page-title": {
+        "en": "Commissions",
+        "hu": "Megbízások"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "new-commission": {
+        "en": "New commission",
+        "hu": "Új megbízás"
+    },
+    "wage": {
+        "en": "Wage",
+        "hu": "Munkadíj"
+    },
+    "days-of-work": {
+        "en": "Days of work",
+        "hu": "Munkanapok száma"
+    },
+    "unknown-contact": {
+        "en": "Unknown contact",
+        "hu": "Ismeretlen kapcsolat"
+    },
+    "unknown-commission": {
+        "en": "Unknown commission",
+        "hu": "Ismeretlen megbízás"
+    },
+    "delete-commission": {
+        "en": "Delete commission",
+        "hu": "Megbízás törlése"
+    },
+    "delete-commission-confirmation-title": {
+        "en": "Delete commission?",
+        "hu": "Megbízás törlése?"
+    },
+    "delete-commission-confirmation-detail": {
+        "en": "Are you sure you want to delete the commission?",
+        "hu": "Biztosan törölni szeretnéd a megbízást?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégsem"
+    },
+    "hours-per-day": {
+        "en": "hours per day",
+        "hu": "óra naponta"
+    },
+    "departure-fee": {
+        "en": "Departure fee",
+        "hu": "Kiszállási díj"
+    },
+    "hourly-wage": {
+        "en": "Hourly wage",
+        "hu": "Órabér"
+    },
+    "material-price": {
+        "en": "Material price",
+        "hu": "Anyagár"
+    },
+    "extra-cost": {
+        "en": "Extra cost",
+        "hu": "Extra költség"
+    },
+    "payment": {
+        "en": "Payment",
+        "hu": "Fizetés"
+    },
+    "margin": {
+        "en": "Margin",
+        "hu": "Árrés"
+    },
+    "deposit": {
+        "en": "Deposit",
+        "hu": "Előleg"
+    },
+    "total-wage": {
+        "en": "Total wage",
+        "hu": "Összes munkadíj"
+    },
+    "material-cost": {
+        "en": "Material cost",
+        "hu": "Anyagár"
+    },
+    "total-cost": {
+        "en": "Total cost",
+        "hu": "Teljes összeg"
+    },
+    "to-be-paid": {
+        "en": "To be paid",
+        "hu": "Fizetendő"
+    },
+    "remaining": {
+        "en": "Remanining",
+        "hu": "Hátralék"
+    },
+    "no-cart": {
+        "en": "No cart selected",
+        "hu": "Nincs kosár kiválasztva"
+    },
+    "cart-price": {
+        "en": "Cart price",
+        "hu": "Kosár értéke"
+    },
+    "total-material-cost": {
+        "en": "Total material cost",
+        "hu": "Teljes anyagár"
+    }
+}
