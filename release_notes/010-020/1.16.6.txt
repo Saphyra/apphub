@@ -10,6 +10,7 @@
             Run test groups
     VillanyAtesz
         Commissions
+    Random direction
 
 ===BUGFIXES===
 

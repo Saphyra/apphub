@@ -21,7 +21,8 @@ public class CollapseModulesTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.findCategoryByIdValidated(driver, CATEGORY_ID)
+        AwaitilityWrapper.getWithWait(() -> ModulesPageActions.findCategoryByIdValidated(driver, CATEGORY_ID))
+            .orElseThrow(() -> new RuntimeException(CATEGORY_ID + " not found."))
             .toggleCollapse();
 
         AwaitilityWrapper.awaitAssert(() -> ModulesPageActions.findCategoryByIdValidated(driver, CATEGORY_ID), category -> assertThat(category.getModules()).isEmpty());

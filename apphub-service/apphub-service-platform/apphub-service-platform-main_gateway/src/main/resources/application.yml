@@ -43,6 +43,7 @@ spring:
             /web/utils/json-formatter,\
             /web/elite-base,\
             /web/elite-base/*,\
+            /web/random-direction,\
             /web/user/account"
         filters:
         - StripPrefix=10

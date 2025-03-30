@@ -30,18 +30,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-common_util</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${versions.lombok}</version>

@@ -36,6 +36,7 @@ spring:
             /web/utils/json-formatter,\
             /web/elite-base,\
             /web/elite-base/*,\
+            /web/random-direction,\
             /web/user/account"
       - id: frontend-resources
         uri: http://localhost:3000

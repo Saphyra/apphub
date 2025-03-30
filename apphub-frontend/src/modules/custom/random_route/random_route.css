@@ -1,0 +1,71 @@
+#random-direction main {}
+
+.random-direction-intersection-selector {
+    position: absolute;
+    height: 50%;
+    width: 50%;
+    margin: 0;
+    background-repeat: no-repeat;
+}
+
+.random-direction-intersection-selector.straight-or-left {
+    background-image: url(img/straight_or_left.jpg);
+    background-position: bottom left;
+    background-size: 75% 100%;
+}
+
+.random-direction-intersection-selector.straight-or-right {
+    background-image: url(img/straight_or_right.jpg);
+    background-position: bottom right;
+    background-size: 75% 100%;
+}
+
+.random-direction-intersection-selector.left-or-right {
+    background-image: url(img/left_or_right.jpg);
+    background-position: bottom right;
+    background-size: 75% 100%;
+}
+
+.random-direction-intersection-selector.straight-left-or-right {
+    background-image: url(img/straight_left_or_right.jpg);
+    background-position: bottom left;
+    background-size: 75% 100%;
+}
+
+.random-direction-intersection-selector.top {
+    top: 0;
+}
+
+.random-direction-intersection-selector.bottom {
+    bottom: 0;
+}
+
+.random-direction-intersection-selector.left {
+    left: 0;
+}
+
+.random-direction-intersection-selector.right {
+    right: 0;
+}
+
+#random-direction-result {
+    position: absolute;
+    left: 35%;
+    right: 35%;
+    top: 35%;
+    bottom: 35%;
+    border: 3px ridge white;
+    background-color: black;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+    background-image: url(img/result.jpg);
+}
+
+#random-direction-result.left {
+    transform: rotate(-90deg);
+}
+
+#random-direction-result.right {
+    transform: rotate(90deg);
+}

@@ -49,8 +49,7 @@ import ErrorPage from './modules/error/ErorPage';
 import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
 import EliteBase from './modules/custom/elite_base/EliteBase';
 import VillanyAteszCommissionsPage from './modules/custom/villany_atesz/commissions/VillanyAteszCommissionsPage';
-
-
+import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPage';
 
 const router = createBrowserRouter([
   {
@@ -300,6 +299,10 @@ const router = createBrowserRouter([
   {
     path: "/web/elite-base",
     element: <EliteBase />
+  },
+  {
+    path: "/web/random-direction",
+    element: <RandomDirectionPage />
   },
 ]);
 
