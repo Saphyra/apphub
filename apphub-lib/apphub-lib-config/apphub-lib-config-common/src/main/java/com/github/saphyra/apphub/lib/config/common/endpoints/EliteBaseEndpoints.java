@@ -16,4 +16,5 @@ public class EliteBaseEndpoints {
     //Commodity trading
     public static final String ELITE_BASE_COMMODITY_TRADING_TRADE = "/api/elite-base/commodity-trading/trade";
     public static final String ELITE_BASE_COMMODITY_TRADING_COMMODITIES = "/api/elite-base/commodity-trading/commodities";
+    public static final String ELITE_BASE_COMMODITY_TRADING_COMMODITIES_AVERAGE_PRICE = "/api/elite-base/commodity-trading/commodities/{commodityName}/average-price";
 }

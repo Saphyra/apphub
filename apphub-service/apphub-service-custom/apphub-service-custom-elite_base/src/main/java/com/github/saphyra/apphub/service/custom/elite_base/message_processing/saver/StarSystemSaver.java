@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ public class StarSystemSaver {
         return save(timestamp, null, systemName, null);
     }
 
-    public  StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition) {
+    public StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition) {
         return save(timestamp, starId, starName, starPosition, null);
     }
 
@@ -70,13 +71,26 @@ public class StarSystemSaver {
 
         List.of(
                 new UpdateHelper(new DefaultChecker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
-                new UpdateHelper(new DefaultChecker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
+                new UpdateHelper(
+                    new DefaultChecker(starId, starSystem::getStarId),
+                    () -> {
+                        if (nonNull(starSystem.getStarId())) {
+                            errorReporterService.report(
+                                "Overwriting non-null starId. New starId: %s Original object: %s".formatted(
+                                    starId,
+                                    starSystem
+                                )
+                            );
+                        }
+                        starSystem.setStarId(starId);
+                    }
+                ),
                 new UpdateHelper(
                     new DefaultChecker(starName, starSystem::getStarName),
                     () -> {
-                        if(!isBlank(starSystem.getStarName())){
+                        if (!isBlank(starSystem.getStarName())) {
                             errorReporterService.report(
-                                "Overwriting not-blank star name. New starName: %s. Object: %s".formatted(
+                                "Overwriting not-blank star name. New starName: %s. Original object: %s".formatted(
                                     starName,
                                     starSystem
                                 )

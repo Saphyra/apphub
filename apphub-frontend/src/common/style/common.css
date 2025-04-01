@@ -425,6 +425,10 @@ textarea {
     text-align: left;
 }
 
+.right {
+    text-align: right;
+}
+
 .relative {
     position: relative;
 }

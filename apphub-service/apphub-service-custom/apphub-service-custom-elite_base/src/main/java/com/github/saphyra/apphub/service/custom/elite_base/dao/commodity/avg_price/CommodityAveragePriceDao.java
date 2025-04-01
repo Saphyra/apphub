@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price;
 
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CachedDao;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
@@ -38,5 +41,10 @@ public class CommodityAveragePriceDao extends CachedDao<CommodityAveragePriceEnt
         }
 
         return !Objects.equals(maybeStored.get().getAveragePrice(), commodityAveragePrice.getAveragePrice());
+    }
+
+    public CommodityAveragePrice findByIdValidated(String commodityName) {
+        return findById(commodityName)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "CommodityAveragePrice not found by commodityName " + commodityName));
     }
 }

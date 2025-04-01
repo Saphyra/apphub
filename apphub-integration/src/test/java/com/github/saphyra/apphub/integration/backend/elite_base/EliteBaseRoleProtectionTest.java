@@ -36,6 +36,7 @@ public class EliteBaseRoleProtectionTest extends BackEndTest {
 
         CommonUtils.verifyMissingRole(() -> EliteBaseCommodityTradingActions.getCommoditiesResponse(getServerPort(), accessTokenId));
         CommonUtils.verifyMissingRole(() -> EliteBaseCommodityTradingActions.getBestTradeLocationsResponse(getServerPort(), accessTokenId, new CommodityTradingRequest()));
+        CommonUtils.verifyMissingRole(() -> EliteBaseCommodityTradingActions.getCommodityAveragePriceResponse(getServerPort(), accessTokenId, "commodityName"));
     }
 
     @DataProvider(parallel = true)
