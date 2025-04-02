@@ -15,4 +15,16 @@
 
         <addPrimaryKey schemaName="elite_base" tableName="material_trader_override" columnNames="station_id" constraintName="material_trader_override-pk"/>
     </changeSet>
+
+    <changeSet id="add-column-verified-to-material_trader_override" author="Saphyra">
+        <preConditions onError="MARK_RAN">
+            <not>
+                <columnExists schemaName="elite_base" tableName="material_trader_override" columnName="verified"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="elite_base" tableName="material_trader_override">
+            <column name="verified" type="boolean" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

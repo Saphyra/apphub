@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class VillanyAteszCommissionActions {
     public static void setDaysOfWork(WebDriver driver, Integer daysOfWork) {
@@ -119,5 +120,18 @@ public class VillanyAteszCommissionActions {
 
     public static boolean isCommissionSelectorVisible(WebDriver driver) {
         return WebElementUtils.isPresent(driver, By.id("villany-atesz-commission-selector"));
+    }
+
+    public static boolean modificationsSaved(WebDriver driver) {
+        return Stream.of(
+          "villany-atesz-commission-days-of-work",
+            "villany-atesz-commission-hours-per-day",
+            "villany-atesz-commission-hourly-wage",
+            "villany-atesz-commission-departure-fee",
+            "villany-atesz-commission-extra-cost",
+            "villany-atesz-commission-deposit"
+        )
+            .map(id-> driver.findElement(By.id(id)))
+            .noneMatch(webElement -> WebElementUtils.getClasses(webElement).contains("scheduled"));
     }
 }

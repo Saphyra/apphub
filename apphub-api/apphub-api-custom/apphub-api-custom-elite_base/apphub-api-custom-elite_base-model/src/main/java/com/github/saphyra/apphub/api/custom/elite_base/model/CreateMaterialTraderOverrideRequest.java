@@ -11,14 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-public class NearestMaterialTraderResponse {
-    private UUID starId;
-    private String starName;
+public class CreateMaterialTraderOverrideRequest {
     private UUID stationId;
-    private String stationName;
-    private Double distanceFromReference;
-    private Double distanceFromStar;
     private MaterialType materialType;
-    private MaterialType originalMaterialType;
-    private Boolean verifiedMaterialOverride;
 }

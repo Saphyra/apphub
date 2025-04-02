@@ -1,6 +1,7 @@
 ===FEATURES===
     EliteBase
         Display galactic average price of selected commodity
+        Material trader override UI
 
 ===BUGFIXES===
 

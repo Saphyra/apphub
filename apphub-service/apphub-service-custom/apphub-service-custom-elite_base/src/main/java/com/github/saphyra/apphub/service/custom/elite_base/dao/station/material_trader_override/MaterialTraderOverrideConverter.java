@@ -17,6 +17,7 @@ class MaterialTraderOverrideConverter extends ConverterBase<MaterialTraderOverri
         return MaterialTraderOverrideEntity.builder()
             .stationId(uuidConverter.convertDomain(domain.getStationId()))
             .materialType(domain.getMaterialType())
+            .verified(domain.isVerified())
             .build();
     }
 
@@ -25,6 +26,7 @@ class MaterialTraderOverrideConverter extends ConverterBase<MaterialTraderOverri
         return MaterialTraderOverride.builder()
             .stationId(uuidConverter.convertEntity(entity.getStationId()))
             .materialType(entity.getMaterialType())
+            .verified(entity.getVerified())
             .build();
     }
 }

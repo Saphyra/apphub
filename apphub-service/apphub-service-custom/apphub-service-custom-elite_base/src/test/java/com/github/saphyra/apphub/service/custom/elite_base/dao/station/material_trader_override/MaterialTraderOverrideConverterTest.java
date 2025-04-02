@@ -29,13 +29,15 @@ class MaterialTraderOverrideConverterTest {
         MaterialTraderOverride domain = MaterialTraderOverride.builder()
             .stationId(STATION_ID)
             .materialType(MaterialType.RAW)
+            .verified(true)
             .build();
 
         given(uuidConverter.convertDomain(STATION_ID)).willReturn(STATION_ID_STRING);
 
         assertThat(underTest.convertDomain(domain))
             .returns(STATION_ID_STRING, MaterialTraderOverrideEntity::getStationId)
-            .returns(MaterialType.RAW, MaterialTraderOverrideEntity::getMaterialType);
+            .returns(MaterialType.RAW, MaterialTraderOverrideEntity::getMaterialType)
+            .returns(true, MaterialTraderOverrideEntity::getVerified);
     }
 
     @Test
@@ -43,12 +45,14 @@ class MaterialTraderOverrideConverterTest {
         MaterialTraderOverrideEntity entity = MaterialTraderOverrideEntity.builder()
             .stationId(STATION_ID_STRING)
             .materialType(MaterialType.RAW)
+            .verified(true)
             .build();
 
         given(uuidConverter.convertEntity(STATION_ID_STRING)).willReturn(STATION_ID);
 
         assertThat(underTest.convertEntity(entity))
             .returns(STATION_ID, MaterialTraderOverride::getStationId)
-            .returns(MaterialType.RAW, MaterialTraderOverride::getMaterialType);
+            .returns(MaterialType.RAW, MaterialTraderOverride::getMaterialType)
+            .returns(true, MaterialTraderOverride::isVerified);
     }
 }
