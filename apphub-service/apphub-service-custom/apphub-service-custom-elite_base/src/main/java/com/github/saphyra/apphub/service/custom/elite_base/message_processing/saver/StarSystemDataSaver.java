@@ -1,19 +1,16 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflict;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.SecurityLevel;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.*;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.ConflictMapper;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.MinorFactionIdResolver;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +44,11 @@ public class StarSystemDataSaver {
         List<MinorFaction> minorFactions,
         ControllingFaction controllingFaction,
         List<Power> powers,
-        EdConflict[] conflictsArr
+        EdConflict[] conflictsArr,
+        Double powerplayStateControlProgress,
+        Double powerplayStateReinforcement,
+        Double powerplayStateUndermining,
+        List<PowerplayConflict> powerplayConflicts
     ) {
         List<MinorFactionConflict> conflicts = conflictMapper.mapConflicts(timestamp, starSystemId, conflictsArr, minorFactions);
 
@@ -66,14 +67,36 @@ public class StarSystemDataSaver {
                     minorFactions,
                     controllingFaction,
                     powers,
-                    conflicts
+                    conflicts,
+                    powerplayStateControlProgress,
+                    powerplayStateReinforcement,
+                    powerplayStateUndermining,
+                    powerplayConflicts
                 );
                 log.debug("Created: {}", created);
                 starSystemDataDao.save(created);
                 return created;
             });
 
-        updateFields(timestamp, starSystemData, population, allegiance, economy, secondaryEconomy, securityLevel, power, powerplayState, minorFactions, controllingFaction, powers, conflicts);
+        updateFields(
+            timestamp,
+            starSystemData,
+            population,
+            allegiance,
+            economy,
+            secondaryEconomy,
+            securityLevel,
+            power,
+            powerplayState,
+            minorFactions,
+            controllingFaction,
+            powers,
+            conflicts,
+            powerplayStateControlProgress,
+            powerplayStateReinforcement,
+            powerplayStateUndermining,
+            powerplayConflicts
+        );
     }
 
     private void updateFields(
@@ -89,7 +112,11 @@ public class StarSystemDataSaver {
         List<MinorFaction> minorFactions,
         ControllingFaction controllingFaction,
         List<Power> powers,
-        List<MinorFactionConflict> conflicts
+        List<MinorFactionConflict> conflicts,
+        Double powerplayStateControlProgress,
+        Double powerplayStateReinforcement,
+        Double powerplayStateUndermining,
+        List<PowerplayConflict> powerplayConflicts
     ) {
         if (timestamp.isBefore(starSystemData.getLastUpdate())) {
             log.debug("StarSystemData {} has newer data than {}", starSystemData.getStarSystemId(), timestamp);
@@ -121,7 +148,11 @@ public class StarSystemDataSaver {
                 new UpdateHelper(controllingFactionId, starSystemData::getControllingFactionId, () -> starSystemData.setControllingFactionId(controllingFactionId)),
                 new UpdateHelper(controllingFactionState, starSystemData::getControllingFactionState, () -> starSystemData.setControllingFactionState(controllingFactionState)),
                 new UpdateHelper(powers, starSystemData::getPowers, () -> starSystemData.setPowers(LazyLoadedField.loaded(powers))),
-                new UpdateHelper(conflicts, starSystemData::getConflicts, () -> starSystemData.setConflicts(LazyLoadedField.loaded(conflicts)))
+                new UpdateHelper(conflicts, starSystemData::getConflicts, () -> starSystemData.setConflicts(LazyLoadedField.loaded(conflicts))),
+                new UpdateHelper(powerplayStateControlProgress, starSystemData::getPowerplayStateControlProgress, () -> starSystemData.setPowerplayStateControlProgress(powerplayStateControlProgress)),
+                new UpdateHelper(powerplayStateReinforcement, starSystemData::getPowerplayStateReinforcement, () -> starSystemData.setPowerplayStateReinforcement(powerplayStateReinforcement)),
+                new UpdateHelper(powerplayStateUndermining, starSystemData::getPowerplayStateUndermining, () -> starSystemData.setPowerplayStateUndermining(powerplayStateUndermining)),
+                new UpdateHelper(powerplayConflicts, starSystemData::getPowerplayConflicts, () -> starSystemData.setPowerplayConflicts(LazyLoadedField.loaded(powerplayConflicts)))
             )
             .forEach(UpdateHelper::modify);
 

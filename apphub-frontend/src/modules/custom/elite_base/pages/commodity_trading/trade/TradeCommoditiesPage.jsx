@@ -24,6 +24,7 @@ import Spinner from "../../../../../../common/component/Spinner";
 import ErrorHandler from "../../../../../../common/js/dao/ErrorHandler";
 import TradeCommoditiesResult from "./TradeCommoditiesResult";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
+import TradeCommoditiesGalacticAverage from "./TradeCommoditiesGalacticAverage";
 
 export const PAGE_SIZE = 20;
 
@@ -111,6 +112,11 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                             min={minPrice}
                         />
                         }
+                    />
+
+                    <TradeCommoditiesGalacticAverage
+                        localizationHandler={localizationHandler}
+                        commodity={commodity}
                     />
                 </div>
 

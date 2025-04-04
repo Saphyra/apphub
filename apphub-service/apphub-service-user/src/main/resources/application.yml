@@ -35,12 +35,14 @@ rolesCanBeDisabled:
 - CALENDAR
 - VILLANY_ATESZ
 - ELITE_BASE
+- ELITE_BASE_ADMIN
 
 add-role-to-all:
   restrictedRoles:
   - ACCESS
   - ADMIN
   - VILLANY_ATESZ
+  - ELITE_BASE_ADMIN
 
 settings:
   notebook:

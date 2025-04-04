@@ -80,14 +80,14 @@ const TradeCommoditiesResult = ({ localizationHandler, searchResult, displayed, 
             .map((offer, index) => {
                 return (
                     <tr key={index}>
-                        <td>{formatNumber(offer.starSystemDistance, 2)} ly</td>
+                        <td className="right">{formatNumber(offer.starSystemDistance, 2)} ly</td>
                         <td>{offer.starName}</td>
                         <td>{offer.locationName}</td>
-                        <td>{formatNumber(offer.stationDistance, 2)} ls</td>
+                        <td className="right">{formatNumber(offer.stationDistance, 2)} ls</td>
                         <td>{offer.locationType}</td>
                         <td>{offer.landingPad}</td>
-                        <td>{formatNumber(offer.tradeAmount)} T</td>
-                        <td>{formatNumber(offer.price)} Cr.</td>
+                        <td className="right">{formatNumber(offer.tradeAmount)} T</td>
+                        <td className="right">{formatNumber(offer.price)} Cr.</td>
                         <td>{getLastUpdated(offer.lastUpdated)}</td>
                         <td>{PowerNames[offer.controllingPower]}</td>
                         <td>{new Stream(offer.powers).map(power => PowerNames[power]).join(", ")}</td>

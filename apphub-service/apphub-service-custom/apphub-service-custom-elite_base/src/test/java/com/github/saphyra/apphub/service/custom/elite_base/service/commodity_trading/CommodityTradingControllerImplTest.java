@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class CommodityTradingControllerImplTest {
     private static final String COMMODITY_NAME = "commodity-name";
+    private static final Integer AVERAGE_PRICE = 23;
 
     @Mock
     private CommodityTradingService commodityTradingService;
@@ -33,6 +36,9 @@ class CommodityTradingControllerImplTest {
 
     @Mock
     private PerformanceReporter performanceReporter;
+
+    @Mock
+    private CommodityAveragePriceDao commodityAveragePriceDao;
 
     @InjectMocks
     private CommodityTradingControllerImpl underTest;
@@ -45,6 +51,9 @@ class CommodityTradingControllerImplTest {
 
     @Mock
     private AccessTokenHeader accessTokenHeader;
+
+    @Mock
+    private CommodityAveragePrice commodityAveragePrice;
 
     @Test
     void bestTradeLocations() {
@@ -60,5 +69,13 @@ class CommodityTradingControllerImplTest {
         given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
 
         assertThat(underTest.getCommodities(accessTokenHeader)).containsExactly(COMMODITY_NAME);
+    }
+
+    @Test
+    void getCommodityAveragePrice() {
+        given(commodityAveragePriceDao.findByIdValidated(COMMODITY_NAME)).willReturn(commodityAveragePrice);
+        given(commodityAveragePrice.getAveragePrice()).willReturn(AVERAGE_PRICE);
+
+        assertThat(underTest.getCommodityAveragePrice(COMMODITY_NAME, accessTokenHeader)).isEqualTo(AVERAGE_PRICE);
     }
 }

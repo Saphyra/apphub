@@ -42,5 +42,9 @@
     "ELITE_BASE": {
         "en": "EliteBase",
         "hu": "EliteBase"
+    },
+    "ELITE_BASE_ADMIN": {
+        "en": "EliteBase Admin",
+        "hu": "EliteBase Admin"
     }
 }

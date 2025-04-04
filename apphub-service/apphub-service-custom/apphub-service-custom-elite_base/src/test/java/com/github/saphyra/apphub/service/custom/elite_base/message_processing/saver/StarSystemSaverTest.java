@@ -67,6 +67,7 @@ class StarSystemSaverTest {
         given(starSystemDao.findByStarId(STAR_ID)).willReturn(Optional.empty());
         given(starSystemDao.findByStarName(STAR_NAME)).willReturn(Optional.of(starSystem));
         given(starSystem.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
+        given(starSystem.getStarId()).willReturn(null);
 
         assertThat(underTest.save(LAST_UPDATE, STAR_ID, STAR_NAME, STAR_POSITION, StarType.A)).isEqualTo(starSystem);
 

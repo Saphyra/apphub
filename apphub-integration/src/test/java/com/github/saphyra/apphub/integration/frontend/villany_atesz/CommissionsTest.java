@@ -80,7 +80,9 @@ public class CommissionsTest extends SeleniumTest {
 
         VillanyAteszCommissionActions.setDeposit(driver, DEPOSIT);
 
-        SleepUtil.sleep(2000);
+        AwaitilityWrapper.createDefault()
+            .until(() -> VillanyAteszCommissionActions.modificationsSaved(driver))
+            .assertTrue("Not all modifications were saved");
 
         //Create new
         VillanyAteszCommissionActions.createNew(driver);
@@ -92,25 +94,27 @@ public class CommissionsTest extends SeleniumTest {
         //Verify save and calculations
         VillanyAteszCommissionActions.selectCommission(driver, commissions.get(1));
 
-        assertThat(VillanyAteszCommissionActions.getDaysOfWork(driver)).isEqualTo(DAYS_OF_WORK);
-        assertThat(VillanyAteszCommissionActions.getHoursPerDay(driver)).isEqualTo(HOURS_PER_DAY);
-        assertThat(VillanyAteszCommissionActions.getHourlyWage(driver)).isEqualTo(HOURLY_WAGE);
-        assertThat(VillanyAteszCommissionActions.getDepartureFee(driver)).isEqualTo(DEPARTURE_FEE);
-        int totalWage = DAYS_OF_WORK * HOURS_PER_DAY * HOURLY_WAGE + DEPARTURE_FEE;
-        assertThat(VillanyAteszCommissionActions.getTotalWage(driver)).isEqualTo(totalWage);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(VillanyAteszCommissionActions.getDaysOfWork(driver)).isEqualTo(DAYS_OF_WORK);
+            assertThat(VillanyAteszCommissionActions.getHoursPerDay(driver)).isEqualTo(HOURS_PER_DAY);
+            assertThat(VillanyAteszCommissionActions.getHourlyWage(driver)).isEqualTo(HOURLY_WAGE);
+            assertThat(VillanyAteszCommissionActions.getDepartureFee(driver)).isEqualTo(DEPARTURE_FEE);
+            int totalWage = DAYS_OF_WORK * HOURS_PER_DAY * HOURLY_WAGE + DEPARTURE_FEE;
+            assertThat(VillanyAteszCommissionActions.getTotalWage(driver)).isEqualTo(totalWage);
 
-        assertThat(VillanyAteszCommissionActions.getExtraCost(driver)).isEqualTo(EXTRA_COST);
-        assertThat(VillanyAteszCommissionActions.getCartContactName(driver)).isEqualTo(CONTACT_NAME);
-        double cartCost = STOCK_ITEM_AMOUNT * STOCK_ITEM_PRICE * 1.2;
-        assertThat(VillanyAteszCommissionActions.getCartCost(driver)).isEqualTo(cartCost);
-        assertThat(VillanyAteszCommissionActions.getMaterialCost(driver)).isEqualTo(cartCost + EXTRA_COST);
-        assertThat(VillanyAteszCommissionActions.getMargin(driver)).isEqualTo(COMMISSION_MARGIN);
-        double totalMaterialCost = COMMISSION_MARGIN / 100d * (cartCost + EXTRA_COST);
-        assertThat(VillanyAteszCommissionActions.getTotalMaterialCost(driver)).isEqualTo(totalMaterialCost);
+            assertThat(VillanyAteszCommissionActions.getExtraCost(driver)).isEqualTo(EXTRA_COST);
+            assertThat(VillanyAteszCommissionActions.getCartContactName(driver)).isEqualTo(CONTACT_NAME);
+            double cartCost = STOCK_ITEM_AMOUNT * STOCK_ITEM_PRICE * 1.2;
+            assertThat(VillanyAteszCommissionActions.getCartCost(driver)).isEqualTo(cartCost);
+            assertThat(VillanyAteszCommissionActions.getMaterialCost(driver)).isEqualTo(cartCost + EXTRA_COST);
+            assertThat(VillanyAteszCommissionActions.getMargin(driver)).isEqualTo(COMMISSION_MARGIN);
+            double totalMaterialCost = COMMISSION_MARGIN / 100d * (cartCost + EXTRA_COST);
+            assertThat(VillanyAteszCommissionActions.getTotalMaterialCost(driver)).isEqualTo(totalMaterialCost);
 
-        assertThat(VillanyAteszCommissionActions.getToBePaid(driver)).isEqualTo(totalMaterialCost + totalWage);
-        assertThat(VillanyAteszCommissionActions.getDeposit(driver)).isEqualTo(DEPOSIT);
-        assertThat(VillanyAteszCommissionActions.getRemaining(driver)).isEqualTo(totalMaterialCost + totalWage - DEPOSIT);
+            assertThat(VillanyAteszCommissionActions.getToBePaid(driver)).isEqualTo(totalMaterialCost + totalWage);
+            assertThat(VillanyAteszCommissionActions.getDeposit(driver)).isEqualTo(DEPOSIT);
+            assertThat(VillanyAteszCommissionActions.getRemaining(driver)).isEqualTo(totalMaterialCost + totalWage - DEPOSIT);
+        });
 
         //Delete commission
         VillanyAteszCommissionActions.deleteCommission(driver);

@@ -3,7 +3,7 @@ import StarSelector from "../../../common/component/star_selector/StarSelector";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../../../../common/js/Utils";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import MapStream from "../../../../../../common/js/collection/MapStream";
-import MaterialType from "./MaterialType";
+import MaterialType, { ANY_MATERIAL_TYPE } from "./MaterialType";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
 import localizationData from "./search_nearest_material_trader_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
@@ -20,7 +20,7 @@ const SearchNearestMaterialTraderPage = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [starId, setStarId] = useState(null);
-    const [materialType, setMaterialType] = useState(cachedOrDefault(CACHE_KEY_MATERIAL_TYPE, MaterialType.ANY));
+    const [materialType, setMaterialType] = useState(cachedOrDefault(CACHE_KEY_MATERIAL_TYPE, ANY_MATERIAL_TYPE));
     const [searchResult, setSearchResult] = useState([]);
     const [page, setPage] = useState(0);
 
@@ -54,6 +54,7 @@ const SearchNearestMaterialTraderPage = ({ }) => {
                 <SearchNearestMaterialTraderResult
                     localizationHandler={localizationHandler}
                     searchResult={searchResult}
+                    reload={reload}
                 />
             }
 
@@ -61,20 +62,26 @@ const SearchNearestMaterialTraderPage = ({ }) => {
                 <Button
                     id="elite-base-sn-material-trader-search-button"
                     label={page == 0 ? localizationHandler.get("search") : localizationHandler.get("load-more")}
-                    onclick={search}
+                    onclick={() => search(page)}
                 />
             </div>
         </div>
     );
 
+    function reload() {
+        setPage(0);
+        search(0, true);
+    }
+
     function getOptions() {
         return new MapStream(MaterialType)
             .toListStream()
             .map(materialType => new SelectOption(materialType, materialType))
+            .add(new SelectOption(ANY_MATERIAL_TYPE, ANY_MATERIAL_TYPE))
             .toList();
     }
 
-    async function search() {
+    async function search(page, eraseExisting = false) {
         if (!hasValue(starId)) {
             NotificationService.showError(localizationHandler.get("star-not-selected"));
             return;
@@ -89,7 +96,11 @@ const SearchNearestMaterialTraderPage = ({ }) => {
         }
 
         setPage(page + 1);
-        setSearchResult(new Stream(searchResult).addAll(response).toList());
+        if (eraseExisting) {
+            setSearchResult(response);
+        } else {
+            setSearchResult(new Stream(searchResult).addAll(response).toList());
+        }
     }
 }
 

@@ -13,3 +13,15 @@
 #elite-base-sn-material-trader-search-button {
     min-width: 200px;
 }
+
+.elite-base-nearest-material-trader-result-override-button {
+    border-width: 2px;
+    margin: 0;
+    margin-left: 20px;
+    padding: 0;
+    float: right;
+}
+
+#elite-base-nearest-material-trader-override-dialog .confirmation-dialog-detail-container {
+    text-align: center;
+}

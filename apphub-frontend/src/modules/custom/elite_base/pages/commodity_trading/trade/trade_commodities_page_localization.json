@@ -186,5 +186,9 @@
     "max-price-too-low": {
         "en": "Maximum price too low." ,
         "hu": "Maximum ár túl alacsony."
+    },
+    "average-price": {
+        "en": "Galactic average",
+        "hu": "Átlagos érték"
     }
 }

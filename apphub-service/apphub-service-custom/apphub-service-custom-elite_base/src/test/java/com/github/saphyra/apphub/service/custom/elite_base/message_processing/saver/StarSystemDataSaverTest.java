@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
@@ -39,6 +40,9 @@ class StarSystemDataSaverTest {
     private static final UUID MINOR_FACTION_ID = UUID.randomUUID();
     private static final String CONTROLLING_FACTION_NAME = "controlling-faction-name";
     private static final UUID CONTROLLING_FACTION_ID = UUID.randomUUID();
+    private static final Double POWERPLAY_STATE_CONTROL_PROGRESS = 313d;
+    private static final Double POWERPLAY_STATE_REINFORCEMENT = 13d;
+    private static final Double POWERPLAY_STATE_UNDERMINING = 54d;
 
     @Mock
     private StarSystemDataDao starSystemDataDao;
@@ -70,6 +74,9 @@ class StarSystemDataSaverTest {
     @Mock
     private ControllingFaction controllingFaction;
 
+    @Mock
+    private PowerplayConflict powerplayConflict;
+
     @Test
     void save_new() {
         EdConflict[] conflicts = {edConflict};
@@ -88,7 +95,11 @@ class StarSystemDataSaverTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            List.of(minorFactionConflict)
+            List.of(minorFactionConflict),
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         ))
             .willReturn(starSystemData);
         given(starSystemData.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
@@ -106,7 +117,11 @@ class StarSystemDataSaverTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            conflicts
+            conflicts,
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         );
 
         then(starSystemData).should(times(0)).setLastUpdate(any());
@@ -122,6 +137,9 @@ class StarSystemDataSaverTest {
         then(starSystemData).should(times(0)).setControllingFactionState(any());
         then(starSystemData).should(times(0)).setPowers(any());
         then(starSystemData).should(times(0)).setConflicts(any());
+        then(starSystemData).should(times(0)).setPowerplayStateControlProgress(any());
+        then(starSystemData).should(times(0)).setPowerplayStateReinforcement(any());
+        then(starSystemData).should(times(0)).setPowerplayStateUndermining(any());
         then(starSystemDataDao).should().save(starSystemData);
     }
 
@@ -149,7 +167,11 @@ class StarSystemDataSaverTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            conflicts
+            conflicts,
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         );
 
         then(starSystemData).should().setLastUpdate(LAST_UPDATE);
@@ -165,6 +187,9 @@ class StarSystemDataSaverTest {
         then(starSystemData).should().setControllingFactionState(FactionStateEnum.DROUGHT);
         then(starSystemData).should().setPowers(any());
         then(starSystemData).should().setConflicts(any());
+        then(starSystemData).should().setPowerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS);
+        then(starSystemData).should().setPowerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT);
+        then(starSystemData).should().setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
         then(starSystemDataDao).should().save(starSystemData);
     }
 }

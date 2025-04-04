@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-powerplay_conflict" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="powerplay_conflict"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="powerplay_conflict">
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="power" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="conflict_progress" type="numeric"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

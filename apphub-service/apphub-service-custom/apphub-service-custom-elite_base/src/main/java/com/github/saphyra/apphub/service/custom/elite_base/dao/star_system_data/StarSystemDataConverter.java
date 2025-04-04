@@ -12,10 +12,14 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.power.StarSystemPowerMapping;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.power.StarSystemPowerMappingDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.power.StarSystemPowerMappingSyncService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflictDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflictSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -30,12 +34,15 @@ class StarSystemDataConverter extends ConverterBase<StarSystemDataEntity, StarSy
     private final StarSystemMinorFactionMappingSyncService starSystemMinorFactionMappingSyncService;
     private final StarSystemPowerMappingDao starSystemPowerMappingDao;
     private final StarSystemPowerMappingSyncService starSystemPowerMappingSyncService;
+    private final PowerplayConflictSyncService powerplayConflictSyncService;
+    private final PowerplayConflictDao powerplayConflictDao;
 
     @Override
     protected StarSystemDataEntity processDomainConversion(StarSystemData domain) {
         minorFactionConflictSyncService.sync(domain.getStarSystemId(), domain.getConflicts());
         starSystemMinorFactionMappingSyncService.sync(domain.getStarSystemId(), domain.getMinorFactions());
         starSystemPowerMappingSyncService.sync(domain.getStarSystemId(), domain.getPowers());
+        powerplayConflictSyncService.sync(domain.getStarSystemId(), domain.getPowerplayConflicts());
 
         return StarSystemDataEntity.builder()
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
@@ -49,6 +56,9 @@ class StarSystemDataConverter extends ConverterBase<StarSystemDataEntity, StarSy
             .powerplayState(domain.getPowerplayState())
             .controllingFactionId(uuidConverter.convertDomain(domain.getControllingFactionId()))
             .controllingFactionState(domain.getControllingFactionState())
+            .powerplayStateControlProgress(domain.getPowerplayStateControlProgress())
+            .powerplayStateReinforcement(domain.getPowerplayStateReinforcement())
+            .powerplayStateUndermining(domain.getPowerplayStateUndermining())
             .build();
     }
 
@@ -67,9 +77,13 @@ class StarSystemDataConverter extends ConverterBase<StarSystemDataEntity, StarSy
             .powerplayState(entity.getPowerplayState())
             .controllingFactionId(uuidConverter.convertEntity(entity.getControllingFactionId()))
             .controllingFactionState(entity.getControllingFactionState())
+            .powerplayStateControlProgress(entity.getPowerplayStateControlProgress())
+            .powerplayStateReinforcement(entity.getPowerplayStateReinforcement())
+            .powerplayStateUndermining(entity.getPowerplayStateUndermining())
             .minorFactions(new LazyLoadedField<>(() -> starSystemMinorFactionMappingDao.getByStarSystemId(starSystemId).stream().map(StarSystemMinorFactionMapping::getMinorFactionId).toList()))
             .powers(new LazyLoadedField<>(() -> starSystemPowerMappingDao.getByStarSystemId(starSystemId).stream().map(StarSystemPowerMapping::getPower).toList()))
             .conflicts(new LazyLoadedField<>(() -> minorFactionConflictDao.getByStarSystemId(starSystemId)))
+            .powerplayConflicts(new LazyLoadedField<List<PowerplayConflict>>(() -> powerplayConflictDao.getByStarSystemId(starSystemId)))
             .build();
     }
 }

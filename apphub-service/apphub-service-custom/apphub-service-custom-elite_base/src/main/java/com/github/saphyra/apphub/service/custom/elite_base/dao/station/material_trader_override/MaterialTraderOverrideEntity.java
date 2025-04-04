@@ -24,4 +24,6 @@ class MaterialTraderOverrideEntity {
 
     @Enumerated(EnumType.STRING)
     private MaterialType materialType;
+
+    private Boolean verified;
 }

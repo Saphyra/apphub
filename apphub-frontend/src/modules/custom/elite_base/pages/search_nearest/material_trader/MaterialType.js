@@ -1,5 +1,6 @@
+export const ANY_MATERIAL_TYPE = "ANY";
+
 const MaterialType = {
-    ANY: "ANY",
     ENCODED: "ENCODED",
     MANUFACTURED: "MANUFACTURED",
     RAW: "RAW",

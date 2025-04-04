@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarS
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflictFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CodexEntryJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
@@ -35,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +56,7 @@ class JournalMessageProcessor implements MessageProcessor {
     private final StationSaverUtil stationSaverUtil;
     private final ControllingFactionParser controllingFactionParser;
     private final PerformanceReporter performanceReporter;
+    private final PowerplayConflictFactory powerplayConflictFactory;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -155,7 +158,11 @@ class JournalMessageProcessor implements MessageProcessor {
             minorFactions,
             controllingFactionParser.parse(message.getControllingFaction()),
             Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
-            message.getConflicts()
+            message.getConflicts(),
+            message.getPowerplayStateControlProgress(),
+            message.getPowerplayStateReinforcement(),
+            message.getPowerplayStateUndermining(),
+            powerplayConflictFactory.create(starSystem.getId(), Optional.ofNullable(message.getPowerplayConflictProgresses()).map(Arrays::asList).orElse(Collections.emptyList()))
         );
 
         if (!isNull(message.getMarketId())) {
@@ -207,7 +214,11 @@ class JournalMessageProcessor implements MessageProcessor {
             minorFactions,
             message.getControllingFaction(),
             Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
-            message.getConflicts()
+            message.getConflicts(),
+            message.getPowerplayStateControlProgress(),
+            message.getPowerplayStateReinforcement(),
+            message.getPowerplayStateUndermining(),
+            powerplayConflictFactory.create(starSystem.getId(), Optional.ofNullable(message.getPowerplayConflictProgresses()).map(Arrays::asList).orElse(Collections.emptyList()))
         );
     }
 
@@ -278,7 +289,11 @@ class JournalMessageProcessor implements MessageProcessor {
             minorFactions,
             controllingFactionParser.parse(message.getControllingFaction()),
             Optional.ofNullable(message.getPowers()).map(strings -> Arrays.stream(strings).map(Power::parse).toList()).orElse(null),
-            message.getConflicts()
+            message.getConflicts(),
+            message.getPowerplayStateControlProgress(),
+            message.getPowerplayStateReinforcement(),
+            message.getPowerplayStateUndermining(),
+            powerplayConflictFactory.create(starSystem.getId(), Optional.ofNullable(message.getPowerplayConflictProgresses()).map(Arrays::asList).orElse(Collections.emptyList()))
         );
     }
 

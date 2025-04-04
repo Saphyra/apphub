@@ -1,16 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceCache;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceRepository;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -108,5 +105,20 @@ class CommodityAveragePriceDaoTest {
         given(storedDomain.getCommodityName()).willReturn(COMMODITY_NAME);
 
         assertThat(underTest.shouldSave(newDomain)).isTrue();
+    }
+
+    @Test
+    void findByIdValidated_notFound() {
+        given(cache.getIfPresent(COMMODITY_NAME)).willReturn(Optional.empty());
+        given(repository.findById(COMMODITY_NAME)).willReturn(Optional.empty());
+
+        ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(COMMODITY_NAME), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    void findByIdValidated() {
+        given(cache.getIfPresent(COMMODITY_NAME)).willReturn(Optional.of(storedDomain));
+
+        assertThat(underTest.findByIdValidated(COMMODITY_NAME)).isEqualTo(storedDomain);
     }
 }

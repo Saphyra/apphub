@@ -3,11 +3,6 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataEntity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflictDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflictSyncService;
@@ -21,6 +16,9 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.SecurityLevel;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflictDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflictSyncService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,6 +43,9 @@ class StarSystemDataConverterTest {
     private static final String STAR_SYSTEM_ID_STRING = "star-system-id";
     private static final String LAST_UPDATE_STRING = "last-update";
     private static final String CONTROLLING_FACTION_ID_STRING = "controlling-faction-id";
+    private static final Double POWERPLAY_STATE_CONTROL_PROGRESS = 354d;
+    private static final Double POWERPLAY_STATE_REINFORCEMENT = 6547d;
+    private static final Double POWERPLAY_STATE_UNDERMINING = 6546d;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -70,6 +71,12 @@ class StarSystemDataConverterTest {
     @Mock
     private StarSystemPowerMappingSyncService starSystemPowerMappingSyncService;
 
+    @Mock
+    private PowerplayConflictSyncService powerplayConflictSyncService;
+
+    @Mock
+    private PowerplayConflictDao powerplayConflictDao;
+
     @InjectMocks
     private StarSystemDataConverter underTest;
 
@@ -81,6 +88,9 @@ class StarSystemDataConverterTest {
 
     @Mock
     private StarSystemPowerMapping starSystemPowerMapping;
+
+    @Mock
+    private PowerplayConflict powerplayConflict;
 
     @Test
     void convertDomain() {
@@ -99,6 +109,10 @@ class StarSystemDataConverterTest {
             .conflicts(LazyLoadedField.loaded(List.of(minorFactionConflict)))
             .minorFactions(LazyLoadedField.loaded(List.of(MINOR_FACTION_ID)))
             .powers(LazyLoadedField.loaded(List.of(Power.NAKATO_KAINE)))
+            .powerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS)
+            .powerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT)
+            .powerplayStateUndermining(POWERPLAY_STATE_UNDERMINING)
+            .powerplayConflicts(LazyLoadedField.loaded(List.of(powerplayConflict)))
             .build();
 
         given(uuidConverter.convertDomain(STAR_SYSTEM_ID)).willReturn(STAR_SYSTEM_ID_STRING);
@@ -116,11 +130,15 @@ class StarSystemDataConverterTest {
             .returns(Power.ARISSA_LAVIGNY_DUVAL, StarSystemDataEntity::getControllingPower)
             .returns(PowerplayState.FORTIFIED, StarSystemDataEntity::getPowerplayState)
             .returns(CONTROLLING_FACTION_ID_STRING, StarSystemDataEntity::getControllingFactionId)
-            .returns(FactionStateEnum.BLIGHT, StarSystemDataEntity::getControllingFactionState);
+            .returns(FactionStateEnum.BLIGHT, StarSystemDataEntity::getControllingFactionState)
+            .returns(POWERPLAY_STATE_CONTROL_PROGRESS, StarSystemDataEntity::getPowerplayStateControlProgress)
+            .returns(POWERPLAY_STATE_REINFORCEMENT, StarSystemDataEntity::getPowerplayStateReinforcement)
+            .returns(POWERPLAY_STATE_UNDERMINING, StarSystemDataEntity::getPowerplayStateUndermining);
 
         then(minorFactionConflictSyncService).should().sync(STAR_SYSTEM_ID, List.of(minorFactionConflict));
         then(starSystemMinorFactionMappingSyncService).should().sync(STAR_SYSTEM_ID, List.of(MINOR_FACTION_ID));
         then(starSystemPowerMappingSyncService).should().sync(STAR_SYSTEM_ID, List.of(Power.NAKATO_KAINE));
+        then(powerplayConflictSyncService).should().sync(STAR_SYSTEM_ID, List.of(powerplayConflict));
     }
 
     @Test
@@ -137,6 +155,9 @@ class StarSystemDataConverterTest {
             .powerplayState(PowerplayState.FORTIFIED)
             .controllingFactionId(CONTROLLING_FACTION_ID_STRING)
             .controllingFactionState(FactionStateEnum.BLIGHT)
+            .powerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS)
+            .powerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT)
+            .powerplayStateUndermining(POWERPLAY_STATE_UNDERMINING)
             .build();
 
         given(uuidConverter.convertEntity(STAR_SYSTEM_ID_STRING)).willReturn(STAR_SYSTEM_ID);
@@ -146,6 +167,7 @@ class StarSystemDataConverterTest {
         given(minorFactionConflictDao.getByStarSystemId(STAR_SYSTEM_ID)).willReturn(List.of(minorFactionConflict));
         given(starSystemMinorFactionMappingDao.getByStarSystemId(STAR_SYSTEM_ID)).willReturn(List.of(starSystemMinorFactionMapping));
         given(starSystemPowerMappingDao.getByStarSystemId(STAR_SYSTEM_ID)).willReturn(List.of(starSystemPowerMapping));
+        given(powerplayConflictDao.getByStarSystemId(STAR_SYSTEM_ID)).willReturn(List.of(powerplayConflict));
         given(starSystemMinorFactionMapping.getMinorFactionId()).willReturn(MINOR_FACTION_ID);
         given(starSystemPowerMapping.getPower()).willReturn(Power.NAKATO_KAINE);
 
@@ -161,9 +183,13 @@ class StarSystemDataConverterTest {
             .returns(PowerplayState.FORTIFIED, StarSystemData::getPowerplayState)
             .returns(CONTROLLING_FACTION_ID, StarSystemData::getControllingFactionId)
             .returns(FactionStateEnum.BLIGHT, StarSystemData::getControllingFactionState)
+            .returns(POWERPLAY_STATE_CONTROL_PROGRESS, StarSystemData::getPowerplayStateControlProgress)
+            .returns(POWERPLAY_STATE_REINFORCEMENT, StarSystemData::getPowerplayStateReinforcement)
+            .returns(POWERPLAY_STATE_UNDERMINING, StarSystemData::getPowerplayStateUndermining)
             .returns(List.of(minorFactionConflict), StarSystemData::getConflicts)
             .returns(List.of(MINOR_FACTION_ID), StarSystemData::getMinorFactions)
-            .returns(List.of(Power.NAKATO_KAINE), StarSystemData::getPowers);
-
+            .returns(List.of(Power.NAKATO_KAINE), StarSystemData::getPowers)
+            .returns(List.of(powerplayConflict), StarSystemData::getPowerplayConflicts)
+        ;
     }
 }

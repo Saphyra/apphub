@@ -19,4 +19,6 @@ public class NearestMaterialTraderResponse {
     private Double distanceFromReference;
     private Double distanceFromStar;
     private MaterialType materialType;
+    private MaterialType originalMaterialType;
+    private Boolean verifiedMaterialOverride;
 }
