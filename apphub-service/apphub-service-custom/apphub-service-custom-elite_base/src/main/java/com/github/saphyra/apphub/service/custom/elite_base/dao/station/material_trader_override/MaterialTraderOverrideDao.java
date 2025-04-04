@@ -19,12 +19,10 @@ public class MaterialTraderOverrideDao extends AbstractDao<MaterialTraderOverrid
         this.uuidConverter = uuidConverter;
     }
 
-    //TODO unit test
     public Optional<MaterialTraderOverride> findById(UUID stationId) {
         return findById(uuidConverter.convertDomain(stationId));
     }
 
-    //TODO unit test
     public MaterialTraderOverride findByIdValidated(UUID stationId) {
         return findById(stationId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "MaterialTraderOverride not found by stationId {}" + stationId));

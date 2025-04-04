@@ -1,5 +1,5 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet id="create-table-star_system_data_data" author="saphyra">
+    <changeSet id="create-table-star_system_data" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists schemaName="elite_base" tableName="star_system_data"/>
@@ -23,5 +23,41 @@
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="star_system_data" columnNames="star_system_id" constraintName="star_system_data-pk"/>
+    </changeSet>
+
+    <changeSet id="add-column-powerplay_state_control_progress-to-star_system_data" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="elite_base" tableName="star_system_data" columnName="powerplay_state_control_progress"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="elite_base" tableName="star_system_data">
+            <column name="powerplay_state_control_progress" type="numeric"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-powerplay_state_reinforcement-to-star_system_data" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="elite_base" tableName="star_system_data" columnName="powerplay_state_reinforcement"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="elite_base" tableName="star_system_data">
+            <column name="powerplay_state_reinforcement" type="numeric"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-powerplay_state_undermining-to-star_system_data" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="elite_base" tableName="star_system_data" columnName="powerplay_state_undermining"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="elite_base" tableName="star_system_data">
+            <column name="powerplay_state_undermining" type="numeric"/>
+        </addColumn>
     </changeSet>
 </databaseChangeLog>

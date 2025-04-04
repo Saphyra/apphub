@@ -11,18 +11,14 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarS
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflictFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.NamePercentPair;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Ring;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CodexEntryJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.FsdJumpJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.SaaSignalFoundJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.ScanJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.*;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
@@ -73,9 +69,15 @@ class JournalMessageProcessorTest {
     private static final String SERVICE = "service";
     private static final Long MARKET_ID = 243545L;
     private static final String STATION_NAME = "station-name";
+    private static final Double POWERPLAY_STATE_CONTROL_PROGRESS = 313d;
+    private static final Double POWERPLAY_STATE_REINFORCEMENT = 13d;
+    private static final Double POWERPLAY_STATE_UNDERMINING = 54d;
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
+
+    @Mock
+    private PowerplayConflictFactory powerplayConflictFactory;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -133,6 +135,12 @@ class JournalMessageProcessorTest {
 
     @Mock
     private Economy economy;
+
+    @Mock
+    private PowerplayConflictProgress powerplayConflictProgress;
+
+    @Mock
+    private PowerplayConflict powerplayConflict;
 
     @Test
     void canProcess() {
@@ -224,6 +232,10 @@ class JournalMessageProcessorTest {
         fsdJumpJournalMessage.setControllingFaction(controllingFaction);
         fsdJumpJournalMessage.setPowers(new String[]{Power.NAKATO_KAINE.getValue()});
         fsdJumpJournalMessage.setConflicts(conflicts);
+        fsdJumpJournalMessage.setPowerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS);
+        fsdJumpJournalMessage.setPowerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT);
+        fsdJumpJournalMessage.setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
+        fsdJumpJournalMessage.setPowerplayConflictProgresses(new PowerplayConflictProgress[]{powerplayConflictProgress});
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
@@ -234,6 +246,7 @@ class JournalMessageProcessorTest {
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
         given(controllingFactionParser.parse(controllingFaction)).willReturn(controllingFaction);
+        given(powerplayConflictFactory.create(STAR_SYSTEM_ID, List.of(powerplayConflictProgress))).willReturn(List.of(powerplayConflict));
 
         underTest.processMessage(edMessage);
 
@@ -251,7 +264,11 @@ class JournalMessageProcessorTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            conflicts
+            conflicts,
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         );
     }
 
@@ -284,6 +301,10 @@ class JournalMessageProcessorTest {
         fsdJumpJournalMessage.setControllingFaction(controllingFaction);
         fsdJumpJournalMessage.setPowers(new String[]{Power.NAKATO_KAINE.getValue()});
         fsdJumpJournalMessage.setConflicts(conflicts);
+        fsdJumpJournalMessage.setPowerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS);
+        fsdJumpJournalMessage.setPowerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT);
+        fsdJumpJournalMessage.setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
+        fsdJumpJournalMessage.setPowerplayConflictProgresses(new PowerplayConflictProgress[]{powerplayConflictProgress});
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
@@ -294,6 +315,7 @@ class JournalMessageProcessorTest {
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
         given(controllingFactionParser.parse(controllingFaction)).willReturn(controllingFaction);
+        given(powerplayConflictFactory.create(STAR_SYSTEM_ID, List.of(powerplayConflictProgress))).willReturn(List.of(powerplayConflict));
 
         underTest.processMessage(edMessage);
 
@@ -311,7 +333,11 @@ class JournalMessageProcessorTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            conflicts
+            conflicts,
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         );
     }
 
@@ -401,6 +427,10 @@ class JournalMessageProcessorTest {
         carrierJumpJournalMessage.setControllingFaction(controllingFaction);
         carrierJumpJournalMessage.setPowers(new String[]{Power.NAKATO_KAINE.getValue()});
         carrierJumpJournalMessage.setConflicts(conflicts);
+        carrierJumpJournalMessage.setPowerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS);
+        carrierJumpJournalMessage.setPowerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT);
+        carrierJumpJournalMessage.setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
+        carrierJumpJournalMessage.setPowerplayConflictProgresses(new PowerplayConflictProgress[]{powerplayConflictProgress});
 
         given(objectMapperWrapper.readValue(MESSAGE, CarrierJumpJournalMessage.class)).willReturn(carrierJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
@@ -410,6 +440,7 @@ class JournalMessageProcessorTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        given(powerplayConflictFactory.create(STAR_SYSTEM_ID, List.of(powerplayConflictProgress))).willReturn(List.of(powerplayConflict));
 
         underTest.processMessage(edMessage);
 
@@ -427,7 +458,11 @@ class JournalMessageProcessorTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            conflicts
+            conflicts,
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         );
     }
 
@@ -462,6 +497,10 @@ class JournalMessageProcessorTest {
         locationJournalMessage.setConflicts(conflicts);
         locationJournalMessage.setBodyType("Star");
         locationJournalMessage.setDistanceFromStar(DISTANCE_FROM_STAR);
+        locationJournalMessage.setPowerplayStateControlProgress(POWERPLAY_STATE_CONTROL_PROGRESS);
+        locationJournalMessage.setPowerplayStateReinforcement(POWERPLAY_STATE_REINFORCEMENT);
+        locationJournalMessage.setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
+        locationJournalMessage.setPowerplayConflictProgresses(new PowerplayConflictProgress[]{powerplayConflictProgress});
 
         given(objectMapperWrapper.readValue(MESSAGE, LocationJournalMessage.class)).willReturn(locationJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
@@ -472,6 +511,7 @@ class JournalMessageProcessorTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        given(powerplayConflictFactory.create(STAR_SYSTEM_ID, List.of(powerplayConflictProgress))).willReturn(List.of(powerplayConflict));
 
         underTest.processMessage(edMessage);
 
@@ -489,22 +529,11 @@ class JournalMessageProcessorTest {
             List.of(minorFaction),
             controllingFaction,
             List.of(Power.NAKATO_KAINE),
-            conflicts
-        );
-        then(starSystemDataSaver).should().save(
-            STAR_SYSTEM_ID,
-            TIMESTAMP,
-            POPULATION,
-            Allegiance.ALLIANCE,
-            EconomyEnum.AGRICULTURE,
-            EconomyEnum.COLONY,
-            SecurityLevel.ANARCHY,
-            Power.AISLING_DUVAL,
-            PowerplayState.FORTIFIED,
-            List.of(minorFaction),
-            controllingFaction,
-            List.of(Power.NAKATO_KAINE),
-            conflicts
+            conflicts,
+            POWERPLAY_STATE_CONTROL_PROGRESS,
+            POWERPLAY_STATE_REINFORCEMENT,
+            POWERPLAY_STATE_UNDERMINING,
+            List.of(powerplayConflict)
         );
     }
 

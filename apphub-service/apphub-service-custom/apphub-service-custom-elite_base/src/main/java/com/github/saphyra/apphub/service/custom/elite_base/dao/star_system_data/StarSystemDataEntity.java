@@ -40,4 +40,7 @@ class StarSystemDataEntity {
     private String controllingFactionId;
     @Enumerated(EnumType.STRING)
     private FactionStateEnum controllingFactionState;
+    private Double powerplayStateControlProgress;
+    private Double powerplayStateReinforcement;
+    private Double powerplayStateUndermining;
 }
