@@ -39,26 +39,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_BODY_ID;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_DISTANCE_FROM_REFERENCE;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_DISTANCE_FROM_STAR;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_ECONOMY;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_ID;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_MATERIAL_TYPE;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_SERVICE;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STAR_NAME;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STAR_SYSTEM_ID;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STATION_ID;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STATION_NAME;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_X_POS;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_Y_POS;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_Z_POS;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_BODY;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_MATERIAL_TRADER_OVERRIDE;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STATION;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STATION_SERVICE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.*;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -83,7 +65,7 @@ public class NearestMaterialTraderService {
 
         String sql = SqlBuilder.select()
             .column(new NamedColumn(new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID), COLUMN_STAR_SYSTEM_ID))
-            .columns(COLUMN_STAR_NAME, COLUMN_X_POS, COLUMN_Y_POS, COLUMN_Z_POS, COLUMN_STATION_NAME, COLUMN_DISTANCE_FROM_STAR, COLUMN_ECONOMY, COLUMN_MATERIAL_TYPE)
+            .columns(COLUMN_STAR_NAME, COLUMN_X_POS, COLUMN_Y_POS, COLUMN_Z_POS, COLUMN_STATION_NAME, COLUMN_DISTANCE_FROM_STAR, COLUMN_ECONOMY, COLUMN_MATERIAL_TYPE, COLUMN_VERIFIED)
             .column(new NamedColumn(new QualifiedColumn(TABLE_STATION, COLUMN_ID), COLUMN_STATION_ID))
             .column(new NamedColumn(
                 new SquareRootSegment(
@@ -119,6 +101,7 @@ public class NearestMaterialTraderService {
             List<NearestMaterialTraderResponse> result = new ArrayList<>();
 
             while (rs.next()) {
+                EconomyEnum economy = EconomyEnum.fromValue(rs.getString(COLUMN_ECONOMY));
                 result.add(NearestMaterialTraderResponse.builder()
                     .starId(uuidConverter.convertEntity(rs.getString(COLUMN_STAR_SYSTEM_ID)))
                     .starName(rs.getString(COLUMN_STAR_NAME))
@@ -126,10 +109,9 @@ public class NearestMaterialTraderService {
                     .stationName(rs.getString(COLUMN_STATION_NAME))
                     .distanceFromReference(rs.getDouble(COLUMN_DISTANCE_FROM_REFERENCE))
                     .distanceFromStar(Utils.nullIfZero(rs.getDouble(COLUMN_DISTANCE_FROM_STAR)))
-                    .materialType(getMaterialType(
-                        EconomyEnum.fromValue(rs.getString(COLUMN_ECONOMY)),
-                        MaterialType.parse(rs.getString(COLUMN_MATERIAL_TYPE))
-                    ))
+                    .materialType(getMaterialType(economy, MaterialType.parse(rs.getString(COLUMN_MATERIAL_TYPE))))
+                    .originalMaterialType(getMaterialType(economy))
+                    .verifiedMaterialOverride(isNull(rs.getObject(COLUMN_VERIFIED)) ? null : rs.getBoolean(COLUMN_VERIFIED))
                     .build());
             }
 
@@ -142,6 +124,10 @@ public class NearestMaterialTraderService {
             return materialType;
         }
 
+        return getMaterialType(economy);
+    }
+
+    private static MaterialType getMaterialType(EconomyEnum economy) {
         return MATERIAL_TYPE_MAPPING.entrySet()
             .stream()
             .filter(entry -> entry.getKey() != MaterialType.ANY)

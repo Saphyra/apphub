@@ -19,4 +19,9 @@ public class EliteBaseCommodityTradingActions {
             .body(request)
             .post(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_COMMODITY_TRADING_TRADE));
     }
+
+    public static Response getCommodityAveragePriceResponse(int serverPort, UUID accessTokenId, String commodityName) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_COMMODITY_TRADING_COMMODITIES_AVERAGE_PRICE, "commodityName", commodityName));
+    }
 }

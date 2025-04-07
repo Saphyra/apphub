@@ -14,4 +14,5 @@ import java.util.UUID;
 public class MaterialTraderOverride {
     private final UUID stationId;
     private MaterialType materialType;
+    private boolean verified;
 }

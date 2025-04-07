@@ -4,7 +4,19 @@
         "hu": "Kezdőlap"
     },
     "title": {
-        "en": "Random route - Apphub",
-        "hu": "Véletlenszerű útvonal - Apphub"
+        "en": "Random direction - Apphub",
+        "hu": "Véletlenszerű irány - Apphub"
+    },
+    "start": {
+        "en": "Start",
+        "hu": "Start"
+    },
+    "pause": {
+        "en": "Pause",
+        "hu": "Szünet"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Nullázás"
     }
 }

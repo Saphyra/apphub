@@ -19,7 +19,7 @@
         "en": "Load more",
         "hu": "Továbbiak keresése"
     },
-    "no-more-result":{
+    "no-more-result": {
         "en": "No more results found.",
         "hu": "Nem található több eredmény."
     },
@@ -38,5 +38,45 @@
     "station-distance": {
         "en": "St Dist",
         "hu": "Állomás táv."
+    },
+    "edit-material-trader-override": {
+        "en": "I found different material trader here.",
+        "hu": "Másfajta kereskedőt találtam itt."
+    },
+    "edit-material-trader-override-dialog-title": {
+        "en": "Which material trader did you find there?",
+        "hu": "Milyen kereskedőt találtál?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "report-misinformation": {
+        "en": "Report misinformation",
+        "hu": "Pontatlanság jelentése"
+    },
+    "overridden-material-trader-type": {
+        "en": "Overridden material trader type. Original: {value}",
+        "hu": "Felülírt kereskedő típus. Eredeti: {value}"
+    },
+    "unverified-overridden-material-trader-type": {
+        "en": "Unverified overridden material trader type. Original: {value}",
+        "hu": "Ellenőrizetlen felülírt kereskedő típus. Eredeti: {value}"
+    },
+    "verify-material-trader-override-dialog-title": {
+        "en": "Verify material trader override",
+        "hu": "Kereskedő típus felülírásának megerősítése"
+    },
+    "verify-material-trader-override-dialog-detail": {
+        "en": "Are you sure you want to verify material trader? Original type: {original}, new type: {override}",
+        "hu": "Biztosan meg szeretnéd erősíteni a kereskedő típusának felülírását? Eredeti típue: {originak}, új típus: {override}"
+    },
+    "verify-material-trader-override": {
+        "en": "Yes, new type is correct.",
+        "hu": "Igen, az új típus helyes."
+    },
+    "delete-material-trader-override": {
+        "en": "No, delete override.",
+        "hu": "Nem, felülírás törlése."
     }
 }

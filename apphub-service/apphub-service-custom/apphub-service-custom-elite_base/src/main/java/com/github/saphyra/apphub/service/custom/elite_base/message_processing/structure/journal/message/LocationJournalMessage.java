@@ -77,6 +77,18 @@ public class LocationJournalMessage extends JournalMessage {
     @JsonProperty("StationFaction")
     private ControllingFaction stationFaction;
 
+    @JsonProperty("PowerplayConflictProgress")
+    private PowerplayConflictProgress[] powerplayConflictProgresses;
+
+    @JsonProperty("PowerplayStateControlProgress")
+    private Double powerplayStateControlProgress;
+
+    @JsonProperty("PowerplayStateReinforcement")
+    private Double powerplayStateReinforcement;
+
+    @JsonProperty("PowerplayStateUndermining")
+    private Double powerplayStateUndermining;
+
     //Unused
     @JsonProperty("Docked")
     private Boolean docked;
@@ -104,17 +116,4 @@ public class LocationJournalMessage extends JournalMessage {
 
     @JsonProperty("FactionState")
     private String factionState;
-
-    //New
-    @JsonProperty("PowerplayConflictProgress")
-    private PowerplayConflictProgress[] powerplayConflictProgresses;
-
-    @JsonProperty("PowerplayStateControlProgress")
-    private Double powerplayStateControlProgress;
-
-    @JsonProperty("PowerplayStateReinforcement")
-    private Double powerplayStateReinforcement;
-
-    @JsonProperty("PowerplayStateUndermining")
-    private Double powerplayStateUndermining;
 }

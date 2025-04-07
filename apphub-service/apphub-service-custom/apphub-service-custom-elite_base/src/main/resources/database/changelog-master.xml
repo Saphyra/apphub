@@ -32,4 +32,5 @@
     <include file="database/change_sets/star_system_data.xml"/>
     <include file="database/change_sets/loadout.xml"/>
     <include file="database/change_sets/material_trader_override.xml"/>
+    <include file="database/change_sets/powerplay_conflict.xml"/>
 </databaseChangeLog>

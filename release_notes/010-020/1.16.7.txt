@@ -1,0 +1,15 @@
+===FEATURES===
+    EliteBase
+        Display galactic average price of selected commodity
+        Material trader override UI
+        Save new powerplay properties
+    RandomDirection
+        Add stopper
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

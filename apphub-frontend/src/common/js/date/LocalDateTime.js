@@ -85,7 +85,6 @@ class LocalDateTimeObj {
     }
 
     toString() {
-        console.log(this.date)
         return this.getYear() + "-" + this.getMonth() + "-" + this.getDay() + "T" + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
     }
 }

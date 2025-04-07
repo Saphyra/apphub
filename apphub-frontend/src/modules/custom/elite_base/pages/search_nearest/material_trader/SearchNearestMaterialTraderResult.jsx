@@ -1,8 +1,9 @@
 import React from "react";
 import Stream from "../../../../../../common/js/collection/Stream";
 import { formatNumber } from "../../../../../../common/js/Utils";
+import MaterialTraderOverride from "./MaterialTraderOverride";
 
-const SearchNearestMaterialTraderResult = ({ localizationHandler, searchResult }) => {
+const SearchNearestMaterialTraderResult = ({ localizationHandler, searchResult, reload }) => {
     return (
         <div id="elite-base-sn-material-trader-search-result">
             <table className="formatted-table selectable">
@@ -26,18 +27,27 @@ const SearchNearestMaterialTraderResult = ({ localizationHandler, searchResult }
         return new Stream(searchResult)
             .map(record =>
                 <SearchResultRow
-                    key={searchResult.starId}
+                    key={record.starId}
+                    localizationHandler={localizationHandler}
                     record={record}
+                    reload={reload}
                 />
             )
             .toList();
     }
 }
 
-const SearchResultRow = ({ record }) => {
+const SearchResultRow = ({ localizationHandler, record, reload }) => {
     return (
         <tr>
-            <td>{record.materialType}</td>
+            <td>
+                <span>{record.materialType}</span>
+                <MaterialTraderOverride
+                    localizationHandler={localizationHandler}
+                    record={record}
+                    reload={reload}
+                />
+            </td>
             <td>{formatNumber(record.distanceFromReference, 2)}</td>
             <td>{record.starName}</td>
             <td>{record.stationName}</td>
