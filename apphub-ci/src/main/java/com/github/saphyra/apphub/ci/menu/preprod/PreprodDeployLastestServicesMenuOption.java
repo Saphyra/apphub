@@ -13,6 +13,8 @@ import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 class PreprodDeployLastestServicesMenuOption implements MenuOption {
@@ -23,6 +25,12 @@ class PreprodDeployLastestServicesMenuOption implements MenuOption {
 
     @Override
     public Menu getMenu() {
+        List<String> latestServices = propertyDao.getLatestServices();
+
+        if (latestServices.isEmpty()) {
+            return Menu.NONE;
+        }
+
         return Menu.PREPROD_MENU;
     }
 
