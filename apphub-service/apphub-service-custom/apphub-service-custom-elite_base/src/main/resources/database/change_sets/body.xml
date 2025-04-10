@@ -29,4 +29,8 @@
             <column name="body_name"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="add-unique-constraint-to-body-body_name" author="Saphyra">
+        <addUniqueConstraint schemaName="elite_base" tableName="body" columnNames="body_name"/>
+    </changeSet>
 </databaseChangeLog>

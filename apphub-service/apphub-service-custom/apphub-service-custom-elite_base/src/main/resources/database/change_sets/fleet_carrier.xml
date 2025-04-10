@@ -30,4 +30,8 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="add-unique-constraint-to-fleet_carrier-market_id" author="Saphyra">
+        <addUniqueConstraint schemaName="elite_base" tableName="fleet_carrier" columnNames="market_id"/>
+    </changeSet>
 </databaseChangeLog>

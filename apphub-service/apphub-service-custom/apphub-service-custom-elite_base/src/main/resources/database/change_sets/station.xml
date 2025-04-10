@@ -32,4 +32,8 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="add-unique-constraint-to-station-market_id" author="Saphyra">
+        <addUniqueConstraint schemaName="elite_base" tableName="station" columnNames="market_id"/>
+    </changeSet>
 </databaseChangeLog>

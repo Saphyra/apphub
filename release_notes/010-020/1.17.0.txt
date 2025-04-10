@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    EliteBase
+        Stabilise message processing by avoiding duplicates
 
 ===PLATFORM CHANGES===
 
