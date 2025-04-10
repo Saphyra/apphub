@@ -12,4 +12,6 @@ interface StarSystemRepository extends CrudRepository<StarSystemEntity, String> 
     Optional<StarSystemEntity> findByStarName(String starName);
 
     List<StarSystemEntity> getByStarNameIgnoreCaseContaining(String query, PageRequest pageRequest);
+
+    List<StarSystemEntity> getByStarIdOrStarName(Long starId, String starName);
 }

@@ -2,6 +2,11 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.s
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
@@ -10,10 +15,6 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_e
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_economy.StationEconomyFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_service.StationServiceEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,11 +22,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
-import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -38,6 +38,7 @@ public class StationSaver {
     private final StationEconomyFactory stationEconomyFactory;
     private final IdGenerator idGenerator;
     private final MinorFactionSaver minorFactionSaver;
+    private final ErrorReporterService errorReporterService;
 
     public void save(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String stationName, Long marketId, Allegiance allegiance, EconomyEnum economy, String[] stationServices, Economy[] economies) {
         save(timestamp, starSystemId, bodyId, stationName, null, marketId, allegiance, economy, stationServices, economies, null, null);
@@ -57,8 +58,8 @@ public class StationSaver {
         String controllingFactionName,
         FactionStateEnum controllingFactionState
     ) {
-        if ((isNull(starSystemId) || isBlank(stationName)) && isNull(marketId)) {
-            throw new IllegalArgumentException("StarSystemId or Station name and marketId must not be blank.");
+        if (isNull(marketId)) {
+            throw new IllegalArgumentException("marketId must not be null.");
         }
 
         if (EconomyEnum.CARRIER == economy || StationType.FLEET_CARRIER == stationType) {
@@ -77,15 +78,7 @@ public class StationSaver {
             .map(MinorFaction::getId)
             .orElse(null);
 
-        Station station = Stream.of(
-                new SearchHelper<>(() -> nonNull(starSystemId) && nonNull(stationName), () -> stationDao.findByStarSystemIdAndStationName(starSystemId, stationName)),
-                new SearchHelper<>(marketId, () -> stationDao.findByMarketId(marketId))
-            )
-            .map(SearchHelper::search)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .peek(ss -> log.debug("Found: {}", ss))
-            .findAny()
+        Station station = stationDao.findByMarketId(marketId)
             .orElseGet(() -> {
                 Station created = stationFactory.create(
                     stationId,
@@ -106,7 +99,11 @@ public class StationSaver {
                 return created;
             });
 
-        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId);
+        if (nonNull(starSystemId) && nonNull(station.getStarSystemId()) && !Objects.equals(starSystemId, station.getStarSystemId())) {
+            errorReporterService.report("StarSystemId mismatch. New starSystemId: %s, %s".formatted(starSystemId, station));
+        }
+
+        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
 
         return station;
     }
@@ -121,7 +118,8 @@ public class StationSaver {
         List<StationEconomy> economies,
         StationType stationType,
         UUID controllingFactionId,
-        Long marketId
+        Long marketId,
+        UUID starSystemId
     ) {
         if (timestamp.isBefore(station.getLastUpdate())) {
             log.debug("Station {} has newer data than {}", station.getId(), timestamp);
@@ -129,6 +127,7 @@ public class StationSaver {
         }
 
         List.of(
+                new UpdateHelper(starSystemId, station::getStarSystemId, () -> station.setStarSystemId(starSystemId)),
                 new UpdateHelper(marketId, station::getMarketId, () -> station.setMarketId(marketId)),
                 new UpdateHelper(timestamp, station::getLastUpdate, () -> station.setLastUpdate(timestamp)),
                 new UpdateHelper(bodyId, station::getBodyId, () -> station.setBodyId(bodyId)),

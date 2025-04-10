@@ -10,9 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 
@@ -36,15 +34,7 @@ public class FleetCarrierSaver {
             throw new IllegalArgumentException("CarrierId must not be blank");
         }
 
-        FleetCarrier carrier = Stream.of(
-                new SearchHelper<>(carrierId, () -> fleetCarrierDao.findByCarrierId(carrierId)),
-                new SearchHelper<>(marketId, () -> fleetCarrierDao.findByMarketId(marketId))
-            )
-            .map(SearchHelper::search)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .peek(ss -> log.debug("Found: {}", ss))
-            .findAny()
+        FleetCarrier carrier = fleetCarrierDao.findByCarrierIdOrMarketId(carrierId, marketId)
             .orElseGet(() -> {
                 FleetCarrier created = fleetCarrierFactory.create(carrierId, timestamp, carrierName, starSystemId, dockingAccess, marketId);
                 log.debug("Saving new {}", created);

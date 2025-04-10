@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyFactory;
@@ -35,6 +36,9 @@ class BodySaverTest {
     @Mock
     private BodyFactory bodyFactory;
 
+    @Mock
+    private ErrorReporterService errorReporterService;
+
     @InjectMocks
     private BodySaver underTest;
 
@@ -58,7 +62,7 @@ class BodySaverTest {
 
     @Test
     void foundByStarSystemIdAndBodyId_deprecatedMessage() {
-        given(bodyDao.findByStarSystemIdAndBodyId(STAR_SYSTEM_ID, BODY_ID)).willReturn(Optional.of(body));
+        given(bodyDao.findByBodyName(BODY_NAME)).willReturn(Optional.of(body));
         given(body.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
 
         assertThat(underTest.save(LAST_UPDATE, STAR_SYSTEM_ID, BodyType.STAR, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).isEqualTo(body);
@@ -91,7 +95,6 @@ class BodySaverTest {
 
     @Test
     void notFound() {
-        given(bodyDao.findByStarSystemIdAndBodyId(STAR_SYSTEM_ID, BODY_ID)).willReturn(Optional.empty());
         given(bodyDao.findByBodyName(BODY_NAME)).willReturn(Optional.empty());
         given(bodyFactory.create(LAST_UPDATE, STAR_SYSTEM_ID, BodyType.STAR, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(body);
         given(body.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));

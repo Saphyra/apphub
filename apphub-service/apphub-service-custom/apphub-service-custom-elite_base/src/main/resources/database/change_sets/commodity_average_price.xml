@@ -16,10 +16,4 @@
 
         <addPrimaryKey schemaName="elite_base" tableName="commodity_average_price" columnNames="commodity_name" constraintName="commodity_average_price-pk"/>
     </changeSet>
-
-    <changeSet id="delete-corrupted-commodity_average_prices" author="Saphyra">
-        <sql endDelimiter=";">
-            delete from elite_base.commodity_average_price where commodity_name like '$%'
-        </sql>
-    </changeSet>
 </databaseChangeLog>

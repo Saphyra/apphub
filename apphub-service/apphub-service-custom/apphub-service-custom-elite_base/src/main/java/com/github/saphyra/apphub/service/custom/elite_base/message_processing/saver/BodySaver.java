@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyFactory;
@@ -10,9 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -24,6 +25,7 @@ import static java.util.Objects.nonNull;
 public class BodySaver {
     private final BodyDao bodyDao;
     private final BodyFactory bodyFactory;
+    private final ErrorReporterService errorReporterService;
 
     public Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
         return save(timestamp, starSystemId, bodyType, bodyId, bodyName, null);
@@ -38,25 +40,25 @@ public class BodySaver {
     }
 
     public synchronized Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
-        if ((isNull(starSystemId) || isNull(bodyId)) && isNull(bodyName)) {
-            throw new IllegalArgumentException("StartSystemId or bodyId and bodyName are null. Cannot identify body location.");
+        if (isNull(bodyName)) {
+            throw new IllegalArgumentException("BodyName must not be null");
         }
 
-        Body body = Stream.of(
-                new SearchHelper<>(() -> nonNull(starSystemId) && nonNull(bodyId), () -> bodyDao.findByStarSystemIdAndBodyId(starSystemId, bodyId)),
-                new SearchHelper<>(bodyName, () -> bodyDao.findByBodyName(bodyName))
-            )
-            .map(SearchHelper::search)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .peek(ss -> log.debug("Found: {}", ss))
-            .findAny()
+        Body body = bodyDao.findByBodyName(bodyName)
             .orElseGet(() -> {
                 Body created = bodyFactory.create(timestamp, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
                 log.debug("Saving new {}", created);
                 bodyDao.save(created);
                 return created;
             });
+
+        if (nonNull(starSystemId) && nonNull(body.getStarSystemId()) && !Objects.equals(starSystemId, body.getStarSystemId())) {
+            errorReporterService.report("StarSystemId mismatch. New starSystemId: %s, %s".formatted(starSystemId, body));
+        }
+
+        if (nonNull(bodyId) && nonNull(body.getBodyId()) && !Objects.equals(bodyId, body.getBodyId())) {
+            errorReporterService.report("BodyId mismatch. New bodyId: %s, %s".formatted(bodyId, body));
+        }
 
         updateFields(timestamp, body, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
 
