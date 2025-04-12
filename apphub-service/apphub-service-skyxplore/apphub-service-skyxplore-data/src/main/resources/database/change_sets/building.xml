@@ -30,4 +30,12 @@
             <column name="location" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-table-building" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="skyxplore_game" tableName="building"/>
+        </preConditions>
+
+        <dropTable schemaName="skyxplore_game" tableName="building"/>
+    </changeSet>
 </databaseChangeLog>
