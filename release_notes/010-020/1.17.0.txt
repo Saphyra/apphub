@@ -4,11 +4,15 @@
     EliteBase
         Stabilise message processing by avoiding duplicates
         Remove cleanup changesets from commodity and commodity_average_price tables
+    Platform
+        Do not report connectivity issues from event-gateway
 
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
     SkyXplore
         Remove deprecated Building related code
+    EliteBase
+        Periodically delete orphaned records
 
 ===ETC===

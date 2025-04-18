@@ -23,4 +23,17 @@
             <column name="conflict_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="rename-column-faction_id-to-minor_faction_id-in-conflicting_minor_faction" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <not>
+                    <columnExists schemaName="elite_base" tableName="conflicting_minor_faction" columnName="minor_faction_id"/>
+                </not>
+                <columnExists schemaName="elite_base" tableName="conflicting_minor_faction" columnName="faction_id"/>
+            </and>
+        </preConditions>
+
+        <renameColumn schemaName="elite_base" tableName="conflicting_minor_faction" oldColumnName="faction_id" newColumnName="minor_faction_id"/>
+    </changeSet>
 </databaseChangeLog>

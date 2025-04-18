@@ -20,7 +20,7 @@ public class ConflictingMinorFactionFactory {
     public ConflictingMinorFaction create(LocalDateTime timestamp, UUID conflictId, ConflictFaction faction, List<MinorFaction> minorFactions) {
         return ConflictingMinorFaction.builder()
             .conflictId(conflictId)
-            .factionId(minorFactionIdResolver.getMinorFactionId(timestamp, faction.getFactionName(), minorFactions))
+            .minorFactionId(minorFactionIdResolver.getMinorFactionId(timestamp, faction.getFactionName(), minorFactions))
             .wonDays(faction.getWonDays())
             .stake(faction.getStake())
             .build();

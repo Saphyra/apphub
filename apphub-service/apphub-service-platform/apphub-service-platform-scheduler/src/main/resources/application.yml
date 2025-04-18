@@ -29,3 +29,4 @@ interval:
     processMessages: PT5S
     resetUnhandledMessages: P7D
     deleteExpiredMessages: PT1H
+    orphanedRecordCleanup: 0 0 3 * * *

@@ -33,4 +33,16 @@
     <changeSet id="add-unique-constraint-to-body-body_name" author="Saphyra">
         <addUniqueConstraint schemaName="elite_base" tableName="body" columnNames="body_name"/>
     </changeSet>
+
+    <changeSet id="create-index-star_system_id-to-body" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="body" columnNames="star_system_id"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="body" indexName="index-body-star_system_id">
+            <column name="star_system_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

@@ -20,7 +20,7 @@ class ConflictingMinorFactionEntity {
     @Id
     private String conflictId;
     @Id
-    private String factionId;
+    private String minorFactionId;
     private Integer wonDays;
     private String stake;
 }
