@@ -16,3 +16,4 @@
         Periodically delete orphaned records
 
 ===ETC===
+    SkyXplore - Cancel deconstruction of constructionArea should stop deconstructing its building modules

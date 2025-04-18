@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.CancelDeconstructionOfBuildingModuleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Slf4j
 public class CancelDeconstructConstructionAreaService {
     private final GameDao gameDao;
+    private final CancelDeconstructionOfBuildingModuleService cancelDeconstructionOfBuildingModuleService;
 
     public void cancelDeconstruction(UUID userId, UUID deconstructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -41,6 +43,7 @@ public class CancelDeconstructConstructionAreaService {
 
                 game.getProgressDiff()
                     .delete(deconstructionId, GameItemType.DECONSTRUCTION);
+                cancelDeconstructionOfBuildingModuleService.cancelDeconstructionOfConstructionAreaBuildingModules(game, deconstruction.getExternalReference());
             })
             .getOrThrow();
     }
