@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetBuildingOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.QueueResponse;
@@ -13,13 +12,11 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.populatio
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueFacade;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -30,7 +27,6 @@ public class PlanetMessageProviderConfiguration {
     private final DateTimeUtil dateTimeUtil;
     private final GameProperties gameProperties;
     private final QueueFacade queueFacade;
-    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
     private final PlanetPopulationOverviewQueryService planetPopulationOverviewQueryService;
 
     @Bean
@@ -63,17 +59,6 @@ public class PlanetMessageProviderConfiguration {
             .responseProvider(queueFacade::getQueueOfPlanet)
             .dateTimeUtil(dateTimeUtil)
             .pollingInterval(gameProperties.getMessageDelay().getPlanetQueue())
-            .build();
-    }
-
-    @Bean
-    DefaultPlanetMessageProvider<Map<String, PlanetBuildingOverviewResponse>> buildingPlanetMessageProvider() {
-        return DefaultPlanetMessageProvider.<Map<String, PlanetBuildingOverviewResponse>>builder()
-            .messageSenderUtil(messageSenderUtil)
-            .itemKey(GameConstants.ITEM_KEY_BUILDINGS)
-            .responseProvider(planetBuildingOverviewQueryService::getBuildingOverview)
-            .dateTimeUtil(dateTimeUtil)
-            .pollingInterval(gameProperties.getMessageDelay().getPlanetBuilding())
             .build();
     }
 

@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction;
 
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ConflictFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.MinorFactionIdResolver;
 import org.junit.jupiter.api.Test;
@@ -48,7 +46,7 @@ class ConflictingMinorFactionFactoryTest {
 
         assertThat(underTest.create(LAST_UPDATE, CONFLICT_ID, faction, List.of(minorFaction)))
             .returns(CONFLICT_ID, ConflictingMinorFaction::getConflictId)
-            .returns(FACTION_ID, ConflictingMinorFaction::getFactionId)
+            .returns(FACTION_ID, ConflictingMinorFaction::getMinorFactionId)
             .returns(WON_DAYS, ConflictingMinorFaction::getWonDays)
             .returns(STAKE, ConflictingMinorFaction::getStake);
     }

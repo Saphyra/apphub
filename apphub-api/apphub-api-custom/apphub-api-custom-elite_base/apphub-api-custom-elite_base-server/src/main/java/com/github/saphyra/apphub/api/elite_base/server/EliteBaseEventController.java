@@ -15,4 +15,7 @@ public interface EliteBaseEventController {
 
     @PostMapping(EliteBaseEndpoints.EVENT_MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR)
     void resetError();
+
+    @PostMapping(EliteBaseEndpoints.EVENT_MIGRATION_ELITE_BASE_ORPHANED_RECORD_CLEANUP)
+    void cleanupOrphanedRecords();
 }

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.CancelConstructionOfBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruct_construction_area.DeconstructConstructionAreaProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruct_construction_area.DeconstructConstructionAreaProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ class DeconstructConstructionAreaService {
     private final DeconstructionFactory deconstructionFactory;
     private final DeconstructionConverter deconstructionConverter;
     private final DeconstructConstructionAreaProcessFactory deconstructConstructionAreaProcessFactory;
+    private final CancelConstructionOfBuildingModuleService cancelConstructionOfBuildingModuleService;
 
     public void deconstructConstructionArea(UUID userId, UUID constructionAreaId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -59,6 +61,8 @@ class DeconstructConstructionAreaService {
                 gameData.getProcesses()
                     .add(process);
                 progressDiff.save(process.toModel());
+
+                cancelConstructionOfBuildingModuleService.cancelConstructionOfConstructionAreaBuildingModules(game, constructionAreaId);
             })
             .getOrThrow();
     }

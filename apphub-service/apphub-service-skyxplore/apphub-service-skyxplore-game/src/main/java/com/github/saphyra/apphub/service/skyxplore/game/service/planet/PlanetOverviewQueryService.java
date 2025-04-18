@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingsSummaryQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ import java.util.UUID;
 class PlanetOverviewQueryService {
     private final GameDao gameDao;
     private final PlanetPopulationOverviewQueryService planetPopulationOverviewQueryService;
-    private final PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
     private final SurfaceResponseQueryService surfaceResponseQueryService;
     private final PlanetStorageOverviewQueryService planetStorageOverviewQueryService;
     private final PriorityQueryService priorityQueryService;
@@ -40,7 +38,6 @@ class PlanetOverviewQueryService {
             .surfaces(surfaceResponseQueryService.getSurfaceOfPlanet(userId, planetId))
             .storage(planetStorageOverviewQueryService.getStorage(userId, planetId))
             .population(planetPopulationOverviewQueryService.getPopulationOverview(userId, planetId))
-            .buildings(planetBuildingOverviewQueryService.getBuildingOverview(userId, planetId))
             .buildingsSummary(buildingsSummaryQueryService.getBuildingsSummary(userId, planetId))
             .priorities(priorityQueryService.getPriorities(userId, planetId))
             .queue(queueFacade.getQueueOfPlanet(userId, planetId))

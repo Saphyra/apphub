@@ -10,15 +10,10 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
-public class SelectQuery implements SqlBuilder {
+public class SelectQuery extends AbstractQuery<SelectQuery> {
     private final List<Column> columns = new ArrayList<>();
-    private Table from;
     private final List<Join> joins = new ArrayList<>();
     private Column groupBy;
-    private final List<SegmentProvider> conditions = new ArrayList<>();
-    private OrderBy orderBy = null;
-    private Integer limit = null;
-    private Integer offset = 0;
 
     @Override
     public String build() {
@@ -77,12 +72,6 @@ public class SelectQuery implements SqlBuilder {
         return this;
     }
 
-    public SelectQuery from(Table table) {
-        from = table;
-
-        return this;
-    }
-
     public SelectQuery innerJoin(Table table, Column column1, Column column2) {
         joins.add(new Join(JoinType.INNER, table, column1, column2));
 
@@ -95,42 +84,7 @@ public class SelectQuery implements SqlBuilder {
         return this;
     }
 
-    @Override
-    public String get() {
-        return "(%s)".formatted(build());
-    }
-
-    public SelectQuery condition(Condition condition) {
-        conditions.add(condition);
-
-        return this;
-    }
-
-    public SelectQuery and() {
-        conditions.add(SegmentProvider.AND_SEGMENT);
-
-        return this;
-    }
-
-    public SelectQuery orderBy(Column column, OrderType orderBy) {
-        this.orderBy = new OrderBy(column, orderBy);
-
-        return this;
-    }
-
-    public SelectQuery limit(Integer limit) {
-        this.limit = limit;
-
-        return this;
-    }
-
-    public SelectQuery offset(int offset) {
-        this.offset = offset;
-
-        return this;
-    }
-
-    public SqlBuilder groupBy(Column column) {
+    public SelectQuery groupBy(Column column) {
         this.groupBy = column;
 
         return this;
@@ -155,17 +109,6 @@ public class SelectQuery implements SqlBuilder {
         @Override
         public String get() {
             return "%s %s on %s = %s".formatted(joinType.value, table.get(), column1.get(), column2.get());
-        }
-    }
-
-    @AllArgsConstructor
-    static class OrderBy implements SegmentProvider{
-        private final Column column;
-        private final OrderType orderType;
-
-        @Override
-        public String get() {
-            return "ORDER BY %S %S".formatted(column.get(), orderType.name());
         }
     }
 }

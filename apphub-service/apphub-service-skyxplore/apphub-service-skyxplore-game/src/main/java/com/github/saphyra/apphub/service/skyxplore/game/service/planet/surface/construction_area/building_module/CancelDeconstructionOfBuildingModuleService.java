@@ -6,11 +6,14 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -18,6 +21,17 @@ import java.util.UUID;
 @Slf4j
 public class CancelDeconstructionOfBuildingModuleService {
     private final GameDao gameDao;
+
+    public void cancelDeconstructionOfConstructionAreaBuildingModules(Game game, UUID constructionAreaId) {
+        GameData gameData = game.getData();
+
+        List<BuildingModule> buildingModulesOfConstructionArea = gameData.getBuildingModules().getByConstructionAreaId(constructionAreaId);
+        buildingModulesOfConstructionArea.stream()
+            .map(buildingModule -> gameData.getDeconstructions().findByExternalReference(buildingModule.getBuildingModuleId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .forEach(deconstruction -> doCancelDeconstruction(game, deconstruction));
+    }
 
     public UUID cancelDeconstruction(UUID userId, UUID deconstructionId) {
         Game game = gameDao.findByUserIdValidated(userId);
@@ -36,18 +50,24 @@ public class CancelDeconstructionOfBuildingModuleService {
 
         game.getEventLoop()
             .processWithWait(() -> {
-                gameData.getProcesses()
-                    .findByExternalReferenceAndTypeValidated(deconstructionId, ProcessType.DECONSTRUCT_BUILDING_MODULE)
-                    .cleanup();
-
-                gameData.getDeconstructions()
-                    .remove(deconstruction);
-
-                game.getProgressDiff()
-                    .delete(deconstructionId, GameItemType.DECONSTRUCTION);
+                doCancelDeconstruction(game, deconstruction);
             })
             .getOrThrow();
 
         return constructionAreaId;
+    }
+
+    private static void doCancelDeconstruction(Game game, Deconstruction deconstruction) {
+        GameData gameData = game.getData();
+
+        gameData.getProcesses()
+            .findByExternalReferenceAndTypeValidated(deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCT_BUILDING_MODULE)
+            .cleanup();
+
+        gameData.getDeconstructions()
+            .remove(deconstruction);
+
+        game.getProgressDiff()
+            .delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
     }
 }

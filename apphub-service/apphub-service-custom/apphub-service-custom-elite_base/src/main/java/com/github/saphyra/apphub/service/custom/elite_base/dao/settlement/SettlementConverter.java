@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class SettlementConverter extends ConverterBase<SettlementEntity, Settlement> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;

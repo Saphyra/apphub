@@ -24,6 +24,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -83,26 +85,33 @@ class CancelDeconstructionOfBuildingModuleServiceTest {
 
     @BeforeEach
     void setUp() {
-        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
-        given(deconstruction.getLocation()).willReturn(PLANET_ID);
-        given(gameData.getPlanets()).willReturn(planets);
-        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
     }
 
     @Test
     void forbiddenOperation() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(planet.getOwner()).willReturn(null);
+        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstruction.getLocation()).willReturn(PLANET_ID);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelDeconstruction(USER_ID, DECONSTRUCTION_ID));
     }
 
     @Test
     void cancelDeconstruction() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstruction.getLocation()).willReturn(PLANET_ID);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
@@ -121,5 +130,19 @@ class CancelDeconstructionOfBuildingModuleServiceTest {
         then(process).should().cleanup();
         then(deconstructions).should().remove(deconstruction);
         then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+    }
+
+    @Test
+    void cancelDeconstructionOfConstructionAreaBuildingModules(){
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule, buildingModule));
+        given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
+        given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction)).willReturn(Optional.empty());
+        given(gameData.getProcesses()).willReturn(processes);
+        given(processes.findByExternalReferenceAndTypeValidated(DECONSTRUCTION_ID, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(process);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+        given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
+
+        underTest.cancelDeconstructionOfConstructionAreaBuildingModules(game, CONSTRUCTION_AREA_ID);
     }
 }

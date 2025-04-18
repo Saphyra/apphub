@@ -98,4 +98,44 @@ class StarSystemDaoTest {
 
         assertThat(underTest.findAllById(List.of(ID))).containsExactly(domain);
     }
+
+    @Test
+    void findByStarIdOrStarName_nullStarId() {
+        given(repository.findByStarName(STAR_NAME)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findByStarIdOrStarName(null, STAR_NAME)).contains(domain);
+    }
+
+    @Test
+    void findByStarIdOrStarName_nullStarName() {
+        given(repository.findByStarId(STAR_ID)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findByStarIdOrStarName(STAR_ID, null)).contains(domain);
+    }
+
+    @Test
+    void findByStarIdOrStarName_multipleOccurrence() {
+        given(repository.getByStarIdOrStarName(STAR_ID, STAR_NAME)).willReturn(List.of(entity, entity));
+        given(converter.convertEntity(List.of(entity, entity))).willReturn(List.of(domain, domain));
+
+        ExceptionValidator.validateNotLoggedException(() -> underTest.findByStarIdOrStarName(STAR_ID, STAR_NAME), HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR);
+    }
+
+    @Test
+    void findByStarIdOrStarName_singleResult() {
+        given(repository.getByStarIdOrStarName(STAR_ID, STAR_NAME)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.findByStarIdOrStarName(STAR_ID, STAR_NAME)).contains(domain);
+    }
+
+    @Test
+    void findByStarIdOrStarName_emptyResult() {
+        given(repository.getByStarIdOrStarName(STAR_ID, STAR_NAME)).willReturn(List.of());
+        given(converter.convertEntity(List.of())).willReturn(List.of());
+
+        assertThat(underTest.findByStarIdOrStarName(STAR_ID, STAR_NAME)).isEmpty();
+    }
 }

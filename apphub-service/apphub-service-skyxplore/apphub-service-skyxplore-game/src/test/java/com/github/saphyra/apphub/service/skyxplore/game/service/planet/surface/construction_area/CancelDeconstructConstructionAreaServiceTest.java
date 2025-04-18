@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.CancelDeconstructionOfBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -32,9 +33,13 @@ class CancelDeconstructConstructionAreaServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID CONSTRUCTION_AREA_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
+
+    @Mock
+    private CancelDeconstructionOfBuildingModuleService cancelDeconstructionOfBuildingModuleService;
 
     @InjectMocks
     private CancelDeconstructConstructionAreaService underTest;
@@ -90,6 +95,7 @@ class CancelDeconstructConstructionAreaServiceTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getLocation()).willReturn(LOCATION);
+        given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(LOCATION)).willReturn(planet);
         given(planet.getOwner()).willReturn(USER_ID);
@@ -107,5 +113,6 @@ class CancelDeconstructConstructionAreaServiceTest {
         then(process).should().cleanup();
         then(deconstructions).should().remove(deconstruction);
         then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(cancelDeconstructionOfBuildingModuleService).should().cancelDeconstructionOfConstructionAreaBuildingModules(game, CONSTRUCTION_AREA_ID);
     }
 }

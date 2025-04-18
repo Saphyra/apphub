@@ -10,3 +10,4 @@ interval:
       deletion: 10000 #10 sec
   eliteBase:
     processMessages: PT5S
+    orphanedRecordCleanup: 0 0 * * * * #Every hour

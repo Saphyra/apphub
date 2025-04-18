@@ -19,7 +19,7 @@ class AdjacentEmptySurfaceProvider {
 
     Optional<Surface> getEmptySurfaceNextTo(Coordinate coordinate, Collection<Surface> surfaces, GameData gameData) {
         for (Surface surface : surfaces) {
-            if (gameData.getBuildings().findBySurfaceId(surface.getSurfaceId()).isEmpty() && isNextTo(coordinate, gameData.getCoordinates().findByReferenceId(surface.getSurfaceId()))) {
+            if (gameData.getConstructionAreas().findBySurfaceId(surface.getSurfaceId()).isEmpty() && isNextTo(coordinate, gameData.getCoordinates().findByReferenceId(surface.getSurfaceId()))) {
                 return Optional.of(surface);
             }
         }

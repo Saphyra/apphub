@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
@@ -57,6 +58,9 @@ class StationSaverTest {
     @Mock
     private MinorFactionSaver minorFactionSaver;
 
+    @Mock
+    private ErrorReporterService errorReporterService;
+
     @InjectMocks
     private StationSaver underTest;
 
@@ -73,25 +77,7 @@ class StationSaverTest {
     private Economy economy;
 
     @Test
-    void nullMarketIdAndStarSystemId() {
-        assertThat(catchThrowable(() -> underTest.save(
-            LAST_UPDATE,
-            null,
-            BODY_ID,
-            STATION_NAME,
-            StationType.SURFACE_STATION,
-            null,
-            Allegiance.ALLIANCE,
-            EconomyEnum.AGRICULTURE,
-            null,
-            null,
-            CONTROLLING_FACTION_NAME,
-            FactionStateEnum.BLIGHT
-        ))).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void nullMarketIdAndStationName() {
+    void nullMarketId() {
         assertThat(catchThrowable(() -> underTest.save(
             LAST_UPDATE,
             STAR_SYSTEM_ID,
@@ -150,7 +136,6 @@ class StationSaverTest {
         Economy[] economies = {economy};
 
         given(stationDao.findByMarketId(MARKET_ID)).willReturn(Optional.empty());
-        given(stationDao.findByStarSystemIdAndStationName(STAR_SYSTEM_ID, STATION_NAME)).willReturn(Optional.empty());
         given(idGenerator.randomUuid()).willReturn(STATION_ID);
         given(minorFactionSaver.save(LAST_UPDATE, CONTROLLING_FACTION_NAME, FactionStateEnum.BLIGHT)).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
@@ -204,7 +189,6 @@ class StationSaverTest {
         Economy[] economies = {economy};
 
         given(stationDao.findByMarketId(MARKET_ID)).willReturn(Optional.of(station));
-        given(stationDao.findByStarSystemIdAndStationName(STAR_SYSTEM_ID, STATION_NAME)).willReturn(Optional.empty());
         given(idGenerator.randomUuid()).willReturn(STATION_ID);
         given(minorFactionSaver.save(LAST_UPDATE, CONTROLLING_FACTION_NAME, FactionStateEnum.BLIGHT)).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);

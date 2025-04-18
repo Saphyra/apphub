@@ -41,6 +41,11 @@ class EliteBaseEventProcessorRegistry implements EventProcessorRegistry {
                 .host(host)
                 .eventName(EmptyEvent.MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR)
                 .url(EliteBaseEndpoints.EVENT_MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .host(host)
+                .eventName(EmptyEvent.ELITE_BASE_ORPHANED_RECORD_CLEANUP)
+                .url(EliteBaseEndpoints.EVENT_MIGRATION_ELITE_BASE_ORPHANED_RECORD_CLEANUP)
                 .build()
         );
     }

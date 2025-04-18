@@ -87,8 +87,8 @@ public class EdMessageProcessor {
                 edMessage.setCreatedAt(edMessage.getCreatedAt().plus(properties.getMessageProcessorRetryDelay()));
                 messageDao.save(edMessage);
             } else {
-                log.warn("Retry count limit of message {} is reached.", edMessage);
-                handleException(MessageStatus.PROCESSING_ERROR, edMessage, e);
+                log.warn("Retry count limit of message {} is reached. {}", edMessage, e.getMessage());
+                updateStatus(MessageStatus.PROCESSING_ERROR, edMessage, idGenerator.randomUuid());
             }
         } catch (Exception e) {
             handleException(MessageStatus.ERROR, edMessage, e);
@@ -131,6 +131,10 @@ public class EdMessageProcessor {
         if (status != MessageStatus.PROCESSING_ERROR) {
             errorReporterService.report(errorMessage, e);
         }
+        updateStatus(status, edMessage, exceptionId);
+    }
+
+    private void updateStatus(MessageStatus status, EdMessage edMessage, UUID exceptionId) {
         edMessage.setStatus(status);
         edMessage.setExceptionId(exceptionId);
         messageDao.save(edMessage);

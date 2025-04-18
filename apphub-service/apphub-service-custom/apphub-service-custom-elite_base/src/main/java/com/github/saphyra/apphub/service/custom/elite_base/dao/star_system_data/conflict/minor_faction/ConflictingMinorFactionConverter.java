@@ -16,7 +16,7 @@ class ConflictingMinorFactionConverter extends ConverterBase<ConflictingMinorFac
     protected ConflictingMinorFactionEntity processDomainConversion(ConflictingMinorFaction domain) {
         return ConflictingMinorFactionEntity.builder()
             .conflictId(uuidConverter.convertDomain(domain.getConflictId()))
-            .factionId(uuidConverter.convertDomain(domain.getFactionId()))
+            .minorFactionId(uuidConverter.convertDomain(domain.getMinorFactionId()))
             .wonDays(domain.getWonDays())
             .stake(domain.getStake())
             .build();
@@ -26,7 +26,7 @@ class ConflictingMinorFactionConverter extends ConverterBase<ConflictingMinorFac
     protected ConflictingMinorFaction processEntityConversion(ConflictingMinorFactionEntity entity) {
         return ConflictingMinorFaction.builder()
             .conflictId(uuidConverter.convertEntity(entity.getConflictId()))
-            .factionId(uuidConverter.convertEntity(entity.getFactionId()))
+            .minorFactionId(uuidConverter.convertEntity(entity.getMinorFactionId()))
             .wonDays(entity.getWonDays())
             .stake(entity.getStake())
             .build();

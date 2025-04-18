@@ -14,6 +14,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.StreamSupport;
 
+import static java.util.Objects.isNull;
+
 @Component
 public class StarSystemDao extends AbstractDao<StarSystemEntity, StarSystem, String, StarSystemRepository> {
     private final UuidConverter uuidConverter;
@@ -51,5 +53,24 @@ public class StarSystemDao extends AbstractDao<StarSystemEntity, StarSystem, Str
             .toList();
 
         return converter.convertEntity(entities);
+    }
+
+    public Optional<StarSystem> findByStarIdOrStarName(Long starId, String starName) {
+        if (isNull(starId)) {
+            return findByStarName(starName);
+        }
+
+        if (isNull(starName)) {
+            return findByStarId(starId);
+        }
+
+        List<StarSystem> result = converter.convertEntity(repository.getByStarIdOrStarName(starId, starName));
+
+        if (result.size() > 1) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.INTERNAL_SERVER_ERROR, "Multiple StarSystems found for starId %s and starName %s: %s".formatted(starId, starName, result));
+        }
+
+        return result.stream()
+            .findAny();
     }
 }

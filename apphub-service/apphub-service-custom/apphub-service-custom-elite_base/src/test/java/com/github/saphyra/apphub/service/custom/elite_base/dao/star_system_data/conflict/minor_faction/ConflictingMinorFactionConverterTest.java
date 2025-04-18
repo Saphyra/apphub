@@ -1,9 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.minor_faction.ConflictingMinorFactionEntity;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,7 +31,7 @@ class ConflictingMinorFactionConverterTest {
     void convertDomain() {
         ConflictingMinorFaction domain = ConflictingMinorFaction.builder()
             .conflictId(CONFLICT_ID)
-            .factionId(FACTION_ID)
+            .minorFactionId(FACTION_ID)
             .wonDays(WON_DAYS)
             .stake(STAKE)
             .build();
@@ -44,7 +41,7 @@ class ConflictingMinorFactionConverterTest {
 
         assertThat(underTest.convertDomain(domain))
             .returns(CONFLICT_ID_STRING, ConflictingMinorFactionEntity::getConflictId)
-            .returns(FACTION_ID_STRING, ConflictingMinorFactionEntity::getFactionId)
+            .returns(FACTION_ID_STRING, ConflictingMinorFactionEntity::getMinorFactionId)
             .returns(WON_DAYS, ConflictingMinorFactionEntity::getWonDays)
             .returns(STAKE, ConflictingMinorFactionEntity::getStake);
     }
@@ -53,7 +50,7 @@ class ConflictingMinorFactionConverterTest {
     void convertEntity() {
         ConflictingMinorFactionEntity domain = ConflictingMinorFactionEntity.builder()
             .conflictId(CONFLICT_ID_STRING)
-            .factionId(FACTION_ID_STRING)
+            .minorFactionId(FACTION_ID_STRING)
             .wonDays(WON_DAYS)
             .stake(STAKE)
             .build();
@@ -63,7 +60,7 @@ class ConflictingMinorFactionConverterTest {
 
         assertThat(underTest.convertEntity(domain))
             .returns(CONFLICT_ID, ConflictingMinorFaction::getConflictId)
-            .returns(FACTION_ID, ConflictingMinorFaction::getFactionId)
+            .returns(FACTION_ID, ConflictingMinorFaction::getMinorFactionId)
             .returns(WON_DAYS, ConflictingMinorFaction::getWonDays)
             .returns(STAKE, ConflictingMinorFaction::getStake);
     }

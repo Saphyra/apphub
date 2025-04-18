@@ -13,5 +13,5 @@ import java.io.Serializable;
 @Builder
 class ConflictingMinorFactionEntityId implements Serializable {
     private String conflictId;
-    private String factionId;
+    private String minorFactionId;
 }

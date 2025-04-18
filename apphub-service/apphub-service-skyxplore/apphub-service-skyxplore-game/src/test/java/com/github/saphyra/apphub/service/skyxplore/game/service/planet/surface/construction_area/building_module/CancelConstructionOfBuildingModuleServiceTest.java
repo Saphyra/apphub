@@ -18,13 +18,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.A
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -85,8 +86,8 @@ class CancelConstructionOfBuildingModuleServiceTest {
     @Mock
     private GameProgressDiff progressDiff;
 
-    @BeforeEach
-    void setUp() {
+    @Test
+    void forbiddenOperation() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
@@ -97,10 +98,6 @@ class CancelConstructionOfBuildingModuleServiceTest {
         given(gameData.getPlanets()).willReturn(planets);
         given(construction.getLocation()).willReturn(PLANET_ID);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
-    }
-
-    @Test
-    void forbiddenOperation() {
         given(planet.getOwner()).willReturn(UUID.randomUUID());
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelConstruction(USER_ID, CONSTRUCTION_ID));
@@ -108,6 +105,16 @@ class CancelConstructionOfBuildingModuleServiceTest {
 
     @Test
     void cancelConstruction() {
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(construction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
+        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(construction.getLocation()).willReturn(PLANET_ID);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(USER_ID);
         given(buildingModule.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(game.getEventLoop()).willReturn(eventLoop);
@@ -120,8 +127,34 @@ class CancelConstructionOfBuildingModuleServiceTest {
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCT_BUILDING_MODULE)).willReturn(process);
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
+        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
 
         assertThat(underTest.cancelConstruction(USER_ID, CONSTRUCTION_ID)).isEqualTo(CONSTRUCTION_AREA_ID);
+
+        then(process).should().cleanup();
+        then(constructions).should().remove(construction);
+        then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(buildingModules).should().remove(buildingModule);
+        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE);
+    }
+
+    @Test
+    void cancelConstructionOfConstructionAreaBuildingModules() {
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getBuildingModules()).willReturn(buildingModules);
+        given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule, buildingModule));
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
+        given(constructions.findByExternalReference(BUILDING_MODULE_ID))
+            .willReturn(Optional.of(construction))
+            .willReturn(Optional.empty());
+        given(gameData.getProcesses()).willReturn(processes);
+        given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCT_BUILDING_MODULE)).willReturn(process);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+
+        underTest.cancelConstructionOfConstructionAreaBuildingModules(game, CONSTRUCTION_AREA_ID);
 
         then(process).should().cleanup();
         then(constructions).should().remove(construction);

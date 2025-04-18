@@ -14,8 +14,6 @@ public enum GameItemType {
     CITIZEN(CitizenModel.class),
     SKILL(SkillModel.class),
     SURFACE(SurfaceModel.class),
-    @Deprecated(forRemoval = true)
-    BUILDING(BuildingModel.class),
     BUILDING_MODULE(BuildingModuleModel.class),
     CONSTRUCTION(ConstructionModel.class),
     CONSTRUCTION_AREA(ConstructionAreaModel.class),

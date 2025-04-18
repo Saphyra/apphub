@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.building;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.geometry.DistanceCalculator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Building;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreas;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.Coordinates;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,7 @@ public class AdjacentEmptySurfaceProviderTest {
     private GameData gameData;
 
     @Mock
-    private Buildings buildings;
+    private ConstructionAreas constructionAreas;
 
     @Mock
     private Coordinates coordinates;
@@ -44,22 +43,19 @@ public class AdjacentEmptySurfaceProviderTest {
     private Coordinate coordinate1;
 
     @Mock
-    private CoordinateModel coordinateModel;
-
-    @Mock
     private Coordinate coordinate2;
 
     @Mock
     private Surface surface;
 
     @Mock
-    private Building building;
+    private ConstructionArea constructionArea;
 
     @Test
     public void surfaceFound() {
         given(gameData.getCoordinates()).willReturn(coordinates);
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate2);
         given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(1d);
@@ -71,8 +67,8 @@ public class AdjacentEmptySurfaceProviderTest {
 
     @Test
     public void hasBuilding() {
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(building));
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(constructionArea));
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
 
         Optional<Surface> result = underTest.getEmptySurfaceNextTo(coordinate1, Arrays.asList(surface), gameData);
@@ -83,8 +79,8 @@ public class AdjacentEmptySurfaceProviderTest {
     @Test
     public void surfaceNotFound() {
         given(gameData.getCoordinates()).willReturn(coordinates);
-        given(gameData.getBuildings()).willReturn(buildings);
-        given(buildings.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate2);
         given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(2d);

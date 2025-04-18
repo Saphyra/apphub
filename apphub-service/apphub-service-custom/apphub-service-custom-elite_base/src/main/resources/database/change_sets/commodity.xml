@@ -41,16 +41,4 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
-
-    <changeSet id="delete-corrupted-commodities" author="Saphyra">
-        <sql endDelimiter=";">
-            delete from elite_base.commodity where commodity_name like '$%'
-        </sql>
-    </changeSet>
-
-    <changeSet id="swap-buy-and-sell-prices-for-commodities" author="Saphyra">
-        <sql endDelimiter=";">
-            update elite_base.commodity set buy_price=sell_price, sell_price=buy_price
-        </sql>
-    </changeSet>
 </databaseChangeLog>
