@@ -160,7 +160,7 @@ class ConstructConstructionAreaProcessTest {
         then(processHelper).should().finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
         then(processHelper).shouldHaveNoMoreInteractions();
 
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
     }
 
     @Test

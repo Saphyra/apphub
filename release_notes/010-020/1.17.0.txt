@@ -6,6 +6,9 @@
         Remove cleanup changesets from commodity and commodity_average_price tables
     Platform
         Do not report connectivity issues from event-gateway
+    SkyXplore
+        Deconstructions not loaded
+        Construct/Deconstruct constructionArea/buildingModule processes are not deleted properly
 
 ===PLATFORM CHANGES===
 
