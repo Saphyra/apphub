@@ -131,7 +131,7 @@ public class QueueFacadeTest {
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(USER_ID);
 
-        Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID, PRIORITY));
+        Throwable ex = catchThrowable(() -> underTest.setPriority(USER_ID, PLANET_ID, QueueItemType.CONSTRUCT_CONSTRUCTION_AREA.name(), ITEM_ID, PRIORITY));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR);
     }
@@ -165,7 +165,7 @@ public class QueueFacadeTest {
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(UUID.randomUUID());
 
-        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID));
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCT_CONSTRUCTION_AREA.name(), ITEM_ID));
     }
 
     @Test
@@ -177,7 +177,7 @@ public class QueueFacadeTest {
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(USER_ID);
 
-        Throwable ex = catchThrowable(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCTION.name(), ITEM_ID));
+        Throwable ex = catchThrowable(() -> underTest.cancelItem(USER_ID, PLANET_ID, QueueItemType.CONSTRUCT_CONSTRUCTION_AREA.name(), ITEM_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR);
     }

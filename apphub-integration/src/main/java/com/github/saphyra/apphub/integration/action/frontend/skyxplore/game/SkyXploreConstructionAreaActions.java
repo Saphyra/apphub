@@ -79,4 +79,10 @@ public class SkyXploreConstructionAreaActions {
         driver.findElement(By.id("skyxplore-game-construction-area-deconstruction-confirm-button"))
             .click();
     }
+
+    public static void close(WebDriver driver) {
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("skyxplore-game-construction-area-close-button")))
+            .orElseThrow(() -> new RuntimeException("Close constructionArea button not found"))
+            .click();
+    }
 }
