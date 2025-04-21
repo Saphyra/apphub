@@ -17,6 +17,8 @@
         Remove deprecated Building related code
     EliteBase
         Periodically delete orphaned records
+    SkyXplore
+        Extend ConstructionArea and BuildingModule planet queue tests with cancellation and priority update test cases
 
 ===ETC===
     SkyXplore
