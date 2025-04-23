@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.villany_atesz;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,22 +11,42 @@ import java.util.stream.Stream;
 public class VillanyAteszCommissionActions {
     public static void setDaysOfWork(WebDriver driver, Integer daysOfWork) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-commission-days-of-work")), daysOfWork);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> modificationsSaved(driver))
+            .assertTrue("Modifications were not saved.");
     }
 
     public static void setHoursPerDay(WebDriver driver, Integer hoursPerDay) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-commission-hours-per-day")), hoursPerDay);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> modificationsSaved(driver))
+            .assertTrue("Modifications were not saved.");
     }
 
     public static void setHourlyWage(WebDriver driver, Integer hourlyWage) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-commission-hourly-wage")), hourlyWage);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> modificationsSaved(driver))
+            .assertTrue("Modifications were not saved.");
     }
 
     public static void setDepartureFee(WebDriver driver, Integer departureFee) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-commission-departure-fee")), departureFee);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> modificationsSaved(driver))
+            .assertTrue("Modifications were not saved.");
     }
 
     public static void setExtraCost(WebDriver driver, Integer extraCost) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-commission-extra-cost")), extraCost);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> modificationsSaved(driver))
+            .assertTrue("Modifications were not saved.");
     }
 
     public static void decreaseMargin(WebDriver driver) {
@@ -35,6 +56,11 @@ public class VillanyAteszCommissionActions {
 
     public static void setDeposit(WebDriver driver, Integer deposit) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("villany-atesz-commission-deposit")), deposit);
+
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> modificationsSaved(driver))
+            .assertTrue("Modifications were not saved.");
     }
 
     public static void selectCart(WebDriver driver, String contactName) {

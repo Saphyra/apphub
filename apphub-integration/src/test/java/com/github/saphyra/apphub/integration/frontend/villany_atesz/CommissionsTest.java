@@ -66,7 +66,8 @@ public class CommissionsTest extends SeleniumTest {
 
         //Set up commission
         VillanyAteszCommissionActions.setDaysOfWork(driver, DAYS_OF_WORK);
-        SleepUtil.sleep(2000); //Sleep is needed so only one save request is sent without commissionId, so only one commission is created
+
+        VillanyAteszCommissionActions.selectCart(driver, CONTACT_NAME);
 
         VillanyAteszCommissionActions.setHoursPerDay(driver, HOURS_PER_DAY);
         VillanyAteszCommissionActions.setHourlyWage(driver, HOURLY_WAGE);
@@ -76,8 +77,6 @@ public class CommissionsTest extends SeleniumTest {
         for (int i = 0; i < 5; i++) {
             VillanyAteszCommissionActions.decreaseMargin(driver);
         }
-        VillanyAteszCommissionActions.selectCart(driver, CONTACT_NAME);
-
         VillanyAteszCommissionActions.setDeposit(driver, DEPOSIT);
 
         AwaitilityWrapper.createDefault()

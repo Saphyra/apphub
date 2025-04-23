@@ -20,6 +20,8 @@
     SkyXplore
         Extend ConstructionArea and BuildingModule planet queue tests with cancellation and priority update test cases
         FE Planet Queue Test for ConstructionArea and BuildingModule
+    VillanyAtesz
+        Stabilize CommissionCrud test
 
 ===ETC===
     SkyXplore
