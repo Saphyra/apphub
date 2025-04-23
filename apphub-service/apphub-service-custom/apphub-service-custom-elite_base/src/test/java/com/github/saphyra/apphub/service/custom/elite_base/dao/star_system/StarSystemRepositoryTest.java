@@ -21,7 +21,11 @@ class StarSystemRepositoryTest {
     private static final String ID_3 = "id-3";
     private static final String ID_4 = "id-4";
     private static final Long STAR_ID_1 = 34L;
-    private static final String STAR_NAME = "star-name";
+    private static final Long STAR_ID_2 = 35L;
+    private static final Long STAR_ID_3 = 36L;
+    private static final String STAR_NAME_1 = "star-name-1";
+    private static final String STAR_NAME_2 = "star-name-2";
+    private static final String STAR_NAME_3 = "star-name-3";
 
     @Autowired
     private StarSystemRepository underTest;
@@ -46,11 +50,11 @@ class StarSystemRepositoryTest {
     void findByStarName() {
         StarSystemEntity entity = StarSystemEntity.builder()
             .id(ID_1)
-            .starName(STAR_NAME)
+            .starName(STAR_NAME_1)
             .build();
         underTest.save(entity);
 
-        assertThat(underTest.findByStarName(STAR_NAME)).contains(entity);
+        assertThat(underTest.findByStarName(STAR_NAME_1)).contains(entity);
     }
 
     @Test
@@ -70,12 +74,61 @@ class StarSystemRepositoryTest {
             .starName("STAR_NAME")
             .build();
         underTest.save(entity3);
-        StarSystemEntity entity4 = StarSystemEntity.builder()
-            .id(ID_4)
-            .starName("STAR_NAME")
-            .build();
-        underTest.save(entity4);
 
         assertThat(underTest.getByStarNameIgnoreCaseContaining("star_NAME", PageRequest.of(0, 2))).containsExactly(entity1, entity3);
+    }
+
+    @Test
+    void getByStarIdOrStarName_doubleMatch() {
+        StarSystemEntity entity1 = StarSystemEntity.builder()
+            .id(ID_1)
+            .starId(STAR_ID_1)
+            .starName(STAR_NAME_1)
+            .build();
+        underTest.save(entity1);
+        StarSystemEntity entity2 = StarSystemEntity.builder()
+            .id(ID_2)
+            .starId(STAR_ID_2)
+            .starName(STAR_NAME_2)
+            .build();
+        underTest.save(entity2);
+
+        assertThat(underTest.getByStarIdOrStarName(STAR_ID_1, STAR_NAME_1)).containsExactlyInAnyOrder(entity1);
+    }
+
+    @Test
+    void getByStarIdOrStarName_starIdMatch() {
+        StarSystemEntity entity1 = StarSystemEntity.builder()
+            .id(ID_1)
+            .starId(STAR_ID_1)
+            .starName(STAR_NAME_2)
+            .build();
+        underTest.save(entity1);
+        StarSystemEntity entity2 = StarSystemEntity.builder()
+            .id(ID_2)
+            .starId(STAR_ID_2)
+            .starName(STAR_NAME_3)
+            .build();
+        underTest.save(entity2);
+
+        assertThat(underTest.getByStarIdOrStarName(STAR_ID_1, STAR_NAME_1)).containsExactlyInAnyOrder(entity1);
+    }
+
+    @Test
+    void getByStarIdOrStarName_starNameMatch() {
+        StarSystemEntity entity1 = StarSystemEntity.builder()
+            .id(ID_1)
+            .starId(STAR_ID_2)
+            .starName(STAR_NAME_1)
+            .build();
+        underTest.save(entity1);
+        StarSystemEntity entity2 = StarSystemEntity.builder()
+            .id(ID_2)
+            .starId(STAR_ID_3)
+            .starName(STAR_NAME_3)
+            .build();
+        underTest.save(entity2);
+
+        assertThat(underTest.getByStarIdOrStarName(STAR_ID_1, STAR_NAME_1)).containsExactlyInAnyOrder(entity1);
     }
 }

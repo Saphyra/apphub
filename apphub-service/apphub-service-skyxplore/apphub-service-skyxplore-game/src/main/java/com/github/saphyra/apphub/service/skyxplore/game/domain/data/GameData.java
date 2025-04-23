@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data;
 
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building.Buildings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
@@ -44,9 +43,6 @@ public class GameData {
     //PLANET
     @Builder.Default
     private final Surfaces surfaces = new Surfaces();
-    @Builder.Default
-    @Deprecated(forRemoval = true)
-    private final Buildings buildings = new Buildings();
     @Builder.Default
     private final ConstructionAreas constructionAreas = new ConstructionAreas();
     @Builder.Default

@@ -2,12 +2,15 @@ package com.github.saphyra.apphub.service.custom.elite_base.common;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageStatus;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor.EdMessageProcessor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -17,6 +20,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -26,6 +30,7 @@ class EliteBaseEventControllerImplTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final Duration PROCESSED_MESSAGE_EXPIRATION = Duration.of(3, ChronoUnit.SECONDS);
     private static final Duration MESSAGE_EXPIRATION = Duration.of(43, ChronoUnit.SECONDS);
+    private static final int NUMBER_OF_DELETED_RECORDS = 23;
 
     @Mock
     private MessageDao messageDao;
@@ -42,8 +47,26 @@ class EliteBaseEventControllerImplTest {
     @Mock
     private ExecutorServiceBean executorServiceBean;
 
-    @InjectMocks
+    @Mock
+    private OrphanedRecordCleaner orphanedRecordCleaner;
+
+    @Mock
+    private ErrorReporterService errorReporterService;
+
     private EliteBaseEventControllerImpl underTest;
+
+    @BeforeEach
+    void setUp() {
+        underTest = EliteBaseEventControllerImpl.builder()
+            .messageDao(messageDao)
+            .dateTimeUtil(dateTimeUtil)
+            .properties(properties)
+            .edMessageProcessor(edMessageProcessor)
+            .executorServiceBean(executorServiceBean)
+            .orphanedRecordCleaners(List.of(orphanedRecordCleaner))
+            .errorReporterService(errorReporterService)
+            .build();
+    }
 
     @Test
     void processMessages() {
@@ -81,5 +104,20 @@ class EliteBaseEventControllerImplTest {
         underTest.resetError();
 
         then(messageDao).should().resetError();
+    }
+
+    @Test
+    void cleanupOrphanedRecords() {
+        given(executorServiceBean.execute(any())).willAnswer(invocationOnMock -> {
+            invocationOnMock.getArgument(0, Runnable.class).run();
+            return null;
+        });
+        given(orphanedRecordCleaner.cleanupOrphanedRecords()).willReturn(NUMBER_OF_DELETED_RECORDS);
+
+        underTest.cleanupOrphanedRecords();
+
+        ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
+        then(errorReporterService).should().report(argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue()).contains(String.valueOf(NUMBER_OF_DELETED_RECORDS));
     }
 }

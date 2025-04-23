@@ -7,22 +7,29 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreConstructionAreaActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetQueueActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class BuildingModuleQueueTest extends BackEndTest {
+    private static final Integer NEW_PRIORITY = 7;
+
     @Test(groups = {"be", "skyxplore"})
-    public void constructAndDeconstructBuildingModuleQueue(){
+    public void constructAndDeconstructBuildingModuleQueue() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         int serverPort = getServerPort();
@@ -40,14 +47,36 @@ public class BuildingModuleQueueTest extends BackEndTest {
             .getConstructionArea()
             .getConstructionAreaId();
 
+        //Create construction queue item
+        SkyXploreBuildingModuleActions.constructBuildingModule(serverPort, accessTokenId, constructionAreaId, Constants.BUILDING_MODULE_HAMSTER_WHEEL);
+
+        QueueResponse queueResponse = AwaitilityWrapper.getSingleItemFromListWithWait(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId));
+
+        assertThat(queueResponse)
+            .returns(Constants.QUEUE_TYPE_CONSTRUCT_BUILDING_MODULE, QueueResponse::getType)
+            .extracting(qr -> qr.getData().get("dataId"))
+            .isEqualTo(Constants.BUILDING_MODULE_HAMSTER_WHEEL);
+
+        //Set priority of construction
+        setPriority_unknownQueueItemType(serverPort, accessTokenId, planetId, queueResponse.getItemId());
+        setPriority_tooLow(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+        setPriority_tooHigh(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+        setPriority(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+
+        //Cancel construction
+        SkyXplorePlanetQueueActions.cancelItem(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId).isEmpty())
+            .assertTrue("Construction is not cancelled.");
+
+        //Finish construction
         UUID buildingModuleId = SkyXploreBuildingModuleActions.constructBuildingModule(serverPort, accessTokenId, constructionAreaId, Constants.BUILDING_MODULE_HAMSTER_WHEEL)
             .get(0)
             .getBuildingModuleId();
-
-        AwaitilityWrapper.assertWithWaitList(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId))
-            .returns(Constants.QUEUE_TYPE_CONSTRUCT_BUILDING_MODULE, QueueResponse::getType)
-            .extracting(queueResponse -> queueResponse.getData().get("dataId"))
-            .isEqualTo(Constants.BUILDING_MODULE_HAMSTER_WHEEL);
+        AwaitilityWrapper.createDefault()
+            .until(() -> !SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId).isEmpty())
+            .assertTrue("Construction is not started.");
 
         SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
 
@@ -57,11 +86,66 @@ public class BuildingModuleQueueTest extends BackEndTest {
 
         SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
 
+        //Create deconstruction queue item
         SkyXploreBuildingModuleActions.deconstructBuildingModule(serverPort, accessTokenId, buildingModuleId);
 
-        AwaitilityWrapper.assertWithWaitList(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId))
+        queueResponse = AwaitilityWrapper.getSingleItemFromListWithWait(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId));
+
+        assertThat(queueResponse)
             .returns(Constants.QUEUE_TYPE_DECONSTRUCT_BUILDING_MODULE, QueueResponse::getType)
-            .extracting(queueResponse -> queueResponse.getData().get("dataId"))
+            .extracting(qr -> qr.getData().get("dataId"))
             .isEqualTo(Constants.BUILDING_MODULE_HAMSTER_WHEEL);
+
+        //Set priority of deconstruction
+        setPriority_unknownQueueItemType(serverPort, accessTokenId, planetId, queueResponse.getItemId());
+        setPriority_tooLow(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+        setPriority_tooHigh(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+        setPriority(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+
+        //Cancel deconstruction
+        SkyXplorePlanetQueueActions.cancelItem(serverPort, accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId).isEmpty())
+            .assertTrue("Deconstruction is not cancelled.");
+
+        //Finish deconstruction
+        SkyXploreBuildingModuleActions.deconstructBuildingModule(serverPort, accessTokenId, buildingModuleId);
+        AwaitilityWrapper.createDefault()
+            .until(() -> !SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId).isEmpty())
+            .assertTrue("Deconstruction is not started.");
+
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+
+        AwaitilityWrapper.create(120, 5)
+            .until(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId).isEmpty())
+            .assertTrue("BuildingModule is not deconstructed.");
+
+        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
+    }
+
+    private void setPriority(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
+        SkyXplorePlanetQueueActions.setPriority(serverPort, accessTokenId, planetId, type, itemId, NEW_PRIORITY);
+
+        AwaitilityWrapper.assertWithWaitList(() -> SkyXplorePlanetActions.getQueue(serverPort, accessTokenId, planetId))
+            .returns(NEW_PRIORITY, QueueResponse::getOwnPriority);
+    }
+
+    private void setPriority_tooHigh(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
+        Response response = SkyXplorePlanetQueueActions.getSetPriorityResponse(serverPort, accessTokenId, planetId, type, itemId, 11);
+
+        ResponseValidator.verifyInvalidParam(response, "priority", "too high");
+    }
+
+    private void setPriority_tooLow(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
+        Response response = SkyXplorePlanetQueueActions.getSetPriorityResponse(serverPort, accessTokenId, planetId, type, itemId, 0);
+
+        ResponseValidator.verifyInvalidParam(response, "priority", "too low");
+    }
+
+    private void setPriority_unknownQueueItemType(int serverPort, UUID accessTokenId, UUID planetId, UUID itemId) {
+        Response response = SkyXplorePlanetQueueActions.getSetPriorityResponse(serverPort, accessTokenId, planetId, "asd", itemId, NEW_PRIORITY);
+
+        ResponseValidator.verifyInvalidParam(response, "type", "invalid value");
     }
 }

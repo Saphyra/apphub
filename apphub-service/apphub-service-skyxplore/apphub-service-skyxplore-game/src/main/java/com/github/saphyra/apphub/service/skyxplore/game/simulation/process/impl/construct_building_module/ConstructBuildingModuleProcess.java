@@ -95,7 +95,7 @@ public class ConstructBuildingModuleProcess implements Process {
         }
 
         helper.finishConstruction(progressDiff, gameData, constructionId);
-        status = ProcessStatus.DONE;
+        status = ProcessStatus.READY_TO_DELETE;
     }
 
     @Override

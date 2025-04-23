@@ -1,0 +1,29 @@
+===FEATURES===
+
+===BUGFIXES===
+    EliteBase
+        Stabilise message processing by avoiding duplicates
+        Remove cleanup changesets from commodity and commodity_average_price tables
+    Platform
+        Do not report connectivity issues from event-gateway
+    SkyXplore
+        Deconstructions not loaded
+        Construct/Deconstruct constructionArea/buildingModule processes are not deleted properly
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    SkyXplore
+        Remove deprecated Building related code
+    EliteBase
+        Periodically delete orphaned records
+    SkyXplore
+        Extend ConstructionArea and BuildingModule planet queue tests with cancellation and priority update test cases
+        FE Planet Queue Test for ConstructionArea and BuildingModule
+    VillanyAtesz
+        Stabilize CommissionCrud test
+
+===ETC===
+    SkyXplore
+        Cancel deconstruction of constructionArea should stop deconstructing its building modules
+        Deconstructing constructionArea should cancel constructions of its buildingModules

@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
@@ -40,15 +38,7 @@ public class StarSystemSaver {
             throw new IllegalArgumentException("Both starId and starName are null.");
         }
 
-        StarSystem starSystem = Stream.of(
-                new SearchHelper<>(starId, () -> starSystemDao.findByStarId(starId)),
-                new SearchHelper<>(starName, () -> starSystemDao.findByStarName(starName))
-            )
-            .map(SearchHelper::search)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .peek(ss -> log.debug("Found: {}", ss))
-            .findAny()
+        StarSystem starSystem = starSystemDao.findByStarIdOrStarName(starId, starName)
             .orElseGet(() -> {
                 StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition, starType);
                 log.debug("Saving new {}", created);

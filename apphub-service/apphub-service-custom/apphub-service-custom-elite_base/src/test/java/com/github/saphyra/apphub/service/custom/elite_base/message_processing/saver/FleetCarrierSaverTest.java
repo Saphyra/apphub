@@ -48,7 +48,7 @@ class FleetCarrierSaverTest {
 
     @Test
     void carrierNotFound() {
-        given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.empty());
+        given(fleetCarrierDao.findByCarrierIdOrMarketId(CARRIER_ID, MARKET_ID)).willReturn(Optional.empty());
         given(fleetCarrierFactory.create(CARRIER_ID, LAST_UPDATE, CARRIER_NAME, STAR_SYSTEM_ID, FleetCarrierDockingAccess.ALL, MARKET_ID)).willReturn(fleetCarrier);
         given(fleetCarrier.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
 
@@ -64,7 +64,7 @@ class FleetCarrierSaverTest {
 
     @Test
     void carrierFound() {
-        given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
+        given(fleetCarrierDao.findByCarrierIdOrMarketId(CARRIER_ID, MARKET_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
 
         given(fleetCarrier.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));

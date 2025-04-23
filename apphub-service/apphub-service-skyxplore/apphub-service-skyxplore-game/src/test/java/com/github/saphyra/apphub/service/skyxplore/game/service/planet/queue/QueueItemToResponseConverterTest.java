@@ -51,7 +51,7 @@ public class QueueItemToResponseConverterTest {
 
         QueueItem queueItem = QueueItem.builder()
             .itemId(ITEM_ID)
-            .type(QueueItemType.CONSTRUCTION)
+            .type(QueueItemType.CONSTRUCT_CONSTRUCTION_AREA)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .currentWorkPoints(CURRENT_WORK_POINTS)
             .priority(PRIORITY)
@@ -65,7 +65,7 @@ public class QueueItemToResponseConverterTest {
         QueueResponse result = underTest.convert(queueItem, gameData, LOCATION);
 
         assertThat(result.getItemId()).isEqualTo(ITEM_ID);
-        assertThat(result.getType()).isEqualTo(QueueItemType.CONSTRUCTION.name());
+        assertThat(result.getType()).isEqualTo(QueueItemType.CONSTRUCT_CONSTRUCTION_AREA.name());
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getOwnPriority()).isEqualTo(PRIORITY);

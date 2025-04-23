@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@Deprecated(forRemoval = true)
 public class SettlementDao extends AbstractDao<SettlementEntity, Settlement, String, SettlementRepository> {
     private final UuidConverter uuidConverter;
 

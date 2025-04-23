@@ -14,7 +14,7 @@ import java.util.UUID;
 @EqualsAndHashCode(exclude = "conflictId")
 public class ConflictingMinorFaction {
     private final UUID conflictId;
-    private final UUID factionId;
+    private final UUID minorFactionId;
     private Integer wonDays;
     private String stake;
 }

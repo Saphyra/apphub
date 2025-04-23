@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.CancelConstructionOfBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruct_construction_area.DeconstructConstructionAreaProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruct_construction_area.DeconstructConstructionAreaProcessFactory;
@@ -53,6 +54,9 @@ class DeconstructConstructionAreaServiceTest {
 
     @Mock
     private DeconstructConstructionAreaProcessFactory deconstructConstructionAreaProcessFactory;
+
+    @Mock
+    private CancelConstructionOfBuildingModuleService cancelConstructionOfBuildingModuleService;
 
     @InjectMocks
     private DeconstructConstructionAreaService underTest;
@@ -186,5 +190,6 @@ class DeconstructConstructionAreaServiceTest {
         then(progressDiff).should().save(deconstructionModel);
         then(processes).should().add(process);
         then(progressDiff).should().save(processModel);
+        then(cancelConstructionOfBuildingModuleService).should().cancelConstructionOfConstructionAreaBuildingModules(game, CONSTRUCTION_AREA_ID);
     }
 }

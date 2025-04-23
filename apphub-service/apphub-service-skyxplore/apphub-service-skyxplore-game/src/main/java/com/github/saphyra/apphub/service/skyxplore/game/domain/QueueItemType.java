@@ -12,10 +12,6 @@ public enum QueueItemType {
     CONSTRUCT_CONSTRUCTION_AREA(PriorityType.CONSTRUCTION),
     DECONSTRUCT_CONSTRUCTION_AREA(PriorityType.CONSTRUCTION),
     TERRAFORMATION(PriorityType.CONSTRUCTION),
-    @Deprecated(forRemoval = true)
-    CONSTRUCTION(PriorityType.CONSTRUCTION),
-    @Deprecated(forRemoval = true)
-    DECONSTRUCTION(PriorityType.CONSTRUCTION),
     ;
 
     private final PriorityType priorityType;

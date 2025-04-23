@@ -99,7 +99,7 @@ public class DeconstructConstructionAreaProcess implements Process {
         }
 
         helper.finishDeconstruction(progressDiff, gameData, deconstructionId);
-        status = ProcessStatus.DONE;
+        status = ProcessStatus.READY_TO_DELETE;
     }
 
     @Override

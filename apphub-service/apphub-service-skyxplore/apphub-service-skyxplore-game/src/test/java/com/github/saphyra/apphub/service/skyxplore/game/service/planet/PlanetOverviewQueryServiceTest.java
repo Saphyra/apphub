@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetBuildingOverviewResponse;
+import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionAreaOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetPopulationOverviewResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.PlanetStorageResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.QueueResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.*;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -20,7 +19,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.Que
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.overview.PlanetStorageOverviewQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.BuildingsSummaryQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.SurfaceResponseQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.building.overview.PlanetBuildingOverviewQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +38,6 @@ public class PlanetOverviewQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PLANET_ID = UUID.randomUUID();
     private static final String PLANET_NAME = "planet-name";
-    private static final String STORAGE_TYPE = "storage-type";
     private static final String PRIORITY_TYPE = "priority-type";
     private static final Integer PRIORITY_VALUE = 24;
     private static final String SURFACE_TYPE = "surface-type";
@@ -50,9 +47,6 @@ public class PlanetOverviewQueryServiceTest {
 
     @Mock
     private PlanetPopulationOverviewQueryService planetPopulationOverviewQueryService;
-
-    @Mock
-    private PlanetBuildingOverviewQueryService planetBuildingOverviewQueryService;
 
     @Mock
     private SurfaceResponseQueryService surfaceResponseQueryService;
@@ -91,9 +85,6 @@ public class PlanetOverviewQueryServiceTest {
     private PlanetPopulationOverviewResponse populationResponse;
 
     @Mock
-    private PlanetBuildingOverviewResponse buildingResponse;
-
-    @Mock
     private QueueResponse queueResponse;
 
     @Mock
@@ -108,7 +99,6 @@ public class PlanetOverviewQueryServiceTest {
         given(surfaceResponseQueryService.getSurfaceOfPlanet(USER_ID, PLANET_ID)).willReturn(List.of(surfaceResponse));
         given(planetStorageOverviewQueryService.getStorage(USER_ID, PLANET_ID)).willReturn(storageResponse);
         given(planetPopulationOverviewQueryService.getPopulationOverview(USER_ID, PLANET_ID)).willReturn(populationResponse);
-        given(planetBuildingOverviewQueryService.getBuildingOverview(USER_ID, PLANET_ID)).willReturn(Map.of(STORAGE_TYPE, buildingResponse));
         given(priorityQueryService.getPriorities(USER_ID, PLANET_ID)).willReturn(Map.of(PRIORITY_TYPE, PRIORITY_VALUE));
         given(queueFacade.getQueueOfPlanet(USER_ID, PLANET_ID)).willReturn(List.of(queueResponse));
         given(buildingsSummaryQueryService.getBuildingsSummary(USER_ID, PLANET_ID)).willReturn(Map.of(SURFACE_TYPE, List.of(constructionAreaOverviewResponse)));
@@ -125,7 +115,6 @@ public class PlanetOverviewQueryServiceTest {
         assertThat(result.getSurfaces()).containsExactly(surfaceResponse);
         assertThat(result.getStorage()).isEqualTo(storageResponse);
         assertThat(result.getPopulation()).isEqualTo(populationResponse);
-        assertThat(result.getBuildings()).containsEntry(STORAGE_TYPE, buildingResponse);
         assertThat(result.getPriorities()).containsEntry(PRIORITY_TYPE, PRIORITY_VALUE);
         assertThat(result.getQueue()).containsExactly(queueResponse);
         assertThat(result.getBuildingsSummary()).isEqualTo(Map.of(SURFACE_TYPE, List.of(constructionAreaOverviewResponse)));
@@ -141,7 +130,6 @@ public class PlanetOverviewQueryServiceTest {
         assertThat(result.getSurfaces()).containsExactly(surfaceResponse);
         assertThat(result.getStorage()).isEqualTo(storageResponse);
         assertThat(result.getPopulation()).isEqualTo(populationResponse);
-        assertThat(result.getBuildings()).containsEntry(STORAGE_TYPE, buildingResponse);
         assertThat(result.getPriorities()).containsEntry(PRIORITY_TYPE, PRIORITY_VALUE);
         assertThat(result.getQueue()).containsExactly(queueResponse);
         assertThat(result.getBuildingsSummary()).isEqualTo(Map.of(SURFACE_TYPE, List.of(constructionAreaOverviewResponse)));

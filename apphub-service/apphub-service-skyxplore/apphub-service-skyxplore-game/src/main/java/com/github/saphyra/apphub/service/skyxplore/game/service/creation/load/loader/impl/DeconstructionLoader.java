@@ -5,9 +5,11 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class DeconstructionLoader extends AutoLoader<DeconstructionModel, Deconstruction> {
     public DeconstructionLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);
