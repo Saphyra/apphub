@@ -92,7 +92,7 @@ public class EdMessageHandler implements MessageHandler {
     }
 
     private void shutdownIfTimeout() {
-        log.info("Checking connection...");
+        log.debug("Checking connection...");
         LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
         LocalDateTime expirationTime = currentTime
             .minus(eliteBaseProperties.getIncomingMessageTimeout());
