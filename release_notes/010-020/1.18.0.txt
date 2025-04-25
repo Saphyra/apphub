@@ -8,6 +8,8 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    SkyXplore
+        Remove building related changeSet
 
 ===ETC===
     EliteBase
