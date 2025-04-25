@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.menu.local_run_menu;
+package com.github.saphyra.apphub.ci.menu.minikube;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
-import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
+import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalDeployProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +15,9 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunStopLatestServicesMenuOption implements MenuOption {
+class MinikubeDeployLatestServiceMenuOption implements MenuOption {
+    private final MinikubeLocalDeployProcess minikubeLocalDeployProcess;
     private final PropertyDao propertyDao;
-    private final LocalStopProcess localStopProcess;
 
     @Override
     public Menu getMenu() {
@@ -27,24 +27,24 @@ class LocalRunStopLatestServicesMenuOption implements MenuOption {
             return Menu.NONE;
         }
 
-        return Menu.LOCAL_RUN_MENU;
+        return Menu.MINIKUBE_MENU;
     }
 
     @Override
     public MenuOrder getOrder() {
-        return MenuOrderEnum.STOP_LATEST_SERVICES;
+        return MenuOrderEnum.DEPLOY_LATEST_SERVICES;
     }
 
     @Override
     public LocalizationProvider getName() {
         String latestServices = String.join(", ", propertyDao.getLatestServices());
 
-        return language -> LocalizedText.LOCAL_STOP_LATEST_SERVICES.getLocalizedText(language).formatted(latestServices);
+        return language -> LocalizedText.REMOTE_DEPLOY_LATEST_SERVICES.getLocalizedText(language).formatted(latestServices);
     }
 
     @Override
     public boolean process() {
-        localStopProcess.stopLatestServices();
+        minikubeLocalDeployProcess.deploy(propertyDao.getLatestServices());
 
         return false;
     }

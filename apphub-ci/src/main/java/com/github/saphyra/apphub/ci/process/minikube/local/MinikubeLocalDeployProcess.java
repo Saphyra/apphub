@@ -28,7 +28,7 @@ public class MinikubeLocalDeployProcess {
     private final NamespaceNameProvider namespaceNameProvider;
     private final PlatformProperties platformProperties;
 
-    public void deploy(List<String> servicesToStart){
+    public void deploy(List<String> servicesToStart) {
         localStopProcess.stopAllServices();
 
         if (!minikubeBuildTask.installServices(servicesToStart)) {

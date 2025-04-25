@@ -7,23 +7,25 @@ import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
-import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
+import com.github.saphyra.apphub.ci.process.local.run_tests.LocalRunTestsProcess;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunStopLatestServicesMenuOption implements MenuOption {
+@Slf4j
+class LocalRunLatestTestGroupsMenuOption implements MenuOption {
     private final PropertyDao propertyDao;
-    private final LocalStopProcess localStopProcess;
+    private final LocalRunTestsProcess localRunTestsProcess;
 
     @Override
     public Menu getMenu() {
-        List<String> latestServices = propertyDao.getLatestServices();
+        String latestTestGroups = propertyDao.getLatestTestGroups();
 
-        if (latestServices.isEmpty()) {
+        if (isNull(latestTestGroups)) {
             return Menu.NONE;
         }
 
@@ -32,19 +34,19 @@ class LocalRunStopLatestServicesMenuOption implements MenuOption {
 
     @Override
     public MenuOrder getOrder() {
-        return MenuOrderEnum.STOP_LATEST_SERVICES;
+        return MenuOrderEnum.RUN_LATEST_TEST_GROUPS;
     }
 
     @Override
     public LocalizationProvider getName() {
-        String latestServices = String.join(", ", propertyDao.getLatestServices());
+        String latestServices = String.join(", ", propertyDao.getLatestTestGroups());
 
-        return language -> LocalizedText.LOCAL_STOP_LATEST_SERVICES.getLocalizedText(language).formatted(latestServices);
+        return language -> LocalizedText.RUN_LATEST_TEST_GROUPS.getLocalizedText(language).formatted(latestServices);
     }
 
     @Override
     public boolean process() {
-        localStopProcess.stopLatestServices();
+        localRunTestsProcess.run(propertyDao.getLatestTestGroups());
 
         return false;
     }

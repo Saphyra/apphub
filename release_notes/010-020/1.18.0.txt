@@ -1,6 +1,7 @@
 ===FEATURES===
     ApphubCI
         Shut down service option
+        Run latest test groups
 
 ===BUGFIXES===
 
