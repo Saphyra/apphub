@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodi
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemPosition;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

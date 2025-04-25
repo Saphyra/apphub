@@ -13,9 +13,9 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastU
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemPosition;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
