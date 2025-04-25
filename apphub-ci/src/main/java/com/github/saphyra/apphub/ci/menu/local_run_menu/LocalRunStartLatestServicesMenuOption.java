@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class LocalRunMenuStartLatestServicesMenuOption implements MenuOption {
+class LocalRunStartLatestServicesMenuOption implements MenuOption {
     private final PropertyDao propertyDao;
     private final LocalStartServicesProcess localStartServicesProcess;
 

@@ -5,14 +5,14 @@ import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
-import com.github.saphyra.apphub.ci.process.local.start.LocalStartProcess;
+import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunMenuStartMenuOption implements MenuOption {
-    private final LocalStartProcess localStartProcess;
+class LocalRunStopMenuOption implements MenuOption {
+    private final LocalStopProcess localStopProcess;
 
     @Override
     public Menu getMenu() {
@@ -21,17 +21,17 @@ class LocalRunMenuStartMenuOption implements MenuOption {
 
     @Override
     public MenuOrder getOrder() {
-        return MenuOrderEnum.DEPLOY;
+        return MenuOrderEnum.STOP;
     }
 
     @Override
     public LocalizedText getName() {
-        return LocalizedText.START;
+        return LocalizedText.STOP;
     }
 
     @Override
     public boolean process() {
-        localStartProcess.run();
+        localStopProcess.stopAllServices();
 
         return false;
     }

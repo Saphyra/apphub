@@ -1,18 +1,19 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
+import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
-import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
+import com.github.saphyra.apphub.ci.process.local.start.LocalStartServicesProcess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunMenuStopMenuOption implements MenuOption {
-    private final LocalStopProcess localStopProcess;
+class LocalRunStartServiceMenuOption implements MenuOption {
+    private final LocalStartServicesProcess localStartServicesProcess;
 
     @Override
     public Menu getMenu() {
@@ -21,17 +22,17 @@ class LocalRunMenuStopMenuOption implements MenuOption {
 
     @Override
     public MenuOrder getOrder() {
-        return MenuOrderEnum.STOP_SERVICES;
+        return MenuOrderEnum.DEPLOY_SERVICES;
     }
 
     @Override
-    public LocalizedText getName() {
-        return LocalizedText.STOP;
+    public LocalizationProvider getName() {
+        return LocalizedText.LOCAL_START_SERVICES;
     }
 
     @Override
     public boolean process() {
-        localStopProcess.stopServices();
+        localStartServicesProcess.start();
 
         return false;
     }

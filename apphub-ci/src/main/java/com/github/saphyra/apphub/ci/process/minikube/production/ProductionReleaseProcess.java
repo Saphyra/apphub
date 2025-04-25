@@ -48,7 +48,7 @@ public class ProductionReleaseProcess {
             }
         );
 
-        localStopProcess.stopServices();
+        localStopProcess.stopAllServices();
 
         if (!minikubeBuildTask.deployServices(username, password)) {
             log.error("Build failed. Startup sequence stopped.");

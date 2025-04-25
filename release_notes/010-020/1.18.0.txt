@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Shut down service option
 
 ===BUGFIXES===
 
