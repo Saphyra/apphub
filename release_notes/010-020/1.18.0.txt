@@ -4,6 +4,8 @@
         Run latest test groups
 
 ===BUGFIXES===
+    SkyXplore
+        Cancelling deconstruction of BuildingModule should cancel deconstruction of ConstructionArea
 
 ===PLATFORM CHANGES===
 

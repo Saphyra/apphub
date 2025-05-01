@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.CancelDeconstructionOfBuildingModuleService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ class DeconstructBuildingModuleQueueService implements QueueService {
     private final GameProperties gameProperties;
     private final GameDao gameDao;
     private final DeconstructionConverter deconstructionConverter;
-    private final CancelDeconstructionOfBuildingModuleService cancelDeconstructionOfBuildingModuleService;
+    private final CancelDeconstructionFacade cancelDeconstructionFacade;
 
     @Override
     public QueueItemType getType() {
@@ -69,6 +69,6 @@ class DeconstructBuildingModuleQueueService implements QueueService {
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID itemId) {
-        cancelDeconstructionOfBuildingModuleService.cancelDeconstruction(userId, itemId);
+        cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(userId, itemId);
     }
 }

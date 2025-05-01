@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.CancelDeconstructConstructionAreaService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class DeconstructConstructionAreaQueueServiceTest {
     private DeconstructionConverter deconstructionConverter;
 
     @Mock
-    private CancelDeconstructConstructionAreaService cancelDeconstructConstructionAreaService;
+    private CancelDeconstructionFacade cancelDeconstructionFacade;
 
     @InjectMocks
     private DeconstructConstructionAreaQueueService underTest;
@@ -145,6 +145,6 @@ class DeconstructConstructionAreaQueueServiceTest {
     void cancel() {
         underTest.cancel(USER_ID, LOCATION, DECONSTRUCTION_ID);
 
-        then(cancelDeconstructConstructionAreaService).should().cancelDeconstruction(USER_ID, DECONSTRUCTION_ID);
+        then(cancelDeconstructionFacade).should().cancelDeconstructionOfConstructionArea(USER_ID, DECONSTRUCTION_ID);
     }
 }

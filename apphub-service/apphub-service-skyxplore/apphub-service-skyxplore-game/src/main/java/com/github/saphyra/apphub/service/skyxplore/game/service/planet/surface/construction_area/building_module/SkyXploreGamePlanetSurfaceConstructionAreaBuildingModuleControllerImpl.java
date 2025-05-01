@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.game.server.game.solar_system.pla
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ public class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerI
     private final ConstructBuildingModuleService constructBuildingModuleService;
     private final CancelConstructionOfBuildingModuleService cancelConstructionOfBuildingModuleService;
     private final DeconstructBuildingModuleService deconstructBuildingModuleService;
-    private final CancelDeconstructionOfBuildingModuleService cancelDeconstructionOfBuildingModuleService;
+    private final CancelDeconstructionFacade cancelDeconstructionFacade;
 
     @Override
     public List<BuildingModuleResponse> getBuildingModules(UUID constructionAreaId, AccessTokenHeader accessTokenHeader) {
@@ -58,7 +59,7 @@ public class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerI
     public List<BuildingModuleResponse> cancelDeconstructionOfBuildingModule(UUID deconstructionId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel of deconstruction {} of buildingModule", accessTokenHeader.getUserId(), deconstructionId);
 
-        UUID constructionAreaId = cancelDeconstructionOfBuildingModuleService.cancelDeconstruction(accessTokenHeader.getUserId(), deconstructionId);
+        UUID constructionAreaId = cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(accessTokenHeader.getUserId(), deconstructionId);
 
         return getBuildingModules(constructionAreaId, accessTokenHeader);
     }
