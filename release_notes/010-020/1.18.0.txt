@@ -12,6 +12,7 @@
 ===TECHNICAL DEBTS===
     SkyXplore
         Remove building related changeSet
+    ExecutorServiceBean should not log and report NotLogged and Logged exceptions
 
 ===ETC===
     EliteBase

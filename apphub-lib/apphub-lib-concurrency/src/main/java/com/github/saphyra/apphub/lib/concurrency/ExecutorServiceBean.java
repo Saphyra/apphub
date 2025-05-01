@@ -2,10 +2,11 @@ package com.github.saphyra.apphub.lib.concurrency;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.exception.LoggedException;
+import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,7 +30,6 @@ public class ExecutorServiceBean {
     private final ExecutorService executor;
 
     @NonNull
-    @Getter
     private final ErrorReporterService errorReporterService;
 
     public Future<ExecutionResult<Void>> execute(Runnable command) {
@@ -47,8 +47,14 @@ public class ExecutorServiceBean {
         return () -> {
             try {
                 return ExecutionResult.success(command.call());
+            } catch (NotLoggedException e) {
+                log.warn("Exception occurred during async processing: {}", e.getMessage());
+                return ExecutionResult.failure(e);
+            } catch (LoggedException e) {
+                log.error("Exception occurred during async processing", e);
+                return ExecutionResult.failure(e);
             } catch (Exception e) {
-                log.error("Unexpected error during processing:", e);
+                log.error("Unexpected error during async processing:", e);
                 errorReporterService.report("Unexpected error during processing: " + e.getMessage(), e);
                 return ExecutionResult.failure(e);
             }

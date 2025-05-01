@@ -10,11 +10,11 @@ import java.util.Optional;
 
 @UtilityClass
 public class ExceptionFactory {
-    public RestException loggedException(HttpStatus status, ErrorCode errorCode, String message) {
+    public LoggedException loggedException(HttpStatus status, ErrorCode errorCode, String message) {
         return loggedException(status, errorCode, new HashMap<>(), message);
     }
 
-    public RestException loggedException(HttpStatus status, ErrorCode errorCode, Map<String, String> params, String message) {
+    public LoggedException loggedException(HttpStatus status, ErrorCode errorCode, Map<String, String> params, String message) {
         return new LoggedException(status, errorCode, params, message);
     }
 
@@ -73,5 +73,9 @@ public class ExceptionFactory {
 
     public RestException forbiddenOperation(String message) {
         return notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, message);
+    }
+
+    public static LoggedException loggedException(String message) {
+        return loggedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR, message);
     }
 }
