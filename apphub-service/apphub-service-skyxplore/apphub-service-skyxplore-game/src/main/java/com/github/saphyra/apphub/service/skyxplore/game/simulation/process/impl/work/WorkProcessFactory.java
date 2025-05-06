@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -30,7 +30,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class WorkProcessFactory implements ProcessFactory {
-    private final ProductionBuildingService productionBuildingService;
+    private final ProductionBuildingModuleService productionBuildingModuleService;
     private final GameProperties gameProperties;
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
@@ -62,7 +62,7 @@ public class WorkProcessFactory implements ProcessFactory {
     public List<WorkProcess> createForProduction(GameData gameData, UUID processId, UUID location, String producerBuildingDataId, String resourceDataId, Integer amount) {
         log.info("Creating WorkPointProcesses...");
 
-        Production production = productionBuildingService.get(producerBuildingDataId)
+        Production production = productionBuildingModuleService.get(producerBuildingDataId)
             .getProduces()
             .stream()
             .filter(p -> p.getResourceDataId().equals(resourceDataId))
