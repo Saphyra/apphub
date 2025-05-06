@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -25,6 +26,7 @@ class StoredResourceLoaderTest {
     private static final UUID LOCATION = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final Integer AMOUNT = 256;
+    private static final UUID CONTAINER_ID = UUID.randomUUID();
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -69,6 +71,8 @@ class StoredResourceLoaderTest {
         given(model.getLocation()).willReturn(LOCATION);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);
+        given(model.getContainerId()).willReturn(CONTAINER_ID);
+        given(model.getContainerType()).willReturn(ContainerType.SURFACE);
 
         StoredResource result = underTest.convert(model);
 
@@ -76,5 +80,7 @@ class StoredResourceLoaderTest {
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
+        assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(result.getContainerType()).isEqualTo(ContainerType.SURFACE);
     }
 }

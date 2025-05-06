@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProducerBuildingModule;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class ResourceRequirementProcessFactory {
-    private final ProductionBuildingService productionBuildingService;
+    private final ProductionBuildingModuleService productionBuildingModuleService;
     private final ProductionRequirementsAllocationService productionRequirementsAllocationService;
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
 
     List<ProductionOrderProcess> createResourceRequirementProcesses(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String resourceDataId, int amount, String producerBuildingDataId) {
-        return Optional.ofNullable(productionBuildingService.get(producerBuildingDataId))
+        return Optional.ofNullable(productionBuildingModuleService.get(producerBuildingDataId))
             .map(ProducerBuildingModule::getProduces)
             .flatMap(productions -> productions.stream().filter(production -> production.getResourceDataId().equals(resourceDataId)).findAny())
             .orElseThrow(() -> ExceptionFactory.reportedException(producerBuildingDataId + " cannot produce " + resourceDataId))

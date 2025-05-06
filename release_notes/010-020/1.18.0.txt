@@ -2,6 +2,8 @@
     ApphubCI
         Shut down service option
         Run latest test groups
+    SkyXplore
+        Resources can be put to exact storages
 
 ===BUGFIXES===
     SkyXplore

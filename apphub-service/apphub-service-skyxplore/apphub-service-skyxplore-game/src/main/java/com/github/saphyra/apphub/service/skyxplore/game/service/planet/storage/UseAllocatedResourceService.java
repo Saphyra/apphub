@@ -16,6 +16,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class UseAllocatedResourceService {
     private final StoredResourceConverter storedResourceConverter;
     private final AllocatedResourceConverter allocatedResourceConverter;
@@ -33,7 +34,7 @@ public class UseAllocatedResourceService {
             .findByExternalReferenceAndDataIdValidated(externalReference, reservedStorage.getDataId());
         log.info("Resolving {}", allocatedResource);
         StoredResource storedResource = gameData.getStoredResources()
-            .findByLocationAndDataIdOrDefault(location, reservedStorage.getDataId());
+            .findByLocationAndDataIdValidated(location, reservedStorage.getDataId());
         storedResource.decreaseAmount(allocatedResource.getAmount());
         log.info("{} left.", storedResource);
         allocatedResource.setAmount(0);

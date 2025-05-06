@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
-public class ProductionBuildingService extends HashMap<String, ProducerBuildingModule> {
-    ProductionBuildingService(List<AbstractDataService<String, ? extends ProducerBuildingModule>> services) {
+public class ProductionBuildingModuleService extends HashMap<String, ProducerBuildingModule> {
+    ProductionBuildingModuleService(List<AbstractDataService<String, ? extends ProducerBuildingModule>> services) {
         services.forEach(this::putAll);
     }
 }

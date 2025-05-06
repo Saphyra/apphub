@@ -25,33 +25,6 @@ class StoredResourcesTest {
     private StoredResource storedResource2;
 
     @Test
-    void findByLocationAndDataIdOrDefault_found() {
-        given(storedResource1.getLocation()).willReturn(LOCATION);
-        given(storedResource1.getDataId()).willReturn(DATA_ID);
-
-        underTest.add(storedResource1);
-
-        assertThat(underTest.findByLocationAndDataIdOrDefault(LOCATION, DATA_ID)).isEqualTo(storedResource1);
-    }
-
-    @Test
-    void findByLocationAndDataIdOrDefault_createDefault() {
-        given(storedResource1.getLocation()).willReturn(UUID.randomUUID());
-
-        given(storedResource2.getLocation()).willReturn(LOCATION);
-        given(storedResource2.getDataId()).willReturn("asd");
-
-        underTest.add(storedResource1);
-        underTest.add(storedResource2);
-
-        StoredResource result = underTest.findByLocationAndDataIdOrDefault(LOCATION, DATA_ID);
-
-        assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getDataId()).isEqualTo(DATA_ID);
-        assertThat(result.getAmount()).isEqualTo(0);
-    }
-
-    @Test
     void findByLocationAndDataId_found() {
         given(storedResource1.getLocation()).willReturn(LOCATION);
         given(storedResource1.getDataId()).willReturn(DATA_ID);

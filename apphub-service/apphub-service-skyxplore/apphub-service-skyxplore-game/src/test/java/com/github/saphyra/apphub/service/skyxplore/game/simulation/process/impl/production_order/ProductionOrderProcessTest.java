@@ -39,7 +39,7 @@ class ProductionOrderProcessTest {
     private static final int AMOUNT = 3412;
     private static final Integer PRIORITY = 342;
     private static final String RESOURCE_DATA_ID = "resource-data-id";
-    private static final String PRODUCER_DATA_ID = "producer-data-id";
+    private static final UUID PRODUCER_BUILDING_MODULE_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
@@ -129,7 +129,7 @@ class ProductionOrderProcessTest {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
-        given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_DATA_ID);
+        given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_BUILDING_MODULE_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(false);
         given(game.getProgressDiff()).willReturn(progressDiff);
 
@@ -137,7 +137,7 @@ class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
+        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_BUILDING_MODULE_ID);
         verify(conditions, times(0)).workStarted(gameData, PROCESS_ID);
     }
 
@@ -149,7 +149,7 @@ class ProductionOrderProcessTest {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
-        given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_DATA_ID);
+        given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_BUILDING_MODULE_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workStarted(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workDone(gameData, PROCESS_ID)).willReturn(false);
@@ -159,9 +159,9 @@ class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
 
-        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
-        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, PRODUCER_DATA_ID, RESERVED_STORAGE_ID);
-        verify(helper, times(0)).storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
+        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_BUILDING_MODULE_ID);
+        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, PRODUCER_BUILDING_MODULE_ID, RESERVED_STORAGE_ID);
+        verify(helper, times(0)).storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT, PRODUCER_BUILDING_MODULE_ID);
     }
 
     @Test
@@ -172,7 +172,7 @@ class ProductionOrderProcessTest {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
-        given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_DATA_ID);
+        given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_BUILDING_MODULE_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workStarted(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workDone(gameData, PROCESS_ID)).willReturn(true);
@@ -182,9 +182,9 @@ class ProductionOrderProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
 
-        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_DATA_ID);
-        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, PRODUCER_DATA_ID, RESERVED_STORAGE_ID);
-        verify(helper).storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT);
+        verify(helper).processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, PRODUCER_BUILDING_MODULE_ID);
+        verify(helper).startWork(progressDiff, gameData, PROCESS_ID, PRODUCER_BUILDING_MODULE_ID, RESERVED_STORAGE_ID);
+        verify(helper).storeResource(progressDiff, gameData, LOCATION, RESERVED_STORAGE_ID, ALLOCATED_RESOURCE_ID, AMOUNT, PRODUCER_BUILDING_MODULE_ID);
     }
 
     @Test
@@ -218,7 +218,7 @@ class ProductionOrderProcessTest {
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat(result.getData()).containsEntry(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID, null);
+        assertThat(result.getData()).containsEntry(ProcessParamKeys.PRODUCER_BUILDING_MODULE_ID, null);
         assertThat(result.getData()).containsEntry(ProcessParamKeys.RESERVED_STORAGE_ID, RESERVED_STORAGE_ID.toString());
         assertThat(result.getData()).containsEntry(ProcessParamKeys.ALLOCATED_RESOURCE_ID, ALLOCATED_RESOURCE_ID.toString());
         assertThat(result.getData()).containsEntry(ProcessParamKeys.AMOUNT, String.valueOf(AMOUNT));

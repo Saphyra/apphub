@@ -44,7 +44,7 @@ class ProductionOrderProcessFactoryTest {
     private static final Integer RESERVED_STORAGE_AMOUNT = 3;
     private static final UUID PROCESS_ID_1 = UUID.randomUUID();
     private static final UUID PROCESS_ID_2 = UUID.randomUUID();
-    private static final String PRODUCER_BUILDING_DATA_ID = "producer-building-data-id";
+    private static final UUID PRODUCER_BUILDING_MODULE_DATA_ID = UUID.randomUUID();
     private static final UUID ALLOCATED_RESOURCE_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
@@ -130,7 +130,7 @@ class ProductionOrderProcessFactoryTest {
         given(model.getId()).willReturn(PROCESS_ID_1);
         given(model.getStatus()).willReturn(ProcessStatus.DONE);
         Map<String, String> data = Map.of(
-            ProcessParamKeys.PRODUCER_BUILDING_DATA_ID, PRODUCER_BUILDING_DATA_ID,
+            ProcessParamKeys.PRODUCER_BUILDING_MODULE_ID, uuidConverter.convertDomain(PRODUCER_BUILDING_MODULE_DATA_ID),
             ProcessParamKeys.ALLOCATED_RESOURCE_ID, uuidConverter.convertDomain(ALLOCATED_RESOURCE_ID),
             ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(RESERVED_STORAGE_ID),
             ProcessParamKeys.AMOUNT, String.valueOf(RESERVED_STORAGE_AMOUNT)

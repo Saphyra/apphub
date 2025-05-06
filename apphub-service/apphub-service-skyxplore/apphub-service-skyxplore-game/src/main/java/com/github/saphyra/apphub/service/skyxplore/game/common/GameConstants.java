@@ -16,11 +16,13 @@ public class GameConstants {
     public static final String DATA_ID_RAW_FOOD = "raw_food";
     public static final String DATA_ID_HEADQUARTERS = "headquarters";
 
+    //BuildingModules
+    public static final String BUILDING_MODULE_HQ_STORAGE = "hq_storage";
+
     //Message Sender item keys
     public static final String ITEM_KEY_SURFACES = "surfaces";
     public static final String ITEM_KEY_STORAGE = "storage";
     public static final String ITEM_KEY_QUEUE = "queue";
-    public static final String ITEM_KEY_BUILDINGS = "buildings";
     public static final String ITEM_KEY_POPULATION = "population";
 
     public static final String CITIZEN_ASSIGNMENT_TYPE_IDLE = "IDLE";

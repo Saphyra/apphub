@@ -10,10 +10,14 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class BuildingCapacityCalculator {
-    //TODO rework logic to support multiple pending productions (e.g. waiting for resources to be delivered)
     public boolean isAvailable(GameData gameData, BuildingModule buildingModule) {
         if (gameData.getDeconstructions().findByExternalReference(buildingModule.getBuildingModuleId()).isPresent()) {
             log.info("Building {} is being deconstructed", buildingModule.getBuildingModuleId());
+            return false;
+        }
+
+        if (gameData.getConstructions().findByExternalReference(buildingModule.getBuildingModuleId()).isPresent()) {
+            log.info("Building {} is being constructed", buildingModule.getBuildingModuleId());
             return false;
         }
 

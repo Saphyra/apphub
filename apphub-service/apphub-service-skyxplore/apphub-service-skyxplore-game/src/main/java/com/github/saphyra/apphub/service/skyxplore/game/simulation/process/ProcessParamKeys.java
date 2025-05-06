@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process;
 
 public class ProcessParamKeys {
-    public static final String PRODUCER_BUILDING_DATA_ID = "producerBuildingDataId";
+    public static final String PRODUCER_BUILDING_MODULE_ID = "producerBuildingModuleId";
     public static final String BUILDING_DATA_ID = "buildingDataId";
     public static final String SKILL_TYPE = "skillType";
     public static final String REQUIRED_WORK_POINTS = "requiredWorkPoints";

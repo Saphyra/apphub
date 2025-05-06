@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequire
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProducerBuildingModule;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
@@ -48,7 +48,7 @@ class WorkProcessFactoryTest {
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private ProductionBuildingService productionBuildingService;
+    private ProductionBuildingModuleService productionBuildingModuleService;
 
     @Mock
     private GameProperties gameProperties;
@@ -123,7 +123,7 @@ class WorkProcessFactoryTest {
 
     @Test
     void createForProduction() {
-        given(productionBuildingService.get(BUILDING_DATA_ID)).willReturn(producerBuildingModule);
+        given(productionBuildingModuleService.get(BUILDING_DATA_ID)).willReturn(producerBuildingModule);
         given(producerBuildingModule.getProduces()).willReturn(List.of(production));
         given(production.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
         given(production.getConstructionRequirements()).willReturn(constructionRequirements);

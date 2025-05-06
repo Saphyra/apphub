@@ -29,4 +29,28 @@
             <column name="location_type"/>
         </dropColumn>
     </changeSet>
+
+    <changeSet id="add-column-container_id-to-stored_resource" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="stored_resource" columnName="container_id"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="stored_resource">
+            <column name="container_id" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-container_type-to-stored_resource" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="stored_resource" columnName="container_type"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="stored_resource">
+            <column name="container_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

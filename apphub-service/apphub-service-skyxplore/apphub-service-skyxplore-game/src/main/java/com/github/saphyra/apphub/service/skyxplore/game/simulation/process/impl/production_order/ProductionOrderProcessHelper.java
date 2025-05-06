@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;
@@ -32,13 +33,17 @@ class ProductionOrderProcessHelper {
     private final StoredResourceConverter storedResourceConverter;
     private final ReservedStorageConverter reservedStorageConverter;
 
-    String findProductionBuilding(GameData gameData, UUID location, String dataId) {
-        return producerBuildingFinderService.findProducerBuildingDataId(gameData, location, dataId)
+    UUID findProductionBuilding(GameData gameData, UUID location, String dataId) {
+        return producerBuildingFinderService.findProducerBuildingId(gameData, location, dataId)
             .orElse(null);
     }
 
-    void processResourceRequirements(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String dataId, int amount, String producerBuildingDataId) {
-        resourceRequirementProcessFactory.createResourceRequirementProcesses(progressDiff, gameData, processId, location, dataId, amount, producerBuildingDataId)
+    void processResourceRequirements(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID location, String dataId, int amount, UUID producerBuildingModuleId) {
+        String producerBuildingModuleDataId = gameData.getBuildingModules()
+            .findByBuildingModuleIdValidated(producerBuildingModuleId)
+            .getDataId();
+
+        resourceRequirementProcessFactory.createResourceRequirementProcesses(progressDiff, gameData, processId, location, dataId, amount, producerBuildingModuleDataId)
             .forEach(productionOrderProcess -> {
                 gameData.getProcesses()
                     .add(productionOrderProcess);
@@ -46,7 +51,7 @@ class ProductionOrderProcessHelper {
             });
     }
 
-    void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, String producerBuildingDataId, UUID reservedStorageId) {
+    void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID producerBuildingModuleId, UUID reservedStorageId) {
         log.info("RequestWorkProcess is not present. Resolving allocations...");
 
         ReservedStorage reservedStorage = gameData.getReservedStorages()
@@ -54,7 +59,11 @@ class ProductionOrderProcessHelper {
 
         useAllocatedResourceService.resolveAllocations(progressDiff, gameData, reservedStorage.getLocation(), processId);
 
-        workProcessFactory.createForProduction(gameData, processId, reservedStorage.getLocation(), producerBuildingDataId, reservedStorage.getDataId(), reservedStorage.getAmount())
+        String producerBuildingModuleDataId = gameData.getBuildingModules()
+            .findByBuildingModuleIdValidated(producerBuildingModuleId)
+            .getDataId();
+
+        workProcessFactory.createForProduction(gameData, processId, reservedStorage.getLocation(), producerBuildingModuleDataId, reservedStorage.getDataId(), reservedStorage.getAmount())
             .forEach(requestWorkProcess -> {
                 gameData.getProcesses()
                     .add(requestWorkProcess);
@@ -62,14 +71,14 @@ class ProductionOrderProcessHelper {
             });
     }
 
-    void storeResource(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID reservedStorageId, UUID allocatedResourceId, int amount) {
+    void storeResource(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID reservedStorageId, UUID allocatedResourceId, int amount, UUID buildingModuleId) {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
             .findByReservedStorageIdValidated(reservedStorageId);
         log.info("ProductionOrder finished. Storing {} of {}", amount, reservedStorage.getDataId());
 
         StoredResource storedResource = gameData.getStoredResources()
             .findByLocationAndDataId(location, reservedStorage.getDataId())
-            .orElseGet(() -> storedResourceFactory.create(progressDiff, gameData, location, reservedStorage.getDataId()));
+            .orElseGet(() -> storedResourceFactory.create(progressDiff, gameData, location, reservedStorage.getDataId(), buildingModuleId, ContainerType.PRODUCER_OUTPUT));
 
         if (nonNull(allocatedResourceId)) {
             AllocatedResource allocatedResource = gameData.getAllocatedResources()

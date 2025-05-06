@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProductionBuildingModuleService extends ValidationAbstractDataService<String, ProductionBuildingModuleData> {
-    public ProductionBuildingModuleService(ContentLoaderFactory contentLoaderFactory, ProductionBuildingModuleValidator validator) {
+public class ProductionBuildingModuleDataService extends ValidationAbstractDataService<String, ProductionBuildingModuleData> {
+    public ProductionBuildingModuleDataService(ContentLoaderFactory contentLoaderFactory, ProductionBuildingModuleValidator validator) {
         super("/data/building/module/production", contentLoaderFactory, validator);
     }
 
