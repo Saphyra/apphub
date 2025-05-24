@@ -94,8 +94,8 @@ class ConstructBuildingModuleQueueServiceTest {
         given(constructions.stream()).willReturn(Stream.of(construction));
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(construction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleId(BUILDING_MODULE_ID)).willReturn(Optional.of(buildingModule));
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findById(BUILDING_MODULE_ID)).willReturn(Optional.of(buildingModule));
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(construction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
@@ -116,7 +116,7 @@ class ConstructBuildingModuleQueueServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

@@ -37,14 +37,14 @@ class DeconstructBuildingModuleQueueService implements QueueService {
     public List<QueueItem> getQueue(GameData gameData, UUID location) {
         return gameData.getDeconstructions()
             .stream()
-            .filter(deconstruction -> gameData.getBuildingModules().findByBuildingModuleId(deconstruction.getExternalReference()).isPresent())
+            .filter(deconstruction -> gameData.getBuildingModules().findById(deconstruction.getExternalReference()).isPresent())
             .map(deconstruction -> QueueItem.builder()
                 .itemId(deconstruction.getDeconstructionId())
                 .type(getType())
                 .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
                 .currentWorkPoints(deconstruction.getCurrentWorkPoints())
                 .priority(deconstruction.getPriority())
-                .data(Map.of("dataId", gameData.getBuildingModules().findByBuildingModuleIdValidated(deconstruction.getExternalReference()).getDataId()))
+                .data(Map.of("dataId", gameData.getBuildingModules().findByIdValidated(deconstruction.getExternalReference()).getDataId()))
                 .build())
             .collect(Collectors.toList());
     }

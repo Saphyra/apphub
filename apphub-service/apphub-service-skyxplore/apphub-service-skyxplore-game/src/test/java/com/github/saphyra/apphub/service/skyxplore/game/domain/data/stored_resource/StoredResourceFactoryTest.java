@@ -56,7 +56,7 @@ public class StoredResourceFactoryTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(storedResourceConverter.toModel(eq(GAME_ID), any(StoredResource.class))).willReturn(storedResourceModel);
 
-        StoredResource result = underTest.create(progressDiff, gameData, LOCATION, DATA_ID, AMOUNT, CONTAINER_ID, ContainerType.SURFACE);
+        StoredResource result = underTest.save(progressDiff, gameData, LOCATION, DATA_ID, AMOUNT, CONTAINER_ID, ContainerType.SURFACE);
 
         assertThat(result.getStoredResourceId()).isEqualTo(STORED_RESOURCE_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);

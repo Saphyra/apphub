@@ -30,4 +30,29 @@
             <column name="location" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="rename-column-location-to-container_id-in-reserved_storage" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <columnExists schemaName="skyxplore_game" tableName="reserved_storage" columnName="location"/>
+                <not>
+                    <columnExists schemaName="skyxplore_game" tableName="reserved_storage" columnName="container_id"/>
+                </not>
+            </and>
+        </preConditions>
+
+        <renameColumn schemaName="skyxplore_game" tableName="reserved_storage" oldColumnName="location" newColumnName="container_id"/>
+    </changeSet>
+
+    <changeSet id="add-column-container_type-to-reserved_storage" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="reserved_storage" columnName="container_type"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="reserved_storage">
+            <column name="container_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

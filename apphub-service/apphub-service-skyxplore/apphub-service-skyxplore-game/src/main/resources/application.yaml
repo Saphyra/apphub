@@ -79,6 +79,8 @@ game:
     hitPoints:
       perLevel: 1000
       base: 9000
+  production:
+    productionOrderMaxDispatchedRatio: 0.2
 
 logging:
   level:

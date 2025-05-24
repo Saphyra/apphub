@@ -103,7 +103,7 @@ class DeconstructConstructionAreaQueueServiceTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(constructionAreas.findByConstructionAreaId(BUILDING_MODULE_ID)).willReturn(Optional.of(constructionArea));
-        given(constructionAreas.findByConstructionAreaIdValidated(BUILDING_MODULE_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(BUILDING_MODULE_ID)).willReturn(constructionArea);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);

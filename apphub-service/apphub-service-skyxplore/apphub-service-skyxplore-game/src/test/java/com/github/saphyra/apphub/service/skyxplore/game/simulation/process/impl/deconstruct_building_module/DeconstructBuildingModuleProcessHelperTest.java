@@ -81,7 +81,7 @@ class DeconstructBuildingModuleProcessHelperTest {
         given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
 
         underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 

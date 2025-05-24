@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingModuleData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleService;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
@@ -34,10 +34,10 @@ class StorageCalculatorTest {
     private static final String INCOMPATIBLE_DATA_ID = "incompatible-data-id";
 
     @Mock
-    private StorageBuildingModuleService storageBuildingModuleService;
+    private StorageBuildingModuleDataService storageBuildingModuleDataService;
 
     @Mock
-    private DwellingBuildingService dwellingBuildingService;
+    private DwellingBuildingDataService dwellingBuildingDataService;
 
     @InjectMocks
     private StorageCalculator underTest;
@@ -83,18 +83,18 @@ class StorageCalculatorTest {
         given(deconstructedModule.getDataId()).willReturn(DATA_ID);
         given(incompatibleModule.getDataId()).willReturn(INCOMPATIBLE_DATA_ID);
         given(matchingModule.getDataId()).willReturn(DATA_ID);
-        given(storageBuildingModuleService.containsKey(NOT_STORAGE_DATA_ID)).willReturn(false);
-        given(storageBuildingModuleService.containsKey(DATA_ID)).willReturn(true);
-        given(storageBuildingModuleService.containsKey(INCOMPATIBLE_DATA_ID)).willReturn(true);
+        given(storageBuildingModuleDataService.containsKey(NOT_STORAGE_DATA_ID)).willReturn(false);
+        given(storageBuildingModuleDataService.containsKey(DATA_ID)).willReturn(true);
+        given(storageBuildingModuleDataService.containsKey(INCOMPATIBLE_DATA_ID)).willReturn(true);
         given(deconstructedModule.getBuildingModuleId()).willReturn(DECONSTRUCTED_BUILDING_MODULE_ID);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
-        given(storageBuildingModuleService.get(INCOMPATIBLE_DATA_ID)).willReturn(incompatibleStorageBuildingModuleData);
-        given(storageBuildingModuleService.get(DATA_ID)).willReturn(storageBuildingModuleData);
+        given(storageBuildingModuleDataService.get(INCOMPATIBLE_DATA_ID)).willReturn(incompatibleStorageBuildingModuleData);
+        given(storageBuildingModuleDataService.get(DATA_ID)).willReturn(storageBuildingModuleData);
         given(incompatibleStorageBuildingModuleData.getStores()).willReturn(Map.of());
         given(storageBuildingModuleData.getStores()).willReturn(Map.of(StorageType.CONTAINER, CAPACITY));
 
-        assertThat(underTest.calculateStorageCapacity(gameData, LOCATION, StorageType.CONTAINER)).isEqualTo(CAPACITY * 2);
+        assertThat(underTest.calculateDepotCapacity(gameData, LOCATION, StorageType.CONTAINER)).isEqualTo(CAPACITY * 2);
     }
 
     @Test
@@ -104,12 +104,12 @@ class StorageCalculatorTest {
         given(incompatibleModule.getDataId()).willReturn(INCOMPATIBLE_DATA_ID);
         given(deconstructedModule.getDataId()).willReturn(DATA_ID);
         given(matchingModule.getDataId()).willReturn(DATA_ID);
-        given(dwellingBuildingService.containsKey(INCOMPATIBLE_DATA_ID)).willReturn(false);
-        given(dwellingBuildingService.containsKey(DATA_ID)).willReturn(true);
+        given(dwellingBuildingDataService.containsKey(INCOMPATIBLE_DATA_ID)).willReturn(false);
+        given(dwellingBuildingDataService.containsKey(DATA_ID)).willReturn(true);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructedModule.getBuildingModuleId()).willReturn(DECONSTRUCTED_BUILDING_MODULE_ID);
         given(deconstructions.findByExternalReference(DECONSTRUCTED_BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
-        given(dwellingBuildingService.get(DATA_ID)).willReturn(dwellingBuildingModuleData);
+        given(dwellingBuildingDataService.get(DATA_ID)).willReturn(dwellingBuildingModuleData);
         given(dwellingBuildingModuleData.getCapacity()).willReturn(CAPACITY);
 
         assertThat(underTest.calculateDwellingCapacity(gameData, LOCATION)).isEqualTo(CAPACITY * 2);

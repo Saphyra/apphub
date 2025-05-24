@@ -29,7 +29,7 @@ class TerraformationProcessHelper {
 
     void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID terraformationId) {
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(terraformationId);
+            .findByIdValidated(terraformationId);
 
         useAllocatedResourceService.resolveAllocations(
             progressDiff,
@@ -54,7 +54,7 @@ class TerraformationProcessHelper {
     void finishTerraformation(GameProgressDiff progressDiff, GameData gameData, UUID terraformationId) {
         log.info("Finishing terraformation...");
         Construction terraformation = gameData.getConstructions()
-            .findByConstructionIdValidated(terraformationId);
+            .findByIdValidated(terraformationId);
 
         allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, terraformationId);
 

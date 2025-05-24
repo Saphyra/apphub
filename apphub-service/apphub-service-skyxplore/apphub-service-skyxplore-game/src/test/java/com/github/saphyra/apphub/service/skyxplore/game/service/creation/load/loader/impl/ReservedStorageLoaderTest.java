@@ -67,7 +67,7 @@ class ReservedStorageLoaderTest {
     @Test
     void convert() {
         given(model.getId()).willReturn(RESERVED_STORAGE_ID);
-        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getContainerId()).willReturn(LOCATION);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);

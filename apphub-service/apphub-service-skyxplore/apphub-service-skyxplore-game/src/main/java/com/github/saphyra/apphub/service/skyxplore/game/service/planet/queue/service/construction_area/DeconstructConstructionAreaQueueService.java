@@ -44,7 +44,7 @@ class DeconstructConstructionAreaQueueService implements QueueService {
                 .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
                 .currentWorkPoints(deconstruction.getCurrentWorkPoints())
                 .priority(deconstruction.getPriority())
-                .data(Map.of("dataId", gameData.getConstructionAreas().findByConstructionAreaIdValidated(deconstruction.getExternalReference()).getDataId()))
+                .data(Map.of("dataId", gameData.getConstructionAreas().findByIdValidated(deconstruction.getExternalReference()).getDataId()))
                 .build())
             .collect(Collectors.toList());
     }

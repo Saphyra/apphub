@@ -106,7 +106,7 @@ class TerraformationProcessTest {
         given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
         given(priority.getValue()).willReturn(PLANET_PRIORITY);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
         given(terraformation.getPriority()).willReturn(TERRAFORMATION_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PLANET_PRIORITY * TERRAFORMATION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);

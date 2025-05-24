@@ -106,7 +106,7 @@ class ConstructBuildingModuleProcessTest {
         given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
         given(priority.getValue()).willReturn(PRIORITY_VALUE);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY_VALUE * CONSTRUCTION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);

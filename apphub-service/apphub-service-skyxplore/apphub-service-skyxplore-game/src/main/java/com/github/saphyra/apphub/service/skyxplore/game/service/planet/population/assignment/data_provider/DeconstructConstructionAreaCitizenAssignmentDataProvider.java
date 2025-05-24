@@ -24,7 +24,7 @@ class DeconstructConstructionAreaCitizenAssignmentDataProvider implements Citize
             .findByDeconstructionIdValidated(process.getExternalReference())
             .getExternalReference();
         return gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(constructionAreaId)
+            .findByIdValidated(constructionAreaId)
             .getDataId();
     }
 }

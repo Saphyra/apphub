@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -14,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

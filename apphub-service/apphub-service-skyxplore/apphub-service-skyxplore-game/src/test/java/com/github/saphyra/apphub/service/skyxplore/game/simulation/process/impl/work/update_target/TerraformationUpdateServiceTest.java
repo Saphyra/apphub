@@ -47,7 +47,7 @@ class TerraformationUpdateServiceTest {
     @Test
     void updateConstruction() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(constructionConverter.toModel(GAME_ID, terraformation)).willReturn(constructionModel);
 

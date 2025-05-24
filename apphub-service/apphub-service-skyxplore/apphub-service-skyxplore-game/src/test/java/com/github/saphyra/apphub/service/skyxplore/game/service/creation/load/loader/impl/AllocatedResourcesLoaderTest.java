@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResource;

@@ -11,12 +11,12 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 public class ReservedStorages extends Vector<ReservedStorage> {
-    public ReservedStorage findByReservedStorageIdValidated(UUID reservedStorageId) {
-        return findByReservedStorageId(reservedStorageId)
+    public ReservedStorage findByIdValidated(UUID reservedStorageId) {
+        return findById(reservedStorageId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ReservedStorage not found by reservedStorageId " + reservedStorageId));
     }
 
-    public Optional<ReservedStorage> findByReservedStorageId(UUID reservedStorageId) {
+    public Optional<ReservedStorage> findById(UUID reservedStorageId) {
         return stream()
             .filter(reservedStorage -> reservedStorage.getReservedStorageId().equals(reservedStorageId))
             .findAny();
@@ -32,5 +32,12 @@ public class ReservedStorages extends Vector<ReservedStorage> {
         return stream()
             .filter(reservedStorage -> reservedStorage.getLocation().equals(location))
             .collect(Collectors.toList());
+    }
+
+    //TODO unit test
+    public List<ReservedStorage> getByContainerId(UUID containerId) {
+        return stream()
+            .filter(reservedStorage -> reservedStorage.getContainerId().equals(containerId))
+            .toList();
     }
 }

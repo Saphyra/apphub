@@ -77,7 +77,7 @@ class ConstructBuildingModuleProcessHelperTest {
     @Test
     void startWork() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getLocation()).willReturn(LOCATION);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(workProcessFactory.createForConstruction(gameData, PROCESS_ID, CONSTRUCTION_ID, LOCATION, REQUIRED_WORK_POINTS)).willReturn(List.of(process));
@@ -94,7 +94,7 @@ class ConstructBuildingModuleProcessHelperTest {
     @Test
     void finishConstruction() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
 
         underTest.finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
 

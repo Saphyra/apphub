@@ -95,7 +95,7 @@ class ConstructConstructionAreaQueueServiceTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(construction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(constructionAreas.findByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(Optional.of(constructionArea));
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(construction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
@@ -116,7 +116,7 @@ class ConstructConstructionAreaQueueServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

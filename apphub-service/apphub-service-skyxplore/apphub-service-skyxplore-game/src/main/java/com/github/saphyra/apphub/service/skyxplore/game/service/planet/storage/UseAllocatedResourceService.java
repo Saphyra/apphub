@@ -17,9 +17,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
+@Deprecated(forRemoval = true)
 public class UseAllocatedResourceService {
     private final StoredResourceConverter storedResourceConverter;
-    private final AllocatedResourceConverter allocatedResourceConverter;
 
     public void resolveAllocations(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, UUID externalReference) {
         gameData.getReservedStorages()

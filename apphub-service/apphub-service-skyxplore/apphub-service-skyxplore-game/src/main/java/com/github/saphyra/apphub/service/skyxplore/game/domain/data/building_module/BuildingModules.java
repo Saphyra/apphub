@@ -39,12 +39,12 @@ public class BuildingModules extends Vector<BuildingModule> {
             .collect(Collectors.toList());
     }
 
-    public BuildingModule findByBuildingModuleIdValidated(UUID buildingModuleId) {
-        return findByBuildingModuleId(buildingModuleId)
+    public BuildingModule findByIdValidated(UUID buildingModuleId) {
+        return findById(buildingModuleId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "BuildingModule not found by buildingModuleId " + buildingModuleId));
     }
 
-    public Optional<BuildingModule> findByBuildingModuleId(UUID buildingModuleId) {
+    public Optional<BuildingModule> findById(UUID buildingModuleId) {
         return stream()
             .filter(buildingModule -> buildingModule.getBuildingModuleId().equals(buildingModuleId))
             .findAny();

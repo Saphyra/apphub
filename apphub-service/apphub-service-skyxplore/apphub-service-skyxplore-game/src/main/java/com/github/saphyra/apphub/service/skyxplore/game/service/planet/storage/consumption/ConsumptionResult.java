@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Deprecated(forRemoval = true)
 class ConsumptionResult {
     private final AllocatedResource allocation;
     private final ReservedStorage reservation;

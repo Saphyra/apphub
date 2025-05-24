@@ -57,7 +57,7 @@ class DeconstructConstructionAreaCitizenAssignmentDataProviderTest {
         given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getDataId()).willReturn(DATA_ID);
 
         assertThat(underTest.getData(gameData, process)).isEqualTo(DATA_ID);

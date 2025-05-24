@@ -33,6 +33,7 @@ public class StoredResourceConverter implements GameDataToModelConverter {
         model.setAmount(storedResource.getAmount());
         model.setContainerId(storedResource.getContainerId());
         model.setContainerType(storedResource.getContainerType());
+        model.setAllocatedBy(storedResource.getAllocatedBy());
         return model;
     }
 

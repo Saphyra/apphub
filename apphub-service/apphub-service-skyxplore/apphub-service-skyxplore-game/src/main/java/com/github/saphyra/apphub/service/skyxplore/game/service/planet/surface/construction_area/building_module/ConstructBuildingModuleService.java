@@ -52,7 +52,7 @@ class ConstructBuildingModuleService {
         GameData gameData = game.getData();
 
         ConstructionArea constructionArea = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(constructionAreaId);
+            .findByIdValidated(constructionAreaId);
         UUID planetId = constructionArea.getLocation();
 
         //Construction must happen on own planet

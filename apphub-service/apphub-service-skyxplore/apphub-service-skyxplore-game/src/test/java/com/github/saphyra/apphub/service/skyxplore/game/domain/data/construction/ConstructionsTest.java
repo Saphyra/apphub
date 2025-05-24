@@ -74,7 +74,7 @@ class ConstructionsTest {
 
         underTest.add(construction1);
 
-        assertThat(underTest.findByConstructionIdValidated(CONSTRUCTION_ID)).isEqualTo(construction1);
+        assertThat(underTest.findByIdValidated(CONSTRUCTION_ID)).isEqualTo(construction1);
     }
 
     @Test
@@ -83,7 +83,7 @@ class ConstructionsTest {
 
         underTest.add(construction1);
 
-        Throwable ex = catchThrowable(() -> underTest.findByConstructionIdValidated(CONSTRUCTION_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(CONSTRUCTION_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }

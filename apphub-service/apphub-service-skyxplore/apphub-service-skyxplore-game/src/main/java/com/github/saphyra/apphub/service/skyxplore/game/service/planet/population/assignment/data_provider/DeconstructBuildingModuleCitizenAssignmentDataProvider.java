@@ -24,7 +24,7 @@ class DeconstructBuildingModuleCitizenAssignmentDataProvider implements CitizenA
             .findByDeconstructionIdValidated(process.getExternalReference())
             .getExternalReference();
         return gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(buildingModuleId)
+            .findByIdValidated(buildingModuleId)
             .getDataId();
     }
 }

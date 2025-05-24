@@ -33,7 +33,7 @@ class DeconstructBuildingModuleProcessHelper {
 
         UUID buildingModuleId = deconstruction.getExternalReference();
         BuildingModule buildingModule = gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(buildingModuleId);
+            .findByIdValidated(buildingModuleId);
 
         gameData.getBuildingModules()
             .remove(buildingModule);

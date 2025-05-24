@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_sett
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;

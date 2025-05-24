@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import org.junit.jupiter.api.Test;
 
