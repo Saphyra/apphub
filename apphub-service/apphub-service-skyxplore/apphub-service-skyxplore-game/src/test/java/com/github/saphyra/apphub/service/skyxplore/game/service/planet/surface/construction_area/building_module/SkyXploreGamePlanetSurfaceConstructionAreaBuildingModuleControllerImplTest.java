@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,7 +40,7 @@ class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerImplTest
     private DeconstructBuildingModuleService deconstructBuildingModuleService;
 
     @Mock
-    private CancelDeconstructionOfBuildingModuleService cancelDeconstructionOfBuildingModuleService;
+    private CancelDeconstructionFacade cancelDeconstructionFacade;
 
     @InjectMocks
     private SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerImpl underTest;
@@ -84,7 +85,7 @@ class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerImplTest
 
     @Test
     void cancelDeconstructionOfBuildingModule() {
-        given(cancelDeconstructionOfBuildingModuleService.cancelDeconstruction(USER_ID, DECONSTRUCTION_ID)).willReturn(CONSTRUCTION_AREA_ID);
+        given(cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(USER_ID, DECONSTRUCTION_ID)).willReturn(CONSTRUCTION_AREA_ID);
 
         assertThat(underTest.cancelDeconstructionOfBuildingModule(DECONSTRUCTION_ID, accessTokenHeader)).containsExactly(buildingModuleResponse);
     }

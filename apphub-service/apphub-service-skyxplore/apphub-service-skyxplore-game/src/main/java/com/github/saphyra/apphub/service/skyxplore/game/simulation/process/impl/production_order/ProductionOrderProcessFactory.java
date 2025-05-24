@@ -85,7 +85,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
         return ProductionOrderProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
-            .producerBuildingDataId(model.getData().get(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID))
+            .producerBuildingModuleId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.PRODUCER_BUILDING_MODULE_ID)))
             .externalReference(model.getExternalReference())
             .gameData(game.getData())
             .location(model.getLocation())
