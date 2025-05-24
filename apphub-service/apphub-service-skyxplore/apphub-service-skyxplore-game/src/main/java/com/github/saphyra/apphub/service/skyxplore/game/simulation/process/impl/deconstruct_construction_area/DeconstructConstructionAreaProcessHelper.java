@@ -61,7 +61,7 @@ class DeconstructConstructionAreaProcessHelper {
 
         UUID constructionAreaId = deconstruction.getExternalReference();
         ConstructionArea constructionArea = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(constructionAreaId);
+            .findByIdValidated(constructionAreaId);
 
         gameData.getConstructionAreas()
             .remove(constructionArea);

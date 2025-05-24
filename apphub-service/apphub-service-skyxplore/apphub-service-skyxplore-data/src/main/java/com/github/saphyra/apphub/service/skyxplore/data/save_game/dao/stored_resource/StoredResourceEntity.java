@@ -22,5 +22,6 @@ class StoredResourceEntity {
     private String containerId;
     private String containerType;
     private String dataId;
+    private String allocatedBy;
     private int amount;
 }

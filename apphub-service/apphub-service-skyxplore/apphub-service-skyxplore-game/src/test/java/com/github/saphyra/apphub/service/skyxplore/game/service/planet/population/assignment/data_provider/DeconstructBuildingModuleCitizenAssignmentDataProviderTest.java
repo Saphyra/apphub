@@ -57,7 +57,7 @@ class DeconstructBuildingModuleCitizenAssignmentDataProviderTest {
         given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getDataId()).willReturn(DATA_ID);
 
         assertThat(underTest.getData(gameData, process)).isEqualTo(DATA_ID);

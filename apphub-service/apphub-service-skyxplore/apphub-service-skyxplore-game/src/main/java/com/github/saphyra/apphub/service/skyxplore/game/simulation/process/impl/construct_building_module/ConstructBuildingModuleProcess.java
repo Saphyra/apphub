@@ -127,7 +127,7 @@ public class ConstructBuildingModuleProcess implements Process {
 
     private Construction findConstruction() {
         return gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
     }
 
     @Override

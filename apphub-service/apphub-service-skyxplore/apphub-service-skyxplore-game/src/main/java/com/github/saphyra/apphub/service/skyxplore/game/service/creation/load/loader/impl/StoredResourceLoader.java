@@ -40,6 +40,7 @@ public class StoredResourceLoader extends AutoLoader<StoredResourceModel, Stored
             .amount(model.getAmount())
             .containerId(model.getContainerId())
             .containerType(model.getContainerType())
+            .allocatedBy(model.getAllocatedBy())
             .build();
     }
 }

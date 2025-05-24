@@ -12,6 +12,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class RequiredEmptyStorageCalculator {
     private final ResourceDataService resourceDataService;
 

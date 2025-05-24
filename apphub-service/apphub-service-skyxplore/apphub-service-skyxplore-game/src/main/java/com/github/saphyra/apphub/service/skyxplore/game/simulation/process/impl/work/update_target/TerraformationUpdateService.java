@@ -20,7 +20,7 @@ class TerraformationUpdateService {
         log.info("Adding {} workPoints to TERRAFORMATION {}", completedWorkPoints, constructionId);
 
         Construction terraformation = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         log.info("Before update: {}", terraformation);
         terraformation.increaseCurrentWorkPoints(completedWorkPoints);

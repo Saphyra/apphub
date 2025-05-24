@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +17,7 @@ public class BuildingModuleAllocationLoader extends AutoLoader<BuildingModuleAll
 
     @Override
     protected GameItemType getGameItemType() {
-        return GameItemType.BUILDING_ALLOCATION;
+        return GameItemType.BUILDING_MODULE_ALLOCATION;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class BuildingModuleAllocationLoader extends AutoLoader<BuildingModuleAll
     @Override
     protected BuildingModuleAllocation convert(BuildingModuleAllocationModel model) {
         return BuildingModuleAllocation.builder()
-            .buildingAllocationId(model.getId())
+            .buildingModuleAllocationId(model.getId())
             .buildingModuleId(model.getBuildingModuleId())
             .processId(model.getProcessId())
             .build();

@@ -54,7 +54,7 @@ public class TerraformationProcess implements Process {
 
     private Construction findTerraformation() {
         return gameData.getConstructions()
-            .findByConstructionIdValidated(terraformationId);
+            .findByIdValidated(terraformationId);
     }
 
     @Override

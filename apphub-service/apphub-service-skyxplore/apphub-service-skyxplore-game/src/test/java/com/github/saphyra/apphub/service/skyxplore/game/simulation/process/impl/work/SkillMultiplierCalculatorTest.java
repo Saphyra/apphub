@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GamePr
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.SkillMultiplierCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

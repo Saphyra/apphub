@@ -50,7 +50,7 @@ public class CancelDeconstructionFacade {
         }
 
         UUID constructionAreaId = gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(deconstruction.getExternalReference())
+            .findByIdValidated(deconstruction.getExternalReference())
             .getConstructionAreaId();
 
         game.getEventLoop()

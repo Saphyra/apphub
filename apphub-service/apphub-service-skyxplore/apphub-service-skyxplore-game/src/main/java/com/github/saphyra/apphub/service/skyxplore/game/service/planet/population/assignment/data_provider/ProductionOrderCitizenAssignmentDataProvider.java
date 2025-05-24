@@ -23,7 +23,7 @@ class ProductionOrderCitizenAssignmentDataProvider implements CitizenAssignmentD
     public Object getData(GameData gameData, Process process) {
         UUID reservedStorageId = ((ProductionOrderProcess) process).getReservedStorageId();
         return gameData.getReservedStorages()
-            .findByReservedStorageIdValidated(reservedStorageId)
+            .findByIdValidated(reservedStorageId)
             .getDataId();
     }
 }

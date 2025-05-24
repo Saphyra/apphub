@@ -20,7 +20,7 @@ class ConstructionUpdateService {
         log.info("Adding {} workPoints to CONSTRUCTION {}", completedWorkPoints, constructionId);
 
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         log.info("Before update: {}", construction);
         construction.increaseCurrentWorkPoints(completedWorkPoints);

@@ -41,13 +41,13 @@ class ConstructionAreasTest {
     void findByConstructionAreaIdValidated() {
         given(constructionArea1.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID_1);
 
-        assertThat(new ConstructionAreas(constructionArea1).findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID_1)).isEqualTo(constructionArea1);
+        assertThat(new ConstructionAreas(constructionArea1).findByIdValidated(CONSTRUCTION_AREA_ID_1)).isEqualTo(constructionArea1);
     }
 
     @Test
     void findByConstructionAreaIdValidated_notFound() {
         given(constructionArea1.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID_2);
 
-        ExceptionValidator.validateNotLoggedException(() -> new ConstructionAreas(constructionArea1).findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID_1), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+        ExceptionValidator.validateNotLoggedException(() -> new ConstructionAreas(constructionArea1).findByIdValidated(CONSTRUCTION_AREA_ID_1), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 }

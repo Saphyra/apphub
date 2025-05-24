@@ -112,7 +112,7 @@ class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProductionOrderProcessHelper.class)).willReturn(helper);
 
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(null);
 
@@ -127,7 +127,7 @@ class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProductionOrderProcessConditions.class)).willReturn(conditions);
 
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_BUILDING_MODULE_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(false);
@@ -147,7 +147,7 @@ class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProductionOrderProcessConditions.class)).willReturn(conditions);
 
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_BUILDING_MODULE_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(true);
@@ -170,7 +170,7 @@ class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProductionOrderProcessConditions.class)).willReturn(conditions);
 
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(helper.findProductionBuilding(gameData, LOCATION, RESOURCE_DATA_ID)).willReturn(PRODUCER_BUILDING_MODULE_ID);
         given(conditions.requiredResourcesPresent(gameData, PROCESS_ID)).willReturn(true);
@@ -218,7 +218,7 @@ class ProductionOrderProcessTest {
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat(result.getData()).containsEntry(ProcessParamKeys.PRODUCER_BUILDING_MODULE_ID, null);
+        assertThat(result.getData()).containsEntry(ProcessParamKeys.BUILDING_MODULE_ID, null);
         assertThat(result.getData()).containsEntry(ProcessParamKeys.RESERVED_STORAGE_ID, RESERVED_STORAGE_ID.toString());
         assertThat(result.getData()).containsEntry(ProcessParamKeys.ALLOCATED_RESOURCE_ID, ALLOCATED_RESOURCE_ID.toString());
         assertThat(result.getData()).containsEntry(ProcessParamKeys.AMOUNT, String.valueOf(AMOUNT));

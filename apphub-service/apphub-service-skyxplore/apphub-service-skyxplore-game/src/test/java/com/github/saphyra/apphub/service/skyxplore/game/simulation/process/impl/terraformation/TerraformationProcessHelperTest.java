@@ -90,7 +90,7 @@ class TerraformationProcessHelperTest {
     @Test
     void startWork() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
         given(terraformation.getLocation()).willReturn(LOCATION);
         given(terraformation.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(workProcessFactory.createForTerraformation(gameData, PROCESS_ID, TERRAFORMATION_ID, LOCATION, REQUIRED_WORK_POINTS)).willReturn(List.of(workProcess));
@@ -107,7 +107,7 @@ class TerraformationProcessHelperTest {
     @Test
     void finishTerraformation() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);

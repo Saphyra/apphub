@@ -88,7 +88,7 @@ class AvailableBuildingModulesServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getSurfaceId()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);

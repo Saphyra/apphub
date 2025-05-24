@@ -45,7 +45,7 @@ class ProductionOrderCitizenAssignmentDataProviderTest {
     void getData() {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
         given(process.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getDataId()).willReturn(DATA_ID);
 
         assertThat(underTest.getData(gameData, process)).isEqualTo(DATA_ID);

@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 public class ReservedStorageQueryService {
     private final ResourceDataService resourceDataService;
 

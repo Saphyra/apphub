@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.coordinate;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,6 @@ class CoordinateEntity {
     private String referenceId;
     private Double x;
     private Double y;
+    @Column(name = "c_order")
+    private Integer order;
 }

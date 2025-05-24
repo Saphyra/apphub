@@ -8,16 +8,18 @@ import com.github.saphyra.apphub.service.skyxplore.game.config.properties.Citize
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocationConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingAllocationFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocationFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.CitizenEfficiencyCalculator;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.CitizenUpdateService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.update_target.UpdateTargetService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,10 +58,10 @@ class WorkProcessHelperTest {
     private ProductionBuildingFinder productionBuildingFinder;
 
     @Mock
-    private BuildingAllocationFactory buildingAllocationFactory;
+    private BuildingModuleAllocationFactory buildingModuleAllocationFactory;
 
     @Mock
-    private BuildingAllocationConverter buildingAllocationConverter;
+    private BuildingModuleAllocationConverter buildingAllocationConverter;
 
     @Mock
     private CitizenFinder citizenFinder;
@@ -125,14 +127,14 @@ class WorkProcessHelperTest {
 
         underTest.allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
 
-        verifyNoInteractions(buildingAllocationFactory);
+        verifyNoInteractions(buildingModuleAllocationFactory);
     }
 
     @Test
     void allocateParentAsBuildingIfPossible() {
         given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
         given(buildingModuleAllocations.getByBuildingModuleId(EXTERNAL_REFERENCE)).willReturn(Collections.emptyList());
-        given(buildingAllocationFactory.create(EXTERNAL_REFERENCE, PROCESS_ID)).willReturn(buildingModuleAllocation);
+        given(buildingModuleAllocationFactory.create(EXTERNAL_REFERENCE, PROCESS_ID)).willReturn(buildingModuleAllocation);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(buildingAllocationConverter.toModel(GAME_ID, buildingModuleAllocation)).willReturn(buildingModuleAllocationModel);
 
@@ -145,7 +147,7 @@ class WorkProcessHelperTest {
     @Test
     void allocateBuildingIfPossible() {
         given(productionBuildingFinder.findSuitableProductionBuilding(gameData, LOCATION, BUILDING_DATA_ID)).willReturn(Optional.of(BUILDING_ID));
-        given(buildingAllocationFactory.create(BUILDING_ID, PROCESS_ID)).willReturn(buildingModuleAllocation);
+        given(buildingModuleAllocationFactory.create(BUILDING_ID, PROCESS_ID)).willReturn(buildingModuleAllocation);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(buildingAllocationConverter.toModel(GAME_ID, buildingModuleAllocation)).willReturn(buildingModuleAllocationModel);
         given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
@@ -194,7 +196,7 @@ class WorkProcessHelperTest {
     void releaseBuildingAndCitizen() {
         given(gameData.getBuildingModuleAllocations()).willReturn(buildingModuleAllocations);
         given(buildingModuleAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(buildingModuleAllocation));
-        given(buildingModuleAllocation.getBuildingAllocationId()).willReturn(BUILDING_ALLOCATION_ID);
+        given(buildingModuleAllocation.getBuildingModuleAllocationId()).willReturn(BUILDING_ALLOCATION_ID);
 
         given(gameData.getCitizenAllocations()).willReturn(citizenAllocations);
         given(citizenAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(citizenAllocation));
@@ -203,7 +205,7 @@ class WorkProcessHelperTest {
         underTest.releaseBuildingAndCitizen(progressDiff, gameData, PROCESS_ID);
 
         verify(buildingModuleAllocations).remove(buildingModuleAllocation);
-        verify(progressDiff).delete(BUILDING_ALLOCATION_ID, GameItemType.BUILDING_ALLOCATION);
+        verify(progressDiff).delete(BUILDING_ALLOCATION_ID, GameItemType.BUILDING_MODULE_ALLOCATION);
 
         verify(citizenAllocations).remove(citizenAllocation);
         verify(progressDiff).delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);

@@ -166,7 +166,7 @@ class CancelDeconstructionFacadeTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModuleDeconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocationOnMock -> {
@@ -198,7 +198,7 @@ class CancelDeconstructionFacadeTest {
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModuleDeconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocationOnMock -> {

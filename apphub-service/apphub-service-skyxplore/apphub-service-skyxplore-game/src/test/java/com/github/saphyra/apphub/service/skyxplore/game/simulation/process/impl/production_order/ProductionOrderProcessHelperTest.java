@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllocatedResourceModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
@@ -141,7 +140,7 @@ class ProductionOrderProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(productionOrderProcess.toModel()).willReturn(processModel);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getDataId()).willReturn(BUILDING_MODULE_DATA_ID);
 
         underTest.processResourceRequirements(progressDiff, gameData, PROCESS_ID, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_MODULE_ID);
@@ -153,7 +152,7 @@ class ProductionOrderProcessHelperTest {
     @Test
     void startWork() {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(reservedStorage.getLocation()).willReturn(LOCATION);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(reservedStorage.getAmount()).willReturn(AMOUNT);
@@ -161,7 +160,7 @@ class ProductionOrderProcessHelperTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(workProcess.toModel()).willReturn(processModel);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getDataId()).willReturn(BUILDING_MODULE_DATA_ID);
 
         underTest.startWork(progressDiff, gameData, PROCESS_ID, BUILDING_MODULE_ID, RESERVED_STORAGE_ID);
@@ -174,7 +173,7 @@ class ProductionOrderProcessHelperTest {
     @Test
     void storeResource_allocatedResourcePresent_storedResourceFound() {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(storedResources.findByLocationAndDataId(LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.of(storedResource));
@@ -200,11 +199,11 @@ class ProductionOrderProcessHelperTest {
     @Test
     void storeResource_allocatedResourceNull_storedResourceNotFound() {
         given(gameData.getReservedStorages()).willReturn(reservedStorages);
-        given(reservedStorages.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
+        given(reservedStorages.findByIdValidated(RESERVED_STORAGE_ID)).willReturn(reservedStorage);
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(reservedStorage.getDataId()).willReturn(RESOURCE_DATA_ID);
         given(storedResources.findByLocationAndDataId(LOCATION, RESOURCE_DATA_ID)).willReturn(Optional.empty());
-        given(storedResourceFactory.create(progressDiff, gameData, LOCATION, RESOURCE_DATA_ID, BUILDING_MODULE_ID, ContainerType.PRODUCER_OUTPUT)).willReturn(storedResource);
+        given(storedResourceFactory.save(progressDiff, gameData, LOCATION, RESOURCE_DATA_ID, BUILDING_MODULE_ID, ContainerType.PRODUCER_OUTPUT)).willReturn(storedResource);
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(storedResourceConverter.toModel(GAME_ID, storedResource)).willReturn(storedResourceModel);
         given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);

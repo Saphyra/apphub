@@ -43,6 +43,6 @@ public class ReservedStorageConverterTest {
         assertThat(result.get(0).getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
-        assertThat(result.get(0).getLocation()).isEqualTo(LOCATION);
+        assertThat(result.get(0).getContainerId()).isEqualTo(LOCATION);
     }
 }

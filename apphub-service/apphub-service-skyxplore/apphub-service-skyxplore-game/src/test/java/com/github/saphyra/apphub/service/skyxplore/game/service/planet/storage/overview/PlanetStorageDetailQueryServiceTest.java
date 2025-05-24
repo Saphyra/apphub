@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceAmountQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocatedResourceAmountQueryService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +57,7 @@ public class PlanetStorageDetailQueryServiceTest {
 
     @Test
     public void getStorageDetails() {
-        given(storageCalculator.calculateStorageCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
+        given(storageCalculator.calculateDepotCapacity(gameData, LOCATION, StorageType.CONTAINER)).willReturn(CAPACITY);
         given(reservedStorageQueryService.getReservedAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(RESERVED_STORAGE_AMOUNT);
         given(storedResourceAmountQueryService.getActualAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ACTUAL_AMOUNT);
         given(allocatedResourceAmountQueryService.getAllocatedResourceAmount(gameData, LOCATION, StorageType.CONTAINER)).willReturn(ALLOCATED_AMOUNT);

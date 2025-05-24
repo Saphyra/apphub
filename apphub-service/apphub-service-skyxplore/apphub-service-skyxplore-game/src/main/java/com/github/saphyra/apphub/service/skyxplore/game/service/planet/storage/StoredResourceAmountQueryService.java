@@ -16,14 +16,16 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 public class StoredResourceAmountQueryService {
     private final ResourceDataService resourceDataService;
 
     public int getActualAmount(GameData gameData, UUID location, String dataId) {
         return gameData.getStoredResources()
-            .findByLocationAndDataId(location, dataId)
-            .map(StoredResource::getAmount)
-            .orElse(0);
+            .getByLocationAndDataId(location, dataId)
+            .stream()
+            .mapToInt(StoredResource::getAmount)
+            .sum();
     }
 
     public int getActualAmount(GameData gameData, UUID location, StorageType storageType) {

@@ -56,7 +56,7 @@ class TerraformationCitizenAssignmentDataProviderTest {
     void getData() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(process.getExternalReference()).willReturn(CONSTRUCTION_ID);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
         given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);

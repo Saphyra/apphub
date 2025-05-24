@@ -113,7 +113,7 @@ class DeconstructBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);

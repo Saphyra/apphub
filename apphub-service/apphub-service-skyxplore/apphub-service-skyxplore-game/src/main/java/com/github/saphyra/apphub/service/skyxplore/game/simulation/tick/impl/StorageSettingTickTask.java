@@ -2,13 +2,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StorageCapacityService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTask;
@@ -22,9 +21,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class StorageSettingTickTask implements TickTask {
     private final StorageSettingProcessFactory storageSettingProcessFactory;
-    private final FreeStorageQueryService freeStorageQueryService;
+    private final StorageCapacityService storageCapacityService;
     private final ResourceDataService resourceDataService;
-    private final GameDao gameDao;
 
     @Override
     public TickTaskOrder getOrder() {
@@ -42,12 +40,13 @@ class StorageSettingTickTask implements TickTask {
         log.info("Processing {}", storageSetting);
 
         int storedAmount = gameData.getStoredResources()
-            .findByLocationAndDataId(storageSetting.getLocation(), storageSetting.getDataId())
-            .map(StoredResource::getAmount)
-            .orElse(0);
+            .getByLocationAndDataId(storageSetting.getLocation(), storageSetting.getDataId())
+            .stream()
+            .mapToInt(StoredResource::getAmount)
+            .sum();
 
         if (storedAmount >= storageSetting.getTargetAmount()) {
-            log.info("There is enough {} at {}", storageSetting.getDataId(), storageSetting.getLocation());
+            log.debug("There is enough {} at {}", storageSetting.getDataId(), storageSetting.getLocation());
             return;
         }
 
@@ -59,23 +58,20 @@ class StorageSettingTickTask implements TickTask {
             .sum();
 
         if (inProgressAmount + storedAmount >= storageSetting.getTargetAmount()) {
-            log.info("Resources already ordered.");
+            log.debug("Resources already ordered.");
             return;
         }
 
         int missingAmount = storageSetting.getTargetAmount() - inProgressAmount;
-        int freeStorage = freeStorageQueryService.getFreeStorage(gameData, storageSetting.getLocation(), storageSetting.getDataId());
+        int freeStorage = storageCapacityService.getFreeDepotStorage(gameData, storageSetting.getLocation(), storageSetting.getDataId());
         if (freeStorage <= 0) {
-            log.info("Not enough storage");
+            log.debug("Not enough storage");
             return;
         }
 
         int orderedAmount = Math.min(missingAmount, freeStorage);
-        int maxProductionBatchSize = resourceDataService.get(storageSetting.getDataId())
-            .getMaxProductionBatchSize();
-        int amountToDeliver = Math.min(orderedAmount, maxProductionBatchSize);
 
-        StorageSettingProcess process = storageSettingProcessFactory.create(game, storageSetting, amountToDeliver);
+        StorageSettingProcess process = storageSettingProcessFactory.create(game, storageSetting, orderedAmount);
 
         gameData.getProcesses()
             .add(process);

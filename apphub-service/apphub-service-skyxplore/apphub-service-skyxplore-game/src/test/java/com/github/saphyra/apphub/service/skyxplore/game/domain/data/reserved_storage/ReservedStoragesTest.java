@@ -35,7 +35,7 @@ class ReservedStoragesTest {
 
         underTest.add(reservedStorage1);
 
-        assertThat(underTest.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).isEqualTo(reservedStorage1);
+        assertThat(underTest.findByIdValidated(RESERVED_STORAGE_ID)).isEqualTo(reservedStorage1);
     }
 
     @Test
@@ -44,7 +44,7 @@ class ReservedStoragesTest {
 
         underTest.add(reservedStorage1);
 
-        Throwable ex = catchThrowable(() -> underTest.findByReservedStorageIdValidated(RESERVED_STORAGE_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(RESERVED_STORAGE_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }

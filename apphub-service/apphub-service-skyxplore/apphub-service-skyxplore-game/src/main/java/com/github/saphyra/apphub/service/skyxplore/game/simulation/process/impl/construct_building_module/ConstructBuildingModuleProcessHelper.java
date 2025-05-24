@@ -29,7 +29,7 @@ class ConstructBuildingModuleProcessHelper {
 
     void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID constructionId) {
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         useAllocatedResourceService.resolveAllocations(
             progressDiff,
@@ -54,7 +54,7 @@ class ConstructBuildingModuleProcessHelper {
     void finishConstruction(GameProgressDiff progressDiff, GameData gameData, UUID constructionId) {
         log.info("Finishing constructionArea construction...");
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, constructionId);
 

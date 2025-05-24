@@ -102,8 +102,8 @@ class DeconstructBuildingModuleQueueServiceTest {
         given(deconstructions.stream()).willReturn(Stream.of(deconstruction));
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleId(BUILDING_MODULE_ID)).willReturn(Optional.of(buildingModule));
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findById(BUILDING_MODULE_ID)).willReturn(Optional.of(buildingModule));
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);

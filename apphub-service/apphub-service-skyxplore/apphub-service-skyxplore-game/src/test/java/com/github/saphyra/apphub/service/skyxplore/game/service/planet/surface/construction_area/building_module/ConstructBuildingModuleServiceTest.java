@@ -167,7 +167,7 @@ class ConstructBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -182,7 +182,7 @@ class ConstructBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -204,7 +204,7 @@ class ConstructBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -226,7 +226,7 @@ class ConstructBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
