@@ -54,7 +54,7 @@ class DeconstructConstructionAreaCitizenAssignmentDataProviderTest {
     void getData() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(process.getExternalReference()).willReturn(DECONSTRUCTION_ID);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);

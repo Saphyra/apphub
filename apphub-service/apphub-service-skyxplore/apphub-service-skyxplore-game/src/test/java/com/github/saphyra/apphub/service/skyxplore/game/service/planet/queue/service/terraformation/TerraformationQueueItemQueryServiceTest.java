@@ -54,7 +54,7 @@ class TerraformationQueueItemQueryServiceTest {
         given(constructions.getByLocationAndType(LOCATION, ConstructionType.TERRAFORMATION)).willReturn(List.of(construction));
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(construction.getExternalReference()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(terraformationToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
 
         List<QueueItem> result = underTest.getQueue(gameData, LOCATION);

@@ -19,7 +19,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resou
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;

@@ -55,7 +55,7 @@ class DeconstructBuildingModuleQueueService implements QueueService {
         GameData gameData = game.getData();
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(itemId);
+            .findByIdValidated(itemId);
 
         game.getEventLoop()
             .processWithWait(() -> {

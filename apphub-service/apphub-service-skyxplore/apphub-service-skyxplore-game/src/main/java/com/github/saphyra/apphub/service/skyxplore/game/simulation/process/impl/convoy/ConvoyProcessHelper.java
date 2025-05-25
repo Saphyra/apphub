@@ -96,7 +96,7 @@ class ConvoyProcessHelper {
 
     private int calculateRequiredWorkPoints(GameData gameData, ReferredCoordinate referredCoordinate) {
         SurfaceType surfaceType = gameData.getSurfaces()
-            .findBySurfaceIdValidated(referredCoordinate.getReferenceId())
+            .findByIdValidated(referredCoordinate.getReferenceId())
             .getSurfaceType();
 
         return gameProperties.getSurface()

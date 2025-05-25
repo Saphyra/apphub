@@ -13,8 +13,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surf
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.SurfaceConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -110,7 +108,7 @@ class TerraformationProcessHelperTest {
         given(constructions.findByIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(terraformation.getExternalReference()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(terraformation.getData()).willReturn(SurfaceType.CONCRETE.name());
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(surfaceConverter.toModel(GAME_ID, surface)).willReturn(surfaceModel);

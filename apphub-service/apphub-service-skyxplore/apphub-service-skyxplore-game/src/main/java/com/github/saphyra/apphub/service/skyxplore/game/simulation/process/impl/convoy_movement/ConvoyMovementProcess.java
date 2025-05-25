@@ -37,11 +37,7 @@ public class ConvoyMovementProcess implements Process {
 
     @NonNull
     private final UUID citizenId;
-
-    @NonNull
     private final int requiredWorkPoints;
-
-    @NonNull
     private int completedWorkPoints;
 
     @Getter

@@ -28,12 +28,6 @@ public class ReservedStorages extends Vector<ReservedStorage> {
             .collect(Collectors.toList());
     }
 
-    public List<ReservedStorage> getByLocation(UUID location) {
-        return stream()
-            .filter(reservedStorage -> reservedStorage.getLocation().equals(location))
-            .collect(Collectors.toList());
-    }
-
     //TODO unit test
     public List<ReservedStorage> getByContainerId(UUID containerId) {
         return stream()

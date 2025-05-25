@@ -8,8 +8,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;

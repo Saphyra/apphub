@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -20,7 +21,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,10 @@ class ConstructBuildingModuleService {
     private final ConstructionAreaDataService constructionAreaDataService;
     private final BuildingModuleFactory buildingModuleFactory;
     private final ConstructionFactory constructionFactory;
-    private final ResourceAllocationService resourceAllocationService;
     private final BuildingModuleConverter buildingModuleConverter;
     private final ConstructionConverter constructionConverter;
     private final ConstructBuildingModuleProcessFactory constructBuildingModuleProcessFactory;
+    private final ReservedStorageFactory reservedStorageFactory;
 
     void constructBuildingModule(UUID userId, UUID constructionAreaId, String buildingModuleDataId) {
         ValidationUtil.notNull(buildingModuleDataId, "buildingModuleDataId");
@@ -83,13 +84,8 @@ class ConstructBuildingModuleService {
             .processWithWait(() -> {
                 GameProgressDiff progressDiff = game.getProgressDiff();
 
-                resourceAllocationService.processResourceRequirements(
-                    progressDiff,
-                    gameData,
-                    planetId,
-                    construction.getConstructionId(),
-                    constructionRequirements.getRequiredResources()
-                );
+                constructionRequirements.getRequiredResources()
+                    .forEach((dataId, amount) -> reservedStorageFactory.save(progressDiff, gameData, constructionArea.getSurfaceId(), ContainerType.SURFACE, construction.getConstructionId(), dataId, amount));
 
                 ConstructBuildingModuleProcess process = constructBuildingModuleProcessFactory.create(game, construction);
                 log.info("{} created.", process);

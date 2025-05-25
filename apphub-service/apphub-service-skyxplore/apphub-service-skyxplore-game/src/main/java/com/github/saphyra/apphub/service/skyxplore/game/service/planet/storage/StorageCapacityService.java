@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants.DEPOT_BUILDING_MODULE_CATEGORIES;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -27,7 +27,8 @@ import static java.util.Objects.nonNull;
 /*
   Keywords:
   Total = Maximum capacity of all the storage buildings combined
-  Occupied = Storage filled by resources
+  OccupiedStorage = Storage filled by resources
+  StoredAmount = Amount of a specific resource stored
   Reserved = Empty storage assigned to a process that will fill it with resources (delivery, production, etc)
   Free = Not occupied or reserved storage
   Empty = Not occupied, reservations ignored
@@ -37,6 +38,7 @@ import static java.util.Objects.nonNull;
 public class StorageCapacityService {
     private final ResourceDataService resourceDataService;
     private final StorageBuildingModuleDataService storageBuildingModuleDataService;
+    private final DwellingBuildingDataService dwellingBuildingDataService;
 
     public int getFreeDepotStorage(GameData gameData, UUID location, String dataId) {
         return getFreeDepotStorage(gameData, location, resourceDataService.get(dataId).getStorageType());
@@ -44,12 +46,12 @@ public class StorageCapacityService {
 
     public int getFreeDepotStorage(GameData gameData, UUID location, StorageType storageType) {
         int totalDepotCapacity = getDepotCapacity(gameData, location, storageType);
-        int occupiedDepotCapacity = getOccupiedDepotCapacity(gameData, location, storageType);
+        int occupiedDepotCapacity = getOccupiedDepotStorage(gameData, location, storageType);
         int reservedDepotCapacity = getReservedDepotCapacity(gameData, location, storageType);
         return totalDepotCapacity - occupiedDepotCapacity - reservedDepotCapacity;
     }
 
-    private int getOccupiedDepotCapacity(GameData gameData, UUID location, StorageType storageType) {
+    public int getOccupiedDepotStorage(GameData gameData, UUID location, StorageType storageType) {
         return gameData.getBuildingModules()
             .getByLocation(location)
             .stream()
@@ -62,7 +64,7 @@ public class StorageCapacityService {
             .sum();
     }
 
-    private int getReservedDepotCapacity(GameData gameData, UUID location, StorageType storageType) {
+    public int getReservedDepotCapacity(GameData gameData, UUID location, StorageType storageType) {
         return gameData.getBuildingModules()
             .getByLocation(location)
             .stream()
@@ -95,6 +97,30 @@ public class StorageCapacityService {
             .sum();
     }
 
+    public int getReservedDepotAmount(GameData gameData, UUID location, String dataId) {
+        return gameData.getBuildingModules()
+            .getByLocation(location)
+            .stream()
+            .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
+            .filter(buildingModule -> DEPOT_BUILDING_MODULE_CATEGORIES.contains(storageBuildingModuleDataService.get(buildingModule.getDataId()).getCategory()))
+            .flatMap(buildingModule -> gameData.getReservedStorages().getByContainerId(buildingModule.getBuildingModuleId()).stream())
+            .filter(reservedStorage -> reservedStorage.getDataId().equals(dataId))
+            .mapToInt(ReservedStorage::getAmount)
+            .sum();
+    }
+
+    public int getDepotStoredAmount(GameData gameData, UUID location, String dataId) {
+        return gameData.getBuildingModules()
+            .getByLocation(location)
+            .stream()
+            .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
+            .filter(buildingModule -> DEPOT_BUILDING_MODULE_CATEGORIES.contains(storageBuildingModuleDataService.get(buildingModule.getDataId()).getCategory()))
+            .flatMap(buildingModule -> gameData.getStoredResources().getByContainerId(buildingModule.getBuildingModuleId()).stream())
+            .filter(storedResource -> storedResource.getDataId().equals(dataId))
+            .mapToInt(StoredResource::getAmount)
+            .sum();
+    }
+
     public int getAllocatedResourceAmount(GameData gameData, UUID location, String dataId) {
         return gameData.getStoredResources()
             .getByLocationAndDataId(location, dataId)
@@ -115,17 +141,6 @@ public class StorageCapacityService {
             .stream()
             .filter(storedResource -> nonNull(storedResource.getAllocatedBy()))
             .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
-            .mapToInt(StoredResource::getAmount)
-            .sum();
-    }
-
-    //Calculating the not-assigned resource present in the storage
-    public int countAvailableResourceAmount(GameData gameData, UUID containerId, String dataId) {
-        return gameData.getStoredResources()
-            .getByContainerId(containerId)
-            .stream()
-            .filter(storedResource -> storedResource.getDataId().equals(dataId))
-            .filter(storedResource -> isNull(storedResource.getAllocatedBy()))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }
@@ -197,5 +212,15 @@ public class StorageCapacityService {
         int occupied = getOccupiedConstructionAreaCapacity(gameData, constructionAreaId, storageType);
 
         return totalCapacity - occupied;
+    }
+
+    public int calculateDwellingCapacity(GameData gameData, UUID location) {
+        return gameData.getBuildingModules()
+            .getByLocation(location)
+            .stream()
+            .filter(buildingModule -> dwellingBuildingDataService.containsKey(buildingModule.getDataId()))
+            .filter(buildingModule -> gameData.getDeconstructions().findByExternalReference(buildingModule.getBuildingModuleId()).isEmpty())
+            .mapToInt(buildingModule -> dwellingBuildingDataService.get(buildingModule.getDataId()).getCapacity())
+            .sum();
     }
 }

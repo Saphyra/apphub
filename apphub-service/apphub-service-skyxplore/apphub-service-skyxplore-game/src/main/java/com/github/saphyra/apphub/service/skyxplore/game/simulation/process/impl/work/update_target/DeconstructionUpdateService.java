@@ -20,7 +20,7 @@ class DeconstructionUpdateService {
         log.info("Adding {} workPoints to DECONSTRUCTION {}", completedWorkPoints, deconstructionId);
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(deconstructionId);
+            .findByIdValidated(deconstructionId);
 
         log.info("Before update: {}", deconstruction);
         deconstruction.increaseWorkPoints(completedWorkPoints);

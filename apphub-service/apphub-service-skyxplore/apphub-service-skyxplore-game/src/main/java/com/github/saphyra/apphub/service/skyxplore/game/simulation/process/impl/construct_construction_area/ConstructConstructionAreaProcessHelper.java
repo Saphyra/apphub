@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.resource_request.ResourceRequestProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class ConstructConstructionAreaProcessHelper {
-    private final UseAllocatedResourceService useAllocatedResourceService;
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
     private final ResourceRequestProcessFactory resourceRequestProcessFactory;

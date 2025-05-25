@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.resource_request.ResourceRequestProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,37 +20,27 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class ConstructBuildingModuleProcessHelper {
-    private final ProductionOrderService productionOrderService;
-    private final UseAllocatedResourceService useAllocatedResourceService;
     private final WorkProcessFactory workProcessFactory;
     private final AllocationRemovalService allocationRemovalService;
+    private final ResourceRequestProcessFactory resourceRequestProcessFactory;
+    private final StoredResourceService storedResourceService;
 
-    void createProductionOrders(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID constructionId) {
-        productionOrderService.createProductionOrdersForReservedStorages(progressDiff, gameData, processId, constructionId);
+    //TODO unit test
+    public void createResourceRequestProcess(Game game, UUID location, UUID processId, UUID constructionId) {
+        game.getData()
+            .getReservedStorages()
+            .getByExternalReference(constructionId)
+            .forEach(reservedStorage -> resourceRequestProcessFactory.save(game, location, processId, reservedStorage.getReservedStorageId()));
     }
 
-    void startWork(GameProgressDiff progressDiff, GameData gameData, UUID processId, UUID constructionId) {
-        Construction construction = gameData.getConstructions()
+    void startWork(Game game, UUID processId, UUID constructionId) {
+        storedResourceService.useResources(game.getProgressDiff(), game.getData(), processId);
+
+        Construction construction = game.getData()
+            .getConstructions()
             .findByIdValidated(constructionId);
 
-        useAllocatedResourceService.resolveAllocations(
-            progressDiff,
-            gameData,
-            construction.getLocation(),
-            constructionId
-        );
-
-        workProcessFactory.createForConstruction(
-            gameData,
-            processId,
-            constructionId,
-            construction.getLocation(),
-            construction.getRequiredWorkPoints()
-        ).forEach(workProcess -> {
-            gameData.getProcesses()
-                .add(workProcess);
-            progressDiff.save(workProcess.toModel());
-        });
+        workProcessFactory.save(game, construction.getLocation(), processId, construction.getRequiredWorkPoints(), SkillType.BUILDING);
     }
 
     void finishConstruction(GameProgressDiff progressDiff, GameData gameData, UUID constructionId) {

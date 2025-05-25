@@ -101,7 +101,7 @@ class DeconstructBuildingModuleProcessTest {
         given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
         given(priority.getValue()).willReturn(PRIORITY_VALUE);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY_VALUE * CONSTRUCTION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);

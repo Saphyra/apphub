@@ -35,7 +35,7 @@ public class ReservedStorageLoader extends AutoLoader<ReservedStorageModel, Rese
     protected ReservedStorage convert(ReservedStorageModel model) {
         return ReservedStorage.builder()
             .reservedStorageId(model.getId())
-            .location(model.getContainerId())
+            .containerId(model.getContainerId())
             .externalReference(model.getExternalReference())
             .dataId(model.getDataId())
             .amount(model.getAmount())

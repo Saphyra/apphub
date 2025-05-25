@@ -85,7 +85,7 @@ class DeconstructConstructionAreaProcessHelperTest {
     void initiateDeconstructModules_alreadyDeconstructed() {
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
@@ -101,7 +101,7 @@ class DeconstructConstructionAreaProcessHelperTest {
     void initiateDeconstructModules() {
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
@@ -129,7 +129,7 @@ class DeconstructConstructionAreaProcessHelperTest {
     @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);

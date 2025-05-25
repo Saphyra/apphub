@@ -21,7 +21,7 @@ class DeconstructBuildingModuleCitizenAssignmentDataProvider implements CitizenA
     @Override
     public Object getData(GameData gameData, Process process) {
         UUID buildingModuleId = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(process.getExternalReference())
+            .findByIdValidated(process.getExternalReference())
             .getExternalReference();
         return gameData.getBuildingModules()
             .findByIdValidated(buildingModuleId)

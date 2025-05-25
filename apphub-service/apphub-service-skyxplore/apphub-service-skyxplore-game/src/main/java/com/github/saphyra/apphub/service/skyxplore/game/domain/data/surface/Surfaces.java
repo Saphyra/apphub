@@ -15,7 +15,7 @@ public class Surfaces extends Vector<Surface> {
             .toList();
     }
 
-    public Surface findBySurfaceIdValidated(UUID surfaceId) {
+    public Surface findByIdValidated(UUID surfaceId) {
         return stream()
             .filter(surface -> surface.getSurfaceId().equals(surfaceId))
             .findFirst()

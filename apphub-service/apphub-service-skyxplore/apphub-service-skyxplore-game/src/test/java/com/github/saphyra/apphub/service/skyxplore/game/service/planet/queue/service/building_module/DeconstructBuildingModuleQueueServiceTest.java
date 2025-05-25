@@ -125,7 +125,7 @@ class DeconstructBuildingModuleQueueServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

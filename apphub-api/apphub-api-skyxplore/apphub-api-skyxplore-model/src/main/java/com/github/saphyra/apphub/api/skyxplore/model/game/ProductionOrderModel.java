@@ -12,11 +12,9 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ProductionOrderModel extends GameItem {
-    private UUID location;
-    private UUID assignee;
-    private UUID externalReference;
-    private String dataId;
-    private Integer amount;
-    private Integer requiredWorkPoints;
-    private Integer currentWorkPoints;
+    private UUID productionRequestId;
+    private UUID constructionAreaId;
+    private String resourceDataId;
+    private Integer requestedAmount;
+    private Integer startedAmount;
 }

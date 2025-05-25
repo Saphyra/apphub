@@ -42,13 +42,13 @@ class ConstructConstructionAreaProcessConditions {
         return available >= amount;
     }
 
-    public boolean hasWorkProcesses(GameData gameData, UUID processId) {
+    boolean hasWorkProcesses(GameData gameData, UUID processId) {
         return !gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .isEmpty();
     }
 
-    public boolean workFinished(GameData gameData, UUID processId) {
+    boolean workFinished(GameData gameData, UUID processId) {
         return gameData.getProcesses()
             .getByExternalReferenceAndType(processId, ProcessType.WORK)
             .stream()

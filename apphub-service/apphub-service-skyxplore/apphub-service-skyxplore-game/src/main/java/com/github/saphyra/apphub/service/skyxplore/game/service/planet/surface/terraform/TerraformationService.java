@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -14,8 +15,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +32,10 @@ import java.util.UUID;
 class TerraformationService {
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
     private final GameDao gameDao;
-    private final ResourceAllocationService resourceAllocationService;
     private final ConstructionFactory constructionFactory;
     private final TerraformationProcessFactory terraformationProcessFactory;
     private final ConstructionConverter constructionConverter;
+    private final ReservedStorageFactory reservedStorageFactory;
 
     void terraform(UUID userId, UUID planetId, UUID surfaceId, String surfaceTypeString) {
         SurfaceType surfaceType = ValidationUtil.convertToEnumChecked(surfaceTypeString, SurfaceType::valueOf, "surfaceType");
@@ -55,7 +56,7 @@ class TerraformationService {
         }
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceIdValidated(surfaceId);
+            .findByIdValidated(surfaceId);
 
         ConstructionRequirements constructionRequirements = terraformingPossibilitiesService.getOptional(surface.getSurfaceType())
             .orElseThrow(() -> ExceptionFactory.forbiddenOperation(surface.getSurfaceType() + " cannot be terraformed."))
@@ -77,13 +78,8 @@ class TerraformationService {
             .processWithWait(() -> {
                 GameProgressDiff progressDiff = game.getProgressDiff();
 
-                resourceAllocationService.processResourceRequirements(
-                    progressDiff,
-                    gameData,
-                    planetId,
-                    terraformation.getConstructionId(),
-                    constructionRequirements.getRequiredResources()
-                );
+                constructionRequirements.getRequiredResources()
+                    .forEach((dataId, amount) -> reservedStorageFactory.save(progressDiff, gameData, surfaceId, ContainerType.SURFACE, terraformation.getConstructionId(), dataId, amount));
 
                 gameData.getConstructions()
                     .add(terraformation);

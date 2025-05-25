@@ -73,20 +73,20 @@ public class ConstructBuildingModuleProcess implements Process {
         GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(progressDiff, gameData, processId, constructionId);
+            helper.createResourceRequestProcess(game, location, processId, constructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
         ConstructBuildingModuleProcessConditions conditions = applicationContextProxy.getBean(ConstructBuildingModuleProcessConditions.class);
 
-        if (!conditions.productionOrdersComplete(gameData, processId)) {
-            log.info("Waiting for ProductionOrderProcesses to finish...");
+        if (!conditions.resourcesAvailable(gameData, processId, constructionId)) {
+            log.info("Waiting for resources...");
             return;
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(progressDiff, gameData, processId, constructionId);
+            helper.startWork(game, processId, constructionId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {

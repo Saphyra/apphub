@@ -78,7 +78,7 @@ class DeconstructBuildingModuleProcessHelperTest {
     @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);

@@ -21,7 +21,7 @@ class DeconstructConstructionAreaCitizenAssignmentDataProvider implements Citize
     @Override
     public Object getData(GameData gameData, Process process) {
         UUID constructionAreaId = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(process.getExternalReference())
+            .findByIdValidated(process.getExternalReference())
             .getExternalReference();
         return gameData.getConstructionAreas()
             .findByIdValidated(constructionAreaId)

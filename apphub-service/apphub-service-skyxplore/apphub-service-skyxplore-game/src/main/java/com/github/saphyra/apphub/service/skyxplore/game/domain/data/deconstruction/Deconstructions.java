@@ -22,7 +22,7 @@ public class Deconstructions extends Vector<Deconstruction> {
             .findAny();
     }
 
-    public Deconstruction findByDeconstructionIdValidated(UUID deconstructionId) {
+    public Deconstruction findByIdValidated(UUID deconstructionId) {
         return findByDeconstructionId(deconstructionId)
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Deconstruction not found by deconstructionId " + deconstructionId));
     }

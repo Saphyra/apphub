@@ -3,8 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.ResourceDetailsResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceAmountQueryService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.ReservedStorageQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

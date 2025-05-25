@@ -139,7 +139,7 @@ class ConstructConstructionAreaServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -154,7 +154,7 @@ class ConstructConstructionAreaServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -171,7 +171,7 @@ class ConstructConstructionAreaServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -190,7 +190,7 @@ class ConstructConstructionAreaServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -235,7 +235,7 @@ class ConstructConstructionAreaServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);

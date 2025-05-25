@@ -75,20 +75,20 @@ public class TerraformationProcess implements Process {
         GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(progressDiff, gameData, processId, terraformationId);
+            helper.createResourceRequestProcess(game, location, processId, terraformationId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
         TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
 
-        if (!conditions.productionOrdersComplete(gameData, processId)) {
-            log.info("Waiting for ProductionOrderProcesses to finish...");
+        if (!conditions.resourcesAvailable(gameData, processId, terraformationId)) {
+            log.info("Waiting for resources...");
             return;
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(progressDiff, gameData, processId, terraformationId);
+            helper.startWork(game, processId, terraformationId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -96,7 +96,7 @@ public class TerraformationProcess implements Process {
             return;
         }
 
-        helper.finishTerraformation(progressDiff, gameData, terraformationId);
+        helper.finishConstruction(progressDiff, gameData, terraformationId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 

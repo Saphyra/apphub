@@ -102,7 +102,7 @@ class DeconstructConstructionAreaProcessTest {
         given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
         given(priority.getValue()).willReturn(PRIORITY_VALUE);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY_VALUE * CONSTRUCTION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
@@ -114,7 +114,7 @@ class DeconstructConstructionAreaProcessTest {
         given(applicationContextProxy.getBean(DeconstructConstructionAreaProcessHelper.class)).willReturn(processHelper);
         given(conditions.modulesDeconstructed(gameData, CONSTRUCTION_AREA_ID)).willReturn(false);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
 
         underTest.work();
@@ -132,7 +132,7 @@ class DeconstructConstructionAreaProcessTest {
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.modulesDeconstructed(gameData, CONSTRUCTION_AREA_ID)).willReturn(true);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
 
         underTest.work();
@@ -153,7 +153,7 @@ class DeconstructConstructionAreaProcessTest {
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.modulesDeconstructed(gameData, CONSTRUCTION_AREA_ID)).willReturn(true);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
 
         underTest.work();

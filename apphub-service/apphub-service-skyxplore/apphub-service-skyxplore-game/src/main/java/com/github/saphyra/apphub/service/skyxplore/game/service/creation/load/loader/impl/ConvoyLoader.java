@@ -20,18 +20,26 @@ class ConvoyLoader extends AutoLoader<ConvoyModel, Convoy> {
 
     @Override
     protected GameItemType getGameItemType() {
+        return GameItemType.CONVOY;
     }
 
     @Override
     protected Class<ConvoyModel[]> getArrayClass() {
+        return ConvoyModel[].class;
     }
 
     @Override
     protected void addToGameData(GameData gameData, List<Convoy> items) {
-
+        gameData.getConvoys()
+            .addAll(items);
     }
 
     @Override
-    protected Convoy convert(ConvoyModel convoyModel) {
+    protected Convoy convert(ConvoyModel model) {
+        return Convoy.builder()
+            .convoyId(model.getId())
+            .resourceDeliveryRequestId(model.getResourceDeliveryRequestId())
+            .capacity(model.getCapacity())
+            .build();
     }
 }

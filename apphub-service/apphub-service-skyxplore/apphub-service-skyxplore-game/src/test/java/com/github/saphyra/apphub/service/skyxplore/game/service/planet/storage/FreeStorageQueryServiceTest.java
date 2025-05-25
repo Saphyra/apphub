@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.StorageCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

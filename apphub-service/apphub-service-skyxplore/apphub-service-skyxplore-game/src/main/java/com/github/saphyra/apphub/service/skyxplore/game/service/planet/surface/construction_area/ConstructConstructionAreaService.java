@@ -49,7 +49,7 @@ class ConstructConstructionAreaService {
         GameData gameData = game.getData();
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceIdValidated(surfaceId);
+            .findByIdValidated(surfaceId);
         UUID planetId = surface.getPlanetId();
 
         //Construction must happen on own planet
