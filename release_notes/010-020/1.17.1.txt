@@ -8,5 +8,6 @@
     EliteBase
         Remove list partitioning from EdMessageProcessor
         Parallelise orphaned record cleanup
+        Partition message table
 
 ===ETC===

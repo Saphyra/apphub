@@ -57,7 +57,7 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
 
         LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
             .minus(properties.getMessageExpiration());
-        messageDao.deleteExpired(expiration, Arrays.asList(MessageStatus.values()));
+        messageDao.deleteExpired(expiration, Arrays.stream(MessageStatus.values()).filter(messageStatus -> messageStatus != MessageStatus.ARRIVED).toList());
     }
 
     @Override

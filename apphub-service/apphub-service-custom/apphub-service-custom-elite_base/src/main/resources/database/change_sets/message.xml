@@ -1,5 +1,5 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet id="create-table-message" author="saphyra">
+    <changeSet id="create-table-message" author="saphyra" dbms="h2">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists schemaName="elite_base" tableName="message"/>
@@ -15,57 +15,92 @@
             <column name="schema_ref" type="text"/>
             <column name="header" type="text"/>
             <column name="message" type="text"/>
+            <column name="exception_id" type="varchar(37)"/>
+            <column name="retry_count" type="numeric" defaultValueNumeric="0"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="message" columnNames="message_id" constraintName="message-pk"/>
     </changeSet>
 
-    <changeSet id="add-column-exception_id-to-message" author="saphyra">
+    <changeSet id="rename-old-message-table" author="Saphyra" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
-            <not>
-                <columnExists schemaName="elite_base" tableName="message" columnName="exception_id"/>
-            </not>
+            <tableExists schemaName="elite_base" tableName="message"/>
         </preConditions>
 
-        <addColumn schemaName="elite_base" tableName="message">
-            <column name="exception_id" type="varchar(37)"/>
-        </addColumn>
+        <renameTable schemaName="elite_base" oldTableName="message" newTableName="message_old"/>
     </changeSet>
 
-    <changeSet id="add-column-retry_count-to-message" author="saphyra">
+    <changeSet id="create-partitioned-table-message" author="Saphyra" dbms="postgresql">
         <preConditions onFail="MARK_RAN">
             <not>
-                <columnExists schemaName="elite_base" tableName="message" columnName="retry_count"/>
+                <tableExists schemaName="elite_base" tableName="message"/>
             </not>
         </preConditions>
 
-        <addColumn schemaName="elite_base" tableName="message">
-            <column name="retry_count" type="numeric" defaultValueNumeric="0"/>
-        </addColumn>
-    </changeSet>
+        <sql>
+            CREATE TABLE elite_base.message (
+            message_id varchar(37),
+            created_at TEXT,
+            status TEXT,
+            schema_ref TEXT,
+            header TEXT,
+            message TEXT,
+            exception_id VARCHAR(37),
+            retry_count SMALLINT DEFAULT 0,
+            PRIMARY KEY(message_id, status)
+            ) PARTITION BY LIST (status);
+        </sql>
 
-    <changeSet id="create-index-status-to-message" author="Saphyra" dbms="postgresql">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="message" columnNames="status"/>
-            </not>
-        </preConditions>
+        <sql>
+            CREATE TABLE elite_base.message_arrived PARTITION OF elite_base.message FOR VALUES IN ('ARRIVED');
+        </sql>
 
-        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-status">
-            <column name="status"/>
-        </createIndex>
-    </changeSet>
+        <sql>
+            CREATE TABLE elite_base.message_processed PARTITION OF elite_base.message FOR VALUES IN ('PROCESSED');
+        </sql>
 
-    <changeSet id="create-index-created_at-status-to-message" author="Saphyra" dbms="postgresql">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="message" columnNames="created_at,status"/>
-            </not>
-        </preConditions>
+        <sql>
+            CREATE TABLE elite_base.message_default PARTITION OF elite_base.message DEFAULT;
+        </sql>
 
-        <createIndex schemaName="elite_base" tableName="message" indexName="index-message-created_at-status">
+        <createIndex schemaName="elite_base" tableName="message_arrived" indexName="index-message_arrived-created_at">
             <column name="created_at"/>
-            <column name="status"/>
         </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="message_processed" indexName="index-message_processed-created_at">
+            <column name="created_at"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="message_default" indexName="index-message_default-created_at">
+            <column name="created_at"/>
+        </createIndex>
+
+        <rollback>
+            <dropTable schemaName="elite_base" tableName="message"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="copy-table-message_old-to-message" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <and>
+                <tableExists schemaName="elite_base" tableName="message_old"/>
+                <tableExists schemaName="elite_base" tableName="message"/>
+            </and>
+        </preConditions>
+
+        <sql>
+            INSERT INTO elite_base.message (message_id, created_at, status, schema_ref, header, message, exception_id, retry_count)
+            SELECT message_id, created_at, status, schema_ref, header, message, exception_id, retry_count FROM elite_base.message_old;
+        </sql>
+
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="drop-table-message_old" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="message_old"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="message_old"/>
     </changeSet>
 </databaseChangeLog>
