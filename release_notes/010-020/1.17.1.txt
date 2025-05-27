@@ -7,5 +7,6 @@
 ===TECHNICAL DEBTS===
     EliteBase
         Remove list partitioning from EdMessageProcessor
+        Parallelise orphaned record cleanup
 
 ===ETC===

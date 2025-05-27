@@ -18,4 +18,6 @@ public class EliteBaseProperties {
     private Integer starSystemSuggestionListSize;
     private Integer searchPageSize;
     private Duration incomingMessageTimeout;
+    private Duration incomingMessageCheckInterval;
+    private Integer orphanedRecordProcessorParallelism;
 }

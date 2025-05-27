@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.common;
 
 import com.github.saphyra.apphub.api.elite_base.server.EliteBaseEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -34,7 +37,7 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
 
     @Override
     public void processMessages() {
-        log.info("processMessages event arrived");
+        log.debug("processMessages event arrived");
         executorServiceBean.execute(edMessageProcessor::processMessages);
     }
 
@@ -67,12 +70,36 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     public void cleanupOrphanedRecords() {
         log.info("cleanupOrphanedRecords event arrived");
 
+        Semaphore semaphore = new Semaphore(properties.getOrphanedRecordProcessorParallelism());
+
         executorServiceBean.execute(() -> {
             Stopwatch stopwatch = Stopwatch.createStarted();
-            int rowsDeleted = orphanedRecordCleaners.stream()
-                .mapToInt(OrphanedRecordCleaner::cleanupOrphanedRecords)
-                .sum();
+
+            List<Future<ExecutionResult<Integer>>> progress = orphanedRecordCleaners.stream()
+                .map(orphanedRecordCleaner -> executorServiceBean.asyncProcess(() -> {
+                    try {
+                        semaphore.acquire();
+                        return orphanedRecordCleaner.cleanupOrphanedRecords();
+                    } finally {
+                        semaphore.release();
+                    }
+                }))
+                .toList();
+
+            int rowsDeleted = 0;
+
+            for (Future<ExecutionResult<Integer>> future : progress) {
+                try {
+                    rowsDeleted += future.get()
+                        .getOrThrow();
+                } catch (Exception e) {
+                    log.error("OrphanedRecord cleanup failed", e);
+                    errorReporterService.report("Orphaned record cleanup failed", e);
+                }
+            }
+
             stopwatch.stop();
+            log.info("Orphaned record cleanup finished. {} rows were deleted.", rowsDeleted);
             errorReporterService.report("EliteBase orphanedRecordCleanup finished in %s seconds. %s rows were deleted.".formatted(stopwatch.elapsed(TimeUnit.SECONDS), rowsDeleted));
         });
     }

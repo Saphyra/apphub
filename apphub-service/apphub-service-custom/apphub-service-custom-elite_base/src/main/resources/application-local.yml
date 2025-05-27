@@ -10,3 +10,4 @@ elite-base:
     threadCount: 10
   messageProcessorRetryDelay: PT2M
   messageProcessorMaxRetryCount: 10
+  incomingMessageCheckInterval: PT60M

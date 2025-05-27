@@ -30,3 +30,5 @@ elite-base:
   starSystemSuggestionListSize: 10
   searchPageSize: 30
   incomingMessageTimeout: PT10M
+  incomingMessageCheckInterval: PT30S
+  orphanedRecordProcessorParallelism: 4
