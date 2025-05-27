@@ -65,14 +65,6 @@ class EliteBaseBeanConfig {
     }
 
     @Bean
-    FixedExecutorServiceBean fixedExecutorServiceBean(
-        ExecutorServiceBeanFactory factory,
-        @Value("${elite-base.executor.fixed.threadCount}") int threadCount
-    ) {
-        return factory.createFixed(threadCount);
-    }
-
-    @Bean
     ScheduledExecutorServiceBean scheduledExecutorServiceBean(
         ExecutorServiceBeanFactory factory,
         @Value("${elite-base.executor.scheduled.threadCount}") int threadCount

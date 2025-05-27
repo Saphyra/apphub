@@ -5,5 +5,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    EliteBase
+        Remove list partitioning from EdMessageProcessor
 
 ===ETC===

@@ -4,12 +4,11 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporti
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.lib.concurrency.FixedExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
-import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageStatus;
@@ -18,7 +17,6 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class EdMessageProcessor {
     private final EliteBaseProperties properties;
     private final MessageDao messageDao;
-    private final FixedExecutorServiceBean executorServiceBean;
+    private final MessageProcessorExecutor messageProcessorExecutor;
     private final IdGenerator idGenerator;
     private final ErrorReporterService errorReporterService;
     private final List<MessageProcessor> messageProcessors;
@@ -51,10 +49,8 @@ public class EdMessageProcessor {
         );
         log.debug("Processing {} messages.", messages.size());
 
-        List<List<EdMessage>> partitions = ListUtils.partition(messages, properties.getMessageProcessorSublistSize());
-
-        List<Future<ExecutionResult<Void>>> futures = partitions.stream()
-            .map(edMessages -> executorServiceBean.execute(() -> processMessages(edMessages)))
+        List<Future<ExecutionResult<Void>>> futures = messages.stream()
+            .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
             .toList();
 
         for (Future<ExecutionResult<Void>> future : futures) {
@@ -63,13 +59,6 @@ public class EdMessageProcessor {
 
         stopWatch.stop();
         log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
-    }
-
-    private void processMessages(List<EdMessage> edMessages) {
-        StopWatch stopWatch = StopWatch.createStarted();
-        edMessages.forEach(this::processMessage);
-        stopWatch.stop();
-        log.debug("Processed {} messages in {}ms.", edMessages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
     }
 
     private void processMessage(EdMessage edMessage) {
