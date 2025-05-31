@@ -23,9 +23,7 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.zip.Inflater;
 
 @Component
@@ -88,7 +86,7 @@ public class EdMessageHandler implements MessageHandler {
 
     @PostConstruct
     void scheduleChecked() {
-        scheduledExecutorServiceBean.scheduleFixedRate(this::shutdownIfTimeout, Duration.of(10, ChronoUnit.SECONDS));
+        scheduledExecutorServiceBean.scheduleFixedRate(this::shutdownIfTimeout, eliteBaseProperties.getIncomingMessageCheckInterval());
     }
 
     private void shutdownIfTimeout() {

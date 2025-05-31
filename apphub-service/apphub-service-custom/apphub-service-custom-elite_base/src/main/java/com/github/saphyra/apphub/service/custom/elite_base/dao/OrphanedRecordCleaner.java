@@ -14,6 +14,7 @@ public abstract class OrphanedRecordCleaner {
 
     public synchronized int cleanupOrphanedRecords() {
         try {
+            log.info("Starting {}", getClass().getSimpleName());
             Stopwatch stopwatch = Stopwatch.createStarted();
             int rowsDeleted = doCleanup();
             stopwatch.stop();

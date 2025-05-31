@@ -27,4 +27,7 @@ public class CodexEntryJournalMessage extends JournalMessage {
 
     @JsonProperty("SystemAddress")
     private Long systemAddress;
+
+    @JsonProperty("NearestDestination")
+    private String nearestDestination;
 }
