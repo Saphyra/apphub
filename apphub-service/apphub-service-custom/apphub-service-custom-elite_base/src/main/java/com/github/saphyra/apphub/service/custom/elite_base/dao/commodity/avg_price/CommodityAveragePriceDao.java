@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,7 +37,9 @@ public class CommodityAveragePriceDao extends CachedDao<CommodityAveragePriceEnt
         }
 
         CommodityAveragePrice stored = maybeStored.get();
-        if (commodityAveragePrice.getLastUpdate().isBefore(stored.getLastUpdate())) {
+        LocalDateTime lastUpdate = Optional.ofNullable(commodityAveragePrice.getLastUpdate())
+            .orElse(LocalDateTime.MIN);
+        if (lastUpdate.isBefore(stored.getLastUpdate())) {
             return false;
         }
 

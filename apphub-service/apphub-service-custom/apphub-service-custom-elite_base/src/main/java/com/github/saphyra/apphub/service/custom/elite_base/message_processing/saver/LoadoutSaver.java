@@ -34,27 +34,21 @@ public class LoadoutSaver {
             throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
-        log.info("Number of incoming loadouts: {}", items.size());
-
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-        Map<String, Loadout> existingLoadouts = loadoutDao.getByExternalReferenceOrMarketId(externalReference, marketId)
+        Map<String, Loadout> existingLoadouts = loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(externalReference, marketId, type)
             .stream()
             .collect(Collectors.toMap(Loadout::getName, Function.identity()));
-
-        log.info("Number of existing loadouts: {}", existingLoadouts.size());
 
         List<Loadout> newItems = items.stream()
             .filter(item -> !existingLoadouts.keySet().contains(item))
             .map(name -> loadoutFactory.create(timestamp, type, commodityLocation, externalReference, marketId, name))
             .toList();
-        log.info("Number of new loadouts: {}", newItems.size());
 
         List<Loadout> deletedItems = existingLoadouts.values()
             .stream()
             .filter(loadout -> !items.contains(loadout.getName()))
             .toList();
-        log.info("Number of deleted loadouts: {}", deletedItems.size());
 
         loadoutDao.deleteAll(deletedItems);
         loadoutDao.saveAll(newItems);

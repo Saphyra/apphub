@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    EliteBase
+        LoadoutSaver did not consider LoadoutType when query existing records
 
 ===PLATFORM CHANGES===
 
