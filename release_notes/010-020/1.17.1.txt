@@ -3,6 +3,7 @@
 ===BUGFIXES===
     EliteBase
         LoadoutSaver did not consider LoadoutType when query existing records
+        Delete commodities where marketId is not paired with unique external_reference
 
 ===PLATFORM CHANGES===
 
