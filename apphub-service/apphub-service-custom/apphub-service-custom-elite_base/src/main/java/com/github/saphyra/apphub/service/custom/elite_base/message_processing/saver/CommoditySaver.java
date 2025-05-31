@@ -55,7 +55,7 @@ public class CommoditySaver {
     }
 
     public synchronized void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<CommodityData> commodities) {
-        if ((isNull(commodityLocation) || isNull(externalReference)) && isNull(marketId)) {
+        if (isNull(marketId)) {
             throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
@@ -65,11 +65,7 @@ public class CommoditySaver {
 
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-        Map<String, Commodity> existingCommodities = performanceReporter.wrap(
-                () -> commodityDao.getByExternalReferenceOrMarketId(externalReference, marketId),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-                PerformanceReportingKey.SAVE_COMMODITIES_QUERY.name()
-            )
+        Map<String, Commodity> existingCommodities = getExistingCommodities(externalReference, type, marketId)
             .stream()
             .collect(Collectors.toMap(Commodity::getCommodityName, Function.identity()));
 
@@ -96,6 +92,23 @@ public class CommoditySaver {
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_COMMODITIES_SAVE_ALL.name()
         );
+    }
+
+    private List<Commodity> getExistingCommodities(UUID externalReference, CommodityType type, Long marketId) {
+        List<Commodity> commodities = performanceReporter.wrap(
+            () -> commodityDao.getByMarketIdAndType(marketId, type),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.SAVE_COMMODITIES_QUERY.name()
+        );
+
+        List<Commodity> incorrectCommodities = commodities.stream()
+            .filter(commodity -> !commodity.getExternalReference().equals(externalReference))
+            .toList();
+        commodityDao.deleteAll(incorrectCommodities);
+
+        return commodities.stream()
+            .filter(commodity -> !incorrectCommodities.contains(commodity))
+            .toList();
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)

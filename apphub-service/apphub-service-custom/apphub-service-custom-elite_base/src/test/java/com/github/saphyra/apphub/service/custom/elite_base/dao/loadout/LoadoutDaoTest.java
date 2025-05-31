@@ -1,11 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.loadout;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.Loadout;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,9 +40,9 @@ class LoadoutDaoTest {
     @Test
     void getByExternalReferenceOrMarketId() {
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
-        given(repository.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE_STRING, MARKET_ID)).willReturn(List.of(entity));
+        given(repository.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE_STRING, MARKET_ID, LoadoutType.OUTFITTING)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
-        assertThat(underTest.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE, MARKET_ID)).containsExactly(domain);
+        assertThat(underTest.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE, MARKET_ID, LoadoutType.OUTFITTING)).containsExactly(domain);
     }
 }

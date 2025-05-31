@@ -36,7 +36,7 @@ public class LoadoutSaver {
 
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-        Map<String, Loadout> existingLoadouts = loadoutDao.getByExternalReferenceOrMarketId(externalReference, marketId)
+        Map<String, Loadout> existingLoadouts = loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(externalReference, marketId, type)
             .stream()
             .collect(Collectors.toMap(Loadout::getName, Function.identity()));
 

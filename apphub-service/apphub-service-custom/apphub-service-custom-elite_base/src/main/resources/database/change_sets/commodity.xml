@@ -41,4 +41,12 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="clear-inconsistent-records-from-commodity" author="Saphyra">
+        <sql>
+            delete from elite_base.commodity where market_id in (select market_id from elite_base.commodity group by market_id having count(distinct external_reference) > 1);
+        </sql>
+
+        <rollback/>
+    </changeSet>
 </databaseChangeLog>

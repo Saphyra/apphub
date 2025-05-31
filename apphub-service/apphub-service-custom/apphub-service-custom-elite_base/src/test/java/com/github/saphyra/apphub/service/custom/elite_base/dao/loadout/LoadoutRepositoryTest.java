@@ -1,8 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.loadout;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutRepository;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutType;
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -40,6 +37,7 @@ class LoadoutRepositoryTest {
             .type(LoadoutType.OUTFITTING)
             .name(NAME_1)
             .marketId(MARKET_ID_1)
+            .type(LoadoutType.OUTFITTING)
             .build();
         underTest.save(entity1);
         LoadoutEntity entity2 = LoadoutEntity.builder()
@@ -47,6 +45,7 @@ class LoadoutRepositoryTest {
             .type(LoadoutType.OUTFITTING)
             .name(NAME_1)
             .marketId(MARKET_ID_1)
+            .type(LoadoutType.OUTFITTING)
             .build();
         underTest.save(entity2);
         LoadoutEntity entity3 = LoadoutEntity.builder()
@@ -54,6 +53,7 @@ class LoadoutRepositoryTest {
             .type(LoadoutType.OUTFITTING)
             .name(NAME_2)
             .marketId(MARKET_ID_2)
+            .type(LoadoutType.OUTFITTING)
             .build();
         underTest.save(entity3);
         LoadoutEntity entity4 = LoadoutEntity.builder()
@@ -63,7 +63,15 @@ class LoadoutRepositoryTest {
             .marketId(MARKET_ID_2)
             .build();
         underTest.save(entity4);
+        LoadoutEntity entity5 = LoadoutEntity.builder()
+            .externalReference(EXTERNAL_REFERENCE_1)
+            .type(LoadoutType.SHIPYARD)
+            .name(NAME_2)
+            .marketId(MARKET_ID_1)
+            .build();
+        underTest.save(entity5);
 
-        assertThat(underTest.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE_1, MARKET_ID_1)).containsExactlyInAnyOrder(entity1, entity2, entity3);
+
+        assertThat(underTest.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE_1, MARKET_ID_1, LoadoutType.OUTFITTING)).containsExactlyInAnyOrder(entity1, entity2, entity3);
     }
 }

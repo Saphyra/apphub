@@ -20,9 +20,8 @@ elite-base:
   messageExpiration: P30D
   processedMessageExpiration: P1D
   messageProcessorBatchSize: 500
-  messageProcessorSublistSize: 10
   executor:
-    fixed:
+    messageProcessor:
       threadCount: 4
     scheduled:
       threadCount: 2
@@ -31,3 +30,5 @@ elite-base:
   starSystemSuggestionListSize: 10
   searchPageSize: 30
   incomingMessageTimeout: PT10M
+  incomingMessageCheckInterval: PT30S
+  orphanedRecordProcessorParallelism: 4

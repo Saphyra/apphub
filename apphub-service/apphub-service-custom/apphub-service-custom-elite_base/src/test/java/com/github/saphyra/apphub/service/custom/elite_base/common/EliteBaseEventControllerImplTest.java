@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.common;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -96,7 +99,7 @@ class EliteBaseEventControllerImplTest {
         underTest.deleteExpiredMessages();
 
         then(messageDao).should().deleteExpired(CURRENT_TIME.minus(PROCESSED_MESSAGE_EXPIRATION), List.of(MessageStatus.PROCESSED));
-        then(messageDao).should().deleteExpired(CURRENT_TIME.minus(MESSAGE_EXPIRATION), Arrays.asList(MessageStatus.values()));
+        then(messageDao).should().deleteExpired(CURRENT_TIME.minus(MESSAGE_EXPIRATION), Arrays.stream(MessageStatus.values()).filter(messageStatus -> messageStatus != MessageStatus.ARRIVED).toList());
     }
 
     @Test
@@ -112,6 +115,10 @@ class EliteBaseEventControllerImplTest {
             invocationOnMock.getArgument(0, Runnable.class).run();
             return null;
         });
+
+        given(properties.getOrphanedRecordProcessorParallelism()).willReturn(1);
+
+        given(executorServiceBean.asyncProcess(any())).willAnswer(invocationOnMock -> CompletableFuture.completedFuture(ExecutionResult.success(invocationOnMock.getArgument(0, Callable.class).call())));
         given(orphanedRecordCleaner.cleanupOrphanedRecords()).willReturn(NUMBER_OF_DELETED_RECORDS);
 
         underTest.cleanupOrphanedRecords();

@@ -72,7 +72,7 @@ class LoadoutSaverTest {
     @Test
     void save() {
         given(lastUpdateFactory.create(EXTERNAL_REFERENCE, LoadoutType.OUTFITTING, LAST_UPDATE)).willReturn(lastUpdate);
-        given(loadoutDao.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE, MARKET_ID)).willReturn(List.of(existingLoadout, deprecatedLoadout));
+        given(loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE, MARKET_ID, LoadoutType.OUTFITTING)).willReturn(List.of(existingLoadout, deprecatedLoadout));
 
         given(existingLoadout.getName()).willReturn(EXISTING_ITEM);
         given(deprecatedLoadout.getName()).willReturn(DEPRECATED_ITEM);
