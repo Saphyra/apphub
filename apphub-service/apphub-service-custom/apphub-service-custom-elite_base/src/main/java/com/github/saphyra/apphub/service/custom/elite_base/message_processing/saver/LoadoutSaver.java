@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -24,33 +28,66 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class LoadoutSaver {
+    private static final Map<LockKey, Object> LOCKS = new ConcurrentHashMap<>();
+
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
     private final LoadoutDao loadoutDao;
     private final LoadoutFactory loadoutFactory;
+    private final PerformanceReporter performanceReporter;
 
-    public synchronized void save(LocalDateTime timestamp, LoadoutType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<String> items) {
+    public void save(LocalDateTime timestamp, LoadoutType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<String> items) {
         if ((isNull(commodityLocation) || isNull(externalReference)) && isNull(marketId)) {
             throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
-        lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
+        LockKey key = new LockKey(externalReference, type);
+        Object lock = LOCKS.computeIfAbsent(key, lockKey -> new Object());
+        synchronized (lock) {
+            try {
+                lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-        Map<String, Loadout> existingLoadouts = loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(externalReference, marketId, type)
-            .stream()
-            .collect(Collectors.toMap(Loadout::getName, Function.identity()));
+                Map<String, Loadout> existingLoadouts = getExistingLoadouts(type, externalReference, marketId)
+                    .stream()
+                    .collect(Collectors.toMap(Loadout::getName, Function.identity()));
 
-        List<Loadout> newItems = items.stream()
-            .filter(item -> !existingLoadouts.keySet().contains(item))
-            .map(name -> loadoutFactory.create(timestamp, type, commodityLocation, externalReference, marketId, name))
-            .toList();
+                List<Loadout> newItems = items.stream()
+                    .filter(item -> !existingLoadouts.containsKey(item))
+                    .map(name -> loadoutFactory.create(timestamp, type, commodityLocation, externalReference, marketId, name))
+                    .toList();
 
-        List<Loadout> deletedItems = existingLoadouts.values()
-            .stream()
-            .filter(loadout -> !items.contains(loadout.getName()))
-            .toList();
+                List<String> deletedItems = existingLoadouts.values()
+                    .stream()
+                    .map(Loadout::getName)
+                    .filter(name -> !items.contains(name))
+                    .toList();
 
-        loadoutDao.deleteAll(deletedItems);
-        loadoutDao.saveAll(newItems);
+                performanceReporter.wrap(
+                    () -> loadoutDao.deleteByExternalReferenceAndLoadoutTypeAndNameIn(externalReference, type, deletedItems),
+                    PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                    PerformanceReportingKey.SAVE_LOADOUT_DELETE_ALL.name()
+                );
+
+                performanceReporter.wrap(
+                    () -> loadoutDao.saveAll(newItems),
+                    PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                    PerformanceReportingKey.SAVE_LOADOUT_SAVE_ALL.name()
+                );
+            } finally {
+                LOCKS.compute(key, (k, v) -> v == lock ? null : v);
+            }
+        }
+    }
+
+    private List<Loadout> getExistingLoadouts(LoadoutType type, UUID externalReference, Long marketId) {
+        return performanceReporter.wrap(
+            () -> loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(externalReference, marketId, type),
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.SAVE_LOADOUT_QUERY_EXISTING.name()
+        );
+    }
+
+
+    private record LockKey(UUID externalReference, LoadoutType loadoutType) {
     }
 }

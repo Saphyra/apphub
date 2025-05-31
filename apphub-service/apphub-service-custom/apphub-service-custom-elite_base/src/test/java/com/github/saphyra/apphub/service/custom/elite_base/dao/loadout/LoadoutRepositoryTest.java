@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -73,5 +75,44 @@ class LoadoutRepositoryTest {
 
 
         assertThat(underTest.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE_1, MARKET_ID_1, LoadoutType.OUTFITTING)).containsExactlyInAnyOrder(entity1, entity2, entity3);
+    }
+
+    @Test
+    void deleteByExternalReferenceAndLoadoutTypeAndNameIn(){
+        LoadoutEntity entity1 = LoadoutEntity.builder()
+            .externalReference(EXTERNAL_REFERENCE_1)
+            .type(LoadoutType.OUTFITTING)
+            .name(NAME_1)
+            .marketId(MARKET_ID_1)
+            .type(LoadoutType.OUTFITTING)
+            .build();
+        underTest.save(entity1);
+        LoadoutEntity entity2 = LoadoutEntity.builder()
+            .externalReference(EXTERNAL_REFERENCE_2)
+            .type(LoadoutType.OUTFITTING)
+            .name(NAME_1)
+            .marketId(MARKET_ID_1)
+            .type(LoadoutType.OUTFITTING)
+            .build();
+        underTest.save(entity2);
+        LoadoutEntity entity3 = LoadoutEntity.builder()
+            .externalReference(EXTERNAL_REFERENCE_1)
+            .type(LoadoutType.OUTFITTING)
+            .name(NAME_2)
+            .marketId(MARKET_ID_2)
+            .type(LoadoutType.OUTFITTING)
+            .build();
+        underTest.save(entity3);
+        LoadoutEntity entity4 = LoadoutEntity.builder()
+            .externalReference(EXTERNAL_REFERENCE_1)
+            .type(LoadoutType.SHIPYARD)
+            .name(NAME_1)
+            .marketId(MARKET_ID_2)
+            .build();
+        underTest.save(entity4);
+
+        underTest.deleteByExternalReferenceAndLoadoutTypeAndNameIn(EXTERNAL_REFERENCE_1, LoadoutType.OUTFITTING, List.of(NAME_1));
+
+        assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity2, entity3, entity4);
     }
 }

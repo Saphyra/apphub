@@ -19,4 +19,8 @@ public class LoadoutDao extends AbstractDao<LoadoutEntity, Loadout, LoadoutEntit
     public List<Loadout> getByExternalReferenceOrMarketIdAndLoadoutType(UUID externalReference, Long marketId, LoadoutType loadoutType) {
         return converter.convertEntity(repository.getByExternalReferenceOrMarketIdAndLoadoutType(uuidConverter.convertDomain(externalReference), marketId, loadoutType));
     }
+
+    public void deleteByExternalReferenceAndLoadoutTypeAndNameIn(UUID externalReference, LoadoutType loadoutType, List<String> names){
+        repository.deleteByExternalReferenceAndLoadoutTypeAndNameIn(uuidConverter.convertDomain(externalReference), loadoutType, names);
+    }
 }

@@ -1,0 +1,14 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    EliteBase
+        Speed up Loadout deletion
+        Allow parallel processing of Loadout messages (by key-based locking)
+
+===ETC===
+    EliteBase
+        Do not trigger Orphaned record cleanup immediately after startup
