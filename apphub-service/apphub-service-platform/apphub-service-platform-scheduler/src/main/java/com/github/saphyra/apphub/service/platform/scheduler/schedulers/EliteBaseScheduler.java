@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.platform.scheduler.SchedulerProperties;
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -60,7 +59,6 @@ public class EliteBaseScheduler {
     }
 
     @Scheduled(cron = "${interval.eliteBase.orphanedRecordCleanup}")
-    @PostConstruct
     void orphanedRecordCleanup() {
         String eventName = EmptyEvent.ELITE_BASE_ORPHANED_RECORD_CLEANUP;
         scheduledExecutorServiceBean.schedule(

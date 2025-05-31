@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
@@ -17,11 +18,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(MockitoExtension.class)
 class LoadoutSaverTest {
@@ -43,6 +47,9 @@ class LoadoutSaverTest {
 
     @Mock
     private LoadoutFactory loadoutFactory;
+
+    @Mock
+    private PerformanceReporter performanceReporter;
 
     @InjectMocks
     private LoadoutSaver underTest;
@@ -72,18 +79,24 @@ class LoadoutSaverTest {
     @Test
     void save() {
         given(lastUpdateFactory.create(EXTERNAL_REFERENCE, LoadoutType.OUTFITTING, LAST_UPDATE)).willReturn(lastUpdate);
-        given(loadoutDao.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE, MARKET_ID)).willReturn(List.of(existingLoadout, deprecatedLoadout));
+        given(loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE, MARKET_ID, LoadoutType.OUTFITTING)).willReturn(List.of(existingLoadout, deprecatedLoadout));
 
         given(existingLoadout.getName()).willReturn(EXISTING_ITEM);
         given(deprecatedLoadout.getName()).willReturn(DEPRECATED_ITEM);
 
         given(loadoutFactory.create(LAST_UPDATE, LoadoutType.OUTFITTING, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, NEW_ITEM)).willReturn(newLoadout);
 
+        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
+        doAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return null;
+        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+
         underTest.save(LAST_UPDATE, LoadoutType.OUTFITTING, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(EXISTING_ITEM, NEW_ITEM));
 
         then(lastUpdateDao).should().save(lastUpdate);
 
-        then(loadoutDao).should().deleteAll(List.of(deprecatedLoadout));
+        then(loadoutDao).should().deleteByExternalReferenceAndLoadoutTypeAndNameIn(EXTERNAL_REFERENCE, LoadoutType.OUTFITTING, List.of(DEPRECATED_ITEM));
         then(loadoutDao).should().saveAll(List.of(newLoadout));
     }
 }

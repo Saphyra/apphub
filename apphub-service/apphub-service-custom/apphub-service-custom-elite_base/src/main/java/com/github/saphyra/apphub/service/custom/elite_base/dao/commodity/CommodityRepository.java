@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 interface CommodityRepository extends CrudRepository<CommodityEntity, CommodityEntityId> {
-    List<CommodityEntity> getByIdExternalReferenceOrMarketId(String externalReference, Long marketId);
+    List<CommodityEntity> getByMarketIdAndType(Long marketId, CommodityType type);
 
     @Query("SELECT e FROM CommodityEntity e WHERE e.id.commodityName=:commodityName AND e.stock >= :stock AND e.sellPrice BETWEEN :minPrice AND :maxPrice")
     List<CommodityEntity> getSellOffers(

@@ -33,13 +33,14 @@ class CommodityRepositoryTest {
     }
 
     @Test
-    void getByExternalReferenceOrMarketId() {
+    void getByMarketIdAndType() {
         CommodityEntity entity1 = CommodityEntity.builder()
             .id(CommodityEntityId.builder()
                 .externalReference(EXTERNAL_REFERENCE_1)
                 .commodityName(COMMODITY_NAME_1)
                 .build())
             .marketId(MARKET_ID_1)
+            .type(CommodityType.COMMODITY)
             .build();
         underTest.save(entity1);
         CommodityEntity entity2 = CommodityEntity.builder()
@@ -48,6 +49,7 @@ class CommodityRepositoryTest {
                 .commodityName(COMMODITY_NAME_1)
                 .build())
             .marketId(MARKET_ID_1)
+            .type(CommodityType.FC_MATERIAL)
             .build();
         underTest.save(entity2);
         CommodityEntity entity3 = CommodityEntity.builder()
@@ -56,18 +58,11 @@ class CommodityRepositoryTest {
                 .commodityName(COMMODITY_NAME_2)
                 .build())
             .marketId(MARKET_ID_2)
+            .type(CommodityType.COMMODITY)
             .build();
         underTest.save(entity3);
-        CommodityEntity entity4 = CommodityEntity.builder()
-            .id(CommodityEntityId.builder()
-                .externalReference(EXTERNAL_REFERENCE_2)
-                .commodityName(COMMODITY_NAME_2)
-                .build())
-            .marketId(MARKET_ID_2)
-            .build();
-        underTest.save(entity4);
 
-        assertThat(underTest.getByIdExternalReferenceOrMarketId(EXTERNAL_REFERENCE_1, MARKET_ID_1)).containsExactlyInAnyOrder(entity1, entity2, entity3);
+        assertThat(underTest.getByMarketIdAndType(MARKET_ID_1, CommodityType.COMMODITY)).containsExactlyInAnyOrder(entity1);
     }
 
     @Test

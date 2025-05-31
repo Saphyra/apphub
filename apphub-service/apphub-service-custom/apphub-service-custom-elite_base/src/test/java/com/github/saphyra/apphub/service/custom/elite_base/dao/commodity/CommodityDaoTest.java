@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ReflectionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,17 +23,12 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class CommodityDaoTest {
-    private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Long MARKET_ID = 34L;
-    private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
     private static final String COMMODITY_NAME = "commodity-name";
     private static final Integer MIN_STOCK = 3214;
     private static final Integer MIN_PRICE = 435;
     private static final Integer MAX_PRICE = 678;
     private static final Integer MIN_DEMAND = 3;
-
-    @Mock
-    private UuidConverter uuidConverter;
 
     @Mock
     private CommodityConverter converter;
@@ -60,11 +53,10 @@ class CommodityDaoTest {
 
     @Test
     void getByExternalReferenceOrMarketId() {
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
-        given(repository.getByIdExternalReferenceOrMarketId(EXTERNAL_REFERENCE_STRING, MARKET_ID)).willReturn(List.of(entity));
+        given(repository.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
-        assertThat(underTest.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE, MARKET_ID)).containsExactly(domain);
+        assertThat(underTest.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).containsExactly(domain);
     }
 
     @Test

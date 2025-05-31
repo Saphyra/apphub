@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporti
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.lib.concurrency.FixedExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.custom.elite_base.common.executor.MessageProcessorExecutor;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageStatus;
@@ -43,7 +43,6 @@ import static org.mockito.Mockito.times;
 class EdMessageProcessorTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final Integer MESSAGE_PROCESSOR_BATCH_SIZE = 3;
-    private static final Integer MESSAGE_PROCESSOR_SUBLIST_SIZE = 2;
     private static final UUID EXCEPTION_ID = UUID.randomUUID();
     private static final Integer MAX_RETRY_COUNT = 234;
     private static final Integer RETRY_COUNT = 23;
@@ -57,7 +56,7 @@ class EdMessageProcessorTest {
     private MessageDao messageDao;
 
     @Mock
-    private FixedExecutorServiceBean executorServiceBean;
+    private MessageProcessorExecutor messageProcessorExecutor;
 
     @Mock
     private IdGenerator idGenerator;
@@ -90,7 +89,7 @@ class EdMessageProcessorTest {
         underTest = EdMessageProcessor.builder()
             .properties(properties)
             .messageDao(messageDao)
-            .executorServiceBean(executorServiceBean)
+            .messageProcessorExecutor(messageProcessorExecutor)
             .idGenerator(idGenerator)
             .errorReporterService(errorReporterService)
             .messageProcessors(List.of(messageProcessor))
@@ -100,8 +99,7 @@ class EdMessageProcessorTest {
 
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(properties.getMessageProcessorBatchSize()).willReturn(MESSAGE_PROCESSOR_BATCH_SIZE);
-        given(properties.getMessageProcessorSublistSize()).willReturn(MESSAGE_PROCESSOR_SUBLIST_SIZE);
-        given(executorServiceBean.execute(any())).willAnswer(invocation -> {
+        given(messageProcessorExecutor.execute(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return future;
         });
@@ -180,7 +178,7 @@ class EdMessageProcessorTest {
 
         underTest.processMessages();
 
-        then(executorServiceBean).should(times(2)).execute(any());
+        then(messageProcessorExecutor).should(times(3)).execute(any());
         then(unhandledMessage).should().setStatus(MessageStatus.UNHANDLED);
         then(messageDao).should().save(unhandledMessage);
         then(edMessage).should(times(2)).setStatus(MessageStatus.PROCESSED);

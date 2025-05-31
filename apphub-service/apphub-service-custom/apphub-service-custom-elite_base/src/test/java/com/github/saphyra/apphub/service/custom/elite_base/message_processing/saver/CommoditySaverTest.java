@@ -91,11 +91,15 @@ class CommoditySaverTest {
 
     @Test
     void saveAll() {
-        given(commodityDao.getByExternalReferenceOrMarketId(EXTERNAL_REFERENCE, MARKET_ID)).willReturn(List.of(existingCommodity, deprecatedCommodity, modifiedCommodity));
+        given(commodityDao.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).willReturn(List.of(existingCommodity, deprecatedCommodity, modifiedCommodity));
 
         given(existingCommodity.getCommodityName()).willReturn(EXISTING_COMMODITY);
         given(deprecatedCommodity.getCommodityName()).willReturn(DEPRECATED_COMMODITY);
         given(modifiedCommodity.getCommodityName()).willReturn(MODIFIED_COMMODITY);
+
+        given(existingCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(deprecatedCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(modifiedCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
 
         given(commodityDataTransformer.transform(null, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData)).willReturn(Optional.of(newCommodity));
         given(commodityDataTransformer.transform(existingCommodity, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData)).willReturn(Optional.empty());

@@ -13,10 +13,11 @@ public class EliteBaseProperties {
     private Duration messageExpiration;
     private Duration processedMessageExpiration;
     private Integer messageProcessorBatchSize;
-    private Integer messageProcessorSublistSize;
     private Duration messageProcessorRetryDelay;
     private Integer messageProcessorMaxRetryCount;
     private Integer starSystemSuggestionListSize;
     private Integer searchPageSize;
     private Duration incomingMessageTimeout;
+    private Duration incomingMessageCheckInterval;
+    private Integer orphanedRecordProcessorParallelism;
 }

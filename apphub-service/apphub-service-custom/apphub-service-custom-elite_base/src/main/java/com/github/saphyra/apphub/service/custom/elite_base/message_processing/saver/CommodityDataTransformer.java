@@ -40,7 +40,9 @@ public class CommodityDataTransformer {
             return Optional.of(created);
         }
 
-        if (maybeStoredCommodity.getLastUpdate().isAfter(timestamp)) {
+        LocalDateTime lastUpdate = Optional.ofNullable(maybeStoredCommodity.getLastUpdate())
+            .orElse(LocalDateTime.MIN);
+        if (lastUpdate.isAfter(timestamp)) {
             //Existing commodity is newer version than the updated one
             return Optional.empty();
         }
