@@ -48,7 +48,7 @@ public class EdMessageProcessor {
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
         );
-        log.debug("Processing {} messages.", messages.size());
+        log.info("Processing {} messages.", messages.size());
 
         List<Future<ExecutionResult<Void>>> futures = messages.stream()
             .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
@@ -72,7 +72,7 @@ public class EdMessageProcessor {
         } catch (MessageProcessingDelayedException e) {
             if (edMessage.getRetryCount() < properties.getMessageProcessorMaxRetryCount()) {
                 edMessage.setRetryCount(edMessage.getRetryCount() + 1);
-                log.warn("Processing of message {} is delayed: {}", edMessage, e.getMessage());
+                log.info("Processing of message {} is delayed: {}", edMessage.getMessageId(), e.getMessage());
                 edMessage.setStatus(MessageStatus.ARRIVED);
                 edMessage.setCreatedAt(edMessage.getCreatedAt().plus(properties.getMessageProcessorRetryDelay()));
                 messageDao.save(edMessage);

@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    EliteBase
+        Further increase message processing performance by allow parallel operations with proper locking
