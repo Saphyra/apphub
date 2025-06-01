@@ -45,7 +45,7 @@
         <versions.thymeleaf-spring>3.1.1.RELEASE</versions.thymeleaf-spring>
         <versions.logback>1.4.5</versions.logback>
         <versions.tomcat-util>8.5.23</versions.tomcat-util>
-        <versions.guava>30.1-jre</versions.guava>
+        <versions.guava>33.4.8-jre</versions.guava>
         <versions.openfeign>12.1</versions.openfeign>
         <versions.gson>2.8.9</versions.gson>
         <versions.java-websocket>1.5.1</versions.java-websocket>

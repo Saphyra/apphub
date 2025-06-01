@@ -22,7 +22,7 @@ elite-base:
   messageProcessorBatchSize: 500
   executor:
     messageProcessor:
-      threadCount: 4
+      threadCount: 10
     scheduled:
       threadCount: 2
   messageProcessorRetryDelay: PT2H
