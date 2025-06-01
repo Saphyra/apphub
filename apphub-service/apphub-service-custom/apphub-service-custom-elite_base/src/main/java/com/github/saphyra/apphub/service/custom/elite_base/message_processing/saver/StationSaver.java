@@ -22,12 +22,10 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -98,10 +96,6 @@ public class StationSaver {
                 stationDao.save(created);
                 return created;
             });
-
-        if (nonNull(starSystemId) && nonNull(station.getStarSystemId()) && !Objects.equals(starSystemId, station.getStarSystemId())) {
-            errorReporterService.report("StarSystemId mismatch. New starSystemId: %s, %s".formatted(starSystemId, station));
-        }
 
         updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
 

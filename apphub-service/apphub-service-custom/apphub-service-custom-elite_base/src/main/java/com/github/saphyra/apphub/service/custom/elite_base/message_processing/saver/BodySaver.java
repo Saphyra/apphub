@@ -52,14 +52,6 @@ public class BodySaver {
                 return created;
             });
 
-        if (nonNull(starSystemId) && nonNull(body.getStarSystemId()) && !Objects.equals(starSystemId, body.getStarSystemId())) {
-            errorReporterService.report("StarSystemId mismatch. New starSystemId: %s, %s".formatted(starSystemId, body));
-        }
-
-        if (nonNull(bodyId) && nonNull(body.getBodyId()) && !Objects.equals(bodyId, body.getBodyId())) {
-            errorReporterService.report("BodyId mismatch. New bodyId: %s, %s".formatted(bodyId, body));
-        }
-
         updateFields(timestamp, body, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
 
         return body;
