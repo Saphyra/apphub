@@ -8,9 +8,6 @@ git pull
 eval "$(minikube docker-env)"
 docker rmi -f $(docker images -a -q)
 
-echo "Logging in to docker with username $USERNAME... Password: $PASSWORD"
-docker login -u "$USERNAME" -p "$PASSWORD"
-
 mvn -T $THREAD_COUNT clean deploy
 
 BUILD_RESULT=$?
@@ -23,5 +20,4 @@ cd apphub-frontend
 npm run build
 docker build -f Dockerfile -t saphyra/apphub-frontend:latest .
 docker tag saphyra/apphub-frontend:latest saphyra/apphub-frontend:release
-docker push saphyra/apphub-frontend:release
 cd ..
