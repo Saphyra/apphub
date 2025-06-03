@@ -11,12 +11,10 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 
 @Component
@@ -44,6 +42,8 @@ public class BodySaver {
             throw new IllegalArgumentException("BodyName must not be null");
         }
 
+        log.info("Saving body {}", bodyName);
+
         Body body = bodyDao.findByBodyName(bodyName)
             .orElseGet(() -> {
                 Body created = bodyFactory.create(timestamp, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
@@ -53,6 +53,8 @@ public class BodySaver {
             });
 
         updateFields(timestamp, body, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
+
+        log.info("Saved body {}", bodyName);
 
         return body;
     }

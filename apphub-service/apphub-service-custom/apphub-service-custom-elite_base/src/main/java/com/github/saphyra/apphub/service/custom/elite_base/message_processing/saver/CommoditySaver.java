@@ -59,11 +59,14 @@ public class CommoditySaver {
             throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
+        log.info("Saving commodities for location {} and type {}", commodityLocation, type);
+
         commodities = commodities.stream()
             .filter(commodityData -> commodityData.getStock() > 0 || commodityData.getDemand() > 0)
             .toList();
 
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
+        log.debug("LastUpdate saved for location {} and type {}", externalReference, type);
 
         Map<String, Commodity> existingCommodities = getExistingCommodities(externalReference, type, marketId)
             .stream()
@@ -83,15 +86,20 @@ public class CommoditySaver {
             .toList();
 
         performanceReporter.wrap(
-            () -> commodityDao.deleteAll(deletedCommodities),
+            () -> commodityDao.deleteByExternalReferencesAndCommodityNames(deletedCommodities),
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_COMMODITIES_DELETE_ALL.name()
         );
+        log.debug("Deleted {} commodities", deletedCommodities.size());
+
         performanceReporter.wrap(
             () -> commodityDao.saveAll(modifiedCommodities),
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_COMMODITIES_SAVE_ALL.name()
         );
+        log.debug("Saved {} commodities", modifiedCommodities.size());
+
+        log.debug("Saved commodities for location {} and type {}", commodityLocation, type);
     }
 
     private List<Commodity> getExistingCommodities(UUID externalReference, CommodityType type, Long marketId) {
@@ -104,7 +112,9 @@ public class CommoditySaver {
         List<Commodity> incorrectCommodities = commodities.stream()
             .filter(commodity -> !commodity.getExternalReference().equals(externalReference))
             .toList();
-        commodityDao.deleteAll(incorrectCommodities);
+        log.debug("Found {} incorrect commodities.", incorrectCommodities.size());
+        commodityDao.deleteByExternalReferencesAndCommodityNames(incorrectCommodities);
+        log.debug("{} incorrect commodities were deleted.", incorrectCommodities.size());
 
         return commodities.stream()
             .filter(commodity -> !incorrectCommodities.contains(commodity))

@@ -20,7 +20,7 @@ spec:
         image: saphyra/apphub-frontend:release
         ports:
         - containerPort: 3000
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         livenessProbe:
           httpGet:
             path: /

@@ -124,21 +124,7 @@
                             </arguments>
                         </configuration>
                     </execution>
-                    <execution>
-                        <id>docker-push</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>docker</executable>
-                            <workingDirectory>${project.basedir}</workingDirectory>
-                            <arguments>
-                                <argument>push</argument>
-                                <argument>saphyra/${project.artifactId}:release</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
+
                 </executions>
             </plugin>
         </plugins>

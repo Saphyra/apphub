@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.s
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
@@ -36,7 +35,6 @@ public class StationSaver {
     private final StationEconomyFactory stationEconomyFactory;
     private final IdGenerator idGenerator;
     private final MinorFactionSaver minorFactionSaver;
-    private final ErrorReporterService errorReporterService;
 
     public void save(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String stationName, Long marketId, Allegiance allegiance, EconomyEnum economy, String[] stationServices, Economy[] economies) {
         save(timestamp, starSystemId, bodyId, stationName, null, marketId, allegiance, economy, stationServices, economies, null, null);
@@ -63,6 +61,8 @@ public class StationSaver {
         if (EconomyEnum.CARRIER == economy || StationType.FLEET_CARRIER == stationType) {
             throw new IllegalArgumentException("Carrier must not be saved as station");
         }
+
+        log.info("Saving station {}", stationName);
 
         List<StationServiceEnum> parsedServices = Optional.ofNullable(stationServices)
             .map(ss -> Arrays.stream(ss).map(StationServiceEnum::parse).toList())
@@ -98,6 +98,8 @@ public class StationSaver {
             });
 
         updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
+
+        log.debug("Saved station {}", stationName);
 
         return station;
     }

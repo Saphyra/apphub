@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
-@Deprecated(forRemoval = true)
 public class Settlement {
     private UUID id;
     private LocalDateTime lastUpdate;

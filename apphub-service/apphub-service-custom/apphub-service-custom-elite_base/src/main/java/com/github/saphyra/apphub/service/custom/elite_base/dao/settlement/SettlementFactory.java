@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Deprecated(forRemoval = true)
 public class SettlementFactory {
     private final IdGenerator idGenerator;
 

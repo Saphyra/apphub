@@ -27,8 +27,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 public class StarSystemSaver {
-    private static final Striped<Lock> STAR_NAME_LOCK = Striped.lock(8);
-    private static final Striped<Lock> STAR_ID_LOCK = Striped.lock(8);
+    private static final Striped<Lock> STAR_NAME_LOCK = Striped.lock(64);
 
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;
@@ -47,13 +46,12 @@ public class StarSystemSaver {
             throw new IllegalArgumentException("Both starId and starName are null.");
         }
 
-        Optional<Lock> starIdLock = Optional.ofNullable(starId)
-            .map(STAR_ID_LOCK::get);
         Optional<Lock> starNameLock = Optional.ofNullable(starName)
             .map(STAR_NAME_LOCK::get);
 
-        starIdLock.ifPresent(this::lock);
         starNameLock.ifPresent(this::lock);
+
+        log.info("Saving starSystem {}", starName);
 
         try {
             StarSystem starSystem = starSystemDao.findByStarIdOrStarName(starId, starName)
@@ -66,9 +64,10 @@ public class StarSystemSaver {
 
             updateMissingFields(timestamp, starSystem, starId, starName, starPosition, starType);
 
+            log.debug("Saved starSystem {}", starName);
+
             return starSystem;
         } finally {
-            starIdLock.ifPresent(Lock::unlock);
             starNameLock.ifPresent(Lock::unlock);
         }
     }
