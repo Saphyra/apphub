@@ -30,4 +30,12 @@
             <column name="location_type"/>
         </dropColumn>
     </changeSet>
+
+    <changeSet id="drop-table-allocated-resource" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="skyxplore_game" tableName="allocated_resource"/>
+        </preConditions>
+
+        <dropTable schemaName="skyxplore_game" tableName="allocated_resource"/>
+    </changeSet>
 </databaseChangeLog>

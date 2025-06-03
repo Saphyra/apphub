@@ -29,7 +29,7 @@ class AvailableBuildingModulesService {
             .getData();
 
         SurfaceType surfaceType = gameData.getSurfaces()
-            .findBySurfaceIdValidated(gameData.getConstructionAreas().findByConstructionAreaIdValidated(constructionAreaId).getSurfaceId())
+            .findByIdValidated(gameData.getConstructionAreas().findByIdValidated(constructionAreaId).getSurfaceId())
             .getSurfaceType();
 
         return buildingModuleDataService.values()

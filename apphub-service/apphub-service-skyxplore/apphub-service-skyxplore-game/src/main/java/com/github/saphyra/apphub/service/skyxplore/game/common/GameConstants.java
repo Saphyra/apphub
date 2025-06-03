@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingModuleCategory;
+
+import java.util.Set;
 
 public class GameConstants {
     //Chat
@@ -18,6 +21,11 @@ public class GameConstants {
 
     //BuildingModules
     public static final String BUILDING_MODULE_HQ_STORAGE = "hq_storage";
+
+    public static final Set<BuildingModuleCategory> DEPOT_BUILDING_MODULE_CATEGORIES = Set.of(
+        BuildingModuleCategory.LARGE_STORAGE,
+        BuildingModuleCategory.HQ_STORAGE
+    );
 
     //Message Sender item keys
     public static final String ITEM_KEY_SURFACES = "surfaces";

@@ -103,7 +103,7 @@ class DeconstructConstructionAreaQueueServiceTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(constructionAreas.findByConstructionAreaId(BUILDING_MODULE_ID)).willReturn(Optional.of(constructionArea));
-        given(constructionAreas.findByConstructionAreaIdValidated(BUILDING_MODULE_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(BUILDING_MODULE_ID)).willReturn(constructionArea);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
@@ -125,7 +125,7 @@ class DeconstructConstructionAreaQueueServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

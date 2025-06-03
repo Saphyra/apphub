@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.CitizenEfficiencyCalculator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

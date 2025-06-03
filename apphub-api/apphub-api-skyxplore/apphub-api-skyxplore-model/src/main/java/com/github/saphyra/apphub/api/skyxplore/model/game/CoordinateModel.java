@@ -15,6 +15,7 @@ import java.util.UUID;
 public class CoordinateModel extends GameItem {
     private UUID referenceId;
     private Coordinate coordinate;
+    private Integer order;
 
     public Double getX() {
         return coordinate.getX();

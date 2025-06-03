@@ -42,7 +42,7 @@ class ConstructConstructionAreaQueueService implements QueueService {
                 .requiredWorkPoints(construction.getRequiredWorkPoints())
                 .currentWorkPoints(construction.getCurrentWorkPoints())
                 .priority(construction.getPriority())
-                .data(Map.of("dataId", gameData.getConstructionAreas().findByConstructionAreaIdValidated(construction.getExternalReference()).getDataId()))
+                .data(Map.of("dataId", gameData.getConstructionAreas().findByIdValidated(construction.getExternalReference()).getDataId()))
                 .build())
             .collect(Collectors.toList());
     }
@@ -53,7 +53,7 @@ class ConstructConstructionAreaQueueService implements QueueService {
         GameData gameData = game.getData();
 
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(itemId);
+            .findByIdValidated(itemId);
 
         game.getEventLoop()
             .processWithWait(() -> {

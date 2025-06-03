@@ -94,7 +94,7 @@ class CancelDeconstructionFacadeTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(CONSTRUCTION_AREA_DECONSTRUCTION_ID)).willReturn(constructionAreaDeconstruction);
+        given(deconstructions.findByIdValidated(CONSTRUCTION_AREA_DECONSTRUCTION_ID)).willReturn(constructionAreaDeconstruction);
         given(constructionAreaDeconstruction.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -108,7 +108,7 @@ class CancelDeconstructionFacadeTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(CONSTRUCTION_AREA_DECONSTRUCTION_ID)).willReturn(constructionAreaDeconstruction);
+        given(deconstructions.findByIdValidated(CONSTRUCTION_AREA_DECONSTRUCTION_ID)).willReturn(constructionAreaDeconstruction);
         given(constructionAreaDeconstruction.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -145,7 +145,7 @@ class CancelDeconstructionFacadeTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(BUILDING_MODULE_DECONSTRUCTION_ID)).willReturn(buildingModuleDeconstruction);
+        given(deconstructions.findByIdValidated(BUILDING_MODULE_DECONSTRUCTION_ID)).willReturn(buildingModuleDeconstruction);
         given(buildingModuleDeconstruction.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -159,14 +159,14 @@ class CancelDeconstructionFacadeTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(BUILDING_MODULE_DECONSTRUCTION_ID)).willReturn(buildingModuleDeconstruction);
+        given(deconstructions.findByIdValidated(BUILDING_MODULE_DECONSTRUCTION_ID)).willReturn(buildingModuleDeconstruction);
         given(buildingModuleDeconstruction.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModuleDeconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocationOnMock -> {
@@ -191,14 +191,14 @@ class CancelDeconstructionFacadeTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(BUILDING_MODULE_DECONSTRUCTION_ID)).willReturn(buildingModuleDeconstruction);
+        given(deconstructions.findByIdValidated(BUILDING_MODULE_DECONSTRUCTION_ID)).willReturn(buildingModuleDeconstruction);
         given(buildingModuleDeconstruction.getLocation()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
         given(planet.getOwner()).willReturn(USER_ID);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModuleDeconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(buildingModule.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocationOnMock -> {

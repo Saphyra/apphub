@@ -68,17 +68,6 @@ public class ReservedStorageDaoTest {
     }
 
     @Test
-    public void getByLocation() {
-        given(uuidConverter.convertDomain(LOCATION)).willReturn(LOCATION_STRING);
-        given(repository.getByLocation(LOCATION_STRING)).willReturn(Arrays.asList(entity));
-        given(converter.convertEntity(Arrays.asList(entity))).willReturn(Arrays.asList(model));
-
-        List<ReservedStorageModel> result = underTest.getByLocation(LOCATION);
-
-        assertThat(result).containsExactly(model);
-    }
-
-    @Test
     public void deleteById() {
         given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESERVED_STORAGE_ID_STRING);
         given(repository.existsById(RESERVED_STORAGE_ID_STRING)).willReturn(true);

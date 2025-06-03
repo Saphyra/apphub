@@ -4,6 +4,7 @@
         Run latest test groups
     SkyXplore
         Resources can be put to exact storages
+        Deliver resources
 
 ===BUGFIXES===
     SkyXplore

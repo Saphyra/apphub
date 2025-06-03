@@ -17,11 +17,11 @@ public class StoredResourceFactory {
     private final IdGenerator idGenerator;
     private final StoredResourceConverter storedResourceConverter;
 
-    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, UUID containerId, ContainerType containerType) {
-        return create(gameProgressDiff, gameData, location, dataId, 0, containerId, containerType);
+    public StoredResource save(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, UUID containerId, ContainerType containerType) {
+        return save(gameProgressDiff, gameData, location, dataId, 0, containerId, containerType);
     }
 
-    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
+    public StoredResource save(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
         StoredResource result = create(location, dataId, amount, containerId, containerType);
 
         gameData.getStoredResources()

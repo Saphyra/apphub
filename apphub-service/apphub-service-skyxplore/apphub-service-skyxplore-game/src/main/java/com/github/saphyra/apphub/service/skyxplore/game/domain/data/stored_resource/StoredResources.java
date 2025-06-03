@@ -12,27 +12,6 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 public class StoredResources extends Vector<StoredResource> {
-    @Override
-    public boolean add(StoredResource storedResource) {
-        if (findByLocationAndDataId(storedResource.getLocation(), storedResource.getDataId()).isPresent()) {
-            throw new RuntimeException(String.format("StoredResource with dataId %s already exist at %s", storedResource.getDataId(), storedResource.getLocation()));
-        }
-
-        return super.add(storedResource);
-    }
-
-    public Optional<StoredResource> findByLocationAndDataId(UUID location, String dataId) {
-        return stream()
-            .filter(storedResource -> storedResource.getLocation().equals(location))
-            .filter(storedResource -> storedResource.getDataId().equals(dataId))
-            .findAny();
-    }
-
-    public StoredResource findByLocationAndDataIdValidated(UUID location, String dataId) {
-        return findByLocationAndDataId(location, dataId)
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by location " + location +  " and dataId " + dataId));
-    }
-
     public List<StoredResource> getByLocation(UUID location) {
         return stream()
             .filter(storedResource -> storedResource.getLocation().equals(location))
@@ -42,5 +21,39 @@ public class StoredResources extends Vector<StoredResource> {
     @Override
     public String toString() {
         return new Gson().toJson(this);
+    }
+
+    //TODO unit test
+    public List<StoredResource> getByLocationAndDataId(UUID location, String dataId) {
+        return stream()
+            .filter(storedResource -> storedResource.getLocation().equals(location))
+            .filter(storedResource -> storedResource.getDataId().equals(dataId))
+            .toList();
+    }
+
+    //TODO unit test
+    public List<StoredResource> getByContainerId(UUID containerId) {
+        return stream()
+            .filter(storedResource -> storedResource.getContainerId().equals(containerId))
+            .toList();
+    }
+
+    //TODO unit test
+    public List<StoredResource> getByAllocatedBy(UUID externalReference) {
+        return stream()
+            .filter(storedResource -> externalReference.equals(storedResource.getAllocatedBy()))
+            .toList();
+    }
+
+    public Optional<StoredResource> findByAllocatedBy(UUID allocatedBy) {
+        return stream()
+            .filter(storedResource -> storedResource.getAllocatedBy().equals(allocatedBy))
+            .findAny();
+    }
+
+    //TODO unit test
+    public StoredResource findByAllocatedByValidated(UUID allocatedBy) {
+        return findByAllocatedBy(allocatedBy)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by allocatedBy " + allocatedBy));
     }
 }

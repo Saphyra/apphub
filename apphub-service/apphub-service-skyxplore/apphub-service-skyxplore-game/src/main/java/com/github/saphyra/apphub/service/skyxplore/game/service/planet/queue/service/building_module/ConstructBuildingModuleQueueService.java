@@ -35,14 +35,14 @@ class ConstructBuildingModuleQueueService implements QueueService {
     public List<QueueItem> getQueue(GameData gameData, UUID location) {
         return gameData.getConstructions()
             .stream()
-            .filter(construction -> gameData.getBuildingModules().findByBuildingModuleId(construction.getExternalReference()).isPresent())
+            .filter(construction -> gameData.getBuildingModules().findById(construction.getExternalReference()).isPresent())
             .map(construction -> QueueItem.builder()
                 .itemId(construction.getConstructionId())
                 .type(getType())
                 .requiredWorkPoints(construction.getRequiredWorkPoints())
                 .currentWorkPoints(construction.getCurrentWorkPoints())
                 .priority(construction.getPriority())
-                .data(Map.of("dataId", gameData.getBuildingModules().findByBuildingModuleIdValidated(construction.getExternalReference()).getDataId()))
+                .data(Map.of("dataId", gameData.getBuildingModules().findByIdValidated(construction.getExternalReference()).getDataId()))
                 .build())
             .collect(Collectors.toList());
     }
@@ -53,7 +53,7 @@ class ConstructBuildingModuleQueueService implements QueueService {
         GameData gameData = game.getData();
 
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(itemId);
+            .findByIdValidated(itemId);
 
         game.getEventLoop()
             .processWithWait(() -> {

@@ -21,10 +21,10 @@ class ConstructBuildingModuleCitizenAssignmentDataProvider implements CitizenAss
     @Override
     public Object getData(GameData gameData, Process process) {
         UUID buildingModuleId = gameData.getConstructions()
-            .findByConstructionIdValidated(process.getExternalReference())
+            .findByIdValidated(process.getExternalReference())
             .getExternalReference();
         return gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(buildingModuleId)
+            .findByIdValidated(buildingModuleId)
             .getDataId();
     }
 }

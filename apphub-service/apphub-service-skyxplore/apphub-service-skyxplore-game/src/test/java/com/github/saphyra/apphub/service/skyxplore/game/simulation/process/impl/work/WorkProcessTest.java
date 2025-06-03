@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -22,10 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -76,9 +73,6 @@ class WorkProcessTest {
             .skillType(SkillType.AIMING)
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .completedWorkPoints(0)
-            .workProcessType(WorkProcessType.TERRAFORMATION)
-            .targetId(TARGET_ID)
-            .gameData(gameData)
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
@@ -97,74 +91,6 @@ class WorkProcessTest {
     @Test
     void getType() {
         assertThat(underTest.getType()).isEqualTo(ProcessType.WORK);
-    }
-
-    @Test
-    void work_buildingNotAllocated() {
-        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
-        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
-        given(conditions.hasBuildingAllocated(gameData, PROCESS_ID)).willReturn(false);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-
-        underTest.work();
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.CREATED);
-
-        verify(helper).allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
-        verify(conditions, times(0)).hasCitizenAllocated(gameData, PROCESS_ID);
-    }
-
-    @Test
-    void work_citizenNotAllocated() {
-        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
-        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
-        given(conditions.hasBuildingAllocated(gameData, PROCESS_ID)).willReturn(true);
-        given(conditions.hasCitizenAllocated(gameData, PROCESS_ID)).willReturn(false);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-
-        underTest.work();
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
-
-        verify(helper).allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
-        verify(helper).allocateCitizenIfPossible(progressDiff, gameData, PROCESS_ID, LOCATION, SkillType.AIMING, REQUIRED_WORK_POINTS);
-        verify(helper, times(0)).work(eq(progressDiff), eq(gameData), eq(PROCESS_ID), eq(SkillType.AIMING), anyInt(), eq(WorkProcessType.TERRAFORMATION), eq(TARGET_ID));
-    }
-
-    @Test
-    void work() {
-        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
-        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
-        given(conditions.hasBuildingAllocated(gameData, PROCESS_ID)).willReturn(true);
-        given(conditions.hasCitizenAllocated(gameData, PROCESS_ID)).willReturn(true);
-        given(helper.work(progressDiff, gameData, PROCESS_ID, SkillType.AIMING, REQUIRED_WORK_POINTS, WorkProcessType.TERRAFORMATION, TARGET_ID)).willReturn(FINISHED_WORK);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-
-        underTest.work();
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
-
-        verify(helper).allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
-        verify(helper, times(0)).allocateCitizenIfPossible(progressDiff, gameData, PROCESS_ID, LOCATION, SkillType.AIMING, REQUIRED_WORK_POINTS);
-        verify(helper, times(0)).releaseBuildingAndCitizen(progressDiff, gameData, PROCESS_ID);
-    }
-
-    @Test
-    void work_finish() {
-        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
-        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
-        given(conditions.hasBuildingAllocated(gameData, PROCESS_ID)).willReturn(true);
-        given(conditions.hasCitizenAllocated(gameData, PROCESS_ID)).willReturn(true);
-        given(helper.work(progressDiff, gameData, PROCESS_ID, SkillType.AIMING, REQUIRED_WORK_POINTS, WorkProcessType.TERRAFORMATION, TARGET_ID)).willReturn(REQUIRED_WORK_POINTS);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-
-        underTest.work();
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
-
-        verify(helper).allocateParentAsBuildingIfPossible(progressDiff, gameData, PROCESS_ID, EXTERNAL_REFERENCE);
-        verify(helper, times(0)).allocateCitizenIfPossible(progressDiff, gameData, PROCESS_ID, LOCATION, SkillType.AIMING, REQUIRED_WORK_POINTS);
-        verify(helper).releaseBuildingAndCitizen(progressDiff, gameData, PROCESS_ID);
     }
 
     @Test

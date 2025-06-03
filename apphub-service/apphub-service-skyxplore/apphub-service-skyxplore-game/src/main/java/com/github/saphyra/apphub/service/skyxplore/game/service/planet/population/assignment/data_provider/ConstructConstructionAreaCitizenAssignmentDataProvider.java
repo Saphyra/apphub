@@ -21,10 +21,10 @@ class ConstructConstructionAreaCitizenAssignmentDataProvider implements CitizenA
     @Override
     public Object getData(GameData gameData, Process process) {
         UUID constructionAreaId = gameData.getConstructions()
-            .findByConstructionIdValidated(process.getExternalReference())
+            .findByIdValidated(process.getExternalReference())
             .getExternalReference();
         return gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(constructionAreaId)
+            .findByIdValidated(constructionAreaId)
             .getDataId();
     }
 }
