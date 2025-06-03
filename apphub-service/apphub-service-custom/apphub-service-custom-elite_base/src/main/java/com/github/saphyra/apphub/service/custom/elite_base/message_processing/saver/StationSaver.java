@@ -99,7 +99,7 @@ public class StationSaver {
 
         updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
 
-        log.info("Saved station {}", stationName);
+        log.debug("Saved station {}", stationName);
 
         return station;
     }

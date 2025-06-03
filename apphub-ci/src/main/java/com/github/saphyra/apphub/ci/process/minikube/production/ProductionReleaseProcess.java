@@ -1,18 +1,14 @@
 package com.github.saphyra.apphub.ci.process.minikube.production;
 
-import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeBuildTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
-import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import com.github.saphyra.apphub.ci.value.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
