@@ -77,6 +77,9 @@ class CommoditySaverTest {
     private Commodity modifiedCommodity;
 
     @Mock
+    private Commodity incorrectCommodity;
+
+    @Mock
     private LastUpdate lastUpdate;
 
     @Test
@@ -91,7 +94,8 @@ class CommoditySaverTest {
 
     @Test
     void saveAll() {
-        given(commodityDao.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).willReturn(List.of(existingCommodity, deprecatedCommodity, modifiedCommodity));
+        given(commodityDao.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).willReturn(List.of(incorrectCommodity, existingCommodity, deprecatedCommodity, modifiedCommodity));
+        given(incorrectCommodity.getExternalReference()).willReturn(UUID.randomUUID());
 
         given(existingCommodity.getCommodityName()).willReturn(EXISTING_COMMODITY);
         given(deprecatedCommodity.getCommodityName()).willReturn(DEPRECATED_COMMODITY);
@@ -121,7 +125,8 @@ class CommoditySaverTest {
         underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(existingCommodityData, newCommodityData, modifiedCommodityData));
 
         then(lastUpdateDao).should().save(lastUpdate);
-        then(commodityDao).should().deleteAll(List.of(deprecatedCommodity));
+        then(commodityDao).should().deleteByExternalReferencesAndCommodityNames(List.of(incorrectCommodity));
+        then(commodityDao).should().deleteByExternalReferencesAndCommodityNames(List.of(deprecatedCommodity));
         then(commodityDao).should().saveAll(List.of(newCommodity, modifiedCommodity));
     }
 }

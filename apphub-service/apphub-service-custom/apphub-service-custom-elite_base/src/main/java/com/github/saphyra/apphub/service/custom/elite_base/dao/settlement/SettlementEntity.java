@@ -14,7 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(schema = "elite_base", name = "settlement")
-@Deprecated(forRemoval = true)
 class SettlementEntity {
     @Id
     private String id;

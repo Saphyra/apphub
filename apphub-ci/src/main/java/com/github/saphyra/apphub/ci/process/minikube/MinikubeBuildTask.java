@@ -77,11 +77,11 @@ public class MinikubeBuildTask {
         }
     }
 
-    public boolean deployServices(String username, String password) {
+    public boolean deployServices() {
         String threadCount = String.valueOf(propertyDao.getThreadCount(DeployMode.DEFAULT));
 
         try {
-            Process process = new ProcessBuilder(propertyDao.getBashFileLocation(), "-c", "./infra/deploy_all.sh %s %s %s".formatted(threadCount, username, password))
+            Process process = new ProcessBuilder(propertyDao.getBashFileLocation(), "-c", "./infra/deploy_all.sh %s".formatted(threadCount))
                 .inheritIO()
                 .start();
 

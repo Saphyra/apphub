@@ -24,7 +24,7 @@ spec:
             value: server,production
         ports:
         - containerPort: 8080
-        imagePullPolicy: Always
+        imagePullPolicy: Never
         livenessProbe:
           httpGet:
             path: /platform/health

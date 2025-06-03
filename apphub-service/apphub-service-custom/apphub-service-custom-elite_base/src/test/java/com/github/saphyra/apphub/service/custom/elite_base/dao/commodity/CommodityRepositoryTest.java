@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -165,5 +167,34 @@ class CommodityRepositoryTest {
         underTest.save(tooExpensiveEntity);
 
         assertThat(underTest.getBuyOffers(COMMODITY_NAME_1, 5, 10, 11)).containsExactly(matchingEntity);
+    }
+
+    @Test
+    void deleteByExternalReferencesAndCommodityNames(){
+        CommodityEntity entity1 = CommodityEntity.builder()
+            .id(CommodityEntityId.builder()
+                .commodityName(COMMODITY_NAME_1)
+                .externalReference(EXTERNAL_REFERENCE_1)
+                .build())
+            .build();
+        underTest.save(entity1);
+        CommodityEntity entity2 = CommodityEntity.builder()
+            .id(CommodityEntityId.builder()
+                .commodityName(COMMODITY_NAME_2)
+                .externalReference(EXTERNAL_REFERENCE_1)
+                .build())
+            .build();
+        underTest.save(entity2);
+        CommodityEntity entity3 = CommodityEntity.builder()
+            .id(CommodityEntityId.builder()
+                .commodityName(COMMODITY_NAME_1)
+                .externalReference(EXTERNAL_REFERENCE_2)
+                .build())
+            .build();
+        underTest.save(entity3);
+
+        underTest.deleteByExternalReferencesAndCommodityNames(List.of(EXTERNAL_REFERENCE_1), List.of(COMMODITY_NAME_1));
+
+        assertThat(underTest.findAll()).containsExactly(entity2, entity3);
     }
 }

@@ -37,7 +37,7 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
 
     @Override
     public void processMessages() {
-        log.debug("processMessages event arrived");
+        log.info("processMessages event arrived");
         executorServiceBean.execute(edMessageProcessor::processMessages);
     }
 

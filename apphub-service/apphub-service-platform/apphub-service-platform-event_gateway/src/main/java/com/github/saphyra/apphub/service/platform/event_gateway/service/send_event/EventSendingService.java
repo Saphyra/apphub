@@ -18,7 +18,7 @@ public class EventSendingService {
     private final boolean backgroundEventSendingEnabled;
 
     @Builder
-    public EventSendingService(
+    EventSendingService(
         ExecutorServiceBean executorServiceBean,
         LocaleProvider localeProvider,
         SendEventRequestValidator sendEventRequestValidator,

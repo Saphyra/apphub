@@ -33,7 +33,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class LoadoutSaver {
-    private static final Striped<Lock> LOCKS = Striped.lock(8);
+    private static final Striped<Lock> LOCKS = Striped.lock(64);
 
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
@@ -52,6 +52,9 @@ public class LoadoutSaver {
         if (!lock.tryLock(30, TimeUnit.SECONDS)) {
             throw new MessageProcessingDelayedException("Lock acquisition failed in class " + getClass().getSimpleName());
         }
+
+        log.info("Saving Loadout for externalReference {} and type {}", externalReference, type);
+
         try {
             lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
@@ -81,6 +84,8 @@ public class LoadoutSaver {
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
                 PerformanceReportingKey.SAVE_LOADOUT_SAVE_ALL.name()
             );
+
+            log.info("Saved Loadout for externalReference {} and type {}", externalReference, type);
         } finally {
             lock.unlock();
         }
