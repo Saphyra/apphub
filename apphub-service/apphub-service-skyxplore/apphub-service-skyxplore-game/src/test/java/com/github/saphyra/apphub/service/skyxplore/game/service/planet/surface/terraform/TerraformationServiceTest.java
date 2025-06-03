@@ -25,7 +25,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation.TerraformationProcessFactory;
@@ -67,9 +66,6 @@ public class TerraformationServiceTest {
 
     @Mock
     private GameDao gameDao;
-
-    @Mock
-    private ResourceAllocationService resourceAllocationService;
 
     @Mock
     private ConstructionFactory constructionFactory;
@@ -249,7 +245,6 @@ public class TerraformationServiceTest {
         argumentCaptor.getValue()
             .run();
 
-        verify(resourceAllocationService).processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Collections.emptyMap());
         verify(processes).add(terraformationProcess);
         verify(executionResult).getOrThrow();
         then(progressDiff).should().save(processModel);

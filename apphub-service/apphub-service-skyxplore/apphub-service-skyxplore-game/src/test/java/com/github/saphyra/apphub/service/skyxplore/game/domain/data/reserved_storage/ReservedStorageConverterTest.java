@@ -20,7 +20,7 @@ public class ReservedStorageConverterTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final int AMOUNT = 3215;
-    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID CONTAINER_ID = UUID.randomUUID();
 
     @InjectMocks
     private ReservedStorageConverter underTest;
@@ -29,7 +29,7 @@ public class ReservedStorageConverterTest {
     public void convert() {
         ReservedStorage reservedStorage = ReservedStorage.builder()
             .reservedStorageId(RESERVED_STORAGE_ID)
-            .location(LOCATION)
+            .containerId(CONTAINER_ID)
             .externalReference(EXTERNAL_REFERENCE)
             .dataId(DATA_ID)
             .amount(AMOUNT)
@@ -43,6 +43,6 @@ public class ReservedStorageConverterTest {
         assertThat(result.get(0).getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
-        assertThat(result.get(0).getContainerId()).isEqualTo(LOCATION);
+        assertThat(result.get(0).getContainerId()).isEqualTo(CONTAINER_ID);
     }
 }

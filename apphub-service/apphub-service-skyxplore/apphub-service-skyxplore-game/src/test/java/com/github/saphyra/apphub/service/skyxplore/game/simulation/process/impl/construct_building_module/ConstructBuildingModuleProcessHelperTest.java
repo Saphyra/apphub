@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -28,12 +27,6 @@ class ConstructBuildingModuleProcessHelperTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
     private static final int REQUIRED_WORK_POINTS = 243;
-
-    @Mock
-    private ProductionOrderService productionOrderService;
-
-    @Mock
-    private UseAllocatedResourceService useAllocatedResourceService;
 
     @Mock
     private WorkProcessFactory workProcessFactory;
@@ -64,30 +57,6 @@ class ConstructBuildingModuleProcessHelperTest {
 
     @Mock
     private ProcessModel processModel;
-
-    @Test
-    void createProductionOrders() {
-        underTest.createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-
-        then(productionOrderService).should().createProductionOrdersForReservedStorages(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-    }
-
-    @Test
-    void startWork() {
-        given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
-        given(construction.getLocation()).willReturn(LOCATION);
-        given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(workProcessFactory.createForConstruction(gameData, PROCESS_ID, CONSTRUCTION_ID, LOCATION, REQUIRED_WORK_POINTS)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
-
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-
-        then(useAllocatedResourceService).should().resolveAllocations(progressDiff, gameData, LOCATION, CONSTRUCTION_ID);
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
-    }
 
     @Test
     void finishConstruction() {

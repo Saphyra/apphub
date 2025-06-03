@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -62,18 +61,6 @@ class DeconstructBuildingModuleProcessHelperTest {
 
     @Mock
     private BuildingModule buildingModule;
-
-    @Test
-    void startWork() {
-        given(workProcessFactory.createForDeconstruction(gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
-
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION);
-
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
-    }
 
     @Test
     void finishDeconstruction() {

@@ -27,7 +27,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_construction_area.ConstructConstructionAreaProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_construction_area.ConstructConstructionAreaProcessFactory;
@@ -74,9 +73,6 @@ class ConstructConstructionAreaServiceTest {
 
     @Mock
     private ConstructionAreaFactory constructionAreaFactory;
-
-    @Mock
-    private ResourceAllocationService resourceAllocationService;
 
     @Mock
     private ConstructConstructionAreaProcessFactory constructConstructionAreaProcessFactory;
@@ -268,7 +264,6 @@ class ConstructConstructionAreaServiceTest {
 
         underTest.constructConstructionArea(USER_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID);
 
-        then(resourceAllocationService).should().processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Map.of(RESOURCE_DATA_ID, RESOURCE_AMOUNT));
         then(constructionAreas).should().add(constructionArea);
         then(processes).should().add(process);
         then(constructions).should().add(construction);

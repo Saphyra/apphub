@@ -19,7 +19,6 @@ import static org.mockito.BDDMockito.given;
 class ReservedStoragesTest {
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final UUID LOCATION = UUID.randomUUID();
 
     private final ReservedStorages underTest = new ReservedStorages();
 
@@ -57,15 +56,5 @@ class ReservedStoragesTest {
         underTest.addAll(List.of(reservedStorage1, reservedStorage2));
 
         assertThat(underTest.getByExternalReference(EXTERNAL_REFERENCE)).containsExactly(reservedStorage1);
-    }
-
-    @Test
-    void getByLocation() {
-        given(reservedStorage1.getLocation()).willReturn(LOCATION);
-        given(reservedStorage2.getLocation()).willReturn(UUID.randomUUID());
-
-        underTest.addAll(List.of(reservedStorage1, reservedStorage2));
-
-        assertThat(underTest.getByLocation(LOCATION)).containsExactly(reservedStorage1);
     }
 }

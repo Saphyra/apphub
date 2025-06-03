@@ -24,6 +24,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
+//TODO unit test
 public class ConstructConstructionAreaProcess implements Process {
     //Own fields
     @Getter

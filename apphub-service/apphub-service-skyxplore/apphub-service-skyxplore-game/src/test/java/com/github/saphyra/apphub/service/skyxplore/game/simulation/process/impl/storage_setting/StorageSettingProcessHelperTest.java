@@ -1,93 +1,36 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderProcess;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderProcessFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.resource_request.ResourceRequestProcessFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class StorageSettingProcessHelperTest {
-    private static final int AMOUNT = 34;
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final UUID GAME_ID = UUID.randomUUID();
-    private static final String DATA_ID = "data-id";
+    private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
 
     @Mock
-    private ProductionOrderProcessFactory productionOrderProcessFactory;
-
-    @Mock
-    private ReservedStorageFactory reservedStorageFactory;
-
-    @Mock
-    private ReservedStorageConverter reservedStorageConverter;
+    private ResourceRequestProcessFactory resourceRequestProcessFactory;
 
     @InjectMocks
     private StorageSettingProcessHelper underTest;
 
     @Mock
-    private GameProgressDiff progressDiff;
-
-    @Mock
-    private GameData gameData;
-
-    @Mock
-    private StorageSetting storageSetting;
-
-    @Mock
-    private ReservedStorage reservedStorage;
-
-    @Mock
-    private ReservedStorages reservedStorages;
-
-    @Mock
-    private ReservedStorageModel reservedStorageModel;
-
-    @Mock
-    private ProductionOrderProcess productionOrderProcess;
-
-    @Mock
-    private Processes processes;
-
-    @Mock
-    private ProcessModel processModel;
+    private Game game;
 
     @Test
     void orderResources() {
-        given(storageSetting.getLocation()).willReturn(LOCATION);
-        given(storageSetting.getDataId()).willReturn(DATA_ID);
-        given(reservedStorageFactory.create(LOCATION, PROCESS_ID, DATA_ID, AMOUNT)).willReturn(reservedStorage);
-        given(gameData.getGameId()).willReturn(GAME_ID);
-        given(reservedStorageConverter.toModel(GAME_ID, reservedStorage)).willReturn(reservedStorageModel);
-        given(productionOrderProcessFactory.create(gameData, PROCESS_ID, LOCATION, reservedStorage)).willReturn(List.of(productionOrderProcess));
-        given(productionOrderProcess.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
-        given(gameData.getReservedStorages()).willReturn(reservedStorages);
+        underTest.orderResources(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
 
-        underTest.orderResources(progressDiff, gameData, PROCESS_ID, storageSetting, AMOUNT);
-
-        verify(reservedStorages).add(reservedStorage);
-        verify(progressDiff).save(reservedStorageModel);
-        verify(processes).add(productionOrderProcess);
-        verify(progressDiff).save(processModel);
+        then(resourceRequestProcessFactory).should().save(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
     }
 }

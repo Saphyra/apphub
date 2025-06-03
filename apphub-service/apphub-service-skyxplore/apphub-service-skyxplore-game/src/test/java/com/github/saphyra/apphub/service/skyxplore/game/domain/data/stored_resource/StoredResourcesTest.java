@@ -14,7 +14,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class StoredResourcesTest {
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final String DATA_ID = "data-id";
 
     private final StoredResources underTest = new StoredResources();
 
@@ -23,29 +22,6 @@ class StoredResourcesTest {
 
     @Mock
     private StoredResource storedResource2;
-
-    @Test
-    void findByLocationAndDataId_found() {
-        given(storedResource1.getLocation()).willReturn(LOCATION);
-        given(storedResource1.getDataId()).willReturn(DATA_ID);
-
-        underTest.add(storedResource1);
-
-        assertThat(underTest.findByLocationAndDataId(LOCATION, DATA_ID)).contains(storedResource1);
-    }
-
-    @Test
-    void findByLocationAndDataIdOrDefault_notFound() {
-        given(storedResource1.getLocation()).willReturn(UUID.randomUUID());
-
-        given(storedResource2.getLocation()).willReturn(LOCATION);
-        given(storedResource2.getDataId()).willReturn("asd");
-
-        underTest.add(storedResource1);
-        underTest.add(storedResource2);
-
-        assertThat(underTest.findByLocationAndDataId(LOCATION, DATA_ID)).isEmpty();
-    }
 
     @Test
     void getByLocation() {

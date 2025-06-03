@@ -1,11 +1,8 @@
-package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work;
+package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.CitizenEfficiencyCalculator;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.MoraleMultiplierCalculator;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.SkillMultiplierCalculator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

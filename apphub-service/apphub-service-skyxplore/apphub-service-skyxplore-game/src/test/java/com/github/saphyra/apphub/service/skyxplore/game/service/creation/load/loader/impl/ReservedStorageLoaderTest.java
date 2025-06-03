@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class ReservedStorageLoaderTest {
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
-    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID CONTAINER_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final Integer AMOUNT = 254;
@@ -67,15 +68,17 @@ class ReservedStorageLoaderTest {
     @Test
     void convert() {
         given(model.getId()).willReturn(RESERVED_STORAGE_ID);
-        given(model.getContainerId()).willReturn(LOCATION);
+        given(model.getContainerId()).willReturn(CONTAINER_ID);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getDataId()).willReturn(DATA_ID);
         given(model.getAmount()).willReturn(AMOUNT);
+        given(model.getContainerType()).willReturn(ContainerType.STORAGE);
 
         ReservedStorage result = underTest.convert(model);
 
         assertThat(result.getReservedStorageId()).isEqualTo(RESERVED_STORAGE_ID);
-        assertThat(result.getLocation()).isEqualTo(LOCATION);
+        assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(result.getContainerType()).isEqualTo(ContainerType.STORAGE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

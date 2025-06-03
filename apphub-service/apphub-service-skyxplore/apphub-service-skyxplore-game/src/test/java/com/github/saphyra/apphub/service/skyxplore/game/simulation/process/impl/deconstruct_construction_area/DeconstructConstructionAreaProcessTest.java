@@ -138,7 +138,7 @@ class DeconstructConstructionAreaProcessTest {
         underTest.work();
 
         then(processHelper).should().initiateDeconstructModules(game, DECONSTRUCTION_ID);
-        then(processHelper).should().startWork(progressDiff, gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION);
+        then(processHelper).should().startWork(game, PROCESS_ID, DECONSTRUCTION_ID);
         then(processHelper).shouldHaveNoMoreInteractions();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);

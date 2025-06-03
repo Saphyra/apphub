@@ -18,6 +18,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class DeconstructBuildingModuleProcessHelper {
     private final WorkProcessFactory workProcessFactory;
     private final GameProperties gameProperties;
@@ -30,7 +31,7 @@ class DeconstructBuildingModuleProcessHelper {
         workProcessFactory.save(game, deconstruction.getLocation(), processId, gameProperties.getDeconstruction().getRequiredWorkPoints(), SkillType.BUILDING);
     }
 
-    public void finishDeconstruction(GameProgressDiff progressDiff, GameData gameData, UUID deconstructionId) {
+     void finishDeconstruction(GameProgressDiff progressDiff, GameData gameData, UUID deconstructionId) {
         Deconstruction deconstruction = gameData.getDeconstructions()
             .findByIdValidated(deconstructionId);
 

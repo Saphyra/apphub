@@ -33,6 +33,7 @@ class ConstructBuildingModuleProcessHelper {
             .forEach(reservedStorage -> resourceRequestProcessFactory.save(game, location, processId, reservedStorage.getReservedStorageId()));
     }
 
+    //TODO unit test
     void startWork(Game game, UUID processId, UUID constructionId) {
         storedResourceService.useResources(game.getProgressDiff(), game.getData(), processId);
 

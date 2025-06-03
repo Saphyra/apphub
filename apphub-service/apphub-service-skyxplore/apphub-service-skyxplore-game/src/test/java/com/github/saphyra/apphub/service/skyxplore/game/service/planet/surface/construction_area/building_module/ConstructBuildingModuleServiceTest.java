@@ -28,7 +28,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcessFactory;
@@ -62,31 +62,31 @@ class ConstructBuildingModuleServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private GameDao gameDao;
+    private  GameDao gameDao;
 
     @Mock
-    private BuildingModuleDataService buildingModuleDataService;
+    private  BuildingModuleDataService buildingModuleDataService;
 
     @Mock
-    private ConstructionAreaDataService constructionAreaDataService;
+    private  ConstructionAreaDataService constructionAreaDataService;
 
     @Mock
-    private BuildingModuleFactory buildingModuleFactory;
+    private  BuildingModuleFactory buildingModuleFactory;
 
     @Mock
-    private ConstructionFactory constructionFactory;
+    private  ConstructionFactory constructionFactory;
 
     @Mock
-    private ResourceAllocationService resourceAllocationService;
+    private  BuildingModuleConverter buildingModuleConverter;
 
     @Mock
-    private BuildingModuleConverter buildingModuleConverter;
+    private  ConstructionConverter constructionConverter;
 
     @Mock
-    private ConstructionConverter constructionConverter;
+    private  ConstructBuildingModuleProcessFactory constructBuildingModuleProcessFactory;
 
     @Mock
-    private ConstructBuildingModuleProcessFactory constructBuildingModuleProcessFactory;
+    private  ReservedStorageFactory reservedStorageFactory;
 
     @InjectMocks
     private ConstructBuildingModuleService underTest;
@@ -262,7 +262,6 @@ class ConstructBuildingModuleServiceTest {
 
         underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID);
 
-        then(resourceAllocationService).should().processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Map.of(RESOURCE_DATA_ID, RESOURCE_AMOUNT));
         then(buildingModules).should().add(buildingModule);
         then(constructions).should().add(construction);
         then(processes).should().add(process);

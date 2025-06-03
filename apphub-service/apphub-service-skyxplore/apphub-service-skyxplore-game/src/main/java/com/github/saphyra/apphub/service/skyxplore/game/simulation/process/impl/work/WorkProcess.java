@@ -73,6 +73,7 @@ public class WorkProcess implements Process {
 
     @SneakyThrows
     @Override
+    //TODO unit test
     public void work() {
         log.info("Working on {}", this);
 

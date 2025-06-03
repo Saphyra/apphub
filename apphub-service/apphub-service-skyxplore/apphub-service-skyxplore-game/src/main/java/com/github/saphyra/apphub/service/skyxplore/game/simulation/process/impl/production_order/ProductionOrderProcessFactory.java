@@ -6,8 +6,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
@@ -20,12 +18,11 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class ProductionOrderProcessFactory implements ProcessFactory {
     private final IdGenerator idGenerator;
-    private final ResourceDataService resourceDataService;
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
-    private final GameDao gameDao;
 
     @Override
     public ProcessType getType() {

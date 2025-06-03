@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Pr
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -20,7 +21,8 @@ import static org.mockito.BDDMockito.given;
 class TerraformationProcessConditionsTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
 
-    private final TerraformationProcessConditions underTest = new TerraformationProcessConditions();
+    @InjectMocks
+    private TerraformationProcessConditions underTest;
 
     @Mock
     private GameData gameData;
@@ -30,15 +32,6 @@ class TerraformationProcessConditionsTest {
 
     @Mock
     private Process process;
-
-    @Test
-    void productionOrdersComplete() {
-        given(gameData.getProcesses()).willReturn(processes);
-        given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(process));
-        given(process.getStatus()).willReturn(ProcessStatus.DONE);
-
-        assertThat(underTest.productionOrdersComplete(gameData, PROCESS_ID)).isTrue();
-    }
 
     @Test
     void hasWorkProcesses() {

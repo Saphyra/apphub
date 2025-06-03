@@ -68,6 +68,7 @@ public class TerraformationProcess implements Process {
     }
 
     @Override
+    //TODO unit test
     public void work() {
         log.info("Working on {}", this);
 

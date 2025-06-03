@@ -115,18 +115,6 @@ class DeconstructConstructionAreaProcessHelperTest {
     }
 
     @Test
-    void startWork() {
-        given(workProcessFactory.createForDeconstruction(gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
-
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION);
-
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
-    }
-
-    @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StorageCapacityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,7 +26,7 @@ class PopulationFillerServiceTest {
     private CitizenFactory citizenFactory;
 
     @Mock
-    private StorageCalculator storageCalculator;
+    private StorageCapacityService storageCapacityService;
 
     @InjectMocks
     private PopulationFillerService underTest;
@@ -50,7 +51,7 @@ class PopulationFillerServiceTest {
         given(planet.hasOwner()).willReturn(true);
         given(emptyPlanet.hasOwner()).willReturn(false);
 
-        given(storageCalculator.calculateDwellingCapacity(gameData, PLANET_ID)).willReturn(2);
+        given(storageCapacityService.calculateDwellingCapacity(gameData, PLANET_ID)).willReturn(2);
 
         given(planet.getPlanetId()).willReturn(PLANET_ID);
 

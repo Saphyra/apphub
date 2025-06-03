@@ -40,6 +40,7 @@ class StorageSettingProcessTest {
     private static final Integer PLANET_PRIORITY = 342;
     private static final Integer STORAGE_SETTING_PRIORITY = 34;
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
@@ -88,7 +89,6 @@ class StorageSettingProcessTest {
             .processId(PROCESS_ID)
             .status(ProcessStatus.CREATED)
             .location(LOCATION)
-            .gameData(gameData)
             .storageSettingId(STORAGE_SETTING_ID)
             .amount(AMOUNT)
             .applicationContextProxy(applicationContextProxy)
@@ -137,7 +137,7 @@ class StorageSettingProcessTest {
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(helper).orderResources(progressDiff, gameData, PROCESS_ID, storageSetting, AMOUNT);
+        verify(helper).orderResources(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
     }
 
     @Test

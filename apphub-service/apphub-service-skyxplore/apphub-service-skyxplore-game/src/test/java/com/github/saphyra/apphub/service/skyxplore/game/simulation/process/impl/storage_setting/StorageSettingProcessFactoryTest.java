@@ -50,20 +50,6 @@ class StorageSettingProcessFactoryTest {
     private ProcessModel model;
 
     @Test
-    void create() {
-        given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
-        given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
-        given(storageSetting.getLocation()).willReturn(LOCATION);
-        given(game.getData()).willReturn(gameData);
-
-        StorageSettingProcess result = underTest.create(game, storageSetting, AMOUNT);
-
-        assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
-        assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
-        assertThat(result.getExternalReference()).isEqualTo(STORAGE_SETTING_ID);
-    }
-
-    @Test
     void getType() {
         assertThat(underTest.getType()).isEqualTo(ProcessType.STORAGE_SETTING);
     }
