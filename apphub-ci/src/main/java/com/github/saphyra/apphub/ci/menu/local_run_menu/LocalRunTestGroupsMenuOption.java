@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.ci.menu.local_run_menu;
 
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
@@ -16,6 +18,7 @@ import java.util.Optional;
 class LocalRunTestGroupsMenuOption implements MenuOption {
     private final ValidatingInputReader validatingInputReader;
     private final LocalRunTestsProcess localRunTestsProcess;
+    private final PropertyDao propertyDao;
 
     @Override
     public Menu getMenu() {
@@ -44,6 +47,8 @@ class LocalRunTestGroupsMenuOption implements MenuOption {
                 return Optional.empty();
             }
         );
+
+        propertyDao.save(PropertyName.LATEST_TEST_GROUPS, testGroups);
 
         localRunTestsProcess.run(testGroups);
 

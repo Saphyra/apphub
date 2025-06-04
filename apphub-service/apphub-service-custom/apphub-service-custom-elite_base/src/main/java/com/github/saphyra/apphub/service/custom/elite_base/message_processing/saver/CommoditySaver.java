@@ -66,7 +66,7 @@ public class CommoditySaver {
             .toList();
 
         lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
-        log.info("LastUpdate saved for location {} and type {}", externalReference, type);
+        log.debug("LastUpdate saved for location {} and type {}", externalReference, type);
 
         Map<String, Commodity> existingCommodities = getExistingCommodities(externalReference, type, marketId)
             .stream()
@@ -90,16 +90,16 @@ public class CommoditySaver {
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_COMMODITIES_DELETE_ALL.name()
         );
-        log.info("Deleted {} commodities", deletedCommodities.size());
+        log.debug("Deleted {} commodities", deletedCommodities.size());
 
         performanceReporter.wrap(
             () -> commodityDao.saveAll(modifiedCommodities),
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_COMMODITIES_SAVE_ALL.name()
         );
-        log.info("Saved {} commodities", modifiedCommodities.size());
+        log.debug("Saved {} commodities", modifiedCommodities.size());
 
-        log.info("Saved commodities for location {} and type {}", commodityLocation, type);
+        log.debug("Saved commodities for location {} and type {}", commodityLocation, type);
     }
 
     private List<Commodity> getExistingCommodities(UUID externalReference, CommodityType type, Long marketId) {
@@ -112,9 +112,9 @@ public class CommoditySaver {
         List<Commodity> incorrectCommodities = commodities.stream()
             .filter(commodity -> !commodity.getExternalReference().equals(externalReference))
             .toList();
-        log.info("Found {} incorrect commodities.", incorrectCommodities.size());
+        log.debug("Found {} incorrect commodities.", incorrectCommodities.size());
         commodityDao.deleteByExternalReferencesAndCommodityNames(incorrectCommodities);
-        log.info("{} incorrect commodities were deleted.", incorrectCommodities.size());
+        log.debug("{} incorrect commodities were deleted.", incorrectCommodities.size());
 
         return commodities.stream()
             .filter(commodity -> !incorrectCommodities.contains(commodity))

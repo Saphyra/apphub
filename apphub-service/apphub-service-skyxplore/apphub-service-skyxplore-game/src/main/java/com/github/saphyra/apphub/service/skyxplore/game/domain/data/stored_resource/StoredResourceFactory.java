@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -16,12 +17,12 @@ public class StoredResourceFactory {
     private final IdGenerator idGenerator;
     private final StoredResourceConverter storedResourceConverter;
 
-    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId) {
-        return create(gameProgressDiff, gameData, location, dataId, 0);
+    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, UUID containerId, ContainerType containerType) {
+        return create(gameProgressDiff, gameData, location, dataId, 0, containerId, containerType);
     }
 
-    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount) {
-        StoredResource result = create(location, dataId, amount);
+    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
+        StoredResource result = create(location, dataId, amount, containerId, containerType);
 
         gameData.getStoredResources()
             .add(result);
@@ -30,12 +31,14 @@ public class StoredResourceFactory {
         return result;
     }
 
-    public StoredResource create(UUID location, String dataId, int amount) {
+    public StoredResource create(UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
         return StoredResource.builder()
             .storedResourceId(idGenerator.randomUuid())
             .location(location)
             .dataId(dataId)
             .amount(amount)
+            .containerId(containerId)
+            .containerType(containerType)
             .build();
     }
 }

@@ -64,7 +64,7 @@ public class StarSystemSaver {
 
             updateMissingFields(timestamp, starSystem, starId, starName, starPosition, starType);
 
-            log.info("Saved starSystem {}", starName);
+            log.debug("Saved starSystem {}", starName);
 
             return starSystem;
         } finally {

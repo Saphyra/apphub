@@ -99,7 +99,7 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
             .map(Commodity::getCommodityName)
             .toList();
 
-        log.info("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);
+        log.debug("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);
 
         String sql = SqlBuilder.delete()
                 .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))

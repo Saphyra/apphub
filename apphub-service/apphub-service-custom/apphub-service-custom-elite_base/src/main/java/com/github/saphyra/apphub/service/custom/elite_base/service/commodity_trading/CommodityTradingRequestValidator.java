@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
