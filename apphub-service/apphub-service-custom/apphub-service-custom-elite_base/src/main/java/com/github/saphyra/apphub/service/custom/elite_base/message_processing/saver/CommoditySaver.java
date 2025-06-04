@@ -113,8 +113,10 @@ public class CommoditySaver {
             .filter(commodity -> !commodity.getExternalReference().equals(externalReference))
             .toList();
         log.info("Found {} incorrect commodities.", incorrectCommodities.size());
-        commodityDao.deleteByExternalReferencesAndCommodityNames(incorrectCommodities);
-        log.info("{} incorrect commodities were deleted.", incorrectCommodities.size());
+        if (!incorrectCommodities.isEmpty()) {
+            commodityDao.deleteByExternalReferencesAndCommodityNames(incorrectCommodities);
+            log.info("{} incorrect commodities were deleted.", incorrectCommodities.size());
+        }
 
         return commodities.stream()
             .filter(commodity -> !incorrectCommodities.contains(commodity))
