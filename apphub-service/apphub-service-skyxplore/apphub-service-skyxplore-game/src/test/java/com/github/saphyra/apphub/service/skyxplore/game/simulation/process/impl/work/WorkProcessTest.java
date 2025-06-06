@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
@@ -28,12 +27,10 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class WorkProcessTest {
     private static final int REQUIRED_WORK_POINTS = 5;
-    private static final UUID TARGET_ID = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
     private static final Integer PRIORITY = 234;
-    private static final Integer FINISHED_WORK = 3;
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
@@ -53,8 +50,6 @@ class WorkProcessTest {
 
     @Mock
     private Game game;
-
-    private final UuidConverter uuidConverter = new UuidConverter();
 
     private WorkProcess underTest;
 
@@ -81,6 +76,7 @@ class WorkProcessTest {
 
     @Test
     void getPriority() {
+        given(game.getData()).willReturn(gameData);
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByIdValidated(EXTERNAL_REFERENCE)).willReturn(process);
         given(process.getPriority()).willReturn(PRIORITY);
@@ -96,21 +92,18 @@ class WorkProcessTest {
     @Test
     void cleanup() {
         given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
-        given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
         given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.cleanup();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
-        verify(helper).releaseBuildingAndCitizen(progressDiff, gameData, PROCESS_ID);
         verify(progressDiff).save(underTest.toModel());
     }
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
-        given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(game.getGameId()).willReturn(GAME_ID);
 
         ProcessModel result = underTest.toModel();
 
@@ -121,11 +114,8 @@ class WorkProcessTest {
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat(result.getData()).containsEntry(ProcessParamKeys.BUILDING_DATA_ID, null);
         assertThat(result.getData()).containsEntry(ProcessParamKeys.SKILL_TYPE, SkillType.AIMING.name());
         assertThat(result.getData()).containsEntry(ProcessParamKeys.REQUIRED_WORK_POINTS, String.valueOf(REQUIRED_WORK_POINTS));
-        assertThat(result.getData()).containsEntry(ProcessParamKeys.WORK_PROCESS_TYPE, WorkProcessType.TERRAFORMATION.name());
-        assertThat(result.getData()).containsEntry(ProcessParamKeys.TARGET_ID, uuidConverter.convertDomain(TARGET_ID));
         assertThat(result.getData()).containsEntry(ProcessParamKeys.COMPLETED_WORK_POINTS, String.valueOf(0));
     }
 }

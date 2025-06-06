@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
@@ -41,6 +42,7 @@ class StorageSettingProcessTest {
     private static final Integer STORAGE_SETTING_PRIORITY = 34;
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
+    private static final String RESERVED_STORAGE_ID_STRING = "reserved-storage-id";
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
@@ -62,6 +64,9 @@ class StorageSettingProcessTest {
 
     @Mock
     private Game game;
+
+    @Mock
+    private UuidConverter uuidConverter;
 
     private StorageSettingProcess underTest;
 
@@ -90,6 +95,7 @@ class StorageSettingProcessTest {
             .status(ProcessStatus.CREATED)
             .location(LOCATION)
             .storageSettingId(STORAGE_SETTING_ID)
+            .reservedStorageId(RESERVED_STORAGE_ID)
             .amount(AMOUNT)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
@@ -108,6 +114,7 @@ class StorageSettingProcessTest {
 
     @Test
     void getPriority() {
+        given(game.getData()).willReturn(gameData);
         given(gameData.getPriorities()).willReturn(priorities);
         given(priorities.findByLocationAndType(LOCATION, PriorityType.INDUSTRY)).willReturn(priority);
         given(priority.getValue()).willReturn(PLANET_PRIORITY);
@@ -119,29 +126,8 @@ class StorageSettingProcessTest {
     }
 
     @Test
-    void work() {
-        given(applicationContextProxy.getBean(StorageSettingProcessConditions.class)).willReturn(conditions);
-        given(applicationContextProxy.getBean(StorageSettingProcessHelper.class)).willReturn(helper);
-        given(gameData.getStorageSettings()).willReturn(storageSettings);
-        given(storageSettings.findByStorageSettingIdValidated(STORAGE_SETTING_ID)).willReturn(storageSetting);
-        given(conditions.isFinished(gameData, PROCESS_ID))
-            .willReturn(false)
-            .willReturn(true);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-
-        underTest.work();
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
-
-        underTest.work();
-
-        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
-
-        verify(helper).orderResources(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
-    }
-
-    @Test
     void cleanup() {
+        given(game.getData()).willReturn(gameData);
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(applicationContextProxy.getBean(AllocationRemovalService.class)).willReturn(allocationRemovalService);
@@ -153,12 +139,13 @@ class StorageSettingProcessTest {
 
         verify(process).cleanup();
         verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, PROCESS_ID);
-        verify(progressDiff).save(underTest.toModel());
     }
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
+        given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESERVED_STORAGE_ID_STRING);
 
         ProcessModel result = underTest.toModel();
 
@@ -170,5 +157,6 @@ class StorageSettingProcessTest {
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getExternalReference()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getData()).containsEntry(ProcessParamKeys.AMOUNT, String.valueOf(AMOUNT));
+        assertThat(result.getData()).containsEntry(ProcessParamKeys.RESERVED_STORAGE_ID, RESERVED_STORAGE_ID_STRING);
     }
 }

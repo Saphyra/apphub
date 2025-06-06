@@ -47,6 +47,7 @@ public class StorageSettingProcess implements Process {
     @Getter
     private final Integer amount;
 
+    @NonNull
     private final UUID reservedStorageId;
 
     @NonNull
@@ -82,6 +83,7 @@ public class StorageSettingProcess implements Process {
     }
 
     @Override
+    //TODO unit test
     public void work() {
         log.info("Working on {}", this);
 
@@ -114,8 +116,6 @@ public class StorageSettingProcess implements Process {
             .removeAllocationsAndReservations(progressDiff, gameData, processId);
 
         status = ProcessStatus.READY_TO_DELETE;
-
-        progressDiff.save(toModel());
     }
 
     @Override

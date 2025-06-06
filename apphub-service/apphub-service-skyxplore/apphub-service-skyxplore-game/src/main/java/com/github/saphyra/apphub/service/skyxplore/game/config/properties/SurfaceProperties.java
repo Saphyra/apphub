@@ -15,7 +15,7 @@ public class SurfaceProperties {
     public void validate() {
         Arrays.stream(SurfaceType.values())
             .forEach(surfaceType -> {
-                if (logisticsWeight.containsKey(surfaceType)) {
+                if (!logisticsWeight.containsKey(surfaceType)) {
                     throw new IllegalStateException("Unconfigured logisticsWeight for surfaceType " + surfaceType);
                 }
             });

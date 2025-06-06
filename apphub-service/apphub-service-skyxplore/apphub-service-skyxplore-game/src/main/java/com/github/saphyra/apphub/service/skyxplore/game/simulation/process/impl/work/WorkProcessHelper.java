@@ -46,26 +46,6 @@ class WorkProcessHelper {
         return completedWorkPoints;
     }
 
-    @Deprecated(forRemoval = true)
-    public void releaseBuildingAndCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId) {
-        gameData.getBuildingModuleAllocations()
-            .findByProcessId(processId)
-            .ifPresent(allocation -> {
-                gameData.getBuildingModuleAllocations()
-                    .remove(allocation);
-
-                progressDiff.delete(allocation.getBuildingModuleAllocationId(), GameItemType.BUILDING_MODULE_ALLOCATION);
-            });
-
-        gameData.getCitizenAllocations()
-            .findByProcessId(processId)
-            .ifPresent(citizenAllocation -> {
-                gameData.getCitizenAllocations()
-                    .remove(citizenAllocation);
-                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
-            });
-    }
-
     public boolean tryAllocateCitizen(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID processId, SkillType skillType) {
         Optional<UUID> maybeAvailableCitizen = getBestSuitableCitizen(gameData, location, skillType);
 

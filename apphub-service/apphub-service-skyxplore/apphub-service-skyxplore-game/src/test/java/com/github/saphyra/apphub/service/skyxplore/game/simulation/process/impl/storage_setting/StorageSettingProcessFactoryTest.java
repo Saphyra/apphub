@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
@@ -27,12 +28,17 @@ class StorageSettingProcessFactoryTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
+    private static final String RESERVED_STORAGE_ID_STRING = "reserved-storage-id";
+    private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
 
     @Mock
     private IdGenerator idGenerator;
+
+    @Mock
+    private UuidConverter uuidConverter;
 
     @InjectMocks
     private StorageSettingProcessFactory underTest;
@@ -56,12 +62,15 @@ class StorageSettingProcessFactoryTest {
 
     @Test
     void createFromModel() {
-        given(game.getData()).willReturn(gameData);
         given(model.getId()).willReturn(PROCESS_ID);
         given(model.getLocation()).willReturn(LOCATION);
         given(model.getExternalReference()).willReturn(STORAGE_SETTING_ID);
         given(model.getStatus()).willReturn(ProcessStatus.DONE);
-        given(model.getData()).willReturn(Map.of(ProcessParamKeys.AMOUNT, String.valueOf(AMOUNT)));
+        given(model.getData()).willReturn(Map.of(
+            ProcessParamKeys.RESERVED_STORAGE_ID, RESERVED_STORAGE_ID_STRING,
+            ProcessParamKeys.AMOUNT, String.valueOf(AMOUNT)
+        ));
+        given(uuidConverter.convertEntity(RESERVED_STORAGE_ID_STRING)).willReturn(RESERVED_STORAGE_ID);
 
         StorageSettingProcess result = underTest.createFromModel(game, model);
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -25,6 +26,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
@@ -82,6 +84,9 @@ class ConstructConstructionAreaServiceTest {
 
     @Mock
     private ConstructionAreaConverter constructionAreaConverter;
+
+    @Mock
+    private ReservedStorageFactory reservedStorageFactory;
 
     @InjectMocks
     private ConstructConstructionAreaService underTest;
@@ -145,7 +150,7 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
-    void terraformationInProgress(){
+    void terraformationInProgress() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
@@ -162,7 +167,7 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
-    void surfaceOccupied(){
+    void surfaceOccupied() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
@@ -181,7 +186,7 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
-    void unsupportedSurfaceType(){
+    void unsupportedSurfaceType() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
@@ -226,7 +231,7 @@ class ConstructConstructionAreaServiceTest {
     private ConstructionModel constructionModel;
 
     @Test
-    void constructConstructionArea(){
+    void constructConstructionArea() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
@@ -270,5 +275,6 @@ class ConstructConstructionAreaServiceTest {
         then(progressDiff).should().save(processModel);
         then(progressDiff).should().save(constructionAreaModel);
         then(progressDiff).should().save(constructionModel);
+        then(reservedStorageFactory).should().save(progressDiff, gameData, SURFACE_ID, ContainerType.SURFACE, CONSTRUCTION_ID, RESOURCE_DATA_ID, RESOURCE_AMOUNT);
     }
 }

@@ -55,6 +55,17 @@ game:
         optional: true
       - surfaceName: FIELD
         spawnRate: 2
+    logisticsWeight:
+      COAL_FIELD: 5
+      DESERT: 5
+      FOREST: 7
+      LAKE: 10
+      MOUNTAIN: 15
+      OIL_FIELD: 5
+      ORE_FIELD: 5
+      VOLCANO: 20
+      FIELD: 3
+      CONCRETE: 1
   citizen:
     workPointsPerTick: 100
     maxWorkPointsBatch: 1000
