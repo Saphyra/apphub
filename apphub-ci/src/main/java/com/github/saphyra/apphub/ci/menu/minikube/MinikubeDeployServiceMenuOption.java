@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.ci.menu.minikube;
 
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.Menu;
@@ -7,12 +9,14 @@ import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalDeployProcess;
+import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -20,6 +24,8 @@ class MinikubeDeployServiceMenuOption implements MenuOption {
     private final ValidatingInputReader validatingInputReader;
     private final MinikubeLocalDeployProcess minikubeLocalDeployProcess;
     private final Services services;
+    private final PropertyDao propertyDao;
+    private final ObjectMapperWrapper objectMapperWrapper;
 
     @Override
     public Menu getMenu() {
@@ -47,8 +53,10 @@ class MinikubeDeployServiceMenuOption implements MenuOption {
                 .map(serviceName -> language -> LocalizedText.SERVICE_NOT_FOUND.getLocalizedText(language).formatted(serviceName))
         );
 
+        List<String> serviceNames = Arrays.asList(servicesToStart);
+        minikubeLocalDeployProcess.deploy(serviceNames);
 
-        minikubeLocalDeployProcess.deploy(Arrays.asList(servicesToStart));
+        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapperWrapper.writeValueAsString(serviceNames));
 
         return false;
     }

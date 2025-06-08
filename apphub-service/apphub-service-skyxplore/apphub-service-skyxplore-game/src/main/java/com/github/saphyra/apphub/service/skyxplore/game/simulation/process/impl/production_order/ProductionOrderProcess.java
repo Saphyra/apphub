@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.A
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import jakarta.annotation.Nullable;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
@@ -42,7 +43,7 @@ public class ProductionOrderProcess implements Process {
 
     @Getter
     @Nullable
-    private volatile String producerBuildingDataId;
+    private volatile UUID producerBuildingModuleId;
     private volatile UUID allocatedResourceId;
     @NonNull
     @Getter
@@ -89,12 +90,12 @@ public class ProductionOrderProcess implements Process {
         if (status == ProcessStatus.CREATED) {
             String dataId = findReservedStorage()
                 .getDataId();
-            producerBuildingDataId = helper.findProductionBuilding(gameData, location, dataId);
+            producerBuildingModuleId = helper.findProductionBuilding(gameData, location, dataId);
 
-            if (!isNull(producerBuildingDataId)) {
+            if (nonNull(producerBuildingModuleId)) {
                 log.info("Creating ResourceRequirementProcesses for {}", this);
 
-                helper.processResourceRequirements(progressDiff, gameData, processId, location, dataId, amount, producerBuildingDataId);
+                helper.processResourceRequirements(progressDiff, gameData, processId, location, dataId, amount, producerBuildingModuleId);
                 status = ProcessStatus.IN_PROGRESS;
             } else {
                 log.info("Available ProductionBuilding not found for {}", dataId);
@@ -110,11 +111,11 @@ public class ProductionOrderProcess implements Process {
             }
 
             if (!conditions.workStarted(gameData, processId)) {
-                helper.startWork(progressDiff, gameData, processId, producerBuildingDataId, reservedStorageId);
+                helper.startWork(progressDiff, gameData, processId, producerBuildingModuleId, reservedStorageId);
             }
 
             if (conditions.workDone(gameData, processId)) {
-                helper.storeResource(progressDiff, gameData, location, reservedStorageId, allocatedResourceId, amount);
+                helper.storeResource(progressDiff, gameData, location, reservedStorageId, allocatedResourceId, amount, producerBuildingModuleId);
 
                 status = ProcessStatus.DONE;
             } else {
@@ -155,7 +156,7 @@ public class ProductionOrderProcess implements Process {
         model.setExternalReference(getExternalReference());
         model.setData(new StringStringMap(
             CollectionUtils.toMap(
-                new BiWrapper<>(ProcessParamKeys.PRODUCER_BUILDING_DATA_ID, producerBuildingDataId),
+                new BiWrapper<>(ProcessParamKeys.PRODUCER_BUILDING_MODULE_ID, uuidConverter.convertDomain(producerBuildingModuleId)),
                 new BiWrapper<>(ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorageId)),
                 new BiWrapper<>(ProcessParamKeys.ALLOCATED_RESOURCE_ID, uuidConverter.convertDomain(allocatedResourceId)),
                 new BiWrapper<>(ProcessParamKeys.AMOUNT, String.valueOf(amount))
@@ -167,11 +168,11 @@ public class ProductionOrderProcess implements Process {
     @Override
     public String toString() {
         return String.format(
-            "%s(processId=%s, status=%s, producerBuildingDataId=%s, reservedStorageId=%s, amount=%s)",
+            "%s(processId=%s, status=%s, producerBuildingModuleId=%s, reservedStorageId=%s, amount=%s)",
             getClass().getSimpleName(),
             processId,
             status,
-            producerBuildingDataId,
+            producerBuildingModuleId,
             reservedStorageId,
             amount
         );

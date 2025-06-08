@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.conflict.MinorFactionConflict;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.powerplay_conflict.PowerplayConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict.MinorFactionConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.powerplay_conflict.PowerplayConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;

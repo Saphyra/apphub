@@ -43,7 +43,7 @@ class PreprodDeployLastestServicesMenuOption implements MenuOption {
     public LocalizationProvider getName() {
         String latestServices = String.join(", ", propertyDao.getLatestServices());
 
-        return language -> LocalizedText.PREPROD_DEPLOY__LATEST_SERVICES.getLocalizedText(language).formatted(latestServices);
+        return language -> LocalizedText.REMOTE_DEPLOY_LATEST_SERVICES.getLocalizedText(language).formatted(latestServices);
     }
 
     @Override
