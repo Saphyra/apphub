@@ -33,7 +33,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class LoadoutSaver {
-    private static final Striped<Lock> LOCKS = Striped.lock(64);
+    private static final Striped<Lock> LOCKS = Striped.lock(8);
 
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;

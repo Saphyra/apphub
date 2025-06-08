@@ -42,7 +42,21 @@ public class EdMessageProcessor {
 
     @SneakyThrows
     public synchronized void processMessages() {
-        StopWatch stopWatch = StopWatch.createStarted();
+        performanceReporter.wrap(
+            () -> {
+                StopWatch stopWatch = StopWatch.createStarted();
+                List<EdMessage> messages = doProcessMessages();
+
+                stopWatch.stop();
+                log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+            },
+            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingKey.PROCESS_BATCH.name()
+        );
+    }
+
+    @SneakyThrows
+    private List<EdMessage> doProcessMessages() {
         List<EdMessage> messages = performanceReporter.wrap(
             () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
@@ -57,9 +71,7 @@ public class EdMessageProcessor {
         for (Future<ExecutionResult<Void>> future : futures) {
             future.get();
         }
-
-        stopWatch.stop();
-        log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+        return messages;
     }
 
     private void processMessage(EdMessage edMessage) {
@@ -81,7 +93,7 @@ public class EdMessageProcessor {
                 updateStatus(MessageStatus.PROCESSING_ERROR, edMessage, idGenerator.randomUuid());
             }
         } catch (Exception e) {
-            handleException(MessageStatus.ERROR, edMessage, e);
+            handleException(edMessage, e);
         }
     }
 
@@ -109,7 +121,7 @@ public class EdMessageProcessor {
             );
     }
 
-    private void handleException(MessageStatus status, EdMessage edMessage, Exception e) {
+    private void handleException(EdMessage edMessage, Exception e) {
         UUID exceptionId = idGenerator.randomUuid();
         String errorMessage = "Failed processing message %s: %s. ExceptionId: %s. Schema: %s".formatted(
             edMessage.getMessageId(),
@@ -118,10 +130,8 @@ public class EdMessageProcessor {
             edMessage.getSchemaRef()
         );
         log.error(errorMessage, e);
-        if (status != MessageStatus.PROCESSING_ERROR) {
-            errorReporterService.report(errorMessage, e);
-        }
-        updateStatus(status, edMessage, exceptionId);
+        errorReporterService.report(errorMessage, e);
+        updateStatus(MessageStatus.ERROR, edMessage, exceptionId);
     }
 
     private void updateStatus(MessageStatus status, EdMessage edMessage, UUID exceptionId) {

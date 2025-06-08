@@ -1,16 +1,19 @@
 package com.github.saphyra.apphub.service.custom.elite_base.util.sql;
 
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class ListValue implements SegmentProvider {
     private final List<? extends SegmentProvider> values;
 
     public ListValue(SegmentProvider segmentProvider) {
         this.values = List.of(segmentProvider);
+    }
+
+    public ListValue(List<?> items) {
+        values = items.stream()
+            .map(o -> new WrappedValue(o.toString()))
+            .toList();
     }
 
     @Override
