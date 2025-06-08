@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
+import com.github.saphyra.apphub.service.custom.elite_base.util.sql.ListValue;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.ValueList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -90,7 +90,12 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
     }
 
     //Has to be JDBC, JPA blocks the flow for some reason
+    //TODO unit test
     public void deleteByExternalReferencesAndCommodityNames(List<Commodity> domains) {
+        if (domains.isEmpty()) {
+            return;
+        }
+
         List<String> externalReferences = domains.stream()
             .map(Commodity::getExternalReference)
             .map(uuidConverter::convertDomain)
@@ -102,13 +107,13 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
         log.info("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);
 
         String sql = SqlBuilder.delete()
-                .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))
-            .condition(new InCondition(new DefaultColumn(COLUMN_COMMODITY_LOCATION), new ValueList(externalReferences)))
-                    .and()
-            .condition(new InCondition(new DefaultColumn(COLUMN_COMMODITY_NAME), new ValueList(externalReferences)))
-                .build();
+            .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))
+            .condition(new InCondition(new DefaultColumn(COLUMN_COMMODITY_LOCATION), new ListValue(externalReferences)))
+            .and()
+            .condition(new InCondition(new DefaultColumn(COLUMN_COMMODITY_NAME), new ListValue(commodityNames)))
+            .build();
 
-        log.info(sql);
+        log.debug(sql);
 
         jdbcTemplate.update(sql);
     }

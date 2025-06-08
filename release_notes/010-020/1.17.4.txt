@@ -1,10 +1,14 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    EliteBase
+        Fix delete commodity SQL
 
 ===PLATFORM CHANGES===
     Do not push to DockerHub
 
 ===TECHNICAL DEBTS===
+    EliteBase
+        Parallel Commodity processing
 
 ===ETC===

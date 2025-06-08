@@ -148,7 +148,7 @@ public class NearestMaterialTraderService {
                         .and()
                         .condition(new InCondition(
                             new DefaultColumn(COLUMN_ECONOMY),
-                            new ListValue(MATERIAL_TYPE_MAPPING.get(materialType).stream().map(economyEnum -> new WrappedValue(economyEnum.name())).toList())
+                            new ListValue(MATERIAL_TYPE_MAPPING.get(materialType))
                         ))
                 )
                 .or()

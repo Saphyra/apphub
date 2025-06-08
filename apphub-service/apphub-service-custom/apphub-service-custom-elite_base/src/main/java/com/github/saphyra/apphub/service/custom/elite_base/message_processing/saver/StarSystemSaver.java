@@ -27,7 +27,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 public class StarSystemSaver {
-    private static final Striped<Lock> STAR_NAME_LOCK = Striped.lock(64);
+    private static final Striped<Lock> STAR_NAME_LOCK = Striped.lock(8);
 
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;

@@ -9,6 +9,6 @@ public class InCondition implements Condition {
 
     @Override
     public String get() {
-        return "%s in (%s)".formatted(column.get(), values.get());
+        return "%s in %s".formatted(column.get(), values.get());
     }
 }
