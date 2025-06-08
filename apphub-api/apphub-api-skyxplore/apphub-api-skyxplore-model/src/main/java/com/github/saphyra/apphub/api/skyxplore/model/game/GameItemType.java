@@ -24,7 +24,7 @@ public enum GameItemType {
     PRIORITY(PriorityModel.class),
     COORDINATE(CoordinateModel.class),
     LINE(LineModel.class),
-    PRODUCTION_ORDER(ProductionOrderModel.class), //TODO update to new schema
+    PRODUCTION_ORDER(ProductionOrderModel.class),
     DURABILITY(DurabilityModel.class),
     PROCESS(ProcessModel.class),
     CITIZEN_ALLOCATION(CitizenAllocationModel.class),

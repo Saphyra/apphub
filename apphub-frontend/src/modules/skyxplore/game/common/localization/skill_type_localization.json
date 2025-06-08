@@ -50,5 +50,9 @@
     "PILOTING": {
         "en": "Piloting",
         "hu": "Űrhajóvezetés"
+    },
+    "LOGISTICS": {
+        "en": "Logistics",
+        "hu": "Logisztika"
     }
 }

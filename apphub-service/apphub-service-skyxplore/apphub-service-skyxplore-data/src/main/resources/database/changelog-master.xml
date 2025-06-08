@@ -47,4 +47,5 @@
     <include file="database/change_sets/setting.xml"/>
     <include file="database/change_sets/construction_area.xml"/>
     <include file="database/change_sets/building_module.xml"/>
+    <include file="database/change_sets/production_order.xml"/>
 </databaseChangeLog>
