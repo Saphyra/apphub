@@ -1,10 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -12,13 +16,30 @@ import org.springframework.stereotype.Component;
 public class TickSchedulerLauncher {
     private final ExecutorServiceBean executorServiceBean;
     private final TickSchedulerContext context;
+    private final GameDao gameDao;
 
     public void launch(Game game) {
-        TickScheduler tickScheduler = TickScheduler.builder()
+        TickScheduler tickScheduler = getTickScheduler(game);
+
+        executorServiceBean.execute(tickScheduler);
+    }
+
+    @SneakyThrows
+    //TODO unit test
+    //TODO synchronize on gameId
+    public void processTick(UUID userId) {
+        Game game = gameDao.findByUserIdValidated(userId);
+        TickScheduler tickScheduler = getTickScheduler(game);
+
+        executorServiceBean.execute(() -> tickScheduler.processTick(0L))
+            .get()
+            .getOrThrow();
+    }
+
+    private TickScheduler getTickScheduler(Game game) {
+        return TickScheduler.builder()
             .game(game)
             .context(context)
             .build();
-
-        executorServiceBean.execute(tickScheduler);
     }
 }

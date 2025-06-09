@@ -5,6 +5,7 @@
     SkyXplore
         Resources can be put to exact storages
         Deliver resources
+        Manual tick triggering
 
 ===BUGFIXES===
     SkyXplore

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     private final ExitFromGameService exitFromGameService;
     private final PauseGameService pauseGameService;
     private final SaveGameService saveGameService;
+    private final TickSchedulerLauncher tickSchedulerLauncher;
 
     @Override
     public OneParamResponse<UUID> getGameId(AccessTokenHeader accessTokenHeader) {
@@ -68,5 +70,13 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     public void saveGame(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to save game.", accessTokenHeader.getUserId());
         saveGameService.saveGame(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    //TODO unit test
+    public void processTick(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to process a tick of their game.", accessTokenHeader.getUserId());
+
+        tickSchedulerLauncher.processTick(accessTokenHeader.getUserId());
     }
 }

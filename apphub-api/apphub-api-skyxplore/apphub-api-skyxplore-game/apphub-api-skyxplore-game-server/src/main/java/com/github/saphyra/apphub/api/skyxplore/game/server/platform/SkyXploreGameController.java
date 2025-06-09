@@ -45,4 +45,9 @@ public interface SkyXploreGameController {
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_SAVE)
     void saveGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_PROCESS_TICK)
+    //TODO API test
+    //TODO role protection test (skyxplore and admin roles are required)
+    void processTick(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

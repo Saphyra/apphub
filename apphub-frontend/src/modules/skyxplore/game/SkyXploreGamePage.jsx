@@ -17,12 +17,14 @@ import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
 import Button from "../../../common/component/input/Button";
 import Spinner from "../../../common/component/Spinner";
 import { GET_OWN_USER_ID } from "../../../common/js/dao/endpoints/GenericEndpoints";
-import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE, SKYXPLORE_PROCESS_TICK } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
 import { addAndSet, hasValue, isTrue } from "../../../common/js/Utils";
 import MapStream from "../../../common/js/collection/MapStream";
 import ChatConstants from "./chat/ChatConstants";
 import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import useLoader from "../../../common/hook/Loader";
+import { IS_ADMIN } from "../../../common/js/dao/endpoints/UserEndpoints";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -32,6 +34,7 @@ const SkyXploreGamePage = () => {
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [userId, setUserId] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
     const [isHost, setIsHost] = useState(false);
 
     const [paused, setPaused] = useState(true);
@@ -47,6 +50,8 @@ const SkyXploreGamePage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => fetchUserId(), []);
     useEffect(() => fetchIsHost(), []);
+
+    useLoader(IS_ADMIN.createRequest(), r => setIsAdmin(r.value));
 
     const { sendMessage } = useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_MAIN,
@@ -187,6 +192,10 @@ const SkyXploreGamePage = () => {
             .send();
     }
 
+    const processTick = async () => {
+        await SKYXPLORE_PROCESS_TICK.createRequest()
+            .send(setDisplaySpinner);
+    }
 
     const footer = () => {
         return <Footer
@@ -197,7 +206,8 @@ const SkyXploreGamePage = () => {
                         label={localizationHandler.get("save")}
                         onclick={save}
                     />
-                    : []),
+                    : []
+                ),
                 <ExitGameButton
                     key="exit"
                     setConfirmationDialogData={setConfirmationDialogData}
@@ -210,7 +220,16 @@ const SkyXploreGamePage = () => {
                     paused={paused}
                 />
             ]}
-            centerButtons={[]}
+            centerButtons={[
+                (isAdmin ?
+                    <Button
+                        key="tick"
+                        label={localizationHandler.get("process-tick")}
+                        onclick={processTick}
+                    />
+                    : []
+                )
+            ]}
             rightButtons={[
                 <ToggleChatButton
                     key="toggle-chat"

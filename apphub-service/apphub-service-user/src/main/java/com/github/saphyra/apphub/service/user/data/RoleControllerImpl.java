@@ -4,12 +4,14 @@ import com.github.saphyra.apphub.api.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.api.user.server.RoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.user.data.service.role.AddRoleToAllProperties;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleToAllService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleQueryService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleRemovalService;
+import com.github.saphyra.apphub.service.user.data.service.role.RoleToAllService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,5 +66,13 @@ class RoleControllerImpl implements RoleController {
     public List<String> getRolesForAllRestrictedRoles() {
         log.info("Querying roles cannot be added to all...");
         return addRoleToAllProperties.getRestrictedRoles();
+    }
+
+    @Override
+    //TODO unit test
+    public OneParamResponse<Boolean> isUserAdmin(AccessTokenHeader accessTokenHeader) {
+        log.info("Checking if user {} is admin", accessTokenHeader.getUserId());
+
+        return new OneParamResponse<>(accessTokenHeader.getRoles().contains(Constants.ROLE_ADMIN));
     }
 }

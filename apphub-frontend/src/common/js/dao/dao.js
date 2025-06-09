@@ -105,7 +105,9 @@ const Request = class {
         return this;
     }
 
-    send() {
+    send(setDisplaySpinner = () => { }) {
+        setDisplaySpinner(true);
+
         const xhr = new XMLHttpRequest();
         xhr.open(this.requestMethod, this.url, true);
 
@@ -120,6 +122,7 @@ const Request = class {
         return new Promise((resolve, reject) => {
             xhr.onload = () => {
                 const response = new Response(xhr.status, xhr.responseText);
+                setDisplaySpinner(false);
                 if (response.status === ResponseStatus.OK) {
                     const parsedBody = this.responseConverter(response);
                     resolve(parsedBody);
@@ -130,6 +133,7 @@ const Request = class {
             };
 
             xhr.onerror = () => {
+                setDisplaySpinner(false);
                 this.handleError(new Response(xhr.status, xhr.responseText));
                 reject();
             }
