@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.reserved_storage;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.production_request;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionRequestModel;
 import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.data.domain.PageRequest;
@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-public class ReservedStorageDao extends AbstractDao<ReservedStorageEntity, ReservedStorageModel, String, ReservedStorageRepository> {
+//TODO unit test
+public class ProductionRequestDao extends AbstractDao<ProductionRequestEntity, ProductionRequestModel, String, ProductionRequestRepository> {
     private final UuidConverter uuidConverter;
 
-    public ReservedStorageDao(ReservedStorageConverter converter, ReservedStorageRepository repository, UuidConverter uuidConverter) {
+    ProductionRequestDao(ProductionRequestConverter converter, ProductionRequestRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -26,7 +27,7 @@ public class ReservedStorageDao extends AbstractDao<ReservedStorageEntity, Reser
         deleteById(uuidConverter.convertDomain(reservedStorageId));
     }
 
-    public List<ReservedStorageModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
+    public List<ProductionRequestModel> getPageByGameId(UUID gameId, Integer page, Integer itemsPerPage) {
         return converter.convertEntity(repository.getByGameId(uuidConverter.convertDomain(gameId), PageRequest.of(page, itemsPerPage)));
     }
 }

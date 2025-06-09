@@ -1,8 +1,8 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.production_order;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.resource_delivery_request;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionOrderModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ResourceDeliveryRequestModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ProductionOrderService implements GameItemService {
-    private final ProductionOrderDao dao;
+public class ResourceDeliveryRequestService implements GameItemService {
+    private final ResourceDeliveryRequestDao dao;
 
     @Override
     public GameItemType getType() {
-        return GameItemType.PRODUCTION_ORDER;
+        return GameItemType.RESOURCE_DELIVERY_REQUEST;
     }
 
     @Override
@@ -32,9 +32,9 @@ public class ProductionOrderService implements GameItemService {
 
     @Override
     public void save(List<GameItem> gameItems) {
-        List<ProductionOrderModel> models = gameItems.stream()
-            .filter(gameItem -> gameItem instanceof ProductionOrderModel)
-            .map(gameItem -> (ProductionOrderModel) gameItem)
+        List<ResourceDeliveryRequestModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof ResourceDeliveryRequestModel)
+            .map(gameItem -> (ResourceDeliveryRequestModel) gameItem)
             .collect(Collectors.toList());
 
         dao.saveAll(models);
@@ -46,7 +46,7 @@ public class ProductionOrderService implements GameItemService {
     }
 
     @Override
-    public List<ProductionOrderModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+    public List<ResourceDeliveryRequestModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
         return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

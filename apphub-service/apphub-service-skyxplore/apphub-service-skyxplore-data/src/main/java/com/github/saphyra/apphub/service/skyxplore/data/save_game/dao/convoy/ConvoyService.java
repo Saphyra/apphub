@@ -1,8 +1,8 @@
-package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.production_order;
+package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.convoy;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ConvoyModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionOrderModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ProductionOrderService implements GameItemService {
-    private final ProductionOrderDao dao;
+public class ConvoyService implements GameItemService {
+    private final ConvoyDao dao;
 
     @Override
     public GameItemType getType() {
-        return GameItemType.PRODUCTION_ORDER;
+        return GameItemType.CONVOY;
     }
 
     @Override
@@ -32,9 +32,9 @@ public class ProductionOrderService implements GameItemService {
 
     @Override
     public void save(List<GameItem> gameItems) {
-        List<ProductionOrderModel> models = gameItems.stream()
-            .filter(gameItem -> gameItem instanceof ProductionOrderModel)
-            .map(gameItem -> (ProductionOrderModel) gameItem)
+        List<ConvoyModel> models = gameItems.stream()
+            .filter(gameItem -> gameItem instanceof ConvoyModel)
+            .map(gameItem -> (ConvoyModel) gameItem)
             .collect(Collectors.toList());
 
         dao.saveAll(models);
@@ -46,7 +46,7 @@ public class ProductionOrderService implements GameItemService {
     }
 
     @Override
-    public List<ProductionOrderModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
+    public List<ConvoyModel> loadPage(UUID gameId, Integer page, Integer itemsPerPage) {
         return dao.getPageByGameId(gameId, page, itemsPerPage);
     }
 }

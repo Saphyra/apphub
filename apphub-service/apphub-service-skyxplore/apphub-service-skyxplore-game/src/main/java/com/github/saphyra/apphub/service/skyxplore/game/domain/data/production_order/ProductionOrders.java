@@ -19,9 +19,13 @@ public class ProductionOrders extends Vector<ProductionOrder> {
     }
 
     public ProductionOrder findByIdValidated(UUID productionOrderId) {
+        return findById(productionOrderId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ProductionOrder not found by id " + productionOrderId));
+    }
+
+    public Optional<ProductionOrder> findById(UUID productionOrderId) {
         return stream()
             .filter(productionOrder -> productionOrder.getProductionOrderId().equals(productionOrderId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ProductionOrder not found by id " + productionOrderId));
+            .findAny();
     }
 }

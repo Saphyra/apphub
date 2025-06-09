@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import org.junit.jupiter.api.Test;
@@ -26,10 +27,11 @@ public class ReservedStorageConverterTest {
     private ReservedStorageConverter underTest;
 
     @Test
-    public void convert() {
+    public void toModel() {
         ReservedStorage reservedStorage = ReservedStorage.builder()
             .reservedStorageId(RESERVED_STORAGE_ID)
             .containerId(CONTAINER_ID)
+            .containerType(ContainerType.STORAGE)
             .externalReference(EXTERNAL_REFERENCE)
             .dataId(DATA_ID)
             .amount(AMOUNT)
@@ -44,5 +46,6 @@ public class ReservedStorageConverterTest {
         assertThat(result.get(0).getDataId()).isEqualTo(DATA_ID);
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
         assertThat(result.get(0).getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(result.get(0).getContainerType()).isEqualTo(ContainerType.STORAGE);
     }
 }

@@ -1,5 +1,5 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <changeSet id="create-table-reserved_storage" author="saphyra">
+    <changeSet id="create-table-production_order" author="saphyra">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists schemaName="skyxplore_game" tableName="production_order"/>

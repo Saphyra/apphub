@@ -9,8 +9,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
-//TODO Create loader
-//TODO save to database
 public class ProductionRequest {
     private final UUID productionRequestId;
     private final UUID reservedStorageId; //Target where the resource has to be delivered once it is produced

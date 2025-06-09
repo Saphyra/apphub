@@ -9,9 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,17 +52,6 @@ public class ReservedStorageDaoTest {
         underTest.deleteByGameId(GAME_ID);
 
         verify(repository).deleteByGameId(GAME_ID_STRING);
-    }
-
-    @Test
-    public void findById() {
-        given(uuidConverter.convertDomain(RESERVED_STORAGE_ID)).willReturn(RESERVED_STORAGE_ID_STRING);
-        given(repository.findById(RESERVED_STORAGE_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(model));
-
-        Optional<ReservedStorageModel> result = underTest.findById(RESERVED_STORAGE_ID);
-
-        assertThat(result).contains(model);
     }
 
     @Test

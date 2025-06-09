@@ -100,7 +100,13 @@ public class ProductionOrderProcess implements Process {
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
-        //TODO delete productionOrder
+        gameData.getProductionOrders()
+            .findById(productionOrderId)
+            .ifPresent(productionOrder -> {
+                gameData.getProductionOrders()
+                    .remove(productionOrder);
+                progressDiff.delete(productionOrderId, GameItemType.PRODUCTION_ORDER);
+            });
 
         status = ProcessStatus.READY_TO_DELETE;
 

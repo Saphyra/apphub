@@ -29,9 +29,9 @@ public enum GameItemType {
     PROCESS(ProcessModel.class),
     CITIZEN_ALLOCATION(CitizenAllocationModel.class),
     BUILDING_MODULE_ALLOCATION(BuildingModuleAllocationModel.class),
-    RESOURCE_DELIVERY_REQUEST(ResourceDeliveryRequestModel.class), //TODO save to database
-    CONVOY(ResourceDeliveryRequestModel.class), //TODO save to database
-    PRODUCTION_REQUEST(ProductionRequestModel.class), //TODO save to database
+    RESOURCE_DELIVERY_REQUEST(ResourceDeliveryRequestModel.class),
+    CONVOY(ConvoyModel.class),
+    PRODUCTION_REQUEST(ProductionRequestModel.class),
     ;
 
     private final Class<? extends GameItem> modelType;
