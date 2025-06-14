@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
@@ -102,7 +103,7 @@ class ConstructionAreaConverterTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(constructions.findByExternalReference(CONSTRUCTION_AREA_ID)).willReturn(Optional.of(construction));
         given(deconstructions.findByExternalReference(CONSTRUCTION_AREA_ID)).willReturn(Optional.of(deconstruction));
-        given(constructionConverter.toResponse(construction)).willReturn(constructionResponse);
+        given(constructionConverter.toResponse(gameData, construction, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)).willReturn(constructionResponse);
         given(deconstructionConverter.toResponse(deconstruction)).willReturn(deconstructionResponse);
 
         assertThat(underTest.toResponse(gameData, constructionArea))

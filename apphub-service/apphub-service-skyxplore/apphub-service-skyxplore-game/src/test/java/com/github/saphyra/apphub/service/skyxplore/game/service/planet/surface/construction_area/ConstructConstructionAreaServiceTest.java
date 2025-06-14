@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -251,7 +250,7 @@ class ConstructConstructionAreaServiceTest {
         given(constructionAreaFactory.create(PLANET_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID)).willReturn(constructionArea);
         given(constructionArea.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(CONSTRUCTION_AREA_ID, ConstructionType.CONSTRUCTION_AREA, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(CONSTRUCTION_AREA_ID, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

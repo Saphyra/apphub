@@ -47,6 +47,7 @@ public class WorkProcess implements Process {
     private final Integer requiredWorkPoints;
 
     @NonNull
+    @Getter
     private Integer completedWorkPoints;
 
     @NonNull

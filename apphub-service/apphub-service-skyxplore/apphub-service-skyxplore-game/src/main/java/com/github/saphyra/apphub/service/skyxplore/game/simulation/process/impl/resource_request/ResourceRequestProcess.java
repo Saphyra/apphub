@@ -79,11 +79,14 @@ public class ResourceRequestProcess implements Process {
 
         int missingResourceAmount = helper.getMissingResources(gameData, reservedStorageId);
         if (missingResourceAmount > 0) {
+            log.info("Missing resource amount: {}", missingResourceAmount);
             int delivered = helper.initiateDelivery(game, processId, location, reservedStorageId, missingResourceAmount);
+            log.info("Delivery initiated for {} resources.", delivered);
             missingResourceAmount -= delivered;
         }
 
         if (missingResourceAmount > 0) {
+            log.info("{} resources are still missing. Requesting production...", missingResourceAmount);
             helper.createProductionRequest(game.getProgressDiff(), gameData, reservedStorageId, missingResourceAmount);
         }
 

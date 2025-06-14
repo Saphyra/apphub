@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -224,7 +223,7 @@ public class TerraformationServiceTest {
         given(terraformingPossibility.getSurfaceType()).willReturn(SurfaceType.CONCRETE);
         given(terraformingPossibility.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(SURFACE_ID, ConstructionType.TERRAFORMATION, PLANET_ID, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(terraformation);
+        given(constructionFactory.create(SURFACE_ID, PLANET_ID, REQUIRED_WORK_POINTS, SurfaceType.CONCRETE.name())).willReturn(terraformation);
         given(terraformation.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(constructionRequirements.getRequiredResources()).willReturn(Collections.emptyMap());
         given(terraformationProcessFactory.create(game, PLANET_ID, terraformation)).willReturn(terraformationProcess);

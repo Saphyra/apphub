@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction_area;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -15,6 +16,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.CancelConstructionAreaConstructionService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,6 +54,9 @@ class ConstructConstructionAreaQueueServiceTest {
 
     @Mock
     private CancelConstructionAreaConstructionService cancelConstructionAreaConstructionService;
+
+    @Mock
+    private WorkPointsUtil workPointsUtil;
 
     @InjectMocks
     private ConstructConstructionAreaQueueService underTest;
@@ -98,9 +103,9 @@ class ConstructConstructionAreaQueueServiceTest {
         given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(construction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
         given(construction.getPriority()).willReturn(PRIORITY);
         given(constructionArea.getDataId()).willReturn(DATA_ID);
+        given(workPointsUtil.getCompletedWorkPoints(gameData, CONSTRUCTION_ID, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)).willReturn(CURRENT_WORK_POINTS);
 
         CustomAssertions.singleListAssertThat(underTest.getQueue(gameData, LOCATION))
             .returns(CONSTRUCTION_ID, QueueItem::getItemId)

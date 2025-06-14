@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction_area;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.QueueItemType;
@@ -9,6 +10,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.CancelConstructionAreaConstructionService;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,7 @@ class ConstructConstructionAreaQueueService implements QueueService {
     private final GameDao gameDao;
     private final ConstructionConverter constructionConverter;
     private final CancelConstructionAreaConstructionService cancelConstructionAreaConstructionService;
+    private final WorkPointsUtil workPointsUtil;
 
     @Override
     public QueueItemType getType() {
@@ -40,7 +43,7 @@ class ConstructConstructionAreaQueueService implements QueueService {
                 .itemId(construction.getConstructionId())
                 .type(getType())
                 .requiredWorkPoints(construction.getRequiredWorkPoints())
-                .currentWorkPoints(construction.getCurrentWorkPoints())
+                .currentWorkPoints(workPointsUtil.getCompletedWorkPoints(gameData, construction.getConstructionId(), ProcessType.CONSTRUCT_CONSTRUCTION_AREA))
                 .priority(construction.getPriority())
                 .data(Map.of("dataId", gameData.getConstructionAreas().findByIdValidated(construction.getExternalReference()).getDataId()))
                 .build())

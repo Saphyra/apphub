@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -62,31 +61,32 @@ class ConstructBuildingModuleServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
-    private  GameDao gameDao;
+    private GameDao gameDao;
 
     @Mock
-    private  BuildingModuleDataService buildingModuleDataService;
+    private BuildingModuleDataService buildingModuleDataService;
 
     @Mock
-    private  ConstructionAreaDataService constructionAreaDataService;
+    private ConstructionAreaDataService constructionAreaDataService;
 
     @Mock
-    private  BuildingModuleFactory buildingModuleFactory;
+    private BuildingModuleFactory buildingModuleFactory;
 
     @Mock
-    private  ConstructionFactory constructionFactory;
+    private ConstructionFactory constructionFactory;
 
     @Mock
-    private  BuildingModuleConverter buildingModuleConverter;
+    private BuildingModuleConverter buildingModuleConverter;
 
     @Mock
-    private  ConstructionConverter constructionConverter;
+    private ConstructionConverter constructionConverter;
 
     @Mock
-    private  ConstructBuildingModuleProcessFactory constructBuildingModuleProcessFactory;
+    private ConstructBuildingModuleProcessFactory constructBuildingModuleProcessFactory;
 
     @Mock
-    private  ReservedStorageFactory reservedStorageFactory;
+    //TODO verify call
+    private ReservedStorageFactory reservedStorageFactory;
 
     @InjectMocks
     private ConstructBuildingModuleService underTest;
@@ -242,7 +242,7 @@ class ConstructBuildingModuleServiceTest {
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
         given(buildingModuleData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(BUILDING_MODULE_ID, ConstructionType.BUILDING_MODULE, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(BUILDING_MODULE_ID, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

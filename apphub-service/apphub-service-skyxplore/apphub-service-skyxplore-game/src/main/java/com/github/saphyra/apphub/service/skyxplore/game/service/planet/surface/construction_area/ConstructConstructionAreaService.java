@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
@@ -79,7 +78,6 @@ class ConstructConstructionAreaService {
 
         Construction construction = constructionFactory.create(
             constructionArea.getConstructionAreaId(),
-            ConstructionType.CONSTRUCTION_AREA,
             planetId,
             constructionRequirements.getRequiredWorkPoints()
         );

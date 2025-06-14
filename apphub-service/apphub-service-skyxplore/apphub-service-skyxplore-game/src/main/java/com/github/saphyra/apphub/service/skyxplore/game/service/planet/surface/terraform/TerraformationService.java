@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.terraform;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
@@ -68,7 +67,6 @@ class TerraformationService {
 
         Construction terraformation = constructionFactory.create(
             surfaceId,
-            ConstructionType.TERRAFORMATION,
             planetId,
             constructionRequirements.getRequiredWorkPoints(),
             surfaceTypeString

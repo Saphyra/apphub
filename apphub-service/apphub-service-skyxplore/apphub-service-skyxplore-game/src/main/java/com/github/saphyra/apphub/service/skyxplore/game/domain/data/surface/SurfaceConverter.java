@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
@@ -60,7 +61,7 @@ public class SurfaceConverter implements GameDataToModelConverter {
 
         ConstructionResponse terraformation = gameData.getConstructions()
             .findByExternalReference(surface.getSurfaceId())
-            .map(constructionConverter::toResponse)
+            .map(construction -> constructionConverter.toResponse(gameData, construction, ProcessType.TERRAFORMATION))
             .orElse(null);
 
         return SurfaceResponse.builder()

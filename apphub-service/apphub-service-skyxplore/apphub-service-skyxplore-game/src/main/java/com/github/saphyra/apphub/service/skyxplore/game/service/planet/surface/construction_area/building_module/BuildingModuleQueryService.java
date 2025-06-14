@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.BuildingModuleDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -34,8 +35,16 @@ public class BuildingModuleQueryService {
                 .buildingModuleId(buildingModule.getBuildingModuleId())
                 .dataId(buildingModule.getDataId())
                 .buildingModuleCategory(buildingModuleDataService.get(buildingModule.getDataId()).getCategory().name())
-                .construction(gameData.getConstructions().findByExternalReference(buildingModule.getBuildingModuleId()).map(constructionConverter::toResponse).orElse(null))
-                .deconstruction(gameData.getDeconstructions().findByExternalReference(buildingModule.getBuildingModuleId()).map(deconstructionConverter::toResponse).orElse(null))
+                .construction(gameData.getConstructions()
+                    .findByExternalReference(buildingModule.getBuildingModuleId())
+                    .map(construction -> constructionConverter.toResponse(gameData, construction, ProcessType.CONSTRUCT_BUILDING_MODULE))
+                    .orElse(null)
+                )
+                .deconstruction(gameData.getDeconstructions()
+                    .findByExternalReference(buildingModule.getBuildingModuleId())
+                    .map(deconstructionConverter::toResponse)
+                    .orElse(null)
+                )
                 .build())
             .collect(Collectors.toList());
     }
