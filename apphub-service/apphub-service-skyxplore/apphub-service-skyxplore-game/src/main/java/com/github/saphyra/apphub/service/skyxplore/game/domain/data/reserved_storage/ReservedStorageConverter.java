@@ -29,7 +29,8 @@ public class ReservedStorageConverter implements GameDataToModelConverter {
         model.setGameId(gameId);
         model.setType(GameItemType.RESERVED_STORAGE);
         model.setExternalReference(reservedStorage.getExternalReference());
-        model.setLocation(reservedStorage.getLocation());
+        model.setContainerId(reservedStorage.getContainerId());
+        model.setContainerType(reservedStorage.getContainerType());
         model.setDataId(reservedStorage.getDataId());
         model.setAmount(reservedStorage.getAmount());
         return model;

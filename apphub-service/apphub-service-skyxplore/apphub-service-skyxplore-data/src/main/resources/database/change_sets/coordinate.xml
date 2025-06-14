@@ -56,4 +56,16 @@
     <changeSet id="drop-not_null-constraint-from-reference_id-from-coordinate" author="saphyra">
         <dropNotNullConstraint schemaName="skyxplore_game" tableName="coordinate" columnName="reference_id"/>
     </changeSet>
+
+    <changeSet id="add-column-order-to-coordinate" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="coordinate" columnName="c_order"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="coordinate">
+            <column name="c_order" type="numeric" />
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

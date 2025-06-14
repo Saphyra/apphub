@@ -18,7 +18,6 @@ public enum GameItemType {
     CONSTRUCTION(ConstructionModel.class),
     CONSTRUCTION_AREA(ConstructionAreaModel.class),
     DECONSTRUCTION(DeconstructionModel.class),
-    ALLOCATED_RESOURCE(AllocatedResourceModel.class),
     RESERVED_STORAGE(ReservedStorageModel.class),
     STORED_RESOURCE(StoredResourceModel.class),
     STORAGE_SETTING(StorageSettingModel.class),
@@ -29,7 +28,10 @@ public enum GameItemType {
     DURABILITY(DurabilityModel.class),
     PROCESS(ProcessModel.class),
     CITIZEN_ALLOCATION(CitizenAllocationModel.class),
-    BUILDING_ALLOCATION(BuildingModuleAllocationModel.class),
+    BUILDING_MODULE_ALLOCATION(BuildingModuleAllocationModel.class),
+    RESOURCE_DELIVERY_REQUEST(ResourceDeliveryRequestModel.class),
+    CONVOY(ConvoyModel.class),
+    PRODUCTION_REQUEST(ProductionRequestModel.class),
     ;
 
     private final Class<? extends GameItem> modelType;

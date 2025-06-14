@@ -17,7 +17,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -64,24 +63,12 @@ class DeconstructBuildingModuleProcessHelperTest {
     private BuildingModule buildingModule;
 
     @Test
-    void startWork() {
-        given(workProcessFactory.createForDeconstruction(gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
-
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION);
-
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
-    }
-
-    @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
 
         underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 

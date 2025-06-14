@@ -69,7 +69,7 @@ public class TerraformationQueueItemPriorityUpdateServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
 
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);

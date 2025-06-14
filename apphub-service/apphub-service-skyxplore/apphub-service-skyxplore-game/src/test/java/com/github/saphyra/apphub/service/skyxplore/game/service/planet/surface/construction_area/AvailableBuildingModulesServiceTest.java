@@ -88,9 +88,9 @@ class AvailableBuildingModulesServiceTest {
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getSurfaceId()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
         given(buildingModuleDataService.values()).willReturn(List.of(differentCategoryBuildingModuleData, unrestrictedBuildingModuleData, restrictedBuildingModuleData, matchingBuildingModuleData));
         given(differentCategoryBuildingModuleData.getCategory()).willReturn(BuildingModuleCategory.CULTURAL);

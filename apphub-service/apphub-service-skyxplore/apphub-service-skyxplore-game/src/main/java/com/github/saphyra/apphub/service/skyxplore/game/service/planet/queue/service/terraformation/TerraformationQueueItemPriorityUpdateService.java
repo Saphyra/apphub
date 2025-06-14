@@ -22,7 +22,7 @@ class TerraformationQueueItemPriorityUpdateService {
 
         Construction terraformation = game.getData()
             .getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         game.getEventLoop()
             .processWithWait(() -> {

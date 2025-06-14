@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import org.junit.jupiter.api.Test;
@@ -31,14 +30,12 @@ public class ConstructionFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(CONSTRUCTION_ID);
 
-        Construction result = underTest.create(EXTERNAL_REFERENCE, ConstructionType.CONSTRUCTION, LOCATION, REQUIRED_WORK_POINTS);
+        Construction result = underTest.create(EXTERNAL_REFERENCE,  LOCATION, REQUIRED_WORK_POINTS);
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(0);
         assertThat(result.getPriority()).isEqualTo(GameConstants.DEFAULT_PRIORITY);
     }
 }

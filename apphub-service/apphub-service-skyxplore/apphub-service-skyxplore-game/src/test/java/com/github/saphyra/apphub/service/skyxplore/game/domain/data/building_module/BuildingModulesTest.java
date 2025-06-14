@@ -66,13 +66,13 @@ class BuildingModulesTest {
     void findByBuildingModuleIdValidated_notFound() {
         given(buildingModule1.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID_1);
 
-        ExceptionValidator.validateNotLoggedException(() -> new BuildingModules(buildingModule1).findByBuildingModuleIdValidated(BUILDING_MODULE_ID_2), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+        ExceptionValidator.validateNotLoggedException(() -> new BuildingModules(buildingModule1).findByIdValidated(BUILDING_MODULE_ID_2), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test
     void findByBuildingModuleIdValidated() {
         given(buildingModule1.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID_1);
 
-        assertThat(new BuildingModules(buildingModule1).findByBuildingModuleIdValidated(BUILDING_MODULE_ID_1)).isEqualTo(buildingModule1);
+        assertThat(new BuildingModules(buildingModule1).findByIdValidated(BUILDING_MODULE_ID_1)).isEqualTo(buildingModule1);
     }
 }

@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-resource_delivery_request" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="resource_delivery_request"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="resource_delivery_request">
+            <column name="resource_delivery_request_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="reserved_storage_id" type="varchar(37)"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="resource_delivery_request" columnNames="resource_delivery_request_id" constraintName="resource_delivery_request-pk"/>
+    </changeSet>
+</databaseChangeLog>

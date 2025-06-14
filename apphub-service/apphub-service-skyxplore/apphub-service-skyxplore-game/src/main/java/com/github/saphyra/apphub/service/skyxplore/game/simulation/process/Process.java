@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
@@ -23,7 +24,11 @@ public interface Process extends Comparable<Process> {
             return;
         }
 
+        LogHolder.log.info("");
+        LogHolder.log.info("Working on {}", this);
         work();
+        LogHolder.log.info("Finished working on {}", this);
+        LogHolder.log.info("");
 
         gameProgressDiff.save(toModel());
     }
@@ -37,4 +42,8 @@ public interface Process extends Comparable<Process> {
     default int compareTo(Process o) {
         return Integer.compare(o.getPriority(), getPriority());
     }
+
+    @Slf4j
+    final class LogHolder
+    {}
 }

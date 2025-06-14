@@ -85,7 +85,7 @@ class DeconstructConstructionAreaProcessHelperTest {
     void initiateDeconstructModules_alreadyDeconstructed() {
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
@@ -101,7 +101,7 @@ class DeconstructConstructionAreaProcessHelperTest {
     void initiateDeconstructModules() {
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
@@ -115,24 +115,12 @@ class DeconstructConstructionAreaProcessHelperTest {
     }
 
     @Test
-    void startWork() {
-        given(workProcessFactory.createForDeconstruction(gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
-
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION);
-
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
-    }
-
-    @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
 
         underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 
