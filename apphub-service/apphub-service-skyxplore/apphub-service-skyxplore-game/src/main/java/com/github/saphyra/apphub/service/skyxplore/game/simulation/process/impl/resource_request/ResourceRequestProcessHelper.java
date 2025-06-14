@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_r
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.logistics.LogisticsService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_dispatcher.ProductionDispatcherProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,21 +24,26 @@ class ResourceRequestProcessHelper {
     private final StoredResourceService storedResourceService;
     private final LogisticsService logisticsService;
     private final ProductionRequestFactory productionRequestFactory;
+    private final ProductionDispatcherProcessFactory productionDispatcherProcessFactory;
 
-    public int getMissingResources(GameData gameData, UUID reservedStorageId) {
+    public MissingResources getMissingResources(GameData gameData, UUID reservedStorageId) {
         int needed = gameData.getReservedStorages()
             .findByIdValidated(reservedStorageId)
             .getAmount();
 
         int onTheWay = countOnTheWay(gameData, reservedStorageId);
+        int toDeliver = needed - onTheWay;
 
         int productionRequested = countProductionRequested(gameData, reservedStorageId);
 
-        int result = needed - onTheWay - productionRequested;
+        int toRequest = needed - onTheWay - productionRequested;
 
-        log.info("Resource needed: {}, On the way: {}, Production Requested: {}, remaining: {}", needed, onTheWay, productionRequested, result);
+        log.info("Resource needed: {}, On the way: {}, Production Requested: {}, toDeliver: {}, toRequest: {}", needed, onTheWay, productionRequested, toDeliver, toRequest);
 
-        return result;
+        return new MissingResources(
+            toDeliver,
+            toRequest
+        );
     }
 
     private int countProductionRequested(GameData gameData, UUID reservedStorageId) {
@@ -53,7 +59,7 @@ class ResourceRequestProcessHelper {
             .getByReservedStorageId(reservedStorageId)
             .stream()
             .flatMap(resourceDeliveryRequest -> gameData.getConvoys().getByResourceDeliveryRequestId(resourceDeliveryRequest.getResourceDeliveryRequestId()).stream())
-            .map(convoy -> gameData.getStoredResources().findByAllocatedByValidated(convoy.getConvoyId()))
+            .map(convoy -> gameData.getStoredResources().findByContainerIdValidated(convoy.getConvoyId()))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }
@@ -66,7 +72,10 @@ class ResourceRequestProcessHelper {
             .findByIdValidated(reservedStorageId)
             .getDataId();
 
+        log.info("Attempting to deliver {} of {}", missingResourceAmount, dataId);
+
         List<StoredResource> resourcesToDeliver = storedResourceService.prepareBatch(progressDiff, gameData, location, dataId, missingResourceAmount);
+        log.info("Resources to deliver: {}", resourcesToDeliver);
 
         logisticsService.requestResourceDelivery(game, processId, location, reservedStorageId, resourcesToDeliver);
 
@@ -75,9 +84,10 @@ class ResourceRequestProcessHelper {
             .sum();
     }
 
-    public void createProductionRequest(GameProgressDiff progressDiff, GameData gameData, UUID reservedStorageId, int requestedAmount) {
-        ProductionRequest productionRequest = productionRequestFactory.save(progressDiff, gameData, reservedStorageId, requestedAmount);
+    public void createProductionRequest(Game game, UUID location, UUID processId, UUID reservedStorageId, int requestedAmount) {
+        ProductionRequest productionRequest = productionRequestFactory.save(game.getProgressDiff(), game.getData(), reservedStorageId, requestedAmount);
 
-        //TODO create ProductionDispatcherProcess
+        productionDispatcherProcessFactory.save(game, location, processId, productionRequest.getProductionRequestId());
+        log.info("{} created.", productionRequest);
     }
 }

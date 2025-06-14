@@ -5,7 +5,6 @@
       "requiredWorkPoints": 10000,
       "requiredEnergy": 0,
       "requiredResources": {
-        "stone": 100,
         "water": 100
       }
     }

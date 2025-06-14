@@ -11,12 +11,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_mod
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_order.ProductionOrder;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_order.ProductionOrderFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_request.ProductionRequest;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_request.ProductionRequestConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StorageCapacityService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.UUID;
@@ -34,6 +36,7 @@ class ProductionDispatcherProcessHelper {
     private final ResourceDataService resourceDataService;
     private final ProductionOrderFactory productionOrderFactory;
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
+    private final ProductionRequestConverter productionRequestConverter;
 
     public int dispatch(Game game, UUID location, UUID processId, UUID productionRequestId, int missingAmount) {
         ProductionRequest productionRequest = game.getData()
@@ -46,6 +49,7 @@ class ProductionDispatcherProcessHelper {
             .getDataId();
 
         Queue<BiWrapper<UUID, Integer>> eligibleConstructionAreas = getEligibleConstructionAreas(game.getData(), location, productionRequest.getProductionRequestId(), resourceDataId);
+        log.info("Eligible constructionAreas: {}", eligibleConstructionAreas);
 
         int dispatched = 0;
         while (missingAmount > 0) {
@@ -62,10 +66,15 @@ class ProductionDispatcherProcessHelper {
             missingAmount -= toDispatch;
         }
 
+        productionRequest.increaseDispatchedAmount(dispatched);
+        game.getProgressDiff()
+            .save(productionRequestConverter.toModel(game.getGameId(), productionRequest));
+
         return dispatched;
     }
 
     private void dispatchToConstructionArea(Game game, UUID location, UUID processId, ProductionRequest productionRequest, UUID constructionAreaId, String resourceDataId, int amount) {
+        log.info("Dispatching {} of {} to constructionArea {}", amount, resourceDataId, constructionAreaId);
         ProductionOrder productionOrder = productionOrderFactory.save(game.getProgressDiff(), game.getData(), productionRequest.getProductionRequestId(), constructionAreaId, resourceDataId, amount);
 
         productionOrderProcessFactory.save(game, location, processId, productionOrder.getProductionOrderId());
@@ -73,7 +82,14 @@ class ProductionDispatcherProcessHelper {
 
     //TODO check if suitable storage for all requiredResources in constructionRequirements
     private Integer calculateAvailability(GameData gameData, UUID productionRequestId, UUID constructionAreaId, String resourceDataId) {
-        if (gameData.getProductionOrders().findByProductionRequestIdAndConstructionAreaIdAndResourceDataId(productionRequestId, constructionAreaId, resourceDataId).isPresent()) {
+        Optional<ProductionOrder> maybeProductionOrderInProgress = gameData.getProductionOrders()
+            .getByProductionRequestIdAndConstructionAreaIdAndResourceDataId(productionRequestId, constructionAreaId, resourceDataId)
+            .stream()
+            .filter(productionOrder -> !productionOrder.allStarted())
+            .findAny();
+        log.info("Scheduled productionOrder: {}", maybeProductionOrderInProgress);
+
+        if (maybeProductionOrderInProgress.isPresent()) {
             log.info("{} production is already scheduled on constructionArea {} for productionRequestId {}", resourceDataId, constructionAreaId, productionRequestId);
             return 0;
         }
@@ -92,6 +108,7 @@ class ProductionDispatcherProcessHelper {
     }
 
     private Queue<BiWrapper<UUID, Integer>> getEligibleConstructionAreas(GameData gameData, UUID location, UUID productionRequestId, String resourceDataId) {
+        log.info("Searching for producers can produce {} at location {}", resourceDataId, location);
         Queue<BiWrapper<UUID, Integer>> result = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getEntity2(), o1.getEntity2()));
 
         gameData.getBuildingModules()
@@ -102,12 +119,15 @@ class ProductionDispatcherProcessHelper {
             .filter(buildingModule -> canProduce(resourceDataId, buildingModule.getDataId()))
             .map(BuildingModule::getConstructionAreaId)
             .distinct()
-            .forEach(constructionAreaId -> result.add(new BiWrapper<>(constructionAreaId, calculateAvailability(gameData, productionRequestId, constructionAreaId, resourceDataId))));
+            .map(constructionAreaId -> new BiWrapper<>(constructionAreaId, calculateAvailability(gameData, productionRequestId, constructionAreaId, resourceDataId)))
+            .filter(mapping -> mapping.getEntity2() > 0)
+            .forEach(result::add);
 
         return result;
     }
 
     private boolean canProduce(String resourceDataId, String buildingModuleDataId) {
+        log.debug("Checking if {} can produce {}", buildingModuleDataId, resourceDataId);
         return productionBuildingModuleDataService.get(buildingModuleDataId)
             .getProduces()
             .stream()

@@ -57,7 +57,9 @@ public class RouteCalculator {
     }
 
     private List<ReferredCoordinate> calculateRoute(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID referenceId, Coordinate startPoint, Coordinate endPoint) {
+        log.info("Calculating route from {} to {}", startPoint, endPoint);
         Map<Coordinate, Integer> map = getWeightedMap(gameData, location);
+        map.forEach((coordinate, weight) -> log.debug("Weight of coordinate {}: {}", coordinate, weight));
         int size = Math.toIntExact(Math.round(Math.sqrt(map.size())));
 
         PriorityQueue<List<Coordinate>> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.stream().mapToInt(map::get).sum()));
@@ -85,12 +87,14 @@ public class RouteCalculator {
             }
         }
 
-        if(isNull(shortestRoute) || shortestRoute.isEmpty()){
+        if (isNull(shortestRoute) || shortestRoute.isEmpty()) {
             throw new IllegalStateException("Shortest route is too short: " + shortestRoute);
         }
 
+        log.info("Route calculated: {}", shortestRoute);
+
         List<ReferredCoordinate> result = new ArrayList<>();
-        for(int i = 0; i < shortestRoute.size(); i++){
+        for (int i = 0; i < shortestRoute.size(); i++) {
             result.add(referredCoordinateFactory.save(progressDiff, gameData, referenceId, shortestRoute.get(i), i));
         }
 

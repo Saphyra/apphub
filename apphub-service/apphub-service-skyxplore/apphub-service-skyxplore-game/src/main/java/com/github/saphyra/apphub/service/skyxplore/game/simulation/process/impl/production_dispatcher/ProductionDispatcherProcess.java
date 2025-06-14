@@ -44,8 +44,6 @@ public class ProductionDispatcherProcess implements Process {
     @NonNull
     private final UUID externalReference;
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -59,26 +57,29 @@ public class ProductionDispatcherProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getProcesses()
+        return game.getData().getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         if (status == ProcessStatus.CREATED) {
             status = ProcessStatus.IN_PROGRESS;
         }
 
+        GameData gameData = game.getData();
+
         ProductionRequest request = gameData.getProductionRequests()
             .findByIdValidated(productionRequestId);
         int missingAmount = request.getRequestedAmount() - request.getDispatchedAmount();
+        log.info("MissingAmount: {}", missingAmount);
 
         if (missingAmount > 0) {
-            missingAmount -= applicationContextProxy.getBean(ProductionDispatcherProcessHelper.class)
+            int dispatchedAmount = applicationContextProxy.getBean(ProductionDispatcherProcessHelper.class)
                 .dispatch(game, location, processId, productionRequestId, missingAmount);
+            missingAmount -= dispatchedAmount;
+            log.info("{} resources were dispatched to producers. {} still left.", dispatchedAmount, missingAmount);
         }
 
         if (missingAmount == 0 && gameData.getProcesses().getByExternalReference(processId).stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
@@ -91,6 +92,7 @@ public class ProductionDispatcherProcess implements Process {
         log.info("Cleaning up {}", this);
 
         GameProgressDiff progressDiff = game.getProgressDiff();
+        GameData gameData = game.getData();
 
         gameData.getProcesses()
             .getByExternalReference(processId)
@@ -111,7 +113,7 @@ public class ProductionDispatcherProcess implements Process {
 
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

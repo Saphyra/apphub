@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
@@ -17,10 +18,14 @@ public class Convoys extends Vector<Convoy> {
     }
 
     public Convoy findByIdValidated(UUID convoyId) {
+        return findById(convoyId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Convoy not found by id " + convoyId));
+    }
+
+    public Optional<Convoy> findById(UUID convoyId) {
         return stream()
             .filter(convoy -> convoy.getConvoyId().equals(convoyId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Convoy not found by id " + convoyId));
+            .findAny();
     }
 
     public void remove(UUID convoyId) {

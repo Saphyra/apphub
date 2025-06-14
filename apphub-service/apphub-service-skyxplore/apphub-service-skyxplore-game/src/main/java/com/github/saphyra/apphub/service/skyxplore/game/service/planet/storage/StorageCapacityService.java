@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.dwelling.DwellingBuildingDataService;
@@ -36,6 +37,8 @@ import static java.util.Objects.nonNull;
  */
 //TODO rename methods to match keywords
 public class StorageCapacityService {
+    private static final List<ContainerType> INFINITE_CONTAINERS = List.of(ContainerType.SURFACE, ContainerType.CONSTRUCTION_AREA);
+
     private final ResourceDataService resourceDataService;
     private final StorageBuildingModuleDataService storageBuildingModuleDataService;
     private final DwellingBuildingDataService dwellingBuildingDataService;
@@ -145,7 +148,11 @@ public class StorageCapacityService {
             .sum();
     }
 
-    public int getEmptyContainerCapacity(GameData gameData, UUID containerId, String resourceDataId) {
+    public int getEmptyContainerCapacity(GameData gameData, UUID containerId, ContainerType containerType, String resourceDataId) {
+        if (INFINITE_CONTAINERS.contains(containerType)) {
+            return Integer.MAX_VALUE;
+        }
+
         String buildingModuleDataId = gameData.getBuildingModules()
             .findByIdValidated(containerId)
             .getDataId();

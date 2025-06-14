@@ -21,7 +21,7 @@ class TerraformationProcessConditions {
     private final TerraformingPossibilitiesService terraformingPossibilitiesService;
     private final StoredResourceService storedResourceService;
 
-    boolean resourcesAvailable(GameData gameData, UUID processId, UUID constructionId) {
+    boolean resourcesAvailable(GameData gameData, UUID constructionId) {
         Construction construction = gameData.getConstructions()
             .findByIdValidated(constructionId);
         SurfaceType newSurfaceType = SurfaceType.valueOf(construction.getData());
@@ -35,11 +35,11 @@ class TerraformationProcessConditions {
 
         return requiredResources.entrySet()
             .stream()
-            .allMatch(entry -> hasEnough(gameData, processId, entry.getKey(), entry.getValue()));
+            .allMatch(entry -> hasEnough(gameData, constructionId, entry.getKey(), entry.getValue()));
     }
 
-    private boolean hasEnough(GameData gameData, UUID processId, String dataId, Integer amount) {
-        int available = storedResourceService.count(gameData, dataId, processId);
+    private boolean hasEnough(GameData gameData, UUID constructionId, String dataId, Integer amount) {
+        int available = storedResourceService.count(gameData, dataId, constructionId);
         log.info("There is {} of {} available. Needed: {}", available, dataId, amount);
         return available >= amount;
     }

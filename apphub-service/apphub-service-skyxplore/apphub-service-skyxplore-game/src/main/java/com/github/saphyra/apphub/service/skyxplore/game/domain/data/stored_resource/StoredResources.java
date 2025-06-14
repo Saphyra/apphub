@@ -11,6 +11,8 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 public class StoredResources extends Vector<StoredResource> {
     public List<StoredResource> getByLocation(UUID location) {
         return stream()
@@ -45,8 +47,10 @@ public class StoredResources extends Vector<StoredResource> {
             .toList();
     }
 
+    //TODO unit test
     public Optional<StoredResource> findByAllocatedBy(UUID allocatedBy) {
         return stream()
+            .filter(storedResource -> nonNull(storedResource.getAllocatedBy()))
             .filter(storedResource -> storedResource.getAllocatedBy().equals(allocatedBy))
             .findAny();
     }
@@ -55,5 +59,12 @@ public class StoredResources extends Vector<StoredResource> {
     public StoredResource findByAllocatedByValidated(UUID allocatedBy) {
         return findByAllocatedBy(allocatedBy)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by allocatedBy " + allocatedBy));
+    }
+
+    public StoredResource findByContainerIdValidated(UUID containerId) {
+        return stream()
+            .filter(storedResource -> storedResource.getContainerId().equals(containerId))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by containerId " + containerId));
     }
 }

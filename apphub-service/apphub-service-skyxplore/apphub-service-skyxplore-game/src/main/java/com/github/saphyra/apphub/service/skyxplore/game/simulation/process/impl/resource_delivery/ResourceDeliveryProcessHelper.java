@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allo
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.convoy.Convoy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.convoy.ConvoyFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy.ConvoyProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy.ConvoyProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +71,7 @@ class ResourceDeliveryProcessHelper {
 
         Convoy convoy = convoyFactory.save(progressDiff, gameData, location, resourceDeliveryRequestId, toDeliver);
 
-        Process process = convoyProcessFactory.save(game, location, processId, convoy.getConvoyId());
+        ConvoyProcess process = convoyProcessFactory.save(game, location, processId, convoy.getConvoyId());
 
         citizenAllocationFactory.save(progressDiff, gameData, citizen.getCitizenId(), process.getProcessId());
 

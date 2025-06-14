@@ -68,21 +68,24 @@ public class ProductionOrderProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
 
         if (status == ProcessStatus.CREATED) {
+            log.info("Ordering resources...");
             helper.orderResources(game, location, processId, productionOrderId);
+            status = ProcessStatus.IN_PROGRESS;
         }
 
         ProductionOrderProcessConditions conditions = applicationContextProxy.getBean(ProductionOrderProcessConditions.class);
 
         if (conditions.productionNeeded(gameData, productionOrderId)) {
             helper.tryProduce(game, location, processId, productionOrderId);
+        } else {
+            log.info("All production is already started");
         }
 
         if (conditions.isFinished(gameData, processId, productionOrderId)) {
+            log.info("ProductionOrder finished.");
             status = ProcessStatus.DONE;
         }
     }

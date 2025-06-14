@@ -4,18 +4,20 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 //TODO unit test
 public class ProductionOrders extends Vector<ProductionOrder> {
-    public Optional<ProductionOrder> findByProductionRequestIdAndConstructionAreaIdAndResourceDataId(UUID productionRequestId, UUID constructionAreaId, String resourceDataId) {
+    public List<ProductionOrder> getByProductionRequestIdAndConstructionAreaIdAndResourceDataId(UUID productionRequestId, UUID constructionAreaId, String resourceDataId) {
         return stream()
             .filter(productionOrder -> productionOrder.getProductionRequestId().equals(productionRequestId))
             .filter(productionOrder -> productionOrder.getConstructionAreaId().equals(constructionAreaId))
             .filter(productionOrder -> productionOrder.getResourceDataId().equals(resourceDataId))
-            .findAny();
+            .collect(Collectors.toList());
     }
 
     public ProductionOrder findByIdValidated(UUID productionOrderId) {

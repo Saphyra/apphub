@@ -32,5 +32,6 @@ public class BuildingModuleAllocationFactory {
             .add(buildingModuleAllocation);
 
         progressDiff.save(buildingModuleAllocationConverter.toModel(gameData.getGameId(), buildingModuleAllocation));
+        log.info("{} created.", buildingModuleAllocation);
     }
 }

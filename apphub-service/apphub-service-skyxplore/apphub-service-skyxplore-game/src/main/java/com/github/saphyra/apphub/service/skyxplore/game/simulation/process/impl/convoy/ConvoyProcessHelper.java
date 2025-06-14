@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -20,6 +22,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.S
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy_movement.ConvoyMovementProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
@@ -55,10 +58,15 @@ class ConvoyProcessHelper {
             .findByAllocatedByValidated(convoy.getResourceDeliveryRequestId());
         int toDeliver = Math.min(convoy.getCapacity(), source.getAmount());
 
-        source.decreaseAmount(toDeliver);
-        progressDiff.save(storedResourceConverter.toModel(gameData.getGameId(), source));
+        extractFromSource(progressDiff, gameData, source, toDeliver);
 
         storedResourceFactory.save(progressDiff, gameData, source.getLocation(), source.getDataId(), toDeliver, convoyId, ContainerType.CONVOY);
+    }
+
+    private void extractFromSource(GameProgressDiff progressDiff, GameData gameData, StoredResource source, int toDeliver) {
+        source.decreaseAmount(toDeliver);
+        progressDiff.save(storedResourceConverter.toModel(gameData.getGameId(), source));
+        log.info("Modified: {}", source);
     }
 
     /**
@@ -78,6 +86,7 @@ class ConvoyProcessHelper {
             .stream()
             .sorted(Comparator.comparingInt(ReferredCoordinate::getOrder))
             .toList();
+        log.info("Route: {}", route);
 
         if (route.isEmpty()) {
             log.info("Convoy is arrived");
@@ -87,26 +96,38 @@ class ConvoyProcessHelper {
         UUID citizenId = gameData.getCitizenAllocations()
             .findByProcessIdValidated(processId)
             .getCitizenId();
-        int requiredWorkPoints = calculateRequiredWorkPoints(gameData, route.get(0));
+        ReferredCoordinate waypoint = route.get(0);
+        int requiredWorkPoints = calculateRequiredWorkPoints(gameData, location, waypoint);
 
         convoyMovementProcessFactory.save(game, location, processId, citizenId, requiredWorkPoints);
+
+        gameData.getCoordinates()
+            .remove(waypoint);
+        game.getProgressDiff()
+            .delete(waypoint.getReferredCoordinateId(), GameItemType.COORDINATE);
 
         return false;
     }
 
-    private int calculateRequiredWorkPoints(GameData gameData, ReferredCoordinate referredCoordinate) {
+    private int calculateRequiredWorkPoints(GameData gameData, UUID location, ReferredCoordinate referredCoordinate) {
         SurfaceType surfaceType = gameData.getSurfaces()
-            .findByIdValidated(referredCoordinate.getReferenceId())
+            .getByPlanetId(location)
+            .stream()
+            .filter(surface -> gameData.getCoordinates().findByReferenceId(surface.getSurfaceId()).equals(referredCoordinate.getCoordinate()))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found on planet " + location + " with coordinate " + referredCoordinate.getCoordinate()))
             .getSurfaceType();
 
-        return gameProperties.getSurface()
+        Integer weight = gameProperties.getSurface()
             .getLogisticsWeight()
             .get(surfaceType);
+
+        return weight * 100; //TODO move constant to config
     }
 
     public boolean unloadResources(GameProgressDiff progressDiff, GameData gameData, UUID convoyId) {
         StoredResource resource = gameData.getStoredResources()
-            .findByAllocatedByValidated(convoyId);
+            .findByContainerIdValidated(convoyId);
         Convoy convoy = gameData.getConvoys()
             .findByIdValidated(convoyId);
         ResourceDeliveryRequest deliveryRequest = gameData.getResourceDeliveryRequests()
@@ -114,14 +135,24 @@ class ConvoyProcessHelper {
         ReservedStorage reservedStorage = gameData.getReservedStorages()
             .findByIdValidated(deliveryRequest.getReservedStorageId());
 
-        int freeCapacity = storageCapacityService.getEmptyContainerCapacity(gameData, reservedStorage.getContainerId(), reservedStorage.getDataId());
+        int freeCapacity = storageCapacityService.getEmptyContainerCapacity(gameData, reservedStorage.getContainerId(), reservedStorage.getContainerType(), reservedStorage.getDataId());
         if (freeCapacity < resource.getAmount()) {
             log.info("There is not enough capacity in storage {} to deposit {} of {}", resource.getContainerId(), resource.getAmount(), resource.getDataId());
             return false;
         }
 
-        storedResourceFactory.save(progressDiff, gameData, resource.getLocation(), resource.getDataId(), resource.getAmount(), reservedStorage.getContainerId(), reservedStorage.getContainerType());
-        reservedStorage.decreaseAmount(reservedStorage.getAmount());
+        storedResourceFactory.save(
+            progressDiff,
+            gameData,
+            resource.getLocation(),
+            resource.getDataId(),
+            resource.getAmount(),
+            reservedStorage.getContainerId(),
+            reservedStorage.getContainerType(),
+            reservedStorage.getExternalReference()
+        );
+        reservedStorage.decreaseAmount(resource.getAmount());
+        log.info("Modified: {}", reservedStorage);
 
         //Resource needed for cleanup / cancel processes
         resource.setAmount(0);
@@ -133,21 +164,12 @@ class ConvoyProcessHelper {
     }
 
     public void cleanup(GameProgressDiff progressDiff, GameData gameData, UUID convoyId) {
-        UUID surfaceId = gameData.getCoordinates()
-            .getByReferenceId(convoyId)
-            .stream()
-            .sorted(Comparator.comparingInt(ReferredCoordinate::getOrder))
-            .toList()
-            .get(0)
-            .getReferenceId();
-
         gameData.getStoredResources()
             .getByContainerId(convoyId)
             .forEach(storedResource -> {
-                storedResource.setContainerId(surfaceId);
-                storedResource.setContainerType(ContainerType.SURFACE);
-
-                progressDiff.save(storedResourceConverter.toModel(gameData.getGameId(), storedResource));
+                progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE);
+                gameData.getStoredResources()
+                    .remove(storedResource);
             });
 
         gameData.getConvoys()

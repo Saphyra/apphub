@@ -22,7 +22,7 @@
       "resourceDataId": "stone",
       "requiredSkill": "MINING",
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
+        "requiredWorkPoints": 5,
         "requiredEnergy": 1,
         "requiredResources": {
         }
@@ -32,7 +32,7 @@
       "resourceDataId": "water",
       "requiredSkill": "MINING",
       "constructionRequirements": {
-        "requiredWorkPoints": 1,
+        "requiredWorkPoints": 5,
         "requiredEnergy": 1,
         "requiredResources": {
         }

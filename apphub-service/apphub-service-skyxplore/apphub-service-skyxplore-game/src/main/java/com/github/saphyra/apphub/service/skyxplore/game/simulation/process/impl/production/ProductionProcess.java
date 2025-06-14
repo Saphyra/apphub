@@ -66,8 +66,6 @@ public class ProductionProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ProductionProcessHelper helper = applicationContextProxy.getBean(ProductionProcessHelper.class);
 
         if (status == ProcessStatus.CREATED) {
@@ -76,10 +74,14 @@ public class ProductionProcess implements Process {
         }
 
         if (game.getData().getProcesses().getByExternalReference(processId).stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
+            log.info("Production is finished.");
             if (helper.resourcesProduced(game, location, productionOrderId, amount)) {
+                log.info("Produced resources successfully stored.");
                 releaseBuildingModuleAllocation();
                 status = ProcessStatus.DONE;
             }
+        } else {
+            log.info("Waiting for work to be finished...");
         }
     }
 
@@ -111,6 +113,7 @@ public class ProductionProcess implements Process {
                 gameData.getBuildingModuleAllocations()
                     .remove(buildingModuleAllocation);
                 progressDiff.delete(buildingModuleAllocation.getBuildingModuleAllocationId(), GameItemType.BUILDING_MODULE_ALLOCATION);
+                log.info("Allocation for buildingModule {} is deleted.", buildingModuleAllocation.getBuildingModuleId());
             });
     }
 

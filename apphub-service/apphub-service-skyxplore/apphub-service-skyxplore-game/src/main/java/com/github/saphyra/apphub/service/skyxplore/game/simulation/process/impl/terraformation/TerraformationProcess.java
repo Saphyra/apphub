@@ -70,12 +70,11 @@ public class TerraformationProcess implements Process {
     @Override
     //TODO unit test
     public void work() {
-        log.info("Working on {}", this);
-
         TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
+            log.info("Creating ResourceRequestProcesses...");
             helper.createResourceRequestProcess(game, location, processId, terraformationId);
 
             status = ProcessStatus.IN_PROGRESS;
@@ -83,7 +82,7 @@ public class TerraformationProcess implements Process {
 
         TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
 
-        if (!conditions.resourcesAvailable(gameData, processId, terraformationId)) {
+        if (!conditions.resourcesAvailable(gameData, terraformationId)) {
             log.info("Waiting for resources...");
             return;
         }

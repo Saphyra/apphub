@@ -85,8 +85,6 @@ public class StorageSettingProcess implements Process {
     @Override
     //TODO unit test
     public void work() {
-        log.info("Working on {}", this);
-
         StorageSettingProcessHelper helper = applicationContextProxy.getBean(StorageSettingProcessHelper.class);
 
         if (status == ProcessStatus.CREATED) {

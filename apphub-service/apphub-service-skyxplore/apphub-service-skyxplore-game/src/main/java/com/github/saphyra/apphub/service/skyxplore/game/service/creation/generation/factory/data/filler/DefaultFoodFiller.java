@@ -57,7 +57,8 @@ public class DefaultFoodFiller {
             GameConstants.DATA_ID_RAW_FOOD,
             targetAmount,
             containerId,
-            ContainerType.STORAGE
+            ContainerType.STORAGE,
+            null
         );
 
         gameData.getStoredResources()

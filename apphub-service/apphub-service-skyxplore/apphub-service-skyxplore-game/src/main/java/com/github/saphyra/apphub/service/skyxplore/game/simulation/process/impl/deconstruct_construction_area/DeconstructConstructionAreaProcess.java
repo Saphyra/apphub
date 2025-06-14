@@ -72,8 +72,6 @@ public class DeconstructConstructionAreaProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         DeconstructConstructionAreaProcessConditions conditions = applicationContextProxy.getBean(DeconstructConstructionAreaProcessConditions.class);
         DeconstructConstructionAreaProcessHelper helper = applicationContextProxy.getBean(DeconstructConstructionAreaProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy_movement;
+package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_dispatcher;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
@@ -19,54 +19,44 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class ConvoyMovementProcessFactory implements ProcessFactory {
+public class ProductionDispatcherProcessFactory implements ProcessFactory {
     private final UuidConverter uuidConverter;
-    private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
+    private final ApplicationContextProxy applicationContextProxy;
 
     @Override
     public ProcessType getType() {
-        return ProcessType.CONVOY_MOVEMENT;
+        return ProcessType.PRODUCTION_DISPATCHER;
     }
 
     @Override
-    public ConvoyMovementProcess createFromModel(Game game, ProcessModel model) {
-        return ConvoyMovementProcess.builder()
+    public ProductionDispatcherProcess createFromModel(Game game, ProcessModel model) {
+        return ProductionDispatcherProcess.builder()
             .processId(model.getId())
             .status(model.getStatus())
-            .citizenId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.CITIZEN_ID)))
-            .requiredWorkPoints(Integer.parseInt(model.getData().get(ProcessParamKeys.REQUIRED_WORK_POINTS)))
-            .completedWorkPoints(Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS)))
+            .productionRequestId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.PRODUCTION_REQUEST_ID)))
             .externalReference(model.getExternalReference())
-            .gameData(game.getData())
+            .game(game)
             .location(model.getLocation())
             .applicationContextProxy(applicationContextProxy)
-            .game(game)
             .build();
     }
 
-    public ConvoyMovementProcess save(Game game, UUID location, UUID externalReference, UUID citizenId, int requiredWorkPoints) {
-        ConvoyMovementProcess process = ConvoyMovementProcess.builder()
+    public void save(Game game, UUID location, UUID externalReference, UUID productionRequestId) {
+        ProductionDispatcherProcess process = ProductionDispatcherProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)
-            .citizenId(citizenId)
-            .requiredWorkPoints(requiredWorkPoints)
-            .completedWorkPoints(0)
+            .productionRequestId(productionRequestId)
             .externalReference(externalReference)
-            .gameData(game.getData())
+            .game(game)
             .location(location)
             .applicationContextProxy(applicationContextProxy)
-            .game(game)
             .build();
 
-        game.getProgressDiff()
-            .save(process.toModel());
         game.getData()
             .getProcesses()
             .add(process);
-
-        log.info("Saved: {}", process);
-
-        return process;
+        game.getProgressDiff()
+            .save(process.toModel());
     }
 }

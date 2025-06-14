@@ -65,19 +65,20 @@ public class ConvoyProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ConvoyProcessHelper helper = applicationContextProxy.getBean(ConvoyProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
+            log.info("Loading resources...");
             helper.loadResources(progressDiff, gameData, convoyId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
         if (helper.move(game, location, processId, convoyId)) {
+            log.info("Convoy reached its destination.");
             if (helper.unloadResources(progressDiff, gameData, convoyId)) {
+                log.info("Convoy unloaded its resources.");
                 helper.releaseCitizen(progressDiff, gameData, processId);
                 status = ProcessStatus.DONE;
             }

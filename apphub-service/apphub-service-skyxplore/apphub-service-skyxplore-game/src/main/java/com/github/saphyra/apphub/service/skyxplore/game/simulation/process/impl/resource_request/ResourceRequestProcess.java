@@ -68,8 +68,6 @@ public class ResourceRequestProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         if (status == ProcessStatus.CREATED) {
             status = ProcessStatus.IN_PROGRESS;
         }
@@ -77,17 +75,17 @@ public class ResourceRequestProcess implements Process {
         GameData gameData = game.getData();
         ResourceRequestProcessHelper helper = applicationContextProxy.getBean(ResourceRequestProcessHelper.class);
 
-        int missingResourceAmount = helper.getMissingResources(gameData, reservedStorageId);
-        if (missingResourceAmount > 0) {
-            log.info("Missing resource amount: {}", missingResourceAmount);
-            int delivered = helper.initiateDelivery(game, processId, location, reservedStorageId, missingResourceAmount);
+        MissingResources missingResources = helper.getMissingResources(gameData, reservedStorageId);
+        if (missingResources.getToDeliver() > 0) {
+            log.info("Resources to deliver: {}", missingResources);
+            int delivered = helper.initiateDelivery(game, processId, location, reservedStorageId, missingResources.getToDeliver());
             log.info("Delivery initiated for {} resources.", delivered);
-            missingResourceAmount -= delivered;
+            missingResources.decreaseToRequest(delivered);
         }
 
-        if (missingResourceAmount > 0) {
-            log.info("{} resources are still missing. Requesting production...", missingResourceAmount);
-            helper.createProductionRequest(game.getProgressDiff(), gameData, reservedStorageId, missingResourceAmount);
+        if (missingResources.getToRequest() > 0) {
+            log.info("{} resources are still missing. Requesting production...", missingResources);
+            helper.createProductionRequest(game, location, processId, reservedStorageId, missingResources.getToRequest());
         }
 
         if (gameData.getProcesses().getByExternalReference(processId).stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {

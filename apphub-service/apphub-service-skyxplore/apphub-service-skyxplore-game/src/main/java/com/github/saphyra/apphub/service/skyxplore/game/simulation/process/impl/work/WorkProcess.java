@@ -76,8 +76,6 @@ public class WorkProcess implements Process {
     @Override
     //TODO unit test
     public void work() {
-        log.info("Working on {}", this);
-
         WorkProcessHelper helper = applicationContextProxy.getBean(WorkProcessHelper.class);
         WorkProcessConditions conditions = applicationContextProxy.getBean(WorkProcessConditions.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
@@ -100,8 +98,10 @@ public class WorkProcess implements Process {
 
         int finishedWork = helper.work(progressDiff, gameData, processId, skillType, workPointsLeft);
         completedWorkPoints += finishedWork;
+        log.info("{} workPoints were missing, finished {} work, now {} is completed out of {} total.", workPointsLeft, finishedWork, completedWorkPoints, requiredWorkPoints);
 
         if (completedWorkPoints >= requiredWorkPoints) {
+            log.info("Work is finished.");
             helper.releaseCitizen(progressDiff, gameData, processId);
             status = ProcessStatus.DONE;
         }

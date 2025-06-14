@@ -14,4 +14,9 @@ public class ProductionRequest {
     private final UUID reservedStorageId; //Target where the resource has to be delivered once it is produced
     private int requestedAmount;
     private int dispatchedAmount;
+
+    //TODO unit test
+    public void increaseDispatchedAmount(int dispatched) {
+        dispatchedAmount += dispatched;
+    }
 }

@@ -18,6 +18,7 @@ public class ProductionOrderConverter {
         model.setId(productionOrder.getProductionOrderId());
         model.setGameId(gameId);
         model.setType(GameItemType.PRODUCTION_ORDER);
+        model.setProductionRequestId(productionOrder.getProductionRequestId());
         model.setConstructionAreaId(productionOrder.getConstructionAreaId());
         model.setResourceDataId(productionOrder.getResourceDataId());
         model.setRequestedAmount(productionOrder.getRequestedAmount());

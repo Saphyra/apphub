@@ -68,8 +68,6 @@ public class ConstructConstructionAreaProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ConstructConstructionAreaProcessHelper helper = applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
 

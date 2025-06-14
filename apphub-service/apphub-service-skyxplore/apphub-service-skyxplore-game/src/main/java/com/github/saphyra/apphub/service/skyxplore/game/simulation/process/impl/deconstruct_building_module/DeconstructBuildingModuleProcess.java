@@ -72,8 +72,6 @@ public class DeconstructBuildingModuleProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         DeconstructBuildingModuleProcessConditions conditions = applicationContextProxy.getBean(DeconstructBuildingModuleProcessConditions.class);
         DeconstructBuildingModuleProcessHelper helper = applicationContextProxy.getBean(DeconstructBuildingModuleProcessHelper.class);
 

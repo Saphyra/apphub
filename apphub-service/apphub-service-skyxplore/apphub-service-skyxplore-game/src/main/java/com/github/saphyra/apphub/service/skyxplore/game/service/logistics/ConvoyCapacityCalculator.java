@@ -12,6 +12,6 @@ import java.util.UUID;
 @Slf4j
 public class ConvoyCapacityCalculator {
     public int calculate(GameData gameData, UUID location, int requestedCapacity) {
-        return 1;
+        return 20;
     }
 }

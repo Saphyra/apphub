@@ -31,6 +31,8 @@ public class ConvoyFactory {
         gameData.getConvoys()
             .add(convoy);
 
+        log.info("Saved: {}", convoy);
+
         return convoy;
     }
 

@@ -68,8 +68,6 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ConstructBuildingModuleProcessHelper helper = applicationContextProxy.getBean(ConstructBuildingModuleProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
 

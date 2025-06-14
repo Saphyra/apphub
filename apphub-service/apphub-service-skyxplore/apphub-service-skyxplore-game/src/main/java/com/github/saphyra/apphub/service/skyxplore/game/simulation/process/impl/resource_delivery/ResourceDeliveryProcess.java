@@ -67,8 +67,6 @@ public class ResourceDeliveryProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         if (status == ProcessStatus.CREATED) {
             status = ProcessStatus.IN_PROGRESS;
         }

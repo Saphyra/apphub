@@ -43,10 +43,11 @@ class ProductionProcessHelper {
             .getResourceDataId();
         Production production = productionBuildingModuleDataService.findProducerFor(resourceDataId)
             .getEntity2();
-        int workPointsPerResource = production
-            .getConstructionRequirements()
+        int workPointsPerResource = production.getConstructionRequirements()
             .getRequiredWorkPoints();
         int workPointsNeeded = workPointsPerResource * amount;
+
+        log.info("Created WorkProcesses for {} workPoints", workPointsNeeded);
 
         workProcessFactory.save(game, location, processId, workPointsNeeded, production.getRequiredSkill());
     }
@@ -62,17 +63,23 @@ class ProductionProcessHelper {
         StorageType storageType = resourceDataService.get(productionOrder.getResourceDataId())
             .getStorageType();
 
-        if (amount > storageCapacityService.getEmptyConstructionAreaCapacity(game.getData(), productionOrder.getConstructionAreaId(), storageType)) {
+        log.info("Storing {} resources to storage {}", amount, storageType);
+
+        int availableCapacity = storageCapacityService.getEmptyConstructionAreaCapacity(game.getData(), productionOrder.getConstructionAreaId(), storageType);
+        if (amount > availableCapacity) {
+            log.info("{} capacity is needed, but there is only {} available.", amount, availableCapacity);
             return false;
         }
 
         Map<UUID, Integer> containers = getContainers(game.getData(), productionOrder.getConstructionAreaId(), productionOrder.getResourceDataId(), amount);
+        log.info("<Container, Amount> mapping: {}", containers);
 
         containers.forEach((containerId, amountToStore) -> storedResourceFactory.save(
             game.getProgressDiff(),
             game.getData(),
             location,
             productionOrder.getResourceDataId(),
+            amountToStore,
             containerId,
             ContainerType.STORAGE
         ));

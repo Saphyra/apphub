@@ -75,12 +75,15 @@ public class ConvoyMovementProcess implements Process {
         if (status == ProcessStatus.IN_PROGRESS) {
             int missingWorkPoints = requiredWorkPoints - completedWorkPoints;
             int workToBeDone = helper.getWorkPointsPerTick(gameData, citizenId, missingWorkPoints);
+            log.info("Missing workPoints: {} - Citizen can work {} this tick.", missingWorkPoints, workToBeDone);
             helper.work(game.getProgressDiff(), gameData, citizenId, SkillType.LOGISTICS, workToBeDone);
 
             completedWorkPoints += workToBeDone;
+            log.info("{} workPoints completed out of {}", completedWorkPoints, requiredWorkPoints);
         }
 
         if (completedWorkPoints >= requiredWorkPoints) {
+            log.info("Convoy movement is finished.");
             status = ProcessStatus.DONE;
         }
     }

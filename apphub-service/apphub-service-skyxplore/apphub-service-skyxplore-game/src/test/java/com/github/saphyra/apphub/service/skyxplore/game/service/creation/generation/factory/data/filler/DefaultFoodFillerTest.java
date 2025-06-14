@@ -97,7 +97,7 @@ class DefaultFoodFillerTest {
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModules.getByLocationAndDataId(PLANET_ID, GameConstants.BUILDING_MODULE_HQ_STORAGE)).willReturn(List.of(buildingModule));
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
-        given(storedResourceFactory.create(PLANET_ID, GameConstants.DATA_ID_RAW_FOOD, DEFAULT_FOOD_AMOUNT, BUILDING_MODULE_ID, ContainerType.STORAGE)).willReturn(storedResource);
+        given(storedResourceFactory.create(PLANET_ID, GameConstants.DATA_ID_RAW_FOOD, DEFAULT_FOOD_AMOUNT, BUILDING_MODULE_ID, ContainerType.STORAGE, null)).willReturn(storedResource);
 
         underTest.fillDefaultFood(gameData);
 
