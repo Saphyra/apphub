@@ -24,11 +24,15 @@ public interface Process extends Comparable<Process> {
             return;
         }
 
-        LogHolder.log.info("");
-        LogHolder.log.info("Working on {}", this);
-        work();
-        LogHolder.log.info("Finished working on {}", this);
-        LogHolder.log.info("");
+        try {
+            LogHolder.log.info("");
+            LogHolder.log.info("Working on {}", this);
+            work();
+            LogHolder.log.info("Finished working on {}", this);
+            LogHolder.log.info("");
+        } catch (Exception e) {
+            throw new RuntimeException("Error occurred during processing of " + this, e);
+        }
 
         gameProgressDiff.save(toModel());
     }
@@ -44,6 +48,6 @@ public interface Process extends Comparable<Process> {
     }
 
     @Slf4j
-    final class LogHolder
-    {}
+    final class LogHolder {
+    }
 }

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -59,7 +60,9 @@ class ResourceRequestProcessHelper {
             .getByReservedStorageId(reservedStorageId)
             .stream()
             .flatMap(resourceDeliveryRequest -> gameData.getConvoys().getByResourceDeliveryRequestId(resourceDeliveryRequest.getResourceDeliveryRequestId()).stream())
-            .map(convoy -> gameData.getStoredResources().findByContainerIdValidated(convoy.getConvoyId()))
+            .map(convoy -> gameData.getStoredResources().findByContainerId(convoy.getConvoyId()))//Convoy might be in init phase, it has not picked up resource yet -> no StoredResource
+            .filter(Optional::isPresent)
+            .map(Optional::get)
             .mapToInt(StoredResource::getAmount)
             .sum();
     }

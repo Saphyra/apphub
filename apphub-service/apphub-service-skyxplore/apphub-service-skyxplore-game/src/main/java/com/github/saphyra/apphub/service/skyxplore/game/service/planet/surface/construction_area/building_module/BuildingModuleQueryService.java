@@ -42,7 +42,7 @@ public class BuildingModuleQueryService {
                 )
                 .deconstruction(gameData.getDeconstructions()
                     .findByExternalReference(buildingModule.getBuildingModuleId())
-                    .map(deconstructionConverter::toResponse)
+                    .map(deconstruction -> deconstructionConverter.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_BUILDING_MODULE))
                     .orElse(null)
                 )
                 .build())

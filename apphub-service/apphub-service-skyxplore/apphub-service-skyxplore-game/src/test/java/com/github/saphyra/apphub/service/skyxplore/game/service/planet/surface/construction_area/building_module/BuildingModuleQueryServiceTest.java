@@ -101,7 +101,7 @@ class BuildingModuleQueryServiceTest {
         given(constructionConverter.toResponse(gameData, construction, ProcessType.CONSTRUCT_BUILDING_MODULE)).willReturn(constructionResponse);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
-        given(deconstructionConverter.toResponse(deconstruction)).willReturn(deconstructionResponse);
+        given(deconstructionConverter.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(deconstructionResponse);
 
         CustomAssertions.singleListAssertThat(underTest.getBuildingModulesOfConstructionArea(USER_ID, CONSTRUCTION_AREA_ID))
             .returns(BUILDING_MODULE_ID, BuildingModuleResponse::getBuildingModuleId)

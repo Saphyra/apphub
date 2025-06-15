@@ -55,27 +55,39 @@ public class StorageCapacityService {
     }
 
     public int getOccupiedDepotStorage(GameData gameData, UUID location, StorageType storageType) {
+        List<String> dataIdsByStorageType = resourceDataService.getByStorageType(storageType)
+            .stream()
+            .map(GameDataItem::getId)
+            .toList();
+
         return gameData.getBuildingModules()
             .getByLocation(location)
             .stream()
             //Filter for storage building module
             .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            //Filter for storage type
-            .filter(buildingModule -> storageBuildingModuleDataService.get(buildingModule.getDataId()).getStores().containsKey(storageType))
+            //Filter for depot
+            .filter(buildingModuleData -> DEPOT_BUILDING_MODULE_CATEGORIES.contains(storageBuildingModuleDataService.get(buildingModuleData.getDataId()).getCategory()))
             .flatMap(buildingModule -> gameData.getStoredResources().getByContainerId(buildingModule.getBuildingModuleId()).stream())
+            .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
             .mapToInt(StoredResource::getAmount)
             .sum();
     }
 
     public int getReservedDepotCapacity(GameData gameData, UUID location, StorageType storageType) {
+        List<String> dataIdsByStorageType = resourceDataService.getByStorageType(storageType)
+            .stream()
+            .map(GameDataItem::getId)
+            .toList();
+
         return gameData.getBuildingModules()
             .getByLocation(location)
             .stream()
             //Filter for storage building module
             .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            //Filter for storage type
-            .filter(buildingModule -> storageBuildingModuleDataService.get(buildingModule.getDataId()).getStores().containsKey(storageType))
+            //Filter for depot
+            .filter(buildingModuleData -> DEPOT_BUILDING_MODULE_CATEGORIES.contains(storageBuildingModuleDataService.get(buildingModuleData.getDataId()).getCategory()))
             .flatMap(buildingModule -> gameData.getReservedStorages().getByContainerId(buildingModule.getBuildingModuleId()).stream())
+            .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
             .mapToInt(ReservedStorage::getAmount)
             .sum();
     }
@@ -133,15 +145,19 @@ public class StorageCapacityService {
             .sum();
     }
 
-    public int getAllocatedResourceAmount(GameData gameData, UUID location, StorageType storageType) {
+    public int getDepotAllocatedResourceAmount(GameData gameData, UUID location, StorageType storageType) {
         List<String> dataIdsByStorageType = resourceDataService.getByStorageType(storageType)
             .stream()
             .map(GameDataItem::getId)
             .toList();
 
-        return gameData.getStoredResources()
+        return gameData.getBuildingModules()
             .getByLocation(location)
             .stream()
+            .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
+            .filter(buildingModule -> DEPOT_BUILDING_MODULE_CATEGORIES.contains(storageBuildingModuleDataService.get(buildingModule.getDataId()).getCategory()))
+            .map(BuildingModule::getBuildingModuleId)
+            .flatMap(buildingModuleId -> gameData.getStoredResources().getByContainerId(buildingModuleId).stream())
             .filter(storedResource -> nonNull(storedResource.getAllocatedBy()))
             .filter(storedResource -> dataIdsByStorageType.contains(storedResource.getDataId()))
             .mapToInt(StoredResource::getAmount)

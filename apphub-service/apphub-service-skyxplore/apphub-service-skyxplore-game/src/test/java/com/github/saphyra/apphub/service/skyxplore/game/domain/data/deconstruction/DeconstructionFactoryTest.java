@@ -2,8 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruct
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +35,5 @@ class DeconstructionFactoryTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getPriority()).isEqualTo(GameConstants.DEFAULT_PRIORITY);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(0);
     }
 }

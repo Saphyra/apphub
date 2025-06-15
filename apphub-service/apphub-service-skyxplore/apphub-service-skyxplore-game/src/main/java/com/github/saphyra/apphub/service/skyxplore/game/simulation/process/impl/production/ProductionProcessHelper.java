@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.UUID;
@@ -91,7 +91,7 @@ class ProductionProcessHelper {
         StorageType storageType = resourceDataService.get(resourceDataId)
             .getStorageType();
 
-        //Fill the containers with highest capacity first
+        //Fill the containers with the highest capacity first
         Queue<BiWrapper<UUID, Integer>> queue = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getEntity2(), o1.getEntity2()));
 
         buildingModuleService.getUsableContainers(gameData, constructionAreaId, storageType)
@@ -102,7 +102,12 @@ class ProductionProcessHelper {
 
         Map<UUID, Integer> result = new HashMap<>();
         while (amount > 0) {
-            BiWrapper<UUID, Integer> container = Objects.requireNonNull(queue.poll());
+            Optional<BiWrapper<UUID, Integer>> maybeContainer = Optional.ofNullable(queue.poll());
+            if (maybeContainer.isEmpty()) {
+                throw new IllegalStateException("There are no more containers to store " + amount + " of " + resourceDataId);
+            }
+
+            BiWrapper<UUID, Integer> container = maybeContainer.get();
             int toStore = Math.min(amount, container.getEntity2());
 
             result.put(container.getEntity1(), toStore);

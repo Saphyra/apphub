@@ -20,7 +20,6 @@ class DeconstructionConverter extends ConverterBase<DeconstructionEntity, Decons
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .currentWorkPoints(domain.getCurrentWorkPoints())
             .priority(domain.getPriority())
             .build();
     }
@@ -32,7 +31,6 @@ class DeconstructionConverter extends ConverterBase<DeconstructionEntity, Decons
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setCurrentWorkPoints(entity.getCurrentWorkPoints());
         model.setPriority(entity.getPriority());
         return model;
     }

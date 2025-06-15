@@ -12,12 +12,14 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.R
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.resource_delivery_request.ResourceDeliveryRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +64,13 @@ public class RouteCalculator {
         map.forEach((coordinate, weight) -> log.debug("Weight of coordinate {}: {}", coordinate, weight));
         int size = Math.toIntExact(Math.round(Math.sqrt(map.size())));
 
-        PriorityQueue<List<Coordinate>> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.stream().mapToInt(map::get).sum()));
+        PriorityQueue<List<Coordinate>> queue = new PriorityQueue<>(Comparator.comparingInt(o -> o.stream().mapToInt(value -> {
+            Integer integer = map.get(value);
+            if (isNull(integer)) {
+                throw new IllegalStateException("Map does not contain weight for " + value);
+            }
+            return integer;
+        }).sum()));
         queue.offer(List.of(startPoint));
         List<Coordinate> shortestRoute = null;
         int shortestRouteWeight = Integer.MAX_VALUE;
@@ -107,10 +115,25 @@ public class RouteCalculator {
     }
 
     private Map<Coordinate, Integer> getWeightedMap(GameData gameData, UUID location) {
-        return gameData.getSurfaces()
-            .getByPlanetId(location)
+        Collection<Surface> surfaces = gameData.getSurfaces()
+            .getByPlanetId(location);
+        Map<Coordinate, Integer> result = surfaces
             .stream()
             .collect(Collectors.toMap(surface -> gameData.getCoordinates().findByReferenceId(surface.getSurfaceId()), surface -> gameProperties.getSurface().getLogisticsWeight().get(surface.getSurfaceType())));
+
+        if (result.size() != surfaces.size()) {
+            log.warn("Surfaces: {}", surfaces);
+            log.warn("WeightedMap: {}", result);
+
+            List<Surface> missingSurfaces = surfaces.stream()
+                .filter(surface -> !result.containsKey(gameData.getCoordinates().findByReferenceId(surface.getSurfaceId())))
+                .peek(surface -> log.info("Missing coordinate: {}", surface))
+                .toList();
+
+            throw new IllegalStateException("Map size does not match. Missing surfaces: " + missingSurfaces);
+        }
+
+        return result;
     }
 
     private Coordinate getCoordinateByStoredResource(GameData gameData, StoredResource storedResource) {

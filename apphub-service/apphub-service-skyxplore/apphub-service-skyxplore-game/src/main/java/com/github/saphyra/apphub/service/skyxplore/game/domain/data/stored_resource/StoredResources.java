@@ -61,10 +61,16 @@ public class StoredResources extends Vector<StoredResource> {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by allocatedBy " + allocatedBy));
     }
 
+    //TODO unit test
     public StoredResource findByContainerIdValidated(UUID containerId) {
+        return findByContainerId(containerId)
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by containerId " + containerId));
+    }
+
+    //TODO unit test
+    public Optional<StoredResource> findByContainerId(UUID containerId) {
         return stream()
             .filter(storedResource -> storedResource.getContainerId().equals(containerId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by containerId " + containerId));
+            .findAny();
     }
 }

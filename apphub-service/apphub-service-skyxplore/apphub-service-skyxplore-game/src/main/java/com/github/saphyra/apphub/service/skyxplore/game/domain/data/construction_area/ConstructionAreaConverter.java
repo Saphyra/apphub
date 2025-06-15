@@ -50,7 +50,7 @@ public class ConstructionAreaConverter implements GameDataToModelConverter {
             )
             .deconstruction(gameData.getDeconstructions()
                 .findByExternalReference(constructionArea.getConstructionAreaId())
-                .map(deconstructionConverter::toResponse)
+                .map(deconstruction -> deconstructionConverter.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_CONSTRUCTION_AREA))
                 .orElse(null)
             )
             .build();

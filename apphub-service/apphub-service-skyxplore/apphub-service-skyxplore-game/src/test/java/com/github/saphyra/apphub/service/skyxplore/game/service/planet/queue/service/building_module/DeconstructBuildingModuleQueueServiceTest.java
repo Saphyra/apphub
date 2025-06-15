@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.building_module;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
@@ -17,6 +18,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,6 +59,9 @@ class DeconstructBuildingModuleQueueServiceTest {
 
     @Mock
     private CancelDeconstructionFacade cancelDeconstructionFacade;
+
+    @Mock
+    private WorkPointsUtil workPointsUtil;
 
     @InjectMocks
     private DeconstructBuildingModuleQueueService underTest;
@@ -107,7 +112,7 @@ class DeconstructBuildingModuleQueueServiceTest {
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(deconstruction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
+        given(workPointsUtil.getCompletedWorkPoints(gameData, DECONSTRUCTION_ID, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(CURRENT_WORK_POINTS);
         given(deconstruction.getPriority()).willReturn(PRIORITY);
         given(buildingModule.getDataId()).willReturn(DATA_ID);
 

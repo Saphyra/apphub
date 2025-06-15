@@ -14,6 +14,5 @@ import java.util.UUID;
 public class DeconstructionModel extends GameItem {
     private UUID externalReference;
     private UUID location;
-    private Integer currentWorkPoints;
     private Integer priority;
 }

@@ -104,7 +104,7 @@ class ConstructionAreaConverterTest {
         given(constructions.findByExternalReference(CONSTRUCTION_AREA_ID)).willReturn(Optional.of(construction));
         given(deconstructions.findByExternalReference(CONSTRUCTION_AREA_ID)).willReturn(Optional.of(deconstruction));
         given(constructionConverter.toResponse(gameData, construction, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)).willReturn(constructionResponse);
-        given(deconstructionConverter.toResponse(deconstruction)).willReturn(deconstructionResponse);
+        given(deconstructionConverter.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_CONSTRUCTION_AREA)).willReturn(deconstructionResponse);
 
         assertThat(underTest.toResponse(gameData, constructionArea))
             .returns(CONSTRUCTION_AREA_ID, SurfaceConstructionAreaResponse::getConstructionAreaId)

@@ -22,7 +22,7 @@ class PlanetStorageDetailQueryService {
             .capacity(storageCapacityService.getDepotCapacity(gameData, location, storageType))
             .reservedStorageAmount(storageCapacityService.getReservedDepotCapacity(gameData, location, storageType))
             .actualResourceAmount(storageCapacityService.getOccupiedDepotStorage(gameData, location, storageType))
-            .allocatedResourceAmount(storageCapacityService.getAllocatedResourceAmount(gameData, location, storageType))
+            .allocatedResourceAmount(storageCapacityService.getDepotAllocatedResourceAmount(gameData, location, storageType))
             .resourceDetails(resourceDetailsQueryService.getResourceDetails(gameData, location, storageType))
             .build();
     }

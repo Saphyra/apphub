@@ -30,4 +30,14 @@
             <column name="location" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-column-current_work_points-from-deconstruction" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="deconstruction" columnName="current_work_points"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="deconstruction">
+            <column name="current_work_points"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

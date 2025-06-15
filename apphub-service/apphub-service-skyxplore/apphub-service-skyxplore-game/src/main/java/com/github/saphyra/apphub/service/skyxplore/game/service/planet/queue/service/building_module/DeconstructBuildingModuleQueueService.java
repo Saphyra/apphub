@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.building_module;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,7 @@ class DeconstructBuildingModuleQueueService implements QueueService {
     private final GameDao gameDao;
     private final DeconstructionConverter deconstructionConverter;
     private final CancelDeconstructionFacade cancelDeconstructionFacade;
+    private final WorkPointsUtil workPointsUtil;
 
     @Override
     public QueueItemType getType() {
@@ -42,7 +45,7 @@ class DeconstructBuildingModuleQueueService implements QueueService {
                 .itemId(deconstruction.getDeconstructionId())
                 .type(getType())
                 .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
-                .currentWorkPoints(deconstruction.getCurrentWorkPoints())
+                .currentWorkPoints(workPointsUtil.getCompletedWorkPoints(gameData, deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCT_BUILDING_MODULE))
                 .priority(deconstruction.getPriority())
                 .data(Map.of("dataId", gameData.getBuildingModules().findByIdValidated(deconstruction.getExternalReference()).getDataId()))
                 .build())
