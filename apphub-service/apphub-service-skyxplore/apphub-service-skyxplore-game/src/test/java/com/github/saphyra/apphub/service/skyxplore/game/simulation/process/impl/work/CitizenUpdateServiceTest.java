@@ -14,6 +14,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skill;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.CitizenEfficiencyCalculator;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.CitizenUpdateService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

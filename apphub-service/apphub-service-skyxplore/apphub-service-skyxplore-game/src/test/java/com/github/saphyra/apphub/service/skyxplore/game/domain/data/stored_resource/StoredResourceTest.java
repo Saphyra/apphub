@@ -19,7 +19,7 @@ class StoredResourceTest {
             .dataId("asd")
             .amount(AMOUNT)
             .containerId(UUID.randomUUID())
-            .containerType(ContainerType.PRODUCER_OUTPUT)
+            .containerType(ContainerType.SURFACE)
             .build();
 
         underTest.decreaseAmount(MODIFICATION);
@@ -35,7 +35,7 @@ class StoredResourceTest {
             .dataId("asd")
             .amount(AMOUNT)
             .containerId(UUID.randomUUID())
-            .containerType(ContainerType.PRODUCER_OUTPUT)
+            .containerType(ContainerType.SURFACE)
             .build();
 
         underTest.increaseAmount(MODIFICATION);

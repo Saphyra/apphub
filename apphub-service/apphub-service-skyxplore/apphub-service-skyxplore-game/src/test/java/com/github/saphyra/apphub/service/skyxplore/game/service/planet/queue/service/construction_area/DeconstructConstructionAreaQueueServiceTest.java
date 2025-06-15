@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction_area;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
@@ -17,6 +18,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import com.github.saphyra.apphub.test.common.CustomAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -57,6 +59,9 @@ class DeconstructConstructionAreaQueueServiceTest {
 
     @Mock
     private CancelDeconstructionFacade cancelDeconstructionFacade;
+
+    @Mock
+    private WorkPointsUtil workPointsUtil;
 
     @InjectMocks
     private DeconstructConstructionAreaQueueService underTest;
@@ -103,11 +108,11 @@ class DeconstructConstructionAreaQueueServiceTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(constructionAreas.findByConstructionAreaId(BUILDING_MODULE_ID)).willReturn(Optional.of(constructionArea));
-        given(constructionAreas.findByConstructionAreaIdValidated(BUILDING_MODULE_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(BUILDING_MODULE_ID)).willReturn(constructionArea);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(deconstruction.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
+        given(workPointsUtil.getCompletedWorkPoints(gameData, DECONSTRUCTION_ID, ProcessType.DECONSTRUCT_CONSTRUCTION_AREA)).willReturn(CURRENT_WORK_POINTS);
         given(deconstruction.getPriority()).willReturn(PRIORITY);
         given(constructionArea.getDataId()).willReturn(DATA_ID);
 
@@ -125,7 +130,7 @@ class DeconstructConstructionAreaQueueServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();

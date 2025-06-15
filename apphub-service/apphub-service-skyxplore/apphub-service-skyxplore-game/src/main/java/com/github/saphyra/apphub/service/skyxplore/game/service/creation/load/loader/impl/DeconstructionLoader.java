@@ -37,7 +37,6 @@ public class DeconstructionLoader extends AutoLoader<DeconstructionModel, Decons
             .deconstructionId(model.getId())
             .externalReference(model.getExternalReference())
             .location(model.getLocation())
-            .currentWorkPoints(model.getCurrentWorkPoints())
             .priority(model.getPriority())
             .build();
     }

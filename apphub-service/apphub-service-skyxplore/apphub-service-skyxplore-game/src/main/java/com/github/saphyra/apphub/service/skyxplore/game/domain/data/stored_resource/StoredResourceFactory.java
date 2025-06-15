@@ -17,21 +17,27 @@ public class StoredResourceFactory {
     private final IdGenerator idGenerator;
     private final StoredResourceConverter storedResourceConverter;
 
-    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, UUID containerId, ContainerType containerType) {
-        return create(gameProgressDiff, gameData, location, dataId, 0, containerId, containerType);
+    public StoredResource save(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, UUID containerId, ContainerType containerType) {
+        return save(gameProgressDiff, gameData, location, dataId, 0, containerId, containerType);
     }
 
-    public StoredResource create(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
-        StoredResource result = create(location, dataId, amount, containerId, containerType);
+    public StoredResource save(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
+        return save(gameProgressDiff, gameData, location, dataId, amount, containerId, containerType, null);
+    }
+
+    public StoredResource save(GameProgressDiff gameProgressDiff, GameData gameData, UUID location, String dataId, int amount, UUID containerId, ContainerType containerType, UUID allocatedBy) {
+        StoredResource result = create(location, dataId, amount, containerId, containerType, allocatedBy);
 
         gameData.getStoredResources()
             .add(result);
         gameProgressDiff.save(storedResourceConverter.toModel(gameData.getGameId(), result));
 
+        log.info("Saved: {}", result);
+
         return result;
     }
 
-    public StoredResource create(UUID location, String dataId, int amount, UUID containerId, ContainerType containerType) {
+    public StoredResource create(UUID location, String dataId, int amount, UUID containerId, ContainerType containerType, UUID allocatedBy) {
         return StoredResource.builder()
             .storedResourceId(idGenerator.randomUuid())
             .location(location)
@@ -39,6 +45,7 @@ public class StoredResourceFactory {
             .amount(amount)
             .containerId(containerId)
             .containerType(containerType)
+            .allocatedBy(allocatedBy)
             .build();
     }
 }

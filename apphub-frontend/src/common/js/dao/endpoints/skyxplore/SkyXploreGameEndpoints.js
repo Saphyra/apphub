@@ -41,3 +41,4 @@ export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF
 export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES = new Endpoint(RequestMethod.GET, "/api/skyxplore/game/surface/construction-area/{constructionAreaId}/building-modules/{buildingModuleCategory}");
 export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE = new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/surface/construction-area/{constructionAreaId}/building-module");
 export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_CONSTRUCTION_OF_BUILDING_MODULE = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/surface/construction-area/building-module/{constructionId}/cancel-construction");
+export const SKYXPLORE_PROCESS_TICK = new Endpoint(RequestMethod.POST, "/api/skyxplore/game/tick");

@@ -23,9 +23,9 @@ class TerraformationCitizenAssignmentDataProvider implements CitizenAssignmentDa
     @Override
     public Object getData(GameData gameData, Process process) {
         Construction terraformation = gameData.getConstructions()
-            .findByConstructionIdValidated(process.getExternalReference());
+            .findByIdValidated(process.getExternalReference());
         SurfaceType originalSurfaceType = gameData.getSurfaces()
-            .findBySurfaceIdValidated(terraformation.getExternalReference())
+            .findByIdValidated(terraformation.getExternalReference())
             .getSurfaceType();
         return Map.of(
             "originalSurfaceType", originalSurfaceType,

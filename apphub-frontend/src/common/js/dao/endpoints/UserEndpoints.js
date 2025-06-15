@@ -23,6 +23,7 @@ export const USER_DATA_REMOVE_ROLE_FROM_ALL = new Endpoint(RequestMethod.DELETE,
 export const USER_DATA_GET_USER_ROLES = new Endpoint(RequestMethod.POST, "/api/user/data/roles");
 export const USER_DATA_ADD_ROLE = new Endpoint(RequestMethod.PUT, "/api/user/data/roles");
 export const USER_DATA_REMOVE_ROLE = new Endpoint(RequestMethod.DELETE, "/api/user/data/roles");
+export const IS_ADMIN = new Endpoint(RequestMethod.GET, "/api/user/admin");
 
 export const USER_DATA_GET_DISABLED_ROLES = new Endpoint(RequestMethod.GET, "/api/user/data/roles/disabled");
 export const USER_DATA_ENABLE_ROLE = new Endpoint(RequestMethod.DELETE, "/api/user/data/roles/{role}");

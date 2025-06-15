@@ -13,7 +13,5 @@ interface ReservedStorageRepository extends CrudRepository<ReservedStorageEntity
     @Query("DELETE FROM ReservedStorageEntity e WHERE e.gameId = :gameId")
     void deleteByGameId(@Param("gameId") String gameId);
 
-    List<ReservedStorageEntity> getByLocation(String location);
-
     List<ReservedStorageEntity> getByGameId(String gameId, PageRequest pageRequest);
 }

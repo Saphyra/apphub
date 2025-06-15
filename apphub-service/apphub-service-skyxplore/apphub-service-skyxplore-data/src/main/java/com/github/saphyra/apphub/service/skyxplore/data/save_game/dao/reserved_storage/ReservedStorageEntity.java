@@ -18,7 +18,8 @@ import jakarta.persistence.Table;
 class ReservedStorageEntity {
     @Id
     private String reservedStorageId;
-    private String location;
+    private String containerId;
+    private String containerType;
     private String gameId;
     private String externalReference;
     private String dataId;

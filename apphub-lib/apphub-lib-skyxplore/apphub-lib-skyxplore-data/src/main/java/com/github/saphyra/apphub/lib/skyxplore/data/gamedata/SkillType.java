@@ -11,5 +11,6 @@ public enum SkillType {
     MINING,
     PILOTING,
     SUPPLYING,
-    STAMINA
+    STAMINA,
+    LOGISTICS,
 }

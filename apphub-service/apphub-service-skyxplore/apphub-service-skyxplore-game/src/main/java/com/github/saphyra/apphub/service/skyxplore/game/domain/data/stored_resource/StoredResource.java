@@ -19,13 +19,15 @@ public class StoredResource {
     private final UUID location;
 
     @NonNull
-    private final UUID containerId;
+    private UUID containerId;
 
     @NonNull
-    private final ContainerType containerType;
+    private  ContainerType containerType;
 
     @NonNull
     private final String dataId;
+
+    private UUID allocatedBy;
 
     @NonNull
     private Integer amount;

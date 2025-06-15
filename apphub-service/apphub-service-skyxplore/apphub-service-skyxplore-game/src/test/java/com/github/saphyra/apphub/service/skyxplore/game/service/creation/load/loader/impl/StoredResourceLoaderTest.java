@@ -27,6 +27,7 @@ class StoredResourceLoaderTest {
     private static final String DATA_ID = "data-id";
     private static final Integer AMOUNT = 256;
     private static final UUID CONTAINER_ID = UUID.randomUUID();
+    private static final UUID ALLOCATED_BY = UUID.randomUUID();
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -73,6 +74,7 @@ class StoredResourceLoaderTest {
         given(model.getAmount()).willReturn(AMOUNT);
         given(model.getContainerId()).willReturn(CONTAINER_ID);
         given(model.getContainerType()).willReturn(ContainerType.SURFACE);
+        given(model.getAllocatedBy()).willReturn(ALLOCATED_BY);
 
         StoredResource result = underTest.convert(model);
 
@@ -82,5 +84,6 @@ class StoredResourceLoaderTest {
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
         assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
         assertThat(result.getContainerType()).isEqualTo(ContainerType.SURFACE);
+        assertThat(result.getAllocatedBy()).isEqualTo(ALLOCATED_BY);
     }
 }

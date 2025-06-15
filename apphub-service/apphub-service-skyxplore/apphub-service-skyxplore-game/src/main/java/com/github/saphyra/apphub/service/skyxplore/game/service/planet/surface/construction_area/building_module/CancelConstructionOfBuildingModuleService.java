@@ -41,10 +41,10 @@ public class CancelConstructionOfBuildingModuleService {
         GameData gameData = game.getData();
 
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         BuildingModule buildingModule = gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(construction.getExternalReference());
+            .findByIdValidated(construction.getExternalReference());
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(construction.getLocation()).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel construction of constructionArea on planet " + constructionId);

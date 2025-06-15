@@ -55,7 +55,7 @@ class DeconstructionsTest {
 
         underTest.add(deconstruction1);
 
-        assertThat(underTest.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).isEqualTo(deconstruction1);
+        assertThat(underTest.findByIdValidated(DECONSTRUCTION_ID)).isEqualTo(deconstruction1);
     }
 
     @Test
@@ -64,7 +64,7 @@ class DeconstructionsTest {
 
         underTest.add(deconstruction1);
 
-        Throwable ex = catchThrowable(() -> underTest.findByDeconstructionIdValidated(DECONSTRUCTION_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(DECONSTRUCTION_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }

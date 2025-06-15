@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +14,16 @@ import java.util.UUID;
 public class ConstructionFactory {
     private final IdGenerator idGenerator;
 
-    public Construction create(UUID externalReference, ConstructionType type, UUID location, int requiredWorkPoints) {
-        return create(externalReference, type, location, requiredWorkPoints, null);
+    public Construction create(UUID externalReference, UUID location, int requiredWorkPoints) {
+        return create(externalReference, location, requiredWorkPoints, null);
     }
 
-    public Construction create(UUID externalReference, ConstructionType type, UUID location, int requiredWorkPoints, String data) {
+    public Construction create(UUID externalReference, UUID location, int requiredWorkPoints, String data) {
         return Construction.builder()
             .constructionId(idGenerator.randomUuid())
             .externalReference(externalReference)
-            .constructionType(type)
             .location(location)
             .requiredWorkPoints(requiredWorkPoints)
-            .currentWorkPoints(0)
             .priority(GameConstants.DEFAULT_PRIORITY)
             .data(data)
             .build();

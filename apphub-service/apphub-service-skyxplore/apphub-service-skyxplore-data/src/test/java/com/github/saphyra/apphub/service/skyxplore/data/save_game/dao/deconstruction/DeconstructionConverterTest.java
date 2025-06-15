@@ -18,7 +18,6 @@ class DeconstructionConverterTest {
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final Integer CURRENT_WORK_POINTS = 243;
     private static final Integer PRIORITY = 24;
     private static final String DECONSTRUCTION_ID_STRING = "deconstruction-id";
     private static final String GAME_ID_STRING = "game-id";
@@ -39,7 +38,6 @@ class DeconstructionConverterTest {
         model.setGameId(GAME_ID);
         model.setExternalReference(EXTERNAL_REFERENCE);
         model.setLocation(LOCATION);
-        model.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         model.setPriority(PRIORITY);
 
         given(uuidConverter.convertDomain(DECONSTRUCTION_ID)).willReturn(DECONSTRUCTION_ID_STRING);
@@ -53,7 +51,6 @@ class DeconstructionConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE_STRING);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
     }
 
@@ -64,7 +61,6 @@ class DeconstructionConverterTest {
             .gameId(GAME_ID_STRING)
             .externalReference(EXTERNAL_REFERENCE_STRING)
             .location(LOCATION_STRING)
-            .currentWorkPoints(CURRENT_WORK_POINTS)
             .priority(PRIORITY)
             .build();
 
@@ -79,7 +75,6 @@ class DeconstructionConverterTest {
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
     }
 }

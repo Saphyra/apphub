@@ -24,7 +24,6 @@ class DeconstructionLoaderTest {
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final Integer CURRENT_WORK_POINTS = 2354;
     private static final Integer PRIORITY = 3465;
 
     @Mock
@@ -69,7 +68,6 @@ class DeconstructionLoaderTest {
         given(model.getId()).willReturn(DECONSTRUCTION_ID);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getLocation()).willReturn(LOCATION);
-        given(model.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
         given(model.getPriority()).willReturn(PRIORITY);
 
         Deconstruction result = underTest.convert(model);
@@ -77,7 +75,6 @@ class DeconstructionLoaderTest {
         assertThat(result.getDeconstructionId()).isEqualTo(DECONSTRUCTION_ID);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
     }
 }
