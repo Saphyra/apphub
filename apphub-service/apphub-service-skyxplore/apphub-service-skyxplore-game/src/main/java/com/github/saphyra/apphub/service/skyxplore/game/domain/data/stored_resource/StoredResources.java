@@ -14,19 +14,19 @@ import java.util.stream.Collectors;
 import static java.util.Objects.nonNull;
 
 public class StoredResources extends Vector<StoredResource> {
-    public List<StoredResource> getByLocation(UUID location) {
+    public synchronized List<StoredResource> getByLocation(UUID location) {
         return stream()
             .filter(storedResource -> storedResource.getLocation().equals(location))
             .collect(Collectors.toList());
     }
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return new Gson().toJson(this);
     }
 
     //TODO unit test
-    public List<StoredResource> getByLocationAndDataId(UUID location, String dataId) {
+    public synchronized List<StoredResource> getByLocationAndDataId(UUID location, String dataId) {
         return stream()
             .filter(storedResource -> storedResource.getLocation().equals(location))
             .filter(storedResource -> storedResource.getDataId().equals(dataId))
@@ -34,21 +34,21 @@ public class StoredResources extends Vector<StoredResource> {
     }
 
     //TODO unit test
-    public List<StoredResource> getByContainerId(UUID containerId) {
+    public synchronized List<StoredResource> getByContainerId(UUID containerId) {
         return stream()
             .filter(storedResource -> storedResource.getContainerId().equals(containerId))
             .toList();
     }
 
     //TODO unit test
-    public List<StoredResource> getByAllocatedBy(UUID externalReference) {
+    public synchronized List<StoredResource> getByAllocatedBy(UUID externalReference) {
         return stream()
             .filter(storedResource -> externalReference.equals(storedResource.getAllocatedBy()))
             .toList();
     }
 
     //TODO unit test
-    public Optional<StoredResource> findByAllocatedBy(UUID allocatedBy) {
+    public synchronized Optional<StoredResource> findByAllocatedBy(UUID allocatedBy) {
         return stream()
             .filter(storedResource -> nonNull(storedResource.getAllocatedBy()))
             .filter(storedResource -> storedResource.getAllocatedBy().equals(allocatedBy))
@@ -56,19 +56,19 @@ public class StoredResources extends Vector<StoredResource> {
     }
 
     //TODO unit test
-    public StoredResource findByAllocatedByValidated(UUID allocatedBy) {
+    public synchronized StoredResource findByAllocatedByValidated(UUID allocatedBy) {
         return findByAllocatedBy(allocatedBy)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by allocatedBy " + allocatedBy));
     }
 
     //TODO unit test
-    public StoredResource findByContainerIdValidated(UUID containerId) {
+    public synchronized StoredResource findByContainerIdValidated(UUID containerId) {
         return findByContainerId(containerId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "StoredResource not found by containerId " + containerId));
     }
 
     //TODO unit test
-    public Optional<StoredResource> findByContainerId(UUID containerId) {
+    public synchronized Optional<StoredResource> findByContainerId(UUID containerId) {
         return stream()
             .filter(storedResource -> storedResource.getContainerId().equals(containerId))
             .findAny();

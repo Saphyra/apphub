@@ -57,7 +57,7 @@ class StorageSettingTickTask implements TickTask {
             .sum();
 
         if (storedAmount >= storageSetting.getTargetAmount()) {
-            log.debug("There is enough {} at {}", storageSetting.getDataId(), storageSetting.getLocation());
+            log.info("There is enough {} at {}", storageSetting.getDataId(), storageSetting.getLocation());
             return;
         }
 
@@ -69,12 +69,13 @@ class StorageSettingTickTask implements TickTask {
             .sum();
 
         if (orderedAmount + storedAmount >= storageSetting.getTargetAmount()) {
-            log.debug("Resources already ordered.");
+            log.info("Resources already ordered.");
             return;
         }
 
         int missingAmount = storageSetting.getTargetAmount() - orderedAmount;
         Map<UUID, Integer> containers = getContainers(gameData, storageSetting.getLocation(), storageSetting.getDataId(), missingAmount);
+        log.info("Ordering {} of {} to containers {}", missingAmount, storageSetting.getDataId(), containers);
 
         containers.forEach((containerId, amount) -> storageSettingProcessFactory.save(game, storageSetting, containerId, amount));
     }

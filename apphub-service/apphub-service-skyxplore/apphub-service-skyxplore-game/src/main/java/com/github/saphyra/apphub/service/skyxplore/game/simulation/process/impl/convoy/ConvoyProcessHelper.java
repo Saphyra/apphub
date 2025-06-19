@@ -113,7 +113,7 @@ class ConvoyProcessHelper {
         SurfaceType surfaceType = gameData.getSurfaces()
             .getByPlanetId(location)
             .stream()
-            .filter(surface -> gameData.getCoordinates().findByReferenceId(surface.getSurfaceId()).equals(referredCoordinate.getCoordinate()))
+            .filter(surface -> gameData.getCoordinates().findByReferenceIdValidated(surface.getSurfaceId()).equals(referredCoordinate.getCoordinate()))
             .findAny()
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found on planet " + location + " with coordinate " + referredCoordinate.getCoordinate()))
             .getSurfaceType();

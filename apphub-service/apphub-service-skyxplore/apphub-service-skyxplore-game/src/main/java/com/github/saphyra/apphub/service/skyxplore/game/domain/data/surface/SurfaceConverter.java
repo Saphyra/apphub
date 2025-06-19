@@ -52,7 +52,7 @@ public class SurfaceConverter implements GameDataToModelConverter {
 
     public SurfaceResponse toResponse(GameData gameData, Surface surface) {
         Coordinate coordinate = gameData.getCoordinates()
-            .findByReferenceId(surface.getSurfaceId());
+            .findByReferenceIdValidated(surface.getSurfaceId());
 
         SurfaceConstructionAreaResponse buildingResponse = gameData.getConstructionAreas()
             .findBySurfaceId(surface.getSurfaceId())

@@ -49,7 +49,7 @@ public class AdjacentRandomEmptySurfaceProviderTest {
     @Test
     public void surfaceFound() {
         given(gameData.getCoordinates()).willReturn(coordinates);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
+        given(coordinates.findByReferenceIdValidated(SURFACE_ID)).willReturn(coordinate);
         given(adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, Arrays.asList(surface2), gameData)).willReturn(Optional.of(surface2));
         given(surface1.getSurfaceId()).willReturn(SURFACE_ID);
 
@@ -61,7 +61,7 @@ public class AdjacentRandomEmptySurfaceProviderTest {
     @Test
     public void surfaceNotFound() {
         given(gameData.getCoordinates()).willReturn(coordinates);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
+        given(coordinates.findByReferenceIdValidated(SURFACE_ID)).willReturn(coordinate);
         given(surface1.getSurfaceId()).willReturn(SURFACE_ID);
         given(randomEmptySurfaceProvider.getEmptyDesertSurface(List.of(surface2), gameData)).willReturn(surface2);
 

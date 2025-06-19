@@ -89,6 +89,7 @@ public class ResourceRequestProcess implements Process {
         }
 
         if (gameData.getProcesses().getByExternalReference(processId).stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
+            log.info("ResourceRequest is fulfilled.");
             status = ProcessStatus.DONE;
         }
     }

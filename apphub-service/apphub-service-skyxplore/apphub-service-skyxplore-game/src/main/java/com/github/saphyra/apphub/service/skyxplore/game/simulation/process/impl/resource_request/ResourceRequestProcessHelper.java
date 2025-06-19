@@ -91,6 +91,6 @@ class ResourceRequestProcessHelper {
         ProductionRequest productionRequest = productionRequestFactory.save(game.getProgressDiff(), game.getData(), reservedStorageId, requestedAmount);
 
         productionDispatcherProcessFactory.save(game, location, processId, productionRequest.getProductionRequestId());
-        log.info("{} created.", productionRequest);
+        log.info("Created: {}.", productionRequest);
     }
 }

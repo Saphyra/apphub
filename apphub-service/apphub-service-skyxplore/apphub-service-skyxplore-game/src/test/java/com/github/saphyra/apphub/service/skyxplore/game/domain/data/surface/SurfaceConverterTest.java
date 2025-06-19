@@ -96,7 +96,7 @@ class SurfaceConverterTest {
             .build();
 
         given(gameData.getCoordinates()).willReturn(coordinates);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
+        given(coordinates.findByReferenceIdValidated(SURFACE_ID)).willReturn(coordinate);
 
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(constructionArea));

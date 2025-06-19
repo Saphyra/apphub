@@ -58,6 +58,7 @@ public class ResourceRequestProcessFactory implements ProcessFactory {
         game.getData()
             .getProcesses()
             .add(process);
+        log.info("Saved: {}", process);
 
         return process;
     }

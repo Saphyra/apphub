@@ -11,7 +11,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ConvoyCapacityCalculator {
+    private static final int MAX_CONVOY_CAPACITY = 20;
+
     public int calculate(GameData gameData, UUID location, int requestedCapacity) {
-        return 20;
+        return Math.min(requestedCapacity, MAX_CONVOY_CAPACITY);
     }
 }

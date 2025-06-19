@@ -60,7 +60,7 @@ class ProductionDispatcherProcessHelper {
 
             int toDispatch = Math.min(missingAmount, constructionArea.getEntity2());
 
-            dispatchToConstructionArea(game, location, processId, productionRequest, constructionArea.getEntity1(), resourceDataId, constructionArea.getEntity2());
+            dispatchToConstructionArea(game, location, processId, productionRequest, constructionArea.getEntity1(), resourceDataId, toDispatch);
 
             dispatched += toDispatch;
             missingAmount -= toDispatch;

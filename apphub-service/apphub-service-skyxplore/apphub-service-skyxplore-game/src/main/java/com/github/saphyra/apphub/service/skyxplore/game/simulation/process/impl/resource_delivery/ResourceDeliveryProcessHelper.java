@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allo
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.convoy.Convoy;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.convoy.ConvoyFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy.ConvoyProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy.ConvoyProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -39,16 +38,8 @@ class ResourceDeliveryProcessHelper {
         return gameData.getConvoys()
             .getByResourceDeliveryRequestId(resourceDeliveryRequestId)
             .stream()
-            .mapToInt(convoy -> calculateResourceCountForConvoy(gameData, convoy))
+            .mapToInt(Convoy::getCapacity)
             .sum();
-    }
-
-    private int calculateResourceCountForConvoy(GameData gameData, Convoy convoy) {
-        StoredResources storedResources = gameData.getStoredResources();
-        int toDeliver = storedResources.findByAllocatedBy(convoy.getConvoyId())
-            .orElseGet(() -> storedResources.findByAllocatedByValidated(convoy.getResourceDeliveryRequestId()))
-            .getAmount();
-        return Math.min(toDeliver, convoy.getCapacity());
     }
 
     private int calculateDeliveryNeeded(GameData gameData, UUID resourceDeliveryRequestId) {
