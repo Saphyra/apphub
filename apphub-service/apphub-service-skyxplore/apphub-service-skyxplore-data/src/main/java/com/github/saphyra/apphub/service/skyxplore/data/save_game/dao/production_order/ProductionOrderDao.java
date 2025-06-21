@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class ProductionOrderDao extends AbstractDao<ProductionOrderEntity, ProductionOrderModel, String, ProductionOrderRepository> {
     private final UuidConverter uuidConverter;
 

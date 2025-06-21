@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ResourceDeliveryRequestDao extends AbstractDao<ResourceDeliveryRequestEntity, ResourceDeliveryRequestModel, String, ResourceDeliveryRequestRepository> {
     private final UuidConverter uuidConverter;
 

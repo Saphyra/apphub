@@ -29,7 +29,7 @@ class TerraformationProcessConditions {
             .findByIdValidated(construction.getExternalReference())
             .getSurfaceType();
         Map<String, Integer> requiredResources = terraformingPossibilitiesService.get(currentSurfaceType)
-            .findBySurfaceType(newSurfaceType)
+            .findBySurfaceTypeValidated(newSurfaceType)
             .getConstructionRequirements()
             .getRequiredResources();
 

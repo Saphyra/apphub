@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-//TODO unit test
 interface ConvoyRepository extends CrudRepository<ConvoyEntity, String> {
     @Modifying
     @Query("DELETE FROM ConvoyEntity e WHERE e.gameId = :gameId")

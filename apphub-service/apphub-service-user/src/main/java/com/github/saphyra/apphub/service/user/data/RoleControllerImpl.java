@@ -69,7 +69,6 @@ class RoleControllerImpl implements RoleController {
     }
 
     @Override
-    //TODO unit test
     public OneParamResponse<Boolean> isUserAdmin(AccessTokenHeader accessTokenHeader) {
         log.info("Checking if user {} is admin", accessTokenHeader.getUserId());
 

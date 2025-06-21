@@ -8,10 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-//TODO unit test
 interface ResourceDeliveryRequestRepository extends CrudRepository<ResourceDeliveryRequestEntity, String> {
-    @Modifying
     @Query("DELETE FROM ResourceDeliveryRequestEntity e WHERE e.gameId = :gameId")
+    @Modifying
     void deleteByGameId(@Param("gameId") String gameId);
 
     List<ResourceDeliveryRequestEntity> getByGameId(String gameId, PageRequest pageRequest);

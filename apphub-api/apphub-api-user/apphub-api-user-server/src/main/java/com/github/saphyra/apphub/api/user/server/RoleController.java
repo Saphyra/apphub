@@ -58,6 +58,5 @@ public interface RoleController {
     List<String> getRolesForAllRestrictedRoles();
 
     @GetMapping(UserEndpoints.IS_ADMIN)
-    //TODO API test
     OneParamResponse<Boolean> isUserAdmin(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

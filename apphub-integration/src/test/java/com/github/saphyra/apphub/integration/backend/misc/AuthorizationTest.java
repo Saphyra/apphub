@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend;
+package com.github.saphyra.apphub.integration.backend.misc;
 
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;

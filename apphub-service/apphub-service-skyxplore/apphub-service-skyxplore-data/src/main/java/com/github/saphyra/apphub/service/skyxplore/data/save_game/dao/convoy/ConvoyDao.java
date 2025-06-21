@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class ConvoyDao extends AbstractDao<ConvoyEntity, ConvoyModel, String, ConvoyRepository> {
     private final UuidConverter uuidConverter;
 

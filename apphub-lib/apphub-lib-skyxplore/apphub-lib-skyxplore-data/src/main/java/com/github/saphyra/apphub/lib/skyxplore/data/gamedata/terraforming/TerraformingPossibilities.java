@@ -12,8 +12,7 @@ public class TerraformingPossibilities extends ArrayList<TerraformingPossibility
         addAll(terraformingPossibilities);
     }
 
-    //TODO unit test
-    public TerraformingPossibility findBySurfaceType(SurfaceType surfaceType) {
+    public TerraformingPossibility findBySurfaceTypeValidated(SurfaceType surfaceType) {
         return stream()
             .filter(terraformingPossibility -> terraformingPossibility.getSurfaceType() == surfaceType)
             .findAny()

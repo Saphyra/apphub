@@ -69,8 +69,12 @@ public class ManualTickProcessingTest extends SeleniumTest {
             .until(() -> SkyXplorePlanetActions.findBySurfaceId(driver, surfaceId).isPresent())
             .assertTrue("Surface is not loaded.");
 
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 200; i++) {
             SkyXploreGameActions.processTick(driver);
+
+            if (!SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId).isConstructionInProgress()) {
+                break;
+            }
         }
 
         assertThat(SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId))

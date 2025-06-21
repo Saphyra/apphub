@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ResourceDeliveryRequestConverter extends ConverterBase<ResourceDeliveryRequestEntity, ResourceDeliveryRequestModel> {
     private final UuidConverter uuidConverter;
 

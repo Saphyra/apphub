@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderConverter extends ConverterBase<ProductionOrderEntity, ProductionOrderModel> {
     private final UuidConverter uuidConverter;
 
