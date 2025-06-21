@@ -224,6 +224,7 @@ const SkyXploreGamePage = () => {
                 (isAdmin ?
                     <Button
                         key="tick"
+                        id="skyxplore-game-process-tick-button"
                         label={localizationHandler.get("process-tick")}
                         onclick={processTick}
                     />

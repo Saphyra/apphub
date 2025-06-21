@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -108,18 +106,5 @@ public class CollectionUtils {
             .collect(Collectors.toMap(keyMapper, valueMapper));
 
         return new OptionalHashMap<>(map);
-    }
-
-    //TODO unit test
-    public static <K, V> Map<K, V> sortMapByValue(Map<K, V> map, Comparator<V> comparator) {
-        List<Map.Entry<K, V>> list = new ArrayList<>(map.entrySet());
-        list.sort((o1, o2) -> comparator.compare(o1.getValue(), o2.getValue()));
-
-        Map<K, V> result = new LinkedHashMap<>();
-        for (Map.Entry<K, V> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-
-        return result;
     }
 }

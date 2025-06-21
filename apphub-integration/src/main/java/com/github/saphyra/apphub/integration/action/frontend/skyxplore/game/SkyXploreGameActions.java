@@ -8,6 +8,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.Optional;
+
 @Slf4j
 public class SkyXploreGameActions {
     public static boolean isGameLoaded(WebDriver driver) {
@@ -72,5 +74,15 @@ public class SkyXploreGameActions {
 
     public static boolean isPausedNotHost(WebDriver driver) {
         return WebElementUtils.isPresent(driver, By.id("skyxplore-game-paused"));
+    }
+
+    public static Optional<WebElement> getProcessTickButton(WebDriver driver) {
+        return WebElementUtils.getIfPresent(() -> driver.findElement(By.id("skyxplore-game-process-tick-button")));
+    }
+
+    public static void processTick(WebDriver driver) {
+        getProcessTickButton(driver)
+            .orElseThrow(() -> new RuntimeException("ProcessTick button is not found."))
+            .click();
     }
 }
