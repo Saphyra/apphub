@@ -1,0 +1,23 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-production_order" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="production_order"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="production_order">
+            <column name="production_order_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="production_request_id" type="varchar(37)"/>
+            <column name="construction_area_id" type="varchar(37)"/>
+            <column name="resource_data_id" type="text"/>
+            <column name="requested_amount" type="integer"/>
+            <column name="started_amount" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="production_order" columnNames="production_order_id" constraintName="production_order-pk"/>
+    </changeSet>
+</databaseChangeLog>

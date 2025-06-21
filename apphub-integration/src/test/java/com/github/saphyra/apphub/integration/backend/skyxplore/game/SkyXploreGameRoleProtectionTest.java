@@ -97,9 +97,31 @@ public class SkyXploreGameRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
     }
 
+    @Test(dataProvider = "adminRoleProvider", groups = {"be", "skyxplore"})
+    public void gameAdminRoleProtection(String role) {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+
+        DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+
+        SleepUtil.sleep(3000);
+
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getProcessTickResponse(getServerPort(), accessTokenId));
+    }
+
     @DataProvider(parallel = true)
     public Object[][] roleProvider() {
         return new Object[][]{
+            new Object[]{Constants.ROLE_SKYXPLORE},
+            new Object[]{Constants.ROLE_ACCESS}
+        };
+    }
+
+    @DataProvider(parallel = true)
+    public Object[][] adminRoleProvider() {
+        return new Object[][]{
+            new Object[]{Constants.ROLE_ADMIN},
             new Object[]{Constants.ROLE_SKYXPLORE},
             new Object[]{Constants.ROLE_ACCESS}
         };

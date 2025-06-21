@@ -21,6 +21,7 @@ public class StoredResourceConverterTest {
     private static final UUID CONTAINER_ID = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final int AMOUNT = 4322;
+    private static final UUID ALLOCATED_BY = UUID.randomUUID();
 
     @InjectMocks
     private StoredResourceConverter underTest;
@@ -34,6 +35,7 @@ public class StoredResourceConverterTest {
             .amount(AMOUNT)
             .containerId(CONTAINER_ID)
             .containerType(ContainerType.SURFACE)
+            .allocatedBy(ALLOCATED_BY)
             .build();
 
         List<StoredResourceModel> result = underTest.toModel(GAME_ID, List.of(storedResource));
@@ -46,5 +48,6 @@ public class StoredResourceConverterTest {
         assertThat(result.get(0).getAmount()).isEqualTo(AMOUNT);
         assertThat(result.get(0).getContainerId()).isEqualTo(CONTAINER_ID);
         assertThat(result.get(0).getContainerType()).isEqualTo(ContainerType.SURFACE);
+        assertThat(result.get(0).getAllocatedBy()).isEqualTo(ALLOCATED_BY);
     }
 }

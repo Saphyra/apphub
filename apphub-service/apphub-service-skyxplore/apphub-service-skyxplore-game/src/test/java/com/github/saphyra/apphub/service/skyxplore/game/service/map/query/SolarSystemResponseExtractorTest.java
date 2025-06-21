@@ -72,7 +72,7 @@ class SolarSystemResponseExtractorTest {
         given(visibilityFacade.isVisible(gameData, USER_ID, VISIBLE_SOLAR_SYSTEM_ID)).willReturn(true);
         given(visibilityFacade.isVisible(gameData, USER_ID, HIDDEN_SOLAR_SYSTEM_ID)).willReturn(false);
 
-        given(coordinates.findByReferenceId(VISIBLE_SOLAR_SYSTEM_ID)).willReturn(coordinate);
+        given(coordinates.findByReferenceIdValidated(VISIBLE_SOLAR_SYSTEM_ID)).willReturn(coordinate);
         given(visibleSolarSystem.getCustomNames()).willReturn(CollectionUtils.singleValueMap(USER_ID, CUSTOM_NAME, new OptionalHashMap<>()));
         given(planets.getBySolarSystemId(VISIBLE_SOLAR_SYSTEM_ID)).willReturn(List.of(planet));
 

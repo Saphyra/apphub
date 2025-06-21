@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
@@ -27,7 +26,6 @@ class ConstructionLoaderTest {
     private static final UUID LOCATION = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 457;
     private static final String DATA = "data";
-    private static final Integer CURRENT_WORK_POINTS = 3645;
     private static final Integer PRIORITY = 3547;
 
     @Mock
@@ -71,22 +69,18 @@ class ConstructionLoaderTest {
     void convert() {
         given(model.getId()).willReturn(CONSTRUCTION_ID);
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(model.getConstructionType()).willReturn(ConstructionType.CONSTRUCTION);
         given(model.getLocation()).willReturn(LOCATION);
         given(model.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(model.getData()).willReturn(DATA);
-        given(model.getCurrentWorkPoints()).willReturn(CURRENT_WORK_POINTS);
         given(model.getPriority()).willReturn(PRIORITY);
 
         Construction result = underTest.convert(model);
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
-        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getData()).isEqualTo(DATA);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
     }
 }

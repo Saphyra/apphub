@@ -67,13 +67,11 @@ public class DeconstructConstructionAreaProcess implements Process {
 
     private Deconstruction findDeconstruction() {
         return gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(deconstructionId);
+            .findByIdValidated(deconstructionId);
     }
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         DeconstructConstructionAreaProcessConditions conditions = applicationContextProxy.getBean(DeconstructConstructionAreaProcessConditions.class);
         DeconstructConstructionAreaProcessHelper helper = applicationContextProxy.getBean(DeconstructConstructionAreaProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
@@ -90,7 +88,7 @@ public class DeconstructConstructionAreaProcess implements Process {
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(game.getProgressDiff(), gameData, processId, deconstructionId, location);
+            helper.startWork(game, processId, deconstructionId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {

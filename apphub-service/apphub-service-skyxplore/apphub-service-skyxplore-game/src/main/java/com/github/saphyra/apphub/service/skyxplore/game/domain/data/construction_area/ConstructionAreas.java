@@ -24,7 +24,7 @@ public class ConstructionAreas extends Vector<ConstructionArea> {
             .findAny();
     }
 
-    public ConstructionArea findByConstructionAreaIdValidated(UUID constructionAreaId) {
+    public ConstructionArea findByIdValidated(UUID constructionAreaId) {
         return findByConstructionAreaId(constructionAreaId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ConstructionArea not found by id " + constructionAreaId));
     }

@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.user.data.service.role.AddRoleToAllProperties;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionService;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleQueryService;
@@ -114,5 +116,15 @@ public class RoleControllerImplTest {
         List<String> result = underTest.getRolesForAllRestrictedRoles();
 
         assertThat(result).containsExactly(ROLE);
+    }
+
+    @Test
+    void isUserAdmin() {
+        given(accessTokenHeader.getRoles())
+            .willReturn(List.of(Constants.ROLE_ADMIN))
+            .willReturn(List.of());
+
+        assertThat(underTest.isUserAdmin(accessTokenHeader)).returns(true, OneParamResponse::getValue);
+        assertThat(underTest.isUserAdmin(accessTokenHeader)).returns(false, OneParamResponse::getValue);
     }
 }

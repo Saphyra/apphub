@@ -102,7 +102,7 @@ public class CancelTerraformationServiceTest {
 
     @Test
     void cancelTerraformationQueueItem_forbiddenOperation() {
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(planet.getOwner()).willReturn(UUID.randomUUID());
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.cancelTerraformationQueueItem(USER_ID, CONSTRUCTION_ID));
@@ -110,7 +110,7 @@ public class CancelTerraformationServiceTest {
 
     @Test
     public void cancelTerraformationQueueItem() {
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(game.getProgressDiff()).willReturn(progressDiff);
 

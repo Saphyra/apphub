@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-convoy" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="skyxplore_game" tableName="convoy"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="skyxplore_game" tableName="convoy">
+            <column name="convoy_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="game_id" type="varchar(37)"/>
+            <column name="resource_delivery_request_id" type="varchar(37)"/>
+            <column name="capacity" type="integer"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="skyxplore_game" tableName="convoy" columnNames="convoy_id" constraintName="convoy-pk"/>
+    </changeSet>
+</databaseChangeLog>

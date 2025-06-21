@@ -21,7 +21,7 @@ class AdjacentRandomEmptySurfaceProvider {
     Surface getRandomEmptySurfaceNextTo(List<Surface> surfacesWithMatchingType, Collection<Surface> surfaces, GameData gameData) {
         for (Surface surface : surfacesWithMatchingType) {
             Coordinate coordinate = gameData.getCoordinates()
-                .findByReferenceId(surface.getSurfaceId());
+                .findByReferenceIdValidated(surface.getSurfaceId());
             Optional<Surface> emptySurface = adjacentEmptySurfaceProvider.getEmptySurfaceNextTo(coordinate, surfaces, gameData);
             if (emptySurface.isPresent()) {
                 return emptySurface.get();

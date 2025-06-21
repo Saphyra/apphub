@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
@@ -42,8 +43,16 @@ public class ConstructionAreaConverter implements GameDataToModelConverter {
         return SurfaceConstructionAreaResponse.builder()
             .constructionAreaId(constructionArea.getConstructionAreaId())
             .dataId(constructionArea.getDataId())
-            .construction(gameData.getConstructions().findByExternalReference(constructionArea.getConstructionAreaId()).map(constructionConverter::toResponse).orElse(null))
-            .deconstruction(gameData.getDeconstructions().findByExternalReference(constructionArea.getConstructionAreaId()).map(deconstructionConverter::toResponse).orElse(null))
+            .construction(gameData.getConstructions()
+                .findByExternalReference(constructionArea.getConstructionAreaId())
+                .map(construction -> constructionConverter.toResponse(gameData, construction, ProcessType.CONSTRUCT_CONSTRUCTION_AREA))
+                .orElse(null)
+            )
+            .deconstruction(gameData.getDeconstructions()
+                .findByExternalReference(constructionArea.getConstructionAreaId())
+                .map(deconstruction -> deconstructionConverter.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_CONSTRUCTION_AREA))
+                .orElse(null)
+            )
             .build();
     }
 }

@@ -10,6 +10,7 @@ public class SkyXploreGameEndpoints {
     public static final String SKYXPLORE_GAME_PAUSE = "/api/skyxplore/game/pause";
     public static final String SKYXPLORE_GAME_GET_PLAYERS = "/api/skyxplore/game/player";
     public static final String SKYXPLORE_EXIT_GAME = "/api/skyxplore/game";
+    public static final String SKYXPLORE_PROCESS_TICK = "/api/skyxplore/game/tick";
 
     //Chat
     public static final String SKYXPLORE_GAME_CREATE_CHAT_ROOM = "/api/skyxplore/game/chat/room";

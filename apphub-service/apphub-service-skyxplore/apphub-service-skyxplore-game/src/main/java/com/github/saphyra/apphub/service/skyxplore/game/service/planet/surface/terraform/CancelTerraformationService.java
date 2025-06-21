@@ -27,7 +27,7 @@ public class CancelTerraformationService {
         GameData gameData = game.getData();
 
         Construction terraformation = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         processCancellation(userId, game, terraformation);
     }

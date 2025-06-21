@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -23,9 +22,7 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
         model.setType(GameItemType.CONSTRUCTION);
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
-        model.setConstructionType(ConstructionType.valueOf(entity.getConstructionType()));
         model.setRequiredWorkPoints(entity.getRequiredWorkPoints());
-        model.setCurrentWorkPoints(entity.getCurrentWorkPoints());
         model.setPriority(entity.getPriority());
         model.setData(entity.getData());
         return model;
@@ -38,9 +35,7 @@ class ConstructionConverter extends ConverterBase<ConstructionEntity, Constructi
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
             .location(uuidConverter.convertDomain(domain.getLocation()))
-            .constructionType(domain.getConstructionType().name())
             .requiredWorkPoints(domain.getRequiredWorkPoints())
-            .currentWorkPoints(domain.getCurrentWorkPoints())
             .priority(domain.getPriority())
             .data(domain.getData())
             .build();

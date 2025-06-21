@@ -110,8 +110,11 @@ public class Constants {
     //SkyXplore skills
     public static final String SKILL_AIMING = "AIMING";
     public static final String SKILL_BUILDING = "BUILDING";
+
+    //Construction Areas
     public static final String CONSTRUCTION_AREA_DEPOT = "depot";
     public static final String CONSTRUCTION_AREA_EXTRACTOR = "extractor";
+    public static final String CONSTRUCTION_AREA_POWER_PLANT = "power_plant";
 
     //Building Modules
     public static final String BUILDING_MODULE_GARAGE = "garage";

@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 class CoordinateLoaderTest {
     private static final UUID REFERRED_COORDINATE_ID = UUID.randomUUID();
     private static final UUID REFERENCE_ID = UUID.randomUUID();
+    private static final Integer ORDER = 3214;
 
     @Mock
     private GameItemLoader gameItemLoader;
@@ -70,11 +71,13 @@ class CoordinateLoaderTest {
         given(coordinateModel.getId()).willReturn(REFERRED_COORDINATE_ID);
         given(coordinateModel.getReferenceId()).willReturn(REFERENCE_ID);
         given(coordinateModel.getCoordinate()).willReturn(coordinate);
+        given(coordinateModel.getOrder()).willReturn(ORDER);
 
         ReferredCoordinate result = underTest.convert(coordinateModel);
 
         assertThat(result.getReferredCoordinateId()).isEqualTo(REFERRED_COORDINATE_ID);
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getCoordinate()).isEqualTo(coordinate);
+        assertThat(result.getOrder()).isEqualTo(ORDER);
     }
 }

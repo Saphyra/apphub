@@ -72,7 +72,7 @@ class PlanetToLocationResponseConverterTest {
         given(visibilityFacade.isVisible(USER_ID, hiddenPlanet)).willReturn(false);
         given(gameData.getCoordinates()).willReturn(coordinates);
         given(visiblePlanet.getPlanetId()).willReturn(PLANET_ID);
-        given(coordinates.findByReferenceId(PLANET_ID)).willReturn(coordinate);
+        given(coordinates.findByReferenceIdValidated(PLANET_ID)).willReturn(coordinate);
         given(visiblePlanet.getCustomNames()).willReturn(CollectionUtils.singleValueMap(USER_ID, PLANET_NAME, new OptionalHashMap<>()));
         given(visiblePlanet.getOwner()).willReturn(OWNER_ID);
         given(game.getPlayers()).willReturn(Map.of(OWNER_ID, player));

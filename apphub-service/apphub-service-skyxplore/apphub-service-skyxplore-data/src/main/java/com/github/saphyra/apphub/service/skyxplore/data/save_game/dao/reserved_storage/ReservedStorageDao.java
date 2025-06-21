@@ -7,7 +7,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -21,14 +20,6 @@ public class ReservedStorageDao extends AbstractDao<ReservedStorageEntity, Reser
 
     public void deleteByGameId(UUID gameId) {
         repository.deleteByGameId(uuidConverter.convertDomain(gameId));
-    }
-
-    public Optional<ReservedStorageModel> findById(UUID reservedStorageId) {
-        return findById(uuidConverter.convertDomain(reservedStorageId));
-    }
-
-    public List<ReservedStorageModel> getByLocation(UUID location) {
-        return converter.convertEntity(repository.getByLocation(uuidConverter.convertDomain(location)));
     }
 
     public void deleteById(UUID reservedStorageId) {

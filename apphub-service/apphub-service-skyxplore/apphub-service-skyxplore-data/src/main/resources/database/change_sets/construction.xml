@@ -55,4 +55,24 @@
             <column name="location" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-column-construction_type-from-construction" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="construction" columnName="construction_type"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="construction_type"/>
+        </dropColumn>
+    </changeSet>
+
+    <changeSet id="drop-column-current_work_points-from-construction" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <columnExists schemaName="skyxplore_game" tableName="construction" columnName="current_work_points"/>
+        </preConditions>
+
+        <dropColumn schemaName="skyxplore_game" tableName="construction">
+            <column name="current_work_points"/>
+        </dropColumn>
+    </changeSet>
 </databaseChangeLog>

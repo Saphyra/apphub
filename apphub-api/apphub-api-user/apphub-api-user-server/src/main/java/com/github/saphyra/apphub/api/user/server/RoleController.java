@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,4 +56,7 @@ public interface RoleController {
      */
     @GetMapping(UserEndpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED)
     List<String> getRolesForAllRestrictedRoles();
+
+    @GetMapping(UserEndpoints.IS_ADMIN)
+    OneParamResponse<Boolean> isUserAdmin(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

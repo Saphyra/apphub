@@ -20,7 +20,7 @@ public class BuildingAllocationService implements GameItemService {
 
     @Override
     public GameItemType getType() {
-        return GameItemType.BUILDING_ALLOCATION;
+        return GameItemType.BUILDING_MODULE_ALLOCATION;
     }
 
     @Override

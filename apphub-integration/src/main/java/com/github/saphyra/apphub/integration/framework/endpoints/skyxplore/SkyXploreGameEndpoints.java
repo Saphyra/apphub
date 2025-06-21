@@ -58,4 +58,5 @@ public class SkyXploreGameEndpoints {
     //Queue
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";
     public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
+    public static final String SKYXPLORE_PROCESS_TICK = "/api/skyxplore/game/tick";
 }

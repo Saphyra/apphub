@@ -34,7 +34,7 @@ class CoordinatesTest {
 
         underTest.add(referredCoordinate);
 
-        assertThat(underTest.findByReferenceId(REFERENCE_ID)).isEqualTo(coordinate);
+        assertThat(underTest.findByReferenceIdValidated(REFERENCE_ID)).isEqualTo(coordinate);
     }
 
     @Test
@@ -43,7 +43,7 @@ class CoordinatesTest {
 
         underTest.add(referredCoordinate);
 
-        Throwable ex = catchThrowable(() -> underTest.findByReferenceId(REFERENCE_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByReferenceIdValidated(REFERENCE_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }

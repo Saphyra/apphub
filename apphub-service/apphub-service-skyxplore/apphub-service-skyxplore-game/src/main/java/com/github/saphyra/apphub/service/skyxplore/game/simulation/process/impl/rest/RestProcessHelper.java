@@ -34,7 +34,7 @@ class RestProcessHelper {
 
         double result = (double) moraleProperties.getWorkEfficiencyDropUnder() / citizen.getMorale();
 
-        log.info("Morale Priority multiplier is {}, when the citizen has {} morale.", result, citizen.getMorale());
+        log.debug("Morale Priority multiplier is {}, when the citizen has {} morale.", result, citizen.getMorale());
 
         return result;
     }
