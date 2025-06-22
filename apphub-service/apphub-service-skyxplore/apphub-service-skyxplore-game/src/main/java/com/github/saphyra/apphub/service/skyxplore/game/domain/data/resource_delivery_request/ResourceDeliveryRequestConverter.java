@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ResourceDeliveryRequestConverter {
     public ResourceDeliveryRequestModel toModel(UUID gameId, ResourceDeliveryRequest deliveryRequest) {
         ResourceDeliveryRequestModel model = new ResourceDeliveryRequestModel();

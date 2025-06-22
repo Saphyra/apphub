@@ -50,7 +50,7 @@ public class RouteCalculator {
     private final ReferredCoordinateFactory referredCoordinateFactory;
     private final ObjectMapperWrapper objectMapperWrapper;
 
-    public List<ReferredCoordinate> calculateForResourceDeliveryRequestId(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID referenceId, UUID resourceDeliveryRequestId) {
+    public List<ReferredCoordinate> calculateAndSaveForResourceDeliveryRequestId(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID referenceId, UUID resourceDeliveryRequestId) {
         ResourceDeliveryRequest request = gameData.getResourceDeliveryRequests()
             .findByIdValidated(resourceDeliveryRequestId);
         StoredResource storedResource = gameData.getStoredResources()

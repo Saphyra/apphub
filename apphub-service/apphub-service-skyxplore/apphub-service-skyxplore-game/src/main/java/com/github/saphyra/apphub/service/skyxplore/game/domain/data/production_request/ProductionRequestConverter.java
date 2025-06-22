@@ -11,7 +11,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionRequestConverter {
     public ProductionRequestModel toModel(UUID gameId, ProductionRequest request) {
         ProductionRequestModel model = new ProductionRequestModel();

@@ -23,7 +23,6 @@ public class Coordinates extends Vector<ReferredCoordinate> {
             .map(ReferredCoordinate::getCoordinate);
     }
 
-    //TODO unit test
     public synchronized List<ReferredCoordinate> getByReferenceId(UUID referenceId) {
         return stream()
             .filter(referredCoordinate -> referredCoordinate.getReferenceId().equals(referenceId))

@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
-//TODO unit test
 public class ResourceDeliveryRequests extends Vector<ResourceDeliveryRequest> {
     public ResourceDeliveryRequest findByIdValidated(UUID resourceDeliveryRequestId) {
         return findById(resourceDeliveryRequestId)

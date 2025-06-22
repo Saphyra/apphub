@@ -16,7 +16,6 @@ public class CitizenAllocationFactory {
     private final IdGenerator idGenerator;
     private final CitizenAllocationConverter citizenAllocationConverter;
 
-    //TODO unit test
     public CitizenAllocation save(GameProgressDiff progressDiff, GameData gameData, UUID citizenId, UUID processId) {
         CitizenAllocation citizenAllocation = create(citizenId, processId);
 

@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
-//TODO unit test
 public class Convoys extends Vector<Convoy> {
     public List<Convoy> getByResourceDeliveryRequestId(UUID resourceDeliveryRequestId) {
         return stream()

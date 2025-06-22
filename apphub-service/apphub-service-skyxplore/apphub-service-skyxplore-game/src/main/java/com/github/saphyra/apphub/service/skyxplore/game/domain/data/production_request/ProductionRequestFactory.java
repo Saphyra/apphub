@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionRequestFactory {
     private final IdGenerator idGenerator;
     private final ProductionRequestConverter productionRequestConverter;

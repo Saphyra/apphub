@@ -20,17 +20,14 @@ public class ProductionOrder {
     private final int requestedAmount;
     private int startedAmount;
 
-    //TODO unit test
     public boolean allStarted() {
         return startedAmount >= requestedAmount;
     }
 
-    //TODO unit test
     public int getMissingAmount() {
         return requestedAmount - startedAmount;
     }
 
-    //TODO unit test
     public void increaseStartedAmount(int amountToStart) {
         this.startedAmount += amountToStart;
     }

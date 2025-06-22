@@ -24,14 +24,15 @@ public class BuildingModuleAllocationFactory {
             .build();
     }
 
-    //TODO unit test
-    public void save(GameProgressDiff progressDiff, GameData gameData, UUID buildingModuleId, UUID processId) {
+    public BuildingModuleAllocation save(GameProgressDiff progressDiff, GameData gameData, UUID buildingModuleId, UUID processId) {
         BuildingModuleAllocation buildingModuleAllocation = create(buildingModuleId, processId);
 
         gameData.getBuildingModuleAllocations()
             .add(buildingModuleAllocation);
 
         progressDiff.save(buildingModuleAllocationConverter.toModel(gameData.getGameId(), buildingModuleAllocation));
-        log.info("{} created.", buildingModuleAllocation);
+        log.info("Saved: {}", buildingModuleAllocation);
+
+        return buildingModuleAllocation;
     }
 }

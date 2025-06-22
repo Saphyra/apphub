@@ -17,7 +17,6 @@ public class ReferredCoordinateFactory {
     private final IdGenerator idGenerator;
     private final CoordinateConverter coordinateConverter;
 
-    //TODO unit test
     public ReferredCoordinate save(GameProgressDiff progressDiff, GameData gameData, UUID referenceId, Coordinate coordinate, Integer order) {
         ReferredCoordinate referredCoordinate = create(referenceId, coordinate, order);
 

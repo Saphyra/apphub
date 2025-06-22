@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ConvoyFactory {
     private final IdGenerator idGenerator;
     private final ConvoyConverter convoyConverter;
@@ -25,7 +24,7 @@ public class ConvoyFactory {
         int capacity = convoyCapacityCalculator.calculate(gameData, location, requestedCapacity);
         Convoy convoy = create(resourceDeliveryRequestId, capacity);
 
-        routeCalculator.calculateForResourceDeliveryRequestId(progressDiff, gameData, location, convoy.getConvoyId(), resourceDeliveryRequestId);
+        routeCalculator.calculateAndSaveForResourceDeliveryRequestId(progressDiff, gameData, location, convoy.getConvoyId(), resourceDeliveryRequestId);
 
         progressDiff.save(convoyConverter.toModel(gameData.getGameId(), convoy));
         gameData.getConvoys()
