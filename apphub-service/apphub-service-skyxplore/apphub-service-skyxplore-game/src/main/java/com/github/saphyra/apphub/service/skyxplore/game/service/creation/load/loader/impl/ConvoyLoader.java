@@ -12,7 +12,6 @@ import java.util.List;
 
 @Component
 @Slf4j
-//TODO unit test
 class ConvoyLoader extends AutoLoader<ConvoyModel, Convoy> {
     ConvoyLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

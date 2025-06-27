@@ -10,14 +10,13 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.UUID;
 
-//TODO unit test
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class WorkPointsUtil {
-    public Integer getCompletedWorkPoints(GameData gameData, UUID constructionId, ProcessType processType) {
+    public Integer getCompletedWorkPoints(GameData gameData, UUID externalReference, ProcessType processType) {
         return gameData.getProcesses()
-            .findByExternalReferenceAndType(constructionId, processType)
+            .findByExternalReferenceAndType(externalReference, processType)
             .map(process -> gameData.getProcesses().getByExternalReferenceAndType(process.getProcessId(), ProcessType.WORK))
             .stream()
             .flatMap(Collection::stream)

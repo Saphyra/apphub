@@ -12,7 +12,6 @@ import java.util.List;
 
 @Component
 @Slf4j
-//TODO unit test
 class ResourceDeliveryRequestLoader extends AutoLoader<ResourceDeliveryRequestModel, ResourceDeliveryRequest> {
     ResourceDeliveryRequestLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

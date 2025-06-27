@@ -94,7 +94,7 @@ class ProductionProcessHelper {
         //Fill the containers with the highest capacity first
         Queue<BiWrapper<UUID, Integer>> queue = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getEntity2(), o1.getEntity2()));
 
-        buildingModuleService.getUsableContainers(gameData, constructionAreaId, storageType)
+        buildingModuleService.getUsableConstructionAreaContainers(gameData, constructionAreaId, storageType)
             .forEach(buildingModule -> queue.add(new BiWrapper<>(
                 buildingModule.getBuildingModuleId(),
                 storageCapacityService.getFreeContainerCapacity(gameData, buildingModule.getBuildingModuleId(), storageType)

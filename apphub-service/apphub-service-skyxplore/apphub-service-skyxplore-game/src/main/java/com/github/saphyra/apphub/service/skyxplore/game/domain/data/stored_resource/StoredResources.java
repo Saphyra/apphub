@@ -38,9 +38,9 @@ public class StoredResources extends Vector<StoredResource> {
             .toList();
     }
 
-    public synchronized List<StoredResource> getByAllocatedBy(UUID externalReference) {
+    public synchronized List<StoredResource> getByAllocatedBy(UUID allocatedBy) {
         return stream()
-            .filter(storedResource -> externalReference.equals(storedResource.getAllocatedBy()))
+            .filter(storedResource -> allocatedBy.equals(storedResource.getAllocatedBy()))
             .toList();
     }
 

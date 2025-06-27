@@ -12,7 +12,6 @@ import java.util.List;
 
 @Component
 @Slf4j
-//TODO unit test
 class ProductionRequestLoader extends AutoLoader<ProductionRequestModel, ProductionRequest> {
     ProductionRequestLoader(GameItemLoader gameItemLoader) {
         super(gameItemLoader);

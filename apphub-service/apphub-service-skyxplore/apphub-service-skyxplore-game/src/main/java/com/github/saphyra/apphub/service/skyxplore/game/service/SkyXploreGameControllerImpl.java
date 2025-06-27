@@ -73,7 +73,6 @@ public class SkyXploreGameControllerImpl implements SkyXploreGameController {
     }
 
     @Override
-    //TODO unit test
     public void processTick(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to process a tick of their game.", accessTokenHeader.getUserId());
 

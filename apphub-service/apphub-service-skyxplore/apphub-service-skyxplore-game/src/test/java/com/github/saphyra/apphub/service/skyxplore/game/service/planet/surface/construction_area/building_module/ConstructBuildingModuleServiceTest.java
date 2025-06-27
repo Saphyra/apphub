@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
@@ -59,6 +60,7 @@ class ConstructBuildingModuleServiceTest {
     private static final String RESOURCE_DATA_ID = "resource-data-id";
     private static final Integer RESOURCE_AMOUNT = 234;
     private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
     private GameDao gameDao;
@@ -85,7 +87,6 @@ class ConstructBuildingModuleServiceTest {
     private ConstructBuildingModuleProcessFactory constructBuildingModuleProcessFactory;
 
     @Mock
-    //TODO verify call
     private ReservedStorageFactory reservedStorageFactory;
 
     @InjectMocks
@@ -259,9 +260,11 @@ class ConstructBuildingModuleServiceTest {
         given(process.toModel()).willReturn(processModel);
         given(constructionConverter.toModel(GAME_ID, construction)).willReturn(constructionModel);
         given(gameData.getConstructions()).willReturn(constructions);
+        given(constructionArea.getSurfaceId()).willReturn(SURFACE_ID);
 
         underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID);
 
+        then(reservedStorageFactory).should().save(progressDiff, gameData, SURFACE_ID, ContainerType.SURFACE, CONSTRUCTION_ID, RESOURCE_DATA_ID, RESOURCE_AMOUNT);
         then(buildingModules).should().add(buildingModule);
         then(constructions).should().add(construction);
         then(processes).should().add(process);

@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.BuildingModuleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,19 +22,16 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class StoredResourceService {
-    private final StorageBuildingModuleDataService storageBuildingModuleDataService;
     private final StoredResourceFactory storedResourceFactory;
+    private final BuildingModuleService buildingModuleService;
+    private final StoredResourceAggregator storedResourceAggregator;
 
+    /**
+     * Collects the resources available in different depots so they can be picked up by convoys
+     */
     public List<StoredResource> prepareBatch(GameProgressDiff progressDiff, GameData gameData, UUID location, String dataId, int missingResourceAmount) {
-        Map<UUID, List<StoredResource>> availableResources = gameData.getBuildingModules()
-            .getByLocation(location)
-            .stream()
-            //Filter for storage building modules
-            .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            //Filter for depots
-            .filter(buildingModule -> GameConstants.DEPOT_BUILDING_MODULE_CATEGORIES.contains(storageBuildingModuleDataService.get(buildingModule.getDataId()).getCategory()))
+        Map<UUID, List<StoredResource>> availableResources = buildingModuleService.getDepots(gameData, location)
             .map(BuildingModule::getBuildingModuleId)
             .flatMap(buildingModuleId -> gameData.getStoredResources().getByContainerId(buildingModuleId).stream())
             //Filter for available resources
@@ -44,7 +40,7 @@ public class StoredResourceService {
             .filter(storedResource -> storedResource.getDataId().equals(dataId))
             .collect(Collectors.groupingBy(StoredResource::getContainerId));
 
-        List<StoredResource> aggregated = aggregate(progressDiff, gameData, availableResources);
+        List<StoredResource> aggregated = storedResourceAggregator.aggregate(progressDiff, gameData, availableResources);
 
         List<StoredResource> result = new ArrayList<>();
         for (StoredResource storedResource : aggregated) {
@@ -53,7 +49,7 @@ public class StoredResourceService {
                     result.add(storedResource);
                     missingResourceAmount -= storedResource.getAmount();
                 } else {
-                    int remaining = storedResource.getAmount();
+                    int remaining = storedResource.getAmount() - missingResourceAmount;
 
                     result.add(split(progressDiff, gameData, storedResource, missingResourceAmount, remaining));
                 }
@@ -73,29 +69,6 @@ public class StoredResourceService {
         return storedResourceFactory.save(progressDiff, gameData, base.getLocation(), base.getDataId(), missingResourceAmount, base.getContainerId(), base.getContainerType());
     }
 
-    private List<StoredResource> aggregate(GameProgressDiff progressDiff, GameData gameData, Map<UUID, List<StoredResource>> availableResources) {
-        return availableResources.values()
-            .stream()
-            .map(storedResources -> aggregate(progressDiff, gameData, storedResources))
-            .toList();
-    }
-
-    private StoredResource aggregate(GameProgressDiff progressDiff, GameData gameData, List<StoredResource> storedResources) {
-        if (storedResources.size() == 1) {
-            return storedResources.get(0);
-        }
-
-        int totalResources = storedResources.stream()
-            .mapToInt(StoredResource::getAmount)
-            .sum();
-
-        gameData.getStoredResources().removeAll(storedResources);
-        storedResources.forEach(storedResource -> progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE));
-
-        StoredResource base = storedResources.get(0);
-
-        return storedResourceFactory.save(progressDiff, gameData, base.getLocation(), base.getDataId(), totalResources, base.getContainerId(), base.getContainerType());
-    }
 
     public int count(GameData gameData, String dataId, UUID allocatedBy) {
         return gameData.getStoredResources()

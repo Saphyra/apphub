@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class TerraformationQueueItemQueryService {
     private final TerraformationToQueueItemConverter converter;
 
@@ -22,10 +22,10 @@ class TerraformationQueueItemQueryService {
         return gameData.getSurfaces()
             .getByPlanetId(location)
             .stream()
-            .map(surface -> gameData.getConstructions().findByExternalReference(surface.getSurfaceId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(construction -> converter.convert(gameData, construction, gameData.getSurfaces().findByIdValidated(construction.getExternalReference())))
+            .map(surface -> new BiWrapper<>(surface, gameData.getConstructions().findByExternalReference(surface.getSurfaceId())))
+            .filter(bw -> bw.getEntity2().isPresent())
+            .map(bw -> bw.mapEntity2(Optional::get))
+            .map(bw -> converter.convert(gameData, bw.getEntity2(), bw.getEntity1()))
             .collect(Collectors.toList());
     }
 }
