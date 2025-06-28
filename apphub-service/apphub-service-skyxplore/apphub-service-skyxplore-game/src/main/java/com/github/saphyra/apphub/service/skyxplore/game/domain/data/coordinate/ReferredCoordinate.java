@@ -14,4 +14,5 @@ public class ReferredCoordinate {
     private final UUID referredCoordinateId;
     private final UUID referenceId;
     private Coordinate coordinate;
+    private Integer order;
 }

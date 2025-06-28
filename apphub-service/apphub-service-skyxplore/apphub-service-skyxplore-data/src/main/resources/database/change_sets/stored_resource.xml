@@ -53,4 +53,16 @@
             <column name="container_type" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-allocated_by-to-stored_resource" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="stored_resource" columnName="allocated_by"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="stored_resource">
+            <column name="allocated_by" type="varchar(37)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

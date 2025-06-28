@@ -14,9 +14,7 @@ import java.util.UUID;
 public class ConstructionModel extends GameItem {
     private UUID externalReference;
     private UUID location;
-    private ConstructionType constructionType;
     private Integer requiredWorkPoints;
-    private Integer currentWorkPoints;
     private Integer priority;
     private String data;
 }

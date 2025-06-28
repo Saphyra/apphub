@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.construction_area;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,6 +29,7 @@ class DeconstructConstructionAreaQueueService implements QueueService {
     private final GameDao gameDao;
     private final DeconstructionConverter deconstructionConverter;
     private final CancelDeconstructionFacade cancelDeconstructionFacade;
+    private final WorkPointsUtil workPointsUtil;
 
     @Override
     public QueueItemType getType() {
@@ -42,9 +45,9 @@ class DeconstructConstructionAreaQueueService implements QueueService {
                 .itemId(deconstruction.getDeconstructionId())
                 .type(getType())
                 .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
-                .currentWorkPoints(deconstruction.getCurrentWorkPoints())
+                .currentWorkPoints(workPointsUtil.getCompletedWorkPoints(gameData, deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCT_CONSTRUCTION_AREA))
                 .priority(deconstruction.getPriority())
-                .data(Map.of("dataId", gameData.getConstructionAreas().findByConstructionAreaIdValidated(deconstruction.getExternalReference()).getDataId()))
+                .data(Map.of("dataId", gameData.getConstructionAreas().findByIdValidated(deconstruction.getExternalReference()).getDataId()))
                 .build())
             .collect(Collectors.toList());
     }
@@ -55,7 +58,7 @@ class DeconstructConstructionAreaQueueService implements QueueService {
         GameData gameData = game.getData();
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(itemId);
+            .findByIdValidated(itemId);
 
         game.getEventLoop()
             .processWithWait(() -> {

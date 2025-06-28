@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
@@ -97,10 +98,10 @@ class BuildingModuleQueryServiceTest {
         given(buildingModuleData.getCategory()).willReturn(BuildingModuleCategory.CULTURAL);
         given(gameData.getConstructions()).willReturn(constructions);
         given(gameData.getConstructions().findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.of(construction));
-        given(constructionConverter.toResponse(construction)).willReturn(constructionResponse);
+        given(constructionConverter.toResponse(gameData, construction, ProcessType.CONSTRUCT_BUILDING_MODULE)).willReturn(constructionResponse);
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.of(deconstruction));
-        given(deconstructionConverter.toResponse(deconstruction)).willReturn(deconstructionResponse);
+        given(deconstructionConverter.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(deconstructionResponse);
 
         CustomAssertions.singleListAssertThat(underTest.getBuildingModulesOfConstructionArea(USER_ID, CONSTRUCTION_AREA_ID))
             .returns(BUILDING_MODULE_ID, BuildingModuleResponse::getBuildingModuleId)

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.construction;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ public class ConstructionConverterTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Integer REQUIRED_WORK_POINTS = 245;
-    private static final Integer CURRENT_WORK_POINTS = 3465;
     private static final Integer PRIORITY = 5726;
     private static final String CONSTRUCTION_ID_STRING = "construction-id";
     private static final String GAME_ID_STRING = "game-id";
@@ -44,10 +42,8 @@ public class ConstructionConverterTest {
         model.setExternalReference(EXTERNAL_REFERENCE);
         model.setLocation(LOCATION);
         model.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
-        model.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         model.setPriority(PRIORITY);
         model.setData(DATA);
-        model.setConstructionType(ConstructionType.CONSTRUCTION);
 
         given(uuidConverter.convertDomain(CONSTRUCTION_ID)).willReturn(CONSTRUCTION_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -58,11 +54,9 @@ public class ConstructionConverterTest {
 
         assertThat(result.getConstructionId()).isEqualTo(CONSTRUCTION_ID_STRING);
         assertThat(result.getGameId()).isEqualTo(GAME_ID_STRING);
-        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION.name());
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE_STRING);
         assertThat(result.getLocation()).isEqualTo(LOCATION_STRING);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
         assertThat(result.getData()).isEqualTo(DATA);
     }
@@ -75,9 +69,7 @@ public class ConstructionConverterTest {
         entity.setExternalReference(EXTERNAL_REFERENCE_STRING);
         entity.setLocation(LOCATION_STRING);
         entity.setRequiredWorkPoints(REQUIRED_WORK_POINTS);
-        entity.setCurrentWorkPoints(CURRENT_WORK_POINTS);
         entity.setPriority(PRIORITY);
-        entity.setConstructionType(ConstructionType.CONSTRUCTION.name());
         entity.setData(DATA);
 
         given(uuidConverter.convertEntity(CONSTRUCTION_ID_STRING)).willReturn(CONSTRUCTION_ID);
@@ -92,9 +84,7 @@ public class ConstructionConverterTest {
         assertThat(result.getType()).isEqualTo(GameItemType.CONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getConstructionType()).isEqualTo(ConstructionType.CONSTRUCTION);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
         assertThat(result.getData()).isEqualTo(DATA);
     }

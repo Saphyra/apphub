@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleAllocationModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocation;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.GameItemLoader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,7 +45,7 @@ class BuildingModuleAllocationLoaderTest {
 
     @Test
     void getGameItemType() {
-        assertThat(underTest.getGameItemType()).isEqualTo(GameItemType.BUILDING_ALLOCATION);
+        assertThat(underTest.getGameItemType()).isEqualTo(GameItemType.BUILDING_MODULE_ALLOCATION);
     }
 
     @Test
@@ -70,7 +70,7 @@ class BuildingModuleAllocationLoaderTest {
 
         BuildingModuleAllocation result = underTest.convert(model);
 
-        assertThat(result.getBuildingAllocationId()).isEqualTo(BUILDING_ALLOCATION_ID);
+        assertThat(result.getBuildingModuleAllocationId()).isEqualTo(BUILDING_ALLOCATION_ID);
         assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
     }

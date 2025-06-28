@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
@@ -62,31 +61,32 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findConstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION)
+            .getValue()
+            * findConstruction().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ConstructBuildingModuleProcessHelper helper = applicationContextProxy.getBean(ConstructBuildingModuleProcessHelper.class);
-        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(progressDiff, gameData, processId, constructionId);
+            helper.createResourceRequestProcess(game, location, processId, constructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
         ConstructBuildingModuleProcessConditions conditions = applicationContextProxy.getBean(ConstructBuildingModuleProcessConditions.class);
 
-        if (!conditions.productionOrdersComplete(gameData, processId)) {
-            log.info("Waiting for ProductionOrderProcesses to finish...");
+        if (!conditions.resourcesAvailable(gameData, processId, constructionId)) {
+            log.info("Waiting for resources...");
             return;
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(progressDiff, gameData, processId, constructionId);
+            helper.startWork(game, processId, constructionId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -94,7 +94,7 @@ public class ConstructBuildingModuleProcess implements Process {
             return;
         }
 
-        helper.finishConstruction(progressDiff, gameData, constructionId);
+        helper.finishConstruction(game.getProgressDiff(), gameData, constructionId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 
@@ -127,7 +127,7 @@ public class ConstructBuildingModuleProcess implements Process {
 
     private Construction findConstruction() {
         return gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
     }
 
     @Override

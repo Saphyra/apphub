@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.Sky
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -29,6 +30,7 @@ public class TerraformationQueueTest extends SeleniumTest {
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
+        DatabaseUtil.addRoleByEmail(registrationParameters.getEmail(), Constants.ROLE_ADMIN);
 
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
@@ -64,7 +66,7 @@ public class TerraformationQueueTest extends SeleniumTest {
         //Check progress
         SkyXploreGameActions.resumeGame(driver);
 
-        AwaitilityWrapper.create(120, 5)
+        AwaitilityWrapper.create(120, 1)
             .until(() -> queueItem.getStatus() > 20)
             .assertTrue("QueueItem is not started.");
 

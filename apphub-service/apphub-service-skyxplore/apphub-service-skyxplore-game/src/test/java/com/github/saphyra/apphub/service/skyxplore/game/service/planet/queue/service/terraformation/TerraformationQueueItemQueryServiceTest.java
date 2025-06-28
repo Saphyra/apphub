@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.terraformation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
@@ -14,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,13 +25,22 @@ class TerraformationQueueItemQueryServiceTest {
     private static final UUID SURFACE_ID = UUID.randomUUID();
 
     @Mock
-    private TerraformationToQueueItemConverter terraformationToQueueItemConverter;
+    private TerraformationToQueueItemConverter converter;
 
     @InjectMocks
     private TerraformationQueueItemQueryService underTest;
 
     @Mock
+    private GameData gameData;
+
+    @Mock
+    private Surfaces surfaces;
+
+    @Mock
     private Surface surface;
+
+    @Mock
+    private Constructions constructions;
 
     @Mock
     private Construction construction;
@@ -39,26 +48,15 @@ class TerraformationQueueItemQueryServiceTest {
     @Mock
     private QueueItem queueItem;
 
-    @Mock
-    private GameData gameData;
-
-    @Mock
-    private Constructions constructions;
-
-    @Mock
-    private Surfaces surfaces;
-
     @Test
     void getQueue() {
-        given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.getByLocationAndType(LOCATION, ConstructionType.TERRAFORMATION)).willReturn(List.of(construction));
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(construction.getExternalReference()).willReturn(SURFACE_ID);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
-        given(terraformationToQueueItemConverter.convert(construction, surface)).willReturn(queueItem);
+        given(surfaces.getByPlanetId(LOCATION)).willReturn(List.of(surface));
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(surface.getSurfaceId()).willReturn(SURFACE_ID);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(construction));
+        given(converter.convert(gameData, construction, surface)).willReturn(queueItem);
 
-        List<QueueItem> result = underTest.getQueue(gameData, LOCATION);
-
-        assertThat(result).containsExactly(queueItem);
+        assertThat(underTest.getQueue(gameData, LOCATION)).containsExactly(queueItem);
     }
 }

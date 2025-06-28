@@ -27,7 +27,7 @@ public class CancelConstructionAreaConstructionService {
         GameData gameData = game.getData();
 
         Construction construction = gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(construction.getLocation()).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel construction of constructionArea on planet " + construction.getConstructionId());
@@ -35,7 +35,7 @@ public class CancelConstructionAreaConstructionService {
 
         UUID constructionAreaId = construction.getExternalReference();
         ConstructionArea constructionArea = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(constructionAreaId);
+            .findByIdValidated(constructionAreaId);
 
         game.getEventLoop()
             .processWithWait(() -> {

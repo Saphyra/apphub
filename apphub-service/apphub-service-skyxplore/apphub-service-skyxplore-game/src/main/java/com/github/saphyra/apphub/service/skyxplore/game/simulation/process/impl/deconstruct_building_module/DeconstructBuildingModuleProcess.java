@@ -67,13 +67,11 @@ public class DeconstructBuildingModuleProcess implements Process {
 
     private Deconstruction findDeconstruction() {
         return gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(deconstructionId);
+            .findByIdValidated(deconstructionId);
     }
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         DeconstructBuildingModuleProcessConditions conditions = applicationContextProxy.getBean(DeconstructBuildingModuleProcessConditions.class);
         DeconstructBuildingModuleProcessHelper helper = applicationContextProxy.getBean(DeconstructBuildingModuleProcessHelper.class);
 
@@ -83,7 +81,7 @@ public class DeconstructBuildingModuleProcess implements Process {
 
         GameProgressDiff progressDiff = game.getProgressDiff();
         if (!conditions.hasWorkProcess(gameData, processId)) {
-            helper.startWork(progressDiff, gameData, processId, deconstructionId, location);
+            helper.startWork(game, processId, deconstructionId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {

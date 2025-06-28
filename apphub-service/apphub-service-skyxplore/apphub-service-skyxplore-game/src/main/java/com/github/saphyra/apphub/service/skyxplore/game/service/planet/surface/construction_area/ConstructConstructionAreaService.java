@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -17,8 +17,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreaConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreaFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_construction_area.ConstructConstructionAreaProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_construction_area.ConstructConstructionAreaProcessFactory;
 import lombok.RequiredArgsConstructor;
@@ -36,10 +36,10 @@ class ConstructConstructionAreaService {
     private final GameDao gameDao;
     private final ConstructionFactory constructionFactory;
     private final ConstructionAreaFactory constructionAreaFactory;
-    private final ResourceAllocationService resourceAllocationService;
     private final ConstructConstructionAreaProcessFactory constructConstructionAreaProcessFactory;
     private final ConstructionConverter constructionConverter;
     private final ConstructionAreaConverter constructionAreaConverter;
+    private final ReservedStorageFactory reservedStorageFactory;
 
     void constructConstructionArea(UUID userId, UUID surfaceId, String constructionAreaDataId) {
         ValidationUtil.containsKey(constructionAreaDataId, constructionAreaDataService, "dataId", "dataId");
@@ -48,7 +48,7 @@ class ConstructConstructionAreaService {
         GameData gameData = game.getData();
 
         Surface surface = gameData.getSurfaces()
-            .findBySurfaceIdValidated(surfaceId);
+            .findByIdValidated(surfaceId);
         UUID planetId = surface.getPlanetId();
 
         //Construction must happen on own planet
@@ -78,7 +78,6 @@ class ConstructConstructionAreaService {
 
         Construction construction = constructionFactory.create(
             constructionArea.getConstructionAreaId(),
-            ConstructionType.CONSTRUCTION_AREA,
             planetId,
             constructionRequirements.getRequiredWorkPoints()
         );
@@ -88,13 +87,8 @@ class ConstructConstructionAreaService {
             .processWithWait(() -> {
                 GameProgressDiff progressDiff = game.getProgressDiff();
 
-                resourceAllocationService.processResourceRequirements(
-                    progressDiff,
-                    gameData,
-                    planetId,
-                    construction.getConstructionId(),
-                    constructionRequirements.getRequiredResources()
-                );
+                constructionRequirements.getRequiredResources()
+                    .forEach((dataId, amount) -> reservedStorageFactory.save(progressDiff, gameData, surfaceId, ContainerType.SURFACE, construction.getConstructionId(), dataId, amount));
 
                 ConstructConstructionAreaProcess process = constructConstructionAreaProcessFactory.create(game, construction);
                 log.info("{} created.", process);

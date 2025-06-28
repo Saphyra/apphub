@@ -52,8 +52,8 @@ class CitizenAssignmentQueryServiceTest {
 
     @Test
     void noMatchingDataProvider() {
-        given(root.getType()).willReturn(ProcessType.CONSTRUCTION);
-        given(dataProvider.getType()).willReturn(ProcessType.DECONSTRUCTION);
+        given(root.getType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(dataProvider.getType()).willReturn(ProcessType.DECONSTRUCT_BUILDING_MODULE);
 
         Throwable ex = catchThrowable(() -> underTest.getAssignment(gameData, process));
 
@@ -62,13 +62,13 @@ class CitizenAssignmentQueryServiceTest {
 
     @Test
     void getAssignment() {
-        given(root.getType()).willReturn(ProcessType.CONSTRUCTION);
-        given(dataProvider.getType()).willReturn(ProcessType.CONSTRUCTION);
+        given(root.getType()).willReturn(ProcessType.PRODUCTION_ORDER);
+        given(dataProvider.getType()).willReturn(ProcessType.PRODUCTION_ORDER);
         given(dataProvider.getData(gameData, root)).willReturn(DATA);
 
         CitizenAssignmentResponse result = underTest.getAssignment(gameData, process);
 
-        assertThat(result.getType()).isEqualTo(ProcessType.CONSTRUCTION.name());
+        assertThat(result.getType()).isEqualTo(ProcessType.PRODUCTION_ORDER.name());
         assertThat(result.getData()).isEqualTo(DATA);
     }
 }

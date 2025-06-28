@@ -4,8 +4,10 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
@@ -40,12 +42,14 @@ public class StorageSettingProcess implements Process {
     private final UUID location;
 
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID storageSettingId;
+
     @NonNull
     @Getter
     private final Integer amount;
+
+    @NonNull
+    private final UUID reservedStorageId;
 
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -59,13 +63,15 @@ public class StorageSettingProcess implements Process {
     }
 
     private StorageSetting findStorageSetting() {
-        return gameData.getStorageSettings()
+        return game.getData()
+            .getStorageSettings()
             .findByStorageSettingIdValidated(storageSettingId);
     }
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities()
+        return game.getData()
+            .getPriorities()
             .findByLocationAndType(location, PriorityType.INDUSTRY)
             .getValue()
             * findStorageSetting().getPriority()
@@ -79,18 +85,15 @@ public class StorageSettingProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         StorageSettingProcessHelper helper = applicationContextProxy.getBean(StorageSettingProcessHelper.class);
 
         if (status == ProcessStatus.CREATED) {
-            helper.orderResources(game.getProgressDiff(), gameData, processId, findStorageSetting(), amount);
+            helper.orderResources(game, location, processId, reservedStorageId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
-        StorageSettingProcessConditions conditions = applicationContextProxy.getBean(StorageSettingProcessConditions.class);
-        if (conditions.isFinished(gameData, processId)) {
+        if (game.getData().getProcesses().getByExternalReference(processId).stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE)) {
             status = ProcessStatus.READY_TO_DELETE;
         }
     }
@@ -98,6 +101,8 @@ public class StorageSettingProcess implements Process {
     @Override
     public void cleanup() {
         log.info("Cleaning up {}", this);
+
+        GameData gameData = game.getData();
 
         gameData.getProcesses()
             .getByExternalReference(processId)
@@ -109,32 +114,37 @@ public class StorageSettingProcess implements Process {
             .removeAllocationsAndReservations(progressDiff, gameData, processId);
 
         status = ProcessStatus.READY_TO_DELETE;
-
-        progressDiff.save(toModel());
     }
 
     @Override
     public ProcessModel toModel() {
+        UuidConverter uuidConverter = applicationContextProxy.getBean(UuidConverter.class);
+
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
         model.setLocation(location);
         model.setExternalReference(getExternalReference());
-        model.setData(CollectionUtils.singleValueMap(ProcessParamKeys.AMOUNT, String.valueOf(amount)));
+        model.setData(CollectionUtils.toMap(
+            new BiWrapper<>(ProcessParamKeys.AMOUNT, String.valueOf(amount)),
+            new BiWrapper<>(ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorageId))
+        ));
         return model;
     }
 
     @Override
     public String toString() {
         return String.format(
-            "%s(processId=%s, status=%s, storageSettingId=%s)",
+            "%s(processId=%s, status=%s, storageSettingId=%s, reservedStorageId=%s, amount=%s)",
             getClass().getSimpleName(),
             processId,
             status,
-            storageSettingId
+            storageSettingId,
+            reservedStorageId,
+            amount
         );
     }
 }

@@ -2,14 +2,18 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.UseAllocatedResourceService;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceService;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.resource_request.ResourceRequestProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;
@@ -30,18 +34,19 @@ class ConstructBuildingModuleProcessHelperTest {
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
     private static final int REQUIRED_WORK_POINTS = 243;
-
-    @Mock
-    private ProductionOrderService productionOrderService;
-
-    @Mock
-    private UseAllocatedResourceService useAllocatedResourceService;
+    private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
 
     @Mock
     private WorkProcessFactory workProcessFactory;
 
     @Mock
     private AllocationRemovalService allocationRemovalService;
+
+    @Mock
+    private ResourceRequestProcessFactory resourceRequestProcessFactory;
+
+    @Mock
+    private StoredResourceService storedResourceService;
 
     @InjectMocks
     private ConstructBuildingModuleProcessHelper underTest;
@@ -67,34 +72,46 @@ class ConstructBuildingModuleProcessHelperTest {
     @Mock
     private ProcessModel processModel;
 
-    @Test
-    void createProductionOrders() {
-        underTest.createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
+    @Mock
+    private Game game;
 
-        then(productionOrderService).should().createProductionOrdersForReservedStorages(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
+    @Mock
+    private ReservedStorages reservedStorages;
+
+    @Mock
+    private ReservedStorage reservedStorage;
+
+    @Test
+    void createResourceRequestProcess() {
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getReservedStorages()).willReturn(reservedStorages);
+        given(reservedStorages.getByExternalReference(CONSTRUCTION_ID)).willReturn(List.of(reservedStorage));
+        given(reservedStorage.getReservedStorageId()).willReturn(RESERVED_STORAGE_ID);
+
+        underTest.createResourceRequestProcess(game, LOCATION, PROCESS_ID, CONSTRUCTION_ID);
+
+        then(resourceRequestProcessFactory).should().save(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
     }
 
     @Test
     void startWork() {
+        given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getLocation()).willReturn(LOCATION);
         given(construction.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(workProcessFactory.createForConstruction(gameData, PROCESS_ID, CONSTRUCTION_ID, LOCATION, REQUIRED_WORK_POINTS)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
 
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
+        underTest.startWork(game, PROCESS_ID, CONSTRUCTION_ID);
 
-        then(useAllocatedResourceService).should().resolveAllocations(progressDiff, gameData, LOCATION, CONSTRUCTION_ID);
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
+        then(storedResourceService).should().useResources(progressDiff, gameData, PROCESS_ID);
+        then(workProcessFactory).should().save(game, LOCATION, PROCESS_ID, REQUIRED_WORK_POINTS, SkillType.BUILDING);
     }
 
     @Test
     void finishConstruction() {
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
 
         underTest.finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
 

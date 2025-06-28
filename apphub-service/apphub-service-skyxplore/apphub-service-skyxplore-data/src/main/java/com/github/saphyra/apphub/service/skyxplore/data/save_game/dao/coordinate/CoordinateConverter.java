@@ -23,6 +23,7 @@ class CoordinateConverter extends ConverterBase<CoordinateEntity, CoordinateMode
         result.setType(GameItemType.COORDINATE);
         result.setReferenceId(uuidConverter.convertEntity((entity.getReferenceId())));
         result.setCoordinate(new Coordinate(entity.getX(), entity.getY()));
+        result.setOrder(entity.getOrder());
         return result;
     }
 
@@ -34,6 +35,7 @@ class CoordinateConverter extends ConverterBase<CoordinateEntity, CoordinateMode
             .referenceId(uuidConverter.convertDomain(domain.getReferenceId()))
             .x(domain.getCoordinate().getX())
             .y(domain.getCoordinate().getY())
+            .order(domain.getOrder())
             .build();
     }
 }

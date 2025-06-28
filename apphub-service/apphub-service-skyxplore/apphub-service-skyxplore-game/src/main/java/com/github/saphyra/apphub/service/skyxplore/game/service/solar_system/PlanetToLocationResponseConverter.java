@@ -33,7 +33,7 @@ class PlanetToLocationResponseConverter {
     private PlanetLocationResponse mapPlanet(Game game, Planet planet, UUID userId) {
         Coordinate coordinate = game.getData()
             .getCoordinates()
-            .findByReferenceId(planet.getPlanetId());
+            .findByReferenceIdValidated(planet.getPlanetId());
 
         return PlanetLocationResponse.builder()
             .planetId(planet.getPlanetId())

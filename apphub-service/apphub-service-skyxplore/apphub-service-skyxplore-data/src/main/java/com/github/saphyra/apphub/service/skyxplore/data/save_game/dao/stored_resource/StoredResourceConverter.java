@@ -26,6 +26,7 @@ class StoredResourceConverter extends ConverterBase<StoredResourceEntity, Stored
         model.setAmount(entity.getAmount());
         model.setContainerId(uuidConverter.convertEntity(entity.getContainerId()));
         model.setContainerType(ContainerType.valueOf(entity.getContainerType()));
+        model.setAllocatedBy(uuidConverter.convertEntity(entity.getAllocatedBy()));
         return model;
     }
 
@@ -39,6 +40,7 @@ class StoredResourceConverter extends ConverterBase<StoredResourceEntity, Stored
             .amount(domain.getAmount())
             .containerId(uuidConverter.convertDomain(domain.getContainerId()))
             .containerType(domain.getContainerType().name())
+            .allocatedBy(uuidConverter.convertDomain(domain.getAllocatedBy()))
             .build();
     }
 }

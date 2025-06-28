@@ -27,7 +27,7 @@ public class CancelDeconstructionFacade {
         GameData gameData = game.getData();
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(deconstructionId);
+            .findByIdValidated(deconstructionId);
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(deconstruction.getLocation()).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel deconstruction of constructionArea on planet " + deconstruction.getDeconstructionId());
@@ -43,14 +43,14 @@ public class CancelDeconstructionFacade {
         GameData gameData = game.getData();
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(deconstructionId);
+            .findByIdValidated(deconstructionId);
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(deconstruction.getLocation()).getOwner())) {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot cancel deconstruction of constructionArea on planet " + deconstructionId);
         }
 
         UUID constructionAreaId = gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(deconstruction.getExternalReference())
+            .findByIdValidated(deconstruction.getExternalReference())
             .getConstructionAreaId();
 
         game.getEventLoop()

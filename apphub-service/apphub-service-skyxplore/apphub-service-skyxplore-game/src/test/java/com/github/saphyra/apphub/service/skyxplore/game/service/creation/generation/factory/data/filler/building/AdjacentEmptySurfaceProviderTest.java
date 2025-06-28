@@ -57,7 +57,7 @@ public class AdjacentEmptySurfaceProviderTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate2);
+        given(coordinates.findByReferenceIdValidated(SURFACE_ID)).willReturn(coordinate2);
         given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(1d);
 
         Optional<Surface> result = underTest.getEmptySurfaceNextTo(coordinate1, Arrays.asList(surface), gameData);
@@ -82,7 +82,7 @@ public class AdjacentEmptySurfaceProviderTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate2);
+        given(coordinates.findByReferenceIdValidated(SURFACE_ID)).willReturn(coordinate2);
         given(distanceCalculator.getDistance(coordinate1, coordinate2)).willReturn(2d);
 
         Optional<Surface> result = underTest.getEmptySurfaceNextTo(coordinate1, Arrays.asList(surface), gameData);

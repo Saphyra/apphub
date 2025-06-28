@@ -5,15 +5,27 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.Vector;
 
 public class Coordinates extends Vector<ReferredCoordinate> {
-    public Coordinate findByReferenceId(UUID referenceId) {
+    public synchronized Coordinate findByReferenceIdValidated(UUID referenceId) {
+        return findByReferenceId(referenceId)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Coordinate not found by referenceId " + referenceId));
+    }
+
+    public synchronized Optional<Coordinate> findByReferenceId(UUID referenceId) {
         return stream()
             .filter(referredCoordinate -> referredCoordinate.getReferenceId().equals(referenceId))
             .findFirst()
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Coordinate not found by referenceId " + referenceId))
-            .getCoordinate();
+            .map(ReferredCoordinate::getCoordinate);
+    }
+
+    public synchronized List<ReferredCoordinate> getByReferenceId(UUID referenceId) {
+        return stream()
+            .filter(referredCoordinate -> referredCoordinate.getReferenceId().equals(referenceId))
+            .toList();
     }
 }

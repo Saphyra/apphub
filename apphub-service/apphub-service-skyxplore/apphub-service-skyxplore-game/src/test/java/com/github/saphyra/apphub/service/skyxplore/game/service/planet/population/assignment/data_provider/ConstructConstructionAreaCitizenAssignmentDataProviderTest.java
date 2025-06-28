@@ -54,10 +54,10 @@ class ConstructConstructionAreaCitizenAssignmentDataProviderTest {
     void getData() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(process.getExternalReference()).willReturn(CONSTRUCTION_ID);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(construction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
-        given(constructionAreas.findByConstructionAreaIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
         given(constructionArea.getDataId()).willReturn(DATA_ID);
 
         assertThat(underTest.getData(gameData, process)).isEqualTo(DATA_ID);

@@ -12,11 +12,8 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import jakarta.annotation.Nullable;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,8 +23,6 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
-
-import static java.util.Objects.nonNull;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
@@ -41,13 +36,8 @@ public class ProductionOrderProcess implements Process {
     @NonNull
     private volatile ProcessStatus status;
 
-    @Getter
-    @Nullable
-    private volatile UUID producerBuildingModuleId;
-    private volatile UUID allocatedResourceId;
     @NonNull
-    @Getter
-    private volatile UUID reservedStorageId;
+    private UUID productionOrderId;
 
     @Getter
     @NonNull
@@ -56,12 +46,15 @@ public class ProductionOrderProcess implements Process {
     private final GameData gameData;
     @NonNull
     private final UUID location;
-    @Getter
-    private final int amount;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
     @NonNull
     private final Game game;
+
+    @Override
+    public ProcessType getType() {
+        return ProcessType.PRODUCTION_ORDER;
+    }
 
     @Override
     public int getPriority() {
@@ -71,56 +64,26 @@ public class ProductionOrderProcess implements Process {
     }
 
     @Override
-    public ProcessType getType() {
-        return ProcessType.PRODUCTION_ORDER;
-    }
-
-    private ReservedStorage findReservedStorage() {
-        return gameData.getReservedStorages()
-            .findByReservedStorageIdValidated(reservedStorageId);
-    }
-
-    @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
 
-        GameProgressDiff progressDiff = game.getProgressDiff();
         if (status == ProcessStatus.CREATED) {
-            String dataId = findReservedStorage()
-                .getDataId();
-            producerBuildingModuleId = helper.findProductionBuilding(gameData, location, dataId);
-
-            if (nonNull(producerBuildingModuleId)) {
-                log.info("Creating ResourceRequirementProcesses for {}", this);
-
-                helper.processResourceRequirements(progressDiff, gameData, processId, location, dataId, amount, producerBuildingModuleId);
-                status = ProcessStatus.IN_PROGRESS;
-            } else {
-                log.info("Available ProductionBuilding not found for {}", dataId);
-            }
+            log.info("Ordering resources...");
+            helper.orderResources(game, location, processId, productionOrderId);
+            status = ProcessStatus.IN_PROGRESS;
         }
 
         ProductionOrderProcessConditions conditions = applicationContextProxy.getBean(ProductionOrderProcessConditions.class);
 
-        if (status == ProcessStatus.IN_PROGRESS) {
-            if (!conditions.requiredResourcesPresent(gameData, processId)) {
-                log.info("Waiting for ProductionOrderProcesses to finish...");
-                return;
-            }
+        if (conditions.productionNeeded(gameData, productionOrderId)) {
+            helper.tryProduce(game, location, processId, productionOrderId);
+        } else {
+            log.info("All production is already started");
+        }
 
-            if (!conditions.workStarted(gameData, processId)) {
-                helper.startWork(progressDiff, gameData, processId, producerBuildingModuleId, reservedStorageId);
-            }
-
-            if (conditions.workDone(gameData, processId)) {
-                helper.storeResource(progressDiff, gameData, location, reservedStorageId, allocatedResourceId, amount, producerBuildingModuleId);
-
-                status = ProcessStatus.DONE;
-            } else {
-                log.info("Waiting for RequestWorkProcesses to finish...");
-            }
+        if (conditions.isFinished(gameData, processId, productionOrderId)) {
+            log.info("ProductionOrder finished.");
+            status = ProcessStatus.DONE;
         }
     }
 
@@ -136,6 +99,14 @@ public class ProductionOrderProcess implements Process {
         gameData.getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
+
+        gameData.getProductionOrders()
+            .findById(productionOrderId)
+            .ifPresent(productionOrder -> {
+                gameData.getProductionOrders()
+                    .remove(productionOrder);
+                progressDiff.delete(productionOrderId, GameItemType.PRODUCTION_ORDER);
+            });
 
         status = ProcessStatus.READY_TO_DELETE;
 
@@ -156,10 +127,7 @@ public class ProductionOrderProcess implements Process {
         model.setExternalReference(getExternalReference());
         model.setData(new StringStringMap(
             CollectionUtils.toMap(
-                new BiWrapper<>(ProcessParamKeys.PRODUCER_BUILDING_MODULE_ID, uuidConverter.convertDomain(producerBuildingModuleId)),
-                new BiWrapper<>(ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorageId)),
-                new BiWrapper<>(ProcessParamKeys.ALLOCATED_RESOURCE_ID, uuidConverter.convertDomain(allocatedResourceId)),
-                new BiWrapper<>(ProcessParamKeys.AMOUNT, String.valueOf(amount))
+                new BiWrapper<>(ProcessParamKeys.PRODUCTION_ORDER_ID, uuidConverter.convertDomain(productionOrderId))
             ))
         );
         return model;
@@ -168,13 +136,11 @@ public class ProductionOrderProcess implements Process {
     @Override
     public String toString() {
         return String.format(
-            "%s(processId=%s, status=%s, producerBuildingModuleId=%s, reservedStorageId=%s, amount=%s)",
+            "%s(processId=%s, status=%s, productionOrderId=%s)",
             getClass().getSimpleName(),
             processId,
             status,
-            producerBuildingModuleId,
-            reservedStorageId,
-            amount
+            productionOrderId
         );
     }
 }

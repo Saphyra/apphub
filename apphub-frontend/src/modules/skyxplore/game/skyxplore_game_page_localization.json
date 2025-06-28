@@ -38,5 +38,9 @@
     "close": {
         "en": "Close",
         "hu": "Bezárás"
+    },
+    "process-tick": {
+        "en": "Process tick",
+        "hu": "Tick lejátszása"
     }
 }

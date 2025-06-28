@@ -31,7 +31,7 @@ public class DeconstructBuildingModuleService {
         GameData gameData = game.getData();
 
         BuildingModule buildingModule = gameData.getBuildingModules()
-            .findByBuildingModuleIdValidated(buildingModuleId);
+            .findByIdValidated(buildingModuleId);
         UUID planetId = buildingModule.getLocation();
 
         if (!userId.equals(gameData.getPlanets().findByIdValidated(planetId).getOwner())) {

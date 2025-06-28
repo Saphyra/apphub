@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSetting;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.FreeStorageQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StorageCapacityService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.BuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.storage_setting.StorageSettingProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickTaskOrder;
@@ -23,32 +23,33 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class StorageSettingTickTaskTest {
     private static final UUID LOCATION = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
-    private static final Integer TARGET_AMOUNT = 425;
-    private static final Integer PRODUCED_AMOUNT = 34;
+    private static final Integer TARGET_AMOUNT = 1000;
+    private static final Integer IN_PROGRESS_AMOUNT = 100;
     private static final UUID STORAGE_SETTING_ID = UUID.randomUUID();
-    private static final Integer FREE_STORAGE = 23;
-    private static final Integer MAX_BATCH_SIZE = FREE_STORAGE - 1;
+    private static final Integer MISSING_AMOUNT = 40;
+    private static final UUID BUILDING_MODULE_ID = UUID.randomUUID();
+    private static final Integer AVAILABLE_STORAGE = 25;
 
     @Mock
     private StorageSettingProcessFactory storageSettingProcessFactory;
 
     @Mock
-    private FreeStorageQueryService freeStorageQueryService;
+    private StorageCapacityService storageCapacityService;
+
+    @Mock
+    private BuildingModuleService buildingModuleService;
 
     @Mock
     private ResourceDataService resourceDataService;
@@ -63,10 +64,9 @@ class StorageSettingTickTaskTest {
     private GameData gameData;
 
     @Mock
-    private GameProgressDiff progressDiff;
-
-    @Mock
     private StorageSetting storageSetting;
+
+    private final StorageSettings storageSettings = new StorageSettings();
 
     @Mock
     private StoredResources storedResources;
@@ -81,10 +81,10 @@ class StorageSettingTickTaskTest {
     private StorageSettingProcess storageSettingProcess;
 
     @Mock
-    private ProcessModel processModel;
+    private ResourceData resourceData;
 
     @Mock
-    private ResourceData resourceData;
+    private BuildingModule buildingModule;
 
     @Test
     void getOrder() {
@@ -92,84 +92,66 @@ class StorageSettingTickTaskTest {
     }
 
     @Test
-    void process_targetAmountReached() {
+    void process_enoughInStorage() {
         given(game.getData()).willReturn(gameData);
-        given(gameData.getStorageSettings()).willReturn(CollectionUtils.toList(new StorageSettings(), storageSetting));
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        storageSettings.add(storageSetting);
+        given(gameData.getStoredResources()).willReturn(storedResources);
         given(storageSetting.getLocation()).willReturn(LOCATION);
         given(storageSetting.getDataId()).willReturn(DATA_ID);
-        given(gameData.getStoredResources()).willReturn(storedResources);
-        given(storedResources.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storedResource));
-        given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT);
+        given(storedResources.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(storedResource));
         given(storedResource.getAmount()).willReturn(TARGET_AMOUNT);
+        given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT - 1);
 
         underTest.process(game);
 
-        verify(gameData, times(0)).getProcesses();
+        then(storageSettingProcessFactory).shouldHaveNoInteractions();
     }
 
     @Test
-    void process_productionInProgress() {
+    void process_enoughProduced() {
         given(game.getData()).willReturn(gameData);
-        given(gameData.getStorageSettings()).willReturn(CollectionUtils.toList(new StorageSettings(), storageSetting));
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        storageSettings.add(storageSetting);
+        given(gameData.getStoredResources()).willReturn(storedResources);
         given(storageSetting.getLocation()).willReturn(LOCATION);
         given(storageSetting.getDataId()).willReturn(DATA_ID);
-        given(gameData.getStoredResources()).willReturn(storedResources);
-        given(storedResources.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storedResource));
+        given(storedResources.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(storedResource));
+        given(storedResource.getAmount()).willReturn(TARGET_AMOUNT - IN_PROGRESS_AMOUNT);
         given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(storedResource.getAmount()).willReturn(TARGET_AMOUNT - PRODUCED_AMOUNT);
         given(gameData.getProcesses()).willReturn(processes);
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
         given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(List.of(storageSettingProcess));
-        given(storageSettingProcess.getAmount()).willReturn(PRODUCED_AMOUNT);
+        given(storageSettingProcess.getAmount()).willReturn(IN_PROGRESS_AMOUNT + 1);
 
         underTest.process(game);
 
-        verify(freeStorageQueryService, times(0)).getFreeStorage(gameData, LOCATION, DATA_ID);
+        then(storageSettingProcessFactory).shouldHaveNoInteractions();
     }
 
     @Test
-    void process_storageFull() {
+    void process() {
         given(game.getData()).willReturn(gameData);
-        given(gameData.getStorageSettings()).willReturn(CollectionUtils.toList(new StorageSettings(), storageSetting));
+        given(gameData.getStorageSettings()).willReturn(storageSettings);
+        storageSettings.add(storageSetting);
+        given(gameData.getStoredResources()).willReturn(storedResources);
         given(storageSetting.getLocation()).willReturn(LOCATION);
         given(storageSetting.getDataId()).willReturn(DATA_ID);
-        given(gameData.getStoredResources()).willReturn(storedResources);
-        given(storedResources.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storedResource));
+        given(storedResources.getByLocationAndDataId(LOCATION, DATA_ID)).willReturn(List.of(storedResource));
+        given(storedResource.getAmount()).willReturn(TARGET_AMOUNT - IN_PROGRESS_AMOUNT);
         given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(storedResource.getAmount()).willReturn(0);
         given(gameData.getProcesses()).willReturn(processes);
         given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
-        given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Collections.emptyList());
-        given(freeStorageQueryService.getFreeStorage(gameData, LOCATION, DATA_ID)).willReturn(0);
-
-        underTest.process(game);
-
-        verifyNoInteractions(storageSettingProcessFactory);
-    }
-
-    @Test
-    void process_create() {
-        given(game.getData()).willReturn(gameData);
-        given(gameData.getStorageSettings()).willReturn(CollectionUtils.toList(new StorageSettings(), storageSetting));
-        given(storageSetting.getLocation()).willReturn(LOCATION);
-        given(storageSetting.getDataId()).willReturn(DATA_ID);
-        given(gameData.getStoredResources()).willReturn(storedResources);
-        given(storedResources.findByLocationAndDataId(LOCATION, DATA_ID)).willReturn(Optional.of(storedResource));
-        given(storageSetting.getTargetAmount()).willReturn(TARGET_AMOUNT);
-        given(storedResource.getAmount()).willReturn(0);
-        given(gameData.getProcesses()).willReturn(processes);
-        given(storageSetting.getStorageSettingId()).willReturn(STORAGE_SETTING_ID);
-        given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(Collections.emptyList());
-        given(freeStorageQueryService.getFreeStorage(gameData, LOCATION, DATA_ID)).willReturn(FREE_STORAGE);
-        given(storageSettingProcessFactory.create(game, storageSetting, MAX_BATCH_SIZE)).willReturn(storageSettingProcess);
-        given(storageSettingProcess.toModel()).willReturn(processModel);
+        given(processes.getByExternalReferenceAndType(STORAGE_SETTING_ID, ProcessType.STORAGE_SETTING)).willReturn(List.of(storageSettingProcess));
+        given(storageSettingProcess.getAmount()).willReturn(IN_PROGRESS_AMOUNT - MISSING_AMOUNT);
         given(resourceDataService.get(DATA_ID)).willReturn(resourceData);
-        given(resourceData.getMaxProductionBatchSize()).willReturn(MAX_BATCH_SIZE);
-        given(game.getProgressDiff()).willReturn(progressDiff);
+        given(resourceData.getStorageType()).willReturn(StorageType.CONTAINER);
+        given(buildingModuleService.getUsableDepots(gameData, LOCATION, StorageType.CONTAINER)).willReturn(Stream.of(buildingModule));
+        given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
+        given(storageCapacityService.getFreeContainerCapacity(gameData, BUILDING_MODULE_ID, StorageType.CONTAINER)).willReturn(AVAILABLE_STORAGE);
 
         underTest.process(game);
 
-        verify(processes).add(storageSettingProcess);
-        verify(progressDiff).save(processModel);
+        then(storageSettingProcessFactory).should().save(game, storageSetting, BUILDING_MODULE_ID, AVAILABLE_STORAGE);
     }
 }

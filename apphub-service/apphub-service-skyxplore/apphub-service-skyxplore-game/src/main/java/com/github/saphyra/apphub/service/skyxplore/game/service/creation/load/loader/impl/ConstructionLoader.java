@@ -36,11 +36,9 @@ public class ConstructionLoader extends AutoLoader<ConstructionModel, Constructi
         return Construction.builder()
             .constructionId(model.getId())
             .externalReference(model.getExternalReference())
-            .constructionType(model.getConstructionType())
             .location(model.getLocation())
             .requiredWorkPoints(model.getRequiredWorkPoints())
             .data(model.getData())
-            .currentWorkPoints(model.getCurrentWorkPoints())
             .priority(model.getPriority())
             .build();
     }

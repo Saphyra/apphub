@@ -16,5 +16,6 @@ public class StoredResourceModel extends GameItem {
     private UUID containerId;
     private ContainerType containerType;
     private String dataId;
+    private UUID allocatedBy;
     private Integer amount;
 }

@@ -54,7 +54,7 @@ public class TerraformationProcess implements Process {
 
     private Construction findTerraformation() {
         return gameData.getConstructions()
-            .findByConstructionIdValidated(terraformationId);
+            .findByIdValidated(terraformationId);
     }
 
     @Override
@@ -69,26 +69,24 @@ public class TerraformationProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
-        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(progressDiff, gameData, processId, terraformationId);
+            log.info("Creating ResourceRequestProcesses...");
+            helper.createResourceRequestProcess(game, location, processId, terraformationId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
         TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
 
-        if (!conditions.productionOrdersComplete(gameData, processId)) {
-            log.info("Waiting for ProductionOrderProcesses to finish...");
+        if (!conditions.resourcesAvailable(gameData, terraformationId)) {
+            log.info("Waiting for resources...");
             return;
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(progressDiff, gameData, processId, terraformationId);
+            helper.startWork(game, processId, terraformationId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -96,7 +94,8 @@ public class TerraformationProcess implements Process {
             return;
         }
 
-        helper.finishTerraformation(progressDiff, gameData, terraformationId);
+        GameProgressDiff progressDiff = game.getProgressDiff();
+        helper.finishConstruction(progressDiff, gameData, terraformationId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 

@@ -23,7 +23,7 @@ class SolarSystemResponseExtractor {
             .filter(solarSystem -> visibilityFacade.isVisible(gameData, userId, solarSystem.getSolarSystemId()))
             .map(solarSystem -> MapSolarSystemResponse.builder()
                 .solarSystemId(solarSystem.getSolarSystemId())
-                .coordinate(gameData.getCoordinates().findByReferenceId(solarSystem.getSolarSystemId()))
+                .coordinate(gameData.getCoordinates().findByReferenceIdValidated(solarSystem.getSolarSystemId()))
                 .solarSystemName(solarSystem.getCustomNames().getOptional(userId).orElse(solarSystem.getDefaultName()))
                 .planetNum(gameData.getPlanets().getBySolarSystemId(solarSystem.getSolarSystemId()).size())
                 .build()
