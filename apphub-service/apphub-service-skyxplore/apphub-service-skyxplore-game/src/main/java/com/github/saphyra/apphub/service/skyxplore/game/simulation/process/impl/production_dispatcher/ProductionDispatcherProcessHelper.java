@@ -13,30 +13,35 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_o
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_request.ProductionRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_request.ProductionRequestConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StorageCapacityService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.BuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order.ProductionOrderProcessFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionDispatcherProcessHelper {
-    private final ProductionBuildingModuleDataService productionBuildingModuleDataService;
     private final StorageCapacityService storageCapacityService;
     private final GameProperties gameProperties;
     private final ResourceDataService resourceDataService;
     private final ProductionOrderFactory productionOrderFactory;
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
     private final ProductionRequestConverter productionRequestConverter;
+    private final BuildingModuleService buildingModuleService;
+    private final ProductionBuildingModuleDataService productionBuildingModuleDataService;
 
     public int dispatch(Game game, UUID location, UUID processId, UUID productionRequestId, int missingAmount) {
         ProductionRequest productionRequest = game.getData()
@@ -48,7 +53,7 @@ class ProductionDispatcherProcessHelper {
             .findByIdValidated(productionRequest.getReservedStorageId())
             .getDataId();
 
-        Queue<BiWrapper<UUID, Integer>> eligibleConstructionAreas = getEligibleConstructionAreas(game.getData(), location, productionRequest.getProductionRequestId(), resourceDataId);
+        Queue<BiWrapper<UUID, Integer>> eligibleConstructionAreas = getEligibleConstructionAreas(game.getData(), location, productionRequestId, resourceDataId);
         log.info("Eligible constructionAreas: {}", eligibleConstructionAreas);
 
         int dispatched = 0;
@@ -66,9 +71,11 @@ class ProductionDispatcherProcessHelper {
             missingAmount -= toDispatch;
         }
 
-        productionRequest.increaseDispatchedAmount(dispatched);
-        game.getProgressDiff()
-            .save(productionRequestConverter.toModel(game.getGameId(), productionRequest));
+        if (dispatched > 0) {
+            productionRequest.increaseDispatchedAmount(dispatched);
+            game.getProgressDiff()
+                .save(productionRequestConverter.toModel(game.getGameId(), productionRequest));
+        }
 
         return dispatched;
     }
@@ -80,7 +87,20 @@ class ProductionDispatcherProcessHelper {
         productionOrderProcessFactory.save(game, location, processId, productionOrder.getProductionOrderId());
     }
 
-    //TODO check if suitable storage for all requiredResources in constructionRequirements
+    private Queue<BiWrapper<UUID, Integer>> getEligibleConstructionAreas(GameData gameData, UUID location, UUID productionRequestId, String resourceDataId) {
+        log.info("Searching for producers can produce {} at location {}", resourceDataId, location);
+        Queue<BiWrapper<UUID, Integer>> result = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getEntity2(), o1.getEntity2()));
+
+        buildingModuleService.getProducersOf(gameData, location, resourceDataId)
+            .map(BuildingModule::getConstructionAreaId)
+            .distinct()
+            .map(constructionAreaId -> new BiWrapper<>(constructionAreaId, calculateAvailability(gameData, productionRequestId, constructionAreaId, resourceDataId)))
+            .filter(mapping -> mapping.getEntity2() > 0)
+            .forEach(result::add);
+
+        return result;
+    }
+
     private Integer calculateAvailability(GameData gameData, UUID productionRequestId, UUID constructionAreaId, String resourceDataId) {
         Optional<ProductionOrder> maybeProductionOrderInProgress = gameData.getProductionOrders()
             .getByProductionRequestIdAndConstructionAreaIdAndResourceDataId(productionRequestId, constructionAreaId, resourceDataId)
@@ -94,43 +114,39 @@ class ProductionDispatcherProcessHelper {
             return 0;
         }
 
+        Collection<StorageType> requirementStorageTypes = productionBuildingModuleDataService.findProducerFor(resourceDataId)
+            .getEntity2()
+            .getConstructionRequirements()
+            .getRequiredResources()
+            .keySet()
+            .stream()
+            .map(rd -> resourceDataService.get(rd).getStorageType())
+            .collect(Collectors.toSet());
+
         StorageType storageType = resourceDataService.get(resourceDataId)
             .getStorageType();
 
+        if (!hasRequiredTypesOfStorage(gameData, constructionAreaId, Stream.concat(Stream.of(storageType), requirementStorageTypes.stream()).collect(Collectors.toSet()))) {
+            log.info("ConstructionArea {} does not have the required storage types for {}", constructionAreaId, resourceDataId);
+            return 0;
+        }
+
         int totalCapacity = storageCapacityService.getTotalConstructionAreaCapacity(gameData, constructionAreaId, storageType);
         int storedAmount = storageCapacityService.getOccupiedConstructionAreaCapacity(gameData, constructionAreaId, storageType);
+        double maxDispatchedRatio = gameProperties.getProduction()
+            .getProductionOrderMaxDispatchedRatio();
 
-        int result = (int) Math.floor((totalCapacity - storedAmount) * gameProperties.getProduction().getProductionOrderMaxDispatchedRatio());
+        int result = (int) Math.floor((totalCapacity - storedAmount) * maxDispatchedRatio);
 
         log.info("ConstructionArea {} has {} {} capacity total, {} is used. Max availability: {}", constructionAreaId, totalCapacity, storageType, storedAmount, result);
 
         return result;
     }
 
-    private Queue<BiWrapper<UUID, Integer>> getEligibleConstructionAreas(GameData gameData, UUID location, UUID productionRequestId, String resourceDataId) {
-        log.info("Searching for producers can produce {} at location {}", resourceDataId, location);
-        Queue<BiWrapper<UUID, Integer>> result = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getEntity2(), o1.getEntity2()));
+    private boolean hasRequiredTypesOfStorage(GameData gameData, UUID constructionAreaId, Set<StorageType> requiredStorageTypes) {
+        Collection<StorageType> availableStorageTypes = buildingModuleService.getAvailableStorageTypes(gameData, constructionAreaId)
+            .toList();
 
-        gameData.getBuildingModules()
-            .getByLocation(location)
-            .stream()
-            .filter(buildingModule -> productionBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            //TODO filter under construction/deconstruction
-            .filter(buildingModule -> canProduce(resourceDataId, buildingModule.getDataId()))
-            .map(BuildingModule::getConstructionAreaId)
-            .distinct()
-            .map(constructionAreaId -> new BiWrapper<>(constructionAreaId, calculateAvailability(gameData, productionRequestId, constructionAreaId, resourceDataId)))
-            .filter(mapping -> mapping.getEntity2() > 0)
-            .forEach(result::add);
-
-        return result;
-    }
-
-    private boolean canProduce(String resourceDataId, String buildingModuleDataId) {
-        log.debug("Checking if {} can produce {}", buildingModuleDataId, resourceDataId);
-        return productionBuildingModuleDataService.get(buildingModuleDataId)
-            .getProduces()
-            .stream()
-            .anyMatch(production -> production.getResourceDataId().equals(resourceDataId));
+        return availableStorageTypes.containsAll(requiredStorageTypes);
     }
 }

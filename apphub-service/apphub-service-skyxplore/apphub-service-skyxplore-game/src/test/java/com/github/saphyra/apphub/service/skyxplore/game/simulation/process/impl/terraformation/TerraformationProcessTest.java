@@ -27,6 +27,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -109,6 +110,53 @@ class TerraformationProcessTest {
         given(terraformation.getPriority()).willReturn(TERRAFORMATION_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PLANET_PRIORITY * TERRAFORMATION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
+    }
+
+    @Test
+    void work_resourcesNotAvailable() {
+        given(applicationContextProxy.getBean(TerraformationProcessConditions.class)).willReturn(conditions);
+        given(applicationContextProxy.getBean(TerraformationProcessHelper.class)).willReturn(helper);
+        given(conditions.resourcesAvailable(gameData, TERRAFORMATION_ID)).willReturn(false);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
+
+        verify(helper).createResourceRequestProcess(game, LOCATION, PROCESS_ID, TERRAFORMATION_ID);
+    }
+
+    @Test
+    void work_workIsNotFinished(){
+        given(applicationContextProxy.getBean(TerraformationProcessConditions.class)).willReturn(conditions);
+        given(applicationContextProxy.getBean(TerraformationProcessHelper.class)).willReturn(helper);
+        given(conditions.resourcesAvailable(gameData, TERRAFORMATION_ID)).willReturn(true);
+        given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
+        given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
+
+        then(helper).should().startWork(game, PROCESS_ID, TERRAFORMATION_ID);
+        verify(helper).createResourceRequestProcess(game, LOCATION, PROCESS_ID, TERRAFORMATION_ID);
+    }
+
+    @Test
+    void work_finished(){
+        given(applicationContextProxy.getBean(TerraformationProcessConditions.class)).willReturn(conditions);
+        given(applicationContextProxy.getBean(TerraformationProcessHelper.class)).willReturn(helper);
+        given(conditions.resourcesAvailable(gameData, TERRAFORMATION_ID)).willReturn(true);
+        given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
+        given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
+
+        then(helper).should().startWork(game, PROCESS_ID, TERRAFORMATION_ID);
+        verify(helper).createResourceRequestProcess(game, LOCATION, PROCESS_ID, TERRAFORMATION_ID);
+        then(helper).should().finishConstruction(progressDiff, gameData, TERRAFORMATION_ID);
     }
 
     @Test

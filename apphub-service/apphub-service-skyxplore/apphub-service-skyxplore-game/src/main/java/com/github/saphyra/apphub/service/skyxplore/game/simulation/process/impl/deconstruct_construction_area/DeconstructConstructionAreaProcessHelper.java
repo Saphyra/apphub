@@ -48,13 +48,15 @@ class DeconstructConstructionAreaProcessHelper {
         deconstructBuildingModuleService.deconstructBuildingModule(game, buildingModule.getLocation(), buildingModule.getBuildingModuleId());
     }
 
-    //TODO unit test
     void startWork(Game game, UUID processId, UUID deconstructionId) {
         Deconstruction deconstruction = game.getData()
             .getDeconstructions()
             .findByIdValidated(deconstructionId);
 
-        workProcessFactory.save(game, deconstruction.getLocation(), processId, gameProperties.getDeconstruction().getRequiredWorkPoints(), SkillType.BUILDING);
+        int requiredWorkPoints = gameProperties.getDeconstruction()
+            .getRequiredWorkPoints();
+
+        workProcessFactory.save(game, deconstruction.getLocation(), processId, requiredWorkPoints, SkillType.BUILDING);
     }
 
     void finishDeconstruction(GameProgressDiff progressDiff, GameData gameData, UUID deconstructionId) {

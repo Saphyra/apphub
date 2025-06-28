@@ -1,57 +1,45 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ProductionOrderProcessFactoryTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
-    private static final UUID RESERVED_STORAGE_EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final String DATA_ID = "data-id";
-    private static final Integer MAX_BATCH_SIZE = 2;
-    private static final Integer RESERVED_STORAGE_AMOUNT = 3;
-    private static final UUID PROCESS_ID_1 = UUID.randomUUID();
-    private static final UUID PROCESS_ID_2 = UUID.randomUUID();
-    private static final UUID PRODUCER_BUILDING_MODULE_DATA_ID = UUID.randomUUID();
-    private static final UUID ALLOCATED_RESOURCE_ID = UUID.randomUUID();
-    private static final UUID GAME_ID = UUID.randomUUID();
+    private static final UUID PRODUCTION_ORDER_ID = UUID.randomUUID();
+    private static final UUID PROCESS_ID = UUID.randomUUID();
+    private static final String PRODUCTION_ORDER_ID_STRING = "production-order-id";
 
     @Mock
     private IdGenerator idGenerator;
 
     @Mock
-    private ResourceDataService resourceDataService;
-
-    @Spy
-    private final UuidConverter uuidConverter = new UuidConverter();
+    private UuidConverter uuidConverter;
 
     @Mock
     private ApplicationContextProxy applicationContextProxy;
-
-    @Mock
-    private GameDao gameDao;
 
     @InjectMocks
     private ProductionOrderProcessFactory underTest;
@@ -60,22 +48,60 @@ class ProductionOrderProcessFactoryTest {
     private GameData gameData;
 
     @Mock
-    private ReservedStorages reservedStorages;
-
-    @Mock
-    private ReservedStorage reservedStorage;
-
-    @Mock
-    private ResourceData resourceData;
-
-    @Mock
     private Game game;
 
     @Mock
     private ProcessModel model;
 
+    @Mock
+    private Processes processes;
+
+    @Mock
+    private GameProgressDiff progressDiff;
+
     @Test
     void getType() {
         assertThat(underTest.getType()).isEqualTo(ProcessType.PRODUCTION_ORDER);
+    }
+
+    @Test
+    void createFromModel() {
+        given(model.getId()).willReturn(PROCESS_ID);
+        given(model.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+        given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(model.getLocation()).willReturn(LOCATION);
+        given(model.getData()).willReturn(Map.of(ProcessParamKeys.PRODUCTION_ORDER_ID, PRODUCTION_ORDER_ID_STRING));
+
+        given(game.getData()).willReturn(gameData);
+        given(uuidConverter.convertEntity(PRODUCTION_ORDER_ID_STRING)).willReturn(PRODUCTION_ORDER_ID);
+
+        ProductionOrderProcess result = underTest.createFromModel(game, model);
+
+        assertThat(result)
+            .returns(PROCESS_ID, ProductionOrderProcess::getProcessId)
+            .returns(ProcessStatus.IN_PROGRESS, ProductionOrderProcess::getStatus)
+            .returns(EXTERNAL_REFERENCE, ProductionOrderProcess::getExternalReference)
+            .returns(ProcessType.PRODUCTION_ORDER, ProductionOrderProcess::getType);
+    }
+
+    @Test
+    void save() {
+        given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getProcesses()).willReturn(processes);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+
+        given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+
+        ProductionOrderProcess result = underTest.save(game, LOCATION, EXTERNAL_REFERENCE, PRODUCTION_ORDER_ID);
+
+        assertThat(result)
+            .returns(PROCESS_ID, ProductionOrderProcess::getProcessId)
+            .returns(ProcessStatus.CREATED, ProductionOrderProcess::getStatus)
+            .returns(EXTERNAL_REFERENCE, ProductionOrderProcess::getExternalReference)
+            .returns(ProcessType.PRODUCTION_ORDER, ProductionOrderProcess::getType);
+
+        then(processes).should().add(result);
+        then(progressDiff).should().save(result.toModel());
     }
 }

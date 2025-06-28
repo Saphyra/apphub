@@ -27,7 +27,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ProductionDispatcherProcess implements Process {
     @Getter
     @NonNull
@@ -57,7 +56,8 @@ public class ProductionDispatcherProcess implements Process {
 
     @Override
     public int getPriority() {
-        return game.getData().getProcesses()
+        return game.getData()
+            .getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }

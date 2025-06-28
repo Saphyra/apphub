@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
@@ -24,7 +23,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ConstructBuildingModuleProcess implements Process {
     //Own fields
     @Getter
@@ -63,13 +61,16 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findConstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION)
+            .getValue()
+            * findConstruction().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
     public void work() {
         ConstructBuildingModuleProcessHelper helper = applicationContextProxy.getBean(ConstructBuildingModuleProcessHelper.class);
-        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
             helper.createResourceRequestProcess(game, location, processId, constructionId);
@@ -93,7 +94,7 @@ public class ConstructBuildingModuleProcess implements Process {
             return;
         }
 
-        helper.finishConstruction(progressDiff, gameData, constructionId);
+        helper.finishConstruction(game.getProgressDiff(), gameData, constructionId);
         status = ProcessStatus.READY_TO_DELETE;
     }
 

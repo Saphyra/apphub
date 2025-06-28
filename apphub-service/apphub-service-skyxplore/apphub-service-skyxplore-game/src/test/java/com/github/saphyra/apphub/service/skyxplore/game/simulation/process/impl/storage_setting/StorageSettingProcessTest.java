@@ -30,6 +30,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,9 +53,6 @@ class StorageSettingProcessTest {
 
     @Mock
     private GameProgressDiff progressDiff;
-
-    @Mock
-    private StorageSettingProcessConditions conditions;
 
     @Mock
     private StorageSettingProcessHelper helper;
@@ -123,6 +121,36 @@ class StorageSettingProcessTest {
         given(storageSetting.getPriority()).willReturn(STORAGE_SETTING_PRIORITY);
 
         assertThat(underTest.getPriority()).isEqualTo(PLANET_PRIORITY * STORAGE_SETTING_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
+    }
+
+    @Test
+    void work_notFinished() {
+        given(applicationContextProxy.getBean(StorageSettingProcessHelper.class)).willReturn(helper);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getProcesses()).willReturn(processes);
+        given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
+        given(process.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
+
+        then(helper).should().orderResources(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
+    }
+
+    @Test
+    void work_finished() {
+        given(applicationContextProxy.getBean(StorageSettingProcessHelper.class)).willReturn(helper);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getProcesses()).willReturn(processes);
+        given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
+        given(process.getStatus()).willReturn(ProcessStatus.DONE);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
+
+        then(helper).should().orderResources(game, LOCATION, PROCESS_ID, RESERVED_STORAGE_ID);
     }
 
     @Test

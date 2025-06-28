@@ -3,9 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleDataService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.storage.StorageBuildingModuleDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -17,6 +15,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_sto
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResourceConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StoredResourceAggregator;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.BuildingModuleService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production.ProductionProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production.ProductionProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.resource_request.ResourceRequestProcessFactory;
@@ -24,43 +24,43 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionOrderProcessHelper {
     private final ProductionBuildingModuleDataService productionBuildingModuleDataService;
     private final ReservedStorageFactory reservedStorageFactory;
     private final ResourceRequestProcessFactory resourceRequestProcessFactory;
     private final ResourceDataService resourceDataService;
-    private final StorageBuildingModuleDataService storageBuildingModuleDataService;
     private final StoredResourceConverter storedResourceConverter;
     private final ProductionOrderConverter productionOrderConverter;
     private final ProductionProcessFactory productionProcessFactory;
     private final BuildingModuleAllocationFactory buildingModuleAllocationFactory;
+    private final BuildingModuleService buildingModuleService;
+    private final StoredResourceAggregator storedResourceAggregator;
 
     void orderResources(Game game, UUID location, UUID processId, UUID productionOrderId) {
         GameData gameData = game.getData();
 
-        ProductionOrder productionOrder = gameData
-            .getProductionOrders()
+        ProductionOrder productionOrder = gameData.getProductionOrders()
             .findByIdValidated(productionOrderId);
 
-        getRequiredResources(gameData, productionOrder)
+        getRequiredResources(productionOrder)
             .forEach((resourceDataId, amountPerResource) -> {
                 int amount = amountPerResource * productionOrder.getRequestedAmount();
 
                 log.info("Ordering {} of {} to work on {}", amount, resourceDataId, productionOrder);
+                UUID containerId = getContainerId(gameData, productionOrder.getConstructionAreaId(), resourceDataId);
                 ReservedStorage reservedStorage = reservedStorageFactory.save(
                     game.getProgressDiff(),
                     gameData,
-                    getContainerId(gameData, productionOrder.getConstructionAreaId(), resourceDataId),
+                    containerId,
                     ContainerType.STORAGE,
                     processId,
                     resourceDataId,
@@ -71,46 +71,24 @@ class ProductionOrderProcessHelper {
             });
     }
 
-    private Map<String, Integer> getRequiredResources(GameData gameData, ProductionOrder productionOrder) {
-        return productionBuildingModuleDataService.get(getProductionBuildingModuleDataId(gameData, productionOrder))
+    private Map<String, Integer> getRequiredResources(ProductionOrder productionOrder) {
+        return productionBuildingModuleDataService.findProducerFor(productionOrder.getResourceDataId())
+            .getEntity2()
             .getConstructionRequirements()
             .getRequiredResources();
-    }
-
-    private String getProductionBuildingModuleDataId(GameData gameData, ProductionOrder productionOrder) {
-        return gameData.getBuildingModules()
-            .getByConstructionAreaId(productionOrder.getConstructionAreaId())
-            .stream()
-            .filter(buildingModule -> productionBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            .map(buildingModule -> productionBuildingModuleDataService.get(buildingModule.getDataId()))
-            .filter(productionBuildingModuleData -> canProduce(productionBuildingModuleData, productionOrder.getResourceDataId()))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.reportedException("No producer available for " + productionOrder.getResourceDataId() + " on ConstructionArea " + productionOrder.getConstructionAreaId()))
-            .getId();
     }
 
     private UUID getContainerId(GameData gameData, UUID constructionAreaId, String resourceDataId) {
         StorageType storageType = resourceDataService.get(resourceDataId)
             .getStorageType();
 
-        return gameData.getBuildingModules()
-            .getByConstructionAreaId(constructionAreaId)
-            .stream()
-            .filter(buildingModule -> storageBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            //TODO filter under de/construction
-            .filter(buildingModule -> storageBuildingModuleDataService.get(buildingModule.getDataId()).getStores().containsKey(storageType))
+        return buildingModuleService.getUsableConstructionAreaContainers(gameData, constructionAreaId, storageType)
             .findAny()
             .map(BuildingModule::getBuildingModuleId)
             .orElseThrow(() -> ExceptionFactory.reportedException("There is no storage that can store " + storageType + " in constructionArea " + constructionAreaId));
     }
 
-    private boolean canProduce(ProductionBuildingModuleData buildingModuleData, String resourceDataId) {
-        return buildingModuleData.getProduces()
-            .stream()
-            .anyMatch(production -> production.getResourceDataId().equals(resourceDataId));
-    }
-
-    public void tryProduce(Game game, UUID location, UUID processId, UUID productionOrderId) {
+    void tryProduce(Game game, UUID location, UUID processId, UUID productionOrderId) {
         GameData gameData = game.getData();
 
         ProductionOrder productionOrder = gameData.getProductionOrders()
@@ -118,12 +96,7 @@ class ProductionOrderProcessHelper {
 
         log.info("Attempting production of {}", productionOrder);
 
-        Optional<UUID> maybeProducerBuildingModuleId = gameData.getBuildingModules()
-            .getByConstructionAreaId(productionOrder.getConstructionAreaId())
-            .stream()
-            .filter(buildingModule -> productionBuildingModuleDataService.containsKey(buildingModule.getDataId()))
-            //TODO filter under de/construction
-            .filter(buildingModule -> canProduce(productionBuildingModuleDataService.get(buildingModule.getDataId()), productionOrder.getResourceDataId()))
+        Optional<UUID> maybeProducerBuildingModuleId = buildingModuleService.getUsableConstructionAreaProducers(gameData, productionOrder.getConstructionAreaId(), productionOrder.getResourceDataId())
             .map(BuildingModule::getBuildingModuleId)
             .filter(buildingModuleId -> gameData.getBuildingModuleAllocations().findByBuildingModuleId(buildingModuleId).isEmpty())
             .findAny();
@@ -135,18 +108,18 @@ class ProductionOrderProcessHelper {
             return;
         }
 
-        Map<String, StoredResource> availableResources = gameData.getStoredResources()
+        Map<String, List<StoredResource>> availableResources = gameData.getStoredResources()
             .getByAllocatedBy(processId)
             .stream()
-            .collect(Collectors.toMap(StoredResource::getDataId, Function.identity()));
+            .collect(Collectors.groupingBy(StoredResource::getDataId));
 
-        Map<String, Integer> resourceMap = availableResources.values()
+        Map<String, Integer> resourceMap = availableResources.entrySet()
             .stream()
-            .collect(Collectors.toMap(StoredResource::getDataId, StoredResource::getAmount));
+            .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().stream().mapToInt(StoredResource::getAmount).sum()));
         log.info("Available resources: {}", resourceMap);
 
         int missingAmount = productionOrder.getMissingAmount();
-        Map<String, Integer> constructionRequirements = getRequiredResources(gameData, productionOrder);
+        Map<String, Integer> constructionRequirements = getRequiredResources(productionOrder);
         log.info("ConstructionRequirements: {}", constructionRequirements);
 
         int amountToStart = calculateAmountToStart(resourceMap, constructionRequirements, missingAmount);
@@ -170,9 +143,9 @@ class ProductionOrderProcessHelper {
         log.info("Started working on {} resources.", amountToStart);
     }
 
-    private void useRequiredResources(Game game, Map<String, StoredResource> availableResources, Map<String, Integer> constructionRequirements, int amountToStart) {
+    private void useRequiredResources(Game game, Map<String, List<StoredResource>> availableResources, Map<String, Integer> constructionRequirements, int amountToStart) {
         constructionRequirements.forEach((resourceDataId, amountNeeded) -> {
-            StoredResource storedResource = availableResources.get(resourceDataId);
+            StoredResource storedResource = storedResourceAggregator.aggregate(game.getProgressDiff(), game.getData(), availableResources.get(resourceDataId));
 
             storedResource.decreaseAmount(amountToStart * amountNeeded);
 
@@ -186,8 +159,8 @@ class ProductionOrderProcessHelper {
 
         for (Map.Entry<String, Integer> required : constructionRequirements.entrySet()) {
             Integer available = resourceMap.getOrDefault(required.getKey(), 0);
-            int enoughFor = available / (missingAmount * required.getValue());
-            log.info("There is {} of {} available, enough for {} resources.", available, required.getKey(), enoughFor);
+            int enoughFor = available / required.getValue();
+            log.info("There is {} of {} available, enough for {} resources. Required for one: {}, total needed: {}", available, required.getKey(), enoughFor, required.getValue(), missingAmount);
 
             if (enoughFor < result) {
                 result = Math.min(enoughFor, missingAmount);

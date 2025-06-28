@@ -15,7 +15,6 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.AllocationRemovalService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,7 +27,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ProductionOrderProcess implements Process {
     @Getter
     @NonNull
@@ -38,8 +36,7 @@ public class ProductionOrderProcess implements Process {
     @NonNull
     private volatile ProcessStatus status;
 
-    @Getter
-    @Nullable
+    @NonNull
     private UUID productionOrderId;
 
     @Getter
@@ -55,15 +52,15 @@ public class ProductionOrderProcess implements Process {
     private final Game game;
 
     @Override
+    public ProcessType getType() {
+        return ProcessType.PRODUCTION_ORDER;
+    }
+
+    @Override
     public int getPriority() {
         return gameData.getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
-    }
-
-    @Override
-    public ProcessType getType() {
-        return ProcessType.PRODUCTION_ORDER;
     }
 
     @Override

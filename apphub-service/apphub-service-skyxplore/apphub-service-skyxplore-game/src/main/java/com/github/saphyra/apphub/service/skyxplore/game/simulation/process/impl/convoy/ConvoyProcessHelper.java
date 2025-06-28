@@ -32,7 +32,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConvoyProcessHelper {
     private final StoredResourceConverter storedResourceConverter;
     private final StoredResourceFactory storedResourceFactory;
@@ -72,7 +71,7 @@ class ConvoyProcessHelper {
     /**
      * @return true, if the convoy reached its destination. False if it is still moving
      */
-    public boolean move(Game game, UUID location, UUID processId, UUID convoyId) {
+    boolean move(Game game, UUID location, UUID processId, UUID convoyId) {
         GameData gameData = game.getData();
 
         if (gameData.getProcesses().getByExternalReference(processId).stream().anyMatch(process -> process.getStatus() != ProcessStatus.DONE)) {
@@ -122,10 +121,10 @@ class ConvoyProcessHelper {
             .getLogisticsWeight()
             .get(surfaceType);
 
-        return weight * 100; //TODO move constant to config
+        return weight * gameProperties.getLogisticsWeightMultiplier();
     }
 
-    public boolean unloadResources(GameProgressDiff progressDiff, GameData gameData, UUID convoyId) {
+    boolean unloadResources(GameProgressDiff progressDiff, GameData gameData, UUID convoyId) {
         StoredResource resource = gameData.getStoredResources()
             .findByContainerIdValidated(convoyId);
         Convoy convoy = gameData.getConvoys()
@@ -163,7 +162,7 @@ class ConvoyProcessHelper {
         return true;
     }
 
-    public void cleanup(GameProgressDiff progressDiff, GameData gameData, UUID convoyId) {
+    void cleanup(GameProgressDiff progressDiff, GameData gameData, UUID convoyId) {
         gameData.getStoredResources()
             .getByContainerId(convoyId)
             .forEach(storedResource -> {

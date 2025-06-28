@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -87,6 +88,64 @@ class WorkProcessTest {
     @Test
     void getType() {
         assertThat(underTest.getType()).isEqualTo(ProcessType.WORK);
+    }
+
+    @Test
+    void work_cantProceed() {
+        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
+        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
+        given(game.getData()).willReturn(gameData);
+        given(conditions.canProceed(gameData, EXTERNAL_REFERENCE)).willReturn(false);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.CREATED);
+    }
+
+    @Test
+    void work_citizenNotAllocated() {
+        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
+        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
+        given(game.getData()).willReturn(gameData);
+        given(conditions.canProceed(gameData, EXTERNAL_REFERENCE)).willReturn(true);
+        given(helper.tryAllocateCitizen(progressDiff, gameData, LOCATION, PROCESS_ID, SkillType.AIMING)).willReturn(false);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.CREATED);
+    }
+
+    @Test
+    void work_hasWorkLeft() {
+        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
+        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
+        given(game.getData()).willReturn(gameData);
+        given(conditions.canProceed(gameData, EXTERNAL_REFERENCE)).willReturn(true);
+        given(helper.tryAllocateCitizen(progressDiff, gameData, LOCATION, PROCESS_ID, SkillType.AIMING)).willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+        given(helper.work(progressDiff, gameData, PROCESS_ID, SkillType.AIMING, REQUIRED_WORK_POINTS)).willReturn(REQUIRED_WORK_POINTS - 1);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
+    }
+
+    @Test
+    void work_finished() {
+        given(applicationContextProxy.getBean(WorkProcessHelper.class)).willReturn(helper);
+        given(applicationContextProxy.getBean(WorkProcessConditions.class)).willReturn(conditions);
+        given(game.getData()).willReturn(gameData);
+        given(conditions.canProceed(gameData, EXTERNAL_REFERENCE)).willReturn(true);
+        given(helper.tryAllocateCitizen(progressDiff, gameData, LOCATION, PROCESS_ID, SkillType.AIMING)).willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+        given(helper.work(progressDiff, gameData, PROCESS_ID, SkillType.AIMING, REQUIRED_WORK_POINTS)).willReturn(REQUIRED_WORK_POINTS);
+
+        underTest.work();
+
+        assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.DONE);
+
+        then(helper).should().releaseCitizen(progressDiff, gameData, PROCESS_ID);
     }
 
     @Test

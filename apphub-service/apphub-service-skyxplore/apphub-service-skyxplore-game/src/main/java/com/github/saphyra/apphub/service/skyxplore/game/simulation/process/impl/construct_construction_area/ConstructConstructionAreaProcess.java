@@ -24,7 +24,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ConstructConstructionAreaProcess implements Process {
     //Own fields
     @Getter
@@ -63,13 +62,15 @@ public class ConstructConstructionAreaProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findConstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue()
+            * findConstruction().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
     public void work() {
         ConstructConstructionAreaProcessHelper helper = applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class);
-        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
             helper.createResourceRequestProcess(game, location, processId, constructionId);
@@ -93,6 +94,7 @@ public class ConstructConstructionAreaProcess implements Process {
             return;
         }
 
+        GameProgressDiff progressDiff = game.getProgressDiff();
         helper.finishConstruction(progressDiff, gameData, constructionId);
         status = ProcessStatus.READY_TO_DELETE;
     }

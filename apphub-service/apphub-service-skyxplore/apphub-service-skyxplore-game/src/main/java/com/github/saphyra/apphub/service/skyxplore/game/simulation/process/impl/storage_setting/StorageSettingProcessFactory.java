@@ -47,8 +47,7 @@ public class StorageSettingProcessFactory implements ProcessFactory {
             .build();
     }
 
-    //TODO unit test
-    public void save(Game game, StorageSetting storageSetting, UUID containerId, Integer amount) {
+    public StorageSettingProcess save(Game game, StorageSetting storageSetting, UUID containerId, Integer amount) {
         UUID processId = idGenerator.randomUuid();
 
         ReservedStorage reservedStorage = reservedStorageFactory.save(
@@ -77,5 +76,7 @@ public class StorageSettingProcessFactory implements ProcessFactory {
             .add(process);
         game.getProgressDiff()
             .save(process.toModel());
+
+        return process;
     }
 }

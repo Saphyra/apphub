@@ -20,14 +20,13 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ResourceRequestProcessHelper {
     private final StoredResourceService storedResourceService;
     private final LogisticsService logisticsService;
     private final ProductionRequestFactory productionRequestFactory;
     private final ProductionDispatcherProcessFactory productionDispatcherProcessFactory;
 
-    public MissingResources getMissingResources(GameData gameData, UUID reservedStorageId) {
+     MissingResources getMissingResources(GameData gameData, UUID reservedStorageId) {
         int needed = gameData.getReservedStorages()
             .findByIdValidated(reservedStorageId)
             .getAmount();
@@ -67,7 +66,7 @@ class ResourceRequestProcessHelper {
             .sum();
     }
 
-    public int initiateDelivery(Game game, UUID processId, UUID location, UUID reservedStorageId, int missingResourceAmount) {
+     int initiateDelivery(Game game, UUID processId, UUID location, UUID reservedStorageId, int missingResourceAmount) {
         GameProgressDiff progressDiff = game.getProgressDiff();
         GameData gameData = game.getData();
 
@@ -87,7 +86,7 @@ class ResourceRequestProcessHelper {
             .sum();
     }
 
-    public void createProductionRequest(Game game, UUID location, UUID processId, UUID reservedStorageId, int requestedAmount) {
+     void createProductionRequest(Game game, UUID location, UUID processId, UUID reservedStorageId, int requestedAmount) {
         ProductionRequest productionRequest = productionRequestFactory.save(game.getProgressDiff(), game.getData(), reservedStorageId, requestedAmount);
 
         productionDispatcherProcessFactory.save(game, location, processId, productionRequest.getProductionRequestId());

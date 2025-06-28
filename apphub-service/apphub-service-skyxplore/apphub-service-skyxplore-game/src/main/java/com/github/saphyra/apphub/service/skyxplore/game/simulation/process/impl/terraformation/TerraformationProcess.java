@@ -68,10 +68,8 @@ public class TerraformationProcess implements Process {
     }
 
     @Override
-    //TODO unit test
     public void work() {
         TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
-        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
             log.info("Creating ResourceRequestProcesses...");
@@ -96,6 +94,7 @@ public class TerraformationProcess implements Process {
             return;
         }
 
+        GameProgressDiff progressDiff = game.getProgressDiff();
         helper.finishConstruction(progressDiff, gameData, terraformationId);
         status = ProcessStatus.READY_TO_DELETE;
     }

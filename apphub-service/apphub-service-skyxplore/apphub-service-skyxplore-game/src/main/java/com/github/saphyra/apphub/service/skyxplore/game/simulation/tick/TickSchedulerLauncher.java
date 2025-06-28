@@ -15,31 +15,24 @@ import java.util.UUID;
 @Slf4j
 public class TickSchedulerLauncher {
     private final ExecutorServiceBean executorServiceBean;
-    private final TickSchedulerContext context;
+    private final TickSchedulerFactory tickSchedulerFactory;
     private final GameDao gameDao;
 
     public void launch(Game game) {
-        TickScheduler tickScheduler = getTickScheduler(game);
+        TickScheduler tickScheduler = tickSchedulerFactory.getTickScheduler(game);
 
         executorServiceBean.execute(tickScheduler);
     }
 
     @SneakyThrows
-    //TODO unit test
-    //TODO synchronize on gameId
     public void processTick(UUID userId) {
         Game game = gameDao.findByUserIdValidated(userId);
-        TickScheduler tickScheduler = getTickScheduler(game);
+        TickScheduler tickScheduler = tickSchedulerFactory.getTickScheduler(game);
 
-        executorServiceBean.execute(() -> tickScheduler.processTick(0L))
-            .get()
-            .getOrThrow();
-    }
-
-    private TickScheduler getTickScheduler(Game game) {
-        return TickScheduler.builder()
-            .game(game)
-            .context(context)
-            .build();
+        synchronized (game) {
+            executorServiceBean.execute(() -> tickScheduler.processTick(0L))
+                .get()
+                .getOrThrow();
+        }
     }
 }

@@ -21,7 +21,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class WorkProcessHelper {
     private final CitizenAllocationFactory citizenAllocationFactory;
     private final GameProperties gameProperties;
@@ -46,7 +45,7 @@ class WorkProcessHelper {
         return completedWorkPoints;
     }
 
-    public boolean tryAllocateCitizen(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID processId, SkillType skillType) {
+    boolean tryAllocateCitizen(GameProgressDiff progressDiff, GameData gameData, UUID location, UUID processId, SkillType skillType) {
         Optional<UUID> maybeAvailableCitizen = getBestSuitableCitizen(gameData, location, skillType);
 
         if (maybeAvailableCitizen.isPresent()) {
@@ -68,7 +67,7 @@ class WorkProcessHelper {
             .map(BiWrapper::getEntity1);
     }
 
-    public void releaseCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId) {
+    void releaseCitizen(GameProgressDiff progressDiff, GameData gameData, UUID processId) {
         gameData.getCitizenAllocations()
             .findByProcessId(processId)
             .ifPresent(citizenAllocation -> {

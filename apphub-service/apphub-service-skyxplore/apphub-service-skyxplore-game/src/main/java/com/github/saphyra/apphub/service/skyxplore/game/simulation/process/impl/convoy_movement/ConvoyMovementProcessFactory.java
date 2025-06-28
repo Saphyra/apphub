@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ConvoyMovementProcessFactory implements ProcessFactory {
     private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;

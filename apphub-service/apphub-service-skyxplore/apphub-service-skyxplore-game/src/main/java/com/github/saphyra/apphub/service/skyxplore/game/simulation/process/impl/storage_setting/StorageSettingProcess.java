@@ -4,7 +4,9 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -22,7 +24,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
@@ -83,7 +84,6 @@ public class StorageSettingProcess implements Process {
     }
 
     @Override
-    //TODO unit test
     public void work() {
         StorageSettingProcessHelper helper = applicationContextProxy.getBean(StorageSettingProcessHelper.class);
 
@@ -128,9 +128,9 @@ public class StorageSettingProcess implements Process {
         model.setStatus(status);
         model.setLocation(location);
         model.setExternalReference(getExternalReference());
-        model.setData(Map.of(
-            ProcessParamKeys.AMOUNT, String.valueOf(amount),
-            ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorageId)
+        model.setData(CollectionUtils.toMap(
+            new BiWrapper<>(ProcessParamKeys.AMOUNT, String.valueOf(amount)),
+            new BiWrapper<>(ProcessParamKeys.RESERVED_STORAGE_ID, uuidConverter.convertDomain(reservedStorageId))
         ));
         return model;
     }

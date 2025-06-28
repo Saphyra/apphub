@@ -8,6 +8,7 @@ skyXploreDataHost: skyxplore-data:8080
 game:
   tickTimeMillis: 100
   pauseGameAfterDisconnectionSeconds: 5
+  logisticsWeightMultiplier: 100
   messageDelay:
     planetSurface: 100
     planetQueue: 100

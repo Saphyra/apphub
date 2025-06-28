@@ -74,7 +74,6 @@ public class WorkProcess implements Process {
 
     @SneakyThrows
     @Override
-    //TODO unit test
     public void work() {
         WorkProcessHelper helper = applicationContextProxy.getBean(WorkProcessHelper.class);
         WorkProcessConditions conditions = applicationContextProxy.getBean(WorkProcessConditions.class);

@@ -2,6 +2,9 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -35,12 +38,16 @@ class DeconstructConstructionAreaProcessHelperTest {
     private static final UUID BUILDING_MODULE_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
+    private static final Integer REQUIRED_WORK_POINTS = 1000;
 
     @Mock
     private WorkProcessFactory workProcessFactory;
 
     @Mock
     private DeconstructBuildingModuleService deconstructBuildingModuleService;
+
+    @Mock
+    private GameProperties gameProperties;
 
     @InjectMocks
     private DeconstructConstructionAreaProcessHelper underTest;
@@ -80,6 +87,9 @@ class DeconstructConstructionAreaProcessHelperTest {
 
     @Mock
     private ConstructionArea constructionArea;
+
+    @Mock
+    private DeconstructionProperties deconstructionProperties;
 
     @Test
     void initiateDeconstructModules_alreadyDeconstructed() {
@@ -128,5 +138,19 @@ class DeconstructConstructionAreaProcessHelperTest {
         then(deconstructions).should().remove(deconstruction);
         then(progressDiff).should().delete(CONSTRUCTION_AREA_ID, GameItemType.CONSTRUCTION_AREA);
         then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+    }
+
+    @Test
+    void startWork() {
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstruction.getLocation()).willReturn(LOCATION);
+        given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
+        given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
+
+        underTest.startWork(game, PROCESS_ID, DECONSTRUCTION_ID);
+
+        then(workProcessFactory).should().save(game, LOCATION, PROCESS_ID, REQUIRED_WORK_POINTS, SkillType.BUILDING);
     }
 }

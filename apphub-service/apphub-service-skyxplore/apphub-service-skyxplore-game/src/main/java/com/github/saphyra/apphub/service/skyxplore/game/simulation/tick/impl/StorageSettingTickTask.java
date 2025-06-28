@@ -20,15 +20,15 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.UUID;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StorageSettingTickTask implements TickTask {
     private final StorageSettingProcessFactory storageSettingProcessFactory;
     private final StorageCapacityService storageCapacityService;
@@ -44,10 +44,12 @@ class StorageSettingTickTask implements TickTask {
     public void process(Game game) {
         game.getData()
             .getStorageSettings()
-            .forEach(storageSetting -> createProductionOrderProcessIfNeeded(game, game.getData(), storageSetting));
+            .forEach(storageSetting -> createProductionOrderProcessIfNeeded(game, storageSetting));
     }
 
-    private void createProductionOrderProcessIfNeeded(Game game, GameData gameData, StorageSetting storageSetting) {
+    private void createProductionOrderProcessIfNeeded(Game game, StorageSetting storageSetting) {
+        GameData gameData = game.getData();
+
         log.info("Processing {}", storageSetting);
 
         int storedAmount = gameData.getStoredResources()
@@ -84,18 +86,26 @@ class StorageSettingTickTask implements TickTask {
         StorageType storageType = resourceDataService.get(dataId)
             .getStorageType();
 
-        //Fill the containers with highest capacity first
+        //Fill the containers with the highest capacity first
         Queue<BiWrapper<UUID, Integer>> queue = new PriorityQueue<>((o1, o2) -> Integer.compare(o2.getEntity2(), o1.getEntity2()));
 
         buildingModuleService.getUsableDepots(gameData, location, storageType)
-            .forEach(buildingModule -> queue.add(new BiWrapper<>(
+            .map(buildingModule -> new BiWrapper<>(
                 buildingModule.getBuildingModuleId(),
                 storageCapacityService.getFreeContainerCapacity(gameData, buildingModule.getBuildingModuleId(), storageType)
-            )));
+            ))
+            .filter(bw -> bw.getEntity2() > 0)
+            .forEach(queue::add);
 
         Map<UUID, Integer> result = new HashMap<>();
         while (amount > 0) {
-            BiWrapper<UUID, Integer> container = Objects.requireNonNull(queue.poll());
+            BiWrapper<UUID, Integer> container = queue.poll();
+
+            if (isNull(container)) {
+                log.info("Not enough storage available for {} of {} at {}", amount, dataId, location);
+                break;
+            }
+
             int toStore = Math.min(amount, container.getEntity2());
 
             result.put(container.getEntity1(), toStore);

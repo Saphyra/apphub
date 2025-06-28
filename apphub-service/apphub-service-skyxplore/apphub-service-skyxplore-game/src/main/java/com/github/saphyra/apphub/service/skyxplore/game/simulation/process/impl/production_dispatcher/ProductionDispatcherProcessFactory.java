@@ -18,7 +18,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ProductionDispatcherProcessFactory implements ProcessFactory {
     private final UuidConverter uuidConverter;
     private final IdGenerator idGenerator;
@@ -42,7 +41,7 @@ public class ProductionDispatcherProcessFactory implements ProcessFactory {
             .build();
     }
 
-    public void save(Game game, UUID location, UUID externalReference, UUID productionRequestId) {
+    public ProductionDispatcherProcess save(Game game, UUID location, UUID externalReference, UUID productionRequestId) {
         ProductionDispatcherProcess process = ProductionDispatcherProcess.builder()
             .processId(idGenerator.randomUuid())
             .status(ProcessStatus.CREATED)
@@ -58,5 +57,7 @@ public class ProductionDispatcherProcessFactory implements ProcessFactory {
             .add(process);
         game.getProgressDiff()
             .save(process.toModel());
+
+        return process;
     }
 }

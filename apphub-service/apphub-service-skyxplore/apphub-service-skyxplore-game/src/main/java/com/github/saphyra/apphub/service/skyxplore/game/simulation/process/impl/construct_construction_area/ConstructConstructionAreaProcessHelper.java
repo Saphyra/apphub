@@ -25,7 +25,6 @@ class ConstructConstructionAreaProcessHelper {
     private final ResourceRequestProcessFactory resourceRequestProcessFactory;
     private final StoredResourceService storedResourceService;
 
-    //TODO unit test
     public void createResourceRequestProcess(Game game, UUID location, UUID processId, UUID constructionId) {
         game.getData()
             .getReservedStorages()
@@ -33,7 +32,6 @@ class ConstructConstructionAreaProcessHelper {
             .forEach(reservedStorage -> resourceRequestProcessFactory.save(game, location, processId, reservedStorage.getReservedStorageId()));
     }
 
-    //TODO unit test
     void startWork(Game game, UUID processId, UUID constructionId) {
         storedResourceService.useResources(game.getProgressDiff(), game.getData(), processId);
 

@@ -29,7 +29,6 @@ class TerraformationProcessHelper {
     private final StoredResourceService storedResourceService;
     private final SurfaceConverter surfaceConverter;
 
-    //TODO unit test
     public void createResourceRequestProcess(Game game, UUID location, UUID processId, UUID constructionId) {
         game.getData()
             .getReservedStorages()
@@ -37,7 +36,6 @@ class TerraformationProcessHelper {
             .forEach(reservedStorage -> resourceRequestProcessFactory.save(game, location, processId, reservedStorage.getReservedStorageId()));
     }
 
-    //TODO unit test
     void startWork(Game game, UUID processId, UUID constructionId) {
         storedResourceService.useResources(game.getProgressDiff(), game.getData(), processId);
 
@@ -55,9 +53,6 @@ class TerraformationProcessHelper {
 
         allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, constructionId);
 
-        gameData.getConstructions()
-            .remove(construction);
-
         progressDiff.delete(constructionId, GameItemType.CONSTRUCTION);
 
         Surface surface = gameData.getSurfaces()
@@ -65,6 +60,9 @@ class TerraformationProcessHelper {
 
         surface.setSurfaceType(SurfaceType.valueOf(construction.getData()));
         progressDiff.save(surfaceConverter.toModel(gameData.getGameId(), surface));
+
+        gameData.getConstructions()
+            .remove(construction);
         progressDiff.delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
     }
 }

@@ -9,7 +9,6 @@ public class MissingResources {
     private final int toDeliver;
     private int toRequest;
 
-    //TODO unit test
     public void decreaseToRequest(int delivered) {
         toRequest -= delivered;
     }

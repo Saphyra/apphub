@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ConvoyMovementProcessHelper {
     private final GameProperties gameProperties;
     private final CitizenEfficiencyCalculator citizenEfficiencyCalculator;

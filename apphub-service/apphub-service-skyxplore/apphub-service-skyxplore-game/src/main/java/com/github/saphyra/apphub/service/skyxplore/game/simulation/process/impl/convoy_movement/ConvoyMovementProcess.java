@@ -25,7 +25,6 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
-//TODO unit test
 public class ConvoyMovementProcess implements Process {
     @Getter
     @NonNull

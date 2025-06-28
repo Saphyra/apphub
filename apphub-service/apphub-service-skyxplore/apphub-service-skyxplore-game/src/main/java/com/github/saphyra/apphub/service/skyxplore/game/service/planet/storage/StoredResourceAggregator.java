@@ -16,7 +16,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class StoredResourceAggregator {
+public class StoredResourceAggregator {
     private final StoredResourceFactory storedResourceFactory;
 
     /**
@@ -29,7 +29,11 @@ class StoredResourceAggregator {
             .toList();
     }
 
-    private StoredResource aggregate(GameProgressDiff progressDiff, GameData gameData, List<StoredResource> storedResources) {
+    public StoredResource aggregate(GameProgressDiff progressDiff, GameData gameData, List<StoredResource> storedResources) {
+        if (storedResources.isEmpty()) {
+            throw new IllegalStateException("StoredResources cannot be empty.");
+        }
+
         if (storedResources.size() == 1) {
             return storedResources.get(0);
         }

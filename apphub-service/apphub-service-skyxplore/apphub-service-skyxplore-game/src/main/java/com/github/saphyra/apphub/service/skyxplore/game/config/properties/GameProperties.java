@@ -16,6 +16,7 @@ public class GameProperties {
     private int creationQueueSize;
     private int tickTimeMillis;
     private int pauseGameAfterDisconnectionSeconds;
+    private int logisticsWeightMultiplier;
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;

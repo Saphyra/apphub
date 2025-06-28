@@ -27,7 +27,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ProductionProcessHelper {
     private final ProductionBuildingModuleDataService productionBuildingModuleDataService;
     private final WorkProcessFactory workProcessFactory;
@@ -56,7 +55,8 @@ class ProductionProcessHelper {
      * @return true, if produced resources can be stored, false if storages are full.
      */
     public boolean resourcesProduced(Game game, UUID location, UUID productionOrderId, int amount) {
-        ProductionOrder productionOrder = game.getData()
+        GameData gameData = game.getData();
+        ProductionOrder productionOrder = gameData
             .getProductionOrders()
             .findByIdValidated(productionOrderId);
 
@@ -65,18 +65,18 @@ class ProductionProcessHelper {
 
         log.info("Storing {} resources to storage {}", amount, storageType);
 
-        int availableCapacity = storageCapacityService.getEmptyConstructionAreaCapacity(game.getData(), productionOrder.getConstructionAreaId(), storageType);
+        int availableCapacity = storageCapacityService.getEmptyConstructionAreaCapacity(gameData, productionOrder.getConstructionAreaId(), storageType);
         if (amount > availableCapacity) {
             log.info("{} capacity is needed, but there is only {} available.", amount, availableCapacity);
             return false;
         }
 
-        Map<UUID, Integer> containers = getContainers(game.getData(), productionOrder.getConstructionAreaId(), productionOrder.getResourceDataId(), amount);
+        Map<UUID, Integer> containers = getContainers(gameData, productionOrder.getConstructionAreaId(), productionOrder.getResourceDataId(), amount);
         log.info("<Container, Amount> mapping: {}", containers);
 
         containers.forEach((containerId, amountToStore) -> storedResourceFactory.save(
             game.getProgressDiff(),
-            game.getData(),
+            gameData,
             location,
             productionOrder.getResourceDataId(),
             amountToStore,
