@@ -31,7 +31,7 @@ class PreprodRunLatestTestGroupsMenuOption implements MenuOption {
 
     @Override
     public MenuOrderEnum getOrder() {
-        return MenuOrderEnum.RUN_TEST_GROUPS;
+        return MenuOrderEnum.RUN_LATEST_TEST_GROUPS;
     }
 
     @Override

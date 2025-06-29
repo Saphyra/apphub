@@ -14,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,8 +30,6 @@ class CommodityDaoTest {
     private static final Integer MIN_PRICE = 435;
     private static final Integer MAX_PRICE = 678;
     private static final Integer MIN_DEMAND = 3;
-    private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
 
     @Mock
     private CommodityConverter converter;
@@ -76,8 +73,8 @@ class CommodityDaoTest {
 
         assertThat(underTest.getCommodityNames()).containsExactly(COMMODITY_NAME);
 
-        Set<String> commodityCache = ReflectionUtils.getFieldValue(underTest, "commodityCache");
-        assertThat(commodityCache).contains(COMMODITY_NAME);
+        Set<String> commodityNameCache = ReflectionUtils.getFieldValue(underTest, "commodityNameCache");
+        assertThat(commodityNameCache).contains(COMMODITY_NAME);
 
         boolean loaded = ReflectionUtils.getFieldValue(underTest, "loaded");
         assertThat(loaded).isTrue();
@@ -111,8 +108,8 @@ class CommodityDaoTest {
 
         underTest.save(domain);
 
-        Set<String> commodityCache = ReflectionUtils.getFieldValue(underTest, "commodityCache");
-        assertThat(commodityCache).contains(COMMODITY_NAME);
+        Set<String> commodityNameCache = ReflectionUtils.getFieldValue(underTest, "commodityNameCache");
+        assertThat(commodityNameCache).contains(COMMODITY_NAME);
 
         then(repository).should().save(entity);
     }
@@ -124,8 +121,8 @@ class CommodityDaoTest {
 
         underTest.saveAll(List.of(domain));
 
-        Set<String> commodityCache = ReflectionUtils.getFieldValue(underTest, "commodityCache");
-        assertThat(commodityCache).contains(COMMODITY_NAME);
+        Set<String> commodityNameCache = ReflectionUtils.getFieldValue(underTest, "commodityNameCache");
+        assertThat(commodityNameCache).contains(COMMODITY_NAME);
 
         then(repository).should().saveAll(List.of(entity));
     }
