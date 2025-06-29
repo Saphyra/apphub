@@ -17,6 +17,8 @@
     SkyXplore
         Remove building related changeSet
     ExecutorServiceBean should not log and report NotLogged and Logged exceptions
+    EliteBase
+        Integration tests for OrphanedRecordCleaners
 
 ===ETC===
     EliteBase

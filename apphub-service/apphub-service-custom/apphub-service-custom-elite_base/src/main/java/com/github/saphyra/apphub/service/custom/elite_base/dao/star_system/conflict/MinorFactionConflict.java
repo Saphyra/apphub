@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,5 +20,6 @@ public class MinorFactionConflict {
     private final UUID starSystemId;
     private final WarStatus status;
     private final WarType warType;
-    private final List<ConflictingMinorFaction> conflictingMinorFactions;
+    @Builder.Default
+    private final List<ConflictingMinorFaction> conflictingMinorFactions = Collections.emptyList();
 }

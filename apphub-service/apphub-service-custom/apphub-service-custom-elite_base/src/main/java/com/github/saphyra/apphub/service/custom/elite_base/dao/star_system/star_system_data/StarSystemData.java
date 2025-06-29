@@ -36,12 +36,14 @@ public class StarSystemData {
     private Double powerplayStateControlProgress;
     private Double powerplayStateReinforcement;
     private Double powerplayStateUndermining;
-    private LazyLoadedField<List<Power>> powers;
-    private LazyLoadedField<List<PowerplayConflict>> powerplayConflicts;
-
-    private LazyLoadedField<List<UUID>> minorFactions;
-
-    private LazyLoadedField<List<MinorFactionConflict>> conflicts;
+    @Builder.Default
+    private LazyLoadedField<List<Power>> powers = LazyLoadedField.loaded(List.of());
+    @Builder.Default
+    private LazyLoadedField<List<PowerplayConflict>> powerplayConflicts = LazyLoadedField.loaded(List.of());
+    @Builder.Default
+    private LazyLoadedField<List<UUID>> minorFactions = LazyLoadedField.loaded(List.of());
+    @Builder.Default
+    private LazyLoadedField<List<MinorFactionConflict>> conflicts = LazyLoadedField.loaded(List.of());
 
     public List<UUID> getMinorFactions() {
         return minorFactions.get();

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ReflectionUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -68,14 +67,14 @@ class CommodityDaoTest {
     }
 
     @Test
-    void getCommodities() throws SQLException, NoSuchFieldException, IllegalAccessException {
+    void getCommodityNames() throws SQLException, NoSuchFieldException, IllegalAccessException {
         given(jdbcTemplate.query(anyString(), any(ResultSetExtractor.class))).willAnswer(invocation -> invocation.getArgument(1, ResultSetExtractor.class).extractData(resultSet));
         given(resultSet.next())
             .willReturn(true)
             .willReturn(false);
         given(resultSet.getString(COLUMN_COMMODITY_NAME)).willReturn(COMMODITY_NAME);
 
-        assertThat(underTest.getCommodities()).containsExactly(COMMODITY_NAME);
+        assertThat(underTest.getCommodityNames()).containsExactly(COMMODITY_NAME);
 
         Set<String> commodityCache = ReflectionUtils.getFieldValue(underTest, "commodityCache");
         assertThat(commodityCache).contains(COMMODITY_NAME);
@@ -83,7 +82,7 @@ class CommodityDaoTest {
         boolean loaded = ReflectionUtils.getFieldValue(underTest, "loaded");
         assertThat(loaded).isTrue();
 
-        assertThat(underTest.getCommodities()).containsExactly(COMMODITY_NAME);
+        assertThat(underTest.getCommodityNames()).containsExactly(COMMODITY_NAME);
 
         then(jdbcTemplate).should().query(anyString(), any(ResultSetExtractor.class));
         then(jdbcTemplate).shouldHaveNoMoreInteractions();
@@ -129,5 +128,12 @@ class CommodityDaoTest {
         assertThat(commodityCache).contains(COMMODITY_NAME);
 
         then(repository).should().saveAll(List.of(entity));
+    }
+
+    @Test
+    void deleteByExternalReferencesAndCommodityNames_empty(){
+        underTest.deleteByExternalReferencesAndCommodityNames(List.of());
+
+        then(jdbcTemplate).shouldHaveNoInteractions();
     }
 }

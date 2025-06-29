@@ -66,7 +66,7 @@ class CommodityTradingControllerImplTest {
 
     @Test
     void getCommodities() {
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         assertThat(underTest.getCommodities(accessTokenHeader)).containsExactly(COMMODITY_NAME);
     }

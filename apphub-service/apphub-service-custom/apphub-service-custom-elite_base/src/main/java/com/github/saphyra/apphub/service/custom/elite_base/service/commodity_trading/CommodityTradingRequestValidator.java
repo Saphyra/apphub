@@ -18,7 +18,7 @@ class CommodityTradingRequestValidator {
 
     void validate(CommodityTradingRequest request) {
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
-        ValidationUtil.contains(request.getCommodity(), commodityDao.getCommodities(), "commodity");
+        ValidationUtil.contains(request.getCommodity(), commodityDao.getCommodityNames(), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
         ValidationUtil.notNull(request.getMaxStationDistance(), "maxStationDistance");
         ValidationUtil.notNull(request.getIncludeUnknownStationDistance(), "includeUnknownStationDistance");

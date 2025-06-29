@@ -11,7 +11,6 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 
 @Component
 @Slf4j
-//TODO unit test
 class LoadoutOrphanedRecordCleaner extends OrphanedRecordCleaner {
     private final JdbcTemplate jdbcTemplate;
 

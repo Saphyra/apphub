@@ -23,9 +23,12 @@ public class MinorFaction {
     private FactionStateEnum state;
     private Double influence;
     private Allegiance allegiance;
-    private LazyLoadedField<List<MinorFactionState>> activeStates;
-    private LazyLoadedField<List<MinorFactionState>> pendingStates;
-    private LazyLoadedField<List<MinorFactionState>> recoveringStates;
+    @Builder.Default
+    private LazyLoadedField<List<MinorFactionState>> activeStates = LazyLoadedField.loaded(List.of());
+    @Builder.Default
+    private LazyLoadedField<List<MinorFactionState>> pendingStates = LazyLoadedField.loaded(List.of());
+    @Builder.Default
+    private LazyLoadedField<List<MinorFactionState>> recoveringStates = LazyLoadedField.loaded(List.of());
 
     public List<MinorFactionState> getActiveStates() {
         return activeStates.get();
