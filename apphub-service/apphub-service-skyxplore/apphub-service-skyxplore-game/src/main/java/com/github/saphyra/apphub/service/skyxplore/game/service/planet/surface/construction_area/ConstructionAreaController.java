@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 import com.github.saphyra.apphub.api.skyxplore.game.server.game.solar_system.planet.surface.SkyXplorePlanetSurfaceConstructionAreaController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,7 @@ class ConstructionAreaController implements SkyXplorePlanetSurfaceConstructionAr
     private final ConstructConstructionAreaService constructConstructionAreaService;
     private final CancelConstructionAreaConstructionService cancelConstructionAreaConstructionService;
     private final DeconstructConstructionAreaService deconstructConstructionAreaService;
-    private final CancelDeconstructConstructionAreaService cancelDeconstructConstructionAreaService;
+    private final CancelDeconstructionFacade cancelDeconstructionFacade;
     private final AvailableBuildingModulesService availableBuildingModulesService;
 
     @Override
@@ -45,7 +46,7 @@ class ConstructionAreaController implements SkyXplorePlanetSurfaceConstructionAr
     public void cancelDeconstructConstructionArea(UUID deconstructionId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to cancel deconstruction {}", accessTokenHeader.getUserId(), deconstructionId);
 
-        cancelDeconstructConstructionAreaService.cancelDeconstruction(accessTokenHeader.getUserId(), deconstructionId);
+        cancelDeconstructionFacade.cancelDeconstructionOfConstructionArea(accessTokenHeader.getUserId(), deconstructionId);
     }
 
     @Override

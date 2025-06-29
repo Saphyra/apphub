@@ -1,19 +1,22 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data;
 
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.allocated_resource.AllocatedResources;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_allocation.BuildingModuleAllocations;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation.BuildingModuleAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Constructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionAreas;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.convoy.Convoys;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate.Coordinates;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.durability.Durabilities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.Priorities;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_order.ProductionOrders;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_request.ProductionRequests;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorages;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.resource_delivery_request.ResourceDeliveryRequests;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.Skills;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.solar_system.SolarSystems;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.storage_setting.StorageSettings;
@@ -56,13 +59,21 @@ public class GameData {
 
     //STORAGE
     @Builder.Default
-    private final AllocatedResources allocatedResources = new AllocatedResources();
-    @Builder.Default
     private final ReservedStorages reservedStorages = new ReservedStorages();
     @Builder.Default
     private final StorageSettings storageSettings = new StorageSettings();
     @Builder.Default
     private final StoredResources storedResources = new StoredResources();
+    @Builder.Default
+    private final ProductionRequests productionRequests = new ProductionRequests();
+    @Builder.Default
+    private final ProductionOrders productionOrders = new ProductionOrders();
+
+    //Logistics
+    @Builder.Default
+    private final ResourceDeliveryRequests resourceDeliveryRequests = new ResourceDeliveryRequests();
+    @Builder.Default
+    private final Convoys convoys = new Convoys();
 
     //CITIZEN
     @Builder.Default

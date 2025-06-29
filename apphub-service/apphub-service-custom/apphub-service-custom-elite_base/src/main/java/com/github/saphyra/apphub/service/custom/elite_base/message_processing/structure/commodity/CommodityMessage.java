@@ -17,6 +17,8 @@ public class CommodityMessage {
     private LocalDateTime timestamp;
     private Long marketId;
     private EdCommodity[] commodities;
+
+    @Builder.Default
     private Economy[] economies = new Economy[0];
     private String[] prohibited;
     private String stationName;

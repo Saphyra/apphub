@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodi
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

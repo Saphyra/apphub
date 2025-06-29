@@ -1,15 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruct_building_module;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModules;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstruction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.Deconstructions;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
-import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work.WorkProcessFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -29,9 +29,13 @@ class DeconstructBuildingModuleProcessHelperTest {
     private static final UUID DECONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
     private static final UUID BUILDING_MODULE_ID = UUID.randomUUID();
+    private static final Integer REQUIRED_WORK_POINTS = 100;
 
     @Mock
     private WorkProcessFactory workProcessFactory;
+
+    @Mock
+    private GameProperties gameProperties;
 
     @InjectMocks
     private DeconstructBuildingModuleProcessHelper underTest;
@@ -41,15 +45,6 @@ class DeconstructBuildingModuleProcessHelperTest {
 
     @Mock
     private GameProgressDiff progressDiff;
-
-    @Mock
-    private Processes processes;
-
-    @Mock
-    private WorkProcess process;
-
-    @Mock
-    private ProcessModel processModel;
 
     @Mock
     private Deconstructions deconstructions;
@@ -63,25 +58,33 @@ class DeconstructBuildingModuleProcessHelperTest {
     @Mock
     private BuildingModule buildingModule;
 
+    @Mock
+    private Game game;
+
+    @Mock
+    private DeconstructionProperties deconstructionProperties;
+
     @Test
     void startWork() {
-        given(workProcessFactory.createForDeconstruction(gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION)).willReturn(List.of(process));
-        given(process.toModel()).willReturn(processModel);
-        given(gameData.getProcesses()).willReturn(processes);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getDeconstructions()).willReturn(deconstructions);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstruction.getLocation()).willReturn(LOCATION);
+        given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
+        given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
 
-        underTest.startWork(progressDiff, gameData, PROCESS_ID, DECONSTRUCTION_ID, LOCATION);
+        underTest.startWork(game, PROCESS_ID, DECONSTRUCTION_ID);
 
-        then(progressDiff).should().save(processModel);
-        then(processes).should().add(process);
+        then(workProcessFactory).should().save(game, LOCATION, PROCESS_ID, REQUIRED_WORK_POINTS, SkillType.BUILDING);
     }
 
     @Test
     void finishDeconstruction() {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
-        given(deconstructions.findByDeconstructionIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
+        given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
 
         underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 

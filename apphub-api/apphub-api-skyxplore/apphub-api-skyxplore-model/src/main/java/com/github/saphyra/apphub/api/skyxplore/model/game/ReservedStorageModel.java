@@ -13,7 +13,8 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class ReservedStorageModel extends GameItem {
     private UUID externalReference;
-    private UUID location;
+    private UUID containerId;
+    private ContainerType containerType;
     private String dataId;
     private Integer amount;
 }

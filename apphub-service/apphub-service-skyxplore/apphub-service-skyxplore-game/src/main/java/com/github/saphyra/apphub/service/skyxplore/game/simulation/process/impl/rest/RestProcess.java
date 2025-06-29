@@ -78,8 +78,6 @@ public class RestProcess implements Process {
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         RestProcessConditions conditions = applicationContextProxy.getBean(RestProcessConditions.class);
 
         if (status == ProcessStatus.CREATED) {

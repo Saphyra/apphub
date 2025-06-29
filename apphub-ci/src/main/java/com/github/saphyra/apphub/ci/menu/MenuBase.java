@@ -134,11 +134,12 @@ public abstract class MenuBase {
         for (MenuOption option : options) {
             MenuOrder order = option
                 .getOrder();
-            if (orders.contains(order.getOrder())) {
+            int orderInt = order.getOrder();
+            if (orders.contains(orderInt)) {
                 return Optional.of(order);
             }
 
-            orders.add(order.getOrder());
+            orders.add(orderInt);
         }
 
         return Optional.empty();

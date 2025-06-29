@@ -32,7 +32,7 @@ class DeconstructConstructionAreaService {
         GameData gameData = game.getData();
 
         UUID planetId = gameData.getConstructionAreas()
-            .findByConstructionAreaIdValidated(constructionAreaId)
+            .findByIdValidated(constructionAreaId)
             .getLocation();
 
         if (!userId.equals(game.getData().getPlanets().findByIdValidated(planetId).getOwner())) {

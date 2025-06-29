@@ -5,37 +5,24 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.ProductionBuildingService;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
-import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class WorkProcessFactory implements ProcessFactory {
-    private final ProductionBuildingService productionBuildingService;
     private final GameProperties gameProperties;
-    private final UuidConverter uuidConverter;
     private final ApplicationContextProxy applicationContextProxy;
     private final IdGenerator idGenerator;
-    private final GameDao gameDao;
 
     @Override
     public ProcessType getType() {
@@ -50,101 +37,38 @@ public class WorkProcessFactory implements ProcessFactory {
             game,
             model.getLocation(),
             model.getStatus(),
-            model.getData().get(ProcessParamKeys.BUILDING_DATA_ID),
             SkillType.valueOf(model.getData().get(ProcessParamKeys.SKILL_TYPE)),
             Integer.parseInt(model.getData().get(ProcessParamKeys.REQUIRED_WORK_POINTS)),
-            WorkProcessType.valueOf(model.getData().get(ProcessParamKeys.WORK_PROCESS_TYPE)),
-            uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.TARGET_ID)),
             Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS))
         );
     }
 
-    public List<WorkProcess> createForProduction(GameData gameData, UUID processId, UUID location, String producerBuildingDataId, String resourceDataId, Integer amount) {
-        log.info("Creating WorkPointProcesses...");
-
-        Production production = productionBuildingService.get(producerBuildingDataId)
-            .getProduces()
-            .stream()
-            .filter(p -> p.getResourceDataId().equals(resourceDataId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.reportedException("ProducerBuildingModule not found by resourceDataId " + resourceDataId));
-        ConstructionRequirements constructionRequirements = production.getConstructionRequirements();
-
-        int requiredWorkPoints = amount * constructionRequirements.getRequiredWorkPoints();
-
-        return createNews(gameData, processId, location, producerBuildingDataId, production.getRequiredSkill(), requiredWorkPoints, WorkProcessType.OTHER, null);
-    }
-
-    public List<WorkProcess> createForDeconstruction(GameData gameData, UUID processId, UUID deconstructionId, UUID location) {
-        DeconstructionProperties deconstructionProperties = gameProperties.getDeconstruction();
-
-        return createNews(gameData, processId, location, null, SkillType.BUILDING, deconstructionProperties.getRequiredWorkPoints(), WorkProcessType.DECONSTRUCTION, deconstructionId);
-    }
-
-    public List<WorkProcess> createForTerraformation(GameData gameData, UUID processId, UUID constructionId, UUID location, int requiredWorkPoints) {
-        return createNews(gameData, processId, location, null, SkillType.BUILDING, requiredWorkPoints, WorkProcessType.TERRAFORMATION, constructionId);
-    }
-
-    public List<WorkProcess> createForConstruction(GameData gameData, UUID processId, UUID constructionId, UUID location, int requiredWorkPoints) {
-        return createNews(gameData, processId, location, null, SkillType.BUILDING, requiredWorkPoints, WorkProcessType.CONSTRUCTION, constructionId);
-    }
-
-    private List<WorkProcess> createNews(
-        GameData gameData,
-        UUID externalReference,
-        UUID location,
-        String buildingDataId,
-        SkillType skillType,
-        int requiredWorkPoints,
-        WorkProcessType processType,
-        UUID targetId
-    ) {
-        int maxWorkPointsBatch = gameProperties.getCitizen()
+    public void save(Game game, UUID location, UUID externalReference, int workPointsNeeded, SkillType skillType) {
+        int maxWorkPointsPerBatch = gameProperties.getCitizen()
             .getMaxWorkPointsBatch();
 
-        List<WorkProcess> result = new ArrayList<>();
+        while (workPointsNeeded > 0) {
+            int workPoints = Math.min(maxWorkPointsPerBatch, workPointsNeeded);
 
-        for (int workPointsLeft = requiredWorkPoints; workPointsLeft > 0; workPointsLeft -= maxWorkPointsBatch) {
-            WorkProcess workProcess = createNew(
-                gameData,
+            WorkProcess process = create(
+                idGenerator.randomUuid(),
                 externalReference,
+                game,
                 location,
-                buildingDataId,
+                ProcessStatus.CREATED,
                 skillType,
-                Math.min(workPointsLeft, maxWorkPointsBatch),
-                processType,
-                targetId
+                workPoints,
+                0
             );
-            log.info("{} created.", workProcess);
-            result.add(workProcess);
+
+            game.getData()
+                .getProcesses()
+                .add(process);
+            game.getProgressDiff()
+                .save(process.toModel());
+
+            workPointsNeeded -= workPoints;
         }
-
-        return result;
-    }
-
-    private WorkProcess createNew(
-        GameData gameData,
-        UUID externalReference,
-        UUID location,
-        String buildingDataId,
-        SkillType skillType,
-        int requiredWorkPoints,
-        WorkProcessType processType,
-        UUID targetId
-    ) {
-        return create(
-            idGenerator.randomUuid(),
-            externalReference,
-            gameDao.findById(gameData.getGameId()),
-            location,
-            ProcessStatus.CREATED,
-            buildingDataId,
-            skillType,
-            requiredWorkPoints,
-            processType,
-            targetId,
-            0
-        );
     }
 
     private WorkProcess create(
@@ -153,24 +77,17 @@ public class WorkProcessFactory implements ProcessFactory {
         Game game,
         UUID location,
         ProcessStatus status,
-        String buildingDataId,
         SkillType skillType,
         int requiredWorkPoints,
-        WorkProcessType workProcessType,
-        UUID targetId,
         int completedWorkPoints
     ) {
         return WorkProcess.builder()
             .processId(processId)
             .status(status)
             .externalReference(externalReference)
-            .gameData(game.getData())
             .location(location)
-            .buildingDataId(buildingDataId)
             .skillType(skillType)
             .requiredWorkPoints(requiredWorkPoints)
-            .workProcessType(workProcessType)
-            .targetId(targetId)
             .applicationContextProxy(applicationContextProxy)
             .completedWorkPoints(completedWorkPoints)
             .game(game)

@@ -19,7 +19,8 @@ import static org.mockito.BDDMockito.given;
 class ReservedStoragesTest {
     private static final UUID RESERVED_STORAGE_ID = UUID.randomUUID();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID CONTAINER_ID_1 = UUID.randomUUID();
+    private static final UUID CONTAINER_ID_2 = UUID.randomUUID();
 
     private final ReservedStorages underTest = new ReservedStorages();
 
@@ -35,7 +36,7 @@ class ReservedStoragesTest {
 
         underTest.add(reservedStorage1);
 
-        assertThat(underTest.findByReservedStorageIdValidated(RESERVED_STORAGE_ID)).isEqualTo(reservedStorage1);
+        assertThat(underTest.findByIdValidated(RESERVED_STORAGE_ID)).isEqualTo(reservedStorage1);
     }
 
     @Test
@@ -44,7 +45,7 @@ class ReservedStoragesTest {
 
         underTest.add(reservedStorage1);
 
-        Throwable ex = catchThrowable(() -> underTest.findByReservedStorageIdValidated(RESERVED_STORAGE_ID));
+        Throwable ex = catchThrowable(() -> underTest.findByIdValidated(RESERVED_STORAGE_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
@@ -60,12 +61,12 @@ class ReservedStoragesTest {
     }
 
     @Test
-    void getByLocation() {
-        given(reservedStorage1.getLocation()).willReturn(LOCATION);
-        given(reservedStorage2.getLocation()).willReturn(UUID.randomUUID());
+    void getByContainerId() {
+        given(reservedStorage1.getContainerId()).willReturn(CONTAINER_ID_1);
+        given(reservedStorage2.getContainerId()).willReturn(CONTAINER_ID_2);
 
         underTest.addAll(List.of(reservedStorage1, reservedStorage2));
 
-        assertThat(underTest.getByLocation(LOCATION)).containsExactly(reservedStorage1);
+        assertThat(underTest.getByContainerId(CONTAINER_ID_1)).containsExactly(reservedStorage1);
     }
 }

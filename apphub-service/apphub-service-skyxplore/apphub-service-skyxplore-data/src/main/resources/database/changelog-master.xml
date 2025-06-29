@@ -32,7 +32,6 @@
     <include file="database/change_sets/citizen.xml"/>
     <include file="database/change_sets/skill.xml"/>
     <include file="database/change_sets/surface.xml"/>
-    <include file="database/change_sets/building.xml"/>
     <include file="database/change_sets/line.xml"/>
     <include file="database/change_sets/allocated_resource.xml"/>
     <include file="database/change_sets/reserved_storage.xml"/>
@@ -48,4 +47,8 @@
     <include file="database/change_sets/setting.xml"/>
     <include file="database/change_sets/construction_area.xml"/>
     <include file="database/change_sets/building_module.xml"/>
+    <include file="database/change_sets/production_order.xml"/>
+    <include file="database/change_sets/resource_delivery_request.xml"/>
+    <include file="database/change_sets/convoy.xml"/>
+    <include file="database/change_sets/production_request.xml"/>
 </databaseChangeLog>

@@ -62,31 +62,31 @@ public class ConstructConstructionAreaProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findConstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return gameData.getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue()
+            * findConstruction().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
     public void work() {
-        log.info("Working on {}", this);
-
         ConstructConstructionAreaProcessHelper helper = applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class);
-        GameProgressDiff progressDiff = game.getProgressDiff();
 
         if (status == ProcessStatus.CREATED) {
-            helper.createProductionOrders(progressDiff, gameData, processId, constructionId);
+            helper.createResourceRequestProcess(game, location, processId, constructionId);
 
             status = ProcessStatus.IN_PROGRESS;
         }
 
         ConstructConstructionAreaProcessConditions conditions = applicationContextProxy.getBean(ConstructConstructionAreaProcessConditions.class);
 
-        if (!conditions.productionOrdersComplete(gameData, processId)) {
-            log.info("Waiting for ProductionOrderProcesses to finish...");
+        if (!conditions.resourcesAvailable(gameData, processId, constructionId)) {
+            log.info("Waiting for resources...");
             return;
         }
 
         if (!conditions.hasWorkProcesses(gameData, processId)) {
-            helper.startWork(progressDiff, gameData, processId, constructionId);
+            helper.startWork(game, processId, constructionId);
         }
 
         if (!conditions.workFinished(gameData, processId)) {
@@ -94,6 +94,7 @@ public class ConstructConstructionAreaProcess implements Process {
             return;
         }
 
+        GameProgressDiff progressDiff = game.getProgressDiff();
         helper.finishConstruction(progressDiff, gameData, constructionId);
         status = ProcessStatus.READY_TO_DELETE;
     }
@@ -126,7 +127,7 @@ public class ConstructConstructionAreaProcess implements Process {
 
     private Construction findConstruction() {
         return gameData.getConstructions()
-            .findByConstructionIdValidated(constructionId);
+            .findByIdValidated(constructionId);
     }
 
     @Override

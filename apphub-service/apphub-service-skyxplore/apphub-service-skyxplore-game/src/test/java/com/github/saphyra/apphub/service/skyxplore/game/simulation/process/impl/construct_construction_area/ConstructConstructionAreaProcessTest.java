@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
-import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -35,27 +34,27 @@ class ConstructConstructionAreaProcessTest {
     private static final UUID PROCESS_ID = UUID.randomUUID();
     private static final UUID CONSTRUCTION_ID = UUID.randomUUID();
     private static final UUID LOCATION = UUID.randomUUID();
-    private static final Integer PRIORITY_VALUE = 2;
-    private static final Integer CONSTRUCTION_PRIORITY = 24;
+    private static final Integer BASE_PRIORITY = 2;
+    private static final Integer CONSTRUCTION_PRIORITY = 3;
     private static final UUID GAME_ID = UUID.randomUUID();
-
-    @Mock
-    private Game game;
 
     @Mock
     private GameData gameData;
 
     @Mock
+    private Game game;
+
+    @Mock
     private ApplicationContextProxy applicationContextProxy;
 
     @Mock
-    private ConstructConstructionAreaProcessHelper processHelper;
+    private ConstructConstructionAreaProcessConditions conditions;
 
     @Mock
     private GameProgressDiff progressDiff;
 
     @Mock
-    private ConstructConstructionAreaProcessConditions conditions;
+    private ConstructConstructionAreaProcessHelper helper;
 
     private ConstructConstructionAreaProcess underTest;
 
@@ -104,61 +103,56 @@ class ConstructConstructionAreaProcessTest {
     void getPriority() {
         given(gameData.getPriorities()).willReturn(priorities);
         given(priorities.findByLocationAndType(LOCATION, PriorityType.CONSTRUCTION)).willReturn(priority);
-        given(priority.getValue()).willReturn(PRIORITY_VALUE);
+        given(priority.getValue()).willReturn(BASE_PRIORITY);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
 
-        assertThat(underTest.getPriority()).isEqualTo(PRIORITY_VALUE * CONSTRUCTION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
+        assertThat(underTest.getPriority()).isEqualTo(600);
     }
 
     @Test
-    void work_productionOrdersNotCompleted() {
-        given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(processHelper);
+    void work_waitingForResources() {
+        given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(helper);
         given(applicationContextProxy.getBean(ConstructConstructionAreaProcessConditions.class)).willReturn(conditions);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-        given(conditions.productionOrdersComplete(gameData, PROCESS_ID)).willReturn(false);
+        given(conditions.resourcesAvailable(gameData, PROCESS_ID, CONSTRUCTION_ID)).willReturn(false);
 
         underTest.work();
 
-        then(processHelper).should().createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-        then(processHelper).shouldHaveNoMoreInteractions();
+        then(helper).should().createResourceRequestProcess(game, LOCATION, PROCESS_ID, CONSTRUCTION_ID);
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
     }
 
     @Test
-    void work_workProcessesNotCompleted() {
-        given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(processHelper);
+    void work_waitingForWork() {
+        given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(helper);
         given(applicationContextProxy.getBean(ConstructConstructionAreaProcessConditions.class)).willReturn(conditions);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-        given(conditions.productionOrdersComplete(gameData, PROCESS_ID)).willReturn(true);
+        given(conditions.resourcesAvailable(gameData, PROCESS_ID, CONSTRUCTION_ID)).willReturn(true);
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
 
         underTest.work();
 
-        then(processHelper).should().createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-        then(processHelper).should().startWork(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-        then(processHelper).shouldHaveNoMoreInteractions();
+        then(helper).should().createResourceRequestProcess(game, LOCATION, PROCESS_ID, CONSTRUCTION_ID);
+        then(helper).should().startWork(game, PROCESS_ID, CONSTRUCTION_ID);
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.IN_PROGRESS);
     }
 
     @Test
-    void work() {
-        given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(processHelper);
+    void work_finished() {
+        given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(helper);
         given(applicationContextProxy.getBean(ConstructConstructionAreaProcessConditions.class)).willReturn(conditions);
-        given(game.getProgressDiff()).willReturn(progressDiff);
-        given(conditions.productionOrdersComplete(gameData, PROCESS_ID)).willReturn(true);
+        given(conditions.resourcesAvailable(gameData, PROCESS_ID, CONSTRUCTION_ID)).willReturn(true);
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
+        given(game.getProgressDiff()).willReturn(progressDiff);
 
         underTest.work();
 
-        then(processHelper).should().createProductionOrders(progressDiff, gameData, PROCESS_ID, CONSTRUCTION_ID);
-        then(processHelper).should().finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
-        then(processHelper).shouldHaveNoMoreInteractions();
+        then(helper).should().createResourceRequestProcess(game, LOCATION, PROCESS_ID, CONSTRUCTION_ID);
+        then(helper).should().finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
     }
@@ -183,8 +177,8 @@ class ConstructConstructionAreaProcessTest {
 
         assertThat(underTest.toModel())
             .returns(PROCESS_ID, GameItem::getId)
-            .returns(GAME_ID, GameItem::getGameId)
             .returns(GameItemType.PROCESS, GameItem::getType)
+            .returns(GAME_ID, GameItem::getGameId)
             .returns(ProcessType.CONSTRUCT_CONSTRUCTION_AREA, ProcessModel::getProcessType)
             .returns(ProcessStatus.CREATED, ProcessModel::getStatus)
             .returns(LOCATION, ProcessModel::getLocation)

@@ -25,6 +25,7 @@ public class CoordinateConverterTest {
     private static final String COORDINATE_ID_STRING = "coordinate-id";
     private static final String GAME_ID_STRING = "game-id";
     private static final String REFERENCE_ID_STRING = "reference-id";
+    private static final Integer ORDER = 243;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -40,6 +41,7 @@ public class CoordinateConverterTest {
             .referenceId(REFERENCE_ID_STRING)
             .x(X)
             .y(Y)
+            .order(ORDER)
             .build();
 
         given(uuidConverter.convertEntity(COORDINATE_ID_STRING)).willReturn(COORDINATE_ID);
@@ -53,6 +55,7 @@ public class CoordinateConverterTest {
         assertThat(result.getType()).isEqualTo(GameItemType.COORDINATE);
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getCoordinate()).isEqualTo(new Coordinate(X, Y));
+        assertThat(result.getOrder()).isEqualTo(ORDER);
     }
 
     @Test
@@ -62,6 +65,7 @@ public class CoordinateConverterTest {
         model.setGameId(GAME_ID);
         model.setReferenceId(REFERENCE_ID);
         model.setCoordinate(new Coordinate(X, Y));
+        model.setOrder(ORDER);
 
         given(uuidConverter.convertDomain(COORDINATE_ID)).willReturn(COORDINATE_ID_STRING);
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
@@ -74,5 +78,6 @@ public class CoordinateConverterTest {
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID_STRING);
         assertThat(result.getX()).isEqualTo(X);
         assertThat(result.getY()).isEqualTo(Y);
+        assertThat(result.getOrder()).isEqualTo(ORDER);
     }
 }

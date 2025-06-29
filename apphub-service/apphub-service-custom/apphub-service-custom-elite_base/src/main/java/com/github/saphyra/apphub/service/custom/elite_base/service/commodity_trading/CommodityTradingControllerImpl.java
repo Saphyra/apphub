@@ -39,7 +39,7 @@ class CommodityTradingControllerImpl implements CommodityTradingController {
     public List<String> getCommodities(AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know the commodity list.", accessTokenHeader.getUserId());
 
-        return commodityDao.getCommodities();
+        return commodityDao.getCommodityNames();
     }
 
     @Override

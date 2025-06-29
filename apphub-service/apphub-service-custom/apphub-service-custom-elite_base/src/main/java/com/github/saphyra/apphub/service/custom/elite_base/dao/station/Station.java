@@ -31,8 +31,10 @@ public class Station {
     private Allegiance allegiance;
     private EconomyEnum economy;
     private UUID controllingFactionId;
-    private LazyLoadedField<List<StationServiceEnum>> services;
-    private LazyLoadedField<List<StationEconomy>> economies;
+    @Builder.Default
+    private LazyLoadedField<List<StationServiceEnum>> services = LazyLoadedField.loaded(List.of());
+    @Builder.Default
+    private LazyLoadedField<List<StationEconomy>> economies = LazyLoadedField.loaded(List.of());
 
     public List<StationServiceEnum> getServices() {
         return services.get();

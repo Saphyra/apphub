@@ -1,0 +1,25 @@
+===FEATURES===
+    ApphubCI
+        Shut down service option
+        Run latest test groups
+    SkyXplore
+        Resources can be put to exact storages
+        Deliver resources
+        Manual tick triggering
+
+===BUGFIXES===
+    SkyXplore
+        Cancelling deconstruction of BuildingModule should cancel deconstruction of ConstructionArea
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    SkyXplore
+        Remove building related changeSet
+    ExecutorServiceBean should not log and report NotLogged and Logged exceptions
+    EliteBase
+        Integration tests for OrphanedRecordCleaners
+
+===ETC===
+    EliteBase
+        Repackage daos

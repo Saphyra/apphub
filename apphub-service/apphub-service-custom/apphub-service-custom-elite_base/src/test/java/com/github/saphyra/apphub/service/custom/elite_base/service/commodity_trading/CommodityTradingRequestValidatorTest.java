@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.Relation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.Power;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,7 +52,7 @@ class CommodityTradingRequestValidatorTest {
             .commodity("invalid-commodity-name")
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "commodity", "must be one of [%s]".formatted(COMMODITY_NAME));
     }
@@ -65,7 +65,7 @@ class CommodityTradingRequestValidatorTest {
             .maxStarSystemDistance(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxStarSystemDistance", "must not be null");
     }
@@ -79,7 +79,7 @@ class CommodityTradingRequestValidatorTest {
             .maxStationDistance(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxStationDistance", "must not be null");
     }
@@ -94,7 +94,7 @@ class CommodityTradingRequestValidatorTest {
             .includeUnknownStationDistance(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeUnknownStationDistance", "must not be null");
     }
@@ -110,7 +110,7 @@ class CommodityTradingRequestValidatorTest {
             .includeUnknownLandingPad(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeUnknownLandingPad", "must not be null");
     }
@@ -127,7 +127,7 @@ class CommodityTradingRequestValidatorTest {
             .maxTimeSinceLastUpdated(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxTimeSinceLastUpdated", "must not be null");
     }
@@ -145,7 +145,7 @@ class CommodityTradingRequestValidatorTest {
             .includeSurfaceStations(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeSurfaceStations", "must not be null");
     }
@@ -164,7 +164,7 @@ class CommodityTradingRequestValidatorTest {
             .includeFleetCarriers(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeFleetCarriers", "must not be null");
     }
@@ -184,7 +184,7 @@ class CommodityTradingRequestValidatorTest {
             .minPrice(0)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "minPrice", "too low");
     }
@@ -205,7 +205,7 @@ class CommodityTradingRequestValidatorTest {
             .maxPrice(MIN_PRICE - 1)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxPrice", "too low");
     }
@@ -227,7 +227,7 @@ class CommodityTradingRequestValidatorTest {
             .controllingPowers(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "controllingPowers", "must not be null");
     }
@@ -250,7 +250,7 @@ class CommodityTradingRequestValidatorTest {
             .controllingPowerRelation(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "controllingPowerRelation", "must not be null");
     }
@@ -274,7 +274,7 @@ class CommodityTradingRequestValidatorTest {
             .powers(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "powers", "must not be null");
     }
@@ -299,7 +299,7 @@ class CommodityTradingRequestValidatorTest {
             .powersRelation(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "powersRelation", "must not be null");
     }
@@ -325,7 +325,7 @@ class CommodityTradingRequestValidatorTest {
             .powerplayState("asd")
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "powerplayState", "invalid value");
     }
@@ -352,7 +352,7 @@ class CommodityTradingRequestValidatorTest {
             .minTradeAmount(null)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "minTradeAmount", "must not be null");
     }
@@ -379,7 +379,7 @@ class CommodityTradingRequestValidatorTest {
             .minTradeAmount(MIN_TRADE_AMOUNT)
             .build();
 
-        given(commodityDao.getCommodities()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         underTest.validate(request);
     }

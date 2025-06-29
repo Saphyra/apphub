@@ -27,7 +27,7 @@ public class BuildingFiller {
         "hamster_wheel",
         "hq_barracks",
         "hq_canteen",
-        "hq_storage",
+        GameConstants.BUILDING_MODULE_HQ_STORAGE,
         "hq_extraction",
         "assembly_line"
     );

@@ -13,6 +13,9 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class StoredResourceModel extends GameItem {
     private UUID location;
+    private UUID containerId;
+    private ContainerType containerType;
     private String dataId;
+    private UUID allocatedBy;
     private Integer amount;
 }

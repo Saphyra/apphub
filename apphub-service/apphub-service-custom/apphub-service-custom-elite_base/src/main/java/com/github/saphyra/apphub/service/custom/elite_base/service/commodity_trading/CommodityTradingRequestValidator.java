@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ class CommodityTradingRequestValidator {
 
     void validate(CommodityTradingRequest request) {
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
-        ValidationUtil.contains(request.getCommodity(), commodityDao.getCommodities(), "commodity");
+        ValidationUtil.contains(request.getCommodity(), commodityDao.getCommodityNames(), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
         ValidationUtil.notNull(request.getMaxStationDistance(), "maxStationDistance");
         ValidationUtil.notNull(request.getIncludeUnknownStationDistance(), "includeUnknownStationDistance");

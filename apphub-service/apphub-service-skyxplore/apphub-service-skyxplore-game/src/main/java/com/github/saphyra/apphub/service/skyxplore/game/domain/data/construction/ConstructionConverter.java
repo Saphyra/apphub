@@ -2,9 +2,11 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.constructio
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class ConstructionConverter implements GameDataToModelConverter {
+    private final WorkPointsUtil workPointsUtil;
+
     public List<ConstructionModel> toModel(UUID gameId, Collection<Construction> constructions) {
         return constructions.stream()
             .map(construction -> toModel(gameId, construction))
@@ -29,22 +33,20 @@ public class ConstructionConverter implements GameDataToModelConverter {
         model.setId(construction.getConstructionId());
         model.setGameId(gameId);
         model.setType(GameItemType.CONSTRUCTION);
-        model.setConstructionType(construction.getConstructionType());
         model.setExternalReference(construction.getExternalReference());
         model.setLocation(construction.getLocation());
         model.setExternalReference(construction.getExternalReference());
         model.setRequiredWorkPoints(construction.getRequiredWorkPoints());
-        model.setCurrentWorkPoints(construction.getCurrentWorkPoints());
         model.setPriority(construction.getPriority());
         model.setData(construction.getData());
         return model;
     }
 
-    public ConstructionResponse toResponse(Construction construction) {
+    public ConstructionResponse toResponse(GameData gameData, Construction construction, ProcessType processType) {
         return ConstructionResponse.builder()
             .constructionId(construction.getConstructionId())
             .requiredWorkPoints(construction.getRequiredWorkPoints())
-            .currentWorkPoints(construction.getCurrentWorkPoints())
+            .currentWorkPoints(workPointsUtil.getCompletedWorkPoints(gameData, construction.getConstructionId(), processType))
             .data(construction.getData())
             .build();
     }

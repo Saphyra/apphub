@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizen;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen.Citizens;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.PlanetPopulationOverviewQueryService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.StorageCapacityService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ public class PlanetPopulationOverviewQueryServiceTest {
     private GameDao gameDao;
 
     @Mock
-    private StorageCalculator storageCalculator;
+    private StorageCapacityService storageCapacityService;
 
     @InjectMocks
     private PlanetPopulationOverviewQueryService underTest;
@@ -53,7 +54,7 @@ public class PlanetPopulationOverviewQueryServiceTest {
         given(gameData.getCitizens()).willReturn(citizens);
         given(citizens.getByLocation(PLANET_ID)).willReturn(List.of(citizen));
 
-        given(storageCalculator.calculateDwellingCapacity(gameData, PLANET_ID)).willReturn(CAPACITY);
+        given(storageCapacityService.calculateDwellingCapacity(gameData, PLANET_ID)).willReturn(CAPACITY);
 
         PlanetPopulationOverviewResponse result = underTest.getPopulationOverview(USER_ID, PLANET_ID);
 

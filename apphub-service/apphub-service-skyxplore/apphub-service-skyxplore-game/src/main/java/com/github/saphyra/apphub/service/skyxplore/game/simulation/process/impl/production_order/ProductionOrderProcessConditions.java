@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,23 +12,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class ProductionOrderProcessConditions {
-    boolean requiredResourcesPresent(GameData gameData, UUID processId) {
-        return gameData.getProcesses()
-                .getByExternalReferenceAndType(processId, ProcessType.PRODUCTION_ORDER)
-                .stream()
-                .allMatch(process -> process.getStatus() == ProcessStatus.DONE);
+    boolean productionNeeded(GameData gameData, UUID productionOrderId) {
+        return !gameData.getProductionOrders()
+            .findByIdValidated(productionOrderId)
+            .allStarted();
     }
 
-    boolean workStarted(GameData gameData, UUID processId) {
-        return !gameData.getProcesses()
-            .getByExternalReferenceAndType(processId, ProcessType.WORK)
-            .isEmpty();
-    }
-
-    boolean workDone(GameData gameData, UUID processId) {
-        return gameData.getProcesses()
-            .getByExternalReferenceAndType(processId, ProcessType.WORK)
-            .stream()
-            .allMatch(process -> process.getStatus() == ProcessStatus.DONE);
+    public boolean isFinished(GameData gameData, UUID processId, UUID productionOrderId) {
+        return !productionNeeded(gameData, productionOrderId) && gameData.getProcesses().getByExternalReference(processId).stream().allMatch(process -> process.getStatus() == ProcessStatus.DONE);
     }
 }

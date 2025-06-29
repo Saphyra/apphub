@@ -44,21 +44,7 @@ class TickScheduler implements Runnable {
             long startTime = context.getDateTimeUtil()
                 .getCurrentTimeEpochMillis();
 
-            game.getEventLoop()
-                .process(
-                    () -> context.getTickTasks()
-                        .stream()
-                        .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
-                        .forEach(tickTask -> tickTask.process(game)));
-
-            Future<ExecutionResult<Long>> future = game.getEventLoop()
-                .processWithResponse(() -> {
-                    long endTime = context.getDateTimeUtil()
-                        .getCurrentTimeEpochMillis();
-                    long processingTime = endTime - startTime;
-                    log.info("Tick finished for game {} in {} ms", game.getGameId(), processingTime);
-                    return processingTime;
-                });
+            Future<ExecutionResult<Long>> future = processTick(startTime);
 
             long processingTime = future.get()
                 .getOrThrow();
@@ -68,5 +54,23 @@ class TickScheduler implements Runnable {
         }
 
         log.info("TickScheduler finished for game {}", game.getGameId());
+    }
+
+    public Future<ExecutionResult<Long>> processTick(long startTime) {
+        game.getEventLoop()
+            .process(
+                () -> context.getTickTasks()
+                    .stream()
+                    .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
+                    .forEach(tickTask -> tickTask.process(game)));
+
+        return game.getEventLoop()
+            .processWithResponse(() -> {
+                long endTime = context.getDateTimeUtil()
+                    .getCurrentTimeEpochMillis();
+                long processingTime = endTime - startTime;
+                log.info("Tick finished for game {} in {} ms", game.getGameId(), processingTime);
+                return processingTime;
+            });
     }
 }

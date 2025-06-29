@@ -16,15 +16,19 @@ public class GameProperties {
     private int creationQueueSize;
     private int tickTimeMillis;
     private int pauseGameAfterDisconnectionSeconds;
+    private int logisticsWeightMultiplier;
     private SolarSystemProperties solarSystem;
     private PlanetProperties planet;
     private SurfaceProperties surface;
     private CitizenProperties citizen;
     private DeconstructionProperties deconstruction;
     private MessageDelay messageDelay;
+    private ProductionProperties production;
 
     @PostConstruct
     public void after() {
         log.info("GameProperties: {}", this);
+
+        surface.validate();
     }
 }

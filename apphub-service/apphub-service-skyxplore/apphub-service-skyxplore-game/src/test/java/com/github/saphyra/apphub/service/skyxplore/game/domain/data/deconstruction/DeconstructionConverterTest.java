@@ -2,9 +2,12 @@ package com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruct
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.DeconstructionProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,11 +32,17 @@ class DeconstructionConverterTest {
     @Mock
     private GameProperties gameProperties;
 
+    @Mock
+    private WorkPointsUtil workPointsUtil;
+
     @InjectMocks
     private DeconstructionConverter underTest;
 
     @Mock
     private DeconstructionProperties deconstructionProperties;
+
+    @Mock
+    private GameData gameData;
 
     @Test
     void toModel() {
@@ -41,7 +50,6 @@ class DeconstructionConverterTest {
             .deconstructionId(DECONSTRUCTION_ID)
             .externalReference(EXTERNAL_REFERENCE)
             .location(LOCATION)
-            .currentWorkPoints(CURRENT_WORK_POINTS)
             .priority(PRIORITY)
             .build();
 
@@ -52,7 +60,6 @@ class DeconstructionConverterTest {
         assertThat(result.getType()).isEqualTo(GameItemType.DECONSTRUCTION);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
-        assertThat(result.getCurrentWorkPoints()).isEqualTo(CURRENT_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
     }
 
@@ -62,14 +69,14 @@ class DeconstructionConverterTest {
             .deconstructionId(DECONSTRUCTION_ID)
             .externalReference(EXTERNAL_REFERENCE)
             .location(LOCATION)
-            .currentWorkPoints(CURRENT_WORK_POINTS)
             .priority(PRIORITY)
             .build();
 
         given(gameProperties.getDeconstruction()).willReturn(deconstructionProperties);
         given(deconstructionProperties.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
+        given(workPointsUtil.getCompletedWorkPoints(gameData, DECONSTRUCTION_ID, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(CURRENT_WORK_POINTS);
 
-        DeconstructionResponse result = underTest.toResponse(deconstruction);
+        DeconstructionResponse result = underTest.toResponse(gameData, deconstruction, ProcessType.DECONSTRUCT_BUILDING_MODULE);
 
         assertThat(result.getDeconstructionId()).isEqualTo(DECONSTRUCTION_ID);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);

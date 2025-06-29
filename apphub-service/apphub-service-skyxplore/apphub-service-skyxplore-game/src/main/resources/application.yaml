@@ -8,6 +8,7 @@ skyXploreDataHost: skyxplore-data:8080
 game:
   tickTimeMillis: 100
   pauseGameAfterDisconnectionSeconds: 5
+  logisticsWeightMultiplier: 100
   messageDelay:
     planetSurface: 100
     planetQueue: 100
@@ -55,6 +56,17 @@ game:
         optional: true
       - surfaceName: FIELD
         spawnRate: 2
+    logisticsWeight:
+      COAL_FIELD: 5
+      DESERT: 5
+      FOREST: 7
+      LAKE: 10
+      MOUNTAIN: 15
+      OIL_FIELD: 5
+      ORE_FIELD: 5
+      VOLCANO: 20
+      FIELD: 3
+      CONCRETE: 1
   citizen:
     workPointsPerTick: 100
     maxWorkPointsBatch: 1000
@@ -79,6 +91,8 @@ game:
     hitPoints:
       perLevel: 1000
       base: 9000
+  production:
+    productionOrderMaxDispatchedRatio: 0.2
 
 logging:
   level:

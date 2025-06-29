@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
@@ -25,9 +25,9 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage.consumption.ResourceAllocationService;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_construction_area.ConstructConstructionAreaProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_construction_area.ConstructConstructionAreaProcessFactory;
@@ -76,9 +76,6 @@ class ConstructConstructionAreaServiceTest {
     private ConstructionAreaFactory constructionAreaFactory;
 
     @Mock
-    private ResourceAllocationService resourceAllocationService;
-
-    @Mock
     private ConstructConstructionAreaProcessFactory constructConstructionAreaProcessFactory;
 
     @Mock
@@ -86,6 +83,9 @@ class ConstructConstructionAreaServiceTest {
 
     @Mock
     private ConstructionAreaConverter constructionAreaConverter;
+
+    @Mock
+    private ReservedStorageFactory reservedStorageFactory;
 
     @InjectMocks
     private ConstructConstructionAreaService underTest;
@@ -139,7 +139,7 @@ class ConstructConstructionAreaServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -149,12 +149,12 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
-    void terraformationInProgress(){
+    void terraformationInProgress() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -166,12 +166,12 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
-    void surfaceOccupied(){
+    void surfaceOccupied() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -185,12 +185,12 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
-    void unsupportedSurfaceType(){
+    void unsupportedSurfaceType() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -230,12 +230,12 @@ class ConstructConstructionAreaServiceTest {
     private ConstructionModel constructionModel;
 
     @Test
-    void constructConstructionArea(){
+    void constructConstructionArea() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getSurfaces()).willReturn(surfaces);
-        given(surfaces.findBySurfaceIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
         given(surface.getPlanetId()).willReturn(PLANET_ID);
         given(gameData.getPlanets()).willReturn(planets);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -250,7 +250,7 @@ class ConstructConstructionAreaServiceTest {
         given(constructionAreaFactory.create(PLANET_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID)).willReturn(constructionArea);
         given(constructionArea.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
-        given(constructionFactory.create(CONSTRUCTION_AREA_ID, ConstructionType.CONSTRUCTION_AREA, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
+        given(constructionFactory.create(CONSTRUCTION_AREA_ID, PLANET_ID, REQUIRED_WORK_POINTS)).willReturn(construction);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
@@ -268,12 +268,12 @@ class ConstructConstructionAreaServiceTest {
 
         underTest.constructConstructionArea(USER_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID);
 
-        then(resourceAllocationService).should().processResourceRequirements(progressDiff, gameData, PLANET_ID, CONSTRUCTION_ID, Map.of(RESOURCE_DATA_ID, RESOURCE_AMOUNT));
         then(constructionAreas).should().add(constructionArea);
         then(processes).should().add(process);
         then(constructions).should().add(construction);
         then(progressDiff).should().save(processModel);
         then(progressDiff).should().save(constructionAreaModel);
         then(progressDiff).should().save(constructionModel);
+        then(reservedStorageFactory).should().save(progressDiff, gameData, SURFACE_ID, ContainerType.SURFACE, CONSTRUCTION_ID, RESOURCE_DATA_ID, RESOURCE_AMOUNT);
     }
 }

@@ -30,7 +30,7 @@ public class PreprodReleaseProcess {
     private final PlatformProperties platformProperties;
 
     public void release() {
-        localStopProcess.stopServices();
+        localStopProcess.stopAllServices();
 
         if (!minikubeBuildTask.installServices()) {
             log.error("Build failed. Startup sequence stopped.");
@@ -58,7 +58,7 @@ public class PreprodReleaseProcess {
     }
 
     public void deployServices(List<String> serviceNames) {
-        localStopProcess.stopServices();
+        localStopProcess.stopAllServices();
 
         if (!minikubeBuildTask.installServices(serviceNames)) {
             log.error("Build failed. Startup sequence stopped.");

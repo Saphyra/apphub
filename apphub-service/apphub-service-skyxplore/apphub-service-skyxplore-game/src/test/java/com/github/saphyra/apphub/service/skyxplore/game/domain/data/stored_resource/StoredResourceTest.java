@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -17,6 +18,8 @@ class StoredResourceTest {
             .location(UUID.randomUUID())
             .dataId("asd")
             .amount(AMOUNT)
+            .containerId(UUID.randomUUID())
+            .containerType(ContainerType.SURFACE)
             .build();
 
         underTest.decreaseAmount(MODIFICATION);
@@ -31,6 +34,8 @@ class StoredResourceTest {
             .location(UUID.randomUUID())
             .dataId("asd")
             .amount(AMOUNT)
+            .containerId(UUID.randomUUID())
+            .containerType(ContainerType.SURFACE)
             .build();
 
         underTest.increaseAmount(MODIFICATION);

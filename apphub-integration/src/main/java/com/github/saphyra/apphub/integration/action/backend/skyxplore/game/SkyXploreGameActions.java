@@ -64,4 +64,9 @@ public class SkyXploreGameActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER));
     }
+
+    public static Response getProcessTickResponse(int serverPort, UUID accessTokenId){
+        return  RequestFactory.createAuthorizedRequest(accessTokenId)
+            .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PROCESS_TICK));
+    }
 }

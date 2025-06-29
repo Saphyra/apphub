@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingModuleCategory;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +38,7 @@ class ConstructionAreaControllerTest {
     private DeconstructConstructionAreaService deconstructConstructionAreaService;
 
     @Mock
-    private CancelDeconstructConstructionAreaService cancelDeconstructConstructionAreaService;
+    private CancelDeconstructionFacade cancelDeconstructionFacade;
 
     @Mock
     private AvailableBuildingModulesService availableBuildingModulesService;
@@ -79,7 +80,7 @@ class ConstructionAreaControllerTest {
     void cancelDeconstructConstructionArea() {
         underTest.cancelDeconstructConstructionArea(DECONSTRUCTION_ID, accessTokenHeader);
 
-        then(cancelDeconstructConstructionAreaService).should().cancelDeconstruction(USER_ID, DECONSTRUCTION_ID);
+        then(cancelDeconstructionFacade).should().cancelDeconstructionOfConstructionArea(USER_ID, DECONSTRUCTION_ID);
     }
 
     @Test

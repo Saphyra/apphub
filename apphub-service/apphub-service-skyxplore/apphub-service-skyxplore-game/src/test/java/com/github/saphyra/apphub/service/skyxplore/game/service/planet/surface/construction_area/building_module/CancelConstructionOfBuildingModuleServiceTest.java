@@ -91,10 +91,10 @@ class CancelConstructionOfBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(construction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(gameData.getPlanets()).willReturn(planets);
         given(construction.getLocation()).willReturn(PLANET_ID);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
@@ -108,10 +108,10 @@ class CancelConstructionOfBuildingModuleServiceTest {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
         given(game.getData()).willReturn(gameData);
         given(gameData.getConstructions()).willReturn(constructions);
-        given(constructions.findByConstructionIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(construction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
-        given(buildingModules.findByBuildingModuleIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
         given(gameData.getPlanets()).willReturn(planets);
         given(construction.getLocation()).willReturn(PLANET_ID);
         given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);

@@ -34,15 +34,6 @@ class ConstructBuildingModuleProcessConditionsTest {
     private Process process;
 
     @Test
-    void productionOrdersComplete() {
-        given(gameData.getProcesses()).willReturn(processes);
-        given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(process));
-        given(process.getStatus()).willReturn(ProcessStatus.DONE);
-
-        assertThat(underTest.productionOrdersComplete(gameData, PROCESS_ID)).isTrue();
-    }
-
-    @Test
     void hasWorkProcesses() {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.WORK)).willReturn(List.of(process));

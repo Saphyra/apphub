@@ -34,7 +34,7 @@ class BuildingAllocationServiceTest {
 
     @Test
     public void getType() {
-        assertThat(underTest.getType()).isEqualTo(GameItemType.BUILDING_ALLOCATION);
+        assertThat(underTest.getType()).isEqualTo(GameItemType.BUILDING_MODULE_ALLOCATION);
     }
 
     @Test

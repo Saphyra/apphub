@@ -28,8 +28,8 @@ public class MinikubeLocalDeployProcess {
     private final NamespaceNameProvider namespaceNameProvider;
     private final PlatformProperties platformProperties;
 
-    public void deploy(List<String> servicesToStart){
-        localStopProcess.stopServices();
+    public void deploy(List<String> servicesToStart) {
+        localStopProcess.stopAllServices();
 
         if (!minikubeBuildTask.installServices(servicesToStart)) {
             log.error("Build failed. Startup sequence stopped.");
@@ -47,7 +47,7 @@ public class MinikubeLocalDeployProcess {
     }
 
     public void deploy() {
-        localStopProcess.stopServices();
+        localStopProcess.stopAllServices();
 
         if (!minikubeBuildTask.installServices()) {
             log.error("Build failed. Startup sequence stopped.");

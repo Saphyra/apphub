@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_order.ProductionOrder;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_order.ProductionOrders;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -18,9 +20,20 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class ProductionOrderProcessConditionsTest {
+    private static final UUID PRODUCTION_ORDER_ID = UUID.randomUUID();
     private static final UUID PROCESS_ID = UUID.randomUUID();
 
-    private final ProductionOrderProcessConditions underTest = new ProductionOrderProcessConditions();
+    @InjectMocks
+    private ProductionOrderProcessConditions underTest;
+
+    @Mock
+    private GameData gameData;
+
+    @Mock
+    private ProductionOrders productionOrders;
+
+    @Mock
+    private ProductionOrder productionOrder;
 
     @Mock
     private Processes processes;
@@ -28,32 +41,26 @@ class ProductionOrderProcessConditionsTest {
     @Mock
     private Process process;
 
-    @Mock
-    private GameData gameData;
-
     @Test
-    void requiredResourcesPresent() {
-        given(gameData.getProcesses()).willReturn(processes);
-        given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.PRODUCTION_ORDER)).willReturn(List.of(process));
-        given(process.getStatus()).willReturn(ProcessStatus.DONE);
+    void productionNeeded() {
+        given(gameData.getProductionOrders()).willReturn(productionOrders);
+        given(productionOrders.findByIdValidated(PRODUCTION_ORDER_ID)).willReturn(productionOrder);
+        given(productionOrder.allStarted()).willReturn(false);
 
-        assertThat(underTest.requiredResourcesPresent(gameData, PROCESS_ID)).isTrue();
+        assertThat(underTest.productionNeeded(gameData, PRODUCTION_ORDER_ID)).isTrue();
     }
 
     @Test
-    void workStarted() {
+    void isFinished() {
+        given(gameData.getProductionOrders()).willReturn(productionOrders);
+        given(productionOrders.findByIdValidated(PRODUCTION_ORDER_ID)).willReturn(productionOrder);
+        given(productionOrder.allStarted()).willReturn(true);
         given(gameData.getProcesses()).willReturn(processes);
-        given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.WORK)).willReturn(List.of(process));
-
-        assertThat(underTest.workStarted(gameData, PROCESS_ID)).isTrue();
-    }
-
-    @Test
-    void workDone() {
-        given(gameData.getProcesses()).willReturn(processes);
-        given(processes.getByExternalReferenceAndType(PROCESS_ID, ProcessType.WORK)).willReturn(List.of(process));
+        given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(process.getStatus()).willReturn(ProcessStatus.DONE);
 
-        assertThat(underTest.workDone(gameData, PROCESS_ID)).isTrue();
+        assertThat(underTest.isFinished(gameData, PROCESS_ID, PRODUCTION_ORDER_ID)).isTrue();
+
+        assertThat(underTest.isFinished(gameData, UUID.randomUUID(), PRODUCTION_ORDER_ID)).isTrue();
     }
 }

@@ -27,8 +27,6 @@ public class ReservedStorageRepositoryTest {
     private static final String RESERVED_STORAGE_ID_2 = "reserved-storage-id-2";
     private static final String RESERVED_STORAGE_ID_3 = "reserved-storage-id-3";
     private static final String RESERVED_STORAGE_ID_4 = "reserved-storage-id-4";
-    private static final String LOCATION_1 = "location-1";
-    private static final String LOCATION_2 = "location-2";
 
     @Autowired
     private ReservedStorageRepository underTest;
@@ -54,25 +52,6 @@ public class ReservedStorageRepositoryTest {
         underTest.deleteByGameId(GAME_ID_1);
 
         assertThat(underTest.findAll()).containsExactly(entity2);
-    }
-
-    @Test
-    public void getByLocation() {
-        ReservedStorageEntity entity1 = ReservedStorageEntity.builder()
-            .reservedStorageId(RESERVED_STORAGE_ID_1)
-            .gameId(GAME_ID_1)
-            .location(LOCATION_1)
-            .build();
-        ReservedStorageEntity entity2 = ReservedStorageEntity.builder()
-            .reservedStorageId(RESERVED_STORAGE_ID_2)
-            .gameId(GAME_ID_2)
-            .location(LOCATION_2)
-            .build();
-        underTest.saveAll(Arrays.asList(entity1, entity2));
-
-        List<ReservedStorageEntity> result = underTest.getByLocation(LOCATION_1);
-
-        assertThat(result).containsExactly(entity1);
     }
 
     @Test

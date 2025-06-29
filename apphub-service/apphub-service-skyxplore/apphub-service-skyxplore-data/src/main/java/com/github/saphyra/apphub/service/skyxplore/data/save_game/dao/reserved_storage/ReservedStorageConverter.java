@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.reserved_storage;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
@@ -21,7 +22,8 @@ class ReservedStorageConverter extends ConverterBase<ReservedStorageEntity, Rese
         model.setGameId(uuidConverter.convertEntity(entity.getGameId()));
         model.setType(GameItemType.RESERVED_STORAGE);
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
-        model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
+        model.setContainerId(uuidConverter.convertEntity(entity.getContainerId()));
+        model.setContainerType(ContainerType.valueOf(entity.getContainerType()));
         model.setDataId(entity.getDataId());
         model.setAmount(entity.getAmount());
         return model;
@@ -33,7 +35,8 @@ class ReservedStorageConverter extends ConverterBase<ReservedStorageEntity, Rese
             .reservedStorageId(uuidConverter.convertDomain(domain.getId()))
             .gameId(uuidConverter.convertDomain(domain.getGameId()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-            .location(uuidConverter.convertDomain(domain.getLocation()))
+            .containerId(uuidConverter.convertDomain(domain.getContainerId()))
+            .containerType(domain.getContainerType().name())
             .dataId(domain.getDataId())
             .amount(domain.getAmount())
             .build();

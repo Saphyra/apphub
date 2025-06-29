@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.building_module;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -9,7 +10,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstructi
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction.DeconstructionConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.QueueItem;
 import com.github.saphyra.apphub.service.skyxplore.game.service.planet.queue.service.QueueService;
-import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module.CancelDeconstructionOfBuildingModuleService;
+import com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
+import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,8 @@ class DeconstructBuildingModuleQueueService implements QueueService {
     private final GameProperties gameProperties;
     private final GameDao gameDao;
     private final DeconstructionConverter deconstructionConverter;
-    private final CancelDeconstructionOfBuildingModuleService cancelDeconstructionOfBuildingModuleService;
+    private final CancelDeconstructionFacade cancelDeconstructionFacade;
+    private final WorkPointsUtil workPointsUtil;
 
     @Override
     public QueueItemType getType() {
@@ -37,14 +40,14 @@ class DeconstructBuildingModuleQueueService implements QueueService {
     public List<QueueItem> getQueue(GameData gameData, UUID location) {
         return gameData.getDeconstructions()
             .stream()
-            .filter(deconstruction -> gameData.getBuildingModules().findByBuildingModuleId(deconstruction.getExternalReference()).isPresent())
+            .filter(deconstruction -> gameData.getBuildingModules().findById(deconstruction.getExternalReference()).isPresent())
             .map(deconstruction -> QueueItem.builder()
                 .itemId(deconstruction.getDeconstructionId())
                 .type(getType())
                 .requiredWorkPoints(gameProperties.getDeconstruction().getRequiredWorkPoints())
-                .currentWorkPoints(deconstruction.getCurrentWorkPoints())
+                .currentWorkPoints(workPointsUtil.getCompletedWorkPoints(gameData, deconstruction.getDeconstructionId(), ProcessType.DECONSTRUCT_BUILDING_MODULE))
                 .priority(deconstruction.getPriority())
-                .data(Map.of("dataId", gameData.getBuildingModules().findByBuildingModuleIdValidated(deconstruction.getExternalReference()).getDataId()))
+                .data(Map.of("dataId", gameData.getBuildingModules().findByIdValidated(deconstruction.getExternalReference()).getDataId()))
                 .build())
             .collect(Collectors.toList());
     }
@@ -55,7 +58,7 @@ class DeconstructBuildingModuleQueueService implements QueueService {
         GameData gameData = game.getData();
 
         Deconstruction deconstruction = gameData.getDeconstructions()
-            .findByDeconstructionIdValidated(itemId);
+            .findByIdValidated(itemId);
 
         game.getEventLoop()
             .processWithWait(() -> {
@@ -69,6 +72,6 @@ class DeconstructBuildingModuleQueueService implements QueueService {
 
     @Override
     public void cancel(UUID userId, UUID planetId, UUID itemId) {
-        cancelDeconstructionOfBuildingModuleService.cancelDeconstruction(userId, itemId);
+        cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(userId, itemId);
     }
 }

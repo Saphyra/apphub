@@ -128,4 +128,10 @@ public class PropertyDao {
             .map(s -> objectMapperWrapper.readArrayValue(s, String[].class))
             .orElse(Collections.emptyList());
     }
+
+    public String getLatestTestGroups() {
+        return propertyRepository.findById(PropertyName.LATEST_TEST_GROUPS)
+            .map(Property::getValue)
+            .orElse(null);
+    }
 }

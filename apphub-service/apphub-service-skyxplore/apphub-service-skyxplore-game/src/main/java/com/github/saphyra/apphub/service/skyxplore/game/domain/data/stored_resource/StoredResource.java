@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,15 @@ public class StoredResource {
     private final UUID location;
 
     @NonNull
+    private UUID containerId;
+
+    @NonNull
+    private  ContainerType containerType;
+
+    @NonNull
     private final String dataId;
+
+    private UUID allocatedBy;
 
     @NonNull
     private Integer amount;

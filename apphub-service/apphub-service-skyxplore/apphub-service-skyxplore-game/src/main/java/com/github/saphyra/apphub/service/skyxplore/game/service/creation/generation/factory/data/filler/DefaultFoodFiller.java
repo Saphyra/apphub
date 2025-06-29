@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.StorageSettingFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -11,6 +12,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resou
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -42,10 +45,20 @@ public class DefaultFoodFiller {
         gameData.getStorageSettings()
             .add(storageSetting);
 
+        UUID containerId = gameData.getBuildingModules()
+            .getByLocationAndDataId(planet.getPlanetId(), GameConstants.BUILDING_MODULE_HQ_STORAGE)
+            .stream()
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Planet has no HeadquarterStorage module built."))
+            .getBuildingModuleId();
+
         StoredResource storedResource = storedResourceFactory.create(
             planet.getPlanetId(),
             GameConstants.DATA_ID_RAW_FOOD,
-            targetAmount
+            targetAmount,
+            containerId,
+            ContainerType.STORAGE,
+            null
         );
 
         gameData.getStoredResources()

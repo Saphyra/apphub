@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.SurfaceModel;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
@@ -95,7 +96,7 @@ class SurfaceConverterTest {
             .build();
 
         given(gameData.getCoordinates()).willReturn(coordinates);
-        given(coordinates.findByReferenceId(SURFACE_ID)).willReturn(coordinate);
+        given(coordinates.findByReferenceIdValidated(SURFACE_ID)).willReturn(coordinate);
 
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.of(constructionArea));
@@ -103,7 +104,7 @@ class SurfaceConverterTest {
 
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.of(terraformation));
-        given(constructionConverter.toResponse(terraformation)).willReturn(terraformationResponse);
+        given(constructionConverter.toResponse(gameData, terraformation, ProcessType.TERRAFORMATION)).willReturn(terraformationResponse);
 
         SurfaceResponse result = underTest.toResponse(gameData, surface);
 

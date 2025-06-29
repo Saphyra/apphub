@@ -9,8 +9,8 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.Fle
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemData;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system_data.StarSystemDataDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
 import com.github.saphyra.apphub.test.common.CustomAssertions;

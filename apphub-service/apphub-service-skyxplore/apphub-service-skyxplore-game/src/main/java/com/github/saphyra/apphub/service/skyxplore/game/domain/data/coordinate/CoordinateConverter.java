@@ -30,6 +30,7 @@ public class CoordinateConverter implements GameDataToModelConverter {
         model.setGameId(gameId);
         model.setType(GameItemType.COORDINATE);
         model.setCoordinate(coordinate.getCoordinate());
+        model.setOrder(coordinate.getOrder());
 
         return model;
     }

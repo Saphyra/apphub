@@ -22,11 +22,15 @@ public class Deconstructions extends Vector<Deconstruction> {
             .findAny();
     }
 
-    public Deconstruction findByDeconstructionIdValidated(UUID deconstructionId) {
+    public Deconstruction findByIdValidated(UUID deconstructionId) {
+        return findByDeconstructionId(deconstructionId)
+            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Deconstruction not found by deconstructionId " + deconstructionId));
+    }
+
+    public Optional<Deconstruction> findByDeconstructionId(UUID deconstructionId) {
         return stream()
             .filter(deconstruction -> deconstruction.getDeconstructionId().equals(deconstructionId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Deconstruction not found by deconstructionId " + deconstructionId));
+            .findAny();
     }
 
     public List<Deconstruction> getByLocation(UUID location) {

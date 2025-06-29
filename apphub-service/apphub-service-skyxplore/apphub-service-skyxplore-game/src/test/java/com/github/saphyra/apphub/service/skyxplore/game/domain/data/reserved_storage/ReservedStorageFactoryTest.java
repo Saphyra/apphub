@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorage;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,7 +19,7 @@ public class ReservedStorageFactoryTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String DATA_ID = "data-id";
     private static final int AMOUNT = 234;
-    private static final UUID LOCATION = UUID.randomUUID();
+    private static final UUID CONTAINER_ID = UUID.randomUUID();
 
     @Mock
     private IdGenerator idGenerator;
@@ -32,10 +31,11 @@ public class ReservedStorageFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(RESERVED_STORAGE_ID);
 
-        ReservedStorage result = underTest.create(LOCATION, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
+        ReservedStorage result = underTest.create(CONTAINER_ID, ContainerType.STORAGE, EXTERNAL_REFERENCE, DATA_ID, AMOUNT);
 
         assertThat(result.getReservedStorageId()).isEqualTo(RESERVED_STORAGE_ID);
-        assertThat(result.getLocation()).isEqualTo(LOCATION);
+        assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
+        assertThat(result.getContainerType()).isEqualTo(ContainerType.STORAGE);
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);

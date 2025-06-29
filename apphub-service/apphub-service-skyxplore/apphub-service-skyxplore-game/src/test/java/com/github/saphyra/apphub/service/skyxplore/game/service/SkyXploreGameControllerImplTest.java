@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.TickSchedulerLauncher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +38,9 @@ public class SkyXploreGameControllerImplTest {
 
     @Mock
     private SaveGameService saveGameService;
+
+    @Mock
+    private TickSchedulerLauncher tickSchedulerLauncher;
 
     @InjectMocks
     private SkyXploreGameControllerImpl underTest;
@@ -104,5 +108,14 @@ public class SkyXploreGameControllerImplTest {
         underTest.saveGame(accessTokenHeader);
 
         then(saveGameService).should().saveGame(USER_ID);
+    }
+
+    @Test
+    void processTick() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.processTick(accessTokenHeader);
+
+        then(tickSchedulerLauncher).should().processTick(USER_ID);
     }
 }

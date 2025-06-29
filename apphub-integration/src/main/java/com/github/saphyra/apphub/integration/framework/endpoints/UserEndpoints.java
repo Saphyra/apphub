@@ -35,4 +35,5 @@ public class UserEndpoints {
     public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
     public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
     public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
+    public static final String IS_ADMIN = "/api/user/admin";
 }
