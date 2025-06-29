@@ -26,7 +26,7 @@ public class SettlementSaver {
             throw new IllegalArgumentException("starSystemId and settlementName must not be null");
         }
 
-        log.info("Saving settlement {}", settlementName);
+        log.debug("Saving settlement {}", settlementName);
 
         Settlement settlement = settlementDao.findByStarSystemIdAndSettlementName(starSystemId, settlementName)
             .orElseGet(() -> {
@@ -38,7 +38,7 @@ public class SettlementSaver {
 
         updateFields(timestamp, settlement, bodyId, marketId, longitude, latitude);
 
-        log.info("Saved settlement {}", settlementName);
+        log.debug("Saved settlement {}", settlementName);
     }
 
     private void updateFields(LocalDateTime timestamp, Settlement settlement, UUID bodyId, Long marketId, Double longitude, Double latitude) {

@@ -48,7 +48,9 @@ public class EdMessageProcessor {
                 List<EdMessage> messages = doProcessMessages();
 
                 stopWatch.stop();
-                log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+                if (!messages.isEmpty()) {
+                    log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+                }
             },
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_BATCH.name()
@@ -62,6 +64,9 @@ public class EdMessageProcessor {
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
         );
+        if (messages.isEmpty()) {
+            return messages;
+        }
         log.info("Processing {} messages.", messages.size());
 
         List<Future<ExecutionResult<Void>>> futures = messages.stream()
@@ -74,8 +79,10 @@ public class EdMessageProcessor {
         return messages;
     }
 
-    private void processMessage(EdMessage edMessage) {
+    public void processMessage(EdMessage edMessage) {
         try {
+            log.info("Processing message {}: {}", edMessage.getMessageId(), edMessage.getSchemaRef());
+
             performanceReporter.wrap(
                 () -> doProcessMessage(edMessage),
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,

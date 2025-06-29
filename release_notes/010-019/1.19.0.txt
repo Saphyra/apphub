@@ -1,4 +1,6 @@
 ===FEATURES===
+    EliteBase
+        Process incoming messages immediately
 
 ===BUGFIXES===
 
