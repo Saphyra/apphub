@@ -31,7 +31,7 @@ public class BodyDataSaver {
     private final BodyMaterialFactory bodyMaterialFactory;
 
     public synchronized void save(UUID bodyId, LocalDateTime timestamp, Boolean landable, Double surfaceGravity, ReserveLevel reserveLevel, Boolean hasRing, NamePercentPair[] materials, Ring[] rings) {
-        log.info("Saving bodyData for body {}", bodyId);
+        log.debug("Saving bodyData for body {}", bodyId);
 
         BodyData bodyData = bodyDataDao.findById(bodyId)
             .orElseGet(() -> {
@@ -43,7 +43,7 @@ public class BodyDataSaver {
 
         updateFields(timestamp, bodyData, landable, surfaceGravity, reserveLevel, hasRing, materials, rings);
 
-        log.info("Saved BodyData for body {}", bodyId);
+        log.debug("Saved BodyData for body {}", bodyId);
     }
 
     private void updateFields(LocalDateTime timestamp, BodyData bodyData, Boolean landable, Double surfaceGravity, ReserveLevel reserveLevel, Boolean hasRing, NamePercentPair[] materials, Ring[] rings) {

@@ -68,7 +68,7 @@ public class MinorFactionSaver {
         List<FactionState> pendingStates,
         List<FactionState> recoveringStates
     ) {
-        log.info("Saving minorFaction {}", factionName);
+        log.debug("Saving minorFaction {}", factionName);
 
         MinorFaction minorFaction = minorFactionDao.findByFactionName(factionName)
             .orElseGet(() -> {
@@ -88,8 +88,6 @@ public class MinorFactionSaver {
             });
 
         updateFields(timestamp, minorFaction, economicState, influence, allegiance, activeStates, pendingStates, recoveringStates);
-
-        log.info("Saved minorFaction {}", factionName);
 
         return minorFaction;
     }

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyFactory;
@@ -23,7 +22,6 @@ import static java.util.Objects.isNull;
 public class BodySaver {
     private final BodyDao bodyDao;
     private final BodyFactory bodyFactory;
-    private final ErrorReporterService errorReporterService;
 
     public Body save(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName) {
         return save(timestamp, starSystemId, bodyType, bodyId, bodyName, null);
@@ -42,7 +40,7 @@ public class BodySaver {
             throw new IllegalArgumentException("BodyName must not be null");
         }
 
-        log.info("Saving body {}", bodyName);
+        log.debug("Saving body {}", bodyName);
 
         Body body = bodyDao.findByBodyName(bodyName)
             .orElseGet(() -> {
@@ -53,8 +51,6 @@ public class BodySaver {
             });
 
         updateFields(timestamp, body, starSystemId, bodyType, bodyId, bodyName, distanceFromStar);
-
-        log.info("Saved body {}", bodyName);
 
         return body;
     }

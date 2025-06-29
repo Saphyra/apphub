@@ -62,7 +62,7 @@ public class StationSaver {
             throw new IllegalArgumentException("Carrier must not be saved as station");
         }
 
-        log.info("Saving station {}", stationName);
+        log.debug("Saving station {}", stationName);
 
         List<StationServiceEnum> parsedServices = Optional.ofNullable(stationServices)
             .map(ss -> Arrays.stream(ss).map(StationServiceEnum::parse).toList())

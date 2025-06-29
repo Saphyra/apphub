@@ -51,7 +51,7 @@ public class StarSystemSaver {
 
         starNameLock.ifPresent(this::lock);
 
-        log.info("Saving starSystem {}", starName);
+        log.debug("Saving starSystem {}", starName);
 
         try {
             StarSystem starSystem = starSystemDao.findByStarIdOrStarName(starId, starName)

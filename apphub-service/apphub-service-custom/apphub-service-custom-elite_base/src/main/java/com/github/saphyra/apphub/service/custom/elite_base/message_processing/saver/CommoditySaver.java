@@ -67,7 +67,7 @@ public class CommoditySaver {
             throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
         }
 
-        log.info("Saving commodities for location {} and type {}", commodityLocation, type);
+        log.debug("Saving commodities for location {} and type {}", commodityLocation, type);
 
         LockKey key = new LockKey(externalReference, type);
         Lock lock = LOCKS.get(key);

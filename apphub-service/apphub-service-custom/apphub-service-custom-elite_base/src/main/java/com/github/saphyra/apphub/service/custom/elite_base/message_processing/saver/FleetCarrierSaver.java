@@ -34,7 +34,7 @@ public class FleetCarrierSaver {
             throw new IllegalArgumentException("CarrierId must not be blank");
         }
 
-        log.info("Saving FleetCarrier {}", carrierId);
+        log.debug("Saving FleetCarrier {}", carrierId);
 
         FleetCarrier carrier = fleetCarrierDao.findByMarketId(marketId)
             .orElseGet(() -> {
@@ -46,7 +46,7 @@ public class FleetCarrierSaver {
 
         updateFields(timestamp, carrier, starSystemId, carrierName, dockingAccess, marketId, carrierId);
 
-        log.info("Saved FleetCarrier {}", carrierId);
+        log.debug("Saved FleetCarrier {}", carrierId);
 
         return carrier;
     }

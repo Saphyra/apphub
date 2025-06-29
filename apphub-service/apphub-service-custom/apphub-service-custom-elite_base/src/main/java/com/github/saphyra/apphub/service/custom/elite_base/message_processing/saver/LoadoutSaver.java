@@ -53,7 +53,7 @@ public class LoadoutSaver {
             throw new MessageProcessingDelayedException("Lock acquisition failed in class " + getClass().getSimpleName());
         }
 
-        log.info("Saving Loadout for externalReference {} and type {}", externalReference, type);
+        log.debug("Saving Loadout for externalReference {} and type {}", externalReference, type);
 
         try {
             lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
@@ -85,7 +85,7 @@ public class LoadoutSaver {
                 PerformanceReportingKey.SAVE_LOADOUT_SAVE_ALL.name()
             );
 
-            log.info("Saved Loadout for externalReference {} and type {}", externalReference, type);
+            log.debug("Saved Loadout for externalReference {} and type {}", externalReference, type);
         } finally {
             lock.unlock();
         }

@@ -1,0 +1,11 @@
+===FEATURES===
+    EliteBase
+        Process incoming messages immediately
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
