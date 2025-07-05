@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.building_module;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleModel;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.citizen_a
 
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;

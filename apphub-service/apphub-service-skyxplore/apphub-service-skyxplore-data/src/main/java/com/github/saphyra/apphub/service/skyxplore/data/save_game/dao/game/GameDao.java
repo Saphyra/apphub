@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.http.HttpStatus;

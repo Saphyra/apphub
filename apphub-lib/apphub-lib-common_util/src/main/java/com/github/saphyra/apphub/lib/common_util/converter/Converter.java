@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.common_util.converter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -29,5 +30,5 @@ public interface Converter<E, D> {
 
     Optional<E> convertDomainToOptional(D domain);
 
-    List<E> convertDomain(List<D> domainList);
+    List<E> convertDomain(Collection<D> domainList);
 }

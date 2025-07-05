@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingLock;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.common.executor.MessageProcessorExecutor;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 @Component
 @RequiredArgsConstructor
@@ -39,6 +41,7 @@ public class EdMessageProcessor {
     private final List<MessageProcessor> messageProcessors;
     private final DateTimeUtil dateTimeUtil;
     private final PerformanceReporter performanceReporter;
+    private final MessageProcessingLock messageProcessingLock;
 
     @SneakyThrows
     public synchronized void processMessages() {
@@ -48,7 +51,9 @@ public class EdMessageProcessor {
                 List<EdMessage> messages = doProcessMessages();
 
                 stopWatch.stop();
-                log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+                if (!messages.isEmpty()) {
+                    log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
+                }
             },
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_BATCH.name()
@@ -57,25 +62,37 @@ public class EdMessageProcessor {
 
     @SneakyThrows
     private List<EdMessage> doProcessMessages() {
-        List<EdMessage> messages = performanceReporter.wrap(
-            () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-            PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
-        );
-        log.info("Processing {} messages.", messages.size());
+        Lock readLock = messageProcessingLock.readLock();
+        try {
+            readLock.lock();
 
-        List<Future<ExecutionResult<Void>>> futures = messages.stream()
-            .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
-            .toList();
+            List<EdMessage> messages = performanceReporter.wrap(
+                () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
+                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
+            );
+            if (messages.isEmpty()) {
+                return messages;
+            }
+            log.info("Processing {} messages.", messages.size());
 
-        for (Future<ExecutionResult<Void>> future : futures) {
-            future.get();
+            List<Future<ExecutionResult<Void>>> futures = messages.stream()
+                .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
+                .toList();
+
+            for (Future<ExecutionResult<Void>> future : futures) {
+                future.get();
+            }
+            return messages;
+        } finally {
+            readLock.unlock();
         }
-        return messages;
     }
 
-    private void processMessage(EdMessage edMessage) {
+    public void processMessage(EdMessage edMessage) {
         try {
+            log.debug("Processing message {}: {}", edMessage.getMessageId(), edMessage.getSchemaRef());
+
             performanceReporter.wrap(
                 () -> doProcessMessage(edMessage),
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,

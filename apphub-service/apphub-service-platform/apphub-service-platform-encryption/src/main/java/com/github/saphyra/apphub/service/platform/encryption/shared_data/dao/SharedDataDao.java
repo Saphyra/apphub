@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.encryption.model.AccessMode;
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.SharedData;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 

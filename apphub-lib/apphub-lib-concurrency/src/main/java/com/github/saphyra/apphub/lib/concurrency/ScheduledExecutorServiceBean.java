@@ -22,8 +22,12 @@ public class ScheduledExecutorServiceBean {
     @NonNull
     private final ErrorReporterService errorReporterService;
 
-    public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, int initialDelay, int delay, TimeUnit timeUnit) {
+    public ScheduledFuture<?> scheduleWithFixedDelay(Runnable task, long initialDelay, long delay, TimeUnit timeUnit) {
         return executor.scheduleWithFixedDelay(wrap(task), initialDelay, delay, timeUnit);
+    }
+
+    public void scheduleWithFixedDelay(Runnable task, Duration interval) {
+        scheduleWithFixedDelay(task, 0, interval.getSeconds(), TimeUnit.SECONDS);
     }
 
     public ScheduledFuture<?> scheduleFixedRate(Runnable task, Duration duration) {
@@ -38,7 +42,7 @@ public class ScheduledExecutorServiceBean {
         return executor.schedule(wrap(task), delay.getSeconds(), TimeUnit.SECONDS);
     }
 
-    public void shutdown(){
+    public void shutdown() {
         executor.shutdown();
     }
 

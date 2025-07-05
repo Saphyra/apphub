@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

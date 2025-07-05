@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.CharacterDao;

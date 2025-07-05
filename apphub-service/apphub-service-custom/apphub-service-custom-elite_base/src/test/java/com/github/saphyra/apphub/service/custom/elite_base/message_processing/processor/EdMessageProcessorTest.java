@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingLock;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
@@ -73,6 +74,8 @@ class EdMessageProcessorTest {
     @Mock
     private PerformanceReporter performanceReporter;
 
+    private final MessageProcessingLock messageProcessingLock = new MessageProcessingLock();
+
     private EdMessageProcessor underTest;
 
     @Mock
@@ -95,6 +98,7 @@ class EdMessageProcessorTest {
             .messageProcessors(List.of(messageProcessor))
             .dateTimeUtil(dateTimeUtil)
             .performanceReporter(performanceReporter)
+            .messageProcessingLock(messageProcessingLock)
             .build();
 
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);

@@ -20,7 +20,9 @@ public enum PerformanceReportingKey {
     SAVE_LOADOUT_DELETE_ALL,
     SAVE_LOADOUT_SAVE_ALL,
     PROCESS_BATCH,
+    BUFFER_SYNCHRONIZATION_BATCH,
     ;
     public static final String PROCESS_MESSAGE = "PROCESS_MESSAGE_%s";
     public static final String PROCESS_JOURNAL_MESSAGE = "PROCESS_JOURNAL_MESSAGE_%s";
+    public static final String BUFFER_SYNCHRONIZATION = "BUFFER_SYNCHRONIZATION_%s";
 }

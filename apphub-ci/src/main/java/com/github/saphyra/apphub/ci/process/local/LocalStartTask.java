@@ -30,7 +30,7 @@ public class LocalStartTask implements Runnable {
         Stopwatch stopwatch = Stopwatch.createStarted();
         log.info("Starting service {}", service.getName());
 
-        new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx512m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=%s".formatted(activeProfiles), "-jar", service.getLocation())
+        new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx1024m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=%s".formatted(activeProfiles), "-jar", service.getLocation())
             .start();
 
         servicePinger.pingLocal(Optional.ofNullable(service.getHealthCheckPort()).orElse(service.getPort()), protocol)

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.loadout;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
@@ -44,6 +45,9 @@ class LoadoutOrphanedRecordCleanerTest {
     @Autowired
     private List<CrudRepository<?, ?>> repositories;
 
+    @Autowired
+    private BufferSynchronizationService bufferSynchronizationService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -84,6 +88,7 @@ class LoadoutOrphanedRecordCleanerTest {
             .type(LoadoutType.OUTFITTING)
             .build();
         loadoutDao.save(orphanedLoadout);
+        bufferSynchronizationService.synchronizeAll();
 
         underTest.doCleanup();
 

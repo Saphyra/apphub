@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.stock.dao.acquisition;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 

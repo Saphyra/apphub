@@ -54,7 +54,7 @@ public class StarSystemDataSaver {
         Double powerplayStateUndermining,
         List<PowerplayConflict> powerplayConflicts
     ) {
-        log.info("Saving StarSystemData for StarSystem {}", starSystemId);
+        log.debug("Saving StarSystemData for StarSystem {}", starSystemId);
 
         List<MinorFactionConflict> conflicts = conflictMapper.mapConflicts(timestamp, starSystemId, conflictsArr, minorFactions);
 
@@ -104,7 +104,7 @@ public class StarSystemDataSaver {
             powerplayConflicts
         );
 
-        log.info("Saved StarSystemData for StarSystem {}", starSystemId);
+        log.debug("Saved StarSystemData for StarSystem {}", starSystemId);
     }
 
     private void updateFields(

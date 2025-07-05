@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_util.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import lombok.AccessLevel;
@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,11 +63,7 @@ public abstract class AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
         repository.save(converter.convertDomain(domain));
     }
 
-    public DOMAIN saveAndReturn(DOMAIN domain) {
-        return converter.convertEntity(repository.save(converter.convertDomain(domain)));
-    }
-
-    public void saveAll(List<DOMAIN> domains) {
+    public void saveAll(Collection<DOMAIN> domains) {
         if (domains.isEmpty()) {
             return;
         }

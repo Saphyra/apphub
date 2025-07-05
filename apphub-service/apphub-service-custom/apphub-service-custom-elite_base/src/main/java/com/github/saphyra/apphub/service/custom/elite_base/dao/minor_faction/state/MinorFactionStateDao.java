@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.state;
 
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
