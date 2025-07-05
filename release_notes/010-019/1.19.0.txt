@@ -4,6 +4,8 @@
         Caching and buffering
 
 ===BUGFIXES===
+    EliteBase
+        Search carriers by carrierId, since marketId is mutable.
 
 ===PLATFORM CHANGES===
 

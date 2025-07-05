@@ -55,4 +55,12 @@ class FleetCarrierDaoTest {
 
         assertThat(underTest.findAllById(List.of(ID))).containsExactly(domain);
     }
+
+    @Test
+    void findByCarrierId() {
+        given(repository.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findByCarrierId(CARRIER_ID)).contains(domain);
+    }
 }
