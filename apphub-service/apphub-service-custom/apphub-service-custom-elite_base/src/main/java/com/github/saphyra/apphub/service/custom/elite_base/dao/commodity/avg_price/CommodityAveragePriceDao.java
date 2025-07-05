@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.CachedDao;
+import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

@@ -125,8 +125,8 @@ class CommoditySaverTest {
         underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(existingCommodityData, newCommodityData, modifiedCommodityData));
 
         then(lastUpdateDao).should().save(lastUpdate);
-        then(commodityDao).should().deleteByExternalReferencesAndCommodityNames(List.of(incorrectCommodity));
-        then(commodityDao).should().deleteByExternalReferencesAndCommodityNames(List.of(deprecatedCommodity));
+        then(commodityDao).should().deleteAll(List.of(incorrectCommodity));
+        then(commodityDao).should().deleteAll(List.of(deprecatedCommodity));
         then(commodityDao).should().saveAll(List.of(newCommodity, modifiedCommodity));
     }
 }

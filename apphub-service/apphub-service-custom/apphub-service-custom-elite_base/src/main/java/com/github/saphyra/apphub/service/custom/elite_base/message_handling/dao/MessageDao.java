@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao;
 
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;

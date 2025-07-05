@@ -18,13 +18,9 @@ class PerformanceReportSender {
 
     void sendReport(PerformanceReportingTopic topic, String key, long value) {
         try {
-            executorServiceBean.execute(() -> {
-                performanceReportingTopicStatusCache.get(topic)
-                    .filter(expiration -> expiration.isAfter(dateTimeUtil.getCurrentDateTime()))
-                    .ifPresent(localDateTime -> {
-                        performanceReportingProxy.report(topic, key, value);
-                    });
-            });
+            executorServiceBean.execute(() -> performanceReportingTopicStatusCache.get(topic)
+                .filter(expiration -> expiration.isAfter(dateTimeUtil.getCurrentDateTime()))
+                .ifPresent(localDateTime -> performanceReportingProxy.report(topic, key, value)));
         } catch (Exception e) {
             log.error("Failed sending performanceReport", e);
         }

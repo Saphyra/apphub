@@ -56,6 +56,11 @@ class EliteBaseEventControllerImplTest {
     @Mock
     private ErrorReporterService errorReporterService;
 
+    private final MessageProcessingLock messageProcessingLock = new MessageProcessingLock();
+
+    @Mock
+    private BufferSynchronizationService bufferSynchronizationService;
+
     private EliteBaseEventControllerImpl underTest;
 
     @BeforeEach
@@ -68,6 +73,8 @@ class EliteBaseEventControllerImplTest {
             .executorServiceBean(executorServiceBean)
             .orphanedRecordCleaners(List.of(orphanedRecordCleaner))
             .errorReporterService(errorReporterService)
+            .messageProcessingLock(messageProcessingLock)
+            .bufferSynchronizationService(bufferSynchronizationService)
             .build();
     }
 
@@ -123,6 +130,7 @@ class EliteBaseEventControllerImplTest {
 
         underTest.cleanupOrphanedRecords();
 
+        then(bufferSynchronizationService).should().synchronizeAll();
         ArgumentCaptor<String> argumentCaptor = ArgumentCaptor.forClass(String.class);
         then(errorReporterService).should().report(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue()).contains(String.valueOf(NUMBER_OF_DELETED_RECORDS));

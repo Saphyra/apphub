@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.common_util.converter;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -56,7 +57,7 @@ public abstract class ConverterBase<E, D> implements Converter<E, D> {
     }
 
     @Override
-    public List<E> convertDomain(List<D> domainList) {
+    public List<E> convertDomain(Collection<D> domainList) {
         if (domainList == null) {
             throw new IllegalArgumentException("domainList must not be null.");
         }

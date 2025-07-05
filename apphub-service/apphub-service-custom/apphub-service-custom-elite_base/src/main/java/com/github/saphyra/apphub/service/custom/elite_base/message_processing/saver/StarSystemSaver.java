@@ -42,8 +42,8 @@ public class StarSystemSaver {
     }
 
     public StarSystem save(LocalDateTime timestamp, Long starId, String starName, Double[] starPosition, StarType starType) {
-        if (isNull(starId) && isNull(starName)) {
-            throw new IllegalArgumentException("Both starId and starName are null.");
+        if (isNull(starName)) {
+            throw new IllegalArgumentException("starName must not be null.");
         }
 
         Optional<Lock> starNameLock = Optional.ofNullable(starName)
@@ -54,7 +54,7 @@ public class StarSystemSaver {
         log.debug("Saving starSystem {}", starName);
 
         try {
-            StarSystem starSystem = starSystemDao.findByStarIdOrStarName(starId, starName)
+            StarSystem starSystem = starSystemDao.findByStarName(starName)
                 .orElseGet(() -> {
                     StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition, starType);
                     log.debug("Saving new {}", created);

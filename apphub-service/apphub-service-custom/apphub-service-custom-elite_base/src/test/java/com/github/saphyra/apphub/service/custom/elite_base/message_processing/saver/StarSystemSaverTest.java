@@ -47,7 +47,7 @@ class StarSystemSaverTest {
 
     @Test
     void save_new() {
-        given(starSystemDao.findByStarIdOrStarName(STAR_ID, STAR_NAME)).willReturn(Optional.empty());
+        given(starSystemDao.findByStarName(STAR_NAME)).willReturn(Optional.empty());
         given(starSystemFactory.create(LAST_UPDATE, STAR_ID, STAR_NAME, STAR_POSITION, StarType.A)).willReturn(starSystem);
         given(starSystem.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
 
@@ -63,7 +63,7 @@ class StarSystemSaverTest {
 
     @Test
     void save_existing() {
-        given(starSystemDao.findByStarIdOrStarName(STAR_ID, STAR_NAME)).willReturn(Optional.of(starSystem));
+        given(starSystemDao.findByStarName(STAR_NAME)).willReturn(Optional.of(starSystem));
         given(starSystem.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
         given(starSystem.getStarId()).willReturn(null);
 

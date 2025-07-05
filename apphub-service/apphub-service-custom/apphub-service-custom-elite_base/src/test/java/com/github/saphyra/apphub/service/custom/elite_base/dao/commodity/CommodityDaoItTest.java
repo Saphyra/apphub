@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -27,9 +26,8 @@ class CommodityDaoItTest {
     @Autowired
     private CommodityDao underTest;
 
-    @Spy
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private BufferSynchronizationService bufferSynchronizationService;
 
     @AfterEach
     void clear(){
@@ -49,31 +47,8 @@ class CommodityDaoItTest {
             .type(CommodityType.COMMODITY)
             .build();
         underTest.saveAll(List.of(commodity1, commodity2));
+        bufferSynchronizationService.synchronizeAll();
 
         assertThat(underTest.getCommodityNames()).containsExactlyInAnyOrder(COMMODITY_NAME_1, COMMODITY_NAME_2);
-    }
-
-    @Test
-    void deleteByExternalReferencesAndCommodityNames() {
-        Commodity commodity1 = Commodity.builder()
-            .externalReference(EXTERNAL_REFERENCE_1)
-            .commodityName(COMMODITY_NAME_1)
-            .type(CommodityType.COMMODITY)
-            .build();
-        Commodity commodity2 = Commodity.builder()
-            .externalReference(EXTERNAL_REFERENCE_2)
-            .commodityName(COMMODITY_NAME_1)
-            .type(CommodityType.COMMODITY)
-            .build();
-        Commodity commodity3 = Commodity.builder()
-            .externalReference(EXTERNAL_REFERENCE_1)
-            .commodityName(COMMODITY_NAME_2)
-            .type(CommodityType.COMMODITY)
-            .build();
-        underTest.saveAll(List.of(commodity1, commodity2, commodity3));
-
-        underTest.deleteByExternalReferencesAndCommodityNames(List.of(commodity1));
-
-        assertThat(underTest.findAll()).containsExactlyInAnyOrder(commodity2, commodity3);
     }
 }

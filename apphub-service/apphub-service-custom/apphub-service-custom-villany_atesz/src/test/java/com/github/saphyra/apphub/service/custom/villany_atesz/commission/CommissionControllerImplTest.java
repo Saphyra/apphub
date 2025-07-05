@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionCartRe
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.Cart;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.commission.dao.Commission;
@@ -34,6 +35,7 @@ class CommissionControllerImplTest {
     private static final UUID CART_ID = UUID.randomUUID();
     private static final UUID CONTACT_ID = UUID.randomUUID();
     private static final String CONTACT_NAME = "contact-name";
+    private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 
     @Mock
     private CommissionRequestValidator commissionRequestValidator;
@@ -56,6 +58,9 @@ class CommissionControllerImplTest {
     @Mock
     private CommissionCartQueryService commissionCartQueryService;
 
+    @Mock
+    private DateTimeUtil dateTimeUtil;
+
     @InjectMocks
     private CommissionControllerImpl underTest;
 
@@ -63,10 +68,7 @@ class CommissionControllerImplTest {
     private AccessTokenHeader accessTokenHeader;
 
     @Mock
-    private Commission commission1;
-
-    @Mock
-    private Commission commission2;
+    private Commission commission;
 
     @Mock
     private CommissionModel response;
@@ -86,19 +88,21 @@ class CommissionControllerImplTest {
     @Test
     void createOrUpdateCommission() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(commissionFactory.create(USER_ID, request)).willReturn(commission1);
-        given(commissionDao.saveAndReturn(commission1)).willReturn(commission2);
-        given(commissionToResponseConverter.convert(commission2)).willReturn(response);
+        given(commissionFactory.create(USER_ID, request)).willReturn(commission);
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
+        given(commissionToResponseConverter.convert(commission)).willReturn(response);
 
         assertThat(underTest.createOrUpdateCommission(request, accessTokenHeader)).isEqualTo(response);
 
+        then(commission).should().setLastUpdate(CURRENT_TIME);
+        then(commissionDao).should().save(commission);
         then(commissionRequestValidator).should().validate(request);
     }
 
     @Test
     void getCommission() {
-        given(commissionDao.findByIdValidated(COMMISSION_ID)).willReturn(commission1);
-        given(commissionToResponseConverter.convert(commission1)).willReturn(response);
+        given(commissionDao.findByIdValidated(COMMISSION_ID)).willReturn(commission);
+        given(commissionToResponseConverter.convert(commission)).willReturn(response);
 
         assertThat(underTest.getCommission(COMMISSION_ID, accessTokenHeader)).isEqualTo(response);
     }
@@ -106,10 +110,10 @@ class CommissionControllerImplTest {
     @Test
     void getCommissions_noCartId() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission1));
-        given(commission1.getCommissionId()).willReturn(COMMISSION_ID);
-        given(commission1.getCartId()).willReturn(null);
-        given(commission1.getLastUpdate()).willReturn(LAST_UPDATE);
+        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission));
+        given(commission.getCommissionId()).willReturn(COMMISSION_ID);
+        given(commission.getCartId()).willReturn(null);
+        given(commission.getLastUpdate()).willReturn(LAST_UPDATE);
 
         CustomAssertions.singleListAssertThat(underTest.getCommissions(accessTokenHeader))
             .returns(COMMISSION_ID, CommissionView::getCommissionId)
@@ -120,11 +124,11 @@ class CommissionControllerImplTest {
     @Test
     void getCommissions_cartNotFound() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission1));
-        given(commission1.getCommissionId()).willReturn(COMMISSION_ID);
-        given(commission1.getCartId()).willReturn(CART_ID);
+        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission));
+        given(commission.getCommissionId()).willReturn(COMMISSION_ID);
+        given(commission.getCartId()).willReturn(CART_ID);
         given(cartDao.findById(CART_ID)).willReturn(Optional.empty());
-        given(commission1.getLastUpdate()).willReturn(LAST_UPDATE);
+        given(commission.getLastUpdate()).willReturn(LAST_UPDATE);
 
         CustomAssertions.singleListAssertThat(underTest.getCommissions(accessTokenHeader))
             .returns(COMMISSION_ID, CommissionView::getCommissionId)
@@ -135,14 +139,14 @@ class CommissionControllerImplTest {
     @Test
     void getCommissions_withContact() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission1));
-        given(commission1.getCommissionId()).willReturn(COMMISSION_ID);
-        given(commission1.getCartId()).willReturn(CART_ID);
+        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission));
+        given(commission.getCommissionId()).willReturn(COMMISSION_ID);
+        given(commission.getCartId()).willReturn(CART_ID);
         given(cartDao.findById(CART_ID)).willReturn(Optional.of(cart));
         given(cart.getContactId()).willReturn(CONTACT_ID);
         given(contactDao.findByIdValidated(CONTACT_ID)).willReturn(contact);
         given(contact.getName()).willReturn(CONTACT_NAME);
-        given(commission1.getLastUpdate()).willReturn(LAST_UPDATE);
+        given(commission.getLastUpdate()).willReturn(LAST_UPDATE);
 
         CustomAssertions.singleListAssertThat(underTest.getCommissions(accessTokenHeader))
             .returns(COMMISSION_ID, CommissionView::getCommissionId)
@@ -152,20 +156,20 @@ class CommissionControllerImplTest {
 
     @Test
     void deleteCommission() {
-        given(commissionDao.findByIdValidated(COMMISSION_ID)).willReturn(commission1);
+        given(commissionDao.findByIdValidated(COMMISSION_ID)).willReturn(commission);
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission1));
-        given(commission1.getCommissionId()).willReturn(COMMISSION_ID);
-        given(commission1.getCartId()).willReturn(CART_ID);
+        given(commissionDao.getByUserId(USER_ID)).willReturn(List.of(commission));
+        given(commission.getCommissionId()).willReturn(COMMISSION_ID);
+        given(commission.getCartId()).willReturn(CART_ID);
         given(cartDao.findById(CART_ID)).willReturn(Optional.empty());
-        given(commission1.getLastUpdate()).willReturn(LAST_UPDATE);
+        given(commission.getLastUpdate()).willReturn(LAST_UPDATE);
 
         CustomAssertions.singleListAssertThat(underTest.deleteCommission(COMMISSION_ID, accessTokenHeader))
             .returns(COMMISSION_ID, CommissionView::getCommissionId)
             .returns(null, CommissionView::getContactName)
             .returns(LAST_UPDATE, CommissionView::getLastUpdate);
 
-        then(commissionDao).should().delete(commission1);
+        then(commissionDao).should().delete(commission);
     }
 
     @Test

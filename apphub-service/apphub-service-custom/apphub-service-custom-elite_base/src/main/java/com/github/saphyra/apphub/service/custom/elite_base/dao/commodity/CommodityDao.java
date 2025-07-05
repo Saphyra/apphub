@@ -1,47 +1,65 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.dao.ListCachedBufferedDao;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.ListValue;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
+import com.google.common.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_EXTERNAL_REFERENCE;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.SCHEMA;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_COMMODITY;
 
 @Component
 @Slf4j
-public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, CommodityEntityId, CommodityRepository> {
+public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodity, CommodityEntityId, CommodityCacheKey, CommodityDomainId, CommodityRepository> {
     private final Set<String> commodityNameCache = ConcurrentHashMap.newKeySet();
-    private volatile boolean loaded = false;
-    private final UuidConverter uuidConverter;
+    private volatile boolean commodityNamesLoaded = false;
 
+    private final UuidConverter uuidConverter;
     private final JdbcTemplate jdbcTemplate;
 
-    CommodityDao(CommodityConverter converter, CommodityRepository repository, UuidConverter uuidConverter, JdbcTemplate jdbcTemplate) {
-        super(converter, repository);
+    protected CommodityDao(
+        CommodityConverter converter,
+        CommodityRepository repository,
+        Cache<CommodityCacheKey, List<Commodity>> commodityReadCache,
+        CommodityWriteBuffer writeBuffer,
+        CommodityDeleteBuffer deleteBuffer,
+        UuidConverter uuidConverter,
+        JdbcTemplate jdbcTemplate
+    ) {
+        super(
+            converter,
+            repository,
+            commodityReadCache,
+            writeBuffer,
+            deleteBuffer
+        );
         this.uuidConverter = uuidConverter;
         this.jdbcTemplate = jdbcTemplate;
     }
 
     public List<Commodity> getByMarketIdAndType(Long marketId, CommodityType type) {
-        return converter.convertEntity(repository.getByMarketIdAndType(marketId, type));
+        CommodityCacheKey cacheKey = CommodityCacheKey.builder()
+            .marketId(marketId)
+            .commodityType(type)
+            .build();
+
+        return searchList(cacheKey, () -> repository.getByMarketIdAndType(marketId, type));
     }
 
     public List<String> getCommodityNames() {
-        if (loaded) {
+        if (commodityNamesLoaded) {
             return new ArrayList<>(commodityNameCache);
         }
 
@@ -63,17 +81,17 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
         });
 
         commodityNameCache.addAll(result);
-        loaded = true;
+        commodityNamesLoaded = true;
 
         return result;
     }
 
     public List<Commodity> findSuppliers(String commodityName, Integer minStock, Integer minPrice, Integer maxPrice) {
-        return converter.convertEntity(repository.getSellOffers(commodityName, minStock, minPrice, maxPrice));
+        return syncWithCaches(converter.convertEntity(repository.getSellOffers(commodityName, minStock, minPrice, maxPrice)));
     }
 
     public List<Commodity> findConsumers(String commodityName, Integer minDemand, Integer minPrice, Integer maxPrice) {
-        return converter.convertEntity(repository.getBuyOffers(commodityName, minDemand, minPrice, maxPrice));
+        return syncWithCaches(converter.convertEntity(repository.getBuyOffers(commodityName, minDemand, minPrice, maxPrice)));
     }
 
     @Override
@@ -83,37 +101,39 @@ public class CommodityDao extends AbstractDao<CommodityEntity, Commodity, Commod
     }
 
     @Override
-    public void saveAll(List<Commodity> domains) {
+    protected CommodityCacheKey getCacheKey(Commodity commodity) {
+        return CommodityCacheKey.builder()
+            .marketId(commodity.getMarketId())
+            .commodityType(commodity.getType())
+            .build();
+    }
+
+    @Override
+    protected CommodityDomainId toDomainId(CommodityEntityId commodityEntityId) {
+        return CommodityDomainId.builder()
+            .externalReference(uuidConverter.convertEntity(commodityEntityId.getExternalReference()))
+            .commodityName(commodityEntityId.getCommodityName())
+            .build();
+    }
+
+    @Override
+    protected CommodityDomainId getDomainId(Commodity commodity) {
+        return CommodityDomainId.builder()
+            .externalReference(commodity.getExternalReference())
+            .commodityName(commodity.getCommodityName())
+            .build();
+    }
+
+    @Override
+    protected boolean matchesWithId(CommodityDomainId domainId, Commodity commodity) {
+        return commodity.getExternalReference().equals(domainId.getExternalReference())
+            && commodity.getCommodityName().equals(domainId.getCommodityName());
+    }
+
+    @Override
+    public void saveAll(Collection<Commodity> domains) {
         commodityNameCache.addAll(domains.stream().map(Commodity::getCommodityName).toList());
 
         super.saveAll(domains);
-    }
-
-    //Has to be JDBC, JPA blocks the flow for some reason
-    public void deleteByExternalReferencesAndCommodityNames(List<Commodity> domains) {
-        if (domains.isEmpty()) {
-            return;
-        }
-
-        List<String> externalReferences = domains.stream()
-            .map(Commodity::getExternalReference)
-            .map(uuidConverter::convertDomain)
-            .toList();
-        List<String> commodityNames = domains.stream()
-            .map(Commodity::getCommodityName)
-            .toList();
-
-        log.debug("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);
-
-        String sql = SqlBuilder.delete()
-            .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))
-            .condition(new InCondition(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE), new ListValue(externalReferences)))
-            .and()
-            .condition(new InCondition(new DefaultColumn(COLUMN_COMMODITY_NAME), new ListValue(commodityNames)))
-            .build();
-
-        log.debug(sql);
-
-        jdbcTemplate.update(sql);
     }
 }

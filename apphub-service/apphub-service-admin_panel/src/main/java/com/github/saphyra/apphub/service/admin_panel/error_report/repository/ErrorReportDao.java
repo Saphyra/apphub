@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;

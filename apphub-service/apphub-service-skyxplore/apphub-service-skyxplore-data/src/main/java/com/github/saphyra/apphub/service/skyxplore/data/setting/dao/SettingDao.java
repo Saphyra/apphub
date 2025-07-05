@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.data.setting.dao;
 
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
-import com.github.saphyra.apphub.lib.common_util.AbstractDao;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 

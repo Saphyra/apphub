@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data;
 
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import org.junit.jupiter.api.AfterEach;
@@ -34,6 +35,9 @@ class StarSystemDataOrphanedRecordCleanerTest {
     @Autowired
     private List<CrudRepository<?, ?>> repositories;
 
+    @Autowired
+    private BufferSynchronizationService bufferSynchronizationService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -53,9 +57,9 @@ class StarSystemDataOrphanedRecordCleanerTest {
             .starSystemId(UUID.randomUUID())
             .build();
         starSystemDataDao.save(orphanedStarSystemData);
+        bufferSynchronizationService.synchronizeAll();
 
         underTest.cleanupOrphanedRecords();
-
 
         assertThat(starSystemDataDao.findAll()).containsExactly(starSystemData);
     }

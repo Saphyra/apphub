@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 @RestController
 @Slf4j
@@ -34,6 +35,8 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     private final ExecutorServiceBean executorServiceBean;
     private final List<OrphanedRecordCleaner> orphanedRecordCleaners;
     private final ErrorReporterService errorReporterService;
+    private final MessageProcessingLock messageProcessingLock;
+    private final BufferSynchronizationService bufferSynchronizationService;
 
     @Override
     public void processMessages() {
@@ -70,37 +73,45 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     public void cleanupOrphanedRecords() {
         log.info("cleanupOrphanedRecords event arrived");
 
-        Semaphore semaphore = new Semaphore(properties.getOrphanedRecordProcessorParallelism());
+        Lock writeLock = messageProcessingLock.writeLock();
+        try {
+            writeLock.lock();
+            bufferSynchronizationService.synchronizeAll();
 
-        executorServiceBean.execute(() -> {
-            Stopwatch stopwatch = Stopwatch.createStarted();
+            Semaphore semaphore = new Semaphore(properties.getOrphanedRecordProcessorParallelism());
 
-            List<Future<ExecutionResult<Integer>>> progress = orphanedRecordCleaners.stream()
-                .map(orphanedRecordCleaner -> executorServiceBean.asyncProcess(() -> {
+            executorServiceBean.execute(() -> {
+                Stopwatch stopwatch = Stopwatch.createStarted();
+
+                List<Future<ExecutionResult<Integer>>> progress = orphanedRecordCleaners.stream()
+                    .map(orphanedRecordCleaner -> executorServiceBean.asyncProcess(() -> {
+                        try {
+                            semaphore.acquire();
+                            return orphanedRecordCleaner.cleanupOrphanedRecords();
+                        } finally {
+                            semaphore.release();
+                        }
+                    }))
+                    .toList();
+
+                int rowsDeleted = 0;
+
+                for (Future<ExecutionResult<Integer>> future : progress) {
                     try {
-                        semaphore.acquire();
-                        return orphanedRecordCleaner.cleanupOrphanedRecords();
-                    } finally {
-                        semaphore.release();
+                        rowsDeleted += future.get()
+                            .getOrThrow();
+                    } catch (Exception e) {
+                        log.error("OrphanedRecord cleanup failed", e);
+                        errorReporterService.report("Orphaned record cleanup failed", e);
                     }
-                }))
-                .toList();
-
-            int rowsDeleted = 0;
-
-            for (Future<ExecutionResult<Integer>> future : progress) {
-                try {
-                    rowsDeleted += future.get()
-                        .getOrThrow();
-                } catch (Exception e) {
-                    log.error("OrphanedRecord cleanup failed", e);
-                    errorReporterService.report("Orphaned record cleanup failed", e);
                 }
-            }
 
-            stopwatch.stop();
-            log.info("Orphaned record cleanup finished. {} rows were deleted.", rowsDeleted);
-            errorReporterService.report("EliteBase orphanedRecordCleanup finished in %s seconds. %s rows were deleted.".formatted(stopwatch.elapsed(TimeUnit.SECONDS), rowsDeleted));
-        });
+                stopwatch.stop();
+                log.info("Orphaned record cleanup finished. {} rows were deleted.", rowsDeleted);
+                errorReporterService.report("EliteBase orphanedRecordCleanup finished in %s seconds. %s rows were deleted.".formatted(stopwatch.elapsed(TimeUnit.SECONDS), rowsDeleted));
+            });
+        } finally {
+            writeLock.unlock();
+        }
     }
 }

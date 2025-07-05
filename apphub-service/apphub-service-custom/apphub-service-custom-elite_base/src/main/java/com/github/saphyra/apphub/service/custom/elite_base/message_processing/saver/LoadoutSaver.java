@@ -43,8 +43,8 @@ public class LoadoutSaver {
 
     @SneakyThrows
     public void save(LocalDateTime timestamp, LoadoutType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<String> items) {
-        if ((isNull(commodityLocation) || isNull(externalReference)) && isNull(marketId)) {
-            throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
+        if (isNull(marketId)) {
+            throw new IllegalArgumentException("marketId must not be null");
         }
 
         LockKey key = new LockKey(externalReference, type);
@@ -58,7 +58,7 @@ public class LoadoutSaver {
         try {
             lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-            Map<String, Loadout> existingLoadouts = getExistingLoadouts(type, externalReference, marketId)
+            Map<String, Loadout> existingLoadouts = getExistingLoadouts(type, marketId)
                 .stream()
                 .collect(Collectors.toMap(Loadout::getName, Function.identity()));
 
@@ -67,14 +67,13 @@ public class LoadoutSaver {
                 .map(name -> loadoutFactory.create(timestamp, type, commodityLocation, externalReference, marketId, name))
                 .toList();
 
-            List<String> deletedItems = existingLoadouts.values()
+            List<Loadout> deletedItems = existingLoadouts.values()
                 .stream()
-                .map(Loadout::getName)
-                .filter(name -> !items.contains(name))
+                .filter(loadout -> !items.contains(loadout.getName()))
                 .toList();
 
             performanceReporter.wrap(
-                () -> loadoutDao.deleteByExternalReferenceAndLoadoutTypeAndNameIn(externalReference, type, deletedItems),
+                () -> loadoutDao.deleteAll(deletedItems),
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
                 PerformanceReportingKey.SAVE_LOADOUT_DELETE_ALL.name()
             );
@@ -91,14 +90,13 @@ public class LoadoutSaver {
         }
     }
 
-    private List<Loadout> getExistingLoadouts(LoadoutType type, UUID externalReference, Long marketId) {
+    private List<Loadout> getExistingLoadouts(LoadoutType type, Long marketId) {
         return performanceReporter.wrap(
-            () -> loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(externalReference, marketId, type),
+            () -> loadoutDao.getByMarketIdAndType(marketId, type),
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_LOADOUT_QUERY_EXISTING.name()
         );
     }
-
 
     @Data
     private static class LockKey {

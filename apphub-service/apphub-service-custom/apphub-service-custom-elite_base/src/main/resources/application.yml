@@ -11,12 +11,17 @@ spring:
         order_updates: true
         batch_versioned_data: true
         jdbc:
-          batch_size: 50
+          batch_size: 100
 
 liquibase:
   schema: elite_base
 
 elite-base:
+  cache:
+    expireAfterAccess: PT1H
+    bufferSynchronizationInterval: PT5M
+    bufferSynchronizationCheckInterval: PT1S
+    maxBufferSize: 10000
   messageExpiration: P30D
   processedMessageExpiration: P1D
   messageProcessorBatchSize: 500

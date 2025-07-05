@@ -79,7 +79,7 @@ class LoadoutSaverTest {
     @Test
     void save() {
         given(lastUpdateFactory.create(EXTERNAL_REFERENCE, LoadoutType.OUTFITTING, LAST_UPDATE)).willReturn(lastUpdate);
-        given(loadoutDao.getByExternalReferenceOrMarketIdAndLoadoutType(EXTERNAL_REFERENCE, MARKET_ID, LoadoutType.OUTFITTING)).willReturn(List.of(existingLoadout, deprecatedLoadout));
+        given(loadoutDao.getByMarketIdAndType(MARKET_ID, LoadoutType.OUTFITTING)).willReturn(List.of(existingLoadout, deprecatedLoadout));
 
         given(existingLoadout.getName()).willReturn(EXISTING_ITEM);
         given(deprecatedLoadout.getName()).willReturn(DEPRECATED_ITEM);
@@ -96,7 +96,7 @@ class LoadoutSaverTest {
 
         then(lastUpdateDao).should().save(lastUpdate);
 
-        then(loadoutDao).should().deleteByExternalReferenceAndLoadoutTypeAndNameIn(EXTERNAL_REFERENCE, LoadoutType.OUTFITTING, List.of(DEPRECATED_ITEM));
+        then(loadoutDao).should().deleteAll(List.of(deprecatedLoadout));
         then(loadoutDao).should().saveAll(List.of(newLoadout));
     }
 }

@@ -1,7 +1,8 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_util.dao;
 
 import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
+import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.jupiter.api.Test;

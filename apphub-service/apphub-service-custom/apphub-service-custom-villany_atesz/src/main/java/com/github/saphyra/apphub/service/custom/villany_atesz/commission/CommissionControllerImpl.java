@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionModel;
 import com.github.saphyra.apphub.api.custom.villany_atesz.model.CommissionView;
 import com.github.saphyra.apphub.api.custom.villany_atesz.server.CommissionController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.custom.villany_atesz.cart.dao.cart.CartDao;
 import com.github.saphyra.apphub.service.custom.villany_atesz.commission.dao.Commission;
 import com.github.saphyra.apphub.service.custom.villany_atesz.commission.dao.CommissionDao;
@@ -28,6 +29,7 @@ class CommissionControllerImpl implements CommissionController {
     private final CartDao cartDao;
     private final ContactDao contactDao;
     private final CommissionCartQueryService commissionCartQueryService;
+    private final DateTimeUtil dateTimeUtil;
 
     @Override
     public CommissionModel createOrUpdateCommission(CommissionModel request, AccessTokenHeader accessTokenHeader) {
@@ -35,7 +37,9 @@ class CommissionControllerImpl implements CommissionController {
 
         commissionRequestValidator.validate(request);
 
-        Commission commission = commissionDao.saveAndReturn(commissionFactory.create(accessTokenHeader.getUserId(), request));
+        Commission commission = commissionFactory.create(accessTokenHeader.getUserId(), request);
+        commissionDao.save(commission);
+        commission.setLastUpdate(dateTimeUtil.getCurrentDateTime());
 
         return commissionToResponseConverter.convert(commission);
     }

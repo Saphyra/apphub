@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.nearest.mate
 import com.github.saphyra.apphub.api.custom.elite_base.model.MaterialType;
 import com.github.saphyra.apphub.api.custom.elite_base.model.NearestMaterialTraderResponse;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
@@ -61,6 +62,9 @@ class NearestMaterialTraderServiceTest {
     @Autowired
     private MaterialTraderOverrideDao materialTraderOverrideDao;
 
+    @Autowired
+    private BufferSynchronizationService bufferSynchronizationService;
+
     @BeforeEach
     void setUp() {
         StarSystem referenceStarSystem = StarSystem.builder()
@@ -109,6 +113,8 @@ class NearestMaterialTraderServiceTest {
             .build();
         bodyDao.save(body);
 
+        bufferSynchronizationService.synchronizeAll();
+
         CustomAssertions.singleListAssertThat(underTest.getNearestMaterialTraders(REFERENCE_STAR_ID, MaterialType.ANY, 0))
             .returns(5d, NearestMaterialTraderResponse::getDistanceFromReference)
             .returns(MATERIAL_TRADER_STAR_ID, NearestMaterialTraderResponse::getStarId)
@@ -149,6 +155,8 @@ class NearestMaterialTraderServiceTest {
             .distanceFromStar(DISTANCE_FROM_STAR)
             .build();
         bodyDao.save(body);
+
+        bufferSynchronizationService.synchronizeAll();
 
         CustomAssertions.singleListAssertThat(underTest.getNearestMaterialTraders(REFERENCE_STAR_ID, MaterialType.MANUFACTURED, 0))
             .returns(5d, NearestMaterialTraderResponse::getDistanceFromReference)
@@ -197,6 +205,8 @@ class NearestMaterialTraderServiceTest {
             .build();
         materialTraderOverrideDao.save(override);
 
+        bufferSynchronizationService.synchronizeAll();
+
         CustomAssertions.singleListAssertThat(underTest.getNearestMaterialTraders(REFERENCE_STAR_ID, MaterialType.ENCODED, 0))
             .returns(5d, NearestMaterialTraderResponse::getDistanceFromReference)
             .returns(MATERIAL_TRADER_STAR_ID, NearestMaterialTraderResponse::getStarId)
@@ -243,6 +253,8 @@ class NearestMaterialTraderServiceTest {
             .materialType(MaterialType.ENCODED)
             .build();
         materialTraderOverrideDao.save(override);
+
+        bufferSynchronizationService.synchronizeAll();
 
         assertThat(underTest.getNearestMaterialTraders(REFERENCE_STAR_ID, MaterialType.MANUFACTURED, 0)).isEmpty();
     }

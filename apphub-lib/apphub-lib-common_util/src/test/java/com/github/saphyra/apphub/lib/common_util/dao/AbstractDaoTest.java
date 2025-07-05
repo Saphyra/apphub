@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_util.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict;
 
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataDao;
 import org.junit.jupiter.api.AfterEach;
@@ -35,6 +36,9 @@ class MinorFactionConflictOrphanedRecordCleanerTest {
     @Autowired
     private List<CrudRepository<?, ?>> repositories;
 
+    @Autowired
+    private BufferSynchronizationService bufferSynchronizationService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -56,6 +60,7 @@ class MinorFactionConflictOrphanedRecordCleanerTest {
             .starSystemId(UUID.randomUUID())
             .build();
         minorFactionConflictDao.save(orphanedMinorFactionConflict);
+        bufferSynchronizationService.synchronizeAll();
 
         underTest.cleanupOrphanedRecords();
 

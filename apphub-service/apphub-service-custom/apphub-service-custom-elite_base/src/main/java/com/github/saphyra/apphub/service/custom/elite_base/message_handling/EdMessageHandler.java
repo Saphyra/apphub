@@ -6,7 +6,9 @@ import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingLock;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor.EdMessageProcessor;
 import jakarta.annotation.PostConstruct;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.concurrent.locks.Lock;
 import java.util.zip.Inflater;
 
 @Component
@@ -34,6 +37,8 @@ public class EdMessageHandler implements MessageHandler {
     private final ScheduledExecutorServiceBean scheduledExecutorServiceBean;
     private final ApplicationContextProxy applicationContextProxy;
     private final EdMessageProcessor edMessageProcessor;
+    private final MessageProcessingLock messageProcessingLock;
+    private final MessageDao messageDao;
 
     private volatile LocalDateTime lastMessage;
 
@@ -44,7 +49,9 @@ public class EdMessageHandler implements MessageHandler {
         ScheduledExecutorServiceBean scheduledExecutorServiceBean,
         EliteBaseProperties eliteBaseProperties,
         ApplicationContextProxy applicationContextProxy,
-        EdMessageProcessor edMessageProcessor
+        EdMessageProcessor edMessageProcessor,
+        MessageProcessingLock messageProcessingLock,
+        MessageDao messageDao
     ) {
         this.messageFactory = messageFactory;
         this.errorReporterService = errorReporterService;
@@ -54,6 +61,8 @@ public class EdMessageHandler implements MessageHandler {
         this.scheduledExecutorServiceBean = scheduledExecutorServiceBean;
         this.applicationContextProxy = applicationContextProxy;
         this.edMessageProcessor = edMessageProcessor;
+        this.messageProcessingLock = messageProcessingLock;
+        this.messageDao = messageDao;
     }
 
     @Override
@@ -69,7 +78,16 @@ public class EdMessageHandler implements MessageHandler {
             String outputString = new String(output, 0, outputLength, StandardCharsets.UTF_8);
             log.debug("{}", outputString);
             EdMessage edMessage = messageFactory.create(outputString);
-            edMessageProcessor.processMessage(edMessage);
+            Lock readLock = messageProcessingLock.readLock();
+            if (readLock.tryLock()) {
+                try {
+                    edMessageProcessor.processMessage(edMessage);
+                } finally {
+                    readLock.unlock();
+                }
+            } else {
+                messageDao.save(edMessage);
+            }
         } catch (MessageProcessingDelayedException e) {
             log.warn(e.getMessage());
         } catch (Exception e) {

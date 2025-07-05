@@ -101,7 +101,7 @@ public class CommoditySaver {
                 .toList();
 
             performanceReporter.wrap(
-                () -> commodityDao.deleteByExternalReferencesAndCommodityNames(deletedCommodities),
+                () -> commodityDao.deleteAll(deletedCommodities),
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
                 PerformanceReportingKey.SAVE_COMMODITIES_DELETE_ALL.name()
             );
@@ -132,7 +132,7 @@ public class CommoditySaver {
             .toList();
         log.debug("Found {} incorrect commodities.", incorrectCommodities.size());
         if (!incorrectCommodities.isEmpty()) {
-            commodityDao.deleteByExternalReferencesAndCommodityNames(incorrectCommodities);
+            commodityDao.deleteAll(incorrectCommodities);
             log.debug("{} incorrect commodities were deleted.", incorrectCommodities.size());
         }
 

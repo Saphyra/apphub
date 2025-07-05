@@ -1,10 +1,11 @@
-package com.github.saphyra.apphub.lib.common_util;
+package com.github.saphyra.apphub.lib.common_util.dao;
 
 import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,7 +96,7 @@ public abstract class CachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepos
     }
 
     @Override
-    public void saveAll(List<DOMAIN> domains) {
+    public void saveAll(Collection<DOMAIN> domains) {
         List<DOMAIN> toSave = domains.stream()
             .filter(this::shouldSave)
             .toList();

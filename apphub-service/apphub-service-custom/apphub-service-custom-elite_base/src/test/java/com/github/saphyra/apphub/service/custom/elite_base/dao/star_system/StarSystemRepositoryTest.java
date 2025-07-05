@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -130,5 +132,25 @@ class StarSystemRepositoryTest {
         underTest.save(entity2);
 
         assertThat(underTest.getByStarIdOrStarName(STAR_ID_1, STAR_NAME_1)).containsExactlyInAnyOrder(entity1);
+    }
+
+    @Test
+    void deleteAllById() {
+        StarSystemEntity entity1 = StarSystemEntity.builder()
+            .id(ID_1)
+            .build();
+        underTest.save(entity1);
+        StarSystemEntity entity2 = StarSystemEntity.builder()
+            .id(ID_2)
+            .build();
+        underTest.save(entity2);
+        StarSystemEntity entity3 = StarSystemEntity.builder()
+            .id(ID_3)
+            .build();
+        underTest.save(entity3);
+
+        underTest.deleteAllById(List.of(ID_1, ID_2));
+
+        assertThat(underTest.findAll()).containsExactly(entity3);
     }
 }

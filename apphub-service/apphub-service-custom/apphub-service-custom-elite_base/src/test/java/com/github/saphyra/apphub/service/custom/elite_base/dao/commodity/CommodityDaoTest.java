@@ -2,8 +2,12 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ReflectionUtils;
+import com.google.common.cache.Cache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,6 +18,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Stream;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,6 +27,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.lenient;
 
 @ExtendWith(MockitoExtension.class)
 class CommodityDaoTest {
@@ -30,6 +37,8 @@ class CommodityDaoTest {
     private static final Integer MIN_PRICE = 435;
     private static final Integer MAX_PRICE = 678;
     private static final Integer MIN_DEMAND = 3;
+    private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
+    private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
 
     @Mock
     private CommodityConverter converter;
@@ -42,6 +51,15 @@ class CommodityDaoTest {
 
     @Mock
     private UuidConverter uuidConverter;
+
+    @Mock
+    private Cache<CommodityCacheKey, List<Commodity>> commodityReadCache;
+
+    @Mock
+    private CommodityWriteBuffer writeBuffer;
+
+    @Mock
+    private CommodityDeleteBuffer deleteBuffer;
 
     @InjectMocks
     private CommodityDao underTest;
@@ -56,7 +74,7 @@ class CommodityDaoTest {
     private ResultSet resultSet;
 
     @Test
-    void getByExternalReferenceOrMarketId() {
+    void getByMarketIdAndType() {
         given(repository.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
@@ -76,7 +94,7 @@ class CommodityDaoTest {
         Set<String> commodityNameCache = ReflectionUtils.getFieldValue(underTest, "commodityNameCache");
         assertThat(commodityNameCache).contains(COMMODITY_NAME);
 
-        boolean loaded = ReflectionUtils.getFieldValue(underTest, "loaded");
+        boolean loaded = ReflectionUtils.getFieldValue(underTest, "commodityNamesLoaded");
         assertThat(loaded).isTrue();
 
         assertThat(underTest.getCommodityNames()).containsExactly(COMMODITY_NAME);
@@ -104,33 +122,77 @@ class CommodityDaoTest {
     @Test
     void save() throws NoSuchFieldException, IllegalAccessException {
         given(domain.getCommodityName()).willReturn(COMMODITY_NAME);
-        given(converter.convertDomain(domain)).willReturn(entity);
 
         underTest.save(domain);
 
         Set<String> commodityNameCache = ReflectionUtils.getFieldValue(underTest, "commodityNameCache");
         assertThat(commodityNameCache).contains(COMMODITY_NAME);
-
-        then(repository).should().save(entity);
     }
 
     @Test
     void saveAll() throws NoSuchFieldException, IllegalAccessException {
         given(domain.getCommodityName()).willReturn(COMMODITY_NAME);
-        given(converter.convertDomain(List.of(domain))).willReturn(List.of(entity));
 
         underTest.saveAll(List.of(domain));
 
         Set<String> commodityNameCache = ReflectionUtils.getFieldValue(underTest, "commodityNameCache");
         assertThat(commodityNameCache).contains(COMMODITY_NAME);
-
-        then(repository).should().saveAll(List.of(entity));
     }
 
     @Test
-    void deleteByExternalReferencesAndCommodityNames_empty(){
-        underTest.deleteByExternalReferencesAndCommodityNames(List.of());
+    void getCacheKey() {
+        given(domain.getMarketId()).willReturn(MARKET_ID);
+        given(domain.getType()).willReturn(CommodityType.COMMODITY);
 
-        then(jdbcTemplate).shouldHaveNoInteractions();
+        assertThat(underTest.getCacheKey(domain))
+            .returns(MARKET_ID, CommodityCacheKey::getMarketId)
+            .returns(CommodityType.COMMODITY, CommodityCacheKey::getCommodityType);
+    }
+
+    @Test
+    void toDomainId() {
+        CommodityEntityId entityId = CommodityEntityId.builder()
+            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .commodityName(COMMODITY_NAME)
+            .build();
+        given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
+
+        assertThat(underTest.toDomainId(entityId))
+            .returns(EXTERNAL_REFERENCE, CommodityDomainId::getExternalReference)
+            .returns(COMMODITY_NAME, CommodityDomainId::getCommodityName);
+    }
+
+    @Test
+    void getDomainId() {
+        given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(domain.getCommodityName()).willReturn(COMMODITY_NAME);
+
+        assertThat(underTest.getDomainId(domain))
+            .returns(EXTERNAL_REFERENCE, CommodityDomainId::getExternalReference)
+            .returns(COMMODITY_NAME, CommodityDomainId::getCommodityName);
+    }
+
+    @ParameterizedTest
+    @MethodSource("matchesWithIdParameters")
+    void matchesWithId(UUID externalReference, String commodityName, boolean expected) {
+        CommodityDomainId domainId = CommodityDomainId.builder()
+            .externalReference(externalReference)
+            .commodityName(commodityName)
+            .build();
+
+        lenient().when(domain.getExternalReference()).thenReturn(EXTERNAL_REFERENCE);
+        lenient().when(domain.getCommodityName()).thenReturn(COMMODITY_NAME);
+
+        assertThat(underTest.matchesWithId(domainId, domain)).isEqualTo(expected);
+
+    }
+
+    static Stream<Arguments> matchesWithIdParameters() {
+        return Stream.of(
+            Arguments.of(EXTERNAL_REFERENCE, COMMODITY_NAME, true),
+            Arguments.of(EXTERNAL_REFERENCE, "other-commodity-name", false),
+            Arguments.of(UUID.randomUUID(), COMMODITY_NAME, false),
+            Arguments.of(UUID.randomUUID(), "other-commodity-name", false)
+        );
     }
 }
