@@ -89,6 +89,13 @@ class PerformanceReportingControllerImpl implements PerformanceReportingControll
     }
 
     @Override
+    public void deleteReports(PerformanceReportingTopic topic, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete all reports by topic {}", accessTokenHeader.getUserId(), topic);
+
+        performanceReportDao.delete(topic);
+    }
+
+    @Override
     public void report(PerformanceReportRequest request) {
         performanceReportDao.add(request.getTopic(), request.getKey(), request.getValue());
     }

@@ -31,6 +31,9 @@ public interface PerformanceReportingController {
     @GetMapping(AdminPanelEndpoints.ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS)
     List<PerformanceReportResponse> getReports(@PathVariable("topic") PerformanceReportingTopic topic, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @DeleteMapping(AdminPanelEndpoints.ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS)
+    void deleteReports(@PathVariable("topic") PerformanceReportingTopic topic, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @PutMapping(AdminPanelEndpoints.ADMIN_PANEL_PERFORMANCE_REPORTING_REPORT)
     void report(@RequestBody PerformanceReportRequest request);
 }

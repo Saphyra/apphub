@@ -98,5 +98,9 @@
     "extend": {
         "en": "Extend expiration",
         "hu": "Lejárat újraindítása"
+    },
+    "delete-all": {
+        "en": "Delete all",
+        "hu": "Összes törlése"
     }
 }

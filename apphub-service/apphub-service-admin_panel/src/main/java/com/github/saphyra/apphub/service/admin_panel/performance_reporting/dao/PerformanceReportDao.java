@@ -45,6 +45,10 @@ public class PerformanceReportDao {
         DAO.add(report);
     }
 
+    public void delete(PerformanceReportingTopic topic) {
+        DAO.removeIf(performanceReport -> performanceReport.getTopic() == topic);
+    }
+
     private void cleanup() {
         LocalDateTime expiration = getExpiration();
 

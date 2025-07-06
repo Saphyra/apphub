@@ -2,8 +2,10 @@ import React from "react";
 import MapStream from "../../../common/js/collection/MapStream";
 import Stream from "../../../common/js/collection/Stream";
 import { formatDuration } from "../../../common/js/Utils";
+import Button from "../../../common/component/input/Button";
+import { ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS } from "../../../common/js/dao/endpoints/AdminPanelEndpoints";
 
-const PerformanceReportingReports = ({ reports, localizationHandler }) => {
+const PerformanceReportingReports = ({ reports, localizationHandler, loadReports }) => {
     const getContent = () => {
         return new MapStream(reports)
             .toList((topic, topicReports) => <TopicReports
@@ -11,6 +13,7 @@ const PerformanceReportingReports = ({ reports, localizationHandler }) => {
                 topic={topic}
                 reports={topicReports}
                 localizationHandler={localizationHandler}
+                loadReports={loadReports}
             />)
     }
 
@@ -21,7 +24,7 @@ const PerformanceReportingReports = ({ reports, localizationHandler }) => {
     );
 }
 
-const TopicReports = ({ topic, reports, localizationHandler }) => {
+const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
     const getContent = () => {
         return new Stream(reports)
             .sorted((a, b) => a.key.localeCompare(b.key))
@@ -36,13 +39,27 @@ const TopicReports = ({ topic, reports, localizationHandler }) => {
 
     return (
         <fieldset className={"performance-reporting-reports-topic " + topic}>
-            <legend>{topic}</legend>
+            <legend>
+                {topic}
+
+                <Button
+                    label={localizationHandler.get("delete-all")}
+                    onclick={deleteAll}
+                />
+            </legend>
 
             <div className="performance-reproting-reports-topic-reports">
                 {getContent()}
             </div>
         </fieldset>
     );
+
+    async function deleteAll() {
+        await ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS.createRequest(null, { topic: topic })
+            .send();
+
+        loadReports();
+    }
 }
 
 const TopicReportItem = ({ report, localizationHandler }) => {

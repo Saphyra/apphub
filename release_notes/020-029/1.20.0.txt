@@ -1,4 +1,7 @@
 ===FEATURES===
+    AdminPanel
+        PerformanceReporting
+            Delete reports of topic
 
 ===BUGFIXES===
 
