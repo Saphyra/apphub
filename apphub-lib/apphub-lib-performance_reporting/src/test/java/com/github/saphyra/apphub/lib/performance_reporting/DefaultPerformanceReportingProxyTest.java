@@ -21,7 +21,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class PerformanceReportingProxyTest {
+class DefaultPerformanceReportingProxyTest {
     private static final String LOCALE = "locale";
     private static final String KEY = "key";
     private static final long VALUE = 234L;
@@ -33,7 +33,7 @@ class PerformanceReportingProxyTest {
     private PerformanceReportingClient performanceReportingClient;
 
     @InjectMocks
-    private PerformanceReportingProxy underTest;
+    private DefaultPerformanceReportingProxy underTest;
 
     @Mock
     private PerformanceReportingTopicStatus performanceReportingTopicStatus;

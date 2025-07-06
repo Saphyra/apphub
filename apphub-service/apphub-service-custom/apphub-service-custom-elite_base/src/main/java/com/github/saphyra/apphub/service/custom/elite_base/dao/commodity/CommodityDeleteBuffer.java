@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.DeleteBuffer;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_EXTERNAL_REFERENCE;
@@ -23,12 +23,10 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 @Component
 @Slf4j
 class CommodityDeleteBuffer extends DeleteBuffer<CommodityDomainId> {
-    private final UuidConverter uuidConverter;
     private final JdbcTemplate jdbcTemplate;
 
-    protected CommodityDeleteBuffer(DateTimeUtil dateTimeUtil, UuidConverter uuidConverter, JdbcTemplate jdbcTemplate) {
+    protected CommodityDeleteBuffer(DateTimeUtil dateTimeUtil, JdbcTemplate jdbcTemplate) {
         super(dateTimeUtil);
-        this.uuidConverter = uuidConverter;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -39,9 +37,8 @@ class CommodityDeleteBuffer extends DeleteBuffer<CommodityDomainId> {
 
     //Has to be JDBC, JPA blocks the flow for some reason
     private void deleteAll(Collection<CommodityDomainId> domains) {
-        List<String> externalReferences = domains.stream()
+        List<UUID> externalReferences = domains.stream()
             .map(CommodityDomainId::getExternalReference)
-            .map(uuidConverter::convertDomain)
             .toList();
         List<String> commodityNames = domains.stream()
             .map(CommodityDomainId::getCommodityName)

@@ -27,7 +27,7 @@ class CommodityDeleteBufferItTest {
     private CommodityRepository commodityRepository;
 
     @Test
-    void deleteByExternalReferencesAndCommodityNames() {
+    void synchronize() {
         CommodityDomainId commodityDomainId = CommodityDomainId.builder()
             .externalReference(EXTERNAL_REFERENCE_1)
             .commodityName(COMMODITY_NAME_1)

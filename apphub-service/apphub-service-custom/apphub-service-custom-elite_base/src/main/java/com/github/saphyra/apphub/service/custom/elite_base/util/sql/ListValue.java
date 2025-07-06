@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.util.sql;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,7 @@ public class ListValue implements SegmentProvider {
         this.values = List.of(segmentProvider);
     }
 
-    public ListValue(List<?> items) {
+    public ListValue(Collection<?> items) {
         values = items.stream()
             .map(o -> new WrappedValue(o.toString()))
             .toList();

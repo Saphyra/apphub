@@ -1,44 +1,44 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class StarSystemDeleteBufferTest {
-    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
-    private static final String STAR_SYSTEM_ID_STRING = "star-system-id";
+    private static final UUID STAR_SYSTEM_ID_1 = UUID.randomUUID();
+    private static final UUID STAR_SYSTEM_ID_2 = UUID.randomUUID();
 
-    @Mock
+    @Autowired
     private StarSystemRepository repository;
 
-    @Mock
-    private DateTimeUtil dateTimeUtil;
-
-    @Mock
-    private UuidConverter uuidConverter;
-
-    @InjectMocks
+    @Autowired
     private StarSystemDeleteBuffer underTest;
 
     @Test
     void synchronize() {
-        underTest.add(STAR_SYSTEM_ID);
+        underTest.add(STAR_SYSTEM_ID_1);
 
-        given(uuidConverter.convertDomain(STAR_SYSTEM_ID)).willReturn(STAR_SYSTEM_ID_STRING);
+        StarSystemEntity entity1 = StarSystemEntity.builder()
+            .id(STAR_SYSTEM_ID_1.toString())
+            .build();
+        repository.save(entity1);
+        StarSystemEntity entity2 = StarSystemEntity.builder()
+            .id(STAR_SYSTEM_ID_2.toString())
+            .build();
+        repository.save(entity2);
 
-        underTest.doSynchronize();
+        underTest.synchronize();
 
-        then(repository).should().deleteAllById(List.of(STAR_SYSTEM_ID_STRING));
+        assertThat(repository.findAll()).containsExactly(entity2);
     }
 }
