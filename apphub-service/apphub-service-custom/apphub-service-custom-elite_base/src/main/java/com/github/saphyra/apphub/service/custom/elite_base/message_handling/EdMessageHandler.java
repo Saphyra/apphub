@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_handling;
 
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
@@ -39,6 +40,7 @@ public class EdMessageHandler implements MessageHandler {
     private final EdMessageProcessor edMessageProcessor;
     private final MessageProcessingLock messageProcessingLock;
     private final MessageDao messageDao;
+    private final ExecutorServiceBean executorServiceBean;
 
     private volatile LocalDateTime lastMessage;
 
@@ -51,7 +53,8 @@ public class EdMessageHandler implements MessageHandler {
         ApplicationContextProxy applicationContextProxy,
         EdMessageProcessor edMessageProcessor,
         MessageProcessingLock messageProcessingLock,
-        MessageDao messageDao
+        MessageDao messageDao,
+        ExecutorServiceBean executorServiceBean
     ) {
         this.messageFactory = messageFactory;
         this.errorReporterService = errorReporterService;
@@ -63,6 +66,7 @@ public class EdMessageHandler implements MessageHandler {
         this.edMessageProcessor = edMessageProcessor;
         this.messageProcessingLock = messageProcessingLock;
         this.messageDao = messageDao;
+        this.executorServiceBean = executorServiceBean;
     }
 
     @Override
@@ -77,17 +81,19 @@ public class EdMessageHandler implements MessageHandler {
             int outputLength = inflater.inflate(output);
             String outputString = new String(output, 0, outputLength, StandardCharsets.UTF_8);
             log.debug("{}", outputString);
-            EdMessage edMessage = messageFactory.create(outputString);
-            Lock readLock = messageProcessingLock.readLock();
-            if (readLock.tryLock()) {
-                try {
-                    edMessageProcessor.processMessage(edMessage);
-                } finally {
-                    readLock.unlock();
+            executorServiceBean.execute(() -> {
+                EdMessage edMessage = messageFactory.create(outputString);
+                Lock readLock = messageProcessingLock.readLock();
+                if (readLock.tryLock()) {
+                    try {
+                        edMessageProcessor.processMessage(edMessage);
+                    } finally {
+                        readLock.unlock();
+                    }
+                } else {
+                    messageDao.save(edMessage);
                 }
-            } else {
-                messageDao.save(edMessage);
-            }
+            });
         } catch (MessageProcessingDelayedException e) {
             log.warn(e.getMessage());
         } catch (Exception e) {
