@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import MapStream from "../../../common/js/collection/MapStream";
 import Stream from "../../../common/js/collection/Stream";
 import { formatDuration } from "../../../common/js/Utils";
 import Button from "../../../common/component/input/Button";
 import { ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS } from "../../../common/js/dao/endpoints/AdminPanelEndpoints";
+import InputField from "../../../common/component/input/InputField";
 
 const PerformanceReportingReports = ({ reports, localizationHandler, loadReports }) => {
     const getContent = () => {
@@ -25,17 +26,7 @@ const PerformanceReportingReports = ({ reports, localizationHandler, loadReports
 }
 
 const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
-    const getContent = () => {
-        return new Stream(reports)
-            .sorted((a, b) => a.key.localeCompare(b.key))
-            .map(report => <TopicReportItem
-                key={report.key}
-                report={report}
-                localizationHandler={localizationHandler}
-            />)
-            .toList();
-    }
-
+    const [searchText, setSearchText] = useState("");
 
     return (
         <fieldset className={"performance-reporting-reports-topic " + topic}>
@@ -46,6 +37,13 @@ const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
                     label={localizationHandler.get("delete-all")}
                     onclick={deleteAll}
                 />
+
+                <InputField
+                    type="text"
+                    placeholder={localizationHandler.get("search-text")}
+                    onchangeCallback={setSearchText}
+                    value={searchText}
+                />
             </legend>
 
             <div className="performance-reproting-reports-topic-reports">
@@ -53,6 +51,18 @@ const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
             </div>
         </fieldset>
     );
+
+    function getContent() {
+        return new Stream(reports)
+            .sorted((a, b) => a.key.localeCompare(b.key))
+            .filter(report => report.key.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+            .map(report => <TopicReportItem
+                key={report.key}
+                report={report}
+                localizationHandler={localizationHandler}
+            />)
+            .toList();
+    }
 
     async function deleteAll() {
         await ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS.createRequest(null, { topic: topic })

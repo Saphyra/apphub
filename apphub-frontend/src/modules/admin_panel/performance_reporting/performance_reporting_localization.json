@@ -102,5 +102,9 @@
     "delete-all": {
         "en": "Delete all",
         "hu": "Összes törlése"
+    },
+    "search-text": {
+        "en": "Search",
+        "hu": "Keresés"
     }
 }

@@ -2,6 +2,7 @@
     AdminPanel
         PerformanceReporting
             Delete reports of topic
+            Filter reports
 
 ===BUGFIXES===
 
