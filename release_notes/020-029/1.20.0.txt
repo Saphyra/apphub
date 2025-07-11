@@ -9,5 +9,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    EliteBase
+        Extract logic from EdMessageHandler so it is unit-testable
 
 ===ETC===
