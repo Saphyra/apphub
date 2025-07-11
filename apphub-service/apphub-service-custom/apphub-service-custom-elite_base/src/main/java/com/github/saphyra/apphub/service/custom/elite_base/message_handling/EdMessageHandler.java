@@ -2,8 +2,10 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_handling;
 
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingLock;
@@ -39,6 +41,8 @@ public class EdMessageHandler implements MessageHandler {
     private final EdMessageProcessor edMessageProcessor;
     private final MessageProcessingLock messageProcessingLock;
     private final MessageDao messageDao;
+    private final ExecutorServiceBean executorServiceBean;
+    private final BufferSynchronizationService bufferSynchronizationService;
 
     private volatile LocalDateTime lastMessage;
 
@@ -51,7 +55,9 @@ public class EdMessageHandler implements MessageHandler {
         ApplicationContextProxy applicationContextProxy,
         EdMessageProcessor edMessageProcessor,
         MessageProcessingLock messageProcessingLock,
-        MessageDao messageDao
+        MessageDao messageDao,
+        ExecutorServiceBean executorServiceBean,
+        BufferSynchronizationService bufferSynchronizationService
     ) {
         this.messageFactory = messageFactory;
         this.errorReporterService = errorReporterService;
@@ -63,6 +69,8 @@ public class EdMessageHandler implements MessageHandler {
         this.edMessageProcessor = edMessageProcessor;
         this.messageProcessingLock = messageProcessingLock;
         this.messageDao = messageDao;
+        this.executorServiceBean = executorServiceBean;
+        this.bufferSynchronizationService = bufferSynchronizationService;
     }
 
     @Override
@@ -77,17 +85,19 @@ public class EdMessageHandler implements MessageHandler {
             int outputLength = inflater.inflate(output);
             String outputString = new String(output, 0, outputLength, StandardCharsets.UTF_8);
             log.debug("{}", outputString);
-            EdMessage edMessage = messageFactory.create(outputString);
-            Lock readLock = messageProcessingLock.readLock();
-            if (readLock.tryLock()) {
-                try {
-                    edMessageProcessor.processMessage(edMessage);
-                } finally {
-                    readLock.unlock();
+            executorServiceBean.execute(() -> {
+                EdMessage edMessage = messageFactory.create(outputString);
+                Lock readLock = messageProcessingLock.readLock();
+                if (readLock.tryLock()) {
+                    try {
+                        edMessageProcessor.processMessage(edMessage);
+                    } finally {
+                        readLock.unlock();
+                    }
+                } else {
+                    messageDao.save(edMessage);
                 }
-            } else {
-                messageDao.save(edMessage);
-            }
+            });
         } catch (MessageProcessingDelayedException e) {
             log.warn(e.getMessage());
         } catch (Exception e) {
@@ -117,6 +127,13 @@ public class EdMessageHandler implements MessageHandler {
     }
 
     private void shutdown() {
+        Lock writeLock = messageProcessingLock.writeLock();
+        writeLock.lock();
+        try {
+            bufferSynchronizationService.synchronizeAll();
+        } catch (Exception e) {
+            errorReporterService.report("Failed saving buffers before shutting down", e);
+        }
         SpringApplication.exit(applicationContextProxy.getContext(), () -> 0);
 
         System.exit(0);
