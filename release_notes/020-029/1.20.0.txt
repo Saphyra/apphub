@@ -5,6 +5,9 @@
             Filter reports
 
 ===BUGFIXES===
+    AdminPanel
+        ErrorReport
+            Align report list content to the top
 
 ===PLATFORM CHANGES===
 
