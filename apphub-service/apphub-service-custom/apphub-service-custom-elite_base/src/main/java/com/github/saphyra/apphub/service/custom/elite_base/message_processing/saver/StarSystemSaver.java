@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
@@ -19,9 +18,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
-import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
-import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
@@ -31,7 +28,6 @@ public class StarSystemSaver {
 
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;
-    private final ErrorReporterService errorReporterService;
 
     public StarSystem save(LocalDateTime timestamp, String starName) {
         return save(timestamp, null, starName, null);
@@ -89,34 +85,8 @@ public class StarSystemSaver {
 
         List.of(
                 new UpdateHelper(new DefaultChecker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
-                new UpdateHelper(
-                    new DefaultChecker(starId, starSystem::getStarId),
-                    () -> {
-                        if (nonNull(starSystem.getStarId())) {
-                            errorReporterService.report(
-                                "Overwriting non-null starId. New starId: %s Original object: %s".formatted(
-                                    starId,
-                                    starSystem
-                                )
-                            );
-                        }
-                        starSystem.setStarId(starId);
-                    }
-                ),
-                new UpdateHelper(
-                    new DefaultChecker(starName, starSystem::getStarName),
-                    () -> {
-                        if (!isBlank(starSystem.getStarName())) {
-                            errorReporterService.report(
-                                "Overwriting not-blank star name. New starName: %s. Original object: %s".formatted(
-                                    starName,
-                                    starSystem
-                                )
-                            );
-                        }
-                        starSystem.setStarName(starName);
-                    }
-                ),
+                new UpdateHelper(new DefaultChecker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
+                new UpdateHelper(new DefaultChecker(starName, starSystem::getStarName), () -> starSystem.setStarName(starName)),
                 new UpdateHelper(new DefaultChecker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition)),
                 new UpdateHelper(new DefaultChecker(starType, starSystem::getStarType), () -> starSystem.setStarType(starType))
             )

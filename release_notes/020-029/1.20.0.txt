@@ -20,3 +20,5 @@
         ListValue throws exception when called with empty list
 
 ===ETC===
+    EliteBase
+        Remove "Overwriting nonNull starId" error report
