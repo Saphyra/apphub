@@ -44,8 +44,6 @@ public class ResourceDeliveryProcess implements Process {
     @NonNull
     private final UUID externalReference;
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -59,7 +57,8 @@ public class ResourceDeliveryProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getProcesses()
+        return game.getData()
+            .getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
@@ -72,6 +71,7 @@ public class ResourceDeliveryProcess implements Process {
 
         ResourceDeliveryProcessHelper helper = applicationContextProxy.getBean(ResourceDeliveryProcessHelper.class);
 
+        GameData gameData = game.getData();
         int toDeliver = helper.calculateToDeliver(gameData, resourceDeliveryRequestId);
         log.info("toDeliver before convoy assembly: {}", toDeliver);
         while (toDeliver > 0) {
@@ -100,6 +100,7 @@ public class ResourceDeliveryProcess implements Process {
 
         GameProgressDiff progressDiff = game.getProgressDiff();
 
+        GameData gameData = game.getData();
         applicationContextProxy.getBean(AllocationRemovalService.class)
             .removeAllocationsAndReservations(progressDiff, gameData, resourceDeliveryRequestId);
 
@@ -118,7 +119,7 @@ public class ResourceDeliveryProcess implements Process {
 
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

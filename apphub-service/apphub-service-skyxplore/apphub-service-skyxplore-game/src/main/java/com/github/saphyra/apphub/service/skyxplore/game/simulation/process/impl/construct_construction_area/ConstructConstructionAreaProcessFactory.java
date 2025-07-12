@@ -32,7 +32,6 @@ public class ConstructConstructionAreaProcessFactory implements ProcessFactory {
             .status(model.getStatus())
             .location(model.getLocation())
             .game(game)
-            .gameData(game.getData())
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -44,7 +43,6 @@ public class ConstructConstructionAreaProcessFactory implements ProcessFactory {
             .status(ProcessStatus.CREATED)
             .location(construction.getLocation())
             .game(game)
-            .gameData(game.getData())
             .applicationContextProxy(applicationContextProxy)
             .build();
     }

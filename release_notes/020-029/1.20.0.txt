@@ -15,10 +15,12 @@
 
 ===TECHNICAL DEBTS===
     EliteBase
-        Extract logic from EdMessageHandler so it is unit-testable
-        Commodity and Loadout delete buffer uses distinct values when generating SQL
+        Extract logic from EdMessageHandler, so it is unit-testable
+        Commodity and Loadout delete buffer use distinct values when generating SQL
         Clear marketIds of other carriers when a carrier is updated
         ListValue throws exception when called with empty list
+    SkyXplore
+        Remove GameData field from every process
 
 ===ETC===
     EliteBase

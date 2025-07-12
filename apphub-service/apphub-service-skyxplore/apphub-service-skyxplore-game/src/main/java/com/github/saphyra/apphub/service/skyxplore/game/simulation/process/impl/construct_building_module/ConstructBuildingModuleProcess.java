@@ -44,9 +44,6 @@ public class ConstructBuildingModuleProcess implements Process {
     private final Game game;
 
     @NonNull
-    private final GameData gameData;
-
-    @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
@@ -61,7 +58,8 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities()
+        return game.getData()
+            .getPriorities()
             .findByLocationAndType(location, PriorityType.CONSTRUCTION)
             .getValue()
             * findConstruction().getPriority()
@@ -80,6 +78,7 @@ public class ConstructBuildingModuleProcess implements Process {
 
         ConstructBuildingModuleProcessConditions conditions = applicationContextProxy.getBean(ConstructBuildingModuleProcessConditions.class);
 
+        GameData gameData = game.getData();
         if (!conditions.resourcesAvailable(gameData, processId, constructionId)) {
             log.info("Waiting for resources...");
             return;
@@ -100,7 +99,8 @@ public class ConstructBuildingModuleProcess implements Process {
 
     @Override
     public void cleanup() {
-        gameData.getProcesses()
+        game.getData()
+            .getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
@@ -114,7 +114,7 @@ public class ConstructBuildingModuleProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
@@ -126,7 +126,8 @@ public class ConstructBuildingModuleProcess implements Process {
 
 
     private Construction findConstruction() {
-        return gameData.getConstructions()
+        return game.getData()
+            .getConstructions()
             .findByIdValidated(constructionId);
     }
 

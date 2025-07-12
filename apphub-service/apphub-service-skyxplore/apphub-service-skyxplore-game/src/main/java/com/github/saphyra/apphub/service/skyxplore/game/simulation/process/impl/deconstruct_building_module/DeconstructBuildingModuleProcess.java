@@ -45,9 +45,6 @@ public class DeconstructBuildingModuleProcess implements Process {
     private final Game game;
 
     @NonNull
-    private final GameData gameData;
-
-    @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
@@ -62,11 +59,16 @@ public class DeconstructBuildingModuleProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findDeconstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return game.getData()
+            .getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue()
+            * findDeconstruction().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     private Deconstruction findDeconstruction() {
-        return gameData.getDeconstructions()
+        return game.getData()
+            .getDeconstructions()
             .findByIdValidated(deconstructionId);
     }
 
@@ -79,6 +81,7 @@ public class DeconstructBuildingModuleProcess implements Process {
             status = ProcessStatus.IN_PROGRESS;
         }
 
+        GameData gameData = game.getData();
         GameProgressDiff progressDiff = game.getProgressDiff();
         if (!conditions.hasWorkProcess(gameData, processId)) {
             helper.startWork(game, processId, deconstructionId);
@@ -95,7 +98,8 @@ public class DeconstructBuildingModuleProcess implements Process {
 
     @Override
     public void cleanup() {
-        gameData.getProcesses()
+        game.getData()
+            .getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
@@ -109,7 +113,7 @@ public class DeconstructBuildingModuleProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

@@ -43,8 +43,6 @@ public class ProductionOrderProcess implements Process {
     @NonNull
     private final UUID externalReference;
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -58,7 +56,8 @@ public class ProductionOrderProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getProcesses()
+        return game.getData()
+            .getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
@@ -75,6 +74,7 @@ public class ProductionOrderProcess implements Process {
 
         ProductionOrderProcessConditions conditions = applicationContextProxy.getBean(ProductionOrderProcessConditions.class);
 
+        GameData gameData = game.getData();
         if (conditions.productionNeeded(gameData, productionOrderId)) {
             helper.tryProduce(game, location, processId, productionOrderId);
         } else {
@@ -93,6 +93,7 @@ public class ProductionOrderProcess implements Process {
 
         GameProgressDiff progressDiff = game.getProgressDiff();
 
+        GameData gameData = game.getData();
         applicationContextProxy.getBean(AllocationRemovalService.class)
             .removeAllocationsAndReservations(progressDiff, gameData, processId);
 
@@ -119,7 +120,7 @@ public class ProductionOrderProcess implements Process {
 
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

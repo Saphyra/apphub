@@ -43,8 +43,6 @@ public class ConvoyMovementProcess implements Process {
     @NonNull
     private final UUID externalReference;
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -58,7 +56,8 @@ public class ConvoyMovementProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getProcesses()
+        return game.getData()
+            .getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
@@ -72,6 +71,8 @@ public class ConvoyMovementProcess implements Process {
         ConvoyMovementProcessHelper helper = applicationContextProxy.getBean(ConvoyMovementProcessHelper.class);
 
         if (status == ProcessStatus.IN_PROGRESS) {
+            GameData gameData = game.getData();
+
             int missingWorkPoints = requiredWorkPoints - completedWorkPoints;
             int workToBeDone = helper.getWorkPointsPerTick(gameData, citizenId, missingWorkPoints);
             log.info("Missing workPoints: {} - Citizen can work {} this tick.", missingWorkPoints, workToBeDone);
@@ -102,7 +103,7 @@ public class ConvoyMovementProcess implements Process {
 
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

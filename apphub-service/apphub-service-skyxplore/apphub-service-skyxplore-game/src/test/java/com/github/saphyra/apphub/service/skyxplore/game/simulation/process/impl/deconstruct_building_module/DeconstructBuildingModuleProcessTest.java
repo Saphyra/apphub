@@ -85,7 +85,6 @@ class DeconstructBuildingModuleProcessTest {
             .status(ProcessStatus.CREATED)
             .location(LOCATION)
             .game(game)
-            .gameData(gameData)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -103,6 +102,7 @@ class DeconstructBuildingModuleProcessTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY_VALUE * CONSTRUCTION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
     }
@@ -114,6 +114,7 @@ class DeconstructBuildingModuleProcessTest {
         given(conditions.hasWorkProcess(gameData, PROCESS_ID)).willReturn(false);
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -130,6 +131,7 @@ class DeconstructBuildingModuleProcessTest {
         given(conditions.hasWorkProcess(gameData, PROCESS_ID)).willReturn(true);
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -144,6 +146,7 @@ class DeconstructBuildingModuleProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 
@@ -155,7 +158,7 @@ class DeconstructBuildingModuleProcessTest {
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
 
         assertThat(underTest.toModel())
             .returns(PROCESS_ID, GameItem::getId)

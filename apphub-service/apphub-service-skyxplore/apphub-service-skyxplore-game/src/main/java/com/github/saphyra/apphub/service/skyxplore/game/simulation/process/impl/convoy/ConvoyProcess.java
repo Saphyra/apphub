@@ -42,8 +42,6 @@ public class ConvoyProcess implements Process {
     @NonNull
     private final UUID externalReference;
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -57,7 +55,8 @@ public class ConvoyProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getProcesses()
+        return game.getData()
+            .getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
@@ -66,6 +65,7 @@ public class ConvoyProcess implements Process {
     public void work() {
         ConvoyProcessHelper helper = applicationContextProxy.getBean(ConvoyProcessHelper.class);
         GameProgressDiff progressDiff = game.getProgressDiff();
+        GameData gameData = game.getData();
 
         if (status == ProcessStatus.CREATED) {
             log.info("Loading resources...");
@@ -90,6 +90,7 @@ public class ConvoyProcess implements Process {
 
         GameProgressDiff progressDiff = game.getProgressDiff();
 
+        GameData gameData = game.getData();
         ConvoyProcessHelper helper = applicationContextProxy.getBean(ConvoyProcessHelper.class);
         helper.releaseCitizen(progressDiff, gameData, processId);
         helper.cleanup(progressDiff, gameData, convoyId);
@@ -109,7 +110,7 @@ public class ConvoyProcess implements Process {
 
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

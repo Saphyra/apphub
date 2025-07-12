@@ -34,8 +34,6 @@ public class TerraformationProcess implements Process {
     private volatile ProcessStatus status;
 
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
 
     @NonNull
@@ -53,13 +51,19 @@ public class TerraformationProcess implements Process {
     }
 
     private Construction findTerraformation() {
-        return gameData.getConstructions()
+        return game.getData()
+            .getConstructions()
             .findByIdValidated(terraformationId);
     }
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findTerraformation().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return game.getData()
+            .getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION)
+            .getValue()
+            * findTerraformation().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
@@ -79,6 +83,7 @@ public class TerraformationProcess implements Process {
         }
 
         TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
+        GameData gameData = game.getData();
 
         if (!conditions.resourcesAvailable(gameData, terraformationId)) {
             log.info("Waiting for resources...");
@@ -101,7 +106,8 @@ public class TerraformationProcess implements Process {
 
     @Override
     public void cleanup() {
-        gameData.getProcesses()
+        game.getData()
+            .getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
@@ -115,7 +121,7 @@ public class TerraformationProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

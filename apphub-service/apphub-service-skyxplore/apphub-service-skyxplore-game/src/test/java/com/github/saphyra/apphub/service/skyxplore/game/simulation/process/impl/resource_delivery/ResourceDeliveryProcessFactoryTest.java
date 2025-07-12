@@ -72,7 +72,6 @@ class ResourceDeliveryProcessFactoryTest {
         given(model.getLocation()).willReturn(LOCATION);
         given(model.getData()).willReturn(Map.of(ProcessParamKeys.RESOURCE_DELIVERY_REQUEST_ID, RESOURCE_DELIVERY_REQUEST_ID_STRING));
         given(uuidConverter.convertEntity(RESOURCE_DELIVERY_REQUEST_ID_STRING)).willReturn(RESOURCE_DELIVERY_REQUEST_ID);
-        given(game.getData()).willReturn(gameData);
 
         ResourceDeliveryProcess result = underTest.createFromModel(game, model);
 
