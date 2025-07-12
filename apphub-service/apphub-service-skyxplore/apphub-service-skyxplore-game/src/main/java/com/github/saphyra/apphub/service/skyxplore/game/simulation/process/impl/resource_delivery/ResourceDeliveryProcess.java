@@ -25,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Responsible for transporting the required resources to the target
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -63,6 +66,13 @@ public class ResourceDeliveryProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Calculates how much resources are left to deliver (in case one convoy has not enough capacity to transport everything at once)</li>
+     *     <li>Creates a convoy by assigning a citizen to the delivery</li>
+     *     <li>Waits until all the required resources are delivered to the destination</li>
+     * </ol>
+     */
     @Override
     public void work() {
         if (status == ProcessStatus.CREATED) {

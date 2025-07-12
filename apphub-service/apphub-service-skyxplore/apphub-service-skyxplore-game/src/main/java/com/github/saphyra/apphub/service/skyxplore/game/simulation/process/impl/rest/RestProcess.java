@@ -23,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles the morale restoration of the citizen.
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -76,6 +79,14 @@ public class RestProcess implements Process {
         return (int) (gameData.getPriorities().findByLocationAndType(location, PriorityType.WELL_BEING).getValue() * 5 * GameConstants.PROCESS_PRIORITY_MULTIPLIER * moraleBasedMultiplier);
     }
 
+    /**
+     * <ol>
+     *     <li>Checks if citizen is allocated. If yes, lifecycle of this process ends</li>
+     *     <li>Allocates citizen if not allocated</li>
+     *     <li>Lets the allocated citizen idle for the requested amount of ticks</li>
+     *     <li>Citizen's morale is charged at the end of each tick</li>
+     * </ol>
+     */
     @Override
     public void work() {
         RestProcessConditions conditions = applicationContextProxy.getBean(RestProcessConditions.class);

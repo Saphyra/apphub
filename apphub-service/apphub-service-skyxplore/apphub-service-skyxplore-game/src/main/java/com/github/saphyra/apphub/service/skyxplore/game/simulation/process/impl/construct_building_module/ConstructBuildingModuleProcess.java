@@ -20,6 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles construction of a BuildingModule
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -66,6 +69,15 @@ public class ConstructBuildingModuleProcess implements Process {
             * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
+    /**
+     * <ol>
+     *     <li>Initiates the production and delivery of the necessary resources</li>
+     *     <li>Waits until resources are available</li>
+     *     <li>Initiates WorkProcesses</li>
+     *     <li>Waits until work is done</li>
+     *     <li>Finishes the BuildingModule</li>
+     * </ol>
+     */
     @Override
     public void work() {
         ConstructBuildingModuleProcessHelper helper = applicationContextProxy.getBean(ConstructBuildingModuleProcessHelper.class);

@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles terraformation of a surface
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -71,6 +74,17 @@ public class TerraformationProcess implements Process {
         return ProcessType.TERRAFORMATION;
     }
 
+    /**
+     * <ol>
+     *     <li>Initiates the production and delivery of the necessary resources</li>
+     *     <li>Waits until resources are available</li>
+     *     <li>Initiates WorkProcesses</li>
+     *     <li>Waits until work is done</li>
+     *     <li>Finishes the terraformation</li>
+     * </ol>
+     *
+     * ProcessStatus instantly switches to READY_TO_DELETE, since there is no parent process that tracks this one.
+     */
     @Override
     public void work() {
         TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);

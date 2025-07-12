@@ -27,3 +27,4 @@
         Remove "Overwriting nonNull starId" error report
     SkyXplore
         Remove change set for allocated resource
+        Add notes to Processes about what they do

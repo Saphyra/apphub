@@ -24,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Responsible for producing the resources of the given ProductionOrder
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -62,6 +65,17 @@ public class ProductionOrderProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Orders the resources required for the production</li>
+     *     <li>Selects an available BuildingModule able to produce the requested resource</li>
+     *     <li>Calculates how many resources can be produced from the available resources</li>
+     *     <li>Uses the resources</li>
+     *     <li>Allocates a factory BuildingModule to the production</li>
+     *     <li>Initiates the production</li>
+     *     <li>Waits until all the resources are produced</li>
+     * </ol>
+     */
     @Override
     public void work() {
         ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
@@ -78,7 +92,7 @@ public class ProductionOrderProcess implements Process {
         if (conditions.productionNeeded(gameData, productionOrderId)) {
             helper.tryProduce(game, location, processId, productionOrderId);
         } else {
-            log.info("All production is already started");
+            log.info("All productions are already started");
         }
 
         if (conditions.isFinished(gameData, processId, productionOrderId)) {

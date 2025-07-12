@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles deconstruction of a BuildingModule
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -57,6 +60,9 @@ public class DeconstructBuildingModuleProcess implements Process {
         return deconstructionId;
     }
 
+    /**
+     * Priority is calculated from the deconstruction's priority, and the planet's prioritySettings, multiplied by a constant value allowing the child processes being correctly prioritized
+     */
     @Override
     public int getPriority() {
         return game.getData()
@@ -72,6 +78,15 @@ public class DeconstructBuildingModuleProcess implements Process {
             .findByIdValidated(deconstructionId);
     }
 
+    /**
+     * <ol>
+     *     <li>Initiates WorkProcesses</li>
+     *     <li>Waits until work is done</li>
+     *     <li>Deletes the deconstructed BuildingModule</li>
+     * </ol>
+     * <p>
+     * ProcessStatus instantly switches to READY_TO_DELETE, since there is no parent process that tracks this one.
+     */
     @Override
     public void work() {
         DeconstructBuildingModuleProcessConditions conditions = applicationContextProxy.getBean(DeconstructBuildingModuleProcessConditions.class);

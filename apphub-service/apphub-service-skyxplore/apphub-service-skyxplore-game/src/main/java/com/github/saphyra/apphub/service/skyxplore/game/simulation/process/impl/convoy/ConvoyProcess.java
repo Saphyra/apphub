@@ -23,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles a Convoy's lifecycle: Load, travel, unload
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -61,6 +64,14 @@ public class ConvoyProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Load resources assigned to this convoy</li>
+     *     <li>Move until destination is reached</li>
+     *     <li>Unload resources if enough storage is available at the destination</li>
+     *     <li>Release the assigned citizen</li>
+     * </ol>
+     */
     @Override
     public void work() {
         ConvoyProcessHelper helper = applicationContextProxy.getBean(ConvoyProcessHelper.class);

@@ -22,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Similar to WorkProcess, makes citizens earn workPoints
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -62,6 +65,14 @@ public class ConvoyMovementProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Calculates remaining workPoints</li>
+     *     <li>Calculates how much workPoints can be earned per tick</li>
+     *     <li>Makes the citizen work</li>
+     *     <li>Wait until all the workPoints are earned</li>
+     * </ol>
+     */
     @Override
     public void work() {
         if (status == ProcessStatus.CREATED) {
