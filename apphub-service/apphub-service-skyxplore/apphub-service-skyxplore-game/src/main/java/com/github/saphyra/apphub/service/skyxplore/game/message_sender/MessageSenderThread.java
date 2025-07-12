@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.message_sender;
 
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -23,7 +22,7 @@ public class MessageSenderThread {
     long sendMessages() {
         StopWatch stopWatch = StopWatch.createStarted();
         log.debug("Updating Clients through WebSocket...");
-        List<Future<ExecutionResult<Boolean>>> result = messageSenders.stream()
+        List<FutureWrapper<Boolean>> result = messageSenders.stream()
             .flatMap(messageSender -> messageSender.sendMessages().stream())
             .toList();
 

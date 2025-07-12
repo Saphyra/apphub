@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,7 +9,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Comparator;
-import java.util.concurrent.Future;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -44,7 +43,7 @@ class TickScheduler implements Runnable {
             long startTime = context.getDateTimeUtil()
                 .getCurrentTimeEpochMillis();
 
-            Future<ExecutionResult<Long>> future = processTick(startTime);
+            FutureWrapper<Long> future = processTick(startTime);
 
             long processingTime = future.get()
                 .getOrThrow();
@@ -56,7 +55,7 @@ class TickScheduler implements Runnable {
         log.info("TickScheduler finished for game {}", game.getGameId());
     }
 
-    public Future<ExecutionResult<Long>> processTick(long startTime) {
+    public FutureWrapper<Long> processTick(long startTime) {
         game.getEventLoop()
             .process(
                 () -> context.getTickTasks()

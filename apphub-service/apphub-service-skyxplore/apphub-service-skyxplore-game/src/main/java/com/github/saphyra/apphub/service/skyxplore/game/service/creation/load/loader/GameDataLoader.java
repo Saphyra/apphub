@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader;
 
 import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl.AutoLoader;
 import lombok.Builder;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 @Component
 @RequiredArgsConstructor
@@ -29,13 +28,11 @@ class GameDataLoader {
             .universeSize(universeSize)
             .build();
 
-        List<Future<ExecutionResult<Void>>> futures = loaders.stream()
+        List<FutureWrapper<Void>> futures = loaders.stream()
             .map(loader -> executorServiceBean.execute(() -> loader.autoLoad(gameData)))
             .toList();
 
-        while (futures.stream().anyMatch(future -> !future.isDone())) {
-            sleepService.sleep(100);
-        }
+        futures.forEach(futureWrapper -> futureWrapper.get().getOrThrow());
 
         return gameData;
     }

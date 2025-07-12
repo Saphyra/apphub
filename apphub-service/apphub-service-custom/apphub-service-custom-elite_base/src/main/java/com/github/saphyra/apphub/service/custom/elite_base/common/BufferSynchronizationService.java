@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.custom.elite_base.common;
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import jakarta.annotation.PostConstruct;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.Future;
 
 @Component
 @RequiredArgsConstructor
@@ -45,11 +44,11 @@ public class BufferSynchronizationService {
     @SneakyThrows
     public void synchronizeAll() {
         log.info("Force-synchronizing all buffers");
-        List<Future<ExecutionResult<Void>>> futures =  buffers.stream()
+        List<FutureWrapper<Void>> futures =  buffers.stream()
             .map(abstractBuffer -> executorServiceBean.execute(() -> doSynchronize(abstractBuffer)))
             .toList();
 
-        for (Future<ExecutionResult<Void>> future : futures) {
+        for (FutureWrapper<Void> future : futures) {
             future.get()
                 .getOrThrow();
         }
@@ -58,11 +57,11 @@ public class BufferSynchronizationService {
 
     @SneakyThrows
     private void doSynchronize() {
-        List<Future<ExecutionResult<Void>>> futures = buffers.stream()
+        List<FutureWrapper<Void>> futures = buffers.stream()
             .map(buffer -> executorServiceBean.execute(() -> synchronize(buffer)))
             .toList();
 
-        for (Future<ExecutionResult<Void>> future : futures) {
+        for (FutureWrapper<Void> future : futures) {
             future.get()
                 .getOrThrow();
         }

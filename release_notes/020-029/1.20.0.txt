@@ -11,6 +11,7 @@
             Align report list content to the top
 
 ===PLATFORM CHANGES===
+    ExecutorServiceBean uses FutureWrapper to hide checked exceptions
 
 ===TECHNICAL DEBTS===
     EliteBase
