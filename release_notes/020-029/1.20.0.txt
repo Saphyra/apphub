@@ -15,5 +15,6 @@
 ===TECHNICAL DEBTS===
     EliteBase
         Extract logic from EdMessageHandler so it is unit-testable
+        Commodity and Loadout delete buffer uses distinct values when generating SQL
 
 ===ETC===
