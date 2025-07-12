@@ -33,7 +33,6 @@
     <include file="database/change_sets/skill.xml"/>
     <include file="database/change_sets/surface.xml"/>
     <include file="database/change_sets/line.xml"/>
-    <include file="database/change_sets/allocated_resource.xml"/>
     <include file="database/change_sets/reserved_storage.xml"/>
     <include file="database/change_sets/stored_resource.xml"/>
     <include file="database/change_sets/storage_setting.xml"/>

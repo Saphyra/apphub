@@ -23,3 +23,5 @@
 ===ETC===
     EliteBase
         Remove "Overwriting nonNull starId" error report
+    SkyXplore
+        Remove change set for allocated resource
