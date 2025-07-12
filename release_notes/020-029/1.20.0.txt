@@ -17,5 +17,6 @@
         Extract logic from EdMessageHandler so it is unit-testable
         Commodity and Loadout delete buffer uses distinct values when generating SQL
         Clear marketIds of other carriers when a carrier is updated
+        ListValue throws exception when called with empty list
 
 ===ETC===
