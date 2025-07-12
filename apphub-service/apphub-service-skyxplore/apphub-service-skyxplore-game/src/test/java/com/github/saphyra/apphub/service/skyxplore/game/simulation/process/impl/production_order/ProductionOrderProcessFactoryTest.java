@@ -72,7 +72,6 @@ class ProductionOrderProcessFactoryTest {
         given(model.getLocation()).willReturn(LOCATION);
         given(model.getData()).willReturn(Map.of(ProcessParamKeys.PRODUCTION_ORDER_ID, PRODUCTION_ORDER_ID_STRING));
 
-        given(game.getData()).willReturn(gameData);
         given(uuidConverter.convertEntity(PRODUCTION_ORDER_ID_STRING)).willReturn(PRODUCTION_ORDER_ID);
 
         ProductionOrderProcess result = underTest.createFromModel(game, model);

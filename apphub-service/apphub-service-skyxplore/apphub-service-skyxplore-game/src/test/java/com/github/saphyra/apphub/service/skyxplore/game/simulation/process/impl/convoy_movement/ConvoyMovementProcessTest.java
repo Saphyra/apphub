@@ -70,7 +70,6 @@ class ConvoyMovementProcessTest {
             .requiredWorkPoints(REQUIRED_WORK_POINTS)
             .completedWorkPoints(COMPLETED_WORK_POINTS)
             .externalReference(EXTERNAL_REFERENCE)
-            .gameData(gameData)
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
@@ -87,6 +86,7 @@ class ConvoyMovementProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByIdValidated(EXTERNAL_REFERENCE)).willReturn(process);
         given(process.getPriority()).willReturn(PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY + 1);
     }
@@ -96,6 +96,7 @@ class ConvoyMovementProcessTest {
         given(applicationContextProxy.getBean(ConvoyMovementProcessHelper.class)).willReturn(helper);
         given(helper.getWorkPointsPerTick(gameData, CITIZEN_ID, REQUIRED_WORK_POINTS - COMPLETED_WORK_POINTS)).willReturn(4);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -106,6 +107,7 @@ class ConvoyMovementProcessTest {
 
     @Test
     void work_finished() {
+        given(game.getData()).willReturn(gameData);
         given(applicationContextProxy.getBean(ConvoyMovementProcessHelper.class)).willReturn(helper);
         given(helper.getWorkPointsPerTick(gameData, CITIZEN_ID, REQUIRED_WORK_POINTS - COMPLETED_WORK_POINTS)).willReturn(7);
         given(game.getProgressDiff()).willReturn(progressDiff);

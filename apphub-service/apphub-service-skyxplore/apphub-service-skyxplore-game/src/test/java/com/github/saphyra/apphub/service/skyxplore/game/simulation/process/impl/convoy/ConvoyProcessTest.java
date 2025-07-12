@@ -71,7 +71,6 @@ class ConvoyProcessTest {
             .convoyId(CONVOY_ID)
             .externalReference(EXTERNAL_REFERENCE)
             .game(game)
-            .gameData(gameData)
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .build();
@@ -87,6 +86,7 @@ class ConvoyProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByIdValidated(EXTERNAL_REFERENCE)).willReturn(process);
         given(process.getPriority()).willReturn(PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY + 1);
     }
@@ -96,6 +96,7 @@ class ConvoyProcessTest {
         given(applicationContextProxy.getBean(ConvoyProcessHelper.class)).willReturn(helper);
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(helper.move(game, LOCATION, PROCESS_ID, CONVOY_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -110,6 +111,7 @@ class ConvoyProcessTest {
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(helper.move(game, LOCATION, PROCESS_ID, CONVOY_ID)).willReturn(true);
         given(helper.unloadResources(progressDiff, gameData, CONVOY_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -124,6 +126,7 @@ class ConvoyProcessTest {
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(helper.move(game, LOCATION, PROCESS_ID, CONVOY_ID)).willReturn(true);
         given(helper.unloadResources(progressDiff, gameData, CONVOY_ID)).willReturn(true);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -140,6 +143,7 @@ class ConvoyProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 
@@ -153,7 +157,7 @@ class ConvoyProcessTest {
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
         given(uuidConverter.convertDomain(CONVOY_ID)).willReturn(CONVOY_ID_STRING);
 

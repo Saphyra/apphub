@@ -57,7 +57,6 @@ class DeconstructConstructionAreaProcessFactoryTest {
         given(model.getExternalReference()).willReturn(DECONSTRUCTION_ID);
         given(model.getStatus()).willReturn(ProcessStatus.DONE);
         given(model.getLocation()).willReturn(LOCATION);
-        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.createFromModel(game, model))
             .returns(PROCESS_ID, DeconstructConstructionAreaProcess::getProcessId)
@@ -70,7 +69,6 @@ class DeconstructConstructionAreaProcessFactoryTest {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(deconstruction.getDeconstructionId()).willReturn(DECONSTRUCTION_ID);
         given(deconstruction.getLocation()).willReturn(LOCATION);
-        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.create(game, deconstruction))
             .returns(PROCESS_ID, DeconstructConstructionAreaProcess::getProcessId)

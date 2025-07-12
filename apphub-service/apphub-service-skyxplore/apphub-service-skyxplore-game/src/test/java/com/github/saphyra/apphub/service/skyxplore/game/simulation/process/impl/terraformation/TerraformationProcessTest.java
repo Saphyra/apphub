@@ -82,7 +82,6 @@ class TerraformationProcessTest {
         underTest = TerraformationProcess.builder()
             .processId(PROCESS_ID)
             .status(ProcessStatus.CREATED)
-            .gameData(gameData)
             .location(LOCATION)
             .terraformationId(TERRAFORMATION_ID)
             .applicationContextProxy(applicationContextProxy)
@@ -108,6 +107,7 @@ class TerraformationProcessTest {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByIdValidated(TERRAFORMATION_ID)).willReturn(terraformation);
         given(terraformation.getPriority()).willReturn(TERRAFORMATION_PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PLANET_PRIORITY * TERRAFORMATION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
     }
@@ -117,6 +117,7 @@ class TerraformationProcessTest {
         given(applicationContextProxy.getBean(TerraformationProcessConditions.class)).willReturn(conditions);
         given(applicationContextProxy.getBean(TerraformationProcessHelper.class)).willReturn(helper);
         given(conditions.resourcesAvailable(gameData, TERRAFORMATION_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -132,6 +133,7 @@ class TerraformationProcessTest {
         given(conditions.resourcesAvailable(gameData, TERRAFORMATION_ID)).willReturn(true);
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -149,6 +151,7 @@ class TerraformationProcessTest {
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -164,6 +167,7 @@ class TerraformationProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 
@@ -175,7 +179,7 @@ class TerraformationProcessTest {
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
 
         ProcessModel result = underTest.toModel();
 

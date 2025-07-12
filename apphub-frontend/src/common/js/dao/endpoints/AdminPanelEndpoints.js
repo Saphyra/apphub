@@ -16,3 +16,4 @@ export const ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPICS = new Endpoint(Request
 export const ADMIN_PANEL_PERFORMANCE_REPORTING_ENABLE_TOPIC = new Endpoint(RequestMethod.POST, "/api/admin-panel/performance-reporting/topics");
 export const ADMIN_PANEL_PERFORMANCE_REPORTING_DISABLE_TOPIC = new Endpoint(RequestMethod.DELETE, "/api/admin-panel/performance-reporting/topics");
 export const ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS = new Endpoint(RequestMethod.GET, "/api/admin-panel/performance-reporting/topics/{topic}/reports");
+export const ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS = new Endpoint(RequestMethod.DELETE, "/api/admin-panel/performance-reporting/topics/{topic}/reports");

@@ -32,15 +32,15 @@ public class ExecutorServiceBean {
     @NonNull
     private final ErrorReporterService errorReporterService;
 
-    public Future<ExecutionResult<Void>> execute(Runnable command) {
+    public FutureWrapper<Void> execute(Runnable command) {
         return asyncProcess(() -> {
             command.run();
             return null;
         });
     }
 
-    public <T> Future<ExecutionResult<T>> asyncProcess(Callable<T> command) {
-        return executor.submit(wrap(command));
+    public <T> FutureWrapper<T> asyncProcess(Callable<T> command) {
+        return new FutureWrapper<>(executor.submit(wrap(command)));
     }
 
     private <T> Callable<ExecutionResult<T>> wrap(Callable<T> command) {

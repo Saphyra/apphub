@@ -79,7 +79,6 @@ class ProductionOrderProcessTest {
             .processId(PROCESS_ID)
             .status(ProcessStatus.CREATED)
             .externalReference(EXTERNAL_REFERENCE)
-            .gameData(gameData)
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
@@ -97,6 +96,7 @@ class ProductionOrderProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByIdValidated(EXTERNAL_REFERENCE)).willReturn(process);
         given(process.getPriority()).willReturn(PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY + 1);
     }
@@ -107,6 +107,7 @@ class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProductionOrderProcessConditions.class)).willReturn(conditions);
         given(conditions.productionNeeded(gameData, PRODUCTION_ORDER_ID)).willReturn(true);
         given(conditions.isFinished(gameData, PROCESS_ID, PRODUCTION_ORDER_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -122,6 +123,7 @@ class ProductionOrderProcessTest {
         given(applicationContextProxy.getBean(ProductionOrderProcessConditions.class)).willReturn(conditions);
         given(conditions.productionNeeded(gameData, PRODUCTION_ORDER_ID)).willReturn(true);
         given(conditions.isFinished(gameData, PROCESS_ID, PRODUCTION_ORDER_ID)).willReturn(true);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -140,6 +142,7 @@ class ProductionOrderProcessTest {
         given(gameData.getProductionOrders()).willReturn(productionOrders);
         given(productionOrders.findById(PRODUCTION_ORDER_ID)).willReturn(Optional.of(productionOrder));
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 

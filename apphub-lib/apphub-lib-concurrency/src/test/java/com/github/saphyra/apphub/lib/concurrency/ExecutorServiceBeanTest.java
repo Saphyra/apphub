@@ -10,12 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -48,8 +45,8 @@ public class ExecutorServiceBeanTest {
     }
 
     @Test
-    void execute() throws ExecutionException, InterruptedException {
-        Future<ExecutionResult<Void>> result = underTest.execute(() -> helper.method());
+    void execute() {
+        FutureWrapper<Void> result = underTest.execute(() -> helper.method());
 
         then(helper).should(timeout(1000)).method();
         assertThat(result.isDone()).isTrue();
@@ -57,11 +54,11 @@ public class ExecutorServiceBeanTest {
     }
 
     @Test
-    void execute_reportError() throws ExecutionException, InterruptedException, TimeoutException {
+    void execute_reportError() {
         RuntimeException exception = new RuntimeException("exception");
         doThrow(exception).when(helper).method();
 
-        Future<ExecutionResult<Void>> result = underTest.execute(() -> helper.method());
+        FutureWrapper<Void> result = underTest.execute(() -> helper.method());
 
         then(helper).should(timeout(1000)).method();
         result.get(1000, TimeUnit.MILLISECONDS);
@@ -71,11 +68,11 @@ public class ExecutorServiceBeanTest {
     }
 
     @Test
-    void execute_doNotReportErrorWhenNotReported() throws ExecutionException, InterruptedException, TimeoutException {
+    void execute_doNotReportErrorWhenNotReported() {
         LoggedException exception = ExceptionFactory.loggedException("asd");
         doThrow(exception).when(helper).method();
 
-        Future<ExecutionResult<Void>> result = underTest.execute(() -> helper.method());
+        FutureWrapper<Void> result = underTest.execute(() -> helper.method());
 
         then(helper).should(timeout(1000)).method();
         result.get(1000, TimeUnit.MILLISECONDS);

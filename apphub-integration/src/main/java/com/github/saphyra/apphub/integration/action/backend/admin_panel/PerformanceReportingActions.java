@@ -26,4 +26,9 @@ public class PerformanceReportingActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS, "topic", topic));
     }
+
+    public static Response getDeleteAllResponse(int serverPort, UUID accessTokenId, PerformanceReportingTopic topic) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS, "topic", topic));
+    }
 }

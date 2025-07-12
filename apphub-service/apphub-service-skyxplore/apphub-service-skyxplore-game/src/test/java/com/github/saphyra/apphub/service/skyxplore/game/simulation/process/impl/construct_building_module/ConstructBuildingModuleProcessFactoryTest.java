@@ -57,7 +57,6 @@ class ConstructBuildingModuleProcessFactoryTest {
         given(model.getExternalReference()).willReturn(CONSTRUCTION_ID);
         given(model.getStatus()).willReturn(ProcessStatus.DONE);
         given(model.getLocation()).willReturn(LOCATION);
-        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.createFromModel(game, model))
             .returns(PROCESS_ID, ConstructBuildingModuleProcess::getProcessId)
@@ -70,7 +69,6 @@ class ConstructBuildingModuleProcessFactoryTest {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(construction.getLocation()).willReturn(LOCATION);
-        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.create(game, construction))
             .returns(PROCESS_ID, ConstructBuildingModuleProcess::getProcessId)

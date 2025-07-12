@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.planet.storage_
 import com.github.saphyra.apphub.api.skyxplore.model.StorageSettingApiModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StorageSettingModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
@@ -26,7 +27,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,7 +79,7 @@ public class StorageSettingEditionServiceTest {
     private ExecutionResult<List<StorageSettingApiModel>> executionResult;
 
     @Mock
-    private Future<ExecutionResult<List<StorageSettingApiModel>>> future;
+    private FutureWrapper<List<StorageSettingApiModel>> future;
 
     @Mock
     private StorageSettings storageSettings;

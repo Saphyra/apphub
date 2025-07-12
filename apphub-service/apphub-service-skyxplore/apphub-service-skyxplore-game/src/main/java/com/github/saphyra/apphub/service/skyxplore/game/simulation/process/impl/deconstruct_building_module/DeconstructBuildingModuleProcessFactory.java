@@ -26,7 +26,6 @@ public class DeconstructBuildingModuleProcessFactory implements ProcessFactory {
             .status(ProcessStatus.CREATED)
             .location(deconstruction.getLocation())
             .game(game)
-            .gameData(game.getData())
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -44,7 +43,6 @@ public class DeconstructBuildingModuleProcessFactory implements ProcessFactory {
             .status(model.getStatus())
             .location(model.getLocation())
             .game(game)
-            .gameData(game.getData())
             .applicationContextProxy(applicationContextProxy)
             .build();
     }

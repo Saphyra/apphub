@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.common;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
@@ -125,7 +126,7 @@ class EliteBaseEventControllerImplTest {
 
         given(properties.getOrphanedRecordProcessorParallelism()).willReturn(1);
 
-        given(executorServiceBean.asyncProcess(any())).willAnswer(invocationOnMock -> CompletableFuture.completedFuture(ExecutionResult.success(invocationOnMock.getArgument(0, Callable.class).call())));
+        given(executorServiceBean.asyncProcess(any())).willAnswer(invocationOnMock -> new FutureWrapper<>(CompletableFuture.completedFuture(ExecutionResult.success(invocationOnMock.getArgument(0, Callable.class).call()))));
         given(orphanedRecordCleaner.cleanupOrphanedRecords()).willReturn(NUMBER_OF_DELETED_RECORDS);
 
         underTest.cleanupOrphanedRecords();

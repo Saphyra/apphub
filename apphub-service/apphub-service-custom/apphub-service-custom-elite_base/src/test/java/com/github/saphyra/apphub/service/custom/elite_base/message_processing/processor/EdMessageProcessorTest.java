@@ -3,13 +3,13 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.p
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
-import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingLock;
-import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingLock;
+import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.common.executor.MessageProcessorExecutor;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -85,7 +84,7 @@ class EdMessageProcessorTest {
     private EdMessage unhandledMessage;
 
     @Mock
-    private Future<ExecutionResult<Void>> future;
+    private FutureWrapper<Void> future;
 
     @BeforeEach
     void setUp() {
@@ -111,9 +110,7 @@ class EdMessageProcessorTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(PerformanceReportingTopic.class), anyString());
-        given(performanceReporter.wrap(any(Callable.class), any(PerformanceReportingTopic.class), anyString())).willAnswer(invocation -> {
-            return invocation.getArgument(0, Callable.class).call();
-        });
+        given(performanceReporter.wrap(any(Callable.class), any(PerformanceReportingTopic.class), anyString())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
     }
 
     @AfterEach
