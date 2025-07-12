@@ -106,5 +106,33 @@
     "search-text": {
         "en": "Search",
         "hu": "Keresés"
+    },
+    "order-by": {
+        "en": "Order by",
+        "hu": "Rendezés"
+    },
+    "key": {
+        "en": "Key",
+        "hu": "Kulcs"
+    },
+    "minimum": {
+        "en": "Minimum",
+        "hu": "Minimum"
+    },
+    "maximum": {
+        "en": "Maximum",
+        "hu": "Maximum"
+    },
+    "average": {
+        "en": "Average",
+        "hu": "Átlag"
+    },
+    "ascending": {
+        "en": "Ascending",
+        "hu": "Növekvő"
+    },
+    "descending": {
+        "en": "Descending",
+        "hu": "Csökkenő"
     }
 }

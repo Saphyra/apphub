@@ -3,6 +3,7 @@
         PerformanceReporting
             Delete reports of topic
             Filter reports
+            Order reports
 
 ===BUGFIXES===
     AdminPanel
