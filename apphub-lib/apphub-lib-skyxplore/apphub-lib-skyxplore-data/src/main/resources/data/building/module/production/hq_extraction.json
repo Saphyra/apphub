@@ -10,43 +10,19 @@
   "produces": [
     {
       "resourceDataId": "log",
-      "requiredSkill": "MINING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
-        "requiredResources": {
-        }
-      }
+      "requiredSkill": "MINING"
     },
     {
       "resourceDataId": "stone",
-      "requiredSkill": "MINING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 5,
-        "requiredEnergy": 1,
-        "requiredResources": {
-        }
-      }
+      "requiredSkill": "MINING"
     },
     {
       "resourceDataId": "water",
-      "requiredSkill": "MINING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 5,
-        "requiredEnergy": 1,
-        "requiredResources": {
-        }
-      }
+      "requiredSkill": "MINING"
     },
     {
       "resourceDataId": "ore",
-      "requiredSkill": "MINING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 10,
-        "requiredEnergy": 10,
-        "requiredResources": {
-        }
-      }
+      "requiredSkill": "MINING"
     }
   ]
 }

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
@@ -34,7 +33,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 class ProductionOrderProcessHelper {
-    private final ProductionBuildingModuleDataService productionBuildingModuleDataService;
     private final ReservedStorageFactory reservedStorageFactory;
     private final ResourceRequestProcessFactory resourceRequestProcessFactory;
     private final ResourceDataService resourceDataService;
@@ -72,8 +70,7 @@ class ProductionOrderProcessHelper {
     }
 
     private Map<String, Integer> getRequiredResources(ProductionOrder productionOrder) {
-        return productionBuildingModuleDataService.findProducerFor(productionOrder.getResourceDataId())
-            .getEntity2()
+        return resourceDataService.get(productionOrder.getResourceDataId())
             .getConstructionRequirements()
             .getRequiredResources();
     }

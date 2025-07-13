@@ -1,5 +1,12 @@
 {
   "id": "steel_ingot",
   "storageType": "container",
-  "maxProductionBatchSize": 50
+  "maxProductionBatchSize": 50,
+  "constructionRequirements": {
+    "requiredWorkPoints": 500,
+    "requiredEnergy": 20,
+    "requiredResources": {
+      "ore": 5
+    }
+  }
 }

@@ -108,7 +108,7 @@ class ConstructConstructionAreaProcessTest {
         given(construction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
         given(game.getData()).willReturn(gameData);
 
-        assertThat(underTest.getPriority()).isEqualTo(600);
+        assertThat(underTest.getPriority()).isEqualTo(6000);
     }
 
     @Test

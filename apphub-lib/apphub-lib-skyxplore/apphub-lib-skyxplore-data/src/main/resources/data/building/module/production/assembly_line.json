@@ -10,14 +10,7 @@
   "produces": [
     {
       "resourceDataId": "energy_cell",
-      "requiredSkill": "ENGINEERING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 500,
-        "requiredEnergy": 100,
-        "requiredResources": {
-          "steel_ingot": 1
-        }
-      }
+      "requiredSkill": "ENGINEERING"
     }
   ]
 }

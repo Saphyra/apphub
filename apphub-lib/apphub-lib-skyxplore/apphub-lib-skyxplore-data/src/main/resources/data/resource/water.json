@@ -1,5 +1,11 @@
 {
   "id": "water",
   "storageType": "liquid",
-  "maxProductionBatchSize": 50
+  "maxProductionBatchSize": 50,
+  "constructionRequirements": {
+    "requiredWorkPoints": 5,
+    "requiredEnergy": 1,
+    "requiredResources": {
+    }
+  }
 }

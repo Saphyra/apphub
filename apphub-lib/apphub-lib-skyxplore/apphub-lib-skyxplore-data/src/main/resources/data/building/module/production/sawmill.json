@@ -10,14 +10,7 @@
   "produces": [
     {
       "resourceDataId": "plank",
-      "requiredSkill": "ENGINEERING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
-        "requiredResources": {
-          "log": 1
-        }
-      }
+      "requiredSkill": "ENGINEERING"
     }
   ]
 }

@@ -1,5 +1,12 @@
 {
   "id": "glass",
   "storageType": "container",
-  "maxProductionBatchSize": 10
+  "maxProductionBatchSize": 10,
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 1,
+    "requiredResources": {
+      "sand": 1
+    }
+  }
 }

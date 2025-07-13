@@ -15,13 +15,7 @@
   "produces": [
     {
       "resourceDataId": "water",
-      "requiredSkill": "MINING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
-        "requiredResources": {
-        }
-      }
+      "requiredSkill": "MINING"
     }
   ]
 }

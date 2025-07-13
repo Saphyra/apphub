@@ -21,6 +21,7 @@
         ListValue throws exception when called with empty list
     SkyXplore
         Remove GameData field from every process
+        Move ConstructionRequirements from Production to Resource data
 
 ===ETC===
     EliteBase

@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItemValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +23,9 @@ class ResourceValidatorTest {
     private static final String KEY = "key";
 
     @Mock
+    private ConstructionRequirementsValidator constructionRequirementsValidator;
+
+    @Mock
     private GameDataItemValidator gameDataItemValidator;
 
     @InjectMocks
@@ -28,9 +34,18 @@ class ResourceValidatorTest {
     @Mock
     private ResourceData resourceData;
 
+    @Mock
+    private ConstructionRequirements constructionRequirements;
+
+    @BeforeEach
+    void setUp(){
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
+    }
+
     @AfterEach
-    void setUp() {
+    void verify() {
         then(gameDataItemValidator).should().validate(resourceData);
+        then(constructionRequirementsValidator).should().validate(constructionRequirements);
     }
 
     @Test
