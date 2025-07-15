@@ -108,6 +108,7 @@
         <module>apphub-service-modules</module>
         <module>apphub-service-admin_panel</module>
         <module>apphub-service-training</module>
+        <module>apphub-service-calendar_deprecated</module>
         <module>apphub-service-calendar</module>
     </modules>
 </project>
