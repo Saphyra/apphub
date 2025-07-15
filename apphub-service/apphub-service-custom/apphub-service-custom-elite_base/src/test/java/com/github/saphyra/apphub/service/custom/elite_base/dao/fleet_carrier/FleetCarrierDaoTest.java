@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class FleetCarrierDaoTest {
@@ -62,5 +63,14 @@ class FleetCarrierDaoTest {
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
 
         assertThat(underTest.findByCarrierId(CARRIER_ID)).contains(domain);
+    }
+
+    @Test
+    void clearMarketId() {
+        given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
+
+        underTest.clearMarketId(ID, MARKET_ID);
+
+        then(repository).should().clearMarketId(ID_STRING, MARKET_ID);
     }
 }

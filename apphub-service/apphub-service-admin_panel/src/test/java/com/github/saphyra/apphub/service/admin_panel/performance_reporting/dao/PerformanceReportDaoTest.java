@@ -70,4 +70,18 @@ class PerformanceReportDaoTest {
         Thread.sleep(2500);
         assertThat(underTest.getByTopic(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING)).isEmpty();
     }
+
+    @Test
+    void delete(){
+        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
+        given(properties.getReportExpiration()).willReturn(REPORT_EXPIRATION);
+
+        underTest.add(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING, KEY, VALUE);
+        underTest.add(PerformanceReportingTopic.ELITE_BASE_BUFFER_SYNCHRONIZATION, KEY, VALUE);
+
+        underTest.delete(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING);
+
+        assertThat(underTest.getByTopic(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING)).isEmpty();
+        assertThat(underTest.getByTopic(PerformanceReportingTopic.ELITE_BASE_BUFFER_SYNCHRONIZATION)).hasSize(1);
+    }
 }

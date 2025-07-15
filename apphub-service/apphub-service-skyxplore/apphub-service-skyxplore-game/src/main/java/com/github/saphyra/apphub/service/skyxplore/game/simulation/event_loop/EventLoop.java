@@ -3,13 +3,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +39,7 @@ public class EventLoop {
             .get(60, TimeUnit.SECONDS);
     }
 
-    public Future<ExecutionResult<Void>> process(Runnable runnable) {
+    public FutureWrapper<Void> process(Runnable runnable) {
         return eventLoopThread.execute(runnable);
     }
 
@@ -49,7 +49,7 @@ public class EventLoop {
             .get(60, TimeUnit.SECONDS);
     }
 
-    public <T> Future<ExecutionResult<T>> processWithResponse(Callable<T> callable) {
+    public <T> FutureWrapper<T> processWithResponse(Callable<T> callable) {
         return eventLoopThread.asyncProcess(callable);
     }
 

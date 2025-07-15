@@ -23,6 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Makes sure all the resources get to the requester
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -66,6 +69,14 @@ public class ResourceRequestProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Calculates how much resources are available to deliver, and how much has to be produced</li>
+     *     <li>Requests delivery of the available resources</li>
+     *     <li>Request production of the missing resources</li>
+     *     <li>Waits until all of the resources are produced and delivered to their destination</li>
+     * </ol>
+     */
     @Override
     public void work() {
         if (status == ProcessStatus.CREATED) {

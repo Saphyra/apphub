@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.MessageDelay;
@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -101,7 +100,7 @@ class PopulationMessageSenderTest {
         given(messageDelay.getPopulation()).willReturn(MESSAGE_DELAY);
         given(messageSenderUtil.lastMessageValid(SESSION_ID, Collections.emptyMap(), MESSAGE_DELAY)).willReturn(true);
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result.get(0).get().getOrThrow()).isFalse();
 
@@ -124,7 +123,7 @@ class PopulationMessageSenderTest {
         given(messageSenderUtil.lastMessageValid(SESSION_ID, lastMessages, MESSAGE_DELAY)).willReturn(false);
         given(populationQueryService.getPopulation(USER_ID, PLANET_ID)).willReturn(List.of(citizenResponse));
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result.get(0).get().getOrThrow()).isFalse();
 
@@ -148,7 +147,7 @@ class PopulationMessageSenderTest {
         given(populationQueryService.getPopulation(USER_ID, PLANET_ID)).willReturn(List.of(citizenResponse));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result.get(0).get().getOrThrow()).isTrue();
 

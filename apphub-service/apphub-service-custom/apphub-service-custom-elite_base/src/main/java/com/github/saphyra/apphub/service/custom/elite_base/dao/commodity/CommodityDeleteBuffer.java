@@ -39,9 +39,11 @@ class CommodityDeleteBuffer extends DeleteBuffer<CommodityDomainId> {
     private void deleteAll(Collection<CommodityDomainId> domains) {
         List<UUID> externalReferences = domains.stream()
             .map(CommodityDomainId::getExternalReference)
+            .distinct()
             .toList();
         List<String> commodityNames = domains.stream()
             .map(CommodityDomainId::getCommodityName)
+            .distinct()
             .toList();
 
         log.debug("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);

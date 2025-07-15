@@ -3,11 +3,10 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 import com.github.saphyra.apphub.lib.data.ValidationAbstractDataService;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
+import jakarta.annotation.PostConstruct;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.PostConstruct;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -2,13 +2,13 @@ package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.MessageSender;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
-import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGamePlanetWebSocketHandler;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
+import com.github.saphyra.apphub.service.skyxplore.game.ws.planet.SkyXploreGamePlanetWebSocketHandler;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 @Builder
@@ -32,7 +31,7 @@ class PlanetMessageSender implements MessageSender {
     private final ErrorReporterService errorReporterService;
 
     @Override
-    public List<Future<ExecutionResult<Boolean>>> sendMessages() {
+    public List<FutureWrapper<Boolean>> sendMessages() {
         List<WsSessionPlanetIdMapping> connectedUsers = planetWebSocketHandler.getConnectedUsers();
 
         messageProviders.forEach(planetMessageProvider -> planetMessageProvider.clearDisconnectedUserData(connectedUsers));
@@ -42,7 +41,7 @@ class PlanetMessageSender implements MessageSender {
             .toList();
     }
 
-    private Future<ExecutionResult<Boolean>> sendMessage(String sessionId, UUID userId, UUID planetId) {
+    private FutureWrapper<Boolean> sendMessage(String sessionId, UUID userId, UUID planetId) {
         return executorServiceBean.asyncProcess(() -> {
             try {
                 Map<String, Object> payload = messageProviders.stream()

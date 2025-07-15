@@ -28,6 +28,7 @@ class FleetCarrierSaverTest {
     private static final String CARRIER_NAME = "carrier-name";
     private static final Long MARKET_ID = 2432L;
     private static final String CARRIER_ID = "carrier-id";
+    private static final UUID ID = UUID.randomUUID();
 
     @Mock
     private FleetCarrierDao fleetCarrierDao;
@@ -60,12 +61,14 @@ class FleetCarrierSaverTest {
         then(fleetCarrier).should(times(0)).setDockingAccess(any());
         then(fleetCarrier).should(times(0)).setMarketId(any());
         then(fleetCarrierDao).should().save(fleetCarrier);
+        then(fleetCarrierDao).shouldHaveNoMoreInteractions();
     }
 
     @Test
     void carrierFound() {
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
+        given(fleetCarrier.getId()).willReturn(ID);
 
         given(fleetCarrier.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
 
@@ -77,5 +80,6 @@ class FleetCarrierSaverTest {
         then(fleetCarrier).should().setDockingAccess(FleetCarrierDockingAccess.ALL);
         then(fleetCarrier).should().setMarketId(MARKET_ID);
         then(fleetCarrierDao).should().save(fleetCarrier);
+        then(fleetCarrierDao).should().clearMarketId(ID, MARKET_ID);
     }
 }

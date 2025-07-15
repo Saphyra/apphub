@@ -28,6 +28,7 @@ public class PerformanceReportingRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> PerformanceReportingActions.getEnableResponse(getServerPort(), accessTokenId, PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING));
         CommonUtils.verifyMissingRole(() -> PerformanceReportingActions.getDisableResponse(getServerPort(), accessTokenId, PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING));
         CommonUtils.verifyMissingRole(() -> PerformanceReportingActions.getReportsResponse(getServerPort(), accessTokenId, PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING));
+        CommonUtils.verifyMissingRole(() -> PerformanceReportingActions.getDeleteAllResponse(getServerPort(), accessTokenId, PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING));
     }
 
     @DataProvider(parallel = true)

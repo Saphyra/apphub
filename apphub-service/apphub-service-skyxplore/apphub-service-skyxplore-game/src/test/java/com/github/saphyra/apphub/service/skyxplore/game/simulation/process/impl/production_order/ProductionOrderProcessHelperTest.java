@@ -3,12 +3,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionOrderModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleDataService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -63,9 +59,6 @@ class ProductionOrderProcessHelperTest {
     private static final UUID PRODUCTION_PROCESS_ID = UUID.randomUUID();
 
     @Mock
-    private ProductionBuildingModuleDataService productionBuildingModuleDataService;
-
-    @Mock
     private ReservedStorageFactory reservedStorageFactory;
 
     @Mock
@@ -106,12 +99,6 @@ class ProductionOrderProcessHelperTest {
 
     @Mock
     private ProductionOrder productionOrder;
-
-    @Mock
-    private ProductionBuildingModuleData productionBuildingModuleData;
-
-    @Mock
-    private Production production;
 
     @Mock
     private ConstructionRequirements constructionRequirements;
@@ -155,8 +142,8 @@ class ProductionOrderProcessHelperTest {
         given(gameData.getProductionOrders()).willReturn(productionOrders);
         given(productionOrders.findByIdValidated(PRODUCTION_ORDER_ID)).willReturn(productionOrder);
         given(productionOrder.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
-        given(productionBuildingModuleDataService.findProducerFor(RESOURCE_DATA_ID)).willReturn(new BiWrapper<>(productionBuildingModuleData, production));
-        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(REQUIRED_RESOURCE_DATA_ID, AMOUNT));
         given(productionOrder.getRequestedAmount()).willReturn(REQUESTED_AMOUNT);
         given(game.getProgressDiff()).willReturn(progressDiff);
@@ -204,8 +191,8 @@ class ProductionOrderProcessHelperTest {
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(storedResources.getByAllocatedBy(PROCESS_ID)).willReturn(List.of());
         given(productionOrder.getMissingAmount()).willReturn(MISSING_AMOUNT);
-        given(productionBuildingModuleDataService.findProducerFor(RESOURCE_DATA_ID)).willReturn(new BiWrapper<>(productionBuildingModuleData, production));
-        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(REQUIRED_RESOURCE_DATA_ID, AMOUNT));
 
         underTest.tryProduce(game, LOCATION, PROCESS_ID, PRODUCTION_ORDER_ID);
@@ -229,8 +216,8 @@ class ProductionOrderProcessHelperTest {
         given(storedResource.getDataId()).willReturn(REQUIRED_RESOURCE_DATA_ID);
         given(storedResource.getAmount()).willReturn(AMOUNT * 2);
         given(productionOrder.getMissingAmount()).willReturn(MISSING_AMOUNT);
-        given(productionBuildingModuleDataService.findProducerFor(RESOURCE_DATA_ID)).willReturn(new BiWrapper<>(productionBuildingModuleData, production));
-        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(REQUIRED_RESOURCE_DATA_ID, AMOUNT));
         given(game.getGameId()).willReturn(GAME_ID);
         given(storedResourceConverter.toModel(GAME_ID, storedResource)).willReturn(storedResourceModel);

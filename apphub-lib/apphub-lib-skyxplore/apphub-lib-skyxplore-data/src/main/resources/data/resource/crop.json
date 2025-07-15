@@ -1,5 +1,12 @@
 {
   "id": "crop",
   "storageType": "container",
-  "maxProductionBatchSize": 50
+  "maxProductionBatchSize": 50,
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 1,
+    "requiredResources": {
+      "water": 1
+    }
+  }
 }

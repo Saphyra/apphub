@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.p
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
@@ -76,11 +75,11 @@ public class EdMessageProcessor {
             }
             log.info("Processing {} messages.", messages.size());
 
-            List<Future<ExecutionResult<Void>>> futures = messages.stream()
+            List<FutureWrapper<Void>> futures = messages.stream()
                 .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
                 .toList();
 
-            for (Future<ExecutionResult<Void>> future : futures) {
+            for (FutureWrapper<Void> future : futures) {
                 future.get();
             }
             return messages;

@@ -39,13 +39,16 @@ class LoadoutDeleteBuffer extends DeleteBuffer<LoadoutDomainId> {
     private void deleteAll(Collection<LoadoutDomainId> domains) {
         List<UUID> externalReferences = domains.stream()
             .map(LoadoutDomainId::getExternalReference)
+            .distinct()
             .toList();
         List<String> loadoutNames = domains.stream()
             .map(LoadoutDomainId::getName)
+            .distinct()
             .toList();
         List<String> types = domains.stream()
             .map(LoadoutDomainId::getType)
             .map(Enum::name)
+            .distinct()
             .toList();
 
         log.debug("Deleting loadouts by externalReferences {} and types {} and loadoutNames {}", externalReferences, types, loadoutNames);

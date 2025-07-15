@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItem;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import lombok.Data;
@@ -13,4 +14,5 @@ public class ResourceData extends GameDataItem {
     private StorageType storageType;
     @Deprecated(forRemoval = true)
     private Integer maxProductionBatchSize;
+    private ConstructionRequirements constructionRequirements;
 }

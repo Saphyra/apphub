@@ -10,25 +10,11 @@
   "produces": [
     {
       "resourceDataId": "steel_ingot",
-      "requiredSkill": "ENGINEERING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 500,
-        "requiredEnergy": 20,
-        "requiredResources": {
-          "ore": 5
-        }
-      }
+      "requiredSkill": "ENGINEERING"
     },
     {
       "resourceDataId": "glass",
-      "requiredSkill": "ENGINEERING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
-        "requiredResources": {
-          "sand": 1
-        }
-      }
+      "requiredSkill": "ENGINEERING"
     }
   ]
 }

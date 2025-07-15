@@ -1,5 +1,12 @@
 {
   "id": "energy_cell",
   "storageType": "container",
-  "maxProductionBatchSize": 50
+  "maxProductionBatchSize": 50,
+  "constructionRequirements": {
+    "requiredWorkPoints": 500,
+    "requiredEnergy": 100,
+    "requiredResources": {
+      "steel_ingot": 1
+    }
+  }
 }

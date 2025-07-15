@@ -72,7 +72,6 @@ class ConvoyProcessFactoryTest {
         given(model.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(model.getLocation()).willReturn(LOCATION);
 
-        given(game.getData()).willReturn(gameData);
         given(uuidConverter.convertEntity(CONVOY_ID_STRING)).willReturn(CONVOY_ID);
 
         assertThat(underTest.createFromModel(game, model))

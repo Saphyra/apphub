@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles terraformation of a surface
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -33,8 +36,6 @@ public class TerraformationProcess implements Process {
     @NonNull
     private volatile ProcessStatus status;
 
-    @NonNull
-    private final GameData gameData;
     @NonNull
     private final UUID location;
 
@@ -53,13 +54,19 @@ public class TerraformationProcess implements Process {
     }
 
     private Construction findTerraformation() {
-        return gameData.getConstructions()
+        return game.getData()
+            .getConstructions()
             .findByIdValidated(terraformationId);
     }
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findTerraformation().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return game.getData()
+            .getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION)
+            .getValue()
+            * findTerraformation().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     @Override
@@ -67,6 +74,17 @@ public class TerraformationProcess implements Process {
         return ProcessType.TERRAFORMATION;
     }
 
+    /**
+     * <ol>
+     *     <li>Initiates the production and delivery of the necessary resources</li>
+     *     <li>Waits until resources are available</li>
+     *     <li>Initiates WorkProcesses</li>
+     *     <li>Waits until work is done</li>
+     *     <li>Finishes the terraformation</li>
+     * </ol>
+     *
+     * ProcessStatus instantly switches to READY_TO_DELETE, since there is no parent process that tracks this one.
+     */
     @Override
     public void work() {
         TerraformationProcessHelper helper = applicationContextProxy.getBean(TerraformationProcessHelper.class);
@@ -79,6 +97,7 @@ public class TerraformationProcess implements Process {
         }
 
         TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
+        GameData gameData = game.getData();
 
         if (!conditions.resourcesAvailable(gameData, terraformationId)) {
             log.info("Waiting for resources...");
@@ -101,7 +120,8 @@ public class TerraformationProcess implements Process {
 
     @Override
     public void cleanup() {
-        gameData.getProcesses()
+        game.getData()
+            .getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
@@ -115,7 +135,7 @@ public class TerraformationProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
