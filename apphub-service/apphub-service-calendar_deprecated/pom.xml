@@ -68,7 +68,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-calendar-server</artifactId>
+            <artifactId>apphub-api-calendar-server_deprecated</artifactId>
             <version>${project.version}</version>
         </dependency>
 

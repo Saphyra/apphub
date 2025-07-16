@@ -3,28 +3,29 @@ package com.github.saphyra.apphub.lib.encryption.impl;
 import com.github.saphyra.apphub.lib.encryption.base.Encryptor;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class LocalDateEncryptor implements Encryptor<LocalDate> {
+//TODO unit test
+public class LocalTimeEncryptor implements Encryptor<LocalTime> {
     private final StringEncryptor stringEncryptor;
 
     @Override
-    public String encrypt(LocalDate entity, String key, String entityId, String column) {
+    public String encrypt(LocalTime entity, String key, String entityId, String column) {
         String stringifiedData = Optional.ofNullable(entity)
-            .map(LocalDate::toString)
+            .map(LocalTime::toString)
             .orElse(null);
 
         return stringEncryptor.encrypt(stringifiedData, key, entityId, column);
     }
 
     @Override
-    public LocalDate decrypt(String entity, String key, String entityId, String column) {
+    public LocalTime decrypt(String entity, String key, String entityId, String column) {
         String decrypted = stringEncryptor.decrypt(entity, key, entityId, column);
 
         return Optional.ofNullable(decrypted)
-            .map(LocalDate::parse)
+            .map(LocalTime::parse)
             .orElse(null);
     }
 }

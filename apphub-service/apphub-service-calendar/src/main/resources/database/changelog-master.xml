@@ -3,5 +3,6 @@
         <sql>CREATE SCHEMA IF NOT EXISTS calendar</sql>
     </changeSet>
 
-    <!--include file="database/change_sets/event.xml"/-->
+    <include file="database/change_sets/event_old.xml"/>
+    <include file="database/change_sets/occurrence_old.xml"/>
 </databaseChangeLog>
