@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao;
+package com.github.saphyra.apphub.service.calendar.domain.label.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -9,10 +9,10 @@ import java.util.UUID;
 
 @Component
 //TODO unit test
-public class EventLabelMappingDao extends AbstractDao<EventLabelMappingEntity, EventLabelMapping, EventLabelMappingEntity, EventLabelMappingRepository> implements DeleteByUserIdDao {
+public class LabelDao extends AbstractDao<LabelEntity, Label, String, LabelRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-     EventLabelMappingDao(EventLabelMappingConverter converter, EventLabelMappingRepository repository, UuidConverter uuidConverter) {
+     LabelDao(LabelConverter converter, LabelRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
          this.uuidConverter = uuidConverter;
      }
