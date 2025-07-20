@@ -12,13 +12,17 @@ import java.util.UUID;
 public class LabelDao extends AbstractDao<LabelEntity, Label, String, LabelRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-     LabelDao(LabelConverter converter, LabelRepository repository, UuidConverter uuidConverter) {
+    LabelDao(LabelConverter converter, LabelRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
-         this.uuidConverter = uuidConverter;
-     }
+        this.uuidConverter = uuidConverter;
+    }
 
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    public boolean existsById(UUID labelId) {
+        return repository.existsById(uuidConverter.convertDomain(labelId));
     }
 }

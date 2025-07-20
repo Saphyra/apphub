@@ -357,7 +357,7 @@ public class ValidationUtilTest {
 
     @Test
     void doesNotContainNull_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(null, FIELD), FIELD, "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Map<Object, Object>) null, FIELD), FIELD, "must not be null");
     }
 
     @Test

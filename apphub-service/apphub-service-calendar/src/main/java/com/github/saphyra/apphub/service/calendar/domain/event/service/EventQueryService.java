@@ -28,7 +28,7 @@ public class EventQueryService {
             .stream()
             .filter(event -> event.getStartDate().isBefore(to))
             .filter(event -> event.getEndDate().isBefore(from))
-            .filter(event -> isNull(label) || eventLabelMappingService.hasLabel(userId, event.getEventId(), label))
+            .filter(event -> isNull(label) || eventLabelMappingService.hasLabel(event.getEventId(), label))
             .map(eventMapper::toResponse)
             .collect(Collectors.toList());
     }
