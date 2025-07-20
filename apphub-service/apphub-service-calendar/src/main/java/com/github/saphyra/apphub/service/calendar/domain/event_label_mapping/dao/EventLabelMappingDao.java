@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -20,5 +21,13 @@ public class EventLabelMappingDao extends AbstractDao<EventLabelMappingEntity, E
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    public void deleteByUserIdAndEventId(UUID userId, UUID eventId) {
+         repository.deleteByUserIdAndEventId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId));
+    }
+
+    public List<EventLabelMapping> getByEventId(UUID eventId) {
+        return converter.convertEntity(repository.getByEventId(uuidConverter.convertDomain(eventId)));
     }
 }

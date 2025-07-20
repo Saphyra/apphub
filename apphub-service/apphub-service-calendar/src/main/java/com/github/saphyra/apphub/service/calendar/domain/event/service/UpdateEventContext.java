@@ -1,0 +1,81 @@
+package com.github.saphyra.apphub.service.calendar.domain.event.service;
+
+import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.RecreateOccurrenceService;
+import lombok.Builder;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import static java.util.Objects.isNull;
+
+@Slf4j
+// TODO unit test
+public class UpdateEventContext {
+    private final Event event;
+    private final EventDao eventDao;
+    private final OccurrenceDao occurrenceDao;
+    private final RecreateOccurrenceService recreateOccurrenceService;
+
+    private final Set<UUID> modifiedOccurrences = new HashSet<>();
+    private final Set<UUID> deletedOccurrences = new HashSet<>();
+
+    private boolean occurrenceRecreationNeeded;
+    private List<Occurrence> occurrences;
+
+    @Builder
+    public UpdateEventContext(
+        @NonNull Event event,
+        @NonNull EventDao eventDao,
+        @NonNull OccurrenceDao occurrenceDao,
+        @NonNull RecreateOccurrenceService recreateOccurrenceService
+    ) {
+        this.event = event;
+        this.eventDao = eventDao;
+        this.occurrenceDao = occurrenceDao;
+        this.recreateOccurrenceService = recreateOccurrenceService;
+    }
+
+    public List<Occurrence> getOccurrences() {
+        if (isNull(occurrences)) {
+            occurrences = occurrenceDao.getByEventId(event.getEventId());
+        }
+
+        return occurrences;
+    }
+
+    public void occurrencesModified(List<Occurrence> modifiedOccurrences) {
+        modifiedOccurrences.stream()
+            .map(Occurrence::getOccurrenceId)
+            .forEach(this.modifiedOccurrences::add);
+    }
+
+    public void processChanges() {
+        if (occurrenceRecreationNeeded) {
+            recreateOccurrenceService.recreateOccurrences(this, event, occurrences);
+        }
+
+        log.info("Saving event {}", event.getEventId());
+        eventDao.save(event);
+
+        log.info("Deleting {} occurrences for event {}", deletedOccurrences.size(), event.getEventId());
+        occurrenceDao.deleteAllById(deletedOccurrences);
+
+        List<Occurrence> modifiedOccurrences = getOccurrences().stream()
+            .filter(occurrence -> this.modifiedOccurrences.contains(occurrence.getOccurrenceId()))
+            .toList();
+        log.info("Saving {} modified occurrences for event {}", modifiedOccurrences.size(), event.getEventId());
+        occurrenceDao.saveAll(modifiedOccurrences);
+    }
+
+    public void occurrenceRecreationNeeded() {
+        occurrenceRecreationNeeded = true;
+    }
+}

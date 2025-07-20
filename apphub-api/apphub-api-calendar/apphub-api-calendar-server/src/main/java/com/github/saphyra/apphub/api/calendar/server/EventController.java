@@ -24,6 +24,7 @@ public interface EventController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_EVENT)
     void createEvent(@RequestBody EventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    //TODO is it in use?
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENTS)
     List<EventResponse> getEvents(
         @RequestParam("fromDate") LocalDate from,

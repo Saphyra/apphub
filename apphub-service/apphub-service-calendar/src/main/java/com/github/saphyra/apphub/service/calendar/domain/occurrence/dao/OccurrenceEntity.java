@@ -23,6 +23,6 @@ class OccurrenceEntity {
     private String time;
     private String status;
     private String note;
-    private String remindAt;
+    private String remindMeBeforeDays;
     private String reminded;
 }

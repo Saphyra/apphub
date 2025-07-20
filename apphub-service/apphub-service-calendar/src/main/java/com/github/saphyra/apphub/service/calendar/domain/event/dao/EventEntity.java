@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.dao;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(schema = "calendar", name = "event")
 class EventEntity {
+    @Id
     private String eventId;
     private String userId;
     private String repetitionType;

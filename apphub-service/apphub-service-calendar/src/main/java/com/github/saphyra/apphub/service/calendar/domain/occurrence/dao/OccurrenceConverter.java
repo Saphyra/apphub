@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LocalDateEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LocalTimeEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
@@ -21,7 +22,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private static final String COLUMN_TIME = "time";
     private static final String COLUMN_STATUS = "status";
     private static final String COLUMN_NOTE = "note";
-    private static final String COLUMN_REMIND_AT = "remind_at";
+    private static final String COLUMN_REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
     private static final String COLUMN_REMINDED = "reminded";
 
     private final AccessTokenProvider accessTokenProvider;
@@ -30,6 +31,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private final LocalTimeEncryptor localTimeEncryptor;
     private final StringEncryptor stringEncryptor;
     private final BooleanEncryptor booleanEncryptor;
+    private final IntegerEncryptor integerEncryptor;
 
     @Override
     protected OccurrenceEntity processDomainConversion(Occurrence domain) {
@@ -44,7 +46,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .time(localTimeEncryptor.encrypt(domain.getTime(), userIdFromAccessToken, occurrenceId, COLUMN_TIME))
             .status(stringEncryptor.encrypt(domain.getStatus().name(), userIdFromAccessToken, occurrenceId, COLUMN_STATUS))
             .note(stringEncryptor.encrypt(domain.getNote(), userIdFromAccessToken, occurrenceId, COLUMN_NOTE))
-            .remindAt(localDateEncryptor.encrypt(domain.getRemindAt(), userIdFromAccessToken, occurrenceId, COLUMN_REMIND_AT))
+            .remindMeBeforeDays(integerEncryptor.encrypt(domain.getRemindMeBeforeDays(), userIdFromAccessToken, occurrenceId, COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.encrypt(domain.getReminded(), userIdFromAccessToken, occurrenceId, COLUMN_REMINDED))
             .build();
     }
@@ -61,7 +63,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .time(localTimeEncryptor.decrypt(entity.getTime(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_TIME))
             .status(OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_STATUS)))
             .note(stringEncryptor.decrypt(entity.getNote(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_NOTE))
-            .remindAt(localDateEncryptor.decrypt(entity.getRemindAt(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMIND_AT))
+            .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.decrypt(entity.getReminded(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMINDED))
             .build();
     }
