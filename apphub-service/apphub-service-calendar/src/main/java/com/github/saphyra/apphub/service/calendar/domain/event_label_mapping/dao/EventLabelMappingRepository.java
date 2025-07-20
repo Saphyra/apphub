@@ -11,4 +11,6 @@ interface EventLabelMappingRepository extends CrudRepository<EventLabelMappingEn
     void deleteByUserIdAndEventId(String userId, String eventId);
 
     List<EventLabelMappingEntity> getByEventId(String eventId);
+
+    void deleteByUserIdAndLabelId(String userId, String labelId);
 }

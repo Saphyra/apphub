@@ -27,7 +27,7 @@ class EventMapper {
             .title(event.getTitle())
             .content(event.getContent())
             .remindMeBeforeDays(event.getRemindMeBeforeDays())
-            .labels(labelQueryService.getLabels(event.getEventId()))
+            .labels(labelQueryService.getByEventId(event.getEventId()))
             .build();
     }
 }

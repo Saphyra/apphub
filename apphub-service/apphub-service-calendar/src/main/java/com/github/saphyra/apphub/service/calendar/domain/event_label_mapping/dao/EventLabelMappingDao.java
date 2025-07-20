@@ -13,10 +13,10 @@ import java.util.UUID;
 public class EventLabelMappingDao extends AbstractDao<EventLabelMappingEntity, EventLabelMapping, EventLabelMappingEntity, EventLabelMappingRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-     EventLabelMappingDao(EventLabelMappingConverter converter, EventLabelMappingRepository repository, UuidConverter uuidConverter) {
+    EventLabelMappingDao(EventLabelMappingConverter converter, EventLabelMappingRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
-         this.uuidConverter = uuidConverter;
-     }
+        this.uuidConverter = uuidConverter;
+    }
 
     @Override
     public void deleteByUserId(UUID userId) {
@@ -24,10 +24,14 @@ public class EventLabelMappingDao extends AbstractDao<EventLabelMappingEntity, E
     }
 
     public void deleteByUserIdAndEventId(UUID userId, UUID eventId) {
-         repository.deleteByUserIdAndEventId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId));
+        repository.deleteByUserIdAndEventId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId));
     }
 
     public List<EventLabelMapping> getByEventId(UUID eventId) {
         return converter.convertEntity(repository.getByEventId(uuidConverter.convertDomain(eventId)));
+    }
+
+    public void deleteByUserIdAndLabelId(UUID userId, UUID labelId) {
+        repository.deleteByUserIdAndLabelId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId));
     }
 }
