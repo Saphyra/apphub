@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.calendar.domain.event.service;
+package com.github.saphyra.apphub.service.calendar.common.context;
 
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class UpdateEventContextFactory {
+public class UpdateEventContextFactory {
     private final EventDao eventDao;
     private final OccurrenceDao occurrenceDao;
     private final RecreateOccurrenceService recreateOccurrenceService;
 
-    UpdateEventContext create(Event event) {
+    public UpdateEventContext create(Event event) {
         return UpdateEventContext.builder()
             .event(event)
             .eventDao(eventDao)

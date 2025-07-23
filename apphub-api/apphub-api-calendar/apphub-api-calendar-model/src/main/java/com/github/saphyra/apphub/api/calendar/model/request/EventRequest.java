@@ -17,7 +17,7 @@ import java.util.UUID;
 @Builder
 public class EventRequest {
     private RepetitionType repetitionType;
-    private String repetitionData;
+    private Object repetitionData;
     private Integer repeatForDays;
     private LocalDate startDate;
     private LocalDate endDate;

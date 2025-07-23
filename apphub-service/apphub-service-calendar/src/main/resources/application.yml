@@ -4,3 +4,6 @@ spring:
 
 liquibase:
   schema: calendar
+
+calendar:
+  maxEventDuration: P730D

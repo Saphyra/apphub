@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.service.updater;
 
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.service.EventFieldUpdater;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.UpdateEventContext;
+import com.github.saphyra.apphub.service.calendar.common.context.UpdateEventContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 //TODO unit test
 class RepetitionDataUpdater implements EventFieldUpdater {
+    private final ObjectMapperWrapper objectMapperWrapper;
+
     @Override
     public Object getRequestField(EventRequest request) {
         return request.getRepetitionData();
@@ -27,7 +30,7 @@ class RepetitionDataUpdater implements EventFieldUpdater {
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
         log.info("Updating repetitionData of Event {}", event.getEventId());
 
-        event.setRepetitionData(request.getRepetitionData());
+        event.setRepetitionData(objectMapperWrapper.writeValueAsPrettyString(request.getRepetitionData()));
 
         context.occurrenceRecreationNeeded();
     }

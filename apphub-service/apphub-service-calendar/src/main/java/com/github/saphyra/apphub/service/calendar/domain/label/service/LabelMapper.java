@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class LabelConverter {
+class LabelMapper {
     LabelResponse toResponse(Label label) {
         return LabelResponse.builder()
             .labelId(label.getLabelId())

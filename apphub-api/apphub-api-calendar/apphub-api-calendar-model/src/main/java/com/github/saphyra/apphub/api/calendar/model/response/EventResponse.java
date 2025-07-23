@@ -26,5 +26,6 @@ public class EventResponse {
     private String title;
     private String content;
     private Integer remindMeBeforeDays;
+    private List<OccurrenceResponse> occurrences;
     private List<LabelResponse> labels;
 }

@@ -8,17 +8,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 public class OccurrenceRequest {
-    private UUID eventId;
     private LocalDate date;
     private LocalTime time;
     private OccurrenceStatus status;
     private String note;
-    private LocalDate remindAt;
+    private Integer remindMeBeforeDays;
 }

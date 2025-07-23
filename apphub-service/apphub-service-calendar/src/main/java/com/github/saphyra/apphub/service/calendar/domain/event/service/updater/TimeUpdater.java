@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.service.EventFieldUpdater;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.UpdateEventContext;
+import com.github.saphyra.apphub.service.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

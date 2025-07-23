@@ -29,10 +29,6 @@ public class LabelDao extends AbstractDao<LabelEntity, Label, String, LabelRepos
         return repository.existsById(uuidConverter.convertDomain(labelId));
     }
 
-    public List<Label> getByEventId(UUID eventId) {
-        return converter.convertEntity(repository.getByEventId(uuidConverter.convertDomain(eventId)));
-    }
-
     public List<Label> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
@@ -43,7 +39,7 @@ public class LabelDao extends AbstractDao<LabelEntity, Label, String, LabelRepos
 
     public Label findByIdValidated(UUID labelId) {
         return findById(labelId)
-            .orElseThrow(() -> ExceptionFactory.notFound("Label not found with id: " + labelId);
+            .orElseThrow(() -> ExceptionFactory.notFound("Label not found with id: " + labelId));
     }
 
     private Optional<Label> findById(UUID labelId) {

@@ -6,12 +6,15 @@ import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.calendar.config.CalendarParams;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ import java.util.List;
 //TODO unit test
 class EventRequestValidator {
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final CalendarParams calendarParams;
 
     void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
@@ -29,31 +33,37 @@ class EventRequestValidator {
         if (request.getStartDate().isAfter(request.getEndDate())) {
             throw ExceptionFactory.invalidParam("startDate", "startDate cannot be after endDate");
         }
+        if (ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) > calendarParams.getMaxEventDuration().get(ChronoUnit.DAYS)) {
+            throw ExceptionFactory.invalidParam("eventDuration", "too long");
+        }
         ValidationUtil.notBlank(request.getTitle(), "title");
         ValidationUtil.notNull(request.getContent(), "content");
         ValidationUtil.notNull(request.getRemindMeBeforeDays(), "remindMeBeforeDays");
         ValidationUtil.notNull(request.getLabels(), "labels");
     }
 
-    private void validateRepetitionData(RepetitionType repetitionType, String repetitionData) {
+    private void validateRepetitionData(RepetitionType repetitionType, Object repetitionData) {
         switch (repetitionType) {
             case ONE_TIME:
                 break;
 
             case EVERY_X_DAYS:
-                ValidationUtil.parse(repetitionData, o -> Integer.parseInt(o.toString()), "repetitionData");
+                Integer days = ValidationUtil.parse(repetitionData, o -> Integer.parseInt(o.toString()), "repetitionData");
+                ValidationUtil.atLeast(days, 1, "repetitionData");
                 break;
 
             case DAYS_OF_WEEK:
-                TypeReference<List<DayOfWeek>> daysOfWeekTypeReference = new TypeReference<>() {
+                TypeReference<Set<DayOfWeek>> daysOfWeekTypeReference = new TypeReference<>() {
                 };
-                ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfWeekTypeReference), "repetitionData");
+                Set<DayOfWeek> dayOfWeeks = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfWeekTypeReference), "repetitionData");
+                ValidationUtil.notEmpty(dayOfWeeks, "repetitionData");
                 break;
 
             case DAYS_OF_MONTH:
                 TypeReference<List<Integer>> daysOfMonthTypeReference = new TypeReference<>() {
                 };
                 List<Integer> values = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfMonthTypeReference), "repetitionData");
+                ValidationUtil.notEmpty(values, "repetitionData");
                 values.forEach(integer -> {
                     ValidationUtil.atLeast(integer, 1, "repetitionData");
                     ValidationUtil.maximum(integer, 31, "repetitionData");

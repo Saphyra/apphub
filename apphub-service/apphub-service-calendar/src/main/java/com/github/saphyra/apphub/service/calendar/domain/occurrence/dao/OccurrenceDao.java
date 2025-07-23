@@ -3,10 +3,12 @@ package com.github.saphyra.apphub.service.calendar.domain.occurrence.dao;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -38,5 +40,14 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
             .toList();
 
         repository.deleteAllById(ids);
+    }
+
+    public Occurrence findByIdValidated(UUID occurrenceId) {
+        return findById(occurrenceId)
+            .orElseThrow(() -> ExceptionFactory.notFound("Occurrence not found with occurrenceId: " + occurrenceId));
+    }
+
+    private Optional<Occurrence> findById(UUID occurrenceId) {
+        return findById(uuidConverter.convertDomain(occurrenceId));
     }
 }

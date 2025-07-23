@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.service.calendar.common.context.UpdateEventContext;
+import com.github.saphyra.apphub.service.calendar.common.context.UpdateEventContextFactory;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
 import jakarta.transaction.Transactional;

@@ -21,6 +21,6 @@ public class OccurrenceResponse {
     private LocalTime time;
     private OccurrenceStatus status;
     private String note;
-    private LocalDate remindAt;
+    private Integer remindMeBeforeDays;
     private Boolean reminded;
 }
