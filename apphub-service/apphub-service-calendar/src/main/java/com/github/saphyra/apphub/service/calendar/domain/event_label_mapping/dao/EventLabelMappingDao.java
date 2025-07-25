@@ -34,4 +34,8 @@ public class EventLabelMappingDao extends AbstractDao<EventLabelMappingEntity, E
     public void deleteByUserIdAndLabelId(UUID userId, UUID labelId) {
         repository.deleteByUserIdAndLabelId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId));
     }
+
+    public List<EventLabelMapping> getByUserIdAndLabelId(UUID userId, UUID labelId) {
+        return converter.convertEntity(repository.getByUserIdAndLabelId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)));
+    }
 }

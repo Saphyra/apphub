@@ -50,4 +50,8 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
     private Optional<Occurrence> findById(UUID occurrenceId) {
         return findById(uuidConverter.convertDomain(occurrenceId));
     }
+
+    public List<Occurrence> getByUserId(UUID userId) {
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    }
 }

@@ -1,26 +1,49 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.service;
 
+import com.github.saphyra.apphub.api.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.calendar.model.response.OccurrenceResponse;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
 class OccurrenceMapper {
-    public OccurrenceResponse toResponse(Occurrence occurrence) {
+    private final DateTimeUtil dateTimeUtil;
+
+    OccurrenceResponse toResponse(EventCache eventCache, Occurrence occurrence) {
         return OccurrenceResponse.builder()
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
             .date(occurrence.getDate())
-            .time(occurrence.getTime())
-            .status(occurrence.getStatus())
+            .time(getFromEventIfNull(eventCache, occurrence.getEventId(), occurrence.getTime(), Event::getTime))
+            .status(calculateOccurrenceStatus(occurrence.getStatus(), occurrence.getDate()))
             .note(occurrence.getNote())
-            .remindMeBeforeDays(occurrence.getRemindMeBeforeDays())
+            .remindMeBeforeDays(getFromEventIfNull(eventCache, occurrence.getEventId(), occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
             .reminded(occurrence.getReminded())
             .build();
+    }
+
+    private OccurrenceStatus calculateOccurrenceStatus(OccurrenceStatus status, LocalDate date) {
+        if (status == OccurrenceStatus.PENDING && date.isBefore(dateTimeUtil.getCurrentDate())) {
+            return OccurrenceStatus.EXPIRED;
+        }
+
+        return status;
+    }
+
+    private <T> T getFromEventIfNull(EventCache eventCache, UUID eventId, T value, Function<Event, T> mapper) {
+        return Optional.ofNullable(value)
+            .orElseGet(() -> mapper.apply(eventCache.get(eventId)));
     }
 }

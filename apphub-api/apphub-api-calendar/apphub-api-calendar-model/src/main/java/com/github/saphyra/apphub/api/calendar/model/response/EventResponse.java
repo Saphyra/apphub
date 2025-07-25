@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -26,6 +25,4 @@ public class EventResponse {
     private String title;
     private String content;
     private Integer remindMeBeforeDays;
-    private List<OccurrenceResponse> occurrences;
-    private List<LabelResponse> labels;
 }

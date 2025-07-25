@@ -100,4 +100,8 @@ public class DateTimeUtil {
     public LocalDate later(@NonNull LocalDate date1, @NonNull LocalDate date2) {
         return latest(List.of(date1, date2));
     }
+
+    public boolean isBetween(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
 }

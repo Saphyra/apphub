@@ -20,4 +20,5 @@ public class CalendarEndpoints {
     public static final String CALENDAR_EDIT_LABEL = "/api/calendar/labels/{labelId}";
     public static final String CALENDAR_CREATE_OCCURRENCE = "/api/calendar/occurrences/{eventId}";
     public static final String CALENDAR_EDIT_OCCURRENCE = "/api/calendar/occurrences/{occurrenceId}";
+    public static final String CALENDAR_GET_OCCURRENCES = "/api/calendar/occurrences";
 }

@@ -3,3 +3,4 @@ TODO migration task
 TODO integration test to check if data is deleted with the user
 TODO clear deprecated controller
 TODO Review occurrence logic - Time and remindMeBeforeDays should be null as default, this case the event's values are used. If they are filled, the event's values are ignored.
+TODO consider repeatForDays when creating / recreating occurrences
