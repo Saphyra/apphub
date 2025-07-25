@@ -1,0 +1,30 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-occurrence-v2" author="Saphyra">
+        <preConditions>
+            <not>
+                <tableExists schemaName="calendar" tableName="occurrence"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="calendar" tableName="occurrence">
+            <column name="occurrence_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="event_id" type="varchar(37)"/>
+            <column name="date" type="text"/>
+            <column name="time" type="text"/>
+            <column name="status" type="text"/>
+            <column name="note" type="text"/>
+            <column name="remind_me_before_days" type="text"/>
+            <column name="reminded" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="calendar" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_v2-pk"/>
+    </changeSet>
+</databaseChangeLog>

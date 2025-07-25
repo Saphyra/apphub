@@ -5,4 +5,8 @@
 
     <include file="database/change_sets/event_old.xml"/>
     <include file="database/change_sets/occurrence_old.xml"/>
+    <include file="database/change_sets/event.xml"/>
+    <include file="database/change_sets/event_label_mapping.xml"/>
+    <include file="database/change_sets/label.xml"/>
+    <include file="database/change_sets/occurrence.xml"/>
 </databaseChangeLog>

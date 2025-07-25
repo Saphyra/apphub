@@ -1,0 +1,32 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-event-v2" author="Saphyra">
+        <preConditions>
+            <not>
+                <tableExists schemaName="calendar" tableName="event"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="calendar" tableName="event">
+            <column name="event_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="repetition_type" type="text"/>
+            <column name="repetition_data" type="text"/>
+            <column name="repeat_for_days" type="text"/>
+            <column name="start_date" type="text"/>
+            <column name="time" type="text"/>
+            <column name="end_date" type="text"/>
+            <column name="title" type="text"/>
+            <column name="content" type="text"/>
+            <column name="remind_me_before_days" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="calendar" tableName="event" columnNames="event_id" constraintName="event_v2-pk"/>
+    </changeSet>
+</databaseChangeLog>
