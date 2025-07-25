@@ -15,7 +15,7 @@ const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
 
     const [storageSettings, setStorageSettings] = useState([]);
 
-    useLoader(SKYXPLORE_PLANET_GET_STORAGE_SETTINGS.createRequest(null, { planetId: planetId }), setStorageSettings);
+    useLoader({request: SKYXPLORE_PLANET_GET_STORAGE_SETTINGS.createRequest(null, { planetId: planetId }), mapper: setStorageSettings});
 
     const getStorageSettings = () => {
         return new Stream(storageSettings)

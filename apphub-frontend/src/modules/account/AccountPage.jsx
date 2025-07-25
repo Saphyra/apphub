@@ -29,7 +29,7 @@ const AccountPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader(ACCOUNT_GET_USER.createRequest(), setUserData);
+    useLoader({ request: ACCOUNT_GET_USER.createRequest(), mapper: setUserData });
 
     return (
         <div className="main-page">

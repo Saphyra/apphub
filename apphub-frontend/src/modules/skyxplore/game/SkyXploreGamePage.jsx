@@ -51,7 +51,7 @@ const SkyXploreGamePage = () => {
     useEffect(() => fetchUserId(), []);
     useEffect(() => fetchIsHost(), []);
 
-    useLoader(IS_ADMIN.createRequest(), r => setIsAdmin(r.value));
+    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value) });
 
     const { sendMessage } = useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_MAIN,

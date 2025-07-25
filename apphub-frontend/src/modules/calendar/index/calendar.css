@@ -1,0 +1,100 @@
+#calendar main {
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+#calendar-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 2;
+}
+
+#calendar-selected-date {
+    border-left: 5px ridge white;
+}
+
+#calendar-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border-bottom: 3px ridge white;
+}
+
+#calendar-navigation-selected-date,
+#calendar-selected-date-title {
+    font-weight: bold;
+    font-size: 32px;
+}
+
+#calendar-selected-date-title {
+    border-bottom: 3px ridge white;
+    padding: 3px;
+}
+
+#modify-labels-button {
+    background: url("../../../common/style/img/edit.png");
+    background-size: cover;
+    color: transparent;
+    width: 27px;
+}
+
+.calendar-label .active {
+    border-color: lime;
+}
+
+#calendar-content {
+    flex-grow: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+#calendar-content-header,
+#calendar-content-body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-column-gap: 7px;
+    grid-row-gap: 3px;
+}
+
+#calendar-content-header {
+    margin-bottom: 3px;
+}
+
+#calendar-content-body {
+    flex-grow: 2;
+}
+
+#calendar-content-header :nth-child(6),
+#calendar-content-header :nth-child(7),
+#calendar-content-body :nth-child(7n + 6),
+#calendar-content-body :nth-child(7n) {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#calendar-content .day,
+#calendar-content .day-header {
+    border: 2px outset white;
+}
+
+#calendar-content .day-header {
+    padding: 3px;
+    text-align: center;
+}
+
+#calendar-content .day.active {
+    border-color: lime;
+}
+
+#calendar-content .day.today{
+    border-color: yellow;
+}
+
+#calendar-content .day.filler {
+    opacity: 0.5
+}
+
+#calendar-content .day:hover {
+    border-color: red;
+}

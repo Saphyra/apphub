@@ -16,7 +16,7 @@ const VillanyAteszStockAcquisitionHistory = ({ }) => {
     const [selectedDate, setSelectedDate] = useState("");
     const [acquisitions, setAcquisitions] = useState([]);
 
-    useLoader(VILLANY_ATESZ_GET_ACQUISITION_DATES.createRequest(), setDates);
+    useLoader({ request: VILLANY_ATESZ_GET_ACQUISITION_DATES.createRequest(), mapper: setDates });
 
     useEffect(() => loadAcquisitions(), [selectedDate]);
     useEffect(() => setDefaultSelectedDate(), [dates]);

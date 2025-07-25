@@ -28,8 +28,16 @@ const VillanyAteszToolboxNew = ({ }) => {
     const [storageBoxes, setStorageBoxes] = useState([]);
     const [uploadCounter, setUploadCounter] = useState(0);
 
-    useLoader(VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), result => setToolTypes(new Stream(result).map(item => new DataListInputEntry(item.toolTypeId, item.name)).toList()), [uploadCounter]);
-    useLoader(VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), result => setStorageBoxes(new Stream(result).map(item => new DataListInputEntry(item.storageBoxId, item.name)).toList()), [uploadCounter]);
+    useLoader({
+        request: VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(),
+        mapper: result => setToolTypes(new Stream(result).map(item => new DataListInputEntry(item.toolTypeId, item.name)).toList()),
+        listener: [uploadCounter]
+    });
+    useLoader({
+        request: VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(),
+        mapper: result => setStorageBoxes(new Stream(result).map(item => new DataListInputEntry(item.storageBoxId, item.name)).toList()),
+        listener: [uploadCounter]
+    });
 
     const create = async () => {
         if (isBlank(name)) {

@@ -20,10 +20,10 @@ const VillanyAteszStockCategories = ({ setConfirmationDialogData }) => {
 
     const [categories, setCategories] = useState([]);
 
-    useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
+    useLoader({ request: VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), mapper: setCategories });
 
     const create = async () => {
-        if(isBlank(newCategoryName)){
+        if (isBlank(newCategoryName)) {
             NotificationService.showError(localizationHandler.get("blank-name"));
             return;
         }

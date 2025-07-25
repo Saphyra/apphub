@@ -36,12 +36,12 @@ const ErrorPage = () => {
     useEffect(() => setRequiredRoles(new Optional(searchParams.get("required_roles")).map(s => s.split(",")).orElse(null)), [searchParams]);
     useEffect(() => checkUserLoggedIn(), []);
 
-    useLoader(
-        ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE.createRequest({ userId: userId, requiredRoles: requiredRoles }),
-        setBannedDetails,
-        [userId, requiredRoles],
-        () => hasValue(userId) && hasValue(requiredRoles)
-    );
+    useLoader({
+        request: ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE.createRequest({ userId: userId, requiredRoles: requiredRoles }),
+        mapper: setBannedDetails,
+        listener: [userId, requiredRoles],
+        condition: () => hasValue(userId) && hasValue(requiredRoles)
+    });
 
     const checkUserLoggedIn = () => {
         const fetch = async () => {
