@@ -2,12 +2,11 @@ import { useState } from "react";
 import Stream from "../../../../../common/js/collection/Stream";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
 import { DAYS_OF_WEEK } from "../../../../../common/js/date/DayOfWeek";
-import dayOfWeekLocalizationData from "../../localization/day_of_week_localization.json";
+import dayOfWeekLocalizationData from "../../../../../common/js/date/day_of_week_localization.json";
 import useLoader from "../../../../../common/hook/Loader";
 import { CALENDAR_GET_OCCURRENCES } from "../../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../../common/js/Utils";
 import CalendarContentDay from "./CalendarContentDay";
-import LocalDate from "../../../../../common/js/date/LocalDate";
 
 const CalendarContent = ({ view, activeLabel, setDisplaySpinner, referenceDate, selectedDate, setSelectedDate }) => {
     const dayOfWeekLocalizationHandler = new LocalizationHandler(dayOfWeekLocalizationData);

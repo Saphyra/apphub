@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../../common/component/Footer";
 import { ToastContainer } from "react-toastify";
 import localizationData from "./localization/calendar_page_localization.json";
@@ -16,20 +16,28 @@ import "./calendar.css";
 import Labels from "./component/Labels";
 import CalendarContent from "./component/content/CalendarContent";
 import SelectedDate from "./component/selected_date/SelectedDate";
+import sessionChecker from "../../../common/js/SessionChecker";
+import NotificationService from "../../../common/js/notification/NotificationService";
+import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
 
-const KEY_SESSION_STORAGE_VIEW = "calendarView"
+const CACHE_KEY_VIEW = "calendar.view";
+const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
+const CACHE_KEY_ACTIVE_LABEL = "calendar.activeLabel";
+const CACHE_KEY_SELECTED_DATE = "calendar.selectedDate";
 
 const CalendarPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
+    useEffect(sessionChecker, []);
+    useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
-    const [viewName, setViewName] = useState(sessionStorage[KEY_SESSION_STORAGE_VIEW] || MONTH);
-    const [referenceDate, setReferenceDate] = useState(LocalDate.now());
-    const [activeLabel, setActiveLabel] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(LocalDate.now());
+    const [viewName, setViewName] = useState(cachedOrDefault(CACHE_KEY_VIEW, MONTH));
+    const [referenceDate, setReferenceDate] = useState(cachedOrDefault(CACHE_KEY_REFERENCE_DATE, LocalDate.now(), v => LocalDate.parse(v)));
+    const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
+    const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
 
     return (
         <div id="calendar" className="main-page">
@@ -38,12 +46,12 @@ const CalendarPage = () => {
                     <div id="calendar-navigation">
                         <ViewSelector
                             view={viewName}
-                            setView={changeView}
+                            setView={v => cacheAndUpdate(CACHE_KEY_VIEW, v, setViewName)}
                         />
 
                         <ReferenceDateSelector
                             referenceDate={referenceDate}
-                            setReferenceDate={setReferenceDate}
+                            setReferenceDate={v => cacheAndUpdate(CACHE_KEY_REFERENCE_DATE, v, setReferenceDate, v => LocalDate.parse(v))}
                             view={View[viewName]}
                         />
 
@@ -55,7 +63,7 @@ const CalendarPage = () => {
 
                     <Labels
                         activeLabel={activeLabel}
-                        setActiveLabel={setActiveLabel}
+                        setActiveLabel={v => cacheAndUpdate(CACHE_KEY_ACTIVE_LABEL, v, setActiveLabel)}
                     />
 
                     <CalendarContent
@@ -64,7 +72,7 @@ const CalendarPage = () => {
                         setDisplaySpinner={setDisplaySpinner}
                         referenceDate={referenceDate}
                         selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
+                        setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
                     />
                 </div>
 
@@ -77,7 +85,7 @@ const CalendarPage = () => {
 
             <Footer rightButtons={[
                 <Button
-                    id="notebook-home-button"
+                    id="calendar-home-button"
                     key="home"
                     onclick={() => window.location.href = Constants.MODULES_PAGE}
                     label={localizationHandler.get("home")}
@@ -98,11 +106,6 @@ const CalendarPage = () => {
             {displaySpinner && <Spinner />}
         </div>
     );
-
-    function changeView(newView) {
-        sessionStorage[KEY_SESSION_STORAGE_VIEW] = newView;
-        setViewName(newView);
-    }
 }
 
 export default CalendarPage;

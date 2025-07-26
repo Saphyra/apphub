@@ -7,8 +7,7 @@ export const WEEK = "WEEK";
 export const SURROUNDING_WEEKS = "SURROUNDING_WEEKS";
 export const MONTH = "MONTH";
 
-export const View = {
-}
+export const View = {};
 
 const localizationHandler = new LocalizationHandler(dateLocalizationData);
 
@@ -39,6 +38,7 @@ View[WEEK] = {
         return result;
     }
 };
+
 View[SURROUNDING_WEEKS] = {
     back: (referenceDate, setReferenceDate) => {
         setReferenceDate(referenceDate.minusDays(DAYS_IN_WEEK));
@@ -73,6 +73,7 @@ View[SURROUNDING_WEEKS] = {
         return result;
     }
 };
+
 View[MONTH] = {
     back: (referenceDate, setReferenceDate) => {
         setReferenceDate(referenceDate.minusMonths(1));

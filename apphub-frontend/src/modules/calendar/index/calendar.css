@@ -87,7 +87,7 @@
     border-color: lime;
 }
 
-#calendar-content .day.today{
+#calendar-content .day.today {
     border-color: yellow;
 }
 
@@ -97,4 +97,13 @@
 
 #calendar-content .day:hover {
     border-color: red;
+}
+
+#calendar-selected-date {
+    display: flex;
+    flex-direction: column;
+}
+
+#calendar-selected-date-content {
+    flex-grow: 2;
 }
