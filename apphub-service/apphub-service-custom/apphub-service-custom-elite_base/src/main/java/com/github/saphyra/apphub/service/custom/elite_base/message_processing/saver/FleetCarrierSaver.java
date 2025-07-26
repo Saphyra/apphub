@@ -37,6 +37,10 @@ public class FleetCarrierSaver {
         log.debug("Saving FleetCarrier {}", carrierId);
 
         FleetCarrier carrier = fleetCarrierDao.findByCarrierId(carrierId)
+            .map(fleetCarrier -> {
+                fleetCarrierDao.clearMarketId(fleetCarrier.getId(), marketId);
+                return fleetCarrier;
+            })
             .orElseGet(() -> {
                 FleetCarrier created = fleetCarrierFactory.create(carrierId, timestamp, carrierName, starSystemId, dockingAccess, marketId);
                 log.debug("Saving new {}", created);

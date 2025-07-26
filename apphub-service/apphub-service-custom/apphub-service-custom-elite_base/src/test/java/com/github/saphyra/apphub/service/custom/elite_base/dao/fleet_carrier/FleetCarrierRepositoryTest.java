@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FleetCarrierRepositoryTest {
     private static final String ID_1 = "id-1";
     private static final String ID_2 = "id-2";
+    private static final String ID_3 = "id-3";
     private static final String CARRIER_ID_1 = "carrier-id-1";
     private static final String CARRIER_ID_2 = "carrier-id-2";
     private static final String CARRIER_ID_3 = "carrier-id-3";
@@ -106,5 +107,39 @@ class FleetCarrierRepositoryTest {
         underTest.save(entity2);
 
         assertThat(underTest.getByCarrierIdOrMarketId(CARRIER_ID_1, MARKET_ID_1)).containsExactly(entity);
+    }
+
+    @Test
+    void clearMarketId_doNotDelete() {
+        FleetCarrierEntity entity1 = FleetCarrierEntity.builder()
+            .id(ID_1)
+            .marketId(MARKET_ID_1)
+            .build();
+        underTest.save(entity1);
+        FleetCarrierEntity entity2 = FleetCarrierEntity.builder()
+            .id(ID_2)
+            .marketId(MARKET_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        underTest.clearMarketId(ID_1, MARKET_ID_1);
+
+        assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity1, entity2);
+    }
+
+    @Test
+    void clearMarketId_delete() {
+        FleetCarrierEntity entity1 = FleetCarrierEntity.builder()
+            .id(ID_1)
+            .marketId(MARKET_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        underTest.clearMarketId(ID_2, MARKET_ID_1);
+
+        assertThat(underTest.findById(ID_1))
+            .isNotEmpty()
+            .get()
+            .returns(null, FleetCarrierEntity::getMarketId);
     }
 }

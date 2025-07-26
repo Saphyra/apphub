@@ -10,12 +10,14 @@
         StarSystemWriteBuffer saves StarSystems one by one if batch update fails
         SQL based deletion in buffers
         Process incoming messages in separate thread
+        Clear marketIds of other carriers when a carrier is updated
     AdminPanel
         Turn off performanceReporting during tests
-    BufferedDao
-        Copy the buffer before syncing, let system work while saving in progress
+    Copy the buffer before syncing, let system work while saving in progress
 
 ===PLATFORM CHANGES===
+    Increase PostgreSQL docker image version on preprod and dev envs
+    Increase memory limit for EliteBase
 
 ===TECHNICAL DEBTS===
 
