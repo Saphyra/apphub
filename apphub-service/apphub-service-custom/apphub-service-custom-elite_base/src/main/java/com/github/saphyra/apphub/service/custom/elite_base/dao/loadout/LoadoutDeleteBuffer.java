@@ -32,8 +32,8 @@ class LoadoutDeleteBuffer extends DeleteBuffer<LoadoutDomainId> {
     }
 
     @Override
-    protected void doSynchronize() {
-        deleteAll(buffer);
+    protected void doSynchronize(Collection<LoadoutDomainId> bufferCopy) {
+        deleteAll(bufferCopy);
     }
 
     private void deleteAll(Collection<LoadoutDomainId> domains) {

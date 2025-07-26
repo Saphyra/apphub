@@ -4,14 +4,6 @@ spring:
   datasource:
     hikari:
       maximumPoolSize: 20
-  jpa:
-    properties:
-      hibernate:
-        order_inserts: true
-        order_updates: true
-        batch_versioned_data: true
-        jdbc:
-          batch_size: 100
 
 liquibase:
   schema: elite_base
@@ -20,8 +12,8 @@ elite-base:
   cache:
     expireAfterAccess: PT1H
     bufferSynchronizationInterval: PT5M
-    bufferSynchronizationCheckInterval: PT1S
-    maxBufferSize: 10000
+    bufferSynchronizationCheckInterval: PT10S
+    maxBufferSize: 100000
   messageExpiration: P30D
   processedMessageExpiration: P1D
   messageProcessorBatchSize: 500

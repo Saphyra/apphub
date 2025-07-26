@@ -12,6 +12,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public abstract class WriteBuffer<DOMAIN_ID, DOMAIN> extends AbstractWriteBuffer<DOMAIN_ID, DOMAIN> {
     protected final Map<DOMAIN_ID, DOMAIN> buffer = new ConcurrentHashMap<>();
@@ -26,14 +27,17 @@ public abstract class WriteBuffer<DOMAIN_ID, DOMAIN> extends AbstractWriteBuffer
     }
 
     @Override
-    protected Collection<?> getBuffer() {
+    protected Collection<DOMAIN> getBuffer() {
         return buffer.values();
     }
 
     @Override
-    protected Map<DOMAIN_ID, DOMAIN> getBufferMap() {
-        return buffer;
+    protected Map<DOMAIN_ID, DOMAIN> getBufferMap(Collection<DOMAIN> bufferCopy) {
+        return bufferCopy.stream()
+            .collect(Collectors.toMap(this::getDomainId, Function.identity()));
     }
+
+    protected abstract DOMAIN_ID getDomainId(DOMAIN domain);
 
     @Override
     protected Lock getWriteLock() {

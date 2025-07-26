@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.DeleteBuffer;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
@@ -22,20 +21,16 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 @Component
 @Slf4j
 class StarSystemDeleteBuffer extends DeleteBuffer<UUID> {
-    private final StarSystemRepository starSystemRepository;
-    private final UuidConverter uuidConverter;
     private final JdbcTemplate jdbcTemplate;
 
-    StarSystemDeleteBuffer(DateTimeUtil dateTimeUtil, StarSystemRepository starSystemRepository, UuidConverter uuidConverter, JdbcTemplate jdbcTemplate) {
+    StarSystemDeleteBuffer(DateTimeUtil dateTimeUtil, JdbcTemplate jdbcTemplate) {
         super(dateTimeUtil);
-        this.starSystemRepository = starSystemRepository;
-        this.uuidConverter = uuidConverter;
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    protected void doSynchronize() {
-        deleteAll(buffer);
+    protected void doSynchronize(Collection<UUID> bufferCopy) {
+        deleteAll(bufferCopy);
     }
 
     private void deleteAll(Collection<UUID> buffer) {
