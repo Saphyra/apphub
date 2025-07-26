@@ -10,7 +10,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public abstract class DeleteBuffer<DOMAIN_ID> extends AbstractBuffer {
+public abstract class DeleteBuffer<DOMAIN_ID> extends AbstractBuffer<DOMAIN_ID> {
     protected final Set<DOMAIN_ID> buffer = Collections.newSetFromMap(new ConcurrentHashMap<>());
     protected final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
 
@@ -19,7 +19,7 @@ public abstract class DeleteBuffer<DOMAIN_ID> extends AbstractBuffer {
     }
 
     @Override
-    protected Collection<?> getBuffer() {
+    protected Collection<DOMAIN_ID> getBuffer() {
         return buffer;
     }
 

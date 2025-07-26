@@ -31,8 +31,8 @@ class CommodityDeleteBuffer extends DeleteBuffer<CommodityDomainId> {
     }
 
     @Override
-    protected void doSynchronize() {
-        deleteAll(buffer);
+    protected void doSynchronize(Collection<CommodityDomainId> bufferCopy) {
+        deleteAll(bufferCopy);
     }
 
     //Has to be JDBC, JPA blocks the flow for some reason

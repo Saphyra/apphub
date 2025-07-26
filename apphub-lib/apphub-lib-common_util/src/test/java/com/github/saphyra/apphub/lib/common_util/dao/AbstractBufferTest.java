@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -21,17 +22,18 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class AbstractBufferTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
+    private static final String ITEM = "item";
 
     @Mock
     private DateTimeUtil dateTimeUtil;
 
     @Mock
-    private Runnable doSynchronize;
+    private Consumer<Collection<String>> doSynchronize;
 
     @Mock
-    private Runnable afterSynchronize;
+    private Consumer<Collection<String>> afterSynchronize;
 
-    private final List<Object> buffer = new ArrayList<>();
+    private final List<String> buffer = new ArrayList<>();
 
     @Mock
     private Lock writeLock;
@@ -51,7 +53,7 @@ class AbstractBufferTest {
 
     @Test
     void getSize() {
-        buffer.add(new Object());
+        buffer.add(ITEM);
 
         assertThat(underTest.getSize()).isEqualTo(1);
     }
@@ -65,28 +67,28 @@ class AbstractBufferTest {
 
     @Test
     void synchronize() {
-        buffer.add(new Object());
+        buffer.add(ITEM);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
         underTest.synchronize();
 
         then(writeLock).should().lock();
-        then(doSynchronize).should().run();
+        then(doSynchronize).should().accept(List.of(ITEM));
         then(writeLock).should().unlock();
-        then(afterSynchronize).should().run();
+        then(afterSynchronize).should().accept(List.of(ITEM));
 
         assertThat(underTest.getLastSynchronized()).isEqualTo(CURRENT_TIME);
         assertThat(buffer).isEmpty();
     }
 
-    private static class AbstractBufferImpl extends AbstractBuffer {
-        private final Runnable doSynchronize;
-        private final Runnable afterSynchronize;
-        private final Collection<?> buffer;
+    private static class AbstractBufferImpl extends AbstractBuffer<String> {
+        private final Consumer<Collection<String>> doSynchronize;
+        private final Consumer<Collection<String>> afterSynchronize;
+        private final Collection<String> buffer;
         private final Lock writeLock;
 
         @Builder
-        protected AbstractBufferImpl(DateTimeUtil dateTimeUtil, Runnable doSynchronize, Runnable afterSynchronize, Collection<?> buffer, Lock writeLock) {
+        protected AbstractBufferImpl(DateTimeUtil dateTimeUtil, Consumer<Collection<String>> doSynchronize, Consumer<Collection<String>> afterSynchronize, Collection<String> buffer, Lock writeLock) {
             super(dateTimeUtil);
             this.doSynchronize = doSynchronize;
             this.afterSynchronize = afterSynchronize;
@@ -95,23 +97,23 @@ class AbstractBufferTest {
         }
 
         @Override
-        protected void doSynchronize() {
-            doSynchronize.run();
+        protected void afterSynchronize(Collection<String> bufferCopy) {
+            afterSynchronize.accept(bufferCopy);
         }
 
         @Override
-        protected void afterSynchronize() {
-            afterSynchronize.run();
-        }
-
-        @Override
-        protected Collection<?> getBuffer() {
+        protected Collection<String> getBuffer() {
             return buffer;
         }
 
         @Override
         protected Lock getWriteLock() {
             return writeLock;
+        }
+
+        @Override
+        protected void doSynchronize(Collection<String> bufferCopy) {
+            doSynchronize.accept(bufferCopy);
         }
     }
 }

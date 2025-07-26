@@ -1,0 +1,24 @@
+===FEATURES===
+    EliteBase
+        Synchronize buffers before shutting down service
+    ApphubCI
+        Scale down production namespace when starting the VM (So fresh start is guaranteed on restart)
+
+===BUGFIXES===
+    EliteBase
+        Query FleetCarriers by carrierId, not mutable marketId
+        StarSystemWriteBuffer saves StarSystems one by one if batch update fails
+        SQL based deletion in buffers
+        Process incoming messages in separate thread
+        Clear marketIds of other carriers when a carrier is updated
+    AdminPanel
+        Turn off performanceReporting during tests
+    Copy the buffer before syncing, let system work while saving in progress
+
+===PLATFORM CHANGES===
+    Increase PostgreSQL docker image version on preprod and dev envs
+    Increase memory limit for EliteBase
+
+===TECHNICAL DEBTS===
+
+===ETC===

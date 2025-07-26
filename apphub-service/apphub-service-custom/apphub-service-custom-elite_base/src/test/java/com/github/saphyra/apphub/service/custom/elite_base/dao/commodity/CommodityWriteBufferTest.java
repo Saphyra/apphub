@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Collection;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -44,7 +43,7 @@ class CommodityWriteBufferTest {
 
         underTest.add(commodityDomainId, commodity);
 
-        underTest.doSynchronize();
+        underTest.doSynchronize(List.of(commodity));
 
         then(repository).should().saveAll(List.of(entity));
     }
