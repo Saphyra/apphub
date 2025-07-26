@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.google.common.cache.Cache;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Component
@@ -32,14 +33,18 @@ class StarSystemWriteBuffer extends WriteBuffer<UUID, StarSystem> {
     }
 
     @Override
-    protected void doSynchronize() {
+    protected void doSynchronize(Collection<StarSystem> bufferCopy) {
         try {
-            starSystemRepository.saveAll(starSystemConverter.convertDomain(buffer.values()));
+            starSystemRepository.saveAll(starSystemConverter.convertDomain(bufferCopy));
         } catch (Exception e) {
             errorReporterService.report("Failed saving StarSystems in batch. Saving them one by one...", e);
-            buffer.values()
-                .forEach(starSystem -> executorServiceBean.execute(() -> save(starSystem)));
+            bufferCopy.forEach(starSystem -> executorServiceBean.execute(() -> save(starSystem)));
         }
+    }
+
+    @Override
+    protected UUID getDomainId(StarSystem starSystem) {
+        return starSystem.getId();
     }
 
     private void save(StarSystem starSystem) {

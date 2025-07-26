@@ -31,17 +31,19 @@ class CommodityDeleteBuffer extends DeleteBuffer<CommodityDomainId> {
     }
 
     @Override
-    protected void doSynchronize() {
-        deleteAll(buffer);
+    protected void doSynchronize(Collection<CommodityDomainId> bufferCopy) {
+        deleteAll(bufferCopy);
     }
 
     //Has to be JDBC, JPA blocks the flow for some reason
     private void deleteAll(Collection<CommodityDomainId> domains) {
         List<UUID> externalReferences = domains.stream()
             .map(CommodityDomainId::getExternalReference)
+            .distinct()
             .toList();
         List<String> commodityNames = domains.stream()
             .map(CommodityDomainId::getCommodityName)
+            .distinct()
             .toList();
 
         log.debug("Deleting commodities by externalReferences {} and commodityNames {}", externalReferences, commodityNames);

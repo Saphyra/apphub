@@ -1,0 +1,22 @@
+===FEATURES===
+    EliteBase
+        Synchronize buffers before shutting down service
+    ApphubCI
+        Scale down production namespace when starting the VM (So fresh start is guaranteed on restart)
+
+===BUGFIXES===
+    EliteBase
+        Query FleetCarriers by carrierId, not mutable marketId
+        StarSystemWriteBuffer saves StarSystems one by one if batch update fails
+        SQL based deletion in buffers
+        Process incoming messages in separate thread
+    AdminPanel
+        Turn off performanceReporting during tests
+    BufferedDao
+        Copy the buffer before syncing, let system work while saving in progress
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

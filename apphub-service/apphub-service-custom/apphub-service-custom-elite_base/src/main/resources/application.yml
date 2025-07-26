@@ -20,8 +20,8 @@ elite-base:
   cache:
     expireAfterAccess: PT1H
     bufferSynchronizationInterval: PT5M
-    bufferSynchronizationCheckInterval: PT1S
-    maxBufferSize: 10000
+    bufferSynchronizationCheckInterval: PT10S
+    maxBufferSize: 100000
   messageExpiration: P30D
   processedMessageExpiration: P1D
   messageProcessorBatchSize: 500

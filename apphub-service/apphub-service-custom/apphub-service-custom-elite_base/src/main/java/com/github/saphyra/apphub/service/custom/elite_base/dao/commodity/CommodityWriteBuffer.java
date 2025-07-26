@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.WriteBuffer;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+
 @Component
 class CommodityWriteBuffer extends WriteBuffer<CommodityDomainId, Commodity> {
     private final CommodityRepository commodityRepository;
@@ -16,7 +18,15 @@ class CommodityWriteBuffer extends WriteBuffer<CommodityDomainId, Commodity> {
     }
 
     @Override
-    protected void doSynchronize() {
-        commodityRepository.saveAll(commodityConverter.convertDomain(buffer.values()));
+    protected void doSynchronize(Collection<Commodity> bufferCopy) {
+        commodityRepository.saveAll(commodityConverter.convertDomain(bufferCopy));
+    }
+
+    @Override
+    protected CommodityDomainId getDomainId(Commodity commodity) {
+        return CommodityDomainId.builder()
+            .commodityName(commodity.getCommodityName())
+            .externalReference(commodity.getExternalReference())
+            .build();
     }
 }
