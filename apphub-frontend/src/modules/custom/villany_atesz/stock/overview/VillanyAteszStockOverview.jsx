@@ -35,7 +35,7 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
             () => updateActiveCart("")
         )
     });
-    useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
+    useLoader({request: VILLANY_ATESZ_GET_CARTS.createRequest(), mapper: setCarts});
 
     useEffect(() => focus(), [search]);
 

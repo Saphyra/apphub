@@ -15,7 +15,7 @@ const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
 
     const [storageSettings, setStorageSettings] = useState([]);
 
-    useLoader({request: SKYXPLORE_PLANET_GET_STORAGE_SETTINGS.createRequest(null, { planetId: planetId }), mapper: setStorageSettings});
+    useLoader({ request: SKYXPLORE_PLANET_GET_STORAGE_SETTINGS.createRequest(null, { planetId: planetId }), mapper: setStorageSettings });
 
     const getStorageSettings = () => {
         return new Stream(storageSettings)
@@ -35,7 +35,7 @@ const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
 
             <div id="skyxplore-game-storage-settings-content">
                 <StorageSettingCreator
-                planetId={planetId}
+                    planetId={planetId}
                     storageSettings={storageSettings}
                     setStorageSettings={setStorageSettings}
                 />
