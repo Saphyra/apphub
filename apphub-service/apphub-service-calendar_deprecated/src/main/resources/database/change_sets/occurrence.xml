@@ -1,0 +1,51 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-occurrence" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="calendar" tableName="occurrence"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="calendar" tableName="occurrence">
+            <column name="occurrence_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="varchar(37)"/>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="date" type="text"/>
+            <column name="status" type="varchar(255)"/>
+            <column name="note" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="calendar" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_pk"/>
+    </changeSet>
+
+    <changeSet id="add-column-time-to-occurrence" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="calendar" tableName="occurrence" columnName="time"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="calendar" tableName="occurrence">
+            <column name="time" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-type-to-occurrence" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="calendar" tableName="occurrence" columnName="type"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="calendar" tableName="occurrence">
+            <column name="type" type="text"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

@@ -23,18 +23,19 @@ const VillanyAteszStockOverview = ({ setConfirmationDialogData }) => {
     const [carts, setCarts] = useState([]);
     const [inputRef, setInputFocus] = useFocus();
 
-    useLoader(VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), setItems);
-    useLoader(
-        VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }),
-        setCart,
-        [activeCart], () => !isBlank(activeCart),
-        undefined,
-        new ErrorHandler(
+    useLoader({ request: VILLANY_ATESZ_GET_STOCK_ITEMS.createRequest(), mapper: setItems });
+    useLoader({
+        request: VILLANY_ATESZ_GET_CART.createRequest(null, { cartId: activeCart }),
+        mapper: setCart,
+        listener: [activeCart],
+        condition: () => !isBlank(activeCart),
+        alternativeResult: undefined,
+        errorHandler: new ErrorHandler(
             response => response.status == ResponseStatus.NOT_FOUND,
             () => updateActiveCart("")
         )
-    );
-    useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
+    });
+    useLoader({request: VILLANY_ATESZ_GET_CARTS.createRequest(), mapper: setCarts});
 
     useEffect(() => focus(), [search]);
 

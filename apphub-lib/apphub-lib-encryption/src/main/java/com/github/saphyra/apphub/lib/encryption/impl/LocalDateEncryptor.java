@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import com.github.saphyra.apphub.lib.encryption.base.AbstractEncryptor;
+import com.github.saphyra.apphub.lib.encryption.base.Encryptor;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class LocalDateEncryptor implements AbstractEncryptor<LocalDate> {
+public class LocalDateEncryptor implements Encryptor<LocalDate> {
     private final StringEncryptor stringEncryptor;
 
     @Override

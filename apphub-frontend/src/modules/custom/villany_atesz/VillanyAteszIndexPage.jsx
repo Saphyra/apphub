@@ -24,9 +24,9 @@ const VillanyAteszIndexPage = () => {
     const [totalToolboxValue, setTotalToolboxValue] = useState(0);
     const [items, setItems] = useState([]);
 
-    useLoader(VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE.createRequest(), (response) => setTotalStockValue(response.value));
-    useLoader(VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE.createRequest(), (response) => setTotalToolboxValue(response.value));
-    useLoader(VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION.createRequest(), setItems);
+    useLoader({ request: VILLANY_ATESZ_INDEX_TOTAL_STOCK_VALUE.createRequest(), mapper: (response) => setTotalStockValue(response.value) });
+    useLoader({ request: VILLANY_ATESZ_INDEX_TOTAL_TOOLBOX_VALUE.createRequest(), mapper: (response) => setTotalToolboxValue(response.value) });
+    useLoader({ request: VILLANY_ATESZ_INDEX_GET_STOCK_ITEMS_MARKED_FOR_ACQUISITION.createRequest(), mapper: setItems });
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);

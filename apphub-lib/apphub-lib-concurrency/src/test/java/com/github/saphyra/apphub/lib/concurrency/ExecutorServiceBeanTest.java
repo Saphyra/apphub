@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.lib.concurrency;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.lib.exception.LoggedException;
+import com.github.saphyra.apphub.lib.exception.RestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -69,7 +69,7 @@ public class ExecutorServiceBeanTest {
 
     @Test
     void execute_doNotReportErrorWhenNotReported() {
-        LoggedException exception = ExceptionFactory.loggedException("asd");
+        RestException exception = ExceptionFactory.loggedException("asd");
         doThrow(exception).when(helper).method();
 
         FutureWrapper<Void> result = underTest.execute(() -> helper.method());

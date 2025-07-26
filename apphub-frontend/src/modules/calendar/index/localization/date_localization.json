@@ -1,0 +1,62 @@
+{
+    "01": {
+        "en": "January",
+        "hu": "Január"
+    },
+    "02": {
+        "en": "February",
+        "hu": "Február"
+    },
+    "03": {
+        "en": "March",
+        "hu": "Március"
+    },
+    "04": {
+        "en": "April",
+        "hu": "Április"
+    },
+    "05": {
+        "en": "May",
+        "hu": "Május"
+    },
+    "06": {
+        "en": "June",
+        "hu": "Június"
+    },
+    "07": {
+        "en": "July",
+        "hu": "Július"
+    },
+    "08": {
+        "en": "August",
+        "hu": "Augusztus"
+    },
+    "09": {
+        "en": "September",
+        "hu": "Szeptember"
+    },
+    "10": {
+        "en": "October",
+        "hu": "Október"
+    },
+    "11": {
+        "en": "November",
+        "hu": "November"
+    },
+    "12": {
+        "en": "December",
+        "hu": "December"
+    },
+    "view-format-month": {
+        "en": "{month}, {year}",
+        "hu": "{year} {month}"
+    },
+    "view-format-surrounding-weeks": {
+        "en": "Week {startWeek} - {endWeek}, {year}",
+        "hu": "{year}, {startWeek} - {endWeek}. hét"
+    },
+    "view-format-week": {
+        "en": "Week {week}, {year}",
+        "hu": "{year} Hét {week}"
+    }
+}

@@ -25,7 +25,7 @@ const DisabledRoleManagement = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader(USER_DATA_GET_DISABLED_ROLES.createRequest(), setRoles)
+    useLoader({ request: USER_DATA_GET_DISABLED_ROLES.createRequest(), mapper: setRoles })
 
     const getContent = () => {
         return new Stream(roles)

@@ -12,7 +12,6 @@ const SelectInput = ({
     onchangeCallback,
     disabled = false
 }) => {
-
     const getOptions = () => {
         return new Stream(options)
             .map((option, index) =>

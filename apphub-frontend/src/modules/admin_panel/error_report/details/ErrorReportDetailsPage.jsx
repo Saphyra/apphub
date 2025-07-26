@@ -28,7 +28,7 @@ const ErrorReportDetailsPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useLoader(ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), setErrorReport);
+    useLoader({ request: ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), mapper: setErrorReport });
 
     const openDeleteConfirmation = () => {
         setConfirmationDialogData(new ConfirmationDialogData(

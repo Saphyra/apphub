@@ -7,10 +7,10 @@ const useLoadSetting = (type, location, callback) => {
         location: location
     }
 
-    useLoader(
-        SKYXPLORE_DATA_GET_SETTING.createRequest(payload),
-        response => callback(response.value)
-    );
+    useLoader({
+        request: SKYXPLORE_DATA_GET_SETTING.createRequest(payload),
+        mapper: response => callback(response.value)
+    });
 }
 
 export const SettingType = {

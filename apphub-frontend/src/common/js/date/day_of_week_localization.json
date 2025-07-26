@@ -1,0 +1,30 @@
+{
+    "MONDAY": {
+        "en": "Monday",
+        "hu": "Hétfő"
+    },
+    "TUESDAY": {
+        "en": "Tuesday",
+        "hu": "Kedd"
+    },
+    "WEDNESDAY": {
+        "en": "Wednesday",
+        "hu": "Szerda"
+    },
+    "THURSDAY": {
+        "en": "Thursday",
+        "hu": "Csütörtök"
+    },
+    "FRIDAY": {
+        "en": "Friday",
+        "hu": "Péntek"
+    },
+    "SATURDAY": {
+        "en": "Saturday",
+        "hu": "Szombat"
+    },
+    "SUNDAY": {
+        "en": "Sunday",
+        "hu": "Vasárnap"
+    }
+}

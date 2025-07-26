@@ -7,7 +7,7 @@ import { VILLANY_ATESZ_GET_TOOL_TYPES } from "../../../../../../common/js/dao/en
 const ManageToolTypes = ({ setConfirmationDialogData, localizationHandler }) => {
     const [toolTypes, setToolTypes] = useState([]);
 
-    useLoader(VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), setToolTypes);
+    useLoader({request: VILLANY_ATESZ_GET_TOOL_TYPES.createRequest(), mapper: setToolTypes});
 
     const getItems = () => {
         return new Stream(toolTypes)

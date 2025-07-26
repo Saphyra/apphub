@@ -26,7 +26,7 @@ const RolesForAllPage = () => {
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader(USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), setRestrictedRoles);
+    useLoader({ request: USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), mapper: setRestrictedRoles });
 
     const getRoles = () => {
         return new Stream(roles)

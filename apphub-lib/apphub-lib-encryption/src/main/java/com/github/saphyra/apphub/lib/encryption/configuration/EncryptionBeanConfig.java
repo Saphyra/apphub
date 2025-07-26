@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.encryption.impl.DefaultStringEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.DoubleEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LocalDateEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.LocalTimeEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LongEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.encryption.impl.RevealingStringEncryptor;
@@ -58,5 +59,10 @@ public class EncryptionBeanConfig {
     @Bean
     LocalDateEncryptor localDateEncryptor(StringEncryptor stringEncryptor){
         return new LocalDateEncryptor(stringEncryptor);
+    }
+
+    @Bean
+    LocalTimeEncryptor localTimeEncryptor(StringEncryptor stringEncryptor){
+        return new LocalTimeEncryptor(stringEncryptor);
     }
 }

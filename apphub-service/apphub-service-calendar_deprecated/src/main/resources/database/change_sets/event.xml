@@ -1,0 +1,52 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-event" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="calendar" tableName="event"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="calendar" tableName="event">
+            <column name="event_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)"/>
+            <column name="start_date" type="text"/>
+            <column name="repetition_type" type="varchar(255)"/>
+            <column name="repetition_data" type="text"/>
+            <column name="title" type="text"/>
+            <column name="content" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="calendar" tableName="event" columnNames="event_id" constraintName="event_pk"/>
+    </changeSet>
+
+    <changeSet id="add-column-time-to-event" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="calendar" tableName="event" columnName="time"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="calendar" tableName="event">
+            <column name="time" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-column-repeat-to-event" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="calendar" tableName="event" columnName="repeat"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="calendar" tableName="event">
+            <column name="repeat" type="text"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

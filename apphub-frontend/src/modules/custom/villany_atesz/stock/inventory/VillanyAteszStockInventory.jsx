@@ -22,15 +22,15 @@ const VillanyAteszStockInventory = ({ setConfirmationDialogData }) => {
     const [lastInventoriedCar, setLastInventoriedCar] = useState("");
     const [lastInventoriedStorage, setLastInventoriedStorage] = useState("");
 
-    useLoader(VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS.createRequest(), setItems);
-    useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), (c) => mapCategories(c));
-    useLoader(
-        GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }),
-        (s) => {
+    useLoader({ request: VILLANY_ATESZ_STOCK_INVENTORY_GET_ITEMS.createRequest(), mapper: setItems });
+    useLoader({ request: VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), mapper: (c) => mapCategories(c) });
+    useLoader({
+        request: GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }),
+        mapper: (s) => {
             setLastInventoriedCar(s[Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR])
             setLastInventoriedStorage(s[Constants.SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE])
         }
-    );
+    });
 
     const updateLastInventoried = async (key, newValue, callback) => {
         const payload = {

@@ -1,0 +1,114 @@
+{
+    "title": {
+        "en": "Create event - Calendar - Apphub",
+        "hu": "Új esemény - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Create event",
+        "hu": "Új esemény"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "when": {
+        "en": "When?",
+        "hu": "Mikor?"
+    },
+    "date": {
+        "en": "Date",
+        "hu": "Dátum"
+    },
+    "start-date": {
+        "en": "Start date",
+        "hu": "Kezdés dátuma"
+    },
+    "end-date": {
+        "en": "End date",
+        "hu": "Esemény vége"
+    },
+    "time": {
+        "en": "Time",
+        "hu": "Idő"
+    },
+    "reset-time": {
+        "en": "Reset time",
+        "hu": "Idő törlése"
+    },
+    "what": {
+        "en": "What",
+        "hu": "Mi?"
+    },
+    "event-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "content": {
+        "en": "Description",
+        "hu": "Leírás"
+    },
+    "repetition": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "repetition-type": {
+        "en": "Repetition type",
+        "hu": "Ismétlés típusa"
+    },
+    "every-x-days-pre-label": {
+        "en": "Repeat every",
+        "hu": "Ismétlődjön minden"
+    },
+    "every-x-days-post-label": {
+        "en": "days",
+        "hu": "nap"
+    },
+    "repeat-for-pre-label": {
+        "en": "Repeat for",
+        "hu": "Ismétlés "
+    },
+    "repeat-for-post-label": {
+        "en": "days",
+        "hu": "napon át"
+    },
+    "reminder": {
+        "en": "Reminder",
+        "hu": "Emlékeztető"
+    },
+    "remind-me-before-days-pre-label": {
+        "en": "Remind me",
+        "hu": "Emlékeztess"
+    },
+    "remind-me-before-days-post-label": {
+        "en": "days before",
+        "hu": "nappal előtte"
+    },
+    "labels": {
+        "en": "Labels",
+        "hu": "Címkék"
+    },
+    "new-label": {
+        "en": "New label",
+        "hu": "Új címke"
+    },
+    "add": {
+        "en": "Add",
+        "hu": "Hozzzáad"
+    },
+    "new-label-too-short": {
+        "en": "Label too short.",
+        "hu": "A címke túl rövid."
+    },
+    "new-label-too-long": {
+        "en": "Label too long. (Maximum 255 characters)",
+        "hu": "A címke túl hosszú. (Maximum 255 karakter)"
+    },
+    "label-already-exists": {
+        "en": "Label already exists.",
+        "hu": "A címke már létezik."
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    }
+}
