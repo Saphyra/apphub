@@ -27,3 +27,5 @@
     SkyXplore
         Remove change set for allocated resource
         Add notes to Processes about what they do
+    ApphubCI
+        Do not checkout and pull master when releasing to production
