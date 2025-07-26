@@ -28,4 +28,5 @@ public class AdminPanelEndpoints {
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS = "/api/admin-panel/performance-reporting/topics/{topic}/reports";
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_REPORT = "/allowed-internal/api/admin-panel/performance-reporting/topics/reports";
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_EVENT_TOPIC_STATUS_MODIFIED = "/event/admin-panel/performance-reporting/topics";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS = "/api/admin-panel/performance-reporting/topics/{topic}/reports";
 }

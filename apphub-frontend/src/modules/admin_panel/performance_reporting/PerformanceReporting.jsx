@@ -86,6 +86,7 @@ const PerformanceReporting = ({ }) => {
                 <PerformanceReportingReports
                     reports={reports}
                     localizationHandler={localizationHandler}
+                    loadReports={loadReports}
                 />
             </main>
 

@@ -3,23 +3,22 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.l
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.load.loader.impl.AutoLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class GameDataLoaderTest {
@@ -38,7 +37,10 @@ class GameDataLoaderTest {
     private GameDataLoader underTest;
 
     @Mock
-    private Future<ExecutionResult<Void>> future;
+    private FutureWrapper<Void> future;
+
+    @Mock
+    private ExecutionResult<Void> executionResult;
 
     @BeforeEach
     void setUp() {
@@ -51,22 +53,17 @@ class GameDataLoaderTest {
 
     @Test
     void load() {
-        given(executorServiceBean.execute(any())).willReturn(future);
-        given(future.isDone())
-            .willReturn(false)
-            .willReturn(true);
+        given(executorServiceBean.execute(any())).willAnswer(invocation -> {
+            invocation.getArgument(0, Runnable.class).run();
+            return future;
+        });
+        given(future.get()).willReturn(executionResult);
 
         GameData result = underTest.load(GAME_ID, UNIVERSE_SIZE);
 
         assertThat(result.getGameId()).isEqualTo(GAME_ID);
         assertThat(result.getUniverseSize()).isEqualTo(UNIVERSE_SIZE);
 
-        ArgumentCaptor<Runnable> argumentCaptor = ArgumentCaptor.forClass(Runnable.class);
-        verify(executorServiceBean).execute(argumentCaptor.capture());
-        argumentCaptor.getValue()
-            .run();
-
-        verify(sleepService).sleep(100);
-        verify(autoLoader).autoLoad(result);
+        then(executionResult).should().getOrThrow();
     }
 }

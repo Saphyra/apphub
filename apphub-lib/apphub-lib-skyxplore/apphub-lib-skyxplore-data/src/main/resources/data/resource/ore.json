@@ -1,5 +1,11 @@
 {
   "id": "ore",
   "storageType": "container",
-  "maxProductionBatchSize": 50
+  "maxProductionBatchSize": 50,
+  "constructionRequirements": {
+    "requiredWorkPoints": 10,
+    "requiredEnergy": 10,
+    "requiredResources": {
+    }
+  }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,8 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -42,7 +41,7 @@ class TickSchedulerLauncherTest {
     private TickScheduler tickScheduler;
 
     @Mock
-    private Future<ExecutionResult<Void>> future;
+    private FutureWrapper<Void> future;
 
     @Mock
     private ExecutionResult<Void> executionResult;
@@ -60,7 +59,7 @@ class TickSchedulerLauncherTest {
     }
 
     @Test
-    void processTick() throws ExecutionException, InterruptedException {
+    void processTick() {
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return future;

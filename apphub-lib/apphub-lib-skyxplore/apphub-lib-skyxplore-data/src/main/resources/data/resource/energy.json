@@ -1,5 +1,11 @@
 {
   "id": "energy",
   "storageType": "energy",
-  "maxProductionBatchSize": 100
+  "maxProductionBatchSize": 100,
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 1,
+    "requiredResources": {
+    }
+  }
 }

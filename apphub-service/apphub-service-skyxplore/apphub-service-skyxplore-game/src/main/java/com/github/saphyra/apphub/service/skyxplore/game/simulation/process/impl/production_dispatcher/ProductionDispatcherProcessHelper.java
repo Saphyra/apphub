@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleDataService;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
@@ -41,7 +40,6 @@ class ProductionDispatcherProcessHelper {
     private final ProductionOrderProcessFactory productionOrderProcessFactory;
     private final ProductionRequestConverter productionRequestConverter;
     private final BuildingModuleService buildingModuleService;
-    private final ProductionBuildingModuleDataService productionBuildingModuleDataService;
 
     public int dispatch(Game game, UUID location, UUID processId, UUID productionRequestId, int missingAmount) {
         ProductionRequest productionRequest = game.getData()
@@ -114,8 +112,7 @@ class ProductionDispatcherProcessHelper {
             return 0;
         }
 
-        Collection<StorageType> requirementStorageTypes = productionBuildingModuleDataService.findProducerFor(resourceDataId)
-            .getEntity2()
+        Collection<StorageType> requirementStorageTypes = resourceDataService.get(resourceDataId)
             .getConstructionRequirements()
             .getRequiredResources()
             .keySet()

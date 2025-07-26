@@ -13,13 +13,7 @@
   "produces": [
     {
       "resourceDataId": "log",
-      "requiredSkill": "MINING",
-      "constructionRequirements": {
-        "requiredWorkPoints": 1,
-        "requiredEnergy": 1,
-        "requiredResources": {
-        }
-      }
+      "requiredSkill": "MINING"
     }
   ]
 }

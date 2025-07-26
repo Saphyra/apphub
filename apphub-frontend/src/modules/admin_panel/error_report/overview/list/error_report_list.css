@@ -13,3 +13,7 @@
 .error-report-list-checkbox-head {
     white-space: nowrap;
 }
+
+#error-report-list td{
+    vertical-align: top;
+}

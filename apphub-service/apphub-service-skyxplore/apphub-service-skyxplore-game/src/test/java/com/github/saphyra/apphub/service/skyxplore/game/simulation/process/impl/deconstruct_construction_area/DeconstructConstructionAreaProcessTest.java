@@ -86,7 +86,6 @@ class DeconstructConstructionAreaProcessTest {
             .status(ProcessStatus.CREATED)
             .location(LOCATION)
             .game(game)
-            .gameData(gameData)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -104,6 +103,7 @@ class DeconstructConstructionAreaProcessTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY_VALUE * CONSTRUCTION_PRIORITY * GameConstants.PROCESS_PRIORITY_MULTIPLIER);
     }
@@ -116,6 +116,7 @@ class DeconstructConstructionAreaProcessTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -134,6 +135,7 @@ class DeconstructConstructionAreaProcessTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -155,6 +157,7 @@ class DeconstructConstructionAreaProcessTest {
         given(gameData.getDeconstructions()).willReturn(deconstructions);
         given(deconstructions.findByIdValidated(DECONSTRUCTION_ID)).willReturn(deconstruction);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -170,6 +173,7 @@ class DeconstructConstructionAreaProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 
@@ -181,7 +185,7 @@ class DeconstructConstructionAreaProcessTest {
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
 
         assertThat(underTest.toModel())
             .returns(PROCESS_ID, GameItem::getId)

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionConstructionAreaIdMapping;
@@ -22,8 +23,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,7 +64,7 @@ class ConstructionAreaMessageSenderTest {
             .build();
 
         given(constructionAreaWebSocketHandler.getConnectedUsers()).willReturn(List.of(CONNECTED_USER));
-        given(executorServiceBean.asyncProcess(any())).willAnswer(invocationOnMock -> CompletableFuture.completedFuture(ExecutionResult.success(invocationOnMock.getArgument(0, Callable.class).call())));
+        given(executorServiceBean.asyncProcess(any())).willAnswer(invocationOnMock -> new FutureWrapper<>(CompletableFuture.completedFuture(ExecutionResult.success(invocationOnMock.getArgument(0, Callable.class).call()))));
     }
 
     @AfterEach
@@ -74,10 +73,10 @@ class ConstructionAreaMessageSenderTest {
     }
 
     @Test
-    void sendMessage() throws ExecutionException, InterruptedException {
+    void sendMessage() {
         given(messageProvider.getMessage(SESSION_ID, USER_ID, CONSTRUCTION_AREA_ID)).willReturn(Optional.of(new UpdateItem(KEY, VALUE)));
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result).hasSize(1);
 
@@ -94,10 +93,10 @@ class ConstructionAreaMessageSenderTest {
     }
 
     @Test
-    void payloadEmpty() throws ExecutionException, InterruptedException {
+    void payloadEmpty() {
         given(messageProvider.getMessage(SESSION_ID, USER_ID, CONSTRUCTION_AREA_ID)).willReturn(Optional.empty());
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result).hasSize(1);
 
@@ -110,11 +109,11 @@ class ConstructionAreaMessageSenderTest {
     }
 
     @Test
-    void exception() throws ExecutionException, InterruptedException {
+    void exception() {
         RuntimeException exception = new RuntimeException();
         given(messageProvider.getMessage(SESSION_ID, USER_ID, CONSTRUCTION_AREA_ID)).willThrow(exception);
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result).hasSize(1);
 

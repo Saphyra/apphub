@@ -42,7 +42,8 @@ class ProductionProcessHelper {
             .getResourceDataId();
         Production production = productionBuildingModuleDataService.findProducerFor(resourceDataId)
             .getEntity2();
-        int workPointsPerResource = production.getConstructionRequirements()
+        int workPointsPerResource = resourceDataService.get(resourceDataId)
+            .getConstructionRequirements()
             .getRequiredWorkPoints();
         int workPointsNeeded = workPointsPerResource * amount;
 

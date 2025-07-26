@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.data.DataValidator;
+import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.GameDataItemValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.Map;
 @Slf4j
 @RequiredArgsConstructor
 public class ResourceValidator implements DataValidator<Map<String, ResourceData>> {
+    private final ConstructionRequirementsValidator constructionRequirementsValidator;
     private final GameDataItemValidator gameDataItemValidator;
 
     @Override
@@ -22,6 +24,7 @@ public class ResourceValidator implements DataValidator<Map<String, ResourceData
 
     private void validate(String key, ResourceData resource) {
         gameDataItemValidator.validate(resource);
+        constructionRequirementsValidator.validate(resource.getConstructionRequirements());
 
         ValidationUtil.notNull(resource.getStorageType(), "storageType");
     }

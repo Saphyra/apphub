@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles deconstruction of a ConstructionArea
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -45,9 +48,6 @@ public class DeconstructConstructionAreaProcess implements Process {
     private final Game game;
 
     @NonNull
-    private final GameData gameData;
-
-    @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
@@ -60,16 +60,36 @@ public class DeconstructConstructionAreaProcess implements Process {
         return deconstructionId;
     }
 
+    /**
+     * Priority is calculated from the deconstruction's priority, and the planet's prioritySettings, multiplied by a constant value allowing the child processes being correctly prioritized
+     */
     @Override
     public int getPriority() {
-        return gameData.getPriorities().findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue() * findDeconstruction().getPriority() * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
+        return game.getData()
+            .getPriorities()
+            .findByLocationAndType(location, PriorityType.CONSTRUCTION)
+            .getValue()
+            * findDeconstruction().getPriority()
+            * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
     private Deconstruction findDeconstruction() {
-        return gameData.getDeconstructions()
+        return game.getData()
+            .getDeconstructions()
             .findByIdValidated(deconstructionId);
     }
 
+    /**
+     * <ol>
+     *     <li>Deconstructs any BuildingModules build on this ConstructionArea</li>
+     *     <li>Waits until all the BuildingModules are deconstructed</li>
+     *     <li>Initiates WorkProcesses</li>
+     *     <li>Waits until work is done</li>
+     *     <li>Deletes the deconstructed ConstructionArea</li>
+     * </ol>
+     *
+     * ProcessStatus instantly switches to READY_TO_DELETE, since there is no parent process that tracks this one.
+     */
     @Override
     public void work() {
         DeconstructConstructionAreaProcessConditions conditions = applicationContextProxy.getBean(DeconstructConstructionAreaProcessConditions.class);
@@ -82,6 +102,7 @@ public class DeconstructConstructionAreaProcess implements Process {
             status = ProcessStatus.IN_PROGRESS;
         }
 
+        GameData gameData = game.getData();
         if (!conditions.modulesDeconstructed(gameData, findDeconstruction().getExternalReference())) {
             log.info("Modules are being deconstructed");
             return;
@@ -102,7 +123,8 @@ public class DeconstructConstructionAreaProcess implements Process {
 
     @Override
     public void cleanup() {
-        gameData.getProcesses()
+        game.getData()
+            .getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
@@ -116,7 +138,7 @@ public class DeconstructConstructionAreaProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

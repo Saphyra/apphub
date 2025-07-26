@@ -21,5 +21,6 @@ public class AdminPanelEndpoints {
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_ENABLE_TOPIC = "/api/admin-panel/performance-reporting/topics";
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_DISABLE_TOPIC = "/api/admin-panel/performance-reporting/topics";
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS = "/api/admin-panel/performance-reporting/topics/{topic}/reports";
+    public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS = "/api/admin-panel/performance-reporting/topics/{topic}/reports";
     public static final String ADMIN_PANEL_PERFORMANCE_REPORTING_PAGE = "/web/admin-panel/performance-reporting";
 }
