@@ -20,6 +20,7 @@
 ===PLATFORM CHANGES===
     Increase PostgreSQL docker image version on preprod and dev envs
     Increase memory limit for EliteBase
+    Name JDBC connections
 
 ===TECHNICAL DEBTS===
 
