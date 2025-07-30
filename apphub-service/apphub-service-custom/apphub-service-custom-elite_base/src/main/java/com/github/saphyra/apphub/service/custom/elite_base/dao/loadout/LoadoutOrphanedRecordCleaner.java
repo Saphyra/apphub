@@ -25,7 +25,8 @@ class LoadoutOrphanedRecordCleaner extends OrphanedRecordCleaner {
         " left join elite_base.station on loadout.external_reference = station.id or loadout.market_id = station.market_id" +
         " left join elite_base.fleet_carrier on loadout.external_reference = fleet_carrier.id or loadout.market_id = fleet_carrier.market_id" +
         " where station.id is null and station.market_id is null and fleet_carrier.id is null and fleet_carrier.market_id is null" +
-        " group by loadout.external_reference";
+        " group by loadout.external_reference" +
+        " limit 10000";
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -46,6 +47,11 @@ class LoadoutOrphanedRecordCleaner extends OrphanedRecordCleaner {
                 return result;
             }
         );
+
+        if (toDelete.isEmpty()) {
+            log.debug("No orphaned loadouts to delete");
+            return 0;
+        }
 
         String sql = SqlBuilder.delete()
             .from(new QualifiedTable(SCHEMA, TABLE_LOADOUT))
