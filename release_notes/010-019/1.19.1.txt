@@ -13,6 +13,7 @@
         Process incoming messages in separate thread
         Clear marketIds of other carriers when a carrier is updated
         Save loadouts lowercased
+        CommoditySaver save one by one
     AdminPanel
         Turn off performanceReporting during tests
     Copy the buffer before syncing, let system work while saving in progress
@@ -21,6 +22,7 @@
     Increase PostgreSQL docker image version on preprod and dev envs
     Increase memory limit for EliteBase
     Name JDBC connections
+    Automatic heap management restored
 
 ===TECHNICAL DEBTS===
 

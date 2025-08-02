@@ -19,7 +19,7 @@ class CommodityWriteBuffer extends WriteBuffer<CommodityDomainId, Commodity> {
 
     @Override
     protected void doSynchronize(Collection<Commodity> bufferCopy) {
-        commodityRepository.saveAll(commodityConverter.convertDomain(bufferCopy));
+        bufferCopy.forEach(commodity -> commodityRepository.save(commodityConverter.convertDomain(commodity)));
     }
 
     @Override

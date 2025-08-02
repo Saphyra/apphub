@@ -29,7 +29,7 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
     private final UuidConverter uuidConverter;
     private final JdbcTemplate jdbcTemplate;
 
-    protected CommodityDao(
+    CommodityDao(
         CommodityConverter converter,
         CommodityRepository repository,
         Cache<CommodityCacheKey, List<Commodity>> commodityReadCache,
