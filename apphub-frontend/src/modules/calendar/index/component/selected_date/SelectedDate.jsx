@@ -35,9 +35,6 @@ const SelectedDate = ({ selectedDate, activeLabel, setDisplaySpinner }) => {
     );
 
     function getContent() {
-        if (occurrences.length > 0) {
-            throwException("NotImplemented", "");
-        }
     }
 
     function getQueryParams() {

@@ -33,4 +33,8 @@ public class LabelQueryService {
             .map(labelMapper::toResponse)
             .toList();
     }
+
+    public LabelResponse getLabel(UUID labelId) {
+        return labelMapper.toResponse(labelDao.findByIdValidated(labelId));
+    }
 }

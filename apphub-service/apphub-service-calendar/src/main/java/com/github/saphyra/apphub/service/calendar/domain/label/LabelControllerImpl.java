@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.api.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.api.calendar.server.LabelController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.service.calendar.domain.label.service.LabelQueryService;
 import com.github.saphyra.apphub.service.calendar.domain.label.service.LabelService;
 import jakarta.transaction.Transactional;
@@ -23,10 +25,14 @@ class LabelControllerImpl implements LabelController {
     private final LabelService labelService;
 
     @Override
-    public void createLabel(OneParamRequest<String> label, AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> createLabel(OneParamRequest<String> label, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a new label.", accessTokenHeader.getUserId());
 
-        labelService.createLabel(accessTokenHeader.getUserId(), label.getValue());
+        new SleepService().sleep(3000); //TODO remove
+
+        UUID labelId = labelService.createLabel(accessTokenHeader.getUserId(), label.getValue());
+
+        return new OneParamResponse<>(labelId);
     }
 
     @Override
@@ -37,17 +43,28 @@ class LabelControllerImpl implements LabelController {
     }
 
     @Override
-    @Transactional
-    public void deleteLabel(UUID labelId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete label {}.", accessTokenHeader.getUserId(), labelId);
+    public LabelResponse getLabel(UUID labelId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get label {}.", accessTokenHeader.getUserId(), labelId);
 
-        labelService.deleteLabel(accessTokenHeader.getUserId(), labelId);
+        return labelQueryService.getLabel(labelId);
     }
 
     @Override
-    public void editLabel(OneParamRequest<String> label, UUID labelId, AccessTokenHeader accessTokenHeader) {
+    @Transactional
+    public List<LabelResponse> deleteLabel(UUID labelId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete label {}.", accessTokenHeader.getUserId(), labelId);
+
+        labelService.deleteLabel(accessTokenHeader.getUserId(), labelId);
+
+        return getLabels(accessTokenHeader);
+    }
+
+    @Override
+    public List<LabelResponse> editLabel(OneParamRequest<String> label, UUID labelId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit label {}", accessTokenHeader.getUserId(), labelId);
 
         labelService.editLabel(accessTokenHeader.getUserId(), labelId, label.getValue());
+
+        return getLabels(accessTokenHeader);
     }
 }

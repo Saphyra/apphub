@@ -39,7 +39,7 @@
     width: 27px;
 }
 
-.calendar-label .active {
+.calendar-label.active {
     border-color: lime;
 }
 

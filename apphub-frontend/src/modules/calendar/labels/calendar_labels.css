@@ -1,0 +1,167 @@
+#calendar-labels main {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    justify-content: center;
+}
+
+#calendar-labels-list {
+    border-left: 3px ridge white;
+    border-right: 3px ridge white;
+    overflow: auto;
+}
+
+#calendar-labels-list-content {
+    display: flex;
+    flex-direction: column;
+}
+
+#calendar-labels-list-search {
+    display: block;
+    position: sticky;
+    top: 3px;
+}
+
+.calendar-labels-label {
+    text-align: left;
+    padding: 0;
+}
+
+.calendar-labels-label.selected {
+    border-color: lime;
+}
+
+.calendar-labels-label-operations {
+    float: right;
+}
+
+.calendar-labels-label-operations button {
+    margin: 2px;
+    padding: 2px;
+    border-width: 2px;
+    width: 23px;
+}
+
+.calendar-labels-label-title {
+    padding: 5px;
+}
+
+.calendar-labels-label-edit {
+    color: transparent;
+    background: url("../../../common/style/img/edit.png");
+    background-size: cover;
+}
+
+.calendar-labels-event {
+    text-align: left;
+}
+
+#calendar-labels-events-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+
+}
+
+#calendar-labels-events {
+    border-right: 3px ridge white;
+    overflow: auto;
+}
+
+.calendar-labels-event.active {
+    border-color: lime;
+}
+
+#calendar-labels-event {
+    border-right: 3px ridge white;
+    overflow: auto;
+}
+
+#calendar-labels-event-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}
+
+#calendar-labels-event-content {
+    width: calc(100% - 6px);
+}
+
+#calendar-labels-event-display-occurrences-wrapper {
+    text-align: center;
+}
+
+.occurrence-time-hidden {
+    visibility: hidden;
+}
+
+.calendar-occurrence {
+    border: 2px outset white;
+    margin: 5px 0;
+    padding: 3px;
+}
+
+.calendar-occurrence.active {
+    border-color: lime;
+}
+
+.calendar-occurrence:hover {
+    border-color: orange;
+}
+
+.calendar-occurrence:active {
+    border-color: red;
+    border-style: inset;
+}
+
+.calendar-labels-event-occurrence-time {
+    border: none;
+    cursor: default !important;
+}
+
+.calendar-labels-event-occurrence-date {
+    border: none;
+    cursor: default !important;
+}
+
+.calendar-occurrence-expired {
+    border-color: red;
+}
+
+.calendar-occurrence-done {
+    border-color: green;
+    text-decoration: line-through;
+}
+
+.calendar-occurrence-snoozed {
+    border-color: grey;
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+#calendar-labels-opened-occurrence {
+    border-right: 3px ridge white;
+}
+
+#calendar-labels-opened-occurrence-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}
+
+#calendar-labels-opened-occurrence-content{
+    padding: 0 3px;
+    line-height: 2;
+}

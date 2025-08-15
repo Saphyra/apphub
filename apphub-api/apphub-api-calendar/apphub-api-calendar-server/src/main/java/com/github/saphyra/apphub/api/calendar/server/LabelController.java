@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.endpoints.CalendarEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,17 @@ import java.util.UUID;
 //TODO API test
 public interface LabelController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_LABEL)
-    void createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELS)
     List<LabelResponse> getLabels(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_LABEL)
+    LabelResponse getLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_LABEL)
-    void deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LabelResponse> deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_LABEL)
-    void editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LabelResponse> editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

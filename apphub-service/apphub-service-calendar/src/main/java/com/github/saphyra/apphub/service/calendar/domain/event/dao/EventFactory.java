@@ -22,7 +22,7 @@ public class EventFactory {
             .eventId(idGenerator.randomUuid())
             .userId(userId)
             .repetitionType(request.getRepetitionType())
-            .repetitionData(objectMapperWrapper.writeValueAsPrettyString(request.getRepetitionData()))
+            .repetitionData(objectMapperWrapper.writeValueAsString(request.getRepetitionData()))
             .repeatForDays(request.getRepeatForDays())
             .startDate(request.getStartDate())
             .endDate(request.getEndDate())

@@ -33,4 +33,10 @@ public interface OccurrenceController {
         @RequestParam(name = "labelId", required = false) UUID labelId,
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
     );
+
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCE)
+    OccurrenceResponse getOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCES_OF_EVENT)
+    List<OccurrenceResponse> getOccurrencesOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

@@ -27,19 +27,25 @@ class EventRequestValidator {
     void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
         validateRepetitionData(request.getRepetitionType(), request.getRepetitionData());
-        ValidationUtil.notNull(request.getRepeatForDays(), "repeatForDays");
+        ValidationUtil.atLeast(request.getRepeatForDays(), 1, "repeatForDays");
         ValidationUtil.notNull(request.getStartDate(), "startDate");
-        ValidationUtil.notNull(request.getEndDate(), "endDate");
-        if (request.getStartDate().isAfter(request.getEndDate())) {
-            throw ExceptionFactory.invalidParam("startDate", "startDate cannot be after endDate");
+
+        if (request.getRepetitionType() != RepetitionType.ONE_TIME) {
+            ValidationUtil.notNull(request.getEndDate(), "endDate");
+            if (request.getStartDate().isAfter(request.getEndDate())) {
+                throw ExceptionFactory.invalidParam("startDate", "startDate cannot be after endDate");
+            }
+            if (ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) > calendarParams.getMaxEventDurationDays()) {
+                throw ExceptionFactory.invalidParam("eventDuration", "too long");
+            }
         }
-        if (ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) > calendarParams.getMaxEventDuration().get(ChronoUnit.DAYS)) {
-            throw ExceptionFactory.invalidParam("eventDuration", "too long");
-        }
+
         ValidationUtil.notBlank(request.getTitle(), "title");
         ValidationUtil.notNull(request.getContent(), "content");
-        ValidationUtil.notNull(request.getRemindMeBeforeDays(), "remindMeBeforeDays");
+        ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
         ValidationUtil.notNull(request.getLabels(), "labels");
+
+        //TODO check labels exist
     }
 
     private void validateRepetitionData(RepetitionType repetitionType, Object repetitionData) {

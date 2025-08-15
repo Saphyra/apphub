@@ -44,4 +44,18 @@ class OccurrenceControllerImpl implements OccurrenceController {
 
         return occurrenceQueryService.getOccurrences(accessTokenHeader.getUserId(), startDate, endDate, labelId);
     }
+
+    @Override
+    public OccurrenceResponse getOccurrence(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get Occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
+
+        return occurrenceQueryService.getOccurrence(occurrenceId);
+    }
+
+    @Override
+    public List<OccurrenceResponse> getOccurrencesOfEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get Occurrences of eventId {}", accessTokenHeader.getUserId(), eventId);
+
+        return occurrenceQueryService.getOccurrencesOfEvent(eventId);
+    }
 }

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,14 +23,14 @@ public interface EventController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_EVENT)
     void createEvent(@RequestBody EventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO is it in use?
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENTS)
     List<EventResponse> getEvents(
-        @RequestParam("fromDate") LocalDate from,
-        @RequestParam("toDate") LocalDate to,
-        @RequestParam(name = "label", required = false) UUID label,
+        @RequestParam(name = "labelId", required = false) UUID label,
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
     );
+
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENT)
+    EventResponse getEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_EVENT)
     void deleteEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

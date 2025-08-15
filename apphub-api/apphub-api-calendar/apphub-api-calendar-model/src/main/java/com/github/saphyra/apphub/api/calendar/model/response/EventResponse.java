@@ -17,7 +17,7 @@ import java.util.UUID;
 public class EventResponse {
     private UUID eventId;
     private RepetitionType repetitionType;
-    private String repetitionData;
+    private Object repetitionData;
     private Integer repeatForDays;
     private LocalDate startDate;
     private LocalDate endDate;

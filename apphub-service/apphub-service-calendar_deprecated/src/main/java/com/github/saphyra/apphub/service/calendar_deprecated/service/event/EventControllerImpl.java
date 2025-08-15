@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.calendar.model.CreateEventRequest;
 import com.github.saphyra.apphub.api.calendar.model.ReferenceDate;
 import com.github.saphyra.apphub.api.calendar.server.EventController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.service.calendar_deprecated.service.event.service.DeleteEventService;
 import com.github.saphyra.apphub.service.calendar_deprecated.service.event.service.creation.CreateEventService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,9 @@ public class EventControllerImpl implements EventController {
     @Override
     public List<CalendarResponse> createEvent(CreateEventRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a new event.", accessTokenHeader.getUserId());
+
+        new SleepService().sleep(3000); //TODO remove
+
         return createEventService.createEvent(accessTokenHeader.getUserId(), request);
     }
 

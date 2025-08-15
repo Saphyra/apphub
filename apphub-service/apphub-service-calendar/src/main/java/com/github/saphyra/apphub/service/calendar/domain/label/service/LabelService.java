@@ -20,10 +20,13 @@ public class LabelService {
     private final LabelValidator labelValidator;
     private final EventLabelMappingDao eventLabelMappingDao;
 
-    public void createLabel(UUID userId, String label) {
+    public UUID createLabel(UUID userId, String label) {
         labelValidator.validate(userId, label);
 
-        labelDao.save(labelFactory.create(userId, label));
+        Label domain = labelFactory.create(userId, label);
+        labelDao.save(domain);
+
+        return domain.getLabelId();
     }
 
     public void deleteLabel(UUID userId, UUID labelId) {

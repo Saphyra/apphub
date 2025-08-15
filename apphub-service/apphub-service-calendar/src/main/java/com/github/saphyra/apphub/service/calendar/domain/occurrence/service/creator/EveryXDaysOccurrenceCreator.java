@@ -24,7 +24,7 @@ class EveryXDaysOccurrenceCreator implements OccurrenceCreator {
 
     @Override
     public RepetitionType getRepetitionType() {
-        return null;
+        return RepetitionType.EVERY_X_DAYS;
     }
 
     @Override

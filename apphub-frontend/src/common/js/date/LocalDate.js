@@ -167,6 +167,20 @@ class LocalDateObj {
         return this.getYear() == obj.getYear() && this.getMonth() == obj.getMonth();
     }
 
+    isBefore(obj){
+        if (!obj instanceof LocalDateObj) {
+            throwException("IllegalArgument", "obj is not a LocalDateObj");
+        }
+
+        const newDate = new Date(this.date);
+        const newObj = new Date(obj.date);
+
+        newDate.setHours(0, 0, 0, 0);
+        newObj.setHours(0, 0, 0, 0);
+
+        return newDate < newObj;
+    }
+
     equals(obj) {
         if (!hasValue(obj)) {
             return false;

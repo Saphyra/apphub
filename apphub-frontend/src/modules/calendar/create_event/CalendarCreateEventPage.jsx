@@ -6,20 +6,19 @@ import NotificationService from "../../../common/js/notification/NotificationSer
 import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
 import { ToastContainer } from "react-toastify";
-import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
 import Button from "../../../common/component/input/Button";
-import { CALENDAR_GET_LABELS, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_CREATE_EVENT, CALENDAR_CREATE_LABEL, CALENDAR_GET_LABELS, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 import useQueryParams from "../../../common/hook/UseQueryParams";
-import { addAndSet, hasValue, isBlank, removeAndSet, throwException } from "../../../common/js/Utils";
+import { addAndSet, hasValue, isBlank, nullIfEmpty, removeAndSet, throwException } from "../../../common/js/Utils";
 import LocalDate from "../../../common/js/date/LocalDate";
-import { REPETITION_TYPE_DAYS_OF_MONTH, REPETITION_TYPE_DAYS_OF_WEEK, REPETITION_TYPE_EVERY_X_DAYS, REPETITION_TYPE_ONE_TIME, RepetitionType } from "./common/RepetitionType";
+import { REPETITION_TYPE_DAYS_OF_MONTH, REPETITION_TYPE_DAYS_OF_WEEK, REPETITION_TYPE_EVERY_X_DAYS, REPETITION_TYPE_ONE_TIME, RepetitionType } from "..//common/js/RepetitionType";
 import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
 import InputField from "../../../common/component/input/InputField";
 import Textarea from "../../../common/component/input/Textarea";
 import SelectInput, { MultiSelect, SelectOption } from "../../../common/component/input/SelectInput";
 import MapStream from "../../../common/js/collection/MapStream";
-import repetitionTypeLocalizationData from "./localization/repetition_type_localization.json";
+import repetitionTypeLocalizationData from "../common/localization/repetition_type_localization.json";
 import LabelWrappedInputField from "../../../common/component/input/LabelWrappedInputField";
 import NumberInput from "../../../common/component/input/NumberInput";
 import daysOfWeekLocalizationData from "../../../common/js/date/day_of_week_localization.json";
@@ -27,7 +26,10 @@ import Stream from "../../../common/js/collection/Stream";
 import { DAYS_OF_WEEK } from "../../../common/js/date/DayOfWeek";
 import useLoader from "../../../common/hook/Loader";
 import Label from "./component/Label";
+import "./create_event.css";
+import { MAX_LABEL_LENGTH } from "../CalendarConstants";
 
+//TODO make it smaller
 const CalendarCreateEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
@@ -39,11 +41,10 @@ const CalendarCreateEventPage = () => {
 
     const queryParams = useQueryParams();
 
-    const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
 
-    const [startDate, setStartDate] = useState(hasValue(queryParams.startDate) ? LocalDate.parse(queryParams.startDate) : LocalDate.now());
-    const [endDate, setEndDate] = useState("");
+    const [startDate, setStartDate] = useState(hasValue(queryParams.startDate) ? queryParams.startDate : LocalDate.now().toString());
+    const [endDate, setEndDate] = useState(null);
     const [time, setTime] = useState("");
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
@@ -54,12 +55,18 @@ const CalendarCreateEventPage = () => {
     const [existingLabels, setExistingLabels] = useState([]);
     const [newLabels, setNewLabels] = useState([]);
 
-    const [availableLabels, setAvailableLabels] = useState([]);
+    const [availableLabels, setAvailableLabels] = useState({});
     const [newLabel, setNewLabel] = useState("");
 
     useEffect(setDefaultRepetitionData, [repetitionType]);
 
-    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: v => new Stream(v).toMap(i => i.labelId) });
+    useLoader({
+        request: CALENDAR_GET_LABELS.createRequest(),
+        mapper: v => setAvailableLabels(new Stream(v).toMap(i => i.labelId)),
+        setDisplaySpinner: setDisplaySpinner
+    });
+
+    console.log(displaySpinner)
 
     return (
         <div id="calendar-create-event" className="main-page">
@@ -91,21 +98,23 @@ const CalendarCreateEventPage = () => {
                         />
                     }
 
-                    <PreLabeledInputField
-                        label={localizationHandler.get("time")}
-                        input={<InputField
-                            id="calendar-create-event-time"
-                            type={"time"}
-                            value={time}
-                            onchangeCallback={setTime}
-                        />}
-                    />
+                    <span className="nowrap">
+                        <PreLabeledInputField
+                            label={localizationHandler.get("time")}
+                            input={<InputField
+                                id="calendar-create-event-time"
+                                type={"time"}
+                                value={time}
+                                onchangeCallback={setTime}
+                            />}
+                        />
 
-                    <Button
-                        id="calendar-create-event-reset-time"
-                        label={localizationHandler.get("reset-time")}
-                        onclick={() => setTime(null)}
-                    />
+                        <Button
+                            id="calendar-create-event-reset-time"
+                            label={localizationHandler.get("reset-time")}
+                            onclick={() => setTime(null)}
+                        />
+                    </span>
                 </fieldset>
 
                 <fieldset>
@@ -123,6 +132,10 @@ const CalendarCreateEventPage = () => {
                         placeholder={localizationHandler.get("content")}
                         value={content}
                         onchangeCallback={setContent}
+                        onKeyUpCallback={e => {
+                            e.target.style.height = "auto";
+                            e.target.style.height = e.target.scrollHeight + 6 + "px";
+                        }}
                     />
                 </fieldset>
 
@@ -147,6 +160,7 @@ const CalendarCreateEventPage = () => {
                                 id="calendar-create-event-repetiton-data"
                                 value={repetitionData}
                                 onchangeCallback={setRepetitionData}
+                                min={1}
                             />}
                         />
                     }
@@ -176,8 +190,8 @@ const CalendarCreateEventPage = () => {
                             id="calendar-create-event-repeat-for"
                             value={repeatForDays}
                             onchangeCallback={setRepeatForDays}
-                        />
-                        }
+                            min={1}
+                        />}
                     />
                 </fieldset>
 
@@ -191,6 +205,7 @@ const CalendarCreateEventPage = () => {
                             id="calendar-create-event-remind-me-before-days"
                             value={remindMeBeforeDays}
                             onchangeCallback={setRemindMeBeforeDays}
+                            min={0}
                         />}
                     />
                 </fieldset>
@@ -198,8 +213,8 @@ const CalendarCreateEventPage = () => {
                 <fieldset>
                     <legend>{localizationHandler.get("labels")}</legend>
 
-                    <div id="calendar-create-event-labels">{getLabels()}</div>
-                    <div id="calendar-create-event-available-labels">{getAvailableLabels()}</div>
+                    <div id="calendar-create-event-labels">{localizationHandler.get("labels-of-event")}: {getLabels()}</div>
+                    <div id="calendar-create-event-available-labels">{localizationHandler.get("available-labels")}: {getAvailableLabels()}</div>
                     <div>
                         <InputField
                             id="calendar-create-event-new-label"
@@ -236,24 +251,86 @@ const CalendarCreateEventPage = () => {
                 ]}
             />
 
-            {confirmationDialogData &&
-                <ConfirmationDialog
-                    id={confirmationDialogData.id}
-                    title={confirmationDialogData.title}
-                    content={confirmationDialogData.content}
-                    choices={confirmationDialogData.choices}
-                />
-            }
-
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
 
             <ToastContainer />
         </div>
     );
 
-    function create() {
+    async function create() {
+        if (repetitionType !== REPETITION_TYPE_ONE_TIME) {
+            if (isBlank(endDate)) {
+                NotificationService.showError(localizationHandler.get("empty-end-date"));
+                return;
+            }
 
+            if (LocalDate.parse(endDate).isBefore(LocalDate.parse(startDate))) {
+                NotificationService.showError(localizationHandler.get("end-date-before-start-date"));
+                return;
+            }
+        }
+
+        if (repeatForDays < 1) {
+            NotificationService.showError(localizationHandler.get("repeat-for-days-too-low"));
+            return;
+        }
+
+        if (repetitionType === REPETITION_TYPE_EVERY_X_DAYS && repetitionData < 1) {
+            NotificationService.showError("repeat-every-x-days-too-low");
+            return;
+        }
+
+        if (repetitionType === REPETITION_TYPE_DAYS_OF_WEEK || repetitionType === REPETITION_TYPE_DAYS_OF_MONTH) {
+            if (repeatForDays.length === 0) {
+                NotificationService.showError(localizationHandler.get("no-days-defined"));
+                return;
+            }
+        }
+
+        if (isBlank(title)) {
+            NotificationService.showError(localizationHandler.get("blank-title"));
+            return;
+        }
+
+        if (remindMeBeforeDays < 0) {
+            NotificationService.showError(localizationHandler.get("remind-me-before-days-too-low"));
+            return;
+        }
+
+        const newLabelIds = await createLabels();
+
+        const payload = {
+            repetitionType: repetitionType,
+            repetitionData: nullIfEmpty(repetitionData),
+            repeatForDays: repeatForDays,
+            startDate: startDate,
+            endDate: nullIfEmpty(endDate),
+            time: nullIfEmpty(time),
+            title: title,
+            content: content,
+            remindMeBeforeDays: remindMeBeforeDays,
+            labels: new Stream(existingLabels)
+                .addAll(newLabelIds)
+                .toList()
+        }
+
+        await CALENDAR_CREATE_EVENT.createRequest(payload)
+            .send(setDisplaySpinner);
+
+        NotificationService.storeSuccessText(localizationHandler.get("event-created"));
+        window.location.href = CALENDAR_PAGE;
+
+        async function createLabels() {
+            return await Promise.all(newLabels.map(label => createLabel(label)));
+
+            async function createLabel(label) {
+                return CALENDAR_CREATE_LABEL.createRequest({ value: label })
+                    .send(setDisplaySpinner)
+                    .then(response => response.value);
+            }
+        }
     }
+
 
     function addNewLabel() {
         if (isBlank(newLabel)) {
@@ -261,13 +338,18 @@ const CalendarCreateEventPage = () => {
             return;
         }
 
-        if (newLabel.length > 255) {
+        if (newLabel.length > MAX_LABEL_LENGTH) {
             NotificationService.showError(localizationHandler.get("new-label-too-long"));
             return;
         }
 
-        if (new Stream(availableLabels).anyMatch(label => label.label === newLabel)) {
-            NotificationService.showError(NotificationService.get("label-already-exists"));
+        if (new MapStream(availableLabels).toListStream().anyMatch(label => label.label === newLabel)) {
+            NotificationService.showError(localizationHandler.get("label-already-exists"));
+            return;
+        }
+
+        if (new Stream(newLabels).anyMatch(label => label === newLabel)) {
+            NotificationService.showError(localizationHandler.get("label-already-exists"));
             return;
         }
 
@@ -279,7 +361,9 @@ const CalendarCreateEventPage = () => {
         return new MapStream(availableLabels)
             .toListStream()
             .filter(label => existingLabels.indexOf(label.labelId) < 0)
+            .sorted((a, b) => a.label.localeCompare(b.label))
             .map(label => <Label
+                key={label.labelId}
                 text={label.label}
                 callback={() => addAndSet(existingLabels, label.labelId, setExistingLabels)}
             />)
@@ -289,10 +373,10 @@ const CalendarCreateEventPage = () => {
     function getLabels() {
         const el = new Stream(existingLabels)
             .toMap(
-                labelId => availableLabels[labelId],
+                labelId => availableLabels[labelId].label,
                 labelId => <Label
                     key={labelId}
-                    text={availableLabels[labelId]}
+                    text={availableLabels[labelId].label}
                     callback={() => removeAndSet(existingLabels, l => l === labelId, setExistingLabels)}
                 />);
         const nl = new Stream(newLabels)

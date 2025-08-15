@@ -17,6 +17,12 @@ const Labels = ({ activeLabel, setActiveLabel }) => {
                 label={"X"}
             />
 
+            <Button
+                id="calendar-deselect-label-button"
+                onclick={() => setActiveLabel(null)}
+                label={"X"}
+            />
+
             {getLabels()}
         </div>
     );

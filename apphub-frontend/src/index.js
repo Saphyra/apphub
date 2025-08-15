@@ -52,6 +52,7 @@ import VillanyAteszCommissionsPage from './modules/custom/villany_atesz/commissi
 import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPage';
 import CalendarPage from './modules/calendar/index/CalendarPage';
 import CalendarCreateEventPage from './modules/calendar/create_event/CalendarCreateEventPage';
+import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
 
 const router = createBrowserRouter([
   {
@@ -313,6 +314,10 @@ const router = createBrowserRouter([
   {
     path: "/web/calendar/create-event",
     element: <CalendarCreateEventPage />
+  },
+  {
+    path: "/web/calendar/labels",
+    element: <CalendarLabelsPage />
   },
 ]);
 

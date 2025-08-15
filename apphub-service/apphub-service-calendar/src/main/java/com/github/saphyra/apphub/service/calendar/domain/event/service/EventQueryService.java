@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,13 +22,15 @@ public class EventQueryService {
     private final EventLabelMappingService eventLabelMappingService;
     private final EventMapper eventMapper;
 
-    public List<EventResponse> getEvents(UUID userId, LocalDate from, LocalDate to, UUID label) {
+    public List<EventResponse> getEvents(UUID userId, UUID labelId) {
         return eventDao.getByUserId(userId)
             .stream()
-            .filter(event -> event.getStartDate().isBefore(to))
-            .filter(event -> event.getEndDate().isBefore(from))
-            .filter(event -> isNull(label) || eventLabelMappingService.hasLabel(event.getEventId(), label))
+            .filter(event -> isNull(labelId) || eventLabelMappingService.hasLabel(event.getEventId(), labelId))
             .map(eventMapper::toResponse)
             .collect(Collectors.toList());
+    }
+
+    public EventResponse getEvent(UUID eventId) {
+        return eventMapper.toResponse(eventDao.findByIdValidated(eventId));
     }
 }

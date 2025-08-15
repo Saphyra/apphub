@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,10 +33,17 @@ class EventControllerImpl implements EventController {
     }
 
     @Override
-    public List<EventResponse> getEvents(LocalDate from, LocalDate to, UUID label, AccessTokenHeader accessTokenHeader) {
+    public List<EventResponse> getEvents(UUID label, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to know their events", accessTokenHeader.getUserId());
 
-        return eventQueryService.getEvents(accessTokenHeader.getUserId(), from, to, label);
+        return eventQueryService.getEvents(accessTokenHeader.getUserId(), label);
+    }
+
+    @Override
+    public EventResponse getEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get event {}", accessTokenHeader.getUserId(), eventId);
+
+        return eventQueryService.getEvent(eventId);
     }
 
     @Override

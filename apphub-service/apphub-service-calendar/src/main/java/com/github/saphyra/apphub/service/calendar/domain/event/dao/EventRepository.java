@@ -8,7 +8,7 @@ import java.util.List;
 interface EventRepository extends CrudRepository<EventEntity, String> {
     void deleteByUserId(String userId);
 
-    List<Event> getByUserId(String userId);
+    List<EventEntity> getByUserId(String userId);
 
     void deleteByUserIdAndEventId(String userId, String eventId);
 }

@@ -26,7 +26,7 @@ public class EventDao extends AbstractDao<EventEntity, Event, String, EventRepos
     }
 
     public List<Event> getByUserId(UUID userId) {
-        return repository.getByUserId(uuidConverter.convertDomain(userId));
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 
     public void deleteByUserIdAndEventId(UUID userId, UUID eventId) {
