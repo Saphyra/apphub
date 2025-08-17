@@ -9,14 +9,12 @@ import { RepetitionType } from "../../common/js/RepetitionType";
 import Button from "../../../../common/component/input/Button";
 import OpenedEventOccurrences from "./OpenedEventOccurrences";
 
-const DEFAULT_DISPLAY_OCCURRENCES = true; //TODO set to false
+const DEFAULT_DISPLAY_OCCURRENCES = false;
 
 const OpenedEvent = ({
     eventId,
     localizationHandler,
-    setConfirmationDialogData,
     setDisplaySpinner,
-    setSelectedEvent,
     selectedOccurrence,
     setSelectedOccurrence
 }) => {

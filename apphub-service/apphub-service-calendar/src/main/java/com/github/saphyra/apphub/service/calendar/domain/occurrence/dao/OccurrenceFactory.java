@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.dao;
 
 import com.github.saphyra.apphub.api.calendar.model.OccurrenceStatus;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import java.util.UUID;
 //TODO unit test
 public class OccurrenceFactory {
     private final IdGenerator idGenerator;
+    private final DateTimeUtil dateTimeUtil;
 
     public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays) {
         return create(userId, eventId, date, time, remindMeBeforeDays, "");
@@ -26,7 +28,7 @@ public class OccurrenceFactory {
             .occurrenceId(idGenerator.randomUuid())
             .userId(userId)
             .eventId(eventId)
-            .status(OccurrenceStatus.PENDING)
+            .status(date.isBefore(dateTimeUtil.getCurrentDate()) ? OccurrenceStatus.EXPIRED : OccurrenceStatus.PENDING)
             .date(date)
             .time(time)
             .note(note)

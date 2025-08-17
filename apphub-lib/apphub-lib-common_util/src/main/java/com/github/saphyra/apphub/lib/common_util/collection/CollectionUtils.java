@@ -17,6 +17,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
+import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class CollectionUtils {
     public static <T> int size(T[] array) {
@@ -106,5 +107,14 @@ public class CollectionUtils {
             .collect(Collectors.toMap(keyMapper, valueMapper));
 
         return new OptionalHashMap<>(map);
+    }
+
+    //TODO unit test
+    public static String nullIfEmpty(String input) {
+        if (isEmpty(input)) {
+            return null;
+        }
+
+        return input;
     }
 }

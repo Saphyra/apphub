@@ -35,6 +35,20 @@ const CalendarLabelsPage = () => {
     const [selectedEvent, setSelectedEvent] = useState(cachedOrDefault(CACHE_KEY_SELECTED_EVENT, null));
     const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
 
+    const changeSelectedLabel = (labelId) => {
+        cacheAndUpdate(CACHE_KEY_SELECTED_LABEL, labelId, setSelectedLabel);
+        changeSelectedEvent(null);
+    }
+
+    const changeSelectedEvent = (eventId) => {
+        cacheAndUpdate(CACHE_KEY_SELECTED_EVENT, eventId, setSelectedEvent);
+        setSelectedOccurrence(null);
+    }
+
+    const changeSelectedOccurrence = (occurrenceId) => {
+        cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, occurrenceId, setSelectedOccurrence)
+    }
+
     return (
         <div id="calendar-labels" className="main-page">
             <Header label={localizationHandler.get("page-title")} />
@@ -44,7 +58,7 @@ const CalendarLabelsPage = () => {
                     localizationHandler={localizationHandler}
                     setDisplaySpinner={setDisplaySpinner}
                     selectedLabel={selectedLabel}
-                    setSelectedLabel={(v) => cacheAndUpdate(CACHE_KEY_SELECTED_LABEL, v, setSelectedLabel)}
+                    setSelectedLabel={changeSelectedLabel}
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
 
@@ -54,19 +68,17 @@ const CalendarLabelsPage = () => {
                         selectedLabel={selectedLabel}
                         setDisplaySpinner={setDisplaySpinner}
                         selectedEvent={selectedEvent}
-                        setSelectedEvent={v => cacheAndUpdate(CACHE_KEY_SELECTED_EVENT, v, setSelectedEvent)}
+                        setSelectedEvent={changeSelectedEvent}
                     />
                 }
 
                 {hasValue(selectedEvent) &&
                     <OpenedEvent
                         localizationHandler={localizationHandler}
-                        setConfirmationDialogData={setConfirmationDialogData}
                         setDisplaySpinner={setDisplaySpinner}
                         eventId={selectedEvent}
-                        setSelectedEvent={v => cacheAndUpdate(CACHE_KEY_SELECTED_EVENT, v, setSelectedEvent)}
                         selectedOccurrence={selectedOccurrence}
-                        setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                        setSelectedOccurrence={changeSelectedOccurrence}
                     />
                 }
 

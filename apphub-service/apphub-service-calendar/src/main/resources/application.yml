@@ -7,3 +7,6 @@ liquibase:
 
 calendar:
   maxEventDurationDays: 730 # 2 years
+
+migration:
+  defaultEndDateOffset: P720D # 2 years

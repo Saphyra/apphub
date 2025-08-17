@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-public class AccessTokenProvider {
+public class AccessTokenProvider implements AutoCloseable {
     private static final ThreadLocal<AccessTokenHeader> STORAGE = new ThreadLocal<>();
 
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
@@ -20,8 +20,10 @@ public class AccessTokenProvider {
         return uuidConverter.convertDomain(get().getUserId());
     }
 
-    public void set(AccessTokenHeader accessTokenHeader) {
+    public AutoCloseable set(AccessTokenHeader accessTokenHeader) {
         STORAGE.set(accessTokenHeader);
+
+        return this;
     }
 
     public Optional<AccessTokenHeader> getOptional() {
@@ -43,5 +45,10 @@ public class AccessTokenProvider {
 
     public void clear() {
         STORAGE.remove();
+    }
+
+    @Override
+    public void close() throws Exception {
+        clear();
     }
 }
