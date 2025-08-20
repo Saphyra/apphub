@@ -36,7 +36,7 @@ public class OccurrenceQueryService {
 
         return occurrenceDao.getByUserId(userId)
             .stream()
-            .filter(occurrence -> dateTimeUtil.isBetween(occurrence.getDate(), startDate, endDate)) //TODO include reminders of occurrences out of range
+            .filter(occurrence -> dateTimeUtil.isBetween(occurrence.getDate(), startDate, endDate)) //TODO include reminders of occurrences out of range //TODO include expired events
             .filter(occurrence -> isNull(labelId) || eventsOfLabel.get().contains(occurrence.getEventId()))
             .map(occurrence -> occurrenceMapper.toResponse(eventCache, occurrence))
             .toList();

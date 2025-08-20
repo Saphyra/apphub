@@ -21,6 +21,12 @@ const of = (hours = 0, minutes = 0, seconds = 0, millis = 0) => {
     return new LocalTimeObj(date);
 }
 
+const now = () => {
+    const date = new Date();
+
+    return new LocalTimeObj(date);
+}
+
 const LocalTimeObj = class {
     constructor(date) {
         this.date = date;
@@ -34,6 +40,7 @@ const LocalTimeObj = class {
 const LocalTime = {
     parse: parse,
     of: of,
+    now: now,
 }
 
 export default LocalTime;

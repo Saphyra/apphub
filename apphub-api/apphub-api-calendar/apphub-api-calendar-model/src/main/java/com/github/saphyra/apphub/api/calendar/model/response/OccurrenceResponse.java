@@ -20,6 +20,8 @@ public class OccurrenceResponse {
     private LocalDate date;
     private LocalTime time;
     private OccurrenceStatus status;
+    private String title;
+    private String content;
     private String note;
     private Integer remindMeBeforeDays;
     private Boolean reminded;

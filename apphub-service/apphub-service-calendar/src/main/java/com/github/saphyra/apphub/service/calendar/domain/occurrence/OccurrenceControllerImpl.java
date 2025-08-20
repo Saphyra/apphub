@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence;
 
+import com.github.saphyra.apphub.api.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.api.calendar.server.OccurrenceController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.CreateOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.EditOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.OccurrenceQueryService;
@@ -40,7 +43,7 @@ class OccurrenceControllerImpl implements OccurrenceController {
 
     @Override
     public List<OccurrenceResponse> getOccurrences(LocalDate startDate, LocalDate endDate, UUID labelId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to get Occurrences", accessTokenHeader.getUserId());
+        log.info("{} wants to get Occurrences for label {}", accessTokenHeader.getUserId(), labelId);
 
         return occurrenceQueryService.getOccurrences(accessTokenHeader.getUserId(), startDate, endDate, labelId);
     }
@@ -57,5 +60,14 @@ class OccurrenceControllerImpl implements OccurrenceController {
         log.info("{} wants to get Occurrences of eventId {}", accessTokenHeader.getUserId(), eventId);
 
         return occurrenceQueryService.getOccurrencesOfEvent(eventId);
+    }
+
+    @Override
+    public OccurrenceResponse editOccurrenceStatus(OneParamRequest<OccurrenceStatus> status, UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to edit status of Occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
+
+        ValidationUtil.notNull(status.getValue(), "status");
+
+        return editOccurrenceService.editOccurrenceStatus(occurrenceId, status.getValue());
     }
 }

@@ -6,5 +6,25 @@
     "home": {
         "en": "Home",
         "hu": "Kezdőlap"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "done": {
+        "en": "Done",
+        "hu": "Kész"
+    },
+    "snooze": {
+        "en": "Snooze",
+        "hu": "Halasztás"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
     }
 }

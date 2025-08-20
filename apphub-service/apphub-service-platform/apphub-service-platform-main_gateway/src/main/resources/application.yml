@@ -45,7 +45,7 @@ spring:
             /web/elite-base/*,\
             /web/random-direction,\
             /web/calendar,\
-            /web/calendar/*,\
+            /web/calendar/**,\
             /web/user/account"
         filters:
         - StripPrefix=10

@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type";
 import { OccurrenceStatusOrder } from "./OccurrenceStatus";
 import { hasValue } from "../../../../common/js/Utils";
 

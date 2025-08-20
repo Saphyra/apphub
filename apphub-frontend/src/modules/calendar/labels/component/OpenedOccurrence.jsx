@@ -18,8 +18,6 @@ const OpenedOccurrence = ({ occurrenceId, localizationHandler }) => {
     );
 
     if (hasValue(occurrence)) {
-        const textareaRows = Math.max(3, occurrence.note.split("\n").length);
-
         return (
             <div id="calendar-labels-opened-occurrence">
                 <div id="calendar-labels-opened-occurrence-title">{occurrence.date}</div>
@@ -37,7 +35,7 @@ const OpenedOccurrence = ({ occurrenceId, localizationHandler }) => {
                         id="calendar-labels-event-content"
                         value={occurrence.note}
                         disabled={true}
-                        rows={textareaRows}
+                        rows={Math.max(3, occurrence.note.split("\n").length)}
                         placeholder={localizationHandler.get("note")}
                     />
 

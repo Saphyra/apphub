@@ -8,7 +8,16 @@ import { CALENDAR_GET_OCCURRENCES } from "../../../../../common/js/dao/endpoints
 import { hasValue } from "../../../../../common/js/Utils";
 import CalendarContentDay from "./CalendarContentDay";
 
-const CalendarContent = ({ view, activeLabel, setDisplaySpinner, referenceDate, selectedDate, setSelectedDate }) => {
+const CalendarContent = ({
+    view,
+    activeLabel,
+    setDisplaySpinner,
+    referenceDate,
+    selectedDate,
+    setSelectedDate,
+    setSelectedOccurrence,
+    refreshCounter
+}) => {
     const dayOfWeekLocalizationHandler = new LocalizationHandler(dayOfWeekLocalizationData);
 
     const [occurrences, setOccurrences] = useState([]);
@@ -17,7 +26,7 @@ const CalendarContent = ({ view, activeLabel, setDisplaySpinner, referenceDate, 
         {
             request: CALENDAR_GET_OCCURRENCES.createRequest(null, null, getQueryParams()),
             mapper: setOccurrences,
-            listener: [view, activeLabel, referenceDate],
+            listener: [view, activeLabel, referenceDate, refreshCounter],
             setDisplaySpinner: setDisplaySpinner
         }
     );
@@ -53,6 +62,7 @@ const CalendarContent = ({ view, activeLabel, setDisplaySpinner, referenceDate, 
                     occurrences={getOccurrences(day)}
                     setSelectedDate={setSelectedDate}
                     referenceDate={referenceDate}
+                    setSelectedOccurrence={setSelectedOccurrence}
                 />
             )
             .toList();
@@ -69,7 +79,7 @@ const CalendarContent = ({ view, activeLabel, setDisplaySpinner, referenceDate, 
             .map(day =>
                 <div
                     key={day}
-                    className="day-header"
+                    className="calendar-content-day-header"
                 >
                     {dayOfWeekLocalizationHandler.get(day)}
                 </div>
@@ -81,7 +91,7 @@ const CalendarContent = ({ view, activeLabel, setDisplaySpinner, referenceDate, 
         const result = {};
 
         if (hasValue(activeLabel)) {
-            result.label = activeLabel;
+            result.labelId = activeLabel;
         }
 
         result.startDate = view.startDate(referenceDate);

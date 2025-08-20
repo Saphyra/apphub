@@ -24,19 +24,10 @@ class OccurrenceMapper {
     private final EventDao eventDao;
 
     OccurrenceResponse toResponse(EventCache eventCache, Occurrence occurrence) {
-        return OccurrenceResponse.builder()
-            .occurrenceId(occurrence.getOccurrenceId())
-            .eventId(occurrence.getEventId())
-            .date(occurrence.getDate())
-            .time(getFromEventIfNull(eventCache::get, occurrence.getEventId(), occurrence.getTime(), Event::getTime))
-            .status(calculateOccurrenceStatus(occurrence.getStatus(), occurrence.getDate()))
-            .note(occurrence.getNote())
-            .remindMeBeforeDays(getFromEventIfNull(eventCache::get, occurrence.getEventId(), occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
-            .reminded(occurrence.getReminded())
-            .build();
+        return toResponse(eventCache::get, occurrence);
     }
 
-    public OccurrenceResponse toResponse(Occurrence occurrence) {
+    OccurrenceResponse toResponse(Occurrence occurrence) {
         return toResponse(eventDao::findByIdValidated, occurrence);
     }
 
@@ -55,6 +46,8 @@ class OccurrenceMapper {
             .date(occurrence.getDate())
             .time(getFromEventIfNull(eventProvider, occurrence.getEventId(), occurrence.getTime(), Event::getTime))
             .status(calculateOccurrenceStatus(occurrence.getStatus(), occurrence.getDate()))
+            .title(eventProvider.apply(occurrence.getEventId()).getTitle())
+            .content(eventProvider.apply(occurrence.getEventId()).getContent())
             .note(occurrence.getNote())
             .remindMeBeforeDays(getFromEventIfNull(eventProvider, occurrence.getEventId(), occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
             .reminded(occurrence.getReminded())

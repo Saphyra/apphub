@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.api.calendar.server;
 
+import com.github.saphyra.apphub.api.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.endpoints.CalendarEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,4 +41,7 @@ public interface OccurrenceController {
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCES_OF_EVENT)
     List<OccurrenceResponse> getOccurrencesOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE_STATUS)
+    OccurrenceResponse editOccurrenceStatus(@RequestBody OneParamRequest<OccurrenceStatus> status, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

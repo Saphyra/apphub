@@ -38,7 +38,7 @@ spring:
             /web/elite-base/*,\
             /web/random-direction,\
             /web/calendar,\
-            /web/calendar/*,\
+            /web/calendar/**,\
             /web/user/account"
       - id: frontend-resources
         uri: http://localhost:3000

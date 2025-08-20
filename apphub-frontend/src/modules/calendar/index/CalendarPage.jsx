@@ -19,11 +19,13 @@ import SelectedDate from "./component/selected_date/SelectedDate";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
+import SelectedOccurrence from "./component/SelectedOccurrence";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
 const CACHE_KEY_ACTIVE_LABEL = "calendar.activeLabel";
 const CACHE_KEY_SELECTED_DATE = "calendar.selectedDate";
+const CACHE_KEY_SELECTED_OCCURRENCE = "calendar.selectedOccurrence";
 
 const CalendarPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -38,6 +40,8 @@ const CalendarPage = () => {
     const [referenceDate, setReferenceDate] = useState(cachedOrDefault(CACHE_KEY_REFERENCE_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
     const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
+    const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
+    const [refreshCounter, setRefreshCounter] = useState(0);
 
     return (
         <div id="calendar" className="main-page">
@@ -73,6 +77,8 @@ const CalendarPage = () => {
                         referenceDate={referenceDate}
                         selectedDate={selectedDate}
                         setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
+                        setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                        refreshCounter={refreshCounter}
                     />
                 </div>
 
@@ -80,6 +86,8 @@ const CalendarPage = () => {
                     selectedDate={selectedDate}
                     activeLabel={activeLabel}
                     setDisplaySpinner={setDisplaySpinner}
+                    setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                    refreshCounter={refreshCounter}
                 />
             </main>
 
@@ -94,6 +102,16 @@ const CalendarPage = () => {
 
             <ToastContainer />
 
+            {selectedOccurrence &&
+                <SelectedOccurrence
+                    occurrenceId={selectedOccurrence}
+                    setDisplaySpinner={setDisplaySpinner}
+                    localizationHandler={localizationHandler}
+                    setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                    refresh={refresh}
+                />
+            }
+
             {confirmationDialogData &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
@@ -106,6 +124,10 @@ const CalendarPage = () => {
             {displaySpinner && <Spinner />}
         </div>
     );
+
+    function refresh() {
+        setRefreshCounter(prev => prev + 1);
+    }
 }
 
 export default CalendarPage;
