@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -15,6 +17,10 @@ class SurfaceStationOfferFilter implements OfferFilter {
     public boolean matches(CommodityTradingResponse response, CommodityTradingRequest request) {
         if (request.getIncludeSurfaceStations()) {
             return true;
+        }
+
+        if (isNull(response.getLocationType())) {
+            return false;
         }
 
         StationType stationType = StationType.valueOf(response.getLocationType());
