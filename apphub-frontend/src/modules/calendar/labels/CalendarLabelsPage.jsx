@@ -16,6 +16,7 @@ import Events from "./component/Events";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
 import OpenedEvent from "./component/OpenedEvent";
 import OpenedOccurrence from "./component/OpenedOccurrence";
+import useRefresh from "../../../common/hook/Refresh";
 
 const CACHE_KEY_SELECTED_LABEL = "calendar.labels.selectedLabel";
 const CACHE_KEY_SELECTED_EVENT = "calendar.labels.selectedEvent";
@@ -30,6 +31,7 @@ const CalendarLabelsPage = () => {
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [refreshCount, refresh] = useRefresh();
 
     const [selectedLabel, setSelectedLabel] = useState(cachedOrDefault(CACHE_KEY_SELECTED_LABEL, null));
     const [selectedEvent, setSelectedEvent] = useState(cachedOrDefault(CACHE_KEY_SELECTED_EVENT, null));
@@ -69,6 +71,7 @@ const CalendarLabelsPage = () => {
                         setDisplaySpinner={setDisplaySpinner}
                         selectedEvent={selectedEvent}
                         setSelectedEvent={changeSelectedEvent}
+                        refreshCounter={refreshCount}
                     />
                 }
 
@@ -79,6 +82,9 @@ const CalendarLabelsPage = () => {
                         eventId={selectedEvent}
                         selectedOccurrence={selectedOccurrence}
                         setSelectedOccurrence={changeSelectedOccurrence}
+                        setConfirmationDialogData={setConfirmationDialogData}
+                        setSelectedEvent={changeSelectedEvent}
+                        refresh={refresh}
                     />
                 }
 

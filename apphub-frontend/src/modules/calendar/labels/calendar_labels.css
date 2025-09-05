@@ -161,7 +161,11 @@
     background-color: var(--background-color);
 }
 
-#calendar-labels-opened-occurrence-content{
+#calendar-labels-opened-occurrence-content {
     padding: 0 3px;
     line-height: 2;
+}
+
+#calendar-labels-event-operations {
+    text-align: center;
 }

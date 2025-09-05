@@ -1,0 +1,18 @@
+{
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "delete-event-confirmation-title": {
+        "en": "Delete event?",
+        "hu": "Esemény törlése?"
+    },
+    "delete-event-confirmation-detail": {
+        "en": "Are you sure you want to delete event {eventTitle}?",
+        "hu": "Biztosan törölni szeretnéd a(z) {eventTitle} eseményt?"
+    }
+}

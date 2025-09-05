@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
 import { CALENDAR_GET_EVENTS, CALENDAR_GET_LABEL } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../common/js/Utils";
 import Stream from "../../../../common/js/collection/Stream";
 import Event from "./Event";
 
-const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selectedEvent, setSelectedEvent }) => {
+const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selectedEvent, setSelectedEvent, refreshCounter }) => {
     const [events, setEvents] = useState([]);
     const [label, setLabel] = useState(null);
 
@@ -13,7 +13,7 @@ const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selecte
         request: CALENDAR_GET_EVENTS.createRequest(null, null, { labelId: selectedLabel }),
         mapper: setEvents,
         setDisplaySpinner: setDisplaySpinner,
-        listener: [selectedLabel],
+        listener: [selectedLabel, refreshCounter],
     });
     useLoader({
         request: CALENDAR_GET_LABEL.createRequest(null, { labelId: selectedLabel }),

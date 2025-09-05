@@ -7,8 +7,16 @@ import LocalTime from "../../../../common/js/date/LocalTime";
 import Button from "../../../../common/component/input/Button";
 import Textarea from "../../../../common/component/input/Textarea";
 import { DONE, PENDING, SNOOZED } from "../../common/js/OccurrenceStatus";
+import confirmEventDeletion from "../../common/js/delete_event/DeleteEvent";
 
-const SelectedOccurrence = ({ occurrenceId, setDisplaySpinner, localizationHandler, setSelectedOccurrence, refresh }) => {
+const SelectedOccurrence = ({
+    occurrenceId,
+    setDisplaySpinner,
+    localizationHandler,
+    setSelectedOccurrence,
+    refresh,
+    setConfirmationDialogData
+}) => {
     const [occurrence, setOccurrence] = useState(null);
 
     useLoader({
@@ -93,6 +101,12 @@ const SelectedOccurrence = ({ occurrenceId, setDisplaySpinner, localizationHandl
         />);
 
         choices.push(<Button
+            key="delete"
+            onclick={() => confirmEventDeletion(setConfirmationDialogData, occurrence.eventId, occurrence.title, setDisplaySpinner, setSelectedOccurrence, refresh)}
+            label={localizationHandler.get("delete")}
+        />);
+
+        choices.push(<Button
             key="cancel"
             onclick={() => setSelectedOccurrence(null)}
             label={localizationHandler.get("cancel")}
@@ -109,19 +123,5 @@ const SelectedOccurrence = ({ occurrenceId, setDisplaySpinner, localizationHandl
         }
     }
 }
-
-/*
-{
-    "occurrenceId": "efe0c2ba-9697-41c0-8267-4531695e56c6",
-    "eventId": "67dd987b-ed6c-4365-9efa-9a1aee246ac2",
-    "date": "2025-08-20",
-    "time": "09:32:00",
-    "status": "PENDING",
-    "title": "First event",
-    "note": "",
-    "remindMeBeforeDays": 1,
-    "reminded": false
-}
-    */
 
 export default SelectedOccurrence;

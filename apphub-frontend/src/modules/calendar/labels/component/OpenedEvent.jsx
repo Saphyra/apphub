@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_GET_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_DELETE_EVENT, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, mapOrDefault } from "../../../../common/js/Utils";
 import Textarea from "../../../../common/component/input/Textarea";
 import repetitionTypeLocalizationData from "../../common/localization/repetition_type_localization.json";
@@ -8,6 +8,8 @@ import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import { RepetitionType } from "../../common/js/RepetitionType";
 import Button from "../../../../common/component/input/Button";
 import OpenedEventOccurrences from "./OpenedEventOccurrences";
+import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import confirmEventDeletion from "../../common/js/delete_event/DeleteEvent";
 
 const DEFAULT_DISPLAY_OCCURRENCES = false;
 
@@ -16,7 +18,10 @@ const OpenedEvent = ({
     localizationHandler,
     setDisplaySpinner,
     selectedOccurrence,
-    setSelectedOccurrence
+    setSelectedOccurrence,
+    setConfirmationDialogData,
+    setSelectedEvent,
+    refresh
 }) => {
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
 
@@ -87,6 +92,20 @@ const OpenedEvent = ({
 
                     {event.remindMeBeforeDays > 0 && <div id="calendar-labels-event-remind-me-before-days">{localizationHandler.get("remind-me-before-days", { days: event.remindMeBeforeDays })}</div>}
                 </fieldset>
+
+                <div id="calendar-labels-event-operations">
+                    <Button
+                        id="calendar-labels-event-edit"
+                        label={localizationHandler.get("edit")}
+                        onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: eventId })}
+                    />
+
+                    <Button
+                        id="calendar-labels-event-delete"
+                        label={localizationHandler.get("delete")}
+                        onclick={() => confirmEventDeletion()}
+                    />
+                </div>
 
                 {!displayOccurrences &&
                     <div id="calendar-labels-event-display-occurrences-wrapper">

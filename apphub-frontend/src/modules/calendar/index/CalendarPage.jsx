@@ -20,6 +20,7 @@ import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
 import SelectedOccurrence from "./component/SelectedOccurrence";
+import useRefresh from "../../../common/hook/Refresh";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
@@ -41,7 +42,7 @@ const CalendarPage = () => {
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
     const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
-    const [refreshCounter, setRefreshCounter] = useState(0);
+    const [refreshCounter, refresh] = useRefresh();
 
     return (
         <div id="calendar" className="main-page">
@@ -109,6 +110,7 @@ const CalendarPage = () => {
                     localizationHandler={localizationHandler}
                     setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
                     refresh={refresh}
+                    setConfirmationDialogData={setConfirmationDialogData}
                 />
             }
 
@@ -124,10 +126,6 @@ const CalendarPage = () => {
             {displaySpinner && <Spinner />}
         </div>
     );
-
-    function refresh() {
-        setRefreshCounter(prev => prev + 1);
-    }
 }
 
 export default CalendarPage;

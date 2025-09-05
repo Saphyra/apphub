@@ -126,5 +126,9 @@
     "reminder-confirmed": {
         "en": "Reminder confirmed: {value}",
         "hu": "Emlékeztető megerősítve: {value}"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
     }
 }

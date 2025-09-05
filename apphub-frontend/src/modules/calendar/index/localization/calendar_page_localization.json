@@ -26,5 +26,9 @@
     "reset": {
         "en": "Reset",
         "hu": "Visszaállítás"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
     }
 }
