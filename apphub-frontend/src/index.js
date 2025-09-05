@@ -53,6 +53,7 @@ import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPa
 import CalendarPage from './modules/calendar/index/CalendarPage';
 import CalendarCreateEventPage from './modules/calendar/create_event/CalendarCreateEventPage';
 import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
+import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/CalendarEditOccurrencePage';
 
 const router = createBrowserRouter([
   {
@@ -318,6 +319,15 @@ const router = createBrowserRouter([
   {
     path: "/web/calendar/labels",
     element: <CalendarLabelsPage />
+  },
+  {
+    path: "/web/calendar/edit-occurrence/:occurrenceId",
+    element: <CalendarEditOccurrencePage />,
+    loader: ({ params }) => {
+      return {
+        occurrenceId: params.occurrenceId
+      }
+    }
   },
 ]);
 

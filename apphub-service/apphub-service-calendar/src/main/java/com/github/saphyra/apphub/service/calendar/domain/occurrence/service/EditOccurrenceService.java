@@ -29,6 +29,7 @@ public class EditOccurrenceService {
         occurrence.setStatus(request.getStatus());
         occurrence.setNote(request.getNote());
         occurrence.setRemindMeBeforeDays(request.getRemindMeBeforeDays());
+        occurrence.setReminded(request.getReminded());
 
         occurrenceDao.save(occurrence);
     }

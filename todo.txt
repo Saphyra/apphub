@@ -4,3 +4,6 @@ TODO clear deprecated controller
 TODO Delete old code including FE
 TODO Add operations to edit events / occurrences on labels page
 TODO Event option: Automatically mark done when expired
+TODO edit event
+TODO create occurrence on day
+TODO UI mobile optimizations

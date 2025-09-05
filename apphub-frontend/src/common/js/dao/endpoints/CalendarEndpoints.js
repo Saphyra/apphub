@@ -19,3 +19,4 @@ export const CALENDAR_GET_OCCURRENCES_OF_EVENT = new Endpoint(RequestMethod.GET,
 export const CALENDAR_GET_OCCURRENCE = new Endpoint(RequestMethod.GET, "/api/calendar/occurrences/{occurrenceId}");
 export const CALENDAR_EDIT_OCCURRENCE_STATUS = new Endpoint(RequestMethod.POST, "/api/calendar/occurrences/{occurrenceId}/status");
 export const CALENDAR_DELETE_EVENT = new Endpoint(RequestMethod.DELETE, "/api/calendar/events/{eventId}");
+export const CALENDAR_EDIT_OCCURRENCE = new Endpoint(RequestMethod.POST, "/api/calendar/occurrences/{occurrenceId}");

@@ -19,4 +19,5 @@ public class OccurrenceRequest {
     private OccurrenceStatus status;
     private String note;
     private Integer remindMeBeforeDays;
+    private Boolean reminded;
 }
