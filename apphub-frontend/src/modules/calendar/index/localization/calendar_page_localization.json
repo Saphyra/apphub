@@ -46,5 +46,9 @@
     "edit-event": {
         "en": "Edit event",
         "hu": "Esemény szerkesztése"
+    },
+    "reminded": {
+        "en": "Reminded",
+        "hu": "Emlékeztetve"
     }
 }

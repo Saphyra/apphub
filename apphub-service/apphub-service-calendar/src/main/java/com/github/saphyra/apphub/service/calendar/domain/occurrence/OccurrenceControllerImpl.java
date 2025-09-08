@@ -79,4 +79,11 @@ class OccurrenceControllerImpl implements OccurrenceController {
 
         return editOccurrenceService.editOccurrenceStatus(occurrenceId, status.getValue());
     }
+
+    @Override
+    public OccurrenceResponse editOccurrenceStatus(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to set reminded to true for Occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
+
+        return editOccurrenceService.setReminded(occurrenceId);
+    }
 }

@@ -5,4 +5,5 @@ public enum OccurrenceStatus {
     DONE,
     SNOOZED, //Dismissed by user
     EXPIRED,
+    REMINDER,
 }

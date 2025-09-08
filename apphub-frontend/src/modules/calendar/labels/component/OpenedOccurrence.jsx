@@ -8,8 +8,11 @@ import { DONE, PENDING, SNOOZED } from "../../common/OccurrenceStatus";
 import Button from "../../../../common/component/input/Button";
 import confirmOccurrenceDeletion from "../../common/delete_occurrence/DeleteOccurrence";
 import NotificationService from "../../../../common/js/notification/NotificationService";
+import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
 
 const OpenedOccurrence = ({ occurrenceId, localizationHandler, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh }) => {
+    console.log(occurrenceId)
+
     const [occurrence, setOccurrence] = useState(null);
 
     useLoader(
@@ -17,7 +20,10 @@ const OpenedOccurrence = ({ occurrenceId, localizationHandler, setConfirmationDi
             request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
-            listener: [occurrenceId, refreshCounter]
+            listener: [occurrenceId, refreshCounter],
+            errorHandler: new ErrorHandler(
+                (response) => response.status == 404,
+                () => setSelectedOccurrence(null))
         }
     );
 

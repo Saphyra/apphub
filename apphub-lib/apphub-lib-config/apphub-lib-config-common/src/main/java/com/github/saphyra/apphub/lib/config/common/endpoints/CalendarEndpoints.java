@@ -20,4 +20,5 @@ public class CalendarEndpoints {
     public static final String CALENDAR_GET_OCCURRENCE = "/api/calendar/occurrences/{occurrenceId}";
     public static final String CALENDAR_EDIT_OCCURRENCE_STATUS = "/api/calendar/occurrences/{occurrenceId}/status";
     public static final String CALENDAR_DELETE_OCCURRENCE = "/api/calendar/occurrences/{occurrenceId}";
+    public static final String CALENDAR_OCCURRENCE_REMINDED = "/api/calendar/occurrences/{occurrenceId}/reminded";
 }

@@ -2,6 +2,7 @@ export const PENDING = "PENDING";
 export const DONE = "DONE";
 export const SNOOZED = "SNOOZED";
 export const EXPIRED = "EXPIRED";
+export const REMINDER = "REMINDER";
 
 export const OccurrenceStatus = {
     PENDING: PENDING,

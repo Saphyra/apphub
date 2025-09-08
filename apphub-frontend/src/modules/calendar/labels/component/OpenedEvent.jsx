@@ -19,7 +19,10 @@ const OpenedEvent = ({
     setDisplaySpinner,
     selectedOccurrence,
     setSelectedOccurrence,
-    refreshCounter
+    refreshCounter,
+    setConfirmationDialogData,
+    setSelectedEvent,
+    refresh
 }) => {
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
 
@@ -101,7 +104,14 @@ const OpenedEvent = ({
                     <Button
                         id="calendar-labels-event-delete"
                         label={localizationHandler.get("delete")}
-                        onclick={() => confirmEventDeletion()}
+                        onclick={() => confirmEventDeletion(
+                            setConfirmationDialogData,
+                            eventId,
+                            event.title,
+                            setDisplaySpinner,
+                            setSelectedEvent,
+                            refresh
+                        )}
                     />
                 </div>
 

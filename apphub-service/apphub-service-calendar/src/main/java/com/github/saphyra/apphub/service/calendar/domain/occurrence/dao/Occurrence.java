@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
-@Builder
+@Builder(toBuilder = true)
 @EqualsAndHashCode(exclude = "occurrenceId")
 public class Occurrence {
     private final UUID occurrenceId;

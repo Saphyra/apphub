@@ -6,7 +6,7 @@ import localizationData from "./delete_event_localization.json";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 
-function confirmEventDeletion(setConfirmationDialogData, eventId, eventTitle, setDisplaySpinner, setSelectedEvent, callback) {
+function confirmEventDeletion(setConfirmationDialogData, eventId, eventTitle, setDisplaySpinner, setSelectedEvent, callback = () => {}) {
     setConfirmationDialogData(new ConfirmationDialogData(
         "calendar-event-delete-confirmation",
         localizationHandler.get("delete-event-confirmation-title"),

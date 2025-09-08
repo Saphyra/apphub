@@ -48,4 +48,7 @@ public interface OccurrenceController {
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE_STATUS)
     OccurrenceResponse editOccurrenceStatus(@RequestBody OneParamRequest<OccurrenceStatus> status, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(CalendarEndpoints.CALENDAR_OCCURRENCE_REMINDED)
+    OccurrenceResponse editOccurrenceStatus(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

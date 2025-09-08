@@ -42,4 +42,12 @@ public class EditOccurrenceService {
 
         return occurrenceMapper.toResponse(occurrence);
     }
+
+    public OccurrenceResponse setReminded(UUID occurrenceId) {
+        Occurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
+        occurrence.setReminded(true);
+        occurrenceDao.save(occurrence);
+
+        return occurrenceMapper.toResponse(occurrence);
+    }
 }

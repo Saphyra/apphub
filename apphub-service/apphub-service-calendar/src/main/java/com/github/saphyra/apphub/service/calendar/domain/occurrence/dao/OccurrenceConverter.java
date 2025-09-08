@@ -73,6 +73,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .build();
     }
 
+    //TODO set status to EXPIRED if date is in the past and status is PENDING
     private OccurrenceStatus getStatus(OccurrenceEntity entity, String userIdFromAccessToken, LocalDate occurrenceDate) {
         OccurrenceStatus savedStatus = OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_STATUS));
 

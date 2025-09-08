@@ -147,6 +147,10 @@
     text-decoration: line-through;
 }
 
+.calendar-occurrence-reminder{
+    border-color: orange;
+}
+
 #calendar-labels-opened-occurrence {
     border-right: 3px ridge white;
 }

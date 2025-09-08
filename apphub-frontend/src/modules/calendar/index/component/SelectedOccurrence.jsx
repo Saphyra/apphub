@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE, CALENDAR_OCCURRENCE_REMINDED } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, isBlank } from "../../../../common/js/Utils";
 import LocalTime from "../../../../common/js/date/LocalTime";
 import Button from "../../../../common/component/input/Button";
@@ -9,7 +9,7 @@ import Textarea from "../../../../common/component/input/Textarea";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
 import { ResponseStatus } from "../../../../common/js/dao/dao";
-import { DONE, PENDING, SNOOZED } from "../../common/OccurrenceStatus";
+import { DONE, PENDING, REMINDER, SNOOZED } from "../../common/OccurrenceStatus";
 import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
 import confirmOccurrenceDeletion from "../../common/delete_occurrence/DeleteOccurrence";
 
@@ -77,6 +77,14 @@ const SelectedOccurrence = ({
 
     function getChoices() {
         const choices = [];
+
+        if (occurrence.status === PENDING && hasValue(occurrence.remindMeBeforeDays) && occurrence.remindMeBeforeDays > 0 && !occurrence.reminded) {
+            choices.push(<Button
+                key="reminder"
+                onclick={() => setReminded()}
+                label={localizationHandler.get("reminded")}
+            />);
+        }
 
         if (occurrence.status !== DONE) {
             choices.push(<Button
@@ -157,6 +165,14 @@ const SelectedOccurrence = ({
 
         async function editStatus(newStatus) {
             const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, { occurrenceId: occurrence.occurrenceId })
+                .send();
+
+            setOccurrence(response);
+            refresh();
+        }
+
+        async function setReminded() {
+            const response = await CALENDAR_OCCURRENCE_REMINDED.createRequest(null, { occurrenceId: occurrence.occurrenceId })
                 .send();
 
             setOccurrence(response);
