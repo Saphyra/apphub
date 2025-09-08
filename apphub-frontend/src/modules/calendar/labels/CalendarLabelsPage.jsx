@@ -82,9 +82,6 @@ const CalendarLabelsPage = () => {
                         eventId={selectedEvent}
                         selectedOccurrence={selectedOccurrence}
                         setSelectedOccurrence={changeSelectedOccurrence}
-                        setConfirmationDialogData={setConfirmationDialogData}
-                        setSelectedEvent={changeSelectedEvent}
-                        refresh={refresh}
                     />
                 }
 

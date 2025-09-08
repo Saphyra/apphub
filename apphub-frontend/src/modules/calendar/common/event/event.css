@@ -1,25 +1,25 @@
-#calendar-create-event-title {
+#calendar-event-title {
     width: 100%;
 }
 
-#calendar-create-event-content {
+#calendar-event-content {
     width: 100%;
     resize: none;
     overflow: hidden;
     min-height: 6em;
 }
 
-#calendar-create-event-repetition-data .multi-select-options{
+#calendar-event-repetition-data .multi-select-options {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-#calendar-create-event label{
+.calendar-event label {
     margin: 6px;
 }
 
-#calendar-create-event input[type=number]{
+.calendar-event input[type=number] {
     width: 45px;
 }

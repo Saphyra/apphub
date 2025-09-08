@@ -1,27 +1,24 @@
 import { useEffect, useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_DELETE_EVENT, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, mapOrDefault } from "../../../../common/js/Utils";
 import Textarea from "../../../../common/component/input/Textarea";
-import repetitionTypeLocalizationData from "../../common/localization/repetition_type_localization.json";
+import repetitionTypeLocalizationData from "../../common/repetition_type/repetition_type_localization.json";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
-import { RepetitionType } from "../../common/js/RepetitionType";
 import Button from "../../../../common/component/input/Button";
 import OpenedEventOccurrences from "./OpenedEventOccurrences";
-import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import confirmEventDeletion from "../../common/js/delete_event/DeleteEvent";
+import { RepetitionType } from "../../common/repetition_type/RepetitionType";
+import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
 
 const DEFAULT_DISPLAY_OCCURRENCES = false;
 
+//TODO make it smaller
 const OpenedEvent = ({
     eventId,
     localizationHandler,
     setDisplaySpinner,
     selectedOccurrence,
     setSelectedOccurrence,
-    setConfirmationDialogData,
-    setSelectedEvent,
-    refresh
 }) => {
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
 

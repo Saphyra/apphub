@@ -24,13 +24,15 @@ public class EditEventService {
     private final List<EventFieldUpdater> eventFieldUpdaters;
 
     @Transactional
-    public void edit(UUID userId, UUID eventId, EventRequest request) {
+    public void edit(UUID eventId, EventRequest request) {
         eventRequestValidator.validate(request);
 
         Event event = eventDao.findByIdValidated(eventId);
         UpdateEventContext context = updateEventContextFactory.create(event);
 
+        log.info("Updating fields of Event {}", eventId);
         eventFieldUpdaters.forEach(eventFieldUpdater -> eventFieldUpdater.update(context, request, event));
+        log.info("Updating fields of Event {} finished", eventId);
 
         context.processChanges();
     }

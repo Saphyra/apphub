@@ -11,9 +11,9 @@
         "en": "Cancel",
         "hu": "Mégse"
     },
-    "edit": {
-        "en": "Edit",
-        "hu": "Szerkesztés"
+    "edit-occurrence": {
+        "en": "Edit occurrence",
+        "hu": "Előfordulás szerkesztése"
     },
     "done": {
         "en": "Done",
@@ -27,8 +27,24 @@
         "en": "Reset",
         "hu": "Visszaállítás"
     },
-    "delete": {
-        "en": "Delete",
-        "hu": "Törlés"
+    "delete-event": {
+        "en": "Delete event",
+        "hu": "Esemény törlése"
+    },
+    "delete-occurrence": {
+        "en": "Delete occurrence",
+        "hu": "Előfordulás törlése"
+    },
+    "occurrence-deleted": {
+        "en": "Occurrence deleted.",
+        "hu": "Előfordulás törölve."
+    },
+    "event-deleted": {
+        "en": "Event deleted.",
+        "hu": "Esemény törölve."
+    },
+    "edit-event": {
+        "en": "Edit event",
+        "hu": "Esemény szerkesztése"
     }
 }

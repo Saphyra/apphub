@@ -47,7 +47,7 @@ public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, Str
             .orElseThrow(() -> ExceptionFactory.notFound("Occurrence not found with occurrenceId: " + occurrenceId));
     }
 
-    private Optional<Occurrence> findById(UUID occurrenceId) {
+    public Optional<Occurrence> findById(UUID occurrenceId) {
         return findById(uuidConverter.convertDomain(occurrenceId));
     }
 

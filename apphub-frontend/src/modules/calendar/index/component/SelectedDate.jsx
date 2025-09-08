@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { CALENDAR_CREATE_EVENT_PAGE, CALENDAR_GET_OCCURRENCES } from "../../../../../common/js/dao/endpoints/CalendarEndpoints";
-import useLoader from "../../../../../common/hook/Loader";
-import { hasValue } from "../../../../../common/js/Utils";
-import localizationData from "../../localization/selected_date_localization.json";
-import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
-import sortOccurrences from "../../../common/js/OccurrenceSorter";
-import Occurrence from "../../common/occurrence/Occurrence";
-import Stream from "../../../../../common/js/collection/Stream";
+import { CALENDAR_CREATE_EVENT_PAGE, CALENDAR_GET_OCCURRENCES } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import useLoader from "../../../../common/hook/Loader";
+import { hasValue } from "../../../../common/js/Utils";
+import localizationData from "../localization/selected_date_localization.json";
+import LocalizationHandler from "../../../../common/js/LocalizationHandler";
+import Occurrence from "../common/occurrence/Occurrence";
+import Stream from "../../../../common/js/collection/Stream";
+import sortOccurrences from "../../common/OccurrenceSorter";
 
 const SelectedDate = ({ selectedDate, activeLabel, setDisplaySpinner, setSelectedOccurrence, refreshCounter }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

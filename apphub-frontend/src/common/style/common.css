@@ -163,7 +163,7 @@ footer label,
     margin: 4px;
 }
 
-.multi-select-option input[type=checkbox]{
+.multi-select-option input[type=checkbox] {
     transform: scale(1.5);
 }
 
@@ -359,13 +359,13 @@ textarea {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
+
     background: black;
     border: 3px ridge white;
     border-radius: 10px;
 
-    display: grid;
-    grid-template-rows: 40px auto 40px;
+    display: flex;
+    flex-direction: column;
 }
 
 .confirmation-dialog-title {
@@ -385,6 +385,7 @@ textarea {
     border-top: 2px ridge white;
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .confirmation-dialog-confirm-button {

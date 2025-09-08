@@ -1,26 +1,26 @@
-import ConfirmationDialogData from "../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
-import Button from "../../../../../common/component/input/Button";
-import { CALENDAR_DELETE_EVENT } from "../../../../../common/js/dao/endpoints/CalendarEndpoints";
-import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
+import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
+import Button from "../../../../common/component/input/Button";
+import { CALENDAR_DELETE_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import LocalizationHandler from "../../../../common/js/LocalizationHandler";
 import localizationData from "./delete_event_localization.json";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 
-function confirmEventDeletion(setConfirmationDialogData, eventId, eventTitle, setDisplaySpinner, setSelectedEvent, refresh) {
+function confirmEventDeletion(setConfirmationDialogData, eventId, eventTitle, setDisplaySpinner, setSelectedEvent, callback) {
     setConfirmationDialogData(new ConfirmationDialogData(
-        "calendar-labels-event-delete-confirmation",
+        "calendar-event-delete-confirmation",
         localizationHandler.get("delete-event-confirmation-title"),
         localizationHandler.get("delete-event-confirmation-detail", { eventTitle: eventTitle }),
         [
             <Button
                 key="delete"
-                id="calendar-labels-event-delete-confirmation-button"
+                id="calendar-event-delete-confirmation-button"
                 label={localizationHandler.get("delete")}
                 onclick={() => deleteEvent()}
             />,
             <Button
                 key="cancel"
-                id="calendar-labels-event-delete-cancel-button"
+                id="calendar-event-delete-cancel-button"
                 label={localizationHandler.get("cancel")}
                 onclick={() => setConfirmationDialogData(null)}
             />
@@ -33,7 +33,7 @@ function confirmEventDeletion(setConfirmationDialogData, eventId, eventTitle, se
 
         setConfirmationDialogData(null);
         setSelectedEvent(null)
-        refresh();
+        callback();
     }
 }
 

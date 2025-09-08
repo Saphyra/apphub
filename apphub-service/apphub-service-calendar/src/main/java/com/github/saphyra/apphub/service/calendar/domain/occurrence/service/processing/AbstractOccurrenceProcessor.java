@@ -35,7 +35,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
     public void createOccurrences(UUID userId, UUID eventId, EventRequest request) {
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
-        List<LocalDate> dates = getConditions()
+        List<LocalDate> dates = getConditions(request.getRepetitionData())
             .getOccurrences(request.getStartDate(), getEndDate(request), request.getRepeatForDays(), currentDate);
         if (dates.isEmpty()) {
             //TODO throw exception
@@ -56,7 +56,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
         Event event = context.getEvent();
 
-        List<LocalDate> datesOfOccurrences = getConditions()
+        List<LocalDate> datesOfOccurrences = getConditions(event.getRepetitionData())
             .getOccurrences(event.getStartDate(), getEndDate(event), event.getRepeatForDays(), currentDate)
             .stream()
             .toList();
@@ -94,7 +94,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         return event.getEndDate();
     }
 
-    private RepetitionTypeCondition getConditions() {
-        return repetitionTypeConditionSelector.get(getRepetitionType(), null);
+    private RepetitionTypeCondition getConditions(Object repetitionData) {
+        return repetitionTypeConditionSelector.get(getRepetitionType(), repetitionData);
     }
 }

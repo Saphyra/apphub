@@ -1,0 +1,42 @@
+{
+    "title": {
+        "en": "Create event - Calendar - Apphub",
+        "hu": "Új esemény - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Create event",
+        "hu": "Új esemény"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "when": {
+        "en": "When?",
+        "hu": "Mikor?"
+    },
+    "what": {
+        "en": "What",
+        "hu": "Mi?"
+    },
+    "repetition": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "reminder": {
+        "en": "Reminder",
+        "hu": "Emlékeztető"
+    },
+    "labels": {
+        "en": "Labels",
+        "hu": "Címkék"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "event-created": {
+        "en": "Event created.",
+        "hu": "Esemény létrehozva."
+    }
+}

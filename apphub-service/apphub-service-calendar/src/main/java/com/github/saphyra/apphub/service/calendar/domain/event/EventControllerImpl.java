@@ -56,7 +56,8 @@ class EventControllerImpl implements EventController {
     @Override
     public void editEvent(EventRequest request, UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit event {}", accessTokenHeader.getUserId(), eventId);
+        log.info("{}", request); //TODO remove
 
-        editEventService.edit(accessTokenHeader.getUserId(), eventId, request);
+        editEventService.edit(eventId, request);
     }
 }

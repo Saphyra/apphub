@@ -1,6 +1,6 @@
 import Stream from "../../../../../common/js/collection/Stream";
 import LocalDate from "../../../../../common/js/date/LocalDate";
-import sortOccurrences from "../../../common/js/OccurrenceSorter";
+import sortOccurrences from "../../../common/OccurrenceSorter";
 import Occurrence from "../../common/occurrence/Occurrence";
 
 const CalendarContentDay = ({ day, occurrences, selectedDate, setSelectedDate, referenceDate, setSelectedOccurrence }) => {

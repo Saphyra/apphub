@@ -54,6 +54,7 @@ import CalendarPage from './modules/calendar/index/CalendarPage';
 import CalendarCreateEventPage from './modules/calendar/create_event/CalendarCreateEventPage';
 import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
 import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/CalendarEditOccurrencePage';
+import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
 
 const router = createBrowserRouter([
   {
@@ -326,6 +327,15 @@ const router = createBrowserRouter([
     loader: ({ params }) => {
       return {
         occurrenceId: params.occurrenceId
+      }
+    }
+  },
+    {
+    path: "/web/calendar/edit-event/:eventId",
+    element: <CalendarEditEventPage />,
+    loader: ({ params }) => {
+      return {
+        eventId: params.eventId
       }
     }
   },

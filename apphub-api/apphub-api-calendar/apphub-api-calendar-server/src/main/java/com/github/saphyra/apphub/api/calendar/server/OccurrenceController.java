@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.endpoints.CalendarEndpoints;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,9 @@ public interface OccurrenceController {
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE)
     void editOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_OCCURRENCE)
+    void deleteOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCES)
     List<OccurrenceResponse> getOccurrences(

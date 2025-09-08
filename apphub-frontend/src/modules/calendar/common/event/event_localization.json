@@ -1,20 +1,4 @@
 {
-    "title": {
-        "en": "Create event - Calendar - Apphub",
-        "hu": "Új esemény - Naptár - Apphub"
-    },
-    "page-title": {
-        "en": "Create event",
-        "hu": "Új esemény"
-    },
-    "back": {
-        "en": "Back",
-        "hu": "Vissza"
-    },
-    "when": {
-        "en": "When?",
-        "hu": "Mikor?"
-    },
     "date": {
         "en": "Date",
         "hu": "Dátum"
@@ -35,10 +19,6 @@
         "en": "Reset time",
         "hu": "Idő törlése"
     },
-    "what": {
-        "en": "What",
-        "hu": "Mi?"
-    },
     "event-title": {
         "en": "Title",
         "hu": "Cím"
@@ -46,10 +26,6 @@
     "content": {
         "en": "Description",
         "hu": "Leírás"
-    },
-    "repetition": {
-        "en": "Repetition",
-        "hu": "Ismétlés"
     },
     "repetition-type": {
         "en": "Repetition type",
@@ -71,10 +47,6 @@
         "en": "days",
         "hu": "napon át"
     },
-    "reminder": {
-        "en": "Reminder",
-        "hu": "Emlékeztető"
-    },
     "remind-me-before-days-pre-label": {
         "en": "Remind me",
         "hu": "Emlékeztess"
@@ -82,10 +54,6 @@
     "remind-me-before-days-post-label": {
         "en": "days before",
         "hu": "nappal előtte"
-    },
-    "labels": {
-        "en": "Labels",
-        "hu": "Címkék"
     },
     "new-label": {
         "en": "New label",
@@ -107,9 +75,13 @@
         "en": "Label already exists.",
         "hu": "A címke már létezik."
     },
-    "create": {
-        "en": "Create",
-        "hu": "Létrehoz"
+    "labels-of-event": {
+        "en": "Labels",
+        "hu": "Címkék"
+    },
+    "available-labels": {
+        "en": "Available labels",
+        "hu": "Elérhető címkék"
     },
     "empty-end-date": {
         "en": "End date is empty.",
@@ -138,17 +110,5 @@
     "remind-me-before-days-too-low": {
         "en": "Remind me before days too low.",
         "hu": "Az értesítés értéke túl alacsony."
-    },
-    "labels-of-event": {
-        "en": "Labels",
-        "hu": "Címkék"
-    },
-    "available-labels": {
-        "en": "Available labels",
-        "hu": "Elérhető címkék"
-    },
-    "event-created": {
-        "en": "Event created.",
-        "hu": "Esemény létrehozva."
     }
 }

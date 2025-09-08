@@ -17,29 +17,17 @@ import PreLabeledInputField from "../../../common/component/input/PreLabeledInpu
 import InputField from "../../../common/component/input/InputField";
 import SelectInput, { SelectOption } from "../../../common/component/input/SelectInput";
 import Stream from "../../../common/js/collection/Stream";
-import { DONE, EXPIRED, PENDING, SNOOZED } from "../common/js/OccurrenceStatus";
 import useRefresh from "../../../common/hook/Refresh";
 import Textarea from "../../../common/component/input/Textarea";
 import "./edit_occurrence.css";
 import LabelWrappedInputField from "../../../common/component/input/LabelWrappedInputField";
 import NumberInput from "../../../common/component/input/NumberInput";
 import PostLabeledInputField from "../../../common/component/input/PostLabeledInputField";
+import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
+import { DONE, EXPIRED, PENDING, SNOOZED } from "../common/OccurrenceStatus";
+import confirmOccurrenceDeletion from "../common/delete_occurrence/DeleteOccurrence";
 
-/*
-{
-    "occurrenceId": "c84baac7-3e56-4ff7-98c6-3dfddb8a9f6d",
-    "eventId": "67dd987b-ed6c-4365-9efa-9a1aee246ac2",
-    "date": "2025-08-27",
-    "time": "09:32:00",
-    "status": "EXPIRED",
-    "title": "First event",
-    "content": "Well,\nThis\nIs\nThe\nSecond\nOne",
-    "note": "",
-    "remindMeBeforeDays": 1,
-    "reminded": false
-}
-*/
-
+//TODO make it smaller
 const CalendarEditOccurrencePage = () => {
     const { occurrenceId } = useParams();
 
@@ -48,17 +36,18 @@ const CalendarEditOccurrencePage = () => {
     document.title = localizationHandler.get("title");
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
+    const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [refreshCounter, refresh] = useRefresh();
 
     const [occurrence, setOccurrence] = useState(null);
 
-    const [date, setDate] = useExtractAsync(o => o.date, occurrence);
-    const [time, setTime] = useExtractAsync(o => o.time, occurrence);
+    const [date, setDate] = useExtractAsync(o => o.date, occurrence, "");
+    const [time, setTime] = useExtractAsync(o => o.time, occurrence, "");
     const [status, setStatus] = useExtractAsync(o => o.status == EXPIRED ? PENDING : o.status, occurrence, PENDING);
-    const [note, setNote] = useExtractAsync(o => o.note, occurrence);
-    const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, occurrence);
-    const [reminded, setReminded] = useExtractAsync(o => o.reminded, occurrence);
+    const [note, setNote] = useExtractAsync(o => o.note, occurrence, "");
+    const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, occurrence, 0);
+    const [reminded, setReminded] = useExtractAsync(o => o.reminded, occurrence, false);
 
     useLoader(
         {
@@ -169,6 +158,20 @@ const CalendarEditOccurrencePage = () => {
                         id="calendar-edit-occurrence-reset-button"
                         label={localizationHandler.get("reset")}
                         onclick={() => refresh()}
+                    />,
+                    <Button
+                        key="delete"
+                        id="calendar-edit-occurrence-delete-button"
+                        label={localizationHandler.get("delete")}
+                        onclick={() => confirmOccurrenceDeletion(
+                            setConfirmationDialogData,
+                            occurrenceId,
+                            occurrence.title,
+                            occurrence.date,
+                            setDisplaySpinner,
+                            () => {},
+                            () => window.location.href = CALENDAR_PAGE
+                        )}
                     />
                 ]}
                 centerButtons={[
@@ -190,6 +193,15 @@ const CalendarEditOccurrencePage = () => {
             />
 
             <ToastContainer />
+
+            {confirmationDialogData &&
+                <ConfirmationDialog
+                    id={confirmationDialogData.id}
+                    title={confirmationDialogData.title}
+                    content={confirmationDialogData.content}
+                    choices={confirmationDialogData.choices}
+                />
+            }
 
             {displaySpinner && <Spinner />}
         </div>

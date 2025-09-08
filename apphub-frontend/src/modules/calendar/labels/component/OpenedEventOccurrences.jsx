@@ -2,10 +2,10 @@ import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
 import { CALENDAR_GET_OCCURRENCES_OF_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import Stream from "../../../../common/js/collection/Stream";
-import sortOccurrences from "../../common/js/OccurrenceSorter";
 import { hasValue } from "../../../../common/js/Utils";
 import LocalTime from "../../../../common/js/date/LocalTime";
 import LocalDate from "../../../../common/js/date/LocalDate";
+import sortOccurrences from "../../common/OccurrenceSorter";
 
 const OpenedEventOccurrences = ({ eventId, setDisplaySpinner, selectedOccurrence, setSelectedOccurrence }) => {
     const [occurrences, setOccurrences] = useState([]);

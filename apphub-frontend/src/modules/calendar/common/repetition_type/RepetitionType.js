@@ -1,7 +1,7 @@
-import Stream from "../../../../common/js/collection/Stream";
 import LocalizationHandler from "../../../../common/js/LocalizationHandler";
-import localizationData from "../localization/repetition_type_localization.json";
+import localizationData from "./repetition_type_localization.json";
 import daysOfWeekLocalizationData from "../../../../common/js/date/day_of_week_localization.json";
+import Stream from "../../../../common/js/collection/Stream";
 import { DAYS_OF_WEEK } from "../../../../common/js/date/DayOfWeek";
 
 const localizationHandler = new LocalizationHandler(localizationData);

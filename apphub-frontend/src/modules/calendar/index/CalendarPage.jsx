@@ -15,12 +15,12 @@ import SelectedDateDispalyer from "./component/SelectedDateDisplayer";
 import "./calendar.css";
 import Labels from "./component/Labels";
 import CalendarContent from "./component/content/CalendarContent";
-import SelectedDate from "./component/selected_date/SelectedDate";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
 import SelectedOccurrence from "./component/SelectedOccurrence";
 import useRefresh from "../../../common/hook/Refresh";
+import SelectedDate from "./component/SelectedDate";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";

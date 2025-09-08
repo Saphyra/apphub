@@ -1,5 +1,5 @@
+import { hasValue } from "../../../common/js/Utils";
 import { OccurrenceStatusOrder } from "./OccurrenceStatus";
-import { hasValue } from "../../../../common/js/Utils";
 
 function sortOccurrences(a, b) {
     //Compare occurrences based of status

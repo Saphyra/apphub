@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.CreateOccurrenceService;
+import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.DeleteOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.EditOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.OccurrenceQueryService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ class OccurrenceControllerImpl implements OccurrenceController {
     private final EditOccurrenceService editOccurrenceService;
     private final CreateOccurrenceService createOccurrenceService;
     private final OccurrenceQueryService occurrenceQueryService;
+    private final DeleteOccurrenceService deleteOccurrenceService;
 
     @Override
     public void createOccurrence(OccurrenceRequest request, UUID eventId, AccessTokenHeader accessTokenHeader) {
@@ -39,6 +41,13 @@ class OccurrenceControllerImpl implements OccurrenceController {
         log.info("{} wants to edit Occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
 
         editOccurrenceService.editOccurrence(occurrenceId, request);
+    }
+
+    @Override
+    public void deleteOccurrence(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to delete Occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
+
+        deleteOccurrenceService.deleteOccurrence(occurrenceId);
     }
 
     @Override

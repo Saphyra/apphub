@@ -1,14 +1,19 @@
 import { useState } from "react";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, isBlank } from "../../../../common/js/Utils";
 import LocalTime from "../../../../common/js/date/LocalTime";
 import Button from "../../../../common/component/input/Button";
 import Textarea from "../../../../common/component/input/Textarea";
-import { DONE, PENDING, SNOOZED } from "../../common/js/OccurrenceStatus";
-import confirmEventDeletion from "../../common/js/delete_event/DeleteEvent";
+import NotificationService from "../../../../common/js/notification/NotificationService";
+import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
+import { ResponseStatus } from "../../../../common/js/dao/dao";
+import { DONE, PENDING, SNOOZED } from "../../common/OccurrenceStatus";
+import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
+import confirmOccurrenceDeletion from "../../common/delete_occurrence/DeleteOccurrence";
 
+//TODO make it smaller
 const SelectedOccurrence = ({
     occurrenceId,
     setDisplaySpinner,
@@ -23,8 +28,11 @@ const SelectedOccurrence = ({
         request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
         mapper: setOccurrence,
         listener: [occurrenceId],
-        setDisplaySpinner: setDisplaySpinner
-    })
+        setDisplaySpinner: setDisplaySpinner,
+        errorHandler: new ErrorHandler(
+            (response) => response.status == ResponseStatus.NOT_FOUND,
+            () => setSelectedOccurrence(null))
+    });
 
     if (hasValue(occurrence)) {
         return <ConfirmationDialog
@@ -95,15 +103,48 @@ const SelectedOccurrence = ({
         }
 
         choices.push(<Button
-            key="edit"
+            key="edit-occurrence"
             onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId })}
-            label={localizationHandler.get("edit")}
+            label={localizationHandler.get("edit-occurrence")}
         />);
 
         choices.push(<Button
-            key="delete"
-            onclick={() => confirmEventDeletion(setConfirmationDialogData, occurrence.eventId, occurrence.title, setDisplaySpinner, setSelectedOccurrence, refresh)}
-            label={localizationHandler.get("delete")}
+            key="edit-event"
+            onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: occurrence.eventId })}
+            label={localizationHandler.get("edit-event")}
+        />);
+
+        choices.push(<Button
+            key="delete-occurrence"
+            onclick={() => confirmOccurrenceDeletion(
+                setConfirmationDialogData,
+                occurrence.occurrenceId,
+                occurrence.title,
+                occurrence.date,
+                setDisplaySpinner,
+                setSelectedOccurrence,
+                () => {
+                    NotificationService.showSuccess(localizationHandler.get("occurrence-deleted"));
+                    refresh();
+                }
+            )}
+            label={localizationHandler.get("delete-occurrence")}
+        />);
+
+        choices.push(<Button
+            key="delete-event"
+            onclick={() => confirmEventDeletion(
+                setConfirmationDialogData,
+                occurrence.eventId,
+                occurrence.title,
+                setDisplaySpinner,
+                setSelectedOccurrence,
+                () => {
+                    NotificationService.showSuccess(localizationHandler.get("event-deleted"));
+                    refresh();
+                }
+            )}
+            label={localizationHandler.get("delete-event")}
         />);
 
         choices.push(<Button

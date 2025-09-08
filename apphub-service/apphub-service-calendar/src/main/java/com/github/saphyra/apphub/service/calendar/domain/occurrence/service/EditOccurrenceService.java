@@ -20,6 +20,7 @@ public class EditOccurrenceService {
     private final OccurrenceDao occurrenceDao;
     private final OccurrenceMapper occurrenceMapper;
 
+    //TODO Check parent fields, and set null if received value matches parent value
     public void editOccurrence(UUID occurrenceId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 

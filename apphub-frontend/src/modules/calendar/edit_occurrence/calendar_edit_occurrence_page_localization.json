@@ -78,5 +78,9 @@
     "saved": {
         "en": "Occurrence saved.",
         "hu": "Előfordulás elmentve."
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
     }
 }

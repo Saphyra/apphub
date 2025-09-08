@@ -7,3 +7,4 @@ TODO Event option: Automatically mark done when expired
 TODO edit event
 TODO create occurrence on day
 TODO UI mobile optimizations
+TODO warn user when recurring event is about to reach end time
