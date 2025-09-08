@@ -19,6 +19,7 @@ const OpenedEvent = ({
     setDisplaySpinner,
     selectedOccurrence,
     setSelectedOccurrence,
+    refreshCounter
 }) => {
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
 
@@ -123,6 +124,7 @@ const OpenedEvent = ({
                             setDisplaySpinner={setDisplaySpinner}
                             selectedOccurrence={selectedOccurrence}
                             setSelectedOccurrence={setSelectedOccurrence}
+                            refreshCounter={refreshCounter}
                         />
                     </fieldset>
                 }

@@ -1,11 +1,15 @@
 import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../common/js/Utils";
 import LocalTime from "../../../../common/js/date/LocalTime";
 import Textarea from "../../../../common/component/input/Textarea";
+import { DONE, PENDING, SNOOZED } from "../../common/OccurrenceStatus";
+import Button from "../../../../common/component/input/Button";
+import confirmOccurrenceDeletion from "../../common/delete_occurrence/DeleteOccurrence";
+import NotificationService from "../../../../common/js/notification/NotificationService";
 
-const OpenedOccurrence = ({ occurrenceId, localizationHandler }) => {
+const OpenedOccurrence = ({ occurrenceId, localizationHandler, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh }) => {
     const [occurrence, setOccurrence] = useState(null);
 
     useLoader(
@@ -13,7 +17,7 @@ const OpenedOccurrence = ({ occurrenceId, localizationHandler }) => {
             request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
-            listener: [occurrenceId]
+            listener: [occurrenceId, refreshCounter]
         }
     );
 
@@ -51,16 +55,68 @@ const OpenedOccurrence = ({ occurrenceId, localizationHandler }) => {
                         </div>
                     }
                 </div>
+
+
+                {getOperations()}
             </div>
         );
     }
-}
 
-/*
-{
-    "remindMeBeforeDays": 1,
-    "reminded": false
+    function getOperations() {
+        return (
+            <div id="calendar-labels-opened-occurrence-operations">
+                {occurrence.status !== DONE &&
+                    <Button
+                        onclick={() => editStatus(DONE)}
+                        label={localizationHandler.get("done")}
+                    />
+                }
+
+                {occurrence.status !== SNOOZED &&
+                    <Button
+                        onclick={() => editStatus(SNOOZED)}
+                        label={localizationHandler.get("snooze")}
+                    />
+                }
+
+                {(occurrence.status === SNOOZED || occurrence.status === DONE) &&
+                    <Button
+                        onclick={() => editStatus(PENDING)}
+                        label={localizationHandler.get("reset")}
+                    />
+                }
+
+                <Button
+                    onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId })}
+                    label={localizationHandler.get("edit-occurrence")}
+                />
+
+                <Button
+                    onclick={() => confirmOccurrenceDeletion(
+                        setConfirmationDialogData,
+                        occurrence.occurrenceId,
+                        occurrence.title,
+                        occurrence.date,
+                        setDisplaySpinner,
+                        setSelectedOccurrence,
+                        () => {
+                            NotificationService.showSuccess(localizationHandler.get("occurrence-deleted"));
+                            refresh();
+                        }
+                    )}
+                    label={localizationHandler.get("delete-occurrence")}
+                />
+            </div>
+        );
+
+        async function editStatus(newStatus) {
+            const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, { occurrenceId: occurrence.occurrenceId })
+                .send();
+
+            setOccurrence(response);
+            refresh();
+        }
+    }
 }
-*/
 
 export default OpenedOccurrence;

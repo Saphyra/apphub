@@ -10,15 +10,12 @@ import { REPETITION_TYPE_DAYS_OF_MONTH, REPETITION_TYPE_DAYS_OF_WEEK, REPETITION
 import localizationData from "./event_localization.json";
 import repetitionTypeLocalizationData from "../repetition_type/repetition_type_localization.json";
 import daysOfWeekLocalizationData from "../../../../common/js/date/day_of_week_localization.json";
-import { useEffect } from "react";
 import { throwException } from "../../../../common/js/Utils";
 
 const EventRepetition = ({ repetitionType, setRepetitionType, repetitionData, setRepetitionData, repeatForDays, setRepeatForDays }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
     const daysOfWeekLocalizationHandler = new LocalizationHandler(daysOfWeekLocalizationData);
-
-    useEffect(setDefaultRepetitionData, [repetitionType]);
 
     return (
         <span>
@@ -27,7 +24,10 @@ const EventRepetition = ({ repetitionType, setRepetitionType, repetitionData, se
                 input={<SelectInput
                     id="calendar-event-repetition-type"
                     value={repetitionType}
-                    onchangeCallback={setRepetitionType}
+                    onchangeCallback={(newRepetitionType) => {
+                        setRepetitionType(newRepetitionType);
+                        setDefaultRepetitionData(newRepetitionType);
+                    }}
                     options={getRepetitionTypes()}
                 />}
             />
@@ -95,8 +95,8 @@ const EventRepetition = ({ repetitionType, setRepetitionType, repetitionData, se
             .toList();
     }
 
-    function setDefaultRepetitionData() {
-        switch (repetitionType) {
+    function setDefaultRepetitionData(newRepetitionType) {
+        switch (newRepetitionType) {
             case REPETITION_TYPE_ONE_TIME:
                 setRepetitionData("");
                 break;

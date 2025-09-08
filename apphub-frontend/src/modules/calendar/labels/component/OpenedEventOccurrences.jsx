@@ -7,14 +7,14 @@ import LocalTime from "../../../../common/js/date/LocalTime";
 import LocalDate from "../../../../common/js/date/LocalDate";
 import sortOccurrences from "../../common/OccurrenceSorter";
 
-const OpenedEventOccurrences = ({ eventId, setDisplaySpinner, selectedOccurrence, setSelectedOccurrence }) => {
+const OpenedEventOccurrences = ({ eventId, setDisplaySpinner, selectedOccurrence, setSelectedOccurrence, refreshCounter }) => {
     const [occurrences, setOccurrences] = useState([]);
 
     useLoader({
         request: CALENDAR_GET_OCCURRENCES_OF_EVENT.createRequest(null, { eventId: eventId }),
         mapper: setOccurrences,
         setDisplaySpinner: setDisplaySpinner,
-        listener: [eventId]
+        listener: [eventId, refreshCounter]
     })
 
     return (
@@ -38,6 +38,7 @@ const OpenedEventOccurrences = ({ eventId, setDisplaySpinner, selectedOccurrence
 }
 
 const Occurrence = ({ occurrence, selectedOccurrence, setSelectedOccurrence }) => {
+    console.log(occurrence)
     return (
         <div
             className={

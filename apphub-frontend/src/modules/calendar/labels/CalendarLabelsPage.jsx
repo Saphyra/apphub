@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import sessionChecker from "../../../common/js/SessionChecker";
-import localizationData from "./localization/calendar_labels_page_localization.json";
+import localizationData from "./calendar_labels_page_localization.json";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
@@ -82,6 +82,7 @@ const CalendarLabelsPage = () => {
                         eventId={selectedEvent}
                         selectedOccurrence={selectedOccurrence}
                         setSelectedOccurrence={changeSelectedOccurrence}
+                        refreshCounter={refreshCount}
                     />
                 }
 
@@ -89,6 +90,11 @@ const CalendarLabelsPage = () => {
                     <OpenedOccurrence
                         occurrenceId={selectedOccurrence}
                         localizationHandler={localizationHandler}
+                        setConfirmationDialogData={setConfirmationDialogData}
+                        setDisplaySpinner={setDisplaySpinner}
+                        setSelectedOccurrence={changeSelectedOccurrence}
+                        refreshCounter={refreshCount}
+                        refresh={refresh}
                     />
                 }
             </main>

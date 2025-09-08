@@ -37,7 +37,6 @@
     <module>apphub-api-skyxplore</module>
     <module>apphub-api-admin_panel</module>
     <module>apphub-api-community</module>
-    <module>apphub-api-calendar_deprecated</module>
     <module>apphub-api-custom</module>
     <module>apphub-api-calendar</module>
   </modules>

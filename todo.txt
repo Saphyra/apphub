@@ -1,10 +1,8 @@
 TODO add to release notes
 TODO integration test to check if data is deleted with the user
-TODO clear deprecated controller
-TODO Delete old code including FE
 TODO Add operations to edit events / occurrences on labels page
 TODO Event option: Automatically mark done when expired
-TODO edit event
 TODO create occurrence on day
 TODO UI mobile optimizations
 TODO warn user when recurring event is about to reach end time
+TODO Back button in edit event/occurrence page should actually go back, not always to index page
