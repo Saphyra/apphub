@@ -67,6 +67,6 @@ class EventMigrator {
             return event.getStartDate();
         }
 
-        return dateTimeUtil.getCurrentDate().plus(migrationProperties.getDefaultEndDateOffset());
+        return dateTimeUtil.getCurrentDate().plusDays(migrationProperties.getDefaultEndDateOffset().toDays());
     }
 }

@@ -17,7 +17,7 @@ import Labels from "./component/Labels";
 import CalendarContent from "./component/content/CalendarContent";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
 import SelectedOccurrence from "./component/SelectedOccurrence";
 import useRefresh from "../../../common/hook/Refresh";
 import SelectedDate from "./component/SelectedDate";

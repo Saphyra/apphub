@@ -340,7 +340,7 @@ textarea {
     background-size: 10vw 10vw;
     background-color: rgba(0, 0, 0, 0.5);
     background-repeat: no-repeat;
-    z-index: 100
+    z-index: 950
 }
 
 /*=======CONFIRMATION_DIALOG=======*/
@@ -351,7 +351,7 @@ textarea {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.75);
-    z-index: 999;
+    z-index: 900;
 }
 
 .confirmation-dialog-content-wrapper {

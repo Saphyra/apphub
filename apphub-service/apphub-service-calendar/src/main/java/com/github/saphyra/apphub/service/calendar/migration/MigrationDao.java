@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -47,7 +48,7 @@ class MigrationDao {
                         .repetitionData(stringEncryptor.decrypt(rs.getString("repetition_data"), userId, eventId, "repetition-data"))
                         .title(stringEncryptor.decrypt(rs.getString("title"), userId, eventId, "title"))
                         .content(stringEncryptor.decrypt(rs.getString("content"), userId, eventId, "content"))
-                        .repeat(integerEncryptor.decrypt(rs.getString("repeat"), userId, eventId, "repeat"))
+                        .repeat(Optional.ofNullable(integerEncryptor.decrypt(rs.getString("repeat"), userId, eventId, "repeat")).orElse(1))
                         .build();
                     events.add(event);
                 }
@@ -67,13 +68,14 @@ class MigrationDao {
                     String occurrenceId = rs.getString("occurrence_id");
                     String userId = rs.getString("user_id");
 
+                    String status = rs.getString("status");
                     DeprecatedOccurrence occurrence = DeprecatedOccurrence.builder()
                         .occurrenceId(uuidConverter.convertEntity(occurrenceId))
                         .eventId(uuidConverter.convertEntity(rs.getString("event_id")))
                         .userId(uuidConverter.convertEntity(userId))
                         .date(localDateEncryptor.decrypt(rs.getString("date"), userId, occurrenceId, "date"))
                         .time(localTimeEncryptor.decrypt(rs.getString("time"), userId, occurrenceId, "time"))
-                        .status(OccurrenceStatus.valueOf(rs.getString("status")))
+                        .status("VIRTUAL".equals(status) ? OccurrenceStatus.PENDING : OccurrenceStatus.valueOf(status))
                         .note(stringEncryptor.decrypt(rs.getString("note"), userId, occurrenceId, "note"))
                         .build();
                     occurrences.add(occurrence);
