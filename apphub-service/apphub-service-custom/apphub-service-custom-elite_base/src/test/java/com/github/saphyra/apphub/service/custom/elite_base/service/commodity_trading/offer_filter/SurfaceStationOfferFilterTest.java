@@ -41,6 +41,14 @@ class SurfaceStationOfferFilterTest {
         assertThat(underTest.matches(response, request)).isFalse();
     }
 
+    @Test
+    void unknownLocationType() {
+        given(response.getLocationType()).willReturn(null);
+        given(request.getIncludeSurfaceStations()).willReturn(false);
+
+        assertThat(underTest.matches(response, request)).isFalse();
+    }
+
     @ParameterizedTest
     @EnumSource(value = StationType.class, mode = EnumSource.Mode.EXCLUDE, names = {"SURFACE_STATION", "ON_FOOT_SETTLEMENT"})
     void includeNotSurfaceStations(StationType stationType) {

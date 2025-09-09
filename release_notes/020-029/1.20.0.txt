@@ -9,6 +9,8 @@
     AdminPanel
         ErrorReport
             Align report list content to the top
+    EliteBase
+        SurfaceStationOfferFilter handles null type
 
 ===PLATFORM CHANGES===
     ExecutorServiceBean uses FutureWrapper to hide checked exceptions
@@ -27,3 +29,5 @@
     SkyXplore
         Remove change set for allocated resource
         Add notes to Processes about what they do
+    ApphubCI
+        Do not checkout and pull master when releasing to production
