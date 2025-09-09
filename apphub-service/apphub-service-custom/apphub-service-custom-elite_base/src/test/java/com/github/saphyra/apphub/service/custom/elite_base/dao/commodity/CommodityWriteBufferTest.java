@@ -7,10 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collection;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -39,12 +37,12 @@ class CommodityWriteBufferTest {
 
     @Test
     void doSynchronize() {
-        given(commodityConverter.convertDomain(any(Collection.class))).willReturn(List.of(entity));
+        given(commodityConverter.convertDomain(commodity)).willReturn(entity);
 
         underTest.add(commodityDomainId, commodity);
 
         underTest.doSynchronize(List.of(commodity));
 
-        then(repository).should().saveAll(List.of(entity));
+        then(repository).should().save(entity);
     }
 }

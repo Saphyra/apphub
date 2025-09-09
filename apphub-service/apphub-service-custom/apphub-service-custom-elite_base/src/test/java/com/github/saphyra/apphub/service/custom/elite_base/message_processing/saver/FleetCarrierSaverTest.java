@@ -52,6 +52,7 @@ class FleetCarrierSaverTest {
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.empty());
         given(fleetCarrierFactory.create(CARRIER_ID, LAST_UPDATE, CARRIER_NAME, STAR_SYSTEM_ID, FleetCarrierDockingAccess.ALL, MARKET_ID)).willReturn(fleetCarrier);
         given(fleetCarrier.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
+        given(fleetCarrier.getId()).willReturn(ID);
 
         assertThat(underTest.save(LAST_UPDATE, STAR_SYSTEM_ID, CARRIER_ID, CARRIER_NAME, FleetCarrierDockingAccess.ALL, MARKET_ID)).isEqualTo(fleetCarrier);
 
@@ -61,6 +62,7 @@ class FleetCarrierSaverTest {
         then(fleetCarrier).should(times(0)).setDockingAccess(any());
         then(fleetCarrier).should(times(0)).setMarketId(any());
         then(fleetCarrierDao).should().save(fleetCarrier);
+        then(fleetCarrierDao).should().clearMarketId(ID, MARKET_ID);
         then(fleetCarrierDao).shouldHaveNoMoreInteractions();
     }
 

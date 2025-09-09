@@ -1,6 +1,7 @@
 ===FEATURES===
     EliteBase
         Synchronize buffers before shutting down service
+        New methodology for Loadout orphaned record cleanup
     ApphubCI
         Scale down production namespace when starting the VM (So fresh start is guaranteed on restart)
 
@@ -11,6 +12,8 @@
         SQL based deletion in buffers
         Process incoming messages in separate thread
         Clear marketIds of other carriers when a carrier is updated
+        Save loadouts lowercased
+        CommoditySaver save one by one
     AdminPanel
         Turn off performanceReporting during tests
     Copy the buffer before syncing, let system work while saving in progress
@@ -18,6 +21,8 @@
 ===PLATFORM CHANGES===
     Increase PostgreSQL docker image version on preprod and dev envs
     Increase memory limit for EliteBase
+    Name JDBC connections
+    Automatic heap management restored
 
 ===TECHNICAL DEBTS===
 

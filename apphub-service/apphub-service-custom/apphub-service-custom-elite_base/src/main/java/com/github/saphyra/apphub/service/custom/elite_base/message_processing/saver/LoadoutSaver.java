@@ -47,6 +47,10 @@ public class LoadoutSaver {
             throw new IllegalArgumentException("marketId must not be null");
         }
 
+        List<String> lowercaseItems = items.stream()
+            .map(String::toLowerCase)
+            .toList();
+
         LockKey key = new LockKey(externalReference, type);
         Lock lock = LOCKS.get(key);
         if (!lock.tryLock(30, TimeUnit.SECONDS)) {
@@ -62,14 +66,14 @@ public class LoadoutSaver {
                 .stream()
                 .collect(Collectors.toMap(Loadout::getName, Function.identity()));
 
-            List<Loadout> newItems = items.stream()
+            List<Loadout> newItems = lowercaseItems.stream()
                 .filter(item -> !existingLoadouts.containsKey(item))
                 .map(name -> loadoutFactory.create(timestamp, type, commodityLocation, externalReference, marketId, name))
                 .toList();
 
             List<Loadout> deletedItems = existingLoadouts.values()
                 .stream()
-                .filter(loadout -> !items.contains(loadout.getName()))
+                .filter(loadout -> !lowercaseItems.contains(loadout.getName()))
                 .toList();
 
             performanceReporter.wrap(
