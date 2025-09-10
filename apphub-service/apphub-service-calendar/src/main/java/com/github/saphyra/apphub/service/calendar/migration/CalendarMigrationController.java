@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CalendarMigrationController {
     private final MigrationDao migrationDao;
     private final EventMigrator eventMigrator;
@@ -19,7 +18,6 @@ class CalendarMigrationController {
 
     @PostMapping(MigrationConstants.URL)
     void migrate() {
-
         try {
             log.info("Calendar migration started.");
 
@@ -32,6 +30,5 @@ class CalendarMigrationController {
             log.error("Migration failed.", e);
             errorReporterService.report("Migration failed.", e);
         }
-
     }
 }

@@ -1,3 +1,4 @@
 TODO add to release notes
-TODO integration test to check if data is deleted with the user
+TODO BE test to check if data is deleted with the user
 TODO UI mobile optimizations
+TODO Integration test for whole migration process

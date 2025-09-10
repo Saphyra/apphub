@@ -21,7 +21,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceMigrator {
     private final MigrationDao migrationDao;
     private final RepetitionTypeConditionSelector repetitionTypeConditionSelector;
@@ -51,12 +50,11 @@ class OccurrenceMigrator {
                         .map(this::convert)
                         .forEach(occurrenceDao::save);
                 } else {
-                    //Occurrence creation is not needed for past dates
+                    log.debug("Occurrence creation is not needed for past dates (so the user does not have to resolve tons of them)");
                 }
             } else {
                 if (nonNull(existingOccurrences)) {
                     existingOccurrences.stream()
-                        .filter(deprecatedOccurrence -> deprecatedOccurrence.getStatus() != OccurrenceStatus.PENDING)
                         .map(this::convert)
                         .forEach(occurrenceDao::save);
                 } else {
@@ -66,6 +64,7 @@ class OccurrenceMigrator {
                         .eventId(event.getEventId())
                         .date(date)
                         .status(OccurrenceStatus.PENDING)
+                        .note("")
                         .build();
                     occurrenceDao.save(occurrence);
                 }

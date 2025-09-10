@@ -16,7 +16,6 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventMigrator {
     private final DateTimeUtil dateTimeUtil;
     private final MigrationProperties migrationProperties;
