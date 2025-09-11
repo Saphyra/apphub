@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface OccurrenceRepository extends CrudRepository<OccurrenceEntity, String> {
     void deleteByUserId(String userId);
 

@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceRequestValidator {
     void validate(OccurrenceRequest request) {
         ValidationUtil.notNull(request.getDate(), "date");
         ValidationUtil.notNull(request.getStatus(), "status");
-        ValidationUtil.notNull(request.getRemindMeBeforeDays(), "remindMeBeforeDays");
+        ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
         ValidationUtil.notNull(request.getNote(), "note");
+        ValidationUtil.notNull(request.getReminded(), "reminded");
     }
 }

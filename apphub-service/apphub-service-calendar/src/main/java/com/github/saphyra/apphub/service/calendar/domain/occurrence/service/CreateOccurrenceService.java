@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.OccurrenceFactory;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
+@Builder
 public class CreateOccurrenceService {
     private final List<OccurrenceCreator> occurrenceCreators;
     private final OccurrenceDao occurrenceDao;

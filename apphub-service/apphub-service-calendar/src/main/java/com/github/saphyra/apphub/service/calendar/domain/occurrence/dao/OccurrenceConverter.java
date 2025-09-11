@@ -19,14 +19,13 @@ import java.time.LocalDate;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
-    private static final String COLUMN_DATE = "date";
-    private static final String COLUMN_TIME = "time";
-    private static final String COLUMN_STATUS = "status";
-    private static final String COLUMN_NOTE = "note";
-    private static final String COLUMN_REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
-    private static final String COLUMN_REMINDED = "reminded";
+    static final String COLUMN_DATE = "date";
+    static final String COLUMN_TIME = "time";
+    static final String COLUMN_STATUS = "status";
+    static final String COLUMN_NOTE = "note";
+    static final String COLUMN_REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
+    static final String COLUMN_REMINDED = "reminded";
 
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;
@@ -36,6 +35,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private final BooleanEncryptor booleanEncryptor;
     private final IntegerEncryptor integerEncryptor;
     private final DateTimeUtil dateTimeUtil;
+    private final OccurrenceRepository occurrenceRepository;
 
     @Override
     protected OccurrenceEntity processDomainConversion(Occurrence domain) {
@@ -66,18 +66,19 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .date(occurrenceDate)
             .time(localTimeEncryptor.decrypt(entity.getTime(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_TIME))
-            .status(getStatus(entity, userIdFromAccessToken, occurrenceDate))
+            .status(syncStatus(entity, userIdFromAccessToken, occurrenceDate))
             .note(stringEncryptor.decrypt(entity.getNote(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_NOTE))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.decrypt(entity.getReminded(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMINDED))
             .build();
     }
 
-    //TODO set status to EXPIRED if date is in the past and status is PENDING
-    private OccurrenceStatus getStatus(OccurrenceEntity entity, String userIdFromAccessToken, LocalDate occurrenceDate) {
+    private OccurrenceStatus syncStatus(OccurrenceEntity entity, String userIdFromAccessToken, LocalDate occurrenceDate) {
         OccurrenceStatus savedStatus = OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_STATUS));
 
         if (savedStatus == OccurrenceStatus.PENDING && dateTimeUtil.getCurrentDate().isAfter(occurrenceDate)) {
+            entity.setStatus(stringEncryptor.encrypt(OccurrenceStatus.EXPIRED.name(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_STATUS));
+            occurrenceRepository.save(entity);
             return OccurrenceStatus.EXPIRED;
         }
 

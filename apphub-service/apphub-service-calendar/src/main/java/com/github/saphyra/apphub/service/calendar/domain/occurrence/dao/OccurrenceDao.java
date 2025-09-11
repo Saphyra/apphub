@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, String, OccurrenceRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

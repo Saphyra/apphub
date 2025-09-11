@@ -16,7 +16,7 @@ public class DaysOfWeekCondition implements RepetitionTypeCondition {
             return true;
         }
 
-        for (int i = 1; i <= repeatForDays; i++) {
+        for (int i = 1; i < repeatForDays; i++) {
             LocalDate previousDate = date.minusDays(i);
             if (daysOfWeek.contains(previousDate.getDayOfWeek())) {
                 return true;

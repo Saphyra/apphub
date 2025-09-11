@@ -22,7 +22,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceControllerImpl implements OccurrenceController {
     private final EditOccurrenceService editOccurrenceService;
     private final CreateOccurrenceService createOccurrenceService;
@@ -81,7 +80,7 @@ class OccurrenceControllerImpl implements OccurrenceController {
     }
 
     @Override
-    public OccurrenceResponse editOccurrenceStatus(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
+    public OccurrenceResponse setReminded(UUID occurrenceId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to set reminded to true for Occurrence {}", accessTokenHeader.getUserId(), occurrenceId);
 
         return editOccurrenceService.setReminded(occurrenceId);

@@ -28,7 +28,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class OccurrenceQueryService {
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
@@ -78,21 +77,21 @@ public class OccurrenceQueryService {
             result.add(clone);
         }
 
-        log.info("Checking if {} should have a reminder", occurrence); //TODO remove
+        log.debug("Checking if {} should have a reminder", occurrence);
         //Add reminder if it is enabled, not yet reminded and in boundaries
         if (needReminder(event, occurrence)) {
             Integer minusDays = Optional.ofNullable(occurrence.getRemindMeBeforeDays())
                 .orElse(event.getRemindMeBeforeDays());
             LocalDate reminderDate = occurrence.getDate()
                 .minusDays(minusDays);
-
             //Reminder should not happen before current date
             if (reminderDate.isBefore(currentDate)) {
-                log.info("Reminder is before current date, setting to current date"); //TODO remove
+                log.debug("Reminder is before current date, setting to current date");
                 reminderDate = currentDate;
             }
+
             if (isBetween(reminderDate, startDate, endDate)) {
-                log.info("Adding reminder for {} at {}", occurrence, reminderDate); //TODO remove
+                log.debug("Adding reminder for {} at {}", occurrence, reminderDate);
                 Occurrence clone = occurrence.toBuilder()
                     .date(reminderDate)
                     .status(OccurrenceStatus.REMINDER)

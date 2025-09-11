@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 @RequiredArgsConstructor
-//TODO unit test
 class EventCache {
     private final Map<UUID, Event> cache = new HashMap<>();
     @NonNull

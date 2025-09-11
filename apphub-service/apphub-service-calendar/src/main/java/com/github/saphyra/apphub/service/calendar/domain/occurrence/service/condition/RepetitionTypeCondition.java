@@ -10,8 +10,6 @@ import java.util.stream.Stream;
 import static java.util.Objects.isNull;
 
 public interface RepetitionTypeCondition {
-    //TODO unit test
-
     /**
      * Returns the dates of the occurrences
      * @param currentDate null if past dates should be returned

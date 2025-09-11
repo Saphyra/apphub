@@ -15,7 +15,7 @@ class DaysOfMonthCondition implements RepetitionTypeCondition {
             return true;
         }
 
-        for (int i = 1; i <= repeatForDays; i++) {
+        for (int i = 1; i < repeatForDays; i++) {
             LocalDate previousDate = date.minusDays(i);
             if (daysOfMonth.contains(previousDate.getDayOfMonth())) {
                 return true;

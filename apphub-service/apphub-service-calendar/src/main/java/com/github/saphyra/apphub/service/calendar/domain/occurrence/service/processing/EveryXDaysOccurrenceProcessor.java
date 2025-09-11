@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-//TODO unit test
 class EveryXDaysOccurrenceProcessor extends AbstractOccurrenceProcessor {
     EveryXDaysOccurrenceProcessor(OccurrenceFactory occurrenceFactory, OccurrenceDao occurrenceDao, RepetitionTypeConditionSelector repetitionTypeConditionSelector, DateTimeUtil dateTimeUtil) {
         super(occurrenceFactory, occurrenceDao, repetitionTypeConditionSelector, dateTimeUtil);

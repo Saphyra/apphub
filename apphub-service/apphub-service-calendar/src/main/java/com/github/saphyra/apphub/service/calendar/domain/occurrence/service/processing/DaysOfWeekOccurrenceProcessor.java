@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.cond
 import org.springframework.stereotype.Component;
 
 @Component
-//TODO unit test
 class DaysOfWeekOccurrenceProcessor extends AbstractOccurrenceProcessor{
     DaysOfWeekOccurrenceProcessor(OccurrenceFactory occurrenceFactory, OccurrenceDao occurrenceDao, RepetitionTypeConditionSelector repetitionTypeConditionSelector, DateTimeUtil dateTimeUtil) {
         super(occurrenceFactory, occurrenceDao, repetitionTypeConditionSelector, dateTimeUtil);

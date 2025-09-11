@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, OccurrenceRecreator {
     private static final EnumSet<OccurrenceStatus> EXPIRED_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.EXPIRED);
-    private static final EnumSet<OccurrenceStatus> FUTURE_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.SNOOZED, OccurrenceStatus.EXPIRED);
+    private static final EnumSet<OccurrenceStatus> FUTURE_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.EXPIRED);
 
     protected final OccurrenceFactory occurrenceFactory;
     protected final OccurrenceDao occurrenceDao;
@@ -38,11 +38,11 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         List<LocalDate> dates = getConditions(request.getRepetitionData())
             .getOccurrences(request.getStartDate(), getEndDate(request), request.getRepeatForDays(), currentDate);
         if (dates.isEmpty()) {
-            //TODO throw exception
+            throw new IllegalStateException("Cannot create occurrences for event " + eventId + " because no occurrence dates were generated.");
         }
 
         dates.stream()
-            .map(date -> occurrenceFactory.create(userId, eventId, date, null, null))
+            .map(date -> occurrenceFactory.create(userId, eventId, date, null, null)) //Null parameters to use the event's values
             .forEach(occurrenceDao::save);
     }
 
@@ -56,12 +56,13 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
         Event event = context.getEvent();
 
+        LocalDate endDate = getEndDate(event);
         List<LocalDate> datesOfOccurrences = getConditions(event.getRepetitionData())
-            .getOccurrences(event.getStartDate(), getEndDate(event), event.getRepeatForDays(), currentDate)
+            .getOccurrences(event.getStartDate(), endDate, event.getRepeatForDays(), currentDate)
             .stream()
             .toList();
         if (datesOfOccurrences.isEmpty()) {
-            //TODO throw exception
+            throw new IllegalStateException("Cannot recreate occurrences for event " + event.getEventId() + " because no occurrence dates were generated.");
         }
 
         // Delete occurrences that are not in the new range
@@ -70,12 +71,15 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         datesOfOccurrences.forEach(date -> {
             // If there is no occurrence for the date, create one
             if (!occurrencesByDate.containsKey(date)) {
-                Occurrence occurrence = occurrenceFactory.create(event.getUserId(), event.getEventId(), date, null, null);
+                Occurrence occurrence = occurrenceFactory.create(event.getUserId(), event.getEventId(), date, null, null); //Null parameters to use the event's values
                 context.addOccurrence(occurrence);
             }
         });
     }
 
+    /**
+     * @return true, if occurrence should be deleted
+     */
     private boolean shouldDelete(LocalDate currentDate, Occurrence occurrence) {
         //Keep history if possible
         if (currentDate.isBefore(occurrence.getDate())) {

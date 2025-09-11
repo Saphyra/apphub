@@ -10,7 +10,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class RecreateOccurrenceService {
     private final List<OccurrenceRecreator> occurrenceRecreators;
 

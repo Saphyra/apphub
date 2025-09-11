@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 
-//TODO unit test
 class OneTimeCondition implements RepetitionTypeCondition {
     @Override
     public List<LocalDate> getOccurrences(LocalDate startDate, LocalDate endDate, Integer repeatForDays, @Nullable LocalDate currentDate) {

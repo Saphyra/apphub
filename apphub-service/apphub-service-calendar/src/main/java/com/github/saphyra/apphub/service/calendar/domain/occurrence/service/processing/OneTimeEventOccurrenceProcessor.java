@@ -14,7 +14,6 @@ import java.time.LocalDate;
 
 @Component
 @Slf4j
-//TODO unit test
 class OneTimeEventOccurrenceProcessor extends AbstractOccurrenceProcessor {
     OneTimeEventOccurrenceProcessor(OccurrenceFactory occurrenceFactory, OccurrenceDao occurrenceDao, RepetitionTypeConditionSelector repetitionTypeConditionSelector, DateTimeUtil dateTimeUtil) {
         super(occurrenceFactory, occurrenceDao, repetitionTypeConditionSelector, dateTimeUtil);
