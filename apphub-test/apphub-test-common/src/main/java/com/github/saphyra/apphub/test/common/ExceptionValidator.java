@@ -45,6 +45,10 @@ public class ExceptionValidator {
         validateRestException((RestException) ex, status, errorCode, field, value);
     }
 
+    public static void validateNotFoundException(Runnable methodCall){
+        validateNotLoggedException(methodCall, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
     public static void validateNotLoggedException(Runnable methodCall, HttpStatus status, ErrorCode errorCode) {
         try {
             methodCall.run();

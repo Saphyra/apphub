@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 class LabelConverter extends ConverterBase<LabelEntity, Label> {
-    private static final String COLUMN_LABEL = "label";
+    static final String COLUMN_LABEL = "label";
 
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.calendar.model.response.LabelResponse;
+import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LabelQueryService {
     private final EventLabelMappingDao eventLabelMappingDao;
     private final LabelDao labelDao;
@@ -22,8 +22,8 @@ public class LabelQueryService {
     public List<LabelResponse> getByEventId(UUID eventId) {
         return eventLabelMappingDao.getByEventId(eventId)
             .stream()
-            .map(eventLabelMapping -> labelDao.findByIdValidated(eventLabelMapping.getLabelId()))
-            .map(labelMapper::toResponse)
+            .map(EventLabelMapping::getLabelId)
+            .map(this::getLabel)
             .toList();
     }
 

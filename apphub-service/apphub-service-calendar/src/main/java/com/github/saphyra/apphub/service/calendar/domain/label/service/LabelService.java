@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao
 import com.github.saphyra.apphub.service.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.calendar.domain.label.dao.LabelFactory;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LabelService {
     private final LabelDao labelDao;
     private final LabelFactory labelFactory;
@@ -29,6 +29,7 @@ public class LabelService {
         return domain.getLabelId();
     }
 
+    @Transactional
     public void deleteLabel(UUID userId, UUID labelId) {
         eventLabelMappingDao.deleteByUserIdAndLabelId(userId, labelId);
         labelDao.deleteByUserIdAndLabelId(userId, labelId);

@@ -5,10 +5,8 @@ import com.github.saphyra.apphub.api.calendar.server.LabelController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.service.calendar.domain.label.service.LabelQueryService;
 import com.github.saphyra.apphub.service.calendar.domain.label.service.LabelService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +17,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class LabelControllerImpl implements LabelController {
     private final LabelQueryService labelQueryService;
     private final LabelService labelService;
@@ -27,8 +24,6 @@ class LabelControllerImpl implements LabelController {
     @Override
     public OneParamResponse<UUID> createLabel(OneParamRequest<String> label, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create a new label.", accessTokenHeader.getUserId());
-
-        new SleepService().sleep(3000); //TODO remove
 
         UUID labelId = labelService.createLabel(accessTokenHeader.getUserId(), label.getValue());
 
@@ -50,7 +45,6 @@ class LabelControllerImpl implements LabelController {
     }
 
     @Override
-    @Transactional
     public List<LabelResponse> deleteLabel(UUID labelId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to delete label {}.", accessTokenHeader.getUserId(), labelId);
 

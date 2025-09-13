@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class LabelDao extends AbstractDao<LabelEntity, Label, String, LabelRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
