@@ -21,7 +21,6 @@ class LabelRepositoryTest {
     private static final String USER_ID_1 = "user-id-1";
     private static final String USER_ID_2 = "user-id-2";
 
-
     @Autowired
     private LabelRepository underTest;
 

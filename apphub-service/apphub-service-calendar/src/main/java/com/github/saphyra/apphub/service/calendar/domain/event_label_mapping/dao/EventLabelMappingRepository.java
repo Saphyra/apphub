@@ -4,7 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface EventLabelMappingRepository extends CrudRepository<EventLabelMappingEntity, EventLabelMappingEntity> {
     void deleteByUserId(String userId);
 

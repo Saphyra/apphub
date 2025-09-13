@@ -9,7 +9,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EventLabelMappingFactory {
     public EventLabelMapping create(UUID userId, UUID eventId, UUID labelId) {
         return EventLabelMapping.builder()

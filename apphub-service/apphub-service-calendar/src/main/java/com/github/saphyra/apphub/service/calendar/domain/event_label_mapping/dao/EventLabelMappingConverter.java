@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventLabelMappingConverter extends ConverterBase<EventLabelMappingEntity, EventLabelMapping> {
     protected final UuidConverter uuidConverter;
 
