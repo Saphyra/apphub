@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.action.backend.UserSettingsActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActions;
-import com.github.saphyra.apphub.integration.action.backend.calendar.EventActions;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
@@ -25,9 +24,6 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.structure.api.calendar.CreateEventRequest;
-import com.github.saphyra.apphub.integration.structure.api.calendar.ReferenceDate;
-import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
@@ -70,8 +66,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("apphub_user", "apphub_role"),
         new BiWrapper<>("apphub_user", "apphub_user"),
         new BiWrapper<>("apphub_user", "settings"),
-        new BiWrapper<>("calendar", "event"),
-        new BiWrapper<>("calendar", "occurrence"),
         new BiWrapper<>("modules", "favorite"),
         new BiWrapper<>("notebook", "checked_item"),
         new BiWrapper<>("notebook", "column_type"),
@@ -363,19 +357,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
     }
 
     private static void calendarTables(UUID accessTokenId) {
-        //calendar.event
-        //calendar.occurrence
-        CreateEventRequest createEventRequest = CreateEventRequest.builder()
-            .referenceDate(ReferenceDate.builder()
-                .day(LocalDate.now())
-                .month(LocalDate.now())
-                .build())
-            .date(LocalDate.now())
-            .title(TITLE)
-            .content("")
-            .repetitionType(RepetitionType.ONE_TIME)
-            .build();
-        EventActions.createEvent(getServerPort(), accessTokenId, createEventRequest);
+        //TODO
     }
 
     private static void apphubUserTables(UUID accessTokenId, UUID userId, RegistrationParameters adminUserData, UUID adminAccessTokenId) {

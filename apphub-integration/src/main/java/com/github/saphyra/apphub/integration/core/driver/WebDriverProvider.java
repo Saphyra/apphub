@@ -15,7 +15,6 @@ import org.apache.commons.pool2.DestroyMode;
 import org.apache.commons.pool2.impl.GenericObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.html5.WebStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,8 +141,6 @@ public class WebDriverProvider {
                 .assertTrue("Failed to redirect to Error page. Current url: " + driver.getCurrentUrl());
             driver.manage()
                 .deleteAllCookies();
-            ((WebStorage) driver).getSessionStorage()
-                .clear();
         } catch (Exception e) {
             log.error("Failed releasing driver. Removing from cache...");
             try {
