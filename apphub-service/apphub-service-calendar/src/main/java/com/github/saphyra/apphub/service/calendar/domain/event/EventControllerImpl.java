@@ -18,7 +18,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventControllerImpl implements EventController {
     private final CreateEventService createEventService;
     private final EventQueryService eventQueryService;
@@ -56,7 +55,6 @@ class EventControllerImpl implements EventController {
     @Override
     public void editEvent(EventRequest request, UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to edit event {}", accessTokenHeader.getUserId(), eventId);
-        log.info("{}", request); //TODO remove
 
         editEventService.edit(eventId, request);
     }

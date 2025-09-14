@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RemindMeBeforeDaysUpdater implements EventFieldUpdater {
     @Override
     public Object getRequestField(EventRequest request) {
@@ -27,7 +26,6 @@ class RemindMeBeforeDaysUpdater implements EventFieldUpdater {
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
         log.info("Updating remindMeBeforeDays of event {}", event.getEventId());
 
-        context.getOccurrences()
-            .forEach(occurrence -> occurrence.setRemindMeBeforeDays(request.getRemindMeBeforeDays()));
+        event.setRemindMeBeforeDays(request.getRemindMeBeforeDays());
     }
 }

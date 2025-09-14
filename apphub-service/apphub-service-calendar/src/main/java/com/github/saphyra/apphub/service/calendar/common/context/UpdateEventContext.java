@@ -55,12 +55,6 @@ public class UpdateEventContext {
         return occurrences;
     }
 
-    public void occurrencesModified(List<Occurrence> modifiedOccurrences) {
-        modifiedOccurrences.stream()
-            .map(Occurrence::getOccurrenceId)
-            .forEach(this.modifiedOccurrences::add);
-    }
-
     public void processChanges() {
         if (occurrenceRecreationNeeded) {
             recreateOccurrenceService.recreateOccurrences(this);
@@ -81,15 +75,6 @@ public class UpdateEventContext {
 
     public void occurrenceRecreationNeeded() {
         occurrenceRecreationNeeded = true;
-    }
-
-    public void deleteOccurrences(List<Occurrence> occurrences) {
-        deleteOccurrences(occurrences::contains);
-    }
-
-    public void deleteOccurrences() {
-        occurrences.forEach(occurrence -> deletedOccurrences.add(occurrence.getOccurrenceId()));
-        occurrences.clear();
     }
 
     /**

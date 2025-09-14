@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.calendar.common.context.UpdateEventCont
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
 import jakarta.transaction.Transactional;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
+@Builder
 public class EditEventService {
     private final EventRequestValidator eventRequestValidator;
     private final EventDao eventDao;

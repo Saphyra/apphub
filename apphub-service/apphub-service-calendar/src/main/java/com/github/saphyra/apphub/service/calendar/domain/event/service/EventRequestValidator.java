@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.calendar.config.CalendarParams;
+import com.github.saphyra.apphub.service.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,10 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventRequestValidator {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final CalendarParams calendarParams;
+    private final LabelDao labelDao;
 
     void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
@@ -43,9 +44,14 @@ class EventRequestValidator {
         ValidationUtil.notBlank(request.getTitle(), "title");
         ValidationUtil.notNull(request.getContent(), "content");
         ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
-        ValidationUtil.notNull(request.getLabels(), "labels");
+        ValidationUtil.doesNotContainNull(request.getLabels(), "labels");
 
-        //TODO check labels exist
+        request.getLabels()
+            .forEach(labelId -> {
+                if (!labelDao.existsById(labelId)) {
+                    throw ExceptionFactory.invalidParam("labelId", "does not exist");
+                }
+            });
     }
 
     private void validateRepetitionData(RepetitionType repetitionType, Object repetitionData) {
@@ -62,6 +68,7 @@ class EventRequestValidator {
                 TypeReference<Set<DayOfWeek>> daysOfWeekTypeReference = new TypeReference<>() {
                 };
                 Set<DayOfWeek> dayOfWeeks = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfWeekTypeReference), "repetitionData");
+                ValidationUtil.doesNotContainNull(dayOfWeeks, "repetitionData");
                 ValidationUtil.notEmpty(dayOfWeeks, "repetitionData");
                 break;
 
@@ -70,6 +77,7 @@ class EventRequestValidator {
                 };
                 List<Integer> values = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfMonthTypeReference), "repetitionData");
                 ValidationUtil.notEmpty(values, "repetitionData");
+                ValidationUtil.doesNotContainNull(values, "repetitionData");
                 values.forEach(integer -> {
                     ValidationUtil.atLeast(integer, 1, "repetitionData");
                     ValidationUtil.maximum(integer, 31, "repetitionData");

@@ -11,7 +11,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class EventDao extends AbstractDao<EventEntity, Event, String, EventRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

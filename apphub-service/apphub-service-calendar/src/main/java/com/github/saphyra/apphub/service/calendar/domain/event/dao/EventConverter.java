@@ -15,17 +15,16 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventConverter extends ConverterBase<EventEntity, Event> {
-    private static final String COLUMN_REPETITION_TYPE = "repetition_type";
-    private static final String COLUMN_REPETITION_DATA = "repetition_data";
-    private static final String COLUMN_START_DATE = "start_date";
-    private static final String COLUMN_END_DATE = "end_date";
-    private static final String COLUMN_TIME = "time";
-    private static final String COLUMN_TITLE = "title";
-    private static final String COLUMN_REPEAT_FOR_DAYS = "repeat_for_days";
-    private static final String COLUMN_CONTENT = "content";
-    private static final String REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
+    static final String COLUMN_REPETITION_TYPE = "repetition_type";
+    static final String COLUMN_REPETITION_DATA = "repetition_data";
+    static final String COLUMN_START_DATE = "start_date";
+    static final String COLUMN_END_DATE = "end_date";
+    static final String COLUMN_TIME = "time";
+    static final String COLUMN_TITLE = "title";
+    static final String COLUMN_REPEAT_FOR_DAYS = "repeat_for_days";
+    static final String COLUMN_CONTENT = "content";
+    static final String REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;

@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class DeleteEventService {
     private final EventDao eventDao;
     private final EventLabelMappingDao eventLabelMappingDao;

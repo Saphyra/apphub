@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EventFactory {
     private final IdGenerator idGenerator;
     private final ObjectMapperWrapper objectMapperWrapper;

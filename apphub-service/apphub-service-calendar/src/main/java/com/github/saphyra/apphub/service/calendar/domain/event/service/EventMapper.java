@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventMapper {
     private final ObjectMapperWrapper objectMapperWrapper;
     private final EventLabelMappingDao eventLabelMappingDao;
@@ -23,7 +22,6 @@ class EventMapper {
      EventResponse toResponse(Event event) {
         return EventResponse.builder()
             .eventId(event.getEventId())
-            .title(event.getTitle())
             .repetitionType(event.getRepetitionType())
             .repetitionData(objectMapperWrapper.readValue(event.getRepetitionData(), Object.class))
             .repeatForDays(event.getRepeatForDays())

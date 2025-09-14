@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ContentUpdater implements EventFieldUpdater {
     @Override
     public Object getRequestField(EventRequest request) {

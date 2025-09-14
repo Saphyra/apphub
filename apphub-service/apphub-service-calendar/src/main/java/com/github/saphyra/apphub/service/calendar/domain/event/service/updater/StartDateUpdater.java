@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StartDateUpdater implements EventFieldUpdater {
     @Override
     public Object getRequestField(EventRequest request) {
@@ -28,5 +27,7 @@ class StartDateUpdater implements EventFieldUpdater {
         log.info("Updating startDate of Event {}", event.getEventId());
 
         event.setStartDate(request.getStartDate());
+
+        context.occurrenceRecreationNeeded();
     }
 }
