@@ -12,7 +12,6 @@ import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
 
 const DEFAULT_DISPLAY_OCCURRENCES = false;
 
-//TODO make it smaller
 const OpenedEvent = ({
     eventId,
     localizationHandler,

@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import Spinner from "../../../common/component/Spinner";
 import Header from "../../../common/component/Header";
 import Button from "../../../common/component/input/Button";
-import { CALENDAR_EDIT_OCCURRENCE, CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 import useLoader from "../../../common/hook/Loader";
 import { hasValue } from "../../../common/js/Utils";
 import { useExtractAsync } from "../../../common/hook/UseEffectValidated";
@@ -26,8 +26,8 @@ import PostLabeledInputField from "../../../common/component/input/PostLabeledIn
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { DONE, EXPIRED, PENDING, SNOOZED } from "../common/OccurrenceStatus";
 import confirmOccurrenceDeletion from "../common/delete_occurrence/DeleteOccurrence";
+import save from "./EditOccurrence";
 
-//TODO make it smaller
 const CalendarEditOccurrencePage = () => {
     const { occurrenceId } = useParams();
 
@@ -169,7 +169,7 @@ const CalendarEditOccurrencePage = () => {
                             occurrence.title,
                             occurrence.date,
                             setDisplaySpinner,
-                            () => {},
+                            () => { },
                             () => window.location.href = CALENDAR_PAGE
                         )}
                     />
@@ -179,7 +179,19 @@ const CalendarEditOccurrencePage = () => {
                         key="save"
                         id="calendar-edit-occurrence-save-button"
                         label={localizationHandler.get("save")}
-                        onclick={() => save()}
+                        onclick={() => save({
+                            localizationHandler: localizationHandler,
+                            occurrenceId: occurrenceId,
+                            date: date,
+                            time: time,
+                            status: status,
+                            note: note,
+                            remindMeBeforeDays: remindMeBeforeDays,
+                            reminded: reminded,
+                            setDisplaySpinner: setDisplaySpinner,
+                            setConfirmationDialogData: setConfirmationDialogData,
+                            refresh: refresh
+                        })}
                     />
                 ]}
                 rightButtons={[
@@ -211,25 +223,6 @@ const CalendarEditOccurrencePage = () => {
         return new Stream([PENDING, DONE, SNOOZED])
             .map(status => new SelectOption(localizationHandler.get(status), status))
             .toList();
-    }
-
-    async function save() {
-        //TODO validation
-
-        const payload = {
-            date: date,
-            time: time,
-            status: status,
-            note: note,
-            remindMeBeforeDays: remindMeBeforeDays,
-            reminded: reminded
-        };
-
-        await CALENDAR_EDIT_OCCURRENCE.createRequest(payload, { occurrenceId: occurrenceId })
-            .send(setDisplaySpinner);
-
-        NotificationService.storeSuccessText(localizationHandler.get("saved"));
-        window.location.href = CALENDAR_PAGE;
     }
 }
 
