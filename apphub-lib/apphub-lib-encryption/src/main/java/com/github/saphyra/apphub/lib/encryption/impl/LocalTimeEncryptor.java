@@ -7,7 +7,6 @@ import java.time.LocalTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-//TODO unit test
 public class LocalTimeEncryptor implements Encryptor<LocalTime> {
     private final StringEncryptor stringEncryptor;
 

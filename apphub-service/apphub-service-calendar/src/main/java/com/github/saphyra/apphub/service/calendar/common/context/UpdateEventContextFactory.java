@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class UpdateEventContextFactory {
     private final EventDao eventDao;
     private final OccurrenceDao occurrenceDao;

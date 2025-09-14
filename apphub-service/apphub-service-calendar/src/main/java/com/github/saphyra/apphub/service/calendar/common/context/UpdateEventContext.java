@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.calendar.common.context;
 
+import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
@@ -10,16 +11,14 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
 
-import static java.util.Objects.isNull;
-
 @Slf4j
-// TODO unit test
 public class UpdateEventContext {
     @Getter
     private final Event event;
@@ -32,7 +31,7 @@ public class UpdateEventContext {
     private final Set<UUID> deletedOccurrences = new HashSet<>();
 
     private boolean occurrenceRecreationNeeded;
-    private List<Occurrence> occurrences;
+    private final LazyLoadedField<List<Occurrence>> occurrences;
 
     @Builder
     public UpdateEventContext(
@@ -45,14 +44,11 @@ public class UpdateEventContext {
         this.eventDao = eventDao;
         this.occurrenceDao = occurrenceDao;
         this.recreateOccurrenceService = recreateOccurrenceService;
+        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(occurrenceDao.getByEventId(event.getEventId())));
     }
 
     public List<Occurrence> getOccurrences() {
-        if (isNull(occurrences)) {
-            occurrences = occurrenceDao.getByEventId(event.getEventId());
-        }
-
-        return occurrences;
+        return occurrences.get();
     }
 
     public void processChanges() {
@@ -66,7 +62,8 @@ public class UpdateEventContext {
         log.info("Deleting {} occurrences for event {}", deletedOccurrences.size(), event.getEventId());
         occurrenceDao.deleteAllById(deletedOccurrences);
 
-        List<Occurrence> modifiedOccurrences = getOccurrences().stream()
+        List<Occurrence> modifiedOccurrences = occurrences.get()
+            .stream()
             .filter(occurrence -> this.modifiedOccurrences.contains(occurrence.getOccurrenceId()))
             .toList();
         log.info("Saving {} modified occurrences for event {}", modifiedOccurrences.size(), event.getEventId());
@@ -81,14 +78,16 @@ public class UpdateEventContext {
      * Deletes occurrences that match the given predicate.
      */
     public void deleteOccurrences(Predicate<Occurrence> predicate) {
-        occurrences.stream()
+        occurrences.get()
+            .stream()
             .filter(predicate)
             .forEach(occurrence -> deletedOccurrences.add(occurrence.getOccurrenceId()));
-        occurrences.removeIf(predicate);
+        occurrences.get()
+            .removeIf(predicate);
     }
 
     public void addOccurrence(Occurrence occurrence) {
-        occurrences.add(occurrence);
+        occurrences.get().add(occurrence);
         modifiedOccurrences.add(occurrence.getOccurrenceId());
     }
 }

@@ -1,15 +1,11 @@
 package com.github.saphyra.apphub.lib.common_util;
 
-import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -71,34 +67,6 @@ public class DateTimeUtil {
             CommonUtils.withLeadingZeros(time.getHour(), 2),
             CommonUtils.withLeadingZeros(time.getMinute(), 2)
         );
-    }
-
-    public OffsetDateTime getCurrentOffsetDateTime() {
-        return OffsetDateTime.now(ZoneOffset.UTC);
-    }
-
-    //TODO unit test
-    public LocalDate earliest(Collection<LocalDate> keySet) {
-        return keySet.stream()
-            .min(LocalDate::compareTo)
-            .orElseThrow(() -> new IllegalArgumentException("The collection of LocalDate is empty"));
-    }
-
-    //TODO unit test
-    public LocalDate earlier(@NonNull LocalDate date1, @NonNull LocalDate date2) {
-        return earliest(List.of(date1, date2));
-    }
-
-    //TODO unit test
-    public LocalDate latest(Collection<LocalDate> keySet) {
-        return keySet.stream()
-            .max(LocalDate::compareTo)
-            .orElseThrow(() -> new IllegalArgumentException("The collection of LocalDate is empty"));
-    }
-
-    //TODO unit test
-    public LocalDate later(@NonNull LocalDate date1, @NonNull LocalDate date2) {
-        return latest(List.of(date1, date2));
     }
 
     public boolean isBetween(LocalDate date, LocalDate startDate, LocalDate endDate) {

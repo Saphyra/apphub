@@ -14,10 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
-import static org.apache.commons.lang3.ObjectUtils.isEmpty;
 
 public class CollectionUtils {
     public static <T> int size(T[] array) {
@@ -100,21 +98,5 @@ public class CollectionUtils {
         }
         in.forEach((k, vs) -> result.put(k, new ArrayList<>(vs)));
         return result;
-    }
-
-    public static <K, V, R> OptionalMap<K, V> mapToOptionalMap(List<R> list, Function<R, K> keyMapper, Function<R, V> valueMapper) {
-        Map<K, V> map = list.stream()
-            .collect(Collectors.toMap(keyMapper, valueMapper));
-
-        return new OptionalHashMap<>(map);
-    }
-
-    //TODO unit test
-    public static String nullIfEmpty(String input) {
-        if (isEmpty(input)) {
-            return null;
-        }
-
-        return input;
     }
 }
