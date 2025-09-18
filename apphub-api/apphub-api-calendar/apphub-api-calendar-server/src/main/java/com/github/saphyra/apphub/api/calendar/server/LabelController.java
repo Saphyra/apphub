@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO Role protection test
-//TODO API test
 public interface LabelController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_LABEL)
     OneParamResponse<UUID> createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
