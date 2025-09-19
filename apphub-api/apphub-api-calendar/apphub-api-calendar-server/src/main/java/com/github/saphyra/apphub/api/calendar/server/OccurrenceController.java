@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-//TODO Role protection test
 //TODO API test
 public interface OccurrenceController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_OCCURRENCE)
