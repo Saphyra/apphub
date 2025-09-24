@@ -5,11 +5,17 @@ import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
 import io.restassured.response.Response;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarOccurrenceActions {
     public static Response getCreateOccurrenceResponse(int serverPort, UUID accessTokenId, UUID eventId, OccurrenceRequest request) {
@@ -31,9 +37,15 @@ public class CalendarOccurrenceActions {
 
     public static Response getGetOccurrencesResponse(int serverPort, UUID accessTokenId, LocalDate startDate, LocalDate endDate) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
-            .queryParam("startDate", startDate)
-            .queryParam("endDate", endDate)
-            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_OCCURRENCES));
+            .get(UrlFactory.create(
+                serverPort,
+                CalendarEndpoints.CALENDAR_GET_OCCURRENCES,
+                Map.of(),
+                Map.of(
+                    "startDate", startDate,
+                    "endDate", endDate
+                )
+            ));
     }
 
     public static Response getGetOccurrenceResponse(int serverPort, UUID accessTokenId, UUID occurrenceId) {
@@ -55,5 +67,21 @@ public class CalendarOccurrenceActions {
     public static Response getSetRemindedResponse(int serverPort, UUID accessTokenId, UUID occurrenceId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_OCCURRENCE_REMINDED, "occurrenceId", occurrenceId));
+    }
+
+    public static List<OccurrenceResponse> getOccurrencesOfEvent(int serverPort, UUID accessTokenId, UUID eventId) {
+        Response response = getGetOccurrencesOfEventResponse(serverPort, accessTokenId, eventId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(OccurrenceResponse[].class));
+    }
+
+    public static List<OccurrenceResponse> getOccurrences(int serverPort, UUID accessTokenId, LocalDate startDate, LocalDate endDate) {
+        Response response = getGetOccurrencesResponse(serverPort, accessTokenId, startDate, endDate);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(OccurrenceResponse[].class));
     }
 }

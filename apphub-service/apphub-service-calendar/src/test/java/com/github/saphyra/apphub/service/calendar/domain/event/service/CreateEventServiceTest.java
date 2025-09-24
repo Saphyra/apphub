@@ -16,6 +16,7 @@ import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class CreateEventServiceTest {
@@ -51,7 +52,7 @@ class CreateEventServiceTest {
         given(eventFactory.create(USER_ID, request)).willReturn(event);
         given(event.getEventId()).willReturn(EVENT_ID);
 
-        underTest.create(USER_ID, request);
+        assertThat(underTest.create(USER_ID, request)).isEqualTo(EVENT_ID);
 
         then(eventRequestValidator).should().validate(request);
         then(eventLabelMappingService).should().addLabels(USER_ID, EVENT_ID, request.getLabels());

@@ -53,10 +53,9 @@ class EventControllerImplTest {
     @Test
     void createEvent() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(createEventService.create(USER_ID, request)).willReturn(EVENT_ID);
 
-        underTest.createEvent(request, accessTokenHeader);
-
-        then(createEventService).should().create(USER_ID, request);
+        assertThat(underTest.createEvent(request, accessTokenHeader).getValue()).isEqualTo(EVENT_ID);
     }
 
     @Test

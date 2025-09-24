@@ -24,7 +24,7 @@ public class CreateEventService {
     private final EventDao eventDao;
 
     @Transactional
-    public void create(UUID userId, EventRequest request) {
+    public UUID create(UUID userId, EventRequest request) {
         eventRequestValidator.validate(request);
 
         Event event = eventFactory.create(userId, request);
@@ -33,5 +33,7 @@ public class CreateEventService {
         createOccurrenceService.createOccurrences(userId, event.getEventId(), request);
 
         eventDao.save(event);
+
+        return event.getEventId();
     }
 }

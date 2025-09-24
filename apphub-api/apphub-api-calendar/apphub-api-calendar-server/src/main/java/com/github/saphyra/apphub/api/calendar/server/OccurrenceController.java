@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
 public interface OccurrenceController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_OCCURRENCE)
     void createOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
@@ -31,6 +30,10 @@ public interface OccurrenceController {
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_OCCURRENCE)
     void deleteOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Returns all occurrences between startDate and endDate (inclusive). Filters for events with the given label if labelId is specified.
+     * Response contains reminders of occurrences.
+     */
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCES)
     List<OccurrenceResponse> getOccurrences(
         @RequestParam("startDate") LocalDate startDate,
@@ -42,6 +45,9 @@ public interface OccurrenceController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCE)
     OccurrenceResponse getOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
+    /**
+     * Returns all occurrences of the given event. Response does not contain reminders of occurrences.
+     */
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCES_OF_EVENT)
     List<OccurrenceResponse> getOccurrencesOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

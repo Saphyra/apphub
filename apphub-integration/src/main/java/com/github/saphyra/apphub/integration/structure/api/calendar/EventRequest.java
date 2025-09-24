@@ -13,7 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class EventRequest {
     private RepetitionType repetitionType;
     private Object repetitionData;

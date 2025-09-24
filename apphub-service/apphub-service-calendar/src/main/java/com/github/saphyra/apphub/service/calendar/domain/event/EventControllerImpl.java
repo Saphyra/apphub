@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.api.calendar.server.EventController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.calendar.domain.event.service.CreateEventService;
 import com.github.saphyra.apphub.service.calendar.domain.event.service.DeleteEventService;
 import com.github.saphyra.apphub.service.calendar.domain.event.service.EditEventService;
@@ -25,10 +26,12 @@ class EventControllerImpl implements EventController {
     private final EditEventService editEventService;
 
     @Override
-    public void createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create an event", accessTokenHeader.getUserId());
 
-        createEventService.create(accessTokenHeader.getUserId(), request);
+        UUID eventId = createEventService.create(accessTokenHeader.getUserId(), request);
+
+        return new OneParamResponse<>(eventId);
     }
 
     @Override
