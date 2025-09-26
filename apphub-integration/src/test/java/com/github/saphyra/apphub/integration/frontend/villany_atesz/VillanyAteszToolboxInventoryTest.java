@@ -49,7 +49,7 @@ public class VillanyAteszToolboxInventoryTest extends SeleniumTest {
         VillanyAteszNavigation.openToolbox(driver);
         VillanyAteszNavigation.openToolboxNew(driver);
 
-        VillanyAteszToolboxPageActions.create(driver, BRAND, NAME, COST, TOOL_TYPE_NAME, STORAGE_BOX_NAME);
+        VillanyAteszToolboxPageActions.createToolbox(driver, BRAND, NAME, COST, TOOL_TYPE_NAME, STORAGE_BOX_NAME);
 
         VillanyAteszNavigation.openToolboxInventory(driver);
 

@@ -208,7 +208,7 @@ public class VillanyAteszCommissionsTest extends BackEndTest {
     private UUID setUpCart(UUID accessTokenId, String contactName, String stockItemName) {
         UUID contactId = createContact(accessTokenId, contactName);
         UUID stockItemId = createStockItem(accessTokenId, stockItemName);
-        UUID cartId = VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
+        UUID cartId = VillanyAteszCartActions.createCart(getServerPort(), accessTokenId, contactId);
         AddToCartRequest addToCartRequest = AddToCartRequest.builder()
             .cartId(cartId)
             .stockItemId(stockItemId)
@@ -241,7 +241,7 @@ public class VillanyAteszCommissionsTest extends BackEndTest {
             .measurement("")
             .build();
 
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, stockCategoryModel)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, stockCategoryModel)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -257,7 +257,7 @@ public class VillanyAteszCommissionsTest extends BackEndTest {
             .price(PRICE)
             .build();
 
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, request);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, request);
 
         return VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()

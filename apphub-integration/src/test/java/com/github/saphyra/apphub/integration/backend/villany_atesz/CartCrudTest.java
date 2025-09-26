@@ -86,7 +86,7 @@ public class CartCrudTest extends BackEndTest {
     }
 
     private UUID create(UUID accessTokenId, UUID contactId) {
-        UUID cartId = VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
+        UUID cartId = VillanyAteszCartActions.createCart(getServerPort(), accessTokenId, contactId);
 
         CustomAssertions.singleListAssertThat(VillanyAteszCartActions.getCarts(getServerPort(), accessTokenId))
             .extracting(CartResponse::getContact)
@@ -196,7 +196,7 @@ public class CartCrudTest extends BackEndTest {
             .measurement("")
             .build();
 
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, stockCategoryModel)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, stockCategoryModel)
             .stream()
             .findFirst()
             .orElseThrow()
@@ -212,7 +212,7 @@ public class CartCrudTest extends BackEndTest {
             .price(PRICE)
             .build();
 
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, request);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, request);
 
         return VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()

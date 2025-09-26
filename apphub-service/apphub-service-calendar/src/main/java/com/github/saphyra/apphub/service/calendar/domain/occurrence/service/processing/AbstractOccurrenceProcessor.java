@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.Occu
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.condition.RepetitionTypeCondition;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.condition.RepetitionTypeConditionSelector;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.util.EnumSet;
@@ -22,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Slf4j
 abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, OccurrenceRecreator {
     private static final EnumSet<OccurrenceStatus> EXPIRED_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.EXPIRED);
     private static final EnumSet<OccurrenceStatus> FUTURE_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.EXPIRED);
@@ -48,25 +50,29 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
     @Override
     public void recreateOccurrences(UpdateEventContext context) {
+        Event event = context.getEvent();
+        log.info("Recreating occurrences for event {}", event.getEventId());
+
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
         Map<LocalDate, List<Occurrence>> occurrencesByDate = context.getOccurrences()
             .stream()
             .collect(Collectors.groupingBy(Occurrence::getDate));
 
-        Event event = context.getEvent();
+        log.info("Current occurrences: {}", occurrencesByDate); //TODO debug
 
         LocalDate endDate = getEndDate(event);
         List<LocalDate> datesOfOccurrences = getConditions(event.getRepetitionData())
             .getOccurrences(event.getStartDate(), endDate, event.getRepeatForDays(), currentDate)
             .stream()
             .toList();
+        log.info("New occurrence dates: {}", datesOfOccurrences); //TODO debug
         if (datesOfOccurrences.isEmpty()) {
             throw new IllegalStateException("Cannot recreate occurrences for event " + event.getEventId() + " because no occurrence dates were generated.");
         }
 
         // Delete occurrences that are not in the new range
-        context.deleteOccurrences(occurrence -> shouldDelete(currentDate, occurrence) && !datesOfOccurrences.contains(occurrence.getDate()));
+        context.deleteOccurrences(occurrence -> shouldDelete(currentDate, occurrence, datesOfOccurrences));
 
         datesOfOccurrences.forEach(date -> {
             // If there is no occurrence for the date, create one
@@ -80,14 +86,32 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
     /**
      * @return true, if occurrence should be deleted
      */
-    private boolean shouldDelete(LocalDate currentDate, Occurrence occurrence) {
+    private boolean shouldDelete(LocalDate currentDate, Occurrence occurrence, List<LocalDate> datesOfOccurrences) {
+        //Keep occurrences that are still in the new range (avoid unnecessary recreation)
+        if (datesOfOccurrences.contains(occurrence.getDate())) {
+            log.info("{} should not be deleted, because it is still in the new range.", occurrence); //TODO debug
+            return false;
+        }
+
         //Keep history if possible
-        if (currentDate.isBefore(occurrence.getDate())) {
-            return EXPIRED_OCCURRENCE_DELETE_STATUSES.contains(occurrence.getStatus());
+        if (occurrence.getDate().isBefore(currentDate)) {
+            boolean result = EXPIRED_OCCURRENCE_DELETE_STATUSES.contains(occurrence.getStatus());
+            if (result) {
+                log.info("{} should be deleted, because it is expired and has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+            } else {
+                log.info("{} should not be deleted, because it is expired, but has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+            }
+            return result;
         }
 
         //Keep completed future occurrences
-        return FUTURE_OCCURRENCE_DELETE_STATUSES.contains(occurrence.getStatus());
+        boolean result = FUTURE_OCCURRENCE_DELETE_STATUSES.contains(occurrence.getStatus());
+        if (result) {
+            log.info("{} should be deleted, because it is future and has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+        } else {
+            log.info("{} should not be deleted, because it is future, but has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+        }
+        return result;
     }
 
     protected LocalDate getEndDate(EventRequest request) {

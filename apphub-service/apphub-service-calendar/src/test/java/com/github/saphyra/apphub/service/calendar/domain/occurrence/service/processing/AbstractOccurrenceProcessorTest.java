@@ -170,9 +170,6 @@ class AbstractOccurrenceProcessorTest {
         given(existingOccurrenceNotOnDate.getDate()).willReturn(EXISTING_OCCURRENCE_NOT_ON_DATE);
         given(existingExpiredOccurrenceNotOnDate.getDate()).willReturn(EXISTING_OCCURRENCE_NOT_ON_DATE);
 
-        given(existingDoneOccurrence.getStatus()).willReturn(OccurrenceStatus.DONE);
-        given(existingExpiredOccurrence.getStatus()).willReturn(OccurrenceStatus.EXPIRED);
-        given(existingFutureOccurrence.getStatus()).willReturn(OccurrenceStatus.PENDING);
         given(existingOccurrenceNotOnDate.getStatus()).willReturn(OccurrenceStatus.EXPIRED);
         given(existingExpiredOccurrenceNotOnDate.getStatus()).willReturn(OccurrenceStatus.EXPIRED);
 

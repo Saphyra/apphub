@@ -82,7 +82,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(MEASUREMENT)
             .build();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, request))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, request))
             .returns(NAME, StockCategoryModel::getName)
             .returns(MEASUREMENT, StockCategoryModel::getMeasurement);
     }
@@ -111,7 +111,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .measurement(NEW_MEASUREMENT)
             .build();
 
-        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.edit(getServerPort(), accessTokenId, stockCategoryId, request))
+        CustomAssertions.singleListAssertThat(VillanyAteszStockCategoryActions.editStockCategory(getServerPort(), accessTokenId, stockCategoryId, request))
             .returns(NEW_NAME, StockCategoryModel::getName)
             .returns(NEW_MEASUREMENT, StockCategoryModel::getMeasurement);
     }
@@ -126,7 +126,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .inStorage(0)
             .price(PRICE)
             .build();
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, createStockItemRequest);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, createStockItemRequest);
         UUID stockItemId = VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()
             .findFirst()
@@ -146,7 +146,7 @@ public class StockCategoryCrudTest extends BackEndTest {
             .orElseThrow()
             .getContactId();
 
-        VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
+        VillanyAteszCartActions.createCart(getServerPort(), accessTokenId, contactId);
         UUID cartId = VillanyAteszCartActions.getCarts(getServerPort(), accessTokenId)
             .stream()
             .findFirst()

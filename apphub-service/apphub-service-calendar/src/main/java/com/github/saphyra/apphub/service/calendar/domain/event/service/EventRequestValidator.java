@@ -28,6 +28,7 @@ class EventRequestValidator {
     void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
         validateRepetitionData(request.getRepetitionType(), request.getRepetitionData());
+
         ValidationUtil.atLeast(request.getRepeatForDays(), 1, "repeatForDays");
         ValidationUtil.notNull(request.getStartDate(), "startDate");
 

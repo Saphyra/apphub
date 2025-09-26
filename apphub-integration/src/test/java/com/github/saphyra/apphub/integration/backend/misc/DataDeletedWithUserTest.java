@@ -214,7 +214,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
             .name(TITLE)
             .measurement("")
             .build();
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, stockCategoryModel)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, stockCategoryModel)
             .get(0)
             .getStockCategoryId();
 
@@ -230,7 +230,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
             .inStorage(2)
             .build();
 
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, createStockItemRequest);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, createStockItemRequest);
         UUID stockItemId = VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId).get(0).getStockItemId();
 
         //villany_atesz.acquisition
@@ -246,7 +246,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
         VillanyAteszStockItemActions.acquire(getServerPort(), accessTokenId, LocalDate.now(), addToStockRequest);
 
         //villany_atesz.cart
-        UUID cartId = VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
+        UUID cartId = VillanyAteszCartActions.createCart(getServerPort(), accessTokenId, contactId);
 
         //villany_atesz.cart_item
         AddToCartRequest addToCartRequest = AddToCartRequest.builder()
