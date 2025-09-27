@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RenameSolarSystemAndPlanet extends BackEndTest {
+public class RenameSolarSystemAndPlanetTest extends BackEndTest {
     private static final String GAME_NAME = "game-name";
     private static final String NEW_SOLAR_SYSTEM_NAME = "new_solar-system-name";
     private static final String NEW_PLANET_NAME = "new-planet-name";

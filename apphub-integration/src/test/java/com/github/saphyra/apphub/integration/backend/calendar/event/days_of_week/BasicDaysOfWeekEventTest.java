@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend.calendar.event.every_x_days;
+package com.github.saphyra.apphub.integration.backend.calendar.event.days_of_week;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
@@ -12,17 +12,23 @@ import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionTy
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextMonday;
+import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextSunday;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class BasicEveryXDaysEventTest extends BackEndTest {
-    private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(7);
+public class BasicDaysOfWeekEventTest extends BackEndTest {
+    private static final LocalDate START_DATE = nextMonday();
+    private static final LocalDate END_DATE = nextSunday(START_DATE);
+    private static final LocalDate NEW_START_DATE = START_DATE.plusWeeks(1);
+    private static final LocalDate NEW_END_DATE = nextSunday(NEW_START_DATE);
 
     @Test(groups = {"be", "calendar"})
-    public void basicEveryXDaysEvent() {
+    public void basicDaysOfWeekEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
@@ -38,14 +44,15 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
         assertThat(CalendarOccurrenceActions.getOccurrences(
             getServerPort(),
             accessTokenId,
-            EventRequestFactory.DEFAULT_START_DATE.minusDays(10),
-            EventRequestFactory.DEFAULT_END_DATE.plusDays(10)
+            START_DATE.minusDays(10),
+            NEW_END_DATE.plusDays(10)
         )).isEmpty();
     }
 
     private void edit(UUID accessTokenId, UUID eventId) {
-        EventRequest request = EventRequestFactory.editRequest(RepetitionType.EVERY_X_DAYS)
+        EventRequest request = EventRequestFactory.editRequest(RepetitionType.DAYS_OF_WEEK)
             .toBuilder()
+            .startDate(NEW_START_DATE)
             .endDate(NEW_END_DATE)
             .build();
 
@@ -53,10 +60,10 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
 
         assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
             .returns(eventId, EventResponse::getEventId)
-            .returns(RepetitionType.EVERY_X_DAYS, EventResponse::getRepetitionType)
-            .returns(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS, EventResponse::getRepetitionData)
+            .returns(RepetitionType.DAYS_OF_WEEK, EventResponse::getRepetitionType)
+            .returns(EventRequestFactory.NEW_REPETITION_DATA_DAYS_OF_WEEK, EventResponse::getRepetitionData)
             .returns(EventRequestFactory.NEW_REPEAT_FOR_DAYS, EventResponse::getRepeatForDays)
-            .returns(EventRequestFactory.NEW_START_DATE, EventResponse::getStartDate)
+            .returns(NEW_START_DATE, EventResponse::getStartDate)
             .returns(NEW_END_DATE, EventResponse::getEndDate)
             .returns(EventRequestFactory.NEW_TIME, EventResponse::getTime)
             .returns(EventRequestFactory.NEW_TITLE, EventResponse::getTitle)
@@ -69,26 +76,36 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
             .map(OccurrenceResponse::getDate)
             .toList();
 
-        assertThat(occurrences).hasSize(4);
+        assertThat(occurrences).hasSize(8);
 
         assertThat(occurrences).containsExactlyInAnyOrder(
-            EventRequestFactory.NEW_START_DATE,
-            EventRequestFactory.NEW_START_DATE.plusDays(1),
-            EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS),
-            EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS + 1)
+            NEW_START_DATE.with(DayOfWeek.WEDNESDAY),
+            NEW_START_DATE.with(DayOfWeek.WEDNESDAY).plusDays(1),
+            NEW_START_DATE.with(DayOfWeek.SUNDAY),
+            NEW_START_DATE.with(DayOfWeek.SUNDAY).plusDays(1),
+            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.WEDNESDAY),
+            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.WEDNESDAY).plusDays(1),
+            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY),
+            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY).plusDays(1)
         );
     }
 
     private UUID create(UUID accessTokenId) {
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, EventRequestFactory.validRequest(RepetitionType.EVERY_X_DAYS));
+        EventRequest request = EventRequestFactory.validRequest(RepetitionType.DAYS_OF_WEEK)
+            .toBuilder()
+            .startDate(START_DATE)
+            .endDate(END_DATE)
+            .build();
+
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
 
         assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
             .returns(eventId, EventResponse::getEventId)
-            .returns(RepetitionType.EVERY_X_DAYS, EventResponse::getRepetitionType)
-            .returns(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS, EventResponse::getRepetitionData)
+            .returns(RepetitionType.DAYS_OF_WEEK, EventResponse::getRepetitionType)
+            .returns(EventRequestFactory.DEFAULT_REPETITION_DATA_DAYS_OF_WEEK, EventResponse::getRepetitionData)
             .returns(1, EventResponse::getRepeatForDays)
-            .returns(EventRequestFactory.DEFAULT_START_DATE, EventResponse::getStartDate)
-            .returns(EventRequestFactory.DEFAULT_END_DATE, EventResponse::getEndDate)
+            .returns(START_DATE, EventResponse::getStartDate)
+            .returns(END_DATE, EventResponse::getEndDate)
             .returns(EventRequestFactory.DEFAULT_TIME, EventResponse::getTime)
             .returns(EventRequestFactory.DEFAULT_TITLE, EventResponse::getTitle)
             .returns(EventRequestFactory.DEFAULT_CONTENT, EventResponse::getContent)
@@ -100,17 +117,14 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
             .map(OccurrenceResponse::getDate)
             .toList();
 
-        assertThat(occurrences).hasSize(6);
+        assertThat(occurrences).hasSize(4);
 
-        for (int i = 0; EventRequestFactory.DEFAULT_START_DATE.plusDays(i).isBefore(EventRequestFactory.DEFAULT_END_DATE); i++) {
-            LocalDate date = EventRequestFactory.DEFAULT_START_DATE.plusDays(i);
-            boolean shouldHaveOccurrence = i % EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS == 0;
-            if (shouldHaveOccurrence) {
-                assertThat(occurrences).contains(date);
-            } else {
-                assertThat(occurrences).doesNotContain(date);
-            }
-        }
+        assertThat(occurrences).containsExactlyInAnyOrder(
+            START_DATE.with(DayOfWeek.TUESDAY),
+            START_DATE.with(DayOfWeek.SATURDAY),
+            START_DATE.plusWeeks(1).with(DayOfWeek.TUESDAY),
+            START_DATE.plusWeeks(1).with(DayOfWeek.SATURDAY)
+        );
 
         return eventId;
     }

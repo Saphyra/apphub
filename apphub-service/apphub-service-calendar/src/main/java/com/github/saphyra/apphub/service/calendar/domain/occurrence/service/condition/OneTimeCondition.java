@@ -19,7 +19,7 @@ class OneTimeCondition implements RepetitionTypeCondition {
     }
 
     @Override
-    public boolean shouldHaveOccurrence(LocalDate startDate, LocalDate date, Integer repeatForDays) {
+    public boolean shouldHaveOccurrence(LocalDate startDate, LocalDate endDate, LocalDate date, Integer repeatForDays) {
         return ChronoUnit.DAYS.between(startDate, date) < repeatForDays;
     }
 }

@@ -39,6 +39,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
         List<LocalDate> dates = getConditions(request.getRepetitionData())
             .getOccurrences(request.getStartDate(), getEndDate(request), request.getRepeatForDays(), currentDate);
+        log.info("Occurrence dates: {}", dates); //TODO debug
         if (dates.isEmpty()) {
             throw new IllegalStateException("Cannot create occurrences for event " + eventId + " because no occurrence dates were generated.");
         }

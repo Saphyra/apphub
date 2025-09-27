@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RemindEveryXDaysEvent extends BackEndTest {
+public class RemindEveryXDaysEventTest extends BackEndTest {
     private static final int REMIND_ME_BEFORE_DAYS = 2;
     private static final LocalDate END_DATE = EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS);
     private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS);
@@ -45,10 +45,10 @@ public class RemindEveryXDaysEvent extends BackEndTest {
         assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRemindMeBeforeDays()).isEqualTo(EventRequestFactory.NEW_REMIND_ME_BEFORE_DAYS);
 
         Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(
-                getServerPort()
-                , accessTokenId,
-                EventRequestFactory.DEFAULT_START_DATE.minusDays(6),
-                EventRequestFactory.DEFAULT_END_DATE
+                getServerPort(),
+                accessTokenId,
+                EventRequestFactory.NEW_START_DATE .minusDays(6),
+                EventRequestFactory.NEW_END_DATE.plusDays(6)
             )
             .stream()
             .collect(Collectors.toMap(OccurrenceResponse::getDate, o -> o));

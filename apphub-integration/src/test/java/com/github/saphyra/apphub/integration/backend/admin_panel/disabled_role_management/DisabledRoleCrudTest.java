@@ -19,7 +19,7 @@ import static com.github.saphyra.apphub.integration.framework.ResponseValidator.
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DisabledRoleCrud extends BackEndTest {
+public class DisabledRoleCrudTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void disabledRoleCrud() {
         RegistrationParameters testUser = RegistrationParameters.validParameters();

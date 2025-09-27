@@ -26,22 +26,20 @@ class RepetitionTypeConditionTest {
 
     @Test
     void getOccurrences() {
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE, REPEAT_FOR_DAYS)).willReturn(true);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(1), REPEAT_FOR_DAYS)).willReturn(true);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(2), REPEAT_FOR_DAYS)).willReturn(false);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(3), REPEAT_FOR_DAYS)).willReturn(true);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(4), REPEAT_FOR_DAYS)).willReturn(false);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE, REPEAT_FOR_DAYS)).willReturn(true);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE.plusDays(1), REPEAT_FOR_DAYS)).willReturn(true);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE.plusDays(2), REPEAT_FOR_DAYS)).willReturn(false);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE.plusDays(3), REPEAT_FOR_DAYS)).willReturn(true);
 
         assertThat(underTest.getOccurrences(START_DATE, END_DATE, REPEAT_FOR_DAYS, CURRENT_DATE)).containsExactlyInAnyOrder(CURRENT_DATE, CURRENT_DATE.plusDays(2));
     }
 
     @Test
     void getOccurrences_nullCurrentDate() {
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE, REPEAT_FOR_DAYS)).willReturn(true);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(1), REPEAT_FOR_DAYS)).willReturn(true);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(2), REPEAT_FOR_DAYS)).willReturn(false);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(3), REPEAT_FOR_DAYS)).willReturn(true);
-        given(shouldHaveOccurrenceSupplier.get(START_DATE, START_DATE.plusDays(4), REPEAT_FOR_DAYS)).willReturn(false);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE, REPEAT_FOR_DAYS)).willReturn(true);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE.plusDays(1), REPEAT_FOR_DAYS)).willReturn(true);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE.plusDays(2), REPEAT_FOR_DAYS)).willReturn(false);
+        given(shouldHaveOccurrenceSupplier.get(START_DATE, END_DATE, START_DATE.plusDays(3), REPEAT_FOR_DAYS)).willReturn(true);
 
         assertThat(underTest.getOccurrences(START_DATE, END_DATE, REPEAT_FOR_DAYS, null)).containsExactlyInAnyOrder(START_DATE, CURRENT_DATE, CURRENT_DATE.plusDays(2));
     }
@@ -54,12 +52,12 @@ class RepetitionTypeConditionTest {
         }
 
         @Override
-        public boolean shouldHaveOccurrence(LocalDate startDate, LocalDate date, Integer repeatForDays) {
-            return shouldHaveOccurrenceSupplier.get(startDate, date, repeatForDays);
+        public boolean shouldHaveOccurrence(LocalDate startDate, LocalDate endDate, LocalDate date, Integer repeatForDays) {
+            return shouldHaveOccurrenceSupplier.get(startDate, endDate, date, repeatForDays);
         }
     }
 
     interface ShouldHaveOccurrenceSupplier {
-        boolean get(LocalDate startDate, LocalDate date, Integer repeatForDays);
+        boolean get(LocalDate startDate, LocalDate endDate, LocalDate date, Integer repeatForDays);
     }
 }
