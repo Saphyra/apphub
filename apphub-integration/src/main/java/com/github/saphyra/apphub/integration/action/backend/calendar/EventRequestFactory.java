@@ -21,15 +21,15 @@ public class EventRequestFactory {
     public static final LocalDate DEFAULT_END_DATE = DEFAULT_START_DATE.plusDays(DEFAULT_EVENT_DURATION);
     public static final LocalDate NEW_END_DATE = DEFAULT_END_DATE.plusDays(1);
     public static final Integer MAX_EVENT_DURATION_DAYS = 730;
-    public static final Integer NEW_REPEAT_FOR_DAYS = 2;
     public static final LocalDate NEW_START_DATE = DEFAULT_START_DATE.plusDays(1);
     public static final String NEW_TITLE = "new-title";
     public static final String NEW_CONTENT = "new-content";
     public static final LocalTime NEW_TIME = LocalTime.of(14, 0);
     public static final Integer NEW_REPETITION_DATA_EVERY_X_DAYS = 5;
-    public static final Integer NEW_REMIND_ME_BEFORE_DAYS = 1;
     public static final Object DEFAULT_REPETITION_DATA_DAYS_OF_WEEK = List.of(DayOfWeek.TUESDAY.name(), DayOfWeek.SATURDAY.name());
     public static final Object NEW_REPETITION_DATA_DAYS_OF_WEEK = List.of(DayOfWeek.WEDNESDAY.name(), DayOfWeek.SUNDAY.name());
+    public static final List<Integer> DEFAULT_REPETITION_DATA_DAYS_OF_MONTH = List.of(7, 22);
+    public static final List<Integer> NEW_REPETITION_DATA_DAYS_OF_MONTH = List.of(2, 24);
 
     public static EventRequest validRequest(RepetitionType repetitionType) {
         return EventRequest.builder()
@@ -49,13 +49,13 @@ public class EventRequestFactory {
     public static EventRequest editRequest(RepetitionType repetitionType) {
         return validRequest(repetitionType)
             .toBuilder()
-            .repeatForDays(NEW_REPEAT_FOR_DAYS)
+            .repeatForDays(DEFAULT_REPEAT_FOR_DAYS)
             .startDate(NEW_START_DATE)
             .endDate(repetitionType == RepetitionType.ONE_TIME ? null : NEW_END_DATE)
             .time(NEW_TIME)
             .title(NEW_TITLE)
             .content(NEW_CONTENT)
-            .remindMeBeforeDays(NEW_REMIND_ME_BEFORE_DAYS)
+            .remindMeBeforeDays(0)
             .repetitionData(getRepetitionData(repetitionType).getEntity2())
             .build();
     }
@@ -65,7 +65,7 @@ public class EventRequestFactory {
             case ONE_TIME -> new BiWrapper<>(null, null);
             case EVERY_X_DAYS -> new BiWrapper<>(DEFAULT_REPETITION_DATA_EVERY_X_DAYS, NEW_REPETITION_DATA_EVERY_X_DAYS);
             case DAYS_OF_WEEK -> new BiWrapper<>(DEFAULT_REPETITION_DATA_DAYS_OF_WEEK, NEW_REPETITION_DATA_DAYS_OF_WEEK);
-            case DAYS_OF_MONTH -> new BiWrapper<>(List.of(22, 19), List.of(28, 2));
+            case DAYS_OF_MONTH -> new BiWrapper<>(DEFAULT_REPETITION_DATA_DAYS_OF_MONTH, NEW_REPETITION_DATA_DAYS_OF_MONTH);
             default -> throw new IllegalArgumentException("Not implemented for repetitionType: " + repetitionType);
         };
     }

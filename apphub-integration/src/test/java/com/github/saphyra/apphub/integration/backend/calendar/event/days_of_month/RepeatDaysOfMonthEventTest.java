@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend.calendar.event.days_of_week;
+package com.github.saphyra.apphub.integration.backend.calendar.event.days_of_month;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
@@ -11,25 +11,28 @@ import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionTy
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextMonday;
-import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextSunday;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RepeatDaysOfWeekEventTest extends BackEndTest {
-    private static final LocalDate START_DATE = nextMonday();
-    private static final LocalDate END_DATE = nextSunday(START_DATE);
-    private static final LocalDate NEW_START_DATE = START_DATE.plusWeeks(1);
-    private static final LocalDate NEW_END_DATE = nextSunday(NEW_START_DATE);
-    private static final Integer REPEAT_FOR_DAYS = 3;
-    private static final int NEW_REPEAT_FOR_DAYS = 2;
+public class RepeatDaysOfMonthEventTest extends BackEndTest {
+    private static final LocalDate START_DATE = LocalDate.now()
+        .plusMonths(1)
+        .withDayOfMonth(1);
+    private static final LocalDate END_DATE = START_DATE.plusMonths(2)
+        .withDayOfMonth(1)
+        .minusDays(1);
+    private static final LocalDate NEW_START_DATE = START_DATE.plusMonths(1);
+    private static final LocalDate NEW_END_DATE = NEW_START_DATE.plusMonths(2)
+        .withDayOfMonth(1)
+        .minusDays(1);
+    private static final Integer REPEAT_FOR_DAYS = 2;
+    private static final Integer NEW_REPEAT_FOR_DAYS = 3;
 
     @Test(groups = {"be", "calendar"})
-    public void repeatDaysOfWeekEvent() {
+    public void repeatDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
@@ -38,7 +41,7 @@ public class RepeatDaysOfWeekEventTest extends BackEndTest {
     }
 
     private void edit(UUID accessTokenId, UUID eventId) {
-        EventRequest request = EventRequestFactory.editRequest(RepetitionType.DAYS_OF_WEEK)
+        EventRequest request = EventRequestFactory.editRequest(RepetitionType.DAYS_OF_MONTH)
             .toBuilder()
             .startDate(NEW_START_DATE)
             .endDate(NEW_END_DATE)
@@ -52,30 +55,34 @@ public class RepeatDaysOfWeekEventTest extends BackEndTest {
         List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort(),
                 accessTokenId,
-                START_DATE.minusDays(10),
-                END_DATE.plusDays(10)
+                NEW_START_DATE.minusMonths(2),
+                NEW_END_DATE.plusMonths(2)
             )
             .stream()
             .map(OccurrenceResponse::getDate)
             .toList();
 
-        assertThat(occurrences).hasSize(8);
+        assertThat(occurrences).hasSize(12);
 
         assertThat(occurrences).containsExactlyInAnyOrder(
-            NEW_START_DATE.with(DayOfWeek.WEDNESDAY),
-            NEW_START_DATE.with(DayOfWeek.WEDNESDAY).plusDays(1),
-            NEW_START_DATE.with(DayOfWeek.SUNDAY),
-            NEW_START_DATE.with(DayOfWeek.SUNDAY).plusDays(1),
+            NEW_START_DATE.withDayOfMonth(2),
+            NEW_START_DATE.withDayOfMonth(3),
+            NEW_START_DATE.withDayOfMonth(4),
+            NEW_START_DATE.withDayOfMonth(24),
+            NEW_START_DATE.withDayOfMonth(25),
+            NEW_START_DATE.withDayOfMonth(26),
 
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.WEDNESDAY),
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.WEDNESDAY).plusDays(1),
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY),
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY).plusDays(1)
+            NEW_START_DATE.plusMonths(1).withDayOfMonth(2),
+            NEW_START_DATE.plusMonths(1).withDayOfMonth(3),
+            NEW_START_DATE.plusMonths(1).withDayOfMonth(4),
+            NEW_START_DATE.plusMonths(1).withDayOfMonth(24),
+            NEW_START_DATE.plusMonths(1).withDayOfMonth(25),
+            NEW_START_DATE.plusMonths(1).withDayOfMonth(26)
         );
     }
 
     private UUID create(UUID accessTokenId) {
-        EventRequest request = EventRequestFactory.validRequest(RepetitionType.DAYS_OF_WEEK)
+        EventRequest request = EventRequestFactory.validRequest(RepetitionType.DAYS_OF_MONTH)
             .toBuilder()
             .startDate(START_DATE)
             .endDate(END_DATE)
@@ -89,29 +96,25 @@ public class RepeatDaysOfWeekEventTest extends BackEndTest {
         List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort(),
                 accessTokenId,
-                START_DATE.minusDays(10),
-                END_DATE.plusDays(10)
+                START_DATE.minusMonths(2),
+                END_DATE.plusMonths(2)
             )
             .stream()
             .map(OccurrenceResponse::getDate)
             .toList();
 
-        assertThat(occurrences).hasSize(12);
+        assertThat(occurrences).hasSize(8);
 
         assertThat(occurrences).containsExactlyInAnyOrder(
-            START_DATE.with(DayOfWeek.TUESDAY),
-            START_DATE.with(DayOfWeek.TUESDAY).plusDays(1),
-            START_DATE.with(DayOfWeek.TUESDAY).plusDays(2),
-            START_DATE.with(DayOfWeek.SATURDAY),
-            START_DATE.with(DayOfWeek.SATURDAY).plusDays(1),
-            START_DATE.with(DayOfWeek.SATURDAY).plusDays(2),
+            START_DATE.withDayOfMonth(7),
+            START_DATE.withDayOfMonth(8),
+            START_DATE.withDayOfMonth(22),
+            START_DATE.withDayOfMonth(23),
 
-            START_DATE.plusWeeks(1).with(DayOfWeek.TUESDAY),
-            START_DATE.plusWeeks(1).with(DayOfWeek.TUESDAY).plusDays(1),
-            START_DATE.plusWeeks(1).with(DayOfWeek.TUESDAY).plusDays(2),
-            START_DATE.plusWeeks(1).with(DayOfWeek.SATURDAY),
-            START_DATE.plusWeeks(1).with(DayOfWeek.SATURDAY).plusDays(1),
-            START_DATE.plusWeeks(1).with(DayOfWeek.SATURDAY).plusDays(2)
+            START_DATE.plusMonths(1).withDayOfMonth(7),
+            START_DATE.plusMonths(1).withDayOfMonth(8),
+            START_DATE.plusMonths(1).withDayOfMonth(22),
+            START_DATE.plusMonths(1).withDayOfMonth(23)
         );
 
         return eventId;

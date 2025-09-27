@@ -62,13 +62,11 @@ public class BasicDaysOfWeekEventTest extends BackEndTest {
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.DAYS_OF_WEEK, EventResponse::getRepetitionType)
             .returns(EventRequestFactory.NEW_REPETITION_DATA_DAYS_OF_WEEK, EventResponse::getRepetitionData)
-            .returns(EventRequestFactory.NEW_REPEAT_FOR_DAYS, EventResponse::getRepeatForDays)
             .returns(NEW_START_DATE, EventResponse::getStartDate)
             .returns(NEW_END_DATE, EventResponse::getEndDate)
             .returns(EventRequestFactory.NEW_TIME, EventResponse::getTime)
             .returns(EventRequestFactory.NEW_TITLE, EventResponse::getTitle)
             .returns(EventRequestFactory.NEW_CONTENT, EventResponse::getContent)
-            .returns(EventRequestFactory.NEW_REMIND_ME_BEFORE_DAYS, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(), EventResponse::getLabels);
 
         List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId)
@@ -76,17 +74,13 @@ public class BasicDaysOfWeekEventTest extends BackEndTest {
             .map(OccurrenceResponse::getDate)
             .toList();
 
-        assertThat(occurrences).hasSize(8);
+        assertThat(occurrences).hasSize(4);
 
         assertThat(occurrences).containsExactlyInAnyOrder(
             NEW_START_DATE.with(DayOfWeek.WEDNESDAY),
-            NEW_START_DATE.with(DayOfWeek.WEDNESDAY).plusDays(1),
             NEW_START_DATE.with(DayOfWeek.SUNDAY),
-            NEW_START_DATE.with(DayOfWeek.SUNDAY).plusDays(1),
             NEW_START_DATE.plusWeeks(1).with(DayOfWeek.WEDNESDAY),
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.WEDNESDAY).plusDays(1),
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY),
-            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY).plusDays(1)
+            NEW_START_DATE.plusWeeks(1).with(DayOfWeek.SUNDAY)
         );
     }
 

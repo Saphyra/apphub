@@ -23,6 +23,7 @@ public class RepeatEveryXDaysEventTest extends BackEndTest {
     private static final Integer REPEAT_FOR_DAYS = 3;
     private static final LocalDate END_DATE = EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS);
     private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS);
+    private static final int NEW_REPEAT_FOR_DAYS = 2;
 
     @Test(groups = {"be", "calendar"})
     public void repeatEveryXDaysEvent() {
@@ -37,12 +38,12 @@ public class RepeatEveryXDaysEventTest extends BackEndTest {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.EVERY_X_DAYS)
             .toBuilder()
             .endDate(NEW_END_DATE)
-            .remindMeBeforeDays(0)
+            .repeatForDays(NEW_REPEAT_FOR_DAYS)
             .build();
 
         CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRepeatForDays()).isEqualTo(EventRequestFactory.NEW_REPEAT_FOR_DAYS);
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRepeatForDays()).isEqualTo(NEW_REPEAT_FOR_DAYS);
 
         Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort()

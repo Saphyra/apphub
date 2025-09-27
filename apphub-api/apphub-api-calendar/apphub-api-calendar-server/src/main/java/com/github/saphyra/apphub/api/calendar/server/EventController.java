@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
 public interface EventController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_EVENT)
     OneParamResponse<UUID> createEvent(@RequestBody EventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
