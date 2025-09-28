@@ -39,7 +39,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
         List<LocalDate> dates = getConditions(request.getRepetitionData())
             .getOccurrences(request.getStartDate(), getEndDate(request), request.getRepeatForDays(), currentDate);
-        log.info("Occurrence dates: {}", dates); //TODO debug
+        log.debug("Occurrence dates: {}", dates);
         if (dates.isEmpty()) {
             throw new IllegalStateException("Cannot create occurrences for event " + eventId + " because no occurrence dates were generated.");
         }
@@ -60,14 +60,14 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
             .stream()
             .collect(Collectors.groupingBy(Occurrence::getDate));
 
-        log.info("Current occurrences: {}", occurrencesByDate); //TODO debug
+        log.debug("Current occurrences: {}", occurrencesByDate);
 
         LocalDate endDate = getEndDate(event);
         List<LocalDate> datesOfOccurrences = getConditions(event.getRepetitionData())
             .getOccurrences(event.getStartDate(), endDate, event.getRepeatForDays(), currentDate)
             .stream()
             .toList();
-        log.info("New occurrence dates: {}", datesOfOccurrences); //TODO debug
+        log.debug("New occurrence dates: {}", datesOfOccurrences);
         if (datesOfOccurrences.isEmpty()) {
             throw new IllegalStateException("Cannot recreate occurrences for event " + event.getEventId() + " because no occurrence dates were generated.");
         }
@@ -90,7 +90,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
     private boolean shouldDelete(LocalDate currentDate, Occurrence occurrence, List<LocalDate> datesOfOccurrences) {
         //Keep occurrences that are still in the new range (avoid unnecessary recreation)
         if (datesOfOccurrences.contains(occurrence.getDate())) {
-            log.info("{} should not be deleted, because it is still in the new range.", occurrence); //TODO debug
+            log.debug("{} should not be deleted, because it is still in the new range.", occurrence);
             return false;
         }
 
@@ -98,9 +98,9 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         if (occurrence.getDate().isBefore(currentDate)) {
             boolean result = EXPIRED_OCCURRENCE_DELETE_STATUSES.contains(occurrence.getStatus());
             if (result) {
-                log.info("{} should be deleted, because it is expired and has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+                log.debug("{} should be deleted, because it is expired and has status {}.", occurrence, occurrence.getStatus());
             } else {
-                log.info("{} should not be deleted, because it is expired, but has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+                log.debug("{} should not be deleted, because it is expired, but has status {}.", occurrence, occurrence.getStatus());
             }
             return result;
         }
@@ -108,9 +108,9 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         //Keep completed future occurrences
         boolean result = FUTURE_OCCURRENCE_DELETE_STATUSES.contains(occurrence.getStatus());
         if (result) {
-            log.info("{} should be deleted, because it is future and has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+            log.debug("{} should be deleted, because it is future and has status {}.", occurrence, occurrence.getStatus());
         } else {
-            log.info("{} should not be deleted, because it is future, but has status {}.", occurrence, occurrence.getStatus()); //TODO debug
+            log.debug("{} should not be deleted, because it is future, but has status {}.", occurrence, occurrence.getStatus());
         }
         return result;
     }

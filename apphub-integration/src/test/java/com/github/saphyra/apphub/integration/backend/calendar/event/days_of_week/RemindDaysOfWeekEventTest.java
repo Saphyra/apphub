@@ -18,15 +18,17 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextMonday;
-import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextSunday;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RemindDaysOfWeekEventTest extends BackEndTest {
-    private static final LocalDate START_DATE = nextMonday();
-    private static final LocalDate END_DATE = nextSunday(START_DATE);
+    private static final LocalDate START_DATE = LocalDate.now()
+        .plusWeeks(1)
+        .with(DayOfWeek.MONDAY);
+    private static final LocalDate END_DATE = START_DATE.plusWeeks(1)
+        .with(DayOfWeek.SUNDAY);
     private static final LocalDate NEW_START_DATE = START_DATE.plusWeeks(1);
-    private static final LocalDate NEW_END_DATE = nextSunday(NEW_START_DATE);
+    private static final LocalDate NEW_END_DATE = NEW_START_DATE.plusWeeks(1)
+        .with(DayOfWeek.SUNDAY);
     private static final Integer REMIND_ME_BEFORE_DAYS = 2;
     private static final int NEW_REMIND_ME_BEFORE_DAYS = 1;
 

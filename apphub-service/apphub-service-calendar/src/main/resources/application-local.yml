@@ -1,2 +1,11 @@
 server:
   port: 8097
+
+logging:
+  level:
+    com:
+      github:
+        saphyra:
+          apphub:
+            service:
+              calendar: debug

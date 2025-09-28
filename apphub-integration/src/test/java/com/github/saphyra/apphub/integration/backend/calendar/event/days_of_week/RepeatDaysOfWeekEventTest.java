@@ -16,15 +16,17 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextMonday;
-import static com.github.saphyra.apphub.integration.framework.DateTimeUtil.nextSunday;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RepeatDaysOfWeekEventTest extends BackEndTest {
-    private static final LocalDate START_DATE = nextMonday();
-    private static final LocalDate END_DATE = nextSunday(START_DATE);
+    private static final LocalDate START_DATE = LocalDate.now()
+        .plusWeeks(1)
+        .with(DayOfWeek.MONDAY);
+    private static final LocalDate END_DATE = START_DATE.plusWeeks(1)
+        .with(DayOfWeek.SUNDAY);
     private static final LocalDate NEW_START_DATE = START_DATE.plusWeeks(1);
-    private static final LocalDate NEW_END_DATE = nextSunday(NEW_START_DATE);
+    private static final LocalDate NEW_END_DATE = NEW_START_DATE.plusWeeks(1)
+        .with(DayOfWeek.SUNDAY);
     private static final Integer REPEAT_FOR_DAYS = 3;
     private static final int NEW_REPEAT_FOR_DAYS = 2;
 

@@ -28,24 +28,33 @@ class EventControllerImpl implements EventController {
     @Override
     public OneParamResponse<UUID> createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create an event", accessTokenHeader.getUserId());
+        log.debug(request.toString());
 
         UUID eventId = createEventService.create(accessTokenHeader.getUserId(), request);
+        OneParamResponse<UUID> response = new OneParamResponse<>(eventId);
+        log.debug("Response: {}", response);
 
-        return new OneParamResponse<>(eventId);
+        return response;
     }
 
     @Override
     public List<EventResponse> getEvents(UUID label, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know their events", accessTokenHeader.getUserId());
+        log.info("{} wants to know their events of label {}", accessTokenHeader.getUserId(), label);
 
-        return eventQueryService.getEvents(accessTokenHeader.getUserId(), label);
+        List<EventResponse> response = eventQueryService.getEvents(accessTokenHeader.getUserId(), label);
+        log.debug("Response: {}", response);
+
+        return response;
     }
 
     @Override
     public EventResponse getEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to get event {}", accessTokenHeader.getUserId(), eventId);
 
-        return eventQueryService.getEvent(eventId);
+        EventResponse response = eventQueryService.getEvent(eventId);
+        log.debug("Response: {}", response);
+
+        return response;
     }
 
     @Override

@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+//TODO API test
 public interface OccurrenceController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_OCCURRENCE)
     void createOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
