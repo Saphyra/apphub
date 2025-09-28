@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.CreateOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.DeleteOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.EditOccurrenceService;
@@ -59,10 +60,9 @@ class OccurrenceControllerImplTest {
     @Test
     void createOccurrence() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(createOccurrenceService.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest)).willReturn(OCCURRENCE_ID);
 
-        underTest.createOccurrence(occurrenceRequest, EVENT_ID, accessTokenHeader);
-
-        then(createOccurrenceService).should().createOccurrence(USER_ID, EVENT_ID, occurrenceRequest);
+        assertThat(underTest.createOccurrence(occurrenceRequest, EVENT_ID, accessTokenHeader)).isEqualTo(new OneParamResponse<>(OCCURRENCE_ID));
     }
 
     @Test

@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.integration.framework;
 
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ObjectAssert;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
 public class CustomAssertions {
@@ -21,7 +23,15 @@ public class CustomAssertions {
 
         T item = singleValueList.get(0);
 
-        return Assertions.assertThat(item);
+        return assertThat(item);
+    }
+
+    public static <T> ObjectAssert<T> singleListAssertThat(List<T> singleValueList, Predicate<T> selector) {
+        List<T> list = singleValueList.stream()
+            .filter(selector)
+            .collect(Collectors.toList());
+
+        return singleListAssertThat(list);
     }
 
     @SafeVarargs

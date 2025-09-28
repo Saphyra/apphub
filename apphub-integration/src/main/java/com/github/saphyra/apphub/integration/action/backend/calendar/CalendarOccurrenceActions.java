@@ -84,4 +84,34 @@ public class CalendarOccurrenceActions {
 
         return Arrays.asList(response.getBody().as(OccurrenceResponse[].class));
     }
+
+    public static UUID createOccurrence(int serverPort, UUID accessTokenId, UUID eventId, OccurrenceRequest request) {
+        Response response = getCreateOccurrenceResponse(serverPort, accessTokenId, eventId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.body().jsonPath().getObject("value", UUID.class);
+    }
+
+    public static void editOccurrence(int serverPort, UUID accessTokenId, UUID occurrenceId, OccurrenceRequest request) {
+        Response response = getEditOccurrenceResponse(serverPort, accessTokenId, occurrenceId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static OccurrenceResponse editOccurrenceStatus(int serverPort, UUID accessTokenId, UUID occurrenceId, OccurrenceStatus status) {
+        Response response = getEditOccurrenceStatusResponse(serverPort, accessTokenId, occurrenceId, status);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(OccurrenceResponse.class);
+    }
+
+    public static OccurrenceResponse setReminded(int serverPort, UUID accessTokenId, UUID occurrenceId) {
+        Response response = getSetRemindedResponse(serverPort, accessTokenId, occurrenceId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(OccurrenceResponse.class);
+    }
 }

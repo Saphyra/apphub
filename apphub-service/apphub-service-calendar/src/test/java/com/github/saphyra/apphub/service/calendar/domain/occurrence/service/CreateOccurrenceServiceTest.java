@@ -31,6 +31,7 @@ class CreateOccurrenceServiceTest {
     private static final LocalTime TIME = LocalTime.now();
     private static final Integer REMIND_ME_BEFORE_DAYS = 1;
     private static final String NOTE = "note";
+    private static final UUID OCCURRENCE_ID = UUID.randomUUID();
 
     @Mock
     private OccurrenceCreator occurrenceCreator;
@@ -95,8 +96,9 @@ class CreateOccurrenceServiceTest {
         given(occurrenceRequest.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
         given(occurrenceRequest.getNote()).willReturn(NOTE);
         given(occurrenceFactory.create(USER_ID, EVENT_ID, DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE)).willReturn(occurrence);
+        given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
 
-        underTest.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest);
+        assertThat(underTest.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest)).isEqualTo(OCCURRENCE_ID);
 
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
         then(eventDao).should().findByIdValidated(EVENT_ID);

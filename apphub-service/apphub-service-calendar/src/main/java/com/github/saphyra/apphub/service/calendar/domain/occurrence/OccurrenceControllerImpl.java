@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.api.calendar.server.OccurrenceController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.CreateOccurrenceService;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.DeleteOccurrenceService;
@@ -30,14 +31,16 @@ class OccurrenceControllerImpl implements OccurrenceController {
     private final DeleteOccurrenceService deleteOccurrenceService;
 
     @Override
-    public void createOccurrence(OccurrenceRequest request, UUID eventId, AccessTokenHeader accessTokenHeader) {
+    public OneParamResponse<UUID> createOccurrence(OccurrenceRequest request, UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to create an Occurrence", accessTokenHeader.getUserId());
         log.debug("eventId: {}", eventId);
         log.debug(request.toString());
 
-        createOccurrenceService.createOccurrence(accessTokenHeader.getUserId(), eventId, request);
+        UUID occurrenceId = createOccurrenceService.createOccurrence(accessTokenHeader.getUserId(), eventId, request);
+        OneParamResponse<UUID> response = new OneParamResponse<>(occurrenceId);
+        log.debug("Response: {}", response);
 
-        log.debug("Response: {}", HttpStatus.OK);
+        return response;
     }
 
     @Override

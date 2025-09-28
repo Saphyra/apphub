@@ -36,12 +36,14 @@ public class CreateOccurrenceService {
             .createOccurrences(userId, eventId, request);
     }
 
-    public void createOccurrence(UUID userId, UUID eventId, OccurrenceRequest request) {
+    public UUID createOccurrence(UUID userId, UUID eventId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
         eventDao.findByIdValidated(eventId); // Ensure the event exists and belongs to the user
 
         Occurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
         occurrenceDao.save(occurrence);
+
+        return occurrence.getOccurrenceId();
     }
 }
