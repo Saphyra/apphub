@@ -9,6 +9,7 @@ import io.restassured.response.Response;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,5 +78,18 @@ public class CalendarEventActions {
         Response response = getEditEventResponse(serverPort, accessTokenId, eventId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static List<EventResponse> getEvents(int serverPort, UUID accessTokenId, UUID labelId) {
+        Response response = getGetEventsResponse(serverPort, accessTokenId, labelId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(EventResponse[].class));
+    }
+
+    private static Response getGetEventsResponse(int serverPort, UUID accessTokenId, UUID labelId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENTS, Map.of(), Map.of("labelId", labelId)));
     }
 }

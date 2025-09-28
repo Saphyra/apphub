@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//TODO TC: LabelEventMapping is deleted with label
 public class CalendarLabelsTest extends BackEndTest {
     private static final String LABEL = "label";
     private static final String NEW_LABEL = "new-label";
