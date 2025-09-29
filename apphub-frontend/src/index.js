@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
@@ -330,7 +329,7 @@ const router = createBrowserRouter([
       }
     }
   },
-    {
+  {
     path: "/web/calendar/edit-event/:eventId",
     element: <CalendarEditEventPage />,
     loader: ({ params }) => {

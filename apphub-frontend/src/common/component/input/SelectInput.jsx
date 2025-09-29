@@ -104,6 +104,7 @@ const MultiSelectOption = ({ option, value, onchangeCallback, disabled }) => {
                     disabled={disabled}
                     onchangeCallback={handleOnchange}
                     checked={new Stream(value).anyMatch(v => v === option.value)}
+                    value={option.value}
                 />
                 }
             />

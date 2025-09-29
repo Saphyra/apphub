@@ -11,8 +11,6 @@ import NotificationService from "../../../../common/js/notification/Notification
 import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
 
 const OpenedOccurrence = ({ occurrenceId, localizationHandler, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh }) => {
-    console.log(occurrenceId)
-
     const [occurrence, setOccurrence] = useState(null);
 
     useLoader(

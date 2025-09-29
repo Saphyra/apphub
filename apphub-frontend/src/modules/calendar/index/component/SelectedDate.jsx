@@ -29,6 +29,7 @@ const SelectedDate = ({ selectedDate, activeLabel, setDisplaySpinner, setSelecte
             <div id="calendar-selected-date-content">{getContent()}</div>
 
             <div
+            id="calendar-selected-date-create-new"
                 className="button"
                 onClick={() => window.location.href = CALENDAR_CREATE_EVENT_PAGE.assembleUrl(null, { startDate: selectedDate.format() })}
             >
@@ -52,7 +53,7 @@ const SelectedDate = ({ selectedDate, activeLabel, setDisplaySpinner, setSelecte
         const result = {};
 
         if (hasValue(activeLabel)) {
-            result.label = activeLabel;
+            result.labelId = activeLabel;
         }
 
         result.startDate = selectedDate;

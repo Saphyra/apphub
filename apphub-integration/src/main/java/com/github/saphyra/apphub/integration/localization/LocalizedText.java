@@ -79,6 +79,19 @@ public enum LocalizedText {
     VILLANY_ATESZ_STOCK_ZERO_AMOUNT("Amount must not be zero."),
     VILLANY_ATESZ_TOOLBOX_NEW_NAME_MUST_NOT_BE_BLANK("Name must not be blank."),
     VILLANY_ATESZ_TOOLBOX_NEW_CREATED("Tool created."),
+
+    //CALENDAR
+    CALENDAR_EMPTY_START_DATE("Start date is empty."),
+    CALENDAR_EMPTY_END_DATE("End date is empty."),
+    CALENDAR_END_DATE_BEFORE_START_DATE("End date is before start date."),
+    CALENDAR_BLANK_TITLE("Title is blank."),
+    CALENDAR_REPEAT_FOR_DAYS_TOO_LOW("Repetition is too low."),
+    CALENDAR_EVERY_X_DAYS_REPETITION_DATA_TOO_LOW("Repetition is too low."),
+    CALENDAR_NO_DAYS_DEFINED("No day defined for repetition."),
+    CALENDAR_LABEL_ALREADY_EXISTS("Label already exists."),
+    CALENDAR_LABEL_TOO_SHORT("Label too short."),
+    CALENDAR_LABEL_TOO_LONG("Label too long. (Maximum 255 characters)"),
+    CALENDAR_EVENT_CREATED("Event created."),
     ;
 
     private final String text;

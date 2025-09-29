@@ -5,6 +5,9 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.action.backend.UserSettingsActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActions;
+import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
+import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLabelActions;
+import com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
@@ -24,6 +27,7 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
@@ -84,7 +88,11 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("villany_atesz", "stock_item_price"),
         new BiWrapper<>("villany_atesz", "storage_box"),
         new BiWrapper<>("villany_atesz", "tool"),
-        new BiWrapper<>("villany_atesz", "tool_type")
+        new BiWrapper<>("villany_atesz", "tool_type"),
+        new BiWrapper<>("calendar", "event"),
+        new BiWrapper<>("calendar", "label"),
+        new BiWrapper<>("calendar", "occurrence"),
+        new BiWrapper<>("calendar", "event_label_mapping")
     );
 
     private static final Map<String, String> COMMUNITY_TABLES = CollectionUtils.toMap(
@@ -357,7 +365,8 @@ public class DataDeletedWithUserTest extends BackEndTest {
     }
 
     private static void calendarTables(UUID accessTokenId) {
-        //TODO
+        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessTokenId, TITLE);
+        CalendarEventActions.createEvent(getServerPort(), accessTokenId, EventRequestFactory.validRequest(RepetitionType.ONE_TIME).toBuilder().labels(List.of(labelId)).build());
     }
 
     private static void apphubUserTables(UUID accessTokenId, UUID userId, RegistrationParameters adminUserData, UUID adminAccessTokenId) {

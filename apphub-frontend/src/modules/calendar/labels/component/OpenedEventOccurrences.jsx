@@ -38,7 +38,6 @@ const OpenedEventOccurrences = ({ eventId, setDisplaySpinner, selectedOccurrence
 }
 
 const Occurrence = ({ occurrence, selectedOccurrence, setSelectedOccurrence }) => {
-    console.log(occurrence)
     return (
         <div
             className={

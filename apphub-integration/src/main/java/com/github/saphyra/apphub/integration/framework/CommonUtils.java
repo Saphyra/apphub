@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import io.restassured.response.Response;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 import java.util.HashMap;
@@ -55,5 +56,9 @@ public class CommonUtils {
             String[] kp = pair.split("=");
             parsed.put(kp[0], kp[1]);
         }
+    }
+
+    public static void enableTestMode(WebDriver driver) {
+        ((JavascriptExecutor) driver).executeScript("enableTestMode()");
     }
 }

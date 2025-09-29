@@ -7,7 +7,7 @@ import localizationData from "./calendar_edit_event_page_localization.json";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 
-async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, newLabels) {
+async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, newLabels, setConfirmationDialogData) {
     if (!validateEventRequest(payload)) {
         return;
     }
@@ -32,6 +32,8 @@ async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, ne
                 .then(response => response.value);
         }
     }
+
+    setConfirmationDialogData(null);
 }
 
 export default saveEvent;

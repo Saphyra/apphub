@@ -1,6 +1,7 @@
 import Button from "../../../../common/component/input/Button";
 import InputField from "../../../../common/component/input/InputField";
 import LocalDate from "../../../../common/js/date/LocalDate";
+import { isTestMode } from "../../../../common/js/Utils";
 
 const ReferenceDateSelector = ({ referenceDate, setReferenceDate, view }) => {
     return (
@@ -12,7 +13,8 @@ const ReferenceDateSelector = ({ referenceDate, setReferenceDate, view }) => {
             />
 
             <InputField
-                type="date"
+                id="calendar-reference-date"
+                type={isTestMode() ? "text" : "date"}
                 value={referenceDate}
                 onchangeCallback={date => setReferenceDate(LocalDate.parse(date))}
             />

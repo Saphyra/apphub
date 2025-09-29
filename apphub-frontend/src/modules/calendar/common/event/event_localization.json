@@ -92,16 +92,16 @@
         "hu": "Az esemény véget ér mielőtt elkezdődne."
     },
     "repeat-for-days-too-low": {
-        "en": "Repetition is too frequent.",
+        "en": "Repetition is too low.",
         "hu": "Az esemény túl gyakran ismétlődik."
     },
     "repeat-every-x-days-too-low": {
-        "en": "Repetition is too frequent.",
+        "en": "Repetition is too low.",
         "hu": "Az esemény túl gyakran ismétlődik."
     },
     "no-days-defined": {
-        "en": "No day defined for repetition",
-        "hu": "Az ismétlés napja nincs megadva"
+        "en": "No day defined for repetition.",
+        "hu": "Az ismétlés napja nincs megadva."
     },
     "blank-title": {
         "en": "Title is blank.",
@@ -110,5 +110,9 @@
     "remind-me-before-days-too-low": {
         "en": "Remind me before days too low.",
         "hu": "Az értesítés értéke túl alacsony."
+    },
+    "empty-start-date": {
+        "en": "Start date is empty.",
+        "hu": "A kezdés dátuma üres."
     }
 }

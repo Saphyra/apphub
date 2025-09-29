@@ -36,6 +36,7 @@ public class WebDriverProvider {
         WebDriverMode.DEFAULT, DEFAULT_DRIVER_POOL,
         WebDriverMode.HEADED, HEADED_DRIVER_POOL
     );
+    private static final int MAX_HEADED_DRIVER_COUNT = 5;
 
     private static GenericObjectPoolConfig<WebDriverWrapper> defaultDriverPoolConfig() {
         GenericObjectPoolConfig<WebDriverWrapper> config = new GenericObjectPoolConfig<>();
@@ -50,11 +51,9 @@ public class WebDriverProvider {
     private static GenericObjectPoolConfig<WebDriverWrapper> headedDriverPoolConfig() {
         GenericObjectPoolConfig<WebDriverWrapper> config = new GenericObjectPoolConfig<>();
 
-        config.setMaxTotal(5);
-        config.setMaxIdle(5);
+        config.setMaxTotal(MAX_HEADED_DRIVER_COUNT);
+        config.setMaxIdle(MAX_HEADED_DRIVER_COUNT);
         config.setTestOnBorrow(true);
-        config.setMinEvictableIdleTimeMillis(30000);
-        config.setTimeBetweenEvictionRunsMillis(1000);
 
         return config;
     }

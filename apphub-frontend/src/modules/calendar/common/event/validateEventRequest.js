@@ -8,7 +8,12 @@ import localizationData from "./event_localization.json";
 const localizationHandler = new LocalizationHandler(localizationData);
 
 function validateEventRequest(payload) {
-     if (payload.repetitionType !== REPETITION_TYPE_ONE_TIME) {
+    if (isBlank(payload.startDate)) {
+        NotificationService.showError(localizationHandler.get("empty-start-date"));
+        return false;
+    }
+
+    if (payload.repetitionType !== REPETITION_TYPE_ONE_TIME) {
         if (isBlank(payload.endDate)) {
             NotificationService.showError(localizationHandler.get("empty-end-date"));
             return false;
@@ -26,12 +31,12 @@ function validateEventRequest(payload) {
     }
 
     if (payload.repetitionType === REPETITION_TYPE_EVERY_X_DAYS && payload.repetitionData < 1) {
-        NotificationService.showError("repeat-every-x-days-too-low");
+        NotificationService.showError(localizationHandler.get("repeat-every-x-days-too-low"));
         return false;
     }
 
     if (payload.repetitionType === REPETITION_TYPE_DAYS_OF_WEEK || payload.repetitionType === REPETITION_TYPE_DAYS_OF_MONTH) {
-        if (payload.repeatForDays.length === 0) {
+        if (payload.repetitionData.length === 0) {
             NotificationService.showError(localizationHandler.get("no-days-defined"));
             return false;
         }

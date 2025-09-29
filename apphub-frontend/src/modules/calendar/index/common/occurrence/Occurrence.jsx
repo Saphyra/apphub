@@ -13,7 +13,7 @@ const Occurrence = ({ occurrence, setSelectedOccurrence }) => {
         >
             {getTime()}
             <span> </span>
-            <span>{occurrence.title}</span>
+            <span className="calendar-occurrence-title">{occurrence.title}</span>
         </div>
     );
 

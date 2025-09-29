@@ -224,3 +224,7 @@ export const mapOrDefault = (value, defaultValue, mapper = v => v) => {
         .map(mapper)
         .orElse(defaultValue);
 }
+
+export const isTestMode = () => {
+    return isTrue(sessionStorage[Constants.STORAGE_KEY_TEST_MODE]);
+}

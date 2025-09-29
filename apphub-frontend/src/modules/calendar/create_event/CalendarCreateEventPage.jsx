@@ -120,7 +120,7 @@ const CalendarCreateEventPage = () => {
                         onclick={() => createEvent(
                             {
                                 repetitionType: repetitionType,
-                                repetitionData: nullIfEmpty(repetitionData),
+                                repetitionData: repetitionData,
                                 repeatForDays: repeatForDays,
                                 startDate: startDate,
                                 endDate: nullIfEmpty(endDate),
