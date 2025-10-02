@@ -25,6 +25,7 @@
 .calendar-labels-label {
     text-align: left;
     padding: 0;
+    height: 100%
 }
 
 .calendar-labels-label.selected {
@@ -44,6 +45,7 @@
 
 .calendar-labels-label-title {
     padding: 5px;
+    display: inline-block;
 }
 
 .calendar-labels-label-edit {
@@ -110,7 +112,7 @@
 }
 
 .calendar-occurrence.active {
-    border-color: lime;
+    border-style: dashed;
 }
 
 .calendar-occurrence:hover {
@@ -147,7 +149,7 @@
     text-decoration: line-through;
 }
 
-.calendar-occurrence-reminder{
+.calendar-occurrence-reminder {
     border-color: orange;
 }
 

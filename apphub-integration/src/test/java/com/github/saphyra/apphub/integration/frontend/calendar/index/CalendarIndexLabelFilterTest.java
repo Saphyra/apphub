@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.calendar;
+package com.github.saphyra.apphub.integration.frontend.calendar.index;
 
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarCreateEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
@@ -35,8 +35,8 @@ public class CalendarIndexLabelFilterTest extends SeleniumTest {
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
-        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
         CommonUtils.enableTestMode(driver);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarIndexPageActions.openCreateEventPage(driver);
         CalendarCreateEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).build());

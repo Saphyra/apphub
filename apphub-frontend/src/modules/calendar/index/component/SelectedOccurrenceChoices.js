@@ -22,6 +22,7 @@ function getChoices(args) {
     if (occurrence.status === PENDING && hasValue(occurrence.remindMeBeforeDays) && occurrence.remindMeBeforeDays > 0 && !occurrence.reminded) {
         choices.push(<Button
             key="reminder"
+            id="calendar-selected-occurrence-remind-button"
             onclick={() => setReminded()}
             label={localizationHandler.get("reminded")}
         />);
@@ -30,6 +31,7 @@ function getChoices(args) {
     if (occurrence.status !== DONE) {
         choices.push(<Button
             key="done"
+            id="calendar-selected-occurrence-done-button"
             onclick={() => editStatus(DONE)}
             label={localizationHandler.get("done")}
         />);
@@ -38,6 +40,7 @@ function getChoices(args) {
     if (occurrence.status !== SNOOZED) {
         choices.push(<Button
             key="snooze"
+            id="calendar-selected-occurrence-snooze-button"
             onclick={() => editStatus(SNOOZED)}
             label={localizationHandler.get("snooze")}
         />);
@@ -46,6 +49,7 @@ function getChoices(args) {
     if (occurrence.status === SNOOZED || occurrence.status === DONE) {
         choices.push(<Button
             key="reset"
+            id="calendar-selected-occurrence-reset-button"
             onclick={() => editStatus(PENDING)}
             label={localizationHandler.get("reset")}
         />);
@@ -53,18 +57,21 @@ function getChoices(args) {
 
     choices.push(<Button
         key="edit-occurrence"
+        id="calendar-selected-occurrence-edit-button"
         onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId })}
         label={localizationHandler.get("edit-occurrence")}
     />);
 
     choices.push(<Button
         key="edit-event"
+        id="calendar-selected-occurrence-edit-event-button"
         onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: occurrence.eventId })}
         label={localizationHandler.get("edit-event")}
     />);
 
     choices.push(<Button
         key="delete-occurrence"
+        id="calendar-selected-occurrence-delete-button"
         onclick={() => confirmOccurrenceDeletion(
             setConfirmationDialogData,
             occurrence.occurrenceId,
@@ -82,6 +89,7 @@ function getChoices(args) {
 
     choices.push(<Button
         key="delete-event"
+        id="calendar-selected-occurrence-delete-event-button"
         onclick={() => confirmEventDeletion(
             setConfirmationDialogData,
             occurrence.eventId,
@@ -98,6 +106,7 @@ function getChoices(args) {
 
     choices.push(<Button
         key="cancel"
+        id="calendar-selected-occurrence-cancel-button"
         onclick={() => setSelectedOccurrence(null)}
         label={localizationHandler.get("cancel")}
     />);

@@ -146,6 +146,10 @@ footer label,
     text-align: center;
 }
 
+.button * {
+    cursor: pointer;
+}
+
 .multi-select {
     display: inline-block;
     padding: 0;

@@ -10,8 +10,6 @@ import OpenedEventOccurrences from "./OpenedEventOccurrences";
 import { RepetitionType } from "../../common/repetition_type/RepetitionType";
 import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
 
-const DEFAULT_DISPLAY_OCCURRENCES = false;
-
 const OpenedEvent = ({
     eventId,
     localizationHandler,
@@ -26,7 +24,6 @@ const OpenedEvent = ({
     const repetitionTypeLocalizationHandler = new LocalizationHandler(repetitionTypeLocalizationData);
 
     const [event, setEvent] = useState(null);
-    const [displayOccurrences, setDisplayOccurrences] = useState(DEFAULT_DISPLAY_OCCURRENCES);
 
     useLoader({
         request: CALENDAR_GET_EVENT.createRequest(null, { eventId: eventId }),
@@ -35,7 +32,6 @@ const OpenedEvent = ({
         condition: () => hasValue(eventId),
         listener: [eventId]
     });
-    useEffect(() => setDisplayOccurrences(DEFAULT_DISPLAY_OCCURRENCES), [eventId]);
 
     if (hasValue(event)) {
         const textareaRows = Math.max(3, event.content.split("\n").length);
@@ -114,29 +110,17 @@ const OpenedEvent = ({
                     />
                 </div>
 
-                {!displayOccurrences &&
-                    <div id="calendar-labels-event-display-occurrences-wrapper">
-                        <Button
-                            id="calendar-labels-event-display-occurrences"
-                            label={localizationHandler.get("display-occurrences")}
-                            onclick={() => setDisplayOccurrences(true)}
-                        />
-                    </div>
-                }
+                <fieldset>
+                    <legend>{localizationHandler.get("occurrences")}</legend>
 
-                {displayOccurrences &&
-                    <fieldset>
-                        <legend>{localizationHandler.get("occurrences")}</legend>
-
-                        <OpenedEventOccurrences
-                            eventId={eventId}
-                            setDisplaySpinner={setDisplaySpinner}
-                            selectedOccurrence={selectedOccurrence}
-                            setSelectedOccurrence={setSelectedOccurrence}
-                            refreshCounter={refreshCounter}
-                        />
-                    </fieldset>
-                }
+                    <OpenedEventOccurrences
+                        eventId={eventId}
+                        setDisplaySpinner={setDisplaySpinner}
+                        selectedOccurrence={selectedOccurrence}
+                        setSelectedOccurrence={setSelectedOccurrence}
+                        refreshCounter={refreshCounter}
+                    />
+                </fieldset>
             </div>
 
         );

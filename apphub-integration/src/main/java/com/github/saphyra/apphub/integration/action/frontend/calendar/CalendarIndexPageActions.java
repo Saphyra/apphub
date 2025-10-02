@@ -1,7 +1,10 @@
 package com.github.saphyra.apphub.integration.action.frontend.calendar;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarDate;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOccurrence;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarView;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
@@ -32,9 +35,9 @@ public class CalendarIndexPageActions {
     }
 
     public static List<CalendarOccurrence> getOccurrencesOnDate(WebDriver driver, LocalDate date) {
-        return driver.findElements(By.className("calendar-content-day"))
+        return getDays(driver)
             .stream()
-            .map(webElement -> new CalendarDate(driver, webElement))
+            .filter(calendarDate -> !calendarDate.isFiller())
             .filter(calendarDate -> calendarDate.getDate().equals(date))
             .findAny()
             .orElseThrow(() -> new IllegalStateException("Date not found: " + date))
@@ -49,6 +52,79 @@ public class CalendarIndexPageActions {
 
     public static void clearLabelFilter(WebDriver driver) {
         driver.findElement(By.id("calendar-deselect-label-button"))
+            .click();
+    }
+
+    public static CalendarOccurrence findOccurrenceByTitleOnDateValidated(WebDriver driver, LocalDate date, String title) {
+        return getOccurrencesOnDate(driver, date).stream()
+            .filter(occurrence -> occurrence.getTitle().equals(title))
+            .findAny()
+            .orElseThrow(() -> new IllegalStateException("Occurrence not found: " + title));
+    }
+
+    public static String getOpenedOccurrenceTitle(WebDriver driver) {
+        return driver.findElement(By.cssSelector("#calendar-selected-occurrence .confirmation-dialog-title"))
+            .getText();
+    }
+
+    public static void markOpenedOccurrenceDone(WebDriver driver) {
+        driver.findElement(By.id("calendar-selected-occurrence-done-button"))
+            .click();
+    }
+
+    public static CalendarOccurrence findOccurrenceByTitleOnSelectedDateValidated(WebDriver driver, String title) {
+        return getSelectedDayOccurrences(driver)
+            .stream()
+            .filter(occurrence -> occurrence.getTitle().equals(title))
+            .findAny()
+            .orElseThrow(() -> new IllegalStateException("Occurrence not found: " + title));
+    }
+
+    public static void markOpenedOccurrenceSnoozed(WebDriver driver) {
+        driver.findElement(By.id("calendar-selected-occurrence-snooze-button"))
+            .click();
+    }
+
+    public static void resetOpenedOccurrenceStatus(WebDriver driver) {
+        driver.findElement(By.id("calendar-selected-occurrence-reset-button"))
+            .click();
+    }
+
+    public static void setReferenceDate(WebDriver driver, LocalDate referenceDate) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-reference-date")), referenceDate);
+    }
+
+    public static void deleteOccurrence(WebDriver driver) {
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-occurrence-delete-button")))
+            .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
+            .click();
+
+        driver.findElement(By.id("calendar-occurrence-delete-confirmation-button"))
+            .click();
+    }
+
+    public static void deleteEvent(WebDriver driver) {
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-occurrence-delete-event-button")))
+            .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
+            .click();
+
+        driver.findElement(By.id("calendar-event-delete-confirmation-button"))
+            .click();
+    }
+
+    public static void setView(WebDriver driver, CalendarView view) {
+        WebElementUtils.selectOptionByValue(driver.findElement(By.id("calendar-view-selector")), view.name());
+    }
+
+    public static List<CalendarDate> getDays(WebDriver driver) {
+        return driver.findElements(By.className("calendar-content-day"))
+            .stream()
+            .map(webElement -> new CalendarDate(driver, webElement))
+            .toList();
+    }
+
+    public static void toLabelsPage(WebDriver driver) {
+        driver.findElement(By.id("modify-labels-button"))
             .click();
     }
 }

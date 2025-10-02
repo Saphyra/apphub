@@ -47,7 +47,7 @@ public class RemindOneTimeEventTest extends BackEndTest {
             .stream()
             .collect(Collectors.toMap(OccurrenceResponse::getDate, o -> o));
 
-        assertThat(occurrences.get(LocalDate.now()))
+        assertThat(occurrences.get(EventRequestFactory.DEFAULT_START_DATE.minusDays(newRemindMeBeforeDays)))
             .returns(OccurrenceStatus.REMINDER, OccurrenceResponse::getStatus);
         assertThat(occurrences.get(EventRequestFactory.DEFAULT_START_DATE))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);

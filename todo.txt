@@ -1,2 +1,3 @@
 TODO add to release notes
 TODO Integration test for whole migration process
+TODO Edit event and occurrence FE test

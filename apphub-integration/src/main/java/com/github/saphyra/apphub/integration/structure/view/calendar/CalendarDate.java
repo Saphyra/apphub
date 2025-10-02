@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.view.calendar;
 
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -26,5 +27,9 @@ public class CalendarDate {
             .stream()
             .map(CalendarOccurrence::new)
             .toList();
+    }
+
+    public boolean isFiller() {
+        return WebElementUtils.getClasses(webElement).contains("filler");
     }
 }

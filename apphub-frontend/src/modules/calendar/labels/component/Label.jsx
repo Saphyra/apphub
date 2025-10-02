@@ -4,7 +4,7 @@ import ConfirmationDialogData from "../../../../common/component/confirmation_di
 import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
 import InputField from "../../../../common/component/input/InputField";
-import {  isBlank } from "../../../../common/js/Utils";
+import { isBlank } from "../../../../common/js/Utils";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import { MAX_LABEL_LENGTH } from "../../CalendarConstants";
@@ -25,23 +25,25 @@ const Label = ({
     const [displayEditDialog, setDisplayEditDialog] = useState(false);
 
     return (
-        <div
-            className={"calendar-labels-label button" + (selected ? " selected" : "")}
-            onClick={() => setSelectedLabel((labelId))}
-        >
-            <span className="calendar-labels-label-title">{label}</span>
+        <div>
+            <div
+                onClick={() => setSelectedLabel((labelId))}
+                className={"calendar-labels-label button" + (selected ? " selected" : "")}
+            >
+                <span className="calendar-labels-label-title">{label}</span>
 
-            <div className="calendar-labels-label-operations">
-                <Button
-                    className="calendar-labels-label-delete"
-                    label={"X"}
-                    onclick={() => confirmLabelDeletion()}
-                />
-                <Button
-                    className="calendar-labels-label-edit"
-                    label={"X"}
-                    onclick={() => setDisplayEditDialog(true)}
-                />
+                <div className="calendar-labels-label-operations">
+                    <Button
+                        className="calendar-labels-label-delete"
+                        label={"X"}
+                        onclick={() => confirmLabelDeletion()}
+                    />
+                    <Button
+                        className="calendar-labels-label-edit"
+                        label={"X"}
+                        onclick={() => setDisplayEditDialog(true)}
+                    />
+                </div>
             </div>
 
             {displayEditDialog &&
