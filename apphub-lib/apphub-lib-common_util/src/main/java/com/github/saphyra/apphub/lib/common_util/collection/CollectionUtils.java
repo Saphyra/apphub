@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -99,12 +98,5 @@ public class CollectionUtils {
         }
         in.forEach((k, vs) -> result.put(k, new ArrayList<>(vs)));
         return result;
-    }
-
-    public static <K, V, R> OptionalMap<K, V> mapToOptionalMap(List<R> list, Function<R, K> keyMapper, Function<R, V> valueMapper) {
-        Map<K, V> map = list.stream()
-            .collect(Collectors.toMap(keyMapper, valueMapper));
-
-        return new OptionalHashMap<>(map);
     }
 }

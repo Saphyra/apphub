@@ -7,7 +7,7 @@ import { VILLANY_ATESZ_GET_STORAGE_BOXES } from "../../../../../../common/js/dao
 const ManageStorageBoxes = ({ setConfirmationDialogData, localizationHandler }) => {
     const [storageBoxes, setStorageBoxes] = useState([]);
 
-    useLoader(VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), setStorageBoxes);
+    useLoader({ request: VILLANY_ATESZ_GET_STORAGE_BOXES.createRequest(), mapper: setStorageBoxes });
 
     const getItems = () => {
         return new Stream(storageBoxes)

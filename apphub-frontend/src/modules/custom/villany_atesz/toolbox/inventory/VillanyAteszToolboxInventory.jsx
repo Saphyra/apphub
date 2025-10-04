@@ -24,8 +24,11 @@ const VillanyAteszToolboxInventory = ({ setConfirmationDialogData }) => {
     const [storageBoxes, setStorageBoxes] = useState([]);
     const [lastInventoried, setLastInventoried] = useState("");
 
-    useLoader(VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
-    useLoader(GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }), (s) => setLastInventoried(s[Constants.SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED]));
+    useLoader({ request: VILLANY_ATESZ_GET_TOOLS.createRequest(), mapper: setTools });
+    useLoader({
+        request: GET_USER_SETTINGS.createRequest(null, { category: Constants.SETTINGS_CATEGORY_VILLANY_ATESZ }),
+        mapper: (s) => setLastInventoried(s[Constants.SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED])
+    });
 
     useEffect(() => loadToolTypes(), []);
     useEffect(() => loadStorageBoxes(), []);

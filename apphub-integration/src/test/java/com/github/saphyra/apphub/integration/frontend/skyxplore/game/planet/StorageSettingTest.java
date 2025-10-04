@@ -65,7 +65,7 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static StorageSetting createStorageSettingForCrud(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_STEEL_INGOT, 10, 3);
+        SkyXplorePlanetStorageSettingActions.createStorageSetting(driver, Constants.DATA_ID_STEEL_INGOT, 10, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> storageSettings.size() == 2)
             .stream()
@@ -147,7 +147,7 @@ public class StorageSettingTest extends SeleniumTest {
     }
 
     private static void createStorageSetting(WebDriver driver) {
-        SkyXplorePlanetStorageSettingActions.create(driver, Constants.DATA_ID_STEEL_INGOT, AMOUNT, 3);
+        SkyXplorePlanetStorageSettingActions.createStorageSetting(driver, Constants.DATA_ID_STEEL_INGOT, AMOUNT, 3);
 
         StorageSetting storageSetting = AwaitilityWrapper.getListWithWait(() -> SkyXplorePlanetStorageSettingActions.getStorageSettings(driver), storageSettings -> !storageSettings.isEmpty())
             .stream()

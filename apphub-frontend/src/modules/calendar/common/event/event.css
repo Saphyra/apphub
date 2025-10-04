@@ -1,0 +1,25 @@
+#calendar-event-title {
+    width: 100%;
+}
+
+#calendar-event-content {
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    min-height: 6em;
+}
+
+#calendar-event-repetition-data .multi-select-options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.calendar-event label {
+    margin: 6px;
+}
+
+.calendar-event input[type=number] {
+    width: 45px;
+}

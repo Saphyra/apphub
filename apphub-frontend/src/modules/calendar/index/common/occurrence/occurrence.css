@@ -1,0 +1,4 @@
+.calendar-occurrence {
+    white-space: nowrap;
+    overflow: auto;
+}

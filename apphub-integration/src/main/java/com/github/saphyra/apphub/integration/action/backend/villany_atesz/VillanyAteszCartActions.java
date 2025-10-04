@@ -25,7 +25,7 @@ public class VillanyAteszCartActions {
             .put(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_CART));
     }
 
-    public static UUID create(int serverPort, UUID accessTokenId, UUID contactId) {
+    public static UUID createCart(int serverPort, UUID accessTokenId, UUID contactId) {
         Response response = getCreateResponse(serverPort, accessTokenId, contactId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);

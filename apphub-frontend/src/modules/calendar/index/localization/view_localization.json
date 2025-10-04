@@ -1,0 +1,14 @@
+{
+    "WEEK": {
+        "en": "Week",
+        "hu": "Hét"
+    },
+    "SURROUNDING_WEEKS": {
+        "en": "Surrounding weeks",
+        "hu": "Környező hetek"
+    },
+    "MONTH": {
+        "en": "Month",
+        "hu": "Hónap"
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "title": {
+        "en": "Edit event - Calendar - Apphub",
+        "hu": "Esemény szerkesztése - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Edit event: {title}",
+        "hu": "Esemény szerkesztése: {title}"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    },
+    "when": {
+        "en": "When?",
+        "hu": "Mikor?"
+    },
+    "what": {
+        "en": "What",
+        "hu": "Mi?"
+    },
+    "repetition": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "reminder": {
+        "en": "Reminder",
+        "hu": "Emlékeztető"
+    },
+    "labels": {
+        "en": "Labels",
+        "hu": "Címkék"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehoz"
+    },
+    "edit-event-confirmation-title": {
+        "en": "Edit event?",
+        "hu": "Esemény szerkesztése?"
+    },
+    "edit-event-confirmation-detail": {
+        "en": "Editing an event might delete and recreate occurrences. Are you sure you want to edit this event?",
+        "hu": "Esemény szerkesztése esetén előfordulhat, hogy az előfordulások törlésre és újra létrehozásra kerülnek. Biztosan szerkeszteni szeretnéd ezt az eseményt?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "event-saved": {
+        "en": "Event saved.",
+        "hu": "Esemény mentve."
+    }
+}

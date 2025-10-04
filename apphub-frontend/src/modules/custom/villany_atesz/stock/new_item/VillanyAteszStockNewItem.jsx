@@ -28,7 +28,7 @@ const VillanyAteszStockNewItem = ({ }) => {
 
     const [price, setPrice] = useState(0);
 
-    useLoader(VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), setCategories);
+    useLoader({ request: VILLANY_ATESZ_GET_STOCK_CATEGORIES.createRequest(), mapper: setCategories });
 
     const getOptions = () => {
         return new Stream(categories)

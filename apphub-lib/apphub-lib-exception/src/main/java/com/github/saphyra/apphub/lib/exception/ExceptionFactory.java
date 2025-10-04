@@ -75,7 +75,11 @@ public class ExceptionFactory {
         return notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, message);
     }
 
-    public static LoggedException loggedException(String message) {
+    public RestException loggedException(String message) {
         return loggedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR, message);
+    }
+
+    public static RestException notFound(String message) {
+        return notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, message);
     }
 }

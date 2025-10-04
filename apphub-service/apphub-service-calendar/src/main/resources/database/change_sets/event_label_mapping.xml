@@ -1,0 +1,28 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-event_label_mapping" author="Saphyra">
+        <preConditions>
+            <not>
+                <tableExists schemaName="calendar" tableName="event_label_mapping"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="calendar" tableName="event_label_mapping">
+            <column name="event_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey schemaName="calendar" tableName="event_label_mapping" columnNames="event_id,label_id" constraintName="event_label_mapping-pk"/>
+    </changeSet>
+</databaseChangeLog>

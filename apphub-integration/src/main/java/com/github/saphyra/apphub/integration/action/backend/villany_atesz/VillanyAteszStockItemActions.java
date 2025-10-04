@@ -24,7 +24,7 @@ public class VillanyAteszStockItemActions {
             .put(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_STOCK_ITEM));
     }
 
-    public static void create(int serverPort, UUID accessTokenId, CreateStockItemRequest request) {
+    public static void createStockItem(int serverPort, UUID accessTokenId, CreateStockItemRequest request) {
         Response response = getCreateResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);

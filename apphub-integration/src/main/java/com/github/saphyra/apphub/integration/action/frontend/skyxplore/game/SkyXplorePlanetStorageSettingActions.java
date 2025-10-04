@@ -17,7 +17,7 @@ public class SkyXplorePlanetStorageSettingActions {
         return WebElementUtils.isPresent(driver, By.id("skyxplore-game-storage-settings"));
     }
 
-    public static void create(WebDriver driver, String resourceId, int amount, int priority) {
+    public static void createStorageSetting(WebDriver driver, String resourceId, int amount, int priority) {
         createStorageSettingResourceSelectMenu(driver)
             .selectOptionByValue(resourceId);
 

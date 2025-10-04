@@ -1,4 +1,5 @@
 import Constants from "./Constants";
+import Optional from "./collection/Optional";
 import Stream from "./collection/Stream";
 
 export const spinnerWrappedOperation = (setDisplaySpinner, call) => {
@@ -185,7 +186,12 @@ export const isArrayEmpty = (input) => {
 }
 
 export const cacheAndUpdate = (key, value, callback, convertValue = v => v) => {
-    sessionStorage[key] = convertValue(value);
+    if (hasValue(value)) {
+        sessionStorage[key] = convertValue(value);
+    } else {
+        delete sessionStorage[key];
+    }
+
     callback(value);
 }
 
@@ -211,4 +217,14 @@ export const validateAll = (validations = []) => {
 
 export const randomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min)
+}
+
+export const mapOrDefault = (value, defaultValue, mapper = v => v) => {
+    return new Optional(value)
+        .map(mapper)
+        .orElse(defaultValue);
+}
+
+export const isTestMode = () => {
+    return isTrue(sessionStorage[Constants.STORAGE_KEY_TEST_MODE]);
 }

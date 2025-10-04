@@ -12,7 +12,6 @@ const SelectInput = ({
     onchangeCallback,
     disabled = false
 }) => {
-
     const getOptions = () => {
         return new Stream(options)
             .map((option, index) =>
@@ -105,6 +104,7 @@ const MultiSelectOption = ({ option, value, onchangeCallback, disabled }) => {
                     disabled={disabled}
                     onchangeCallback={handleOnchange}
                     checked={new Stream(value).anyMatch(v => v === option.value)}
+                    value={option.value}
                 />
                 }
             />

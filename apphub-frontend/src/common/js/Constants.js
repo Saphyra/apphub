@@ -3,6 +3,8 @@ const MEGABYTES = KILOBYTES * 1024;
 const GIGABYTES = MEGABYTES * 1024;
 
 const Constants = {
+    STORAGE_KEY_TEST_MODE: "testMode",
+
     //REQUEST
     COOKIE_LOCALE: "language",
     DEFAULT_LOCALE: "en",

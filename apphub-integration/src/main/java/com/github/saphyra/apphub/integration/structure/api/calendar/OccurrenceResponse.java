@@ -9,17 +9,19 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Builder
 public class OccurrenceResponse {
     private UUID occurrenceId;
     private UUID eventId;
-    private String status;
+    private LocalDate date;
+    private LocalTime time;
+    private OccurrenceStatus status;
     private String title;
     private String content;
     private String note;
-    private LocalDate date;
-    private LocalTime time;
+    private Integer remindMeBeforeDays;
+    private Boolean reminded;
 }

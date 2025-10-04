@@ -39,7 +39,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
         }
     }, [isInFocus]);
 
-    useLoader(NOTEBOOK_GET_PIN_GROUPS.createRequest(), setPinGroups, [loadPinGroupsTrigger]);
+    useLoader({ request: NOTEBOOK_GET_PIN_GROUPS.createRequest(), mapper: setPinGroups, listener: [loadPinGroupsTrigger] });
 
     const processEvent = () => {
         if (lastEvent === null) {

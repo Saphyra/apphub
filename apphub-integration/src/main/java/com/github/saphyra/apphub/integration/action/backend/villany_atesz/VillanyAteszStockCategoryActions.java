@@ -19,7 +19,7 @@ public class VillanyAteszStockCategoryActions {
             .put(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_CREATE_STOCK_CATEGORY));
     }
 
-    public static List<StockCategoryModel> create(int serverPort, UUID accessTokenId, StockCategoryModel request) {
+    public static List<StockCategoryModel> createStockCategory(int serverPort, UUID accessTokenId, StockCategoryModel request) {
         Response response = getCreateResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
@@ -46,7 +46,7 @@ public class VillanyAteszStockCategoryActions {
             .post(UrlFactory.create(serverPort, VillanyAteszEndpoints.VILLANY_ATESZ_EDIT_STOCK_CATEGORY, "stockCategoryId", stockCategoryId));
     }
 
-    public static List<StockCategoryModel> edit(int serverPort, UUID accessTokenId, UUID stockCategoryId, StockCategoryModel request) {
+    public static List<StockCategoryModel> editStockCategory(int serverPort, UUID accessTokenId, UUID stockCategoryId, StockCategoryModel request) {
         Response response = getEditResponse(serverPort, accessTokenId, stockCategoryId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);

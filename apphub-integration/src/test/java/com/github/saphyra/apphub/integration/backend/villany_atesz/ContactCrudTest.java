@@ -217,7 +217,7 @@ public class ContactCrudTest extends BackEndTest {
     }
 
     private void deleteContact(UUID accessTokenId, UUID contactId) {
-        VillanyAteszCartActions.create(getServerPort(), accessTokenId, contactId);
+        VillanyAteszCartActions.createCart(getServerPort(), accessTokenId, contactId);
 
         assertThat(VillanyAteszContactActions.deleteContact(getServerPort(), accessTokenId, contactId)).isEmpty();
 

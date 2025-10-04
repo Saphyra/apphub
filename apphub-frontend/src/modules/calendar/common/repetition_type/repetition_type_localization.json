@@ -1,0 +1,30 @@
+{
+    "ONE_TIME": {
+        "en": "One time",
+        "hu": "Egyszeri"
+    },
+    "EVERY_X_DAYS": {
+        "en": "Every X days",
+        "hu": "X naponta"
+    },
+    "DAYS_OF_WEEK": {
+        "en": "Days of week",
+        "hu": "A hét napjain"
+    },
+    "DAYS_OF_MONTH": {
+        "en": "Days of month",
+        "hu": "A hónap napjain"
+    },
+    "days": {
+        "en": "Repeat every {days} days",
+        "hu": "Ismétlés {days} naponta"
+    },
+    "days-of-week": {
+        "en": "Repeat on days of week: {days}",
+        "hu": "Ismétlés a hét napjain: {days}"
+    },
+    "days-of-month": {
+        "en": "Repeat on days of month: {days}",
+        "hu": "Ismétlés a hónap napjain: {days}"
+    }
+}

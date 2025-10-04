@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class VillanyAteszToolboxPageActions {
-    public static void create(WebDriver driver, String brand, String name, Integer cost, String toolTypeName, String storageBoxName) {
+    public static void createToolbox(WebDriver driver, String brand, String name, Integer cost, String toolTypeName, String storageBoxName) {
         fillForm(driver, brand, name, cost, toolTypeName, storageBoxName);
         submit(driver);
 

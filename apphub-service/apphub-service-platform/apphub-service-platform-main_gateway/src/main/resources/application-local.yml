@@ -37,6 +37,8 @@ spring:
             /web/elite-base,\
             /web/elite-base/*,\
             /web/random-direction,\
+            /web/calendar,\
+            /web/calendar/**,\
             /web/user/account"
       - id: frontend-resources
         uri: http://localhost:3000
@@ -46,7 +48,7 @@ spring:
       - id: common-resorces
         uri: http://localhost:8083
         predicates:
-        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/calendar/**, /res/modules/**, /res/utils/**, /res/user/**
+        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/modules/**, /res/utils/**, /res/user/**
       - id: training-resorces
         uri: http://localhost:8086
         predicates:
@@ -56,7 +58,7 @@ spring:
       - id: common-pages
         uri: http://localhost:8083
         predicates:
-        - Path=/web/community, /web/calendar
+        - Path=/web/community
       - id: training-pages
         uri: http://localhost:8086
         predicates:

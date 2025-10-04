@@ -1,0 +1,154 @@
+{
+    "title": {
+        "en": "Labels - Calendar - Apphub",
+        "hu": "Címkék - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Labels",
+        "hu": "Címkék"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "delete-label-confirmation-dialog-title": {
+        "en": "Delete label?",
+        "hu": "Címke törlése?"
+    },
+    "delete-label-confirmation-dialog-content": {
+        "en": "Are you sure you want to delete label {label}?",
+        "hu": "Biztosan törölni szeretnéd {label} címkét?"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "rename-label": {
+        "en": "Rename label",
+        "hu": "Címke átnevezése"
+    },
+    "new-label": {
+        "en": "New label",
+        "hu": "Új címke"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "label-too-short": {
+        "en": "Label too short.",
+        "hu": "A címke túl rövid."
+    },
+    "label-too-long": {
+        "en": "Label too long. (Maximum 255 characters)",
+        "hu": "A címke túl hosszú. (Maximum 255 karakter)"
+    },
+    "label-already-exists": {
+        "en": "Label already exists.",
+        "hu": "A címke már létezik."
+    },
+    "events-of-label": {
+        "en": "Events of label {label}",
+        "hu": "{label} címke eseményei"
+    },
+    "settings": {
+        "en": "Settings",
+        "hu": "Beállítások"
+    },
+    "start-date": {
+        "en": "Start date: {date}",
+        "hu": "Kezdés: {date}"
+    },
+    "end-date": {
+        "en": "End date: {date}",
+        "hu": "Befejezés: {date}"
+    },
+    "time": {
+        "en": "Time: {time}",
+        "hu": "Időpont: {time}"
+    },
+    "not-set": {
+        "en": "N/A",
+        "hu": "N/A"
+    },
+    "repetition-type": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "repeat-for-days": {
+        "en": "Repeating every occurrence {days} times",
+        "hu": "Minden alkalom megismételve {days} alkalommal"
+    },
+    "remind-me-before-days": {
+        "en": "Reminder set up {days} before every occurrence",
+        "hu": "Emlékeztető beállítva {days} nappal minden alkalom előtt"
+    },
+    "content": {
+        "en": "Description",
+        "hu": "Leírás"
+    },
+    "display-occurrences": {
+        "en": "Display occurrences",
+        "hu": "Alkalmak megjelenítése"
+    },
+    "occurrences": {
+        "en": "Occurrences",
+        "hu": "Alkalmak"
+    },
+    "at": {
+        "en": "At",
+        "hu": "Időpont"
+    },
+    "note": {
+        "en": "Note",
+        "hu": "Megjegyzés"
+    },
+    "reminder": {
+        "en": "Reminder: {days} day(s) before",
+        "hu": "Emlékeztető: {days} nappal előtte"
+    },
+    "false": {
+        "en": "No",
+        "hu": "Nem"
+    },
+    "true": {
+        "en": "Yes",
+        "hu": "Igen"
+    },
+    "reminder-confirmed": {
+        "en": "Reminder confirmed: {value}",
+        "hu": "Emlékeztető megerősítve: {value}"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "done": {
+        "en": "Done",
+        "hu": "Kész"
+    },
+    "snooze": {
+        "en": "Snooze",
+        "hu": "Halasztás"
+    },
+    "edit-occurrence": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "delete-occurrence": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    }
+}
