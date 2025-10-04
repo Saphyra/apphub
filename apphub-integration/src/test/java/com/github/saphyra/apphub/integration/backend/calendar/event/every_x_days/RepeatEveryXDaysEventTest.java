@@ -21,9 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RepeatEveryXDaysEventTest extends BackEndTest {
     private static final Integer REPEAT_FOR_DAYS = 3;
-    private static final LocalDate END_DATE = EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS);
-    private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS);
-    private static final int NEW_REPEAT_FOR_DAYS = 2;
+    private static final LocalDate END_DATE = EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS).plusDays(1);
+    private static final LocalDate NEW_END_DATE = EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS).plusDays(1);
+    private static final int NEW_REPEAT_FOR_DAYS = 4;
 
     @Test(groups = {"be", "calendar"})
     public void repeatEveryXDaysEvent() {
@@ -46,19 +46,23 @@ public class RepeatEveryXDaysEventTest extends BackEndTest {
         assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRepeatForDays()).isEqualTo(NEW_REPEAT_FOR_DAYS);
 
         Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(
-                getServerPort()
-                , accessTokenId,
+                getServerPort(),
+                accessTokenId,
                 EventRequestFactory.DEFAULT_START_DATE.minusDays(6),
-                EventRequestFactory.DEFAULT_END_DATE
+                EventRequestFactory.NEW_END_DATE
             )
             .stream()
             .collect(Collectors.toMap(OccurrenceResponse::getDate, o -> o));
 
-        assertThat(occurrences).hasSize(4);
+        assertThat(occurrences).hasSize(6);
 
         assertThat(occurrences.get(EventRequestFactory.NEW_START_DATE))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
         assertThat(occurrences.get(EventRequestFactory.NEW_START_DATE.plusDays(1)))
+            .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
+        assertThat(occurrences.get(EventRequestFactory.NEW_START_DATE.plusDays(2)))
+            .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
+        assertThat(occurrences.get(EventRequestFactory.NEW_START_DATE.plusDays(3)))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
         assertThat(occurrences.get(EventRequestFactory.NEW_START_DATE.plusDays(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS)))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
@@ -86,7 +90,7 @@ public class RepeatEveryXDaysEventTest extends BackEndTest {
             .stream()
             .collect(Collectors.toMap(OccurrenceResponse::getDate, o -> o));
 
-        assertThat(occurrences).hasSize(6);
+        assertThat(occurrences).hasSize(5);
 
         assertThat(occurrences.get(EventRequestFactory.DEFAULT_START_DATE))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
@@ -97,8 +101,6 @@ public class RepeatEveryXDaysEventTest extends BackEndTest {
         assertThat(occurrences.get(EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS)))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
         assertThat(occurrences.get(EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS + 1)))
-            .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
-        assertThat(occurrences.get(EventRequestFactory.DEFAULT_START_DATE.plusDays(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS + 2)))
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
 
         return eventId;
