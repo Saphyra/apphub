@@ -1,0 +1,54 @@
+{
+    "title": {
+        "en": "Calendar - Apphub",
+        "hu": "Naptár - Apphub"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "edit-occurrence": {
+        "en": "Edit occurrence",
+        "hu": "Előfordulás szerkesztése"
+    },
+    "done": {
+        "en": "Done",
+        "hu": "Kész"
+    },
+    "snooze": {
+        "en": "Snooze",
+        "hu": "Halasztás"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    },
+    "delete-event": {
+        "en": "Delete event",
+        "hu": "Esemény törlése"
+    },
+    "delete-occurrence": {
+        "en": "Delete occurrence",
+        "hu": "Előfordulás törlése"
+    },
+    "occurrence-deleted": {
+        "en": "Occurrence deleted.",
+        "hu": "Előfordulás törölve."
+    },
+    "event-deleted": {
+        "en": "Event deleted.",
+        "hu": "Esemény törölve."
+    },
+    "edit-event": {
+        "en": "Edit event",
+        "hu": "Esemény szerkesztése"
+    },
+    "reminded": {
+        "en": "Reminded",
+        "hu": "Emlékeztetve"
+    }
+}

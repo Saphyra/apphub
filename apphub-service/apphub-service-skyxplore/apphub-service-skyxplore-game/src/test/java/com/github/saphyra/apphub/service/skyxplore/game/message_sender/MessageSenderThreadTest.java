@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.message_sender;
 
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import org.apache.commons.lang3.concurrent.ConcurrentUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,9 +45,9 @@ class MessageSenderThreadTest {
     @Test
     void sendMessage() {
         given(messageSender.sendMessages()).willReturn(List.of(
-            ConcurrentUtils.constantFuture(messageSentExecutionResult),
-            ConcurrentUtils.constantFuture(noMessageSentExecutionResult),
-            ConcurrentUtils.constantFuture(errorExecutionResult)
+            new FutureWrapper<>(ConcurrentUtils.constantFuture(messageSentExecutionResult)),
+            new FutureWrapper<>(ConcurrentUtils.constantFuture(noMessageSentExecutionResult)),
+            new FutureWrapper<>(ConcurrentUtils.constantFuture(errorExecutionResult))
         ));
 
         given(messageSentExecutionResult.getOrThrow()).willReturn(true);

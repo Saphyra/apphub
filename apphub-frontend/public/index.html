@@ -4,6 +4,22 @@
 <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+    <script>
+        const STORAGE_KEY_TEST_MODE = "testMode";
+
+        function enableTestMode() {
+            window.sessionStorage[STORAGE_KEY_TEST_MODE] = true;
+
+            window.location.reload();
+        }
+
+        function disableTestMode() {
+            delete window.sessionStorage[STORAGE_KEY_TEST_MODE];
+
+            window.location.reload();
+        }
+    </script>
 </head>
 
 <body>

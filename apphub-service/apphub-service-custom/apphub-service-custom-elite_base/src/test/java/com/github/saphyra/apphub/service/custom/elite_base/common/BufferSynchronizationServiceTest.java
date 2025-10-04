@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,7 +79,7 @@ class BufferSynchronizationServiceTest {
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
-            return CompletableFuture.completedFuture(executionResult);
+            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
         });
         given(cacheProperties.getBufferSynchronizationInterval()).willReturn(BUFFER_SYNCHRONIZATION_INTERVAL);
         given(cacheProperties.getMaxBufferSize()).willReturn(MAX_BUFFER_SIZE);
@@ -100,7 +101,7 @@ class BufferSynchronizationServiceTest {
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
-            return CompletableFuture.completedFuture(executionResult);
+            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
         });
         given(cacheProperties.getMaxBufferSize()).willReturn(MAX_BUFFER_SIZE);
         given(buffer.getSize()).willReturn(MAX_BUFFER_SIZE + 1);
@@ -120,7 +121,7 @@ class BufferSynchronizationServiceTest {
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
-            return CompletableFuture.completedFuture(executionResult);
+            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
         });
         given(cacheProperties.getBufferSynchronizationInterval()).willReturn(BUFFER_SYNCHRONIZATION_INTERVAL);
         given(cacheProperties.getMaxBufferSize()).willReturn(MAX_BUFFER_SIZE);
@@ -141,7 +142,7 @@ class BufferSynchronizationServiceTest {
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
-            return CompletableFuture.completedFuture(executionResult);
+            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
         });
 
         underTest.synchronizeAll();

@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import com.github.saphyra.apphub.lib.encryption.base.AbstractEncryptor;
+import com.github.saphyra.apphub.lib.encryption.base.Encryptor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class BooleanEncryptor implements AbstractEncryptor<Boolean> {
+public class BooleanEncryptor implements Encryptor<Boolean> {
     private final StringEncryptor stringEncryptor;
 
     @Override

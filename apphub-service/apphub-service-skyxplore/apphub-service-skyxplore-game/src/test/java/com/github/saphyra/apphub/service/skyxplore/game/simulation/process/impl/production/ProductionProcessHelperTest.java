@@ -102,7 +102,8 @@ class ProductionProcessHelperTest {
         given(productionOrders.findByIdValidated(PRODUCTION_ORDER_ID)).willReturn(productionOrder);
         given(productionOrder.getResourceDataId()).willReturn(RESOURCE_DATA_ID);
         given(productionBuildingModuleDataService.findProducerFor(RESOURCE_DATA_ID)).willReturn(new BiWrapper<>(productionBuildingModuleData, production));
-        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredWorkPoints()).willReturn(REQUIRED_WORK_POINTS);
         given(production.getRequiredSkill()).willReturn(SkillType.AIMING);
 

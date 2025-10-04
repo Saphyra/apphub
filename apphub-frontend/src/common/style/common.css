@@ -146,6 +146,10 @@ footer label,
     text-align: center;
 }
 
+.button * {
+    cursor: pointer;
+}
+
 .multi-select {
     display: inline-block;
     padding: 0;
@@ -163,7 +167,7 @@ footer label,
     margin: 4px;
 }
 
-.multi-select-option input[type=checkbox]{
+.multi-select-option input[type=checkbox] {
     transform: scale(1.5);
 }
 
@@ -340,7 +344,7 @@ textarea {
     background-size: 10vw 10vw;
     background-color: rgba(0, 0, 0, 0.5);
     background-repeat: no-repeat;
-    z-index: 100
+    z-index: 950
 }
 
 /*=======CONFIRMATION_DIALOG=======*/
@@ -351,7 +355,7 @@ textarea {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.75);
-    z-index: 999;
+    z-index: 900;
 }
 
 .confirmation-dialog-content-wrapper {
@@ -359,13 +363,13 @@ textarea {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    
+
     background: black;
     border: 3px ridge white;
     border-radius: 10px;
 
-    display: grid;
-    grid-template-rows: 40px auto 40px;
+    display: flex;
+    flex-direction: column;
 }
 
 .confirmation-dialog-title {
@@ -378,12 +382,14 @@ textarea {
     bottom: var(--confirmation-dialog-footer-height);
     font-size: 20px;
     overflow: auto;
+    max-height: 50vh;
 }
 
 .confirmation-dialog-button-container {
     border-top: 2px ridge white;
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .confirmation-dialog-confirm-button {

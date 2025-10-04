@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles construction of a ConstructionArea
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -45,9 +48,6 @@ public class ConstructConstructionAreaProcess implements Process {
     private final Game game;
 
     @NonNull
-    private final GameData gameData;
-
-    @NonNull
     private final ApplicationContextProxy applicationContextProxy;
 
     @Override
@@ -62,12 +62,22 @@ public class ConstructConstructionAreaProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getPriorities()
+        return game.getData()
+            .getPriorities()
             .findByLocationAndType(location, PriorityType.CONSTRUCTION).getValue()
             * findConstruction().getPriority()
             * GameConstants.PROCESS_PRIORITY_MULTIPLIER;
     }
 
+    /**
+     * <ol>
+     *     <li>Initiates the production and delivery of the necessary resources</li>
+     *     <li>Waits until resources are available</li>
+     *     <li>Initiates WorkProcesses</li>
+     *     <li>Waits until work is done</li>
+     *     <li>Finishes the construction</li>
+     * </ol>
+     */
     @Override
     public void work() {
         ConstructConstructionAreaProcessHelper helper = applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class);
@@ -80,6 +90,7 @@ public class ConstructConstructionAreaProcess implements Process {
 
         ConstructConstructionAreaProcessConditions conditions = applicationContextProxy.getBean(ConstructConstructionAreaProcessConditions.class);
 
+        GameData gameData = game.getData();
         if (!conditions.resourcesAvailable(gameData, processId, constructionId)) {
             log.info("Waiting for resources...");
             return;
@@ -101,7 +112,8 @@ public class ConstructConstructionAreaProcess implements Process {
 
     @Override
     public void cleanup() {
-        gameData.getProcesses()
+        game.getData()
+            .getProcesses()
             .getByExternalReference(processId)
             .forEach(Process::cleanup);
 
@@ -115,7 +127,7 @@ public class ConstructConstructionAreaProcess implements Process {
     public ProcessModel toModel() {
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);
@@ -126,7 +138,8 @@ public class ConstructConstructionAreaProcess implements Process {
     }
 
     private Construction findConstruction() {
-        return gameData.getConstructions()
+        return game.getData()
+            .getConstructions()
             .findByIdValidated(constructionId);
     }
 

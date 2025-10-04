@@ -17,7 +17,7 @@ const VillanyAteszToolboxOverview = ({ setConfirmationDialogData }) => {
     const [search, setSearch] = useState("");
     const [tools, setTools] = useState([]);
 
-    useLoader(VILLANY_ATESZ_GET_TOOLS.createRequest(), setTools);
+    useLoader({ request: VILLANY_ATESZ_GET_TOOLS.createRequest(), mapper: setTools });
 
     const getTools = () => {
         return new Stream(tools)

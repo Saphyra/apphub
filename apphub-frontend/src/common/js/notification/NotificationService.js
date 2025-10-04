@@ -2,6 +2,8 @@ import errorCodes from "./notification_translations.json";
 import LocalizationHandler from "../LocalizationHandler";
 import { toast } from 'react-toastify';
 
+const KEY_SUCCESS_TEXT = "successText";
+
 const localizationHandler = new LocalizationHandler(errorCodes);
 
 const showError = (message, timeout = 0) => {
@@ -24,6 +26,10 @@ const showSuccess = (message, timeout = 0) => {
             }
         );
     }, timeout);
+}
+
+const storeSuccessText = (text) => {
+    sessionStorage[KEY_SUCCESS_TEXT] = text;
 }
 
 const displayStoredMessages = () => {
@@ -53,7 +59,8 @@ const NotificationService = {
     showErrorCode: (errorCode, params = {}) => showError(localizationHandler.get(errorCode, params)),
     showSuccess: showSuccess,
     showSuccessCode: (errorCode, params) => showSuccess(localizationHandler.get(errorCode, params)),
-    displayStoredMessages: displayStoredMessages
+    displayStoredMessages: displayStoredMessages,
+    storeSuccessText: storeSuccessText,
 }
 
 export default NotificationService;

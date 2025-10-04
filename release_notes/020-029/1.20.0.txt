@@ -1,0 +1,34 @@
+===FEATURES===
+    AdminPanel
+        PerformanceReporting
+            Delete reports of topic
+            Filter reports
+            Order reports
+    Calendar V2
+
+===BUGFIXES===
+    AdminPanel
+        ErrorReport
+            Align report list content to the top
+    EliteBase
+        SurfaceStationOfferFilter handles null type
+
+===PLATFORM CHANGES===
+    ExecutorServiceBean uses FutureWrapper to hide checked exceptions
+
+===TECHNICAL DEBTS===
+    EliteBase
+        Extract logic from EdMessageHandler, so it is unit-testable
+        ListValue throws exception when called with empty list
+    SkyXplore
+        Remove GameData field from every process
+        Move ConstructionRequirements from Production to Resource data
+
+===ETC===
+    EliteBase
+        Remove "Overwriting nonNull starId" error report
+    SkyXplore
+        Remove change set for allocated resource
+        Add notes to Processes about what they do
+    ApphubCI
+        Do not checkout and pull master when releasing to production

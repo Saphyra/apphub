@@ -78,7 +78,7 @@ const SkyXploreLobbyPage = () => {
     useEffect(() => loadLobbyData(), []);
     useEffect(() => loadAlliances(), []);
 
-    useLoader(SKYXPLORE_LOBBY_GET_SETTINGS.createRequest(), setSettings);
+    useLoader({ request: SKYXPLORE_LOBBY_GET_SETTINGS.createRequest(), mapper: setSettings });
 
     //Load
     const loadLobbyData = () => {

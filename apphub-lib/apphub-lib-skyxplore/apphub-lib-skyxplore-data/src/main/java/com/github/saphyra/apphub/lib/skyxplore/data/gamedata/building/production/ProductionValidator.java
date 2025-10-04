@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirementsValidator;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class ProductionValidator {
-    private final ConstructionRequirementsValidator constructionRequirementsValidator;
     private final ResourceDataService resourceDataService;
 
     public void validate(List<Production> produces) {
@@ -21,7 +19,6 @@ public class ProductionValidator {
     }
 
     private void validate(Production production) {
-        constructionRequirementsValidator.validate(production.getConstructionRequirements());
         ValidationUtil.atLeast(production.getAmount(), 1, "amount");
 
         ValidationUtil.notBlank(production.getResourceDataId(), "resourceDataId");

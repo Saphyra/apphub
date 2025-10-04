@@ -129,4 +129,11 @@ class PerformanceReportingControllerImplTest {
 
         then(performanceReportDao).should().add(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING, KEY, MIN_VALUE);
     }
+
+    @Test
+    void deleteReports() {
+        underTest.deleteReports(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING, accessTokenHeader);
+
+        then(performanceReportDao).should().delete(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING);
+    }
 }

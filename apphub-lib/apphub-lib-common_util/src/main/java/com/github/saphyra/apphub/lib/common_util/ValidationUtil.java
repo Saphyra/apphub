@@ -192,4 +192,12 @@ public class ValidationUtil {
 
         value.forEach((key, v) -> notNull(v, "%s.%s".formatted(field, key)));
     }
+
+    public static void doesNotContainNull(Collection<?> value, String field) {
+        notNull(value, field);
+
+        if (value.stream().anyMatch(Objects::isNull)) {
+            throw ExceptionFactory.invalidParam(field, "must not contain null values");
+        }
+    }
 }

@@ -1,5 +1,12 @@
 {
   "id": "plank",
   "storageType": "container",
-  "maxProductionBatchSize": 10
+  "maxProductionBatchSize": 10,
+  "constructionRequirements": {
+    "requiredWorkPoints": 1,
+    "requiredEnergy": 1,
+    "requiredResources": {
+      "log": 1
+    }
+  }
 }

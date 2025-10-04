@@ -1,12 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_dispatcher;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionRequestModel;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleData;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.module.production.ProductionBuildingModuleDataService;
-import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.production.Production;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceDataService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -74,9 +70,6 @@ class ProductionDispatcherProcessHelperTest {
     @Mock
     private BuildingModuleService buildingModuleService;
 
-    @Mock
-    private ProductionBuildingModuleDataService productionBuildingModuleDataService;
-
     @InjectMocks
     private ProductionDispatcherProcessHelper underTest;
 
@@ -106,12 +99,6 @@ class ProductionDispatcherProcessHelperTest {
 
     @Mock
     private ProductionOrder productionOrder;
-
-    @Mock
-    private ProductionBuildingModuleData productionBuildingModuleData;
-
-    @Mock
-    private Production production;
 
     @Mock
     private ConstructionRequirements constructionRequirements;
@@ -152,8 +139,8 @@ class ProductionDispatcherProcessHelperTest {
     @Test
     void dispatch_notSupportedStorageType() {
         given(productionOrder.allStarted()).willReturn(true);
-        given(productionBuildingModuleDataService.findProducerFor(RESOURCE_DATA_ID)).willReturn(new BiWrapper<>(productionBuildingModuleData, production));
-        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(RESOURCE_DATA_ID, 1));
         given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CONTAINER);
@@ -165,8 +152,8 @@ class ProductionDispatcherProcessHelperTest {
     @Test
     void dispatch() {
         given(productionOrder.allStarted()).willReturn(true);
-        given(productionBuildingModuleDataService.findProducerFor(RESOURCE_DATA_ID)).willReturn(new BiWrapper<>(productionBuildingModuleData, production));
-        given(production.getConstructionRequirements()).willReturn(constructionRequirements);
+        given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
+        given(resourceData.getConstructionRequirements()).willReturn(constructionRequirements);
         given(constructionRequirements.getRequiredResources()).willReturn(Map.of(RESOURCE_DATA_ID, 1));
         given(resourceDataService.get(RESOURCE_DATA_ID)).willReturn(resourceData);
         given(resourceData.getStorageType()).willReturn(StorageType.CONTAINER);

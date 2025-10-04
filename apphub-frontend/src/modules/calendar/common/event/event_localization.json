@@ -1,0 +1,118 @@
+{
+    "date": {
+        "en": "Date",
+        "hu": "Dátum"
+    },
+    "start-date": {
+        "en": "Start date",
+        "hu": "Kezdés dátuma"
+    },
+    "end-date": {
+        "en": "End date",
+        "hu": "Esemény vége"
+    },
+    "time": {
+        "en": "Time",
+        "hu": "Idő"
+    },
+    "reset-time": {
+        "en": "Reset time",
+        "hu": "Idő törlése"
+    },
+    "event-title": {
+        "en": "Title",
+        "hu": "Cím"
+    },
+    "content": {
+        "en": "Description",
+        "hu": "Leírás"
+    },
+    "repetition-type": {
+        "en": "Repetition type",
+        "hu": "Ismétlés típusa"
+    },
+    "every-x-days-pre-label": {
+        "en": "Repeat every",
+        "hu": "Ismétlődjön minden"
+    },
+    "every-x-days-post-label": {
+        "en": "days",
+        "hu": "nap"
+    },
+    "repeat-for-pre-label": {
+        "en": "Repeat for",
+        "hu": "Ismétlés "
+    },
+    "repeat-for-post-label": {
+        "en": "days",
+        "hu": "napon át"
+    },
+    "remind-me-before-days-pre-label": {
+        "en": "Remind me",
+        "hu": "Emlékeztess"
+    },
+    "remind-me-before-days-post-label": {
+        "en": "days before",
+        "hu": "nappal előtte"
+    },
+    "new-label": {
+        "en": "New label",
+        "hu": "Új címke"
+    },
+    "add": {
+        "en": "Add",
+        "hu": "Hozzzáad"
+    },
+    "new-label-too-short": {
+        "en": "Label too short.",
+        "hu": "A címke túl rövid."
+    },
+    "new-label-too-long": {
+        "en": "Label too long. (Maximum 255 characters)",
+        "hu": "A címke túl hosszú. (Maximum 255 karakter)"
+    },
+    "label-already-exists": {
+        "en": "Label already exists.",
+        "hu": "A címke már létezik."
+    },
+    "labels-of-event": {
+        "en": "Labels",
+        "hu": "Címkék"
+    },
+    "available-labels": {
+        "en": "Available labels",
+        "hu": "Elérhető címkék"
+    },
+    "empty-end-date": {
+        "en": "End date is empty.",
+        "hu": "Az esemény vége üres."
+    },
+    "end-date-before-start-date": {
+        "en": "End date is before start date.",
+        "hu": "Az esemény véget ér mielőtt elkezdődne."
+    },
+    "repeat-for-days-too-low": {
+        "en": "Repetition is too low.",
+        "hu": "Az esemény túl gyakran ismétlődik."
+    },
+    "repeat-every-x-days-too-low": {
+        "en": "Repetition is too low.",
+        "hu": "Az esemény túl gyakran ismétlődik."
+    },
+    "no-days-defined": {
+        "en": "No day defined for repetition.",
+        "hu": "Az ismétlés napja nincs megadva."
+    },
+    "blank-title": {
+        "en": "Title is blank.",
+        "hu": "A cím üres."
+    },
+    "remind-me-before-days-too-low": {
+        "en": "Remind me before days too low.",
+        "hu": "Az értesítés értéke túl alacsony."
+    },
+    "empty-start-date": {
+        "en": "Start date is empty.",
+        "hu": "A kezdés dátuma üres."
+    }
+}

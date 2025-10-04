@@ -24,6 +24,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Assigns the required production requests to eligible ConstructionAreas
+ * Eligible ConstructionArea: where a factory of the required resource exists, and there is enough storage available to handle the production.
+ * One ConstructionArea can accept only one batch of production of the same source at the same time.
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -62,6 +67,14 @@ public class ProductionDispatcherProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Calculates the amount missing</li>
+     *     <li>Looks for ConstructionAreas that can produce the required resources</li>
+     *     <li>Assigns productions of found ConstructionAreas</li>
+     *     <li>Waits until all the production is dispatched, and finished</li>
+     * </ol>
+     */
     @Override
     public void work() {
         if (status == ProcessStatus.CREATED) {

@@ -17,7 +17,10 @@ const ConstructBuildingModule = ({ closePage, footer, constructionAreaId, buildi
 
     const [availableBuildings, setAvailableBuildings] = useState([]);
 
-    useLoader(SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionAreaId, buildingModuleCategory: buildingModuleCategory }), setAvailableBuildings);
+    useLoader({
+        request: SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionAreaId, buildingModuleCategory: buildingModuleCategory }),
+        mapper: setAvailableBuildings
+    });
 
     const getContent = () => {
         return new Stream(availableBuildings)

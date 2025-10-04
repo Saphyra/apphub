@@ -50,7 +50,6 @@ class TerraformationProcessFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(PROCESS_ID);
         given(terraformation.getConstructionId()).willReturn(TERRAFORMATION_ID);
-        given(game.getData()).willReturn(gameData);
 
         TerraformationProcess result = underTest.create(game, LOCATION, terraformation);
 
@@ -66,7 +65,6 @@ class TerraformationProcessFactoryTest {
 
     @Test
     void createFromModel() {
-        given(game.getData()).willReturn(gameData);
         given(model.getId()).willReturn(PROCESS_ID);
         given(model.getLocation()).willReturn(LOCATION);
         given(model.getExternalReference()).willReturn(TERRAFORMATION_ID);

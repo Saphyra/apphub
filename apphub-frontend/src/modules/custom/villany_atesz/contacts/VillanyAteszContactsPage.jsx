@@ -56,7 +56,7 @@ const VillanyAteszContactsPage = () => {
         [editedContact]
     );
 
-    useLoader(VILLANY_ATESZ_GET_CONTACTS.createRequest(), setContacts);
+    useLoader({ request: VILLANY_ATESZ_GET_CONTACTS.createRequest(), mapper: setContacts });
 
     const resetInputFields = () => {
         setCode("");

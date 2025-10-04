@@ -1,0 +1,18 @@
+{
+    "delete-occurrence-confirmation-title": {
+        "en": "Delete occurrence?",
+        "hu": "Előfordulás törlése?"
+    },
+    "delete-occurrence-confirmation-detail": {
+        "en": "Are you sure you want to delete the occurrence of event {eventTitle} on <span class='nowrap'>{occurrenceDate}</span>?",
+        "hu": "Biztosan törölni szeretnéd a(z) {eventTitle} esemény <span class='nowrap'>{occurrenceDate}</span> előfordulását?"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    }
+}

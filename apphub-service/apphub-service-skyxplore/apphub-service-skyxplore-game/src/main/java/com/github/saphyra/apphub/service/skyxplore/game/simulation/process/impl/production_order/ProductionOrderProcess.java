@@ -24,6 +24,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Responsible for producing the resources of the given ProductionOrder
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -43,8 +46,6 @@ public class ProductionOrderProcess implements Process {
     @NonNull
     private final UUID externalReference;
     @NonNull
-    private final GameData gameData;
-    @NonNull
     private final UUID location;
     @NonNull
     private final ApplicationContextProxy applicationContextProxy;
@@ -58,11 +59,23 @@ public class ProductionOrderProcess implements Process {
 
     @Override
     public int getPriority() {
-        return gameData.getProcesses()
+        return game.getData()
+            .getProcesses()
             .findByIdValidated(externalReference)
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Orders the resources required for the production</li>
+     *     <li>Selects an available BuildingModule able to produce the requested resource</li>
+     *     <li>Calculates how many resources can be produced from the available resources</li>
+     *     <li>Uses the resources</li>
+     *     <li>Allocates a factory BuildingModule to the production</li>
+     *     <li>Initiates the production</li>
+     *     <li>Waits until all the resources are produced</li>
+     * </ol>
+     */
     @Override
     public void work() {
         ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
@@ -75,10 +88,11 @@ public class ProductionOrderProcess implements Process {
 
         ProductionOrderProcessConditions conditions = applicationContextProxy.getBean(ProductionOrderProcessConditions.class);
 
+        GameData gameData = game.getData();
         if (conditions.productionNeeded(gameData, productionOrderId)) {
             helper.tryProduce(game, location, processId, productionOrderId);
         } else {
-            log.info("All production is already started");
+            log.info("All productions are already started");
         }
 
         if (conditions.isFinished(gameData, processId, productionOrderId)) {
@@ -93,6 +107,7 @@ public class ProductionOrderProcess implements Process {
 
         GameProgressDiff progressDiff = game.getProgressDiff();
 
+        GameData gameData = game.getData();
         applicationContextProxy.getBean(AllocationRemovalService.class)
             .removeAllocationsAndReservations(progressDiff, gameData, processId);
 
@@ -119,7 +134,7 @@ public class ProductionOrderProcess implements Process {
 
         ProcessModel model = new ProcessModel();
         model.setId(processId);
-        model.setGameId(gameData.getGameId());
+        model.setGameId(game.getGameId());
         model.setType(GameItemType.PROCESS);
         model.setProcessType(getType());
         model.setStatus(status);

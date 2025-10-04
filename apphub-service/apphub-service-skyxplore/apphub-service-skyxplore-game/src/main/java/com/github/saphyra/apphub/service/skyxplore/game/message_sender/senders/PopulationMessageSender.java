@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResp
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.LastMessage;
@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
 
 @Builder
 @Component
@@ -44,7 +43,7 @@ public class PopulationMessageSender implements MessageSender {
     private final Map<String, LastMessage<List<CitizenResponse>>> lastMessages = new ConcurrentHashMap<>();
 
     @Override
-    public List<Future<ExecutionResult<Boolean>>> sendMessages() {
+    public List<FutureWrapper<Boolean>> sendMessages() {
         List<WsSessionPlanetIdMapping> connectedUsers = populationWebSocketHandler.getConnectedUsers();
 
         messageSenderUtil.clearDisconnectedUserData(connectedUsers, lastMessages);
@@ -54,7 +53,7 @@ public class PopulationMessageSender implements MessageSender {
             .toList();
     }
 
-    private Future<ExecutionResult<Boolean>> sendMessage(String sessionId, UUID userId, UUID planetId) {
+    private FutureWrapper<Boolean> sendMessage(String sessionId, UUID userId, UUID planetId) {
         return executorServiceBean.asyncProcess(() -> {
             try {
                 Optional<List<CitizenResponse>> payload = getPayload(sessionId, userId, planetId);

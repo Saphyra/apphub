@@ -47,7 +47,7 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .name(CATEGORY_NAME)
             .measurement("")
             .build();
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, category)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, category)
             .get(0)
             .getStockCategoryId();
 
@@ -60,7 +60,7 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .inStorage(IN_STORAGE_1)
             .price(PRICE_1)
             .build();
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, stockItemRequest1);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, stockItemRequest1);
 
         CreateStockItemRequest stockItemRequest2 = CreateStockItemRequest.builder()
             .stockCategoryId(stockCategoryId)
@@ -71,7 +71,7 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .inStorage(IN_STORAGE_2)
             .price(PRICE_2)
             .build();
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, stockItemRequest2);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, stockItemRequest2);
 
         assertThat(VillanyAteszIndexActions.getTotalStockValue(getServerPort(), accessTokenId)).isEqualTo((IN_CAR_1 + IN_STORAGE_1) * PRICE_1 + (IN_CAR_2 + IN_STORAGE_2) * PRICE_2);
     }
@@ -115,7 +115,7 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .name(CATEGORY_NAME)
             .measurement("")
             .build();
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, category)
+        UUID stockCategoryId = VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, category)
             .get(0)
             .getStockCategoryId();
 
@@ -128,7 +128,7 @@ public class VillanyAteszIndexTest extends BackEndTest {
             .inStorage(IN_STORAGE_1)
             .price(PRICE_1)
             .build();
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, stockItemRequest);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, stockItemRequest);
 
         UUID stockItemId = VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .get(0)

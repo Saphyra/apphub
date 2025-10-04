@@ -1,0 +1,11 @@
+#calendar-edit-occurrence-note {
+    width: 100%;
+}
+
+#calendar-edit-occurrence-remind-me-before-days {
+    width: 48px;
+}
+
+#calendar-edit-occurrence-reminded{
+    transform: scale(1.5);
+}

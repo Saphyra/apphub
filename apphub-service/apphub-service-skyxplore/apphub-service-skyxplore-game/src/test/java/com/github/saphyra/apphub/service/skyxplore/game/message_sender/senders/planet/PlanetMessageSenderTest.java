@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.message_sender.UpdateItem;
 import com.github.saphyra.apphub.service.skyxplore.game.ws.etc.WsSessionPlanetIdMapping;
@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Future;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -68,7 +67,7 @@ class PlanetMessageSenderTest {
 
         given(messageProvider.getMessage(SESSION_ID, USER_ID, PLANET_ID)).willReturn(Optional.of(new UpdateItem(UPDATE_ITEM_KEY, UPDATE_ITEM_VALUE)));
 
-        List<Future<ExecutionResult<Boolean>>> result = underTest.sendMessages();
+        List<FutureWrapper<Boolean>> result = underTest.sendMessages();
 
         assertThat(result.get(0).get().getOrThrow()).isTrue();
 

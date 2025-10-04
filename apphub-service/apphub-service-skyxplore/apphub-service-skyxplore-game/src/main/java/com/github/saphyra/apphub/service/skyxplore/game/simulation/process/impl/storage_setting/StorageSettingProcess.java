@@ -26,6 +26,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Orders resources to fulfil the StorageSetting
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -83,6 +86,14 @@ public class StorageSettingProcess implements Process {
         return ProcessType.STORAGE_SETTING;
     }
 
+    /**
+     * <ol>
+     *     <li>Orders the requested resources</li>
+     *     <li>Waits until they are produced</li>
+     * </ol>
+     *
+     * ProcessStatus instantly switches to READY_TO_DELETE, since there is no parent process that tracks this one.
+     */
     @Override
     public void work() {
         StorageSettingProcessHelper helper = applicationContextProxy.getBean(StorageSettingProcessHelper.class);

@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import com.github.saphyra.apphub.lib.encryption.base.AbstractEncryptor;
+import com.github.saphyra.apphub.lib.encryption.base.Encryptor;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class LongEncryptor implements AbstractEncryptor<Long> {
+public class LongEncryptor implements Encryptor<Long> {
     private final StringEncryptor stringEncryptor;
 
     @Override

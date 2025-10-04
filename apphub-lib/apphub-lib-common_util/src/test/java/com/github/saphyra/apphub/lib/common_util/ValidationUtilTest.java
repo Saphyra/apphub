@@ -356,18 +356,33 @@ public class ValidationUtilTest {
     }
 
     @Test
-    void doesNotContainNull_null() {
-        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(null, FIELD), FIELD, "must not be null");
+    void mapDoesNotContainNull_null() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Map<Object, Object>) null, FIELD), FIELD, "must not be null");
     }
 
     @Test
-    void doesNotContainNull_containsNull() {
+    void mapDoesNotContainNull_containsNull() {
         ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.singleValueMap(KEY, null), FIELD), "%s.%s".formatted(FIELD, KEY), "must not be null");
     }
 
     @Test
-    void doesNotContainNull() {
+    void mapDoesNotContainNull() {
         ValidationUtil.doesNotContainNull(Map.of(KEY, VALUE), FIELD);
+    }
+
+    @Test
+    void collectionDoesNotContainNull_null() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull((Collection<Object>) null, FIELD), FIELD, "must not be null");
+    }
+
+    @Test
+    void collectionDoesNotContainNull_containsNull() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.doesNotContainNull(CollectionUtils.toList("a", null, "b"), FIELD), FIELD, "must not contain null values");
+    }
+
+    @Test
+    void collectionDoesNotContainNull() {
+        ValidationUtil.doesNotContainNull(CollectionUtils.toList("a", "b"), FIELD);
     }
 
     enum TestEnum {

@@ -22,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
 
+/**
+ * Handles a resource production job at a factory
+ */
 @AllArgsConstructor(access = AccessLevel.PACKAGE)
 @Builder(access = AccessLevel.PACKAGE)
 @Slf4j
@@ -63,6 +66,14 @@ public class ProductionProcess implements Process {
             .getPriority() + 1;
     }
 
+    /**
+     * <ol>
+     *     <li>Creates workProcesses required for production</li>
+     *     <li>Waits until workProcesses are finished</li>
+     *     <li>Places the produced resources to the empty storage of the ConstructionArea</li>
+     *     <li>Releases the producer BuildingModule</li>
+     * </ol>
+     */
     @Override
     public void work() {
         ProductionProcessHelper helper = applicationContextProxy.getBean(ProductionProcessHelper.class);

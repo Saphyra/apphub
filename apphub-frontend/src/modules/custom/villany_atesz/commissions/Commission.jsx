@@ -29,17 +29,17 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
     const [cart, setCart] = useState(null);
     const [carts, setCarts] = useState([]);
 
-    useLoader(
-        VILLANY_ATESZ_COMMISSION_GET.createRequest(null, { commissionId: commissionId }),
-        setCommission,
-        [commissionId],
-        () => hasValue(commissionId),
-        DEFAULT_COMMISSION
-    );
-    useLoader(VILLANY_ATESZ_GET_CARTS.createRequest(), setCarts);
-    useLoader(
-        VILLANY_ATESZ_COMMISSION_GET_CART.createRequest(null, { cartId: commission.cartId }),
-        response => {
+    useLoader({
+        request: VILLANY_ATESZ_COMMISSION_GET.createRequest(null, { commissionId: commissionId }),
+        mapper: setCommission,
+        listener: [commissionId],
+        condition: () => hasValue(commissionId),
+        alternativeResult: DEFAULT_COMMISSION
+    });
+    useLoader({ request: VILLANY_ATESZ_GET_CARTS.createRequest(), mapper: setCarts });
+    useLoader({
+        request: VILLANY_ATESZ_COMMISSION_GET_CART.createRequest(null, { cartId: commission.cartId }),
+        mapper: response => {
             setCart(response);
             if (hasValue(response)) {
                 setCartId(response.cartId)
@@ -47,10 +47,10 @@ const Commission = ({ localizationHandler, commissionId, setCommissionId, cartId
                 setCartId(null);
             }
         },
-        [commission.cartId],
-        () => hasValue(commission.cartId),
-        null
-    )
+        listener: [commission.cartId],
+        condition: () => hasValue(commission.cartId),
+        alternativeResult: null
+    });
 
     const totalWage = commission.daysOfWork * commission.hoursPerDay * commission.hourlyWage + Number(commission.departureFee);
     const cartCost = hasValue(cart) ? cart.cartCost * cart.margin : 0;

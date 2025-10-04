@@ -31,7 +31,10 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
         SKYXPLORE_GET_ITEM_DATA.createRequest(null, { dataId: constructionArea.dataId }),
         setConstructionAreaData
     );
-    useLoader(SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId }), setBuildingModules);
+    useLoader({
+        request: SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId }),
+        mapper: setBuildingModules
+    });
 
     useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_CONSTRUCTION_AREA,

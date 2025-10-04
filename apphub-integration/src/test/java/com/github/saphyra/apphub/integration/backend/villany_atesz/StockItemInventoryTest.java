@@ -212,7 +212,7 @@ public class StockItemInventoryTest extends BackEndTest {
             .price(PRICE)
             .build();
 
-        VillanyAteszStockItemActions.create(getServerPort(), accessTokenId, request);
+        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, request);
 
         return VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId)
             .stream()
@@ -234,6 +234,6 @@ public class StockItemInventoryTest extends BackEndTest {
             .measurement("")
             .build();
 
-        VillanyAteszStockCategoryActions.create(getServerPort(), accessTokenId, request);
+        VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, request);
     }
 }

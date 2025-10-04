@@ -75,7 +75,6 @@ class ResourceDeliveryProcessTest {
             .status(ProcessStatus.CREATED)
             .resourceDeliveryRequestId(RESOURCE_DELIVERY_REQUEST_ID)
             .externalReference(EXTERNAL_REFERENCE)
-            .gameData(gameData)
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
@@ -92,6 +91,7 @@ class ResourceDeliveryProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByIdValidated(EXTERNAL_REFERENCE)).willReturn(process);
         given(process.getPriority()).willReturn(PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
         assertThat(underTest.getPriority()).isEqualTo(PRIORITY + 1);
     }
@@ -101,6 +101,7 @@ class ResourceDeliveryProcessTest {
         given(applicationContextProxy.getBean(ResourceDeliveryProcessHelper.class)).willReturn(helper);
         given(helper.calculateToDeliver(gameData, RESOURCE_DELIVERY_REQUEST_ID)).willReturn(TO_DELVER);
         given(helper.assembleConvoy(game, LOCATION, PROCESS_ID, RESOURCE_DELIVERY_REQUEST_ID, TO_DELVER)).willReturn(Optional.empty());
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -115,6 +116,7 @@ class ResourceDeliveryProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(process.getStatus()).willReturn(ProcessStatus.IN_PROGRESS);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -129,6 +131,7 @@ class ResourceDeliveryProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(process.getStatus()).willReturn(ProcessStatus.DONE);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -142,6 +145,7 @@ class ResourceDeliveryProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 
@@ -156,7 +160,7 @@ class ResourceDeliveryProcessTest {
     @Test
     void toModel() {
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
         given(uuidConverter.convertDomain(RESOURCE_DELIVERY_REQUEST_ID)).willReturn(RESOURCE_DELIVERY_REQUEST_ID_STRING);
 
         assertThat(underTest.toModel())

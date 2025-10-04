@@ -28,7 +28,7 @@ const BanDetailsPage = () => {
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useLoader(ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), setUserdata);
+    useLoader({ request: ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), mapper: setUserdata });
 
     return (
         <div id="ban-details" className="main-page">

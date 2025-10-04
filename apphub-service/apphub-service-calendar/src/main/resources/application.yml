@@ -4,3 +4,9 @@ spring:
 
 liquibase:
   schema: calendar
+
+calendar:
+  maxEventDurationDays: 730 # 2 years
+
+migration:
+  defaultEndDateOffset: P730D # 2 years

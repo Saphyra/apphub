@@ -1,0 +1,94 @@
+{
+    "title": {
+        "en": "Edit occurrence - Calendar - Apphub",
+        "hu": "Előfordulás szerkesztése - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Edit occurrence: {eventTitle} - {date}",
+        "hu": "Előfordulás szerkesztése: {eventTitle} - {date}"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "when": {
+        "en": "When",
+        "hu": "Mikor"
+    },
+    "date": {
+        "en": "Date",
+        "hu": "Dátum"
+    },
+    "time": {
+        "en": "Time",
+        "hu": "Idő"
+    },
+    "reset-time": {
+        "en": "Reset time",
+        "hu": "Idő visszaállítása"
+    },
+    "status": {
+        "en": "Status",
+        "hu": "Állapot"
+    },
+    "PENDING": {
+        "en": "Default",
+        "hu": "Alapértelmezett"
+    },
+    "DONE": {
+        "en": "Done",
+        "hu": "Kész"
+    },
+    "SNOOZED": {
+        "en": "Snoozed",
+        "hu": "Halasztva"
+    },
+    "EXPIRED": {
+        "en": "Expired",
+        "hu": "Lejárt"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
+    },
+    "settings": {
+        "en": "Settings",
+        "hu": "Beállítások"
+    },
+    "note": {
+        "en": "Note",
+        "hu": "Megjegyzés"
+    },
+    "remind-me-before-days-pre-label": {
+        "en": "Remind me",
+        "hu": "Emlékeztess"
+    },
+    "remind-me-before-days-post-label": {
+        "en": "days before",
+        "hu": "nappal előtte"
+    },
+    "reminded": {
+        "en": "Reminded",
+        "hu": "Emlékeztetve"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "saved": {
+        "en": "Occurrence saved.",
+        "hu": "Előfordulás elmentve."
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "remind-me-before-days-too-low": {
+        "en": "Remind me before days too low.",
+        "hu": "Az emlékeztetés napjainak száma túl alacsony."
+    },
+    "empty-date": {
+        "en": "Date is empty.",
+        "hu": "A dátum üres."
+    }
+}

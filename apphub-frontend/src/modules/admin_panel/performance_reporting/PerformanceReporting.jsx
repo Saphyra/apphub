@@ -24,7 +24,7 @@ const PerformanceReporting = ({ }) => {
     const [interval, sInterval] = useState(null);
     const [reports, setReports] = useState({});
 
-    useLoader(ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPICS.createRequest(), setTopics);
+    useLoader({ request: ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPICS.createRequest(), mapper: setTopics });
 
     useEffect(() => setRefresh(), [refreshInterval]);
     useEffect(() => loadReports(), [topics]);
@@ -86,6 +86,7 @@ const PerformanceReporting = ({ }) => {
                 <PerformanceReportingReports
                     reports={reports}
                     localizationHandler={localizationHandler}
+                    loadReports={loadReports}
                 />
             </main>
 

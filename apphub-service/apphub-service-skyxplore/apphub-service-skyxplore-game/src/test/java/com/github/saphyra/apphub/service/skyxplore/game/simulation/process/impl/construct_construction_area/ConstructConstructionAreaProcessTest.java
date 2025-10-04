@@ -84,7 +84,6 @@ class ConstructConstructionAreaProcessTest {
             .status(ProcessStatus.CREATED)
             .location(LOCATION)
             .game(game)
-            .gameData(gameData)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -107,8 +106,9 @@ class ConstructConstructionAreaProcessTest {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
         given(construction.getPriority()).willReturn(CONSTRUCTION_PRIORITY);
+        given(game.getData()).willReturn(gameData);
 
-        assertThat(underTest.getPriority()).isEqualTo(600);
+        assertThat(underTest.getPriority()).isEqualTo(6000);
     }
 
     @Test
@@ -116,6 +116,7 @@ class ConstructConstructionAreaProcessTest {
         given(applicationContextProxy.getBean(ConstructConstructionAreaProcessHelper.class)).willReturn(helper);
         given(applicationContextProxy.getBean(ConstructConstructionAreaProcessConditions.class)).willReturn(conditions);
         given(conditions.resourcesAvailable(gameData, PROCESS_ID, CONSTRUCTION_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -131,6 +132,7 @@ class ConstructConstructionAreaProcessTest {
         given(conditions.resourcesAvailable(gameData, PROCESS_ID, CONSTRUCTION_ID)).willReturn(true);
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(false);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(false);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -148,6 +150,7 @@ class ConstructConstructionAreaProcessTest {
         given(conditions.hasWorkProcesses(gameData, PROCESS_ID)).willReturn(true);
         given(conditions.workFinished(gameData, PROCESS_ID)).willReturn(true);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.work();
 
@@ -162,6 +165,7 @@ class ConstructConstructionAreaProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(game.getData()).willReturn(gameData);
 
         underTest.cleanup();
 
@@ -173,7 +177,7 @@ class ConstructConstructionAreaProcessTest {
 
     @Test
     void toModel() {
-        given(gameData.getGameId()).willReturn(GAME_ID);
+        given(game.getGameId()).willReturn(GAME_ID);
 
         assertThat(underTest.toModel())
             .returns(PROCESS_ID, GameItem::getId)

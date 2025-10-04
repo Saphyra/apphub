@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
 
@@ -70,7 +69,7 @@ public class DateTimeUtil {
         );
     }
 
-    public OffsetDateTime getCurrentOffsetDateTime() {
-        return OffsetDateTime.now(ZoneOffset.UTC);
+    public boolean isBetween(LocalDate date, LocalDate startDate, LocalDate endDate) {
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 }
