@@ -13,10 +13,6 @@ async function save({
     occurrenceId,
     setDisplaySpinner
 }) {
-    if (!validateOccurrenceRequest(localizationHandler, payload)) {
-        return;
-    }
-
     const payload = {
         date: date,
         time: time,
@@ -25,6 +21,10 @@ async function save({
         remindMeBeforeDays: remindMeBeforeDays,
         reminded: reminded
     };
+
+    if (!validateOccurrenceRequest(localizationHandler, payload)) {
+        return;
+    }
 
     await CALENDAR_EDIT_OCCURRENCE.createRequest(payload, { occurrenceId: occurrenceId })
         .send(setDisplaySpinner);

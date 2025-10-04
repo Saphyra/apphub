@@ -27,6 +27,11 @@ import ConfirmationDialog from "../../../common/component/confirmation_dialog/Co
 import { DONE, EXPIRED, PENDING, SNOOZED } from "../common/OccurrenceStatus";
 import confirmOccurrenceDeletion from "../common/delete_occurrence/DeleteOccurrence";
 import save from "./EditOccurrence";
+import LocalDate from "../../../common/js/date/LocalDate";
+import LocalTime from "../../../common/js/date/LocalTime";
+import Optional from "../../../common/js/collection/Optional";
+import TestableDateInput from "../common/input/TestableDateInput";
+import TestableTimeInput from "../common/input/TestableTimeInput";
 
 const CalendarEditOccurrencePage = () => {
     const { occurrenceId } = useParams();
@@ -42,8 +47,13 @@ const CalendarEditOccurrencePage = () => {
 
     const [occurrence, setOccurrence] = useState(null);
 
-    const [date, setDate] = useExtractAsync(o => o.date, occurrence, "");
-    const [time, setTime] = useExtractAsync(o => o.time, occurrence, "");
+    const [date, setDate] = useExtractAsync(o => LocalDate.parse(o.date), occurrence, null);
+        const [time, setTime] = useExtractAsync(
+        o => LocalTime.parse(o.time),
+        occurrence,
+        null,
+        e => hasValue(e) && hasValue(e.time)
+    );
     const [status, setStatus] = useExtractAsync(o => o.status == EXPIRED ? PENDING : o.status, occurrence, PENDING);
     const [note, setNote] = useExtractAsync(o => o.note, occurrence, "");
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, occurrence, 0);
@@ -70,22 +80,20 @@ const CalendarEditOccurrencePage = () => {
 
                     <PreLabeledInputField
                         label={localizationHandler.get("date")}
-                        input={<InputField
+                        input={<TestableDateInput
                             id="calendar-edit-occurrence-date"
-                            type={"date"}
-                            value={date}
-                            onchangeCallback={setDate}
+                            date={date}
+                            setDate={setDate}
                         />}
                     />
 
                     <span className="nowrap">
                         <PreLabeledInputField
                             label={localizationHandler.get("time")}
-                            input={<InputField
+                            input={<TestableTimeInput
                                 id="calendar-edit-occurrence-time"
-                                type={"time"}
-                                value={time}
-                                onchangeCallback={setTime}
+                                time={time}
+                                setTime={setTime}
                             />}
                         />
 
@@ -182,8 +190,8 @@ const CalendarEditOccurrencePage = () => {
                         onclick={() => save({
                             localizationHandler: localizationHandler,
                             occurrenceId: occurrenceId,
-                            date: date,
-                            time: time,
+                            date: new Optional(date).map(d => d.toString()).orElse(null),
+                            time: new Optional(time).map(d => d.formatWithoutSeconds()).orElse(null),
                             status: status,
                             note: note,
                             remindMeBeforeDays: remindMeBeforeDays,

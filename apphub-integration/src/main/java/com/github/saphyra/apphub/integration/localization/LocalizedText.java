@@ -92,6 +92,9 @@ public enum LocalizedText {
     CALENDAR_LABEL_TOO_SHORT("Label too short."),
     CALENDAR_LABEL_TOO_LONG("Label too long. (Maximum 255 characters)"),
     CALENDAR_EVENT_CREATED("Event created."),
+    CALENDAR_EVENT_SAVED("Event saved."),
+    CALENDAR_EMPTY_DATE("Date is empty."),
+    CALENDAR_OCCURRENCE_SAVED("Occurrence saved."),
     ;
 
     private final String text;

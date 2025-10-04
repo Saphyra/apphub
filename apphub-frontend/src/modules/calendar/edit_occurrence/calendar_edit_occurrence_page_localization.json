@@ -86,5 +86,9 @@
     "remind-me-before-days-too-low": {
         "en": "Remind me before days too low.",
         "hu": "Az emlékeztetés napjainak száma túl alacsony."
+    },
+    "empty-date": {
+        "en": "Date is empty.",
+        "hu": "A dátum üres."
     }
 }

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class CalendarCreateEventPageActions {
+public class CalendarEventPageActions {
     public static void fillForm(WebDriver driver, CreateEventParameters parameters) {
         WebElementUtils.selectOptionByValue(driver.findElement(By.id("calendar-event-repetition-type")), parameters.getRepetitionType().name());
 
@@ -90,8 +90,23 @@ public class CalendarCreateEventPageActions {
         }
     }
 
-    public static void submit(WebDriver driver) {
+    public static void create(WebDriver driver) {
         driver.findElement(By.id("calendar-create-event-button"))
+            .click();
+    }
+
+    public static void save(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-event-save-button"))
+            .click();
+    }
+
+    public static void confirmSave(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-event-confirm-save-button"))
+            .click();
+    }
+
+    public static void backFromEdit(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-event-back-button"))
             .click();
     }
 }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.calendar.index;
 
-import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarCreateEventPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
@@ -39,13 +39,13 @@ public class CalendarIndexLabelFilterTest extends SeleniumTest {
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
 
         CalendarIndexPageActions.openCreateEventPage(driver);
-        CalendarCreateEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).build());
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).build());
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 
         CalendarIndexPageActions.openCreateEventPage(driver);
-        CalendarCreateEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).title(LABELED_EVENT).newLabels(List.of(LABEL)).build());
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).title(LABELED_EVENT).newLabels(List.of(LABEL)).build());
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 
         CalendarIndexPageActions.filterByLabel(driver, LABEL);

@@ -25,6 +25,9 @@ import EventReminder from "../common/event/EventReminder";
 import EventLabels from "../common/event/EventLabels";
 import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import saveEvent from "./saveEvent";
+import LocalDate from "../../../common/js/date/LocalDate";
+import Optional from "../../../common/js/collection/Optional";
+import LocalTime from "../../../common/js/date/LocalTime";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -43,9 +46,19 @@ const CalendarEditEventPage = () => {
 
     const [title, setTitle] = useExtractAsync(o => o.title, event, "");
     const [content, setContent] = useExtractAsync(o => o.content, event, "");
-    const [startDate, setStartDate] = useExtractAsync(o => o.startDate, event, "");
-    const [endDate, setEndDate] = useExtractAsync(o => o.endDate, event, "");
-    const [time, setTime] = useExtractAsync(o => o.time, event, "");
+    const [startDate, setStartDate] = useExtractAsync(o => LocalDate.parse(o.startDate), event, null);
+    const [endDate, setEndDate] = useExtractAsync(
+        o => LocalDate.parse(o.endDate),
+        event,
+        null,
+        e => hasValue(e) && hasValue(e.endDate)
+    );
+    const [time, setTime] = useExtractAsync(
+        o => LocalTime.parse(o.time),
+        event,
+        null,
+        e => hasValue(e) && hasValue(e.time)
+    );
     const [repetitionType, setRepetitionType] = useExtractAsync(o => o.repetitionType, event, REPETITION_TYPE_ONE_TIME);
     const [repetitionData, setRepetitionData] = useExtractAsync(o => o.repetitionData, event);
     const [repeatForDays, setRepeatForDays] = useExtractAsync(o => o.repeatForDays, event, 1);
@@ -202,9 +215,9 @@ const CalendarEditEventPage = () => {
                             repetitionType: repetitionType,
                             repetitionData: nullIfEmpty(repetitionData),
                             repeatForDays: repeatForDays,
-                            startDate: startDate,
-                            endDate: nullIfEmpty(endDate),
-                            time: nullIfEmpty(time),
+                            startDate: new Optional(startDate).map(d => d.toString()).orElse(null),
+                            endDate: new Optional(nullIfEmpty(endDate)).map(d => d.toString()).orElse(null),
+                            time: new Optional(time).map(d => d.formatWithoutSeconds()).orElse(null),
                             title: title,
                             content: content,
                             remindMeBeforeDays: remindMeBeforeDays

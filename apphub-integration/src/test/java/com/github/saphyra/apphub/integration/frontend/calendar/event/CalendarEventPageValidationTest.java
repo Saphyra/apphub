@@ -1,6 +1,6 @@
-package com.github.saphyra.apphub.integration.frontend.calendar;
+package com.github.saphyra.apphub.integration.frontend.calendar.event;
 
-import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarCreateEventPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
@@ -18,11 +18,11 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-public class CalendarCreateEventPageValidationTest extends SeleniumTest {
+public class CalendarEventPageValidationTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
     @Test(groups = {"fe", "calendar"})
-    public void createEventPageValidation() {
+    public void eventPageValidation() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -59,8 +59,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
     }
 
     private void labelAlreadyExists(WebDriver driver) {
-        CalendarCreateEventPageActions.addNewLabel(driver, LABEL_1);
-        CalendarCreateEventPageActions.addNewLabel(driver, LABEL_1);
+        CalendarEventPageActions.addNewLabel(driver, LABEL_1);
+        CalendarEventPageActions.addNewLabel(driver, LABEL_1);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_LABEL_ALREADY_EXISTS);
         ToastMessageUtil.clearToasts(driver);
@@ -69,14 +69,14 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
     private void labelTooLong(WebDriver driver) {
         String label = "a".repeat(256);
 
-        CalendarCreateEventPageActions.addNewLabel(driver, label);
+        CalendarEventPageActions.addNewLabel(driver, label);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_LABEL_TOO_LONG);
         ToastMessageUtil.clearToasts(driver);
     }
 
     private void labelTooShort(WebDriver driver) {
-        CalendarCreateEventPageActions.addNewLabel(driver, " ");
+        CalendarEventPageActions.addNewLabel(driver, " ");
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_LABEL_TOO_SHORT);
         ToastMessageUtil.clearToasts(driver);
@@ -88,8 +88,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .repetitionData(List.of())
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_NO_DAYS_DEFINED);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -100,8 +100,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .repetitionData(List.of())
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_NO_DAYS_DEFINED);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -112,8 +112,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .repetitionData(0)
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_EVERY_X_DAYS_REPETITION_DATA_TOO_LOW);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -124,8 +124,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .repeatForDays(0)
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_REPEAT_FOR_DAYS_TOO_LOW);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -136,8 +136,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .title(" ")
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_BLANK_TITLE);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -148,8 +148,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .endDate(CreateEventParameters.DEFAULT_START_DATE.minusDays(1))
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_END_DATE_BEFORE_START_DATE);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -160,8 +160,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .endDate(null)
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_EMPTY_END_DATE);
         ToastMessageUtil.clearToasts(driver);
     }
@@ -172,8 +172,8 @@ public class CalendarCreateEventPageValidationTest extends SeleniumTest {
             .startDate(null)
             .build();
 
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_EMPTY_START_DATE);
         ToastMessageUtil.clearToasts(driver);
     }

@@ -9,7 +9,12 @@ export const useEffectValidated = (callback, property, validation = (p) => hasVa
     }, [property]);
 }
 
-export const useExtractAsync = (extract, property, initialValue = null, validation = (p) => hasValue(p)) => {
+export const useExtractAsync = (
+    extract,
+    property,
+    initialValue = null,
+    validation = (p) => hasValue(p)
+) => {
     const [value, setValue] = useState(initialValue);
 
     useEffect(() => {

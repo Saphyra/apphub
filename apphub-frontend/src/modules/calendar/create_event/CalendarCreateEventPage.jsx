@@ -20,6 +20,7 @@ import EventRepetition from "../common/event/EventRepetition";
 import EventReminder from "../common/event/EventReminder";
 import EventLabels from "../common/event/EventLabels";
 import createEvent from "./createEvent";
+import Optional from "../../../common/js/collection/Optional";
 
 const CalendarCreateEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -32,9 +33,9 @@ const CalendarCreateEventPage = () => {
 
     const [displaySpinner, setDisplaySpinner] = useState(0);
 
-    const [startDate, setStartDate] = useState(hasValue(queryParams.startDate) ? queryParams.startDate : LocalDate.now().toString());
+    const [startDate, setStartDate] = useState(hasValue(queryParams.startDate) ? LocalDate.parse(queryParams.startDate) : LocalDate.now());
     const [endDate, setEndDate] = useState(null);
-    const [time, setTime] = useState("");
+    const [time, setTime] = useState(null);
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [repetitionType, setRepetitionType] = useState(REPETITION_TYPE_ONE_TIME);
@@ -122,9 +123,9 @@ const CalendarCreateEventPage = () => {
                                 repetitionType: repetitionType,
                                 repetitionData: repetitionData,
                                 repeatForDays: repeatForDays,
-                                startDate: startDate,
-                                endDate: nullIfEmpty(endDate),
-                                time: nullIfEmpty(time),
+                                startDate: new Optional(startDate).map(d => d.toString()).orElse(null),
+                                endDate: new Optional(nullIfEmpty(endDate)).map(d => d.toString()).orElse(null),
+                                time: new Optional(time).map(d => d.formatWithoutSeconds()).orElse(null),
                                 title: title,
                                 content: content,
                                 remindMeBeforeDays: remindMeBeforeDays

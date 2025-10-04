@@ -127,4 +127,16 @@ public class CalendarIndexPageActions {
         driver.findElement(By.id("modify-labels-button"))
             .click();
     }
+
+    public static void editEvent(WebDriver driver) {
+        AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-edit-event-button"))))
+            .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
+            .click();
+    }
+
+    public static void editOccurrence(WebDriver driver) {
+        AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-edit-button"))))
+            .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
+            .click();
+    }
 }

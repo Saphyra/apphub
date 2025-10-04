@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.calendar;
 
-import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarCreateEventPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarLabelsPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
@@ -45,8 +45,8 @@ public class CalendarLabelsTest extends SeleniumTest {
             .toBuilder()
             .newLabels(List.of(LABEL_1, LABEL_2))
             .build();
-        CalendarCreateEventPageActions.fillForm(driver, parameters);
-        CalendarCreateEventPageActions.submit(driver);
+        CalendarEventPageActions.fillForm(driver, parameters);
+        CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 
         CalendarIndexPageActions.toLabelsPage(driver);

@@ -70,6 +70,7 @@ const parse = (dateString) => {
     const type = typeof dateString;
 
     if (type !== "string") {
+        console.error(dateString);
         throwException("IllegalArgument", "date must be string, it was " + type);
     }
 
@@ -167,7 +168,7 @@ class LocalDateObj {
         return this.getYear() == obj.getYear() && this.getMonth() == obj.getMonth();
     }
 
-    isBefore(obj){
+    isBefore(obj) {
         if (!obj instanceof LocalDateObj) {
             throwException("IllegalArgument", "obj is not a LocalDateObj");
         }

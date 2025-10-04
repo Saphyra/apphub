@@ -29,6 +29,12 @@ public class CreateEventParameters {
     public static final List<DayOfWeek> NEW_REPETITION_TYPE_DAYS_OF_WEEK = List.of(DayOfWeek.WEDNESDAY, DayOfWeek.SUNDAY);
     public static final List<Integer> DEFAULT_REPETITION_DATA_DAYS_OF_MONTH = List.of(3, 22);
     public static final List<Integer> NEW_REPETITION_DATA_EVERY_X_DAYS_DAYS_OF_WEEK = List.of(5, 24);
+    public static final LocalDate NEW_START_DATE = DEFAULT_START_DATE.plusMonths(1);
+    public static final LocalDate NEW_END_DATE = NEW_START_DATE.plusWeeks(2);
+    public static final LocalTime NEW_TIME = LocalTime.of(14, 15);
+    public static final String NEW_TITLE = "new-event-title";
+    public static final String NEW_DESCRIPTION = "new-event-description";
+
 
     private Integer repeatForDays;
     private LocalDate startDate;
@@ -51,6 +57,20 @@ public class CreateEventParameters {
             .time(DEFAULT_TIME)
             .title(DEFAULT_TITLE)
             .content(DEFAULT_DESCRIPTION)
+            .repetitionType(repetitionType)
+            .repetitionData(getRepetitionData(repetitionType).getEntity1())
+            .remindMeBeforeDays(DEFAULT_REMIND_ME_BEFORE_DAYS)
+            .repeatForDays(DEFAULT_REPEAT_FOR_DAYS)
+            .build();
+    }
+
+    public static CreateEventParameters edit(RepetitionType repetitionType) {
+        return CreateEventParameters.builder()
+            .startDate(NEW_START_DATE)
+            .endDate(repetitionType == RepetitionType.ONE_TIME ? null : NEW_END_DATE)
+            .time(NEW_TIME)
+            .title(NEW_TITLE)
+            .content(NEW_DESCRIPTION)
             .repetitionType(repetitionType)
             .repetitionData(getRepetitionData(repetitionType).getEntity1())
             .remindMeBeforeDays(DEFAULT_REMIND_ME_BEFORE_DAYS)
