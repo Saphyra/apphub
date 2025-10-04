@@ -139,4 +139,15 @@ public class CalendarIndexPageActions {
             .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
             .click();
     }
+
+    public static void confirmReminder(WebDriver driver) {
+        AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-remind-button"))))
+            .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
+            .click();
+    }
+
+    public static void closeOccurrence(WebDriver driver) {
+        driver.findElement(By.id("calendar-selected-occurrence-cancel-button"))
+            .click();
+    }
 }

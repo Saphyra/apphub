@@ -20,4 +20,9 @@ public class CalendarOccurrencePageActions {
         driver.findElement(By.id("calendar-edit-occurrence-save-button"))
             .click();
     }
+
+    public static boolean isReminded(WebDriver driver) {
+        return driver.findElement(By.id("calendar-edit-occurrence-reminded"))
+            .isSelected();
+    }
 }
