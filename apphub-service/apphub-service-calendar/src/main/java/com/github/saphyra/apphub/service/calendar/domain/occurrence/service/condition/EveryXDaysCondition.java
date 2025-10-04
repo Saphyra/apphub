@@ -6,12 +6,11 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 @RequiredArgsConstructor
-//TODO unit test
 class EveryXDaysCondition implements RepetitionTypeCondition {
     private final int days;
 
     @Override
     public boolean shouldHaveOccurrence(LocalDate startDate, LocalDate endDate, LocalDate date, Integer repeatForDays) {
-        return ChronoUnit.DAYS.between(startDate, date) % days < repeatForDays;
+        return !date.isBefore(startDate) && !date.isAfter(endDate) &&  ChronoUnit.DAYS.between(startDate, date) % days < repeatForDays;
     }
 }

@@ -6,7 +6,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-//TODO unit test
 class DaysOfMonthCondition implements RepetitionTypeCondition {
     private final Collection<Integer> daysOfMonth;
 

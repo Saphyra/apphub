@@ -1,2 +1,0 @@
-TODO add to release notes
-TODO Integration test for whole migration process

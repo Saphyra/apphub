@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 
 @RequiredArgsConstructor
-//TODO unit test
 public class DaysOfWeekCondition implements RepetitionTypeCondition {
     private final Collection<DayOfWeek> daysOfWeek;
 

@@ -4,6 +4,7 @@
             Delete reports of topic
             Filter reports
             Order reports
+    Calendar V2
 
 ===BUGFIXES===
     AdminPanel
