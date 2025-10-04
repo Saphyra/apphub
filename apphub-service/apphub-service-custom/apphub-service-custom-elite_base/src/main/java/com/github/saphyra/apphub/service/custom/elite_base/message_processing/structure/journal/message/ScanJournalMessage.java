@@ -107,6 +107,9 @@ public class ScanJournalMessage extends JournalMessage {
     @JsonProperty("WasMapped")
     private Boolean wasMapped;
 
+    @JsonProperty("WasFootfalled")
+    private Boolean wasFootfalled;
+
     @JsonProperty("AbsoluteMagnitude")
     private Double absoluteMagnitude;
 

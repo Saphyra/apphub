@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    EliteBase
+        Unmapped property: WasFootfalled
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
