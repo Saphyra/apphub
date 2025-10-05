@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.dao;
 
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.LocalDateEncryptor;
@@ -149,6 +150,49 @@ class EventConverterTest {
             .returns(TIME, Event::getTime)
             .returns(TITLE, Event::getTitle)
             .returns(CONTENT, Event::getContent)
+            .returns(REMIND_ME_BEFORE_DAYS, Event::getRemindMeBeforeDays);
+    }
+
+    @Test
+    void convertEntity_nulls() {
+        EventEntity entity = EventEntity.builder()
+            .eventId(EVENT_ID_STRING)
+            .userId(USER_ID_STRING)
+            .repetitionType(ENCRYPTED_REPETITION_TYPE)
+            .repetitionData(ENCRYPTED_REPETITION_DATA)
+            .repeatForDays(ENCRYPTED_REPEAT_FOR_DAYS)
+            .startDate(ENCRYPTED_START_DATE)
+            .endDate(ENCRYPTED_END_DATE)
+            .time(ENCRYPTED_TIME)
+            .title(ENCRYPTED_TITLE)
+            .content(ENCRYPTED_CONTENT)
+            .remindMeBeforeDays(ENCRYPTED_REMIND_ME_BEFORE_DAYS)
+            .build();
+
+        given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
+        given(uuidConverter.convertEntity(EVENT_ID_STRING)).willReturn(EVENT_ID);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
+        given(stringEncryptor.decrypt(ENCRYPTED_REPETITION_TYPE, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_REPETITION_TYPE)).willReturn(RepetitionType.EVERY_X_DAYS.name());
+        given(stringEncryptor.decrypt(ENCRYPTED_REPETITION_DATA, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_REPETITION_DATA)).willReturn(REPETITION_DATA);
+        given(integerEncryptor.decrypt(ENCRYPTED_REPEAT_FOR_DAYS, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_REPEAT_FOR_DAYS)).willReturn(REPEAT_FOR_DAYS);
+        given(localDateEncryptor.decrypt(ENCRYPTED_START_DATE, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_START_DATE)).willReturn(START_DATE);
+        given(localDateEncryptor.decrypt(ENCRYPTED_END_DATE, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_END_DATE)).willReturn(END_DATE);
+        given(localTimeEncryptor.decrypt(ENCRYPTED_TIME, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_TIME)).willReturn(TIME);
+        given(stringEncryptor.decrypt(ENCRYPTED_TITLE, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_TITLE)).willReturn(TITLE);
+        given(stringEncryptor.decrypt(ENCRYPTED_CONTENT, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_CONTENT)).willReturn(null);
+        given(integerEncryptor.decrypt(ENCRYPTED_REMIND_ME_BEFORE_DAYS, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.REMIND_ME_BEFORE_DAYS)).willReturn(REMIND_ME_BEFORE_DAYS);
+
+        assertThat(underTest.convertEntity(entity))
+            .returns(EVENT_ID, Event::getEventId)
+            .returns(USER_ID, Event::getUserId)
+            .returns(RepetitionType.EVERY_X_DAYS, Event::getRepetitionType)
+            .returns(REPETITION_DATA, Event::getRepetitionData)
+            .returns(REPEAT_FOR_DAYS, Event::getRepeatForDays)
+            .returns(START_DATE, Event::getStartDate)
+            .returns(END_DATE, Event::getEndDate)
+            .returns(TIME, Event::getTime)
+            .returns(TITLE, Event::getTitle)
+            .returns(Constants.EMPTY_STRING, Event::getContent)
             .returns(REMIND_ME_BEFORE_DAYS, Event::getRemindMeBeforeDays);
     }
 }

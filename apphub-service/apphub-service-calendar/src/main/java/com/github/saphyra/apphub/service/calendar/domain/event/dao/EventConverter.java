@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.dao;
 
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
@@ -11,6 +12,8 @@ import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -67,7 +70,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .endDate(localDateEncryptor.decrypt(entity.getEndDate(), userIdFromAccessToken, entity.getEventId(), COLUMN_END_DATE))
             .time(localTimeEncryptor.decrypt(entity.getTime(), userIdFromAccessToken, entity.getEventId(), COLUMN_TIME))
             .title(stringEncryptor.decrypt(entity.getTitle(), userIdFromAccessToken, entity.getEventId(), COLUMN_TITLE))
-            .content(stringEncryptor.decrypt(entity.getContent(), userIdFromAccessToken, entity.getEventId(), COLUMN_CONTENT))
+            .content(Optional.ofNullable(stringEncryptor.decrypt(entity.getContent(), userIdFromAccessToken, entity.getEventId(), COLUMN_CONTENT)).orElse(Constants.EMPTY_STRING))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getEventId(), REMIND_ME_BEFORE_DAYS))
             .build();
     }

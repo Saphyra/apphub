@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -23,7 +24,7 @@ class EventMapper {
         return EventResponse.builder()
             .eventId(event.getEventId())
             .repetitionType(event.getRepetitionType())
-            .repetitionData(objectMapperWrapper.readValue(event.getRepetitionData(), Object.class))
+            .repetitionData(Optional.ofNullable(event.getRepetitionData()).map(repetitionData -> objectMapperWrapper.readValue(repetitionData, Object.class)).orElse(null))
             .repeatForDays(event.getRepeatForDays())
             .startDate(event.getStartDate())
             .endDate(event.getEndDate())

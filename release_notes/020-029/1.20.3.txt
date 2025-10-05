@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    Calendar
+        Handling null values in events
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
