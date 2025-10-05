@@ -21,8 +21,6 @@ public class LocalStartTask implements Runnable {
     private final Service service;
     @Builder.Default
     private final String activeProfiles = Constants.PROFILE_LOCAL;
-    @Builder.Default
-    private final String protocol = Constants.PROTOCOL_UNSECURE;
 
     @Override
     @SneakyThrows
@@ -33,7 +31,7 @@ public class LocalStartTask implements Runnable {
         new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx1024m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=%s".formatted(activeProfiles), "-jar", service.getLocation())
             .start();
 
-        servicePinger.pingLocal(Optional.ofNullable(service.getHealthCheckPort()).orElse(service.getPort()), protocol)
+        servicePinger.pingLocal(Optional.ofNullable(service.getHealthCheckPort()).orElse(service.getPort()))
             .ifPresent(cause -> {
                 throw new IllegalStateException(service.getName() + " failed to start.", cause);
             });

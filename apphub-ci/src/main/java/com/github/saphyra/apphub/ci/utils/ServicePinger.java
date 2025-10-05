@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.ci.utils;
 
-import com.github.saphyra.apphub.ci.value.Constants;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,16 +21,12 @@ public class ServicePinger {
         return new RestTemplate();
     }
 
-    public Optional<Exception> pingLocal(int port, String protocol) {
-        return pingService(60, () -> singlePingLocal(port, protocol));
+    public Optional<Exception> pingLocal(int port) {
+        return pingService(60, () -> singlePingLocal(port));
     }
 
     public Optional<Exception> singlePingLocal(int port) {
-        return singlePingLocal(port, Constants.PROTOCOL_UNSECURE);
-    }
-
-    public Optional<Exception> singlePingLocal(int port, String protocol) {
-        String url = "%s://localhost:%s/platform/health".formatted(protocol, port);
+        String url = "http://localhost:%s/platform/health".formatted(port);
         return singlePing(url);
     }
 

@@ -15,7 +15,6 @@ public class NamespaceNameProvider {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        String branchName = reader.readLine();
-        return branchName.equals("master") ? "production" : branchName;
+        return reader.readLine();
     }
 }

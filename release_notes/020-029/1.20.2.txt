@@ -1,0 +1,15 @@
+===FEATURES===
+
+===BUGFIXES===
+    ApphubCI
+        Minikube deploy does not deploy to prod from master
+    Calendar
+        Proper overflow in Index page
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    ApphubCI
+        Removed unused http/https protocol switch
+
+===ETC===

@@ -11,7 +11,5 @@ public class Constants {
     public static final String NAMESPACE_NAME_PRODUCTION = "production";
     public static final String NAMESPACE_NAME_PREPROD = "preprod";
     public static final String PROFILE_PREPROD = "preprod";
-    public static final String PROTOCOL_SECURE = "https";
     public static final String PROFILE_LOCAL = "local";
-    public static final String PROTOCOL_UNSECURE = "http";
 }
