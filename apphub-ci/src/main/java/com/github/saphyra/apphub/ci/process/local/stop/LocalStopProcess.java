@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.process.local.stop;
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
+import com.github.saphyra.apphub.ci.menu.ServiceListValidator;
 import com.github.saphyra.apphub.ci.process.ProcessKiller;
 import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +32,7 @@ public class LocalStopProcess {
     private final ValidatingInputReader validatingInputReader;
     private final PropertyDao propertyDao;
     private final ObjectMapperWrapper objectMapperWrapper;
+    private final ServiceListValidator serviceListValidator;
 
     public void stopAllServices() {
         log.info("Stopping local server...");
@@ -51,16 +55,17 @@ public class LocalStopProcess {
     }
 
     public void stopServices() {
-        String[] serviceNamesArr = validatingInputReader.getInput(
-            LocalizedText.SERVICES_TO_STOP,
-            input -> input.split(","),
-            input -> Arrays.stream(input)
-                .filter(serviceName -> services.getServices().stream().noneMatch(service -> service.getName().equals(serviceName)))
-                .findAny()
-                .map(serviceName -> language -> LocalizedText.SERVICE_NOT_FOUND.getLocalizedText(language).formatted(serviceName))
+        String[] servicesToStartArr = validatingInputReader.getInput(
+            LocalizedText.SERVICES_TO_START,
+            input -> isBlank(input) ? new String[0] : input.split(","),
+            serviceListValidator
         );
 
-        List<String> serviceNames = Arrays.asList(serviceNamesArr);
+        if (servicesToStartArr.length == 0) {
+            return;
+        }
+
+        List<String> serviceNames = Arrays.asList(servicesToStartArr);
 
         propertyDao.save(PropertyName.LATEST_SERVICES, objectMapperWrapper.writeValueAsString(serviceNames));
 

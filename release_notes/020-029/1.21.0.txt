@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Return from *Services menu if input is empty
 
 ===BUGFIXES===
 
