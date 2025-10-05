@@ -3,6 +3,9 @@
         Return from *Services menu if input is empty
 
 ===BUGFIXES===
+    AdminPanel
+        PerformanceReporting
+            Client does not throw exception when connection to AdminPanel failed
 
 ===PLATFORM CHANGES===
 
