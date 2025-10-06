@@ -1,6 +1,8 @@
 ===FEATURES===
     ApphubCI
         Return from *Services menu if input is empty
+    Calendar
+        Back button on edit event/occurrence screen actually goes back, not only to index page
 
 ===BUGFIXES===
     AdminPanel
