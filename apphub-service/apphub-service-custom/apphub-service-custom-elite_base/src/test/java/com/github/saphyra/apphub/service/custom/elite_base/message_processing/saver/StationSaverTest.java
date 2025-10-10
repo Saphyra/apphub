@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
@@ -9,10 +11,6 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationFa
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_economy.StationEconomyFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_service.StationServiceEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,13 +51,7 @@ class StationSaverTest {
     private StationEconomyFactory stationEconomyFactory;
 
     @Mock
-    private IdGenerator idGenerator;
-
-    @Mock
     private MinorFactionSaver minorFactionSaver;
-
-    @Mock
-    private ErrorReporterService errorReporterService;
 
     @InjectMocks
     private StationSaver underTest;
@@ -136,11 +128,9 @@ class StationSaverTest {
         Economy[] economies = {economy};
 
         given(stationDao.findByMarketId(MARKET_ID)).willReturn(Optional.empty());
-        given(idGenerator.randomUuid()).willReturn(STATION_ID);
         given(minorFactionSaver.save(LAST_UPDATE, CONTROLLING_FACTION_NAME, FactionStateEnum.BLIGHT)).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
         given(stationFactory.create(
-            STATION_ID,
             LAST_UPDATE,
             STAR_SYSTEM_ID,
             BODY_ID,
@@ -150,12 +140,10 @@ class StationSaverTest {
             Allegiance.ALLIANCE,
             EconomyEnum.AGRICULTURE,
             List.of(StationServiceEnum.BARTENDER),
-            List.of(stationEconomy),
+            List.of(economy),
             CONTROLLING_FACTION_ID
         ))
             .willReturn(station);
-        given(stationEconomyFactory.create(STATION_ID, economy)).willReturn(stationEconomy);
-        given(station.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
 
         assertThat(underTest.save(
             LAST_UPDATE,
@@ -189,11 +177,11 @@ class StationSaverTest {
         Economy[] economies = {economy};
 
         given(stationDao.findByMarketId(MARKET_ID)).willReturn(Optional.of(station));
-        given(idGenerator.randomUuid()).willReturn(STATION_ID);
         given(minorFactionSaver.save(LAST_UPDATE, CONTROLLING_FACTION_NAME, FactionStateEnum.BLIGHT)).willReturn(minorFaction);
         given(minorFaction.getId()).willReturn(CONTROLLING_FACTION_ID);
         given(stationEconomyFactory.create(STATION_ID, economy)).willReturn(stationEconomy);
         given(station.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
+        given(station.getId()).willReturn(STATION_ID);
 
         assertThat(underTest.save(
             LAST_UPDATE,
