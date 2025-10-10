@@ -92,7 +92,7 @@ public class StationSaver {
                 allegiance,
                 economy,
                 parsedServices,
-                Arrays.asList(economies),
+                Optional.ofNullable(economies).map(Arrays::asList).orElse(null),
                 controllingFactionId
             );
             log.debug("Saving new {}", station);

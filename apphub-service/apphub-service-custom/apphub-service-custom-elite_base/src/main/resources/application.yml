@@ -25,7 +25,7 @@ elite-base:
   messageProcessorRetryDelay: PT2H
   messageProcessorMaxRetryCount: 50
   starSystemSuggestionListSize: 10
-  searchPageSize: 30
+  searchPageSize: 10
   incomingMessageTimeout: PT10M
   incomingMessageCheckInterval: PT30S
   orphanedRecordProcessorParallelism: 4

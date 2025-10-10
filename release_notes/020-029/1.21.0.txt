@@ -16,3 +16,5 @@
 ===TECHNICAL DEBTS===
 
 ===ETC===
+    EliteBase
+        Limit size of searchResult to 10
