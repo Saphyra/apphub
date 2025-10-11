@@ -14,6 +14,8 @@ elite-base:
     bufferSynchronizationInterval: PT5M
     bufferSynchronizationCheckInterval: PT10S
     maxBufferSize: 100000
+    cacheReadTimeout: PT5S
+    loadRetryDelay: PT5S
   messageExpiration: P30D
   processedMessageExpiration: P1D
   messageProcessorBatchSize: 500
@@ -24,7 +26,6 @@ elite-base:
       threadCount: 2
   messageProcessorRetryDelay: PT2H
   messageProcessorMaxRetryCount: 50
-  starSystemSuggestionListSize: 10
   searchPageSize: 10
   incomingMessageTimeout: PT10M
   incomingMessageCheckInterval: PT30S

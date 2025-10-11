@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRes
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityNameCache;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class CommodityTradingControllerImplTest {
     private CommodityTradingService commodityTradingService;
 
     @Mock
-    private CommodityDao commodityDao;
+    private CommodityNameCache commodityNameCache;
 
     @Mock
     private PerformanceReporter performanceReporter;
@@ -66,7 +66,7 @@ class CommodityTradingControllerImplTest {
 
     @Test
     void getCommodities() {
-        given(commodityDao.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
 
         assertThat(underTest.getCommodities(accessTokenHeader)).containsExactly(COMMODITY_NAME);
     }

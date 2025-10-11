@@ -48,5 +48,6 @@ public class DatabaseConstants {
     public static final String COLUMN_COMMODITY_LOCATION = "commodity_location";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_POPULATION = "population";
 }
 

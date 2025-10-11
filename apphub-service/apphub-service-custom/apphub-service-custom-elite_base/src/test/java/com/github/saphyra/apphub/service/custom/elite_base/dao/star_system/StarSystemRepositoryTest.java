@@ -6,11 +6,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,21 +63,22 @@ class StarSystemRepositoryTest {
     void getByStarNameIgnoreCaseContaining() {
         StarSystemEntity entity1 = StarSystemEntity.builder()
             .id(ID_1)
-            .starName("star_name")
+            .starName("incorrect")
             .build();
         underTest.save(entity1);
-        StarSystemEntity entity2 = StarSystemEntity.builder()
-            .id(ID_2)
-            .starName("STAR_aNAME")
-            .build();
-        underTest.save(entity2);
-        StarSystemEntity entity3 = StarSystemEntity.builder()
-            .id(ID_3)
-            .starName("STAR_NAME")
-            .build();
-        underTest.save(entity3);
 
-        assertThat(underTest.getByStarNameIgnoreCaseContaining("star_NAME", PageRequest.of(0, 2))).containsExactly(entity1, entity3);
+        Stream.iterate(2, i -> i + 1)
+            .limit(11).forEach(i -> {
+                StarSystemEntity entity = StarSystemEntity.builder()
+                    .id("id-" + i)
+                    .starName("star_name_" + i)
+                    .build();
+                underTest.save(entity);
+            });
+
+        assertThat(underTest.getByStarNameIgnoreCaseContaining("star_NAME"))
+            .hasSize(10)
+            .doesNotContain(entity1);
     }
 
     @Test
