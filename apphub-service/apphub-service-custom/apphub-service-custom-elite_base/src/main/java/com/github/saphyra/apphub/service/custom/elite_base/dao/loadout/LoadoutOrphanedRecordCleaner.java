@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.loadout;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Orphanage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.ListValue;
@@ -33,6 +34,16 @@ class LoadoutOrphanedRecordCleaner extends OrphanedRecordCleaner {
     public LoadoutOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate) {
         super(errorReporterService);
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Orphanage getOrphanage() {
+        return Orphanage.LOADOUT;
+    }
+
+    @Override
+    public List<Orphanage> getPreconditions() {
+        return List.of(Orphanage.STATION);
     }
 
     @Override

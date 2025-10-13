@@ -29,4 +29,6 @@ elite-base:
   searchPageSize: 10
   incomingMessageTimeout: PT10M
   incomingMessageCheckInterval: PT30S
-  orphanedRecordProcessorParallelism: 4
+  orphanedRecordCleaner:
+    processorParallelism: 4
+    timeout: PT2H

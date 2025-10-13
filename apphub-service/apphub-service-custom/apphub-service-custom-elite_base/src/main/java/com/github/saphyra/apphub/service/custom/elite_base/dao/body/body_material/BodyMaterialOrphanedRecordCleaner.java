@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.body.body_material;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Orphanage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.*;
 
@@ -17,6 +20,16 @@ class BodyMaterialOrphanedRecordCleaner extends OrphanedRecordCleaner {
     public BodyMaterialOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate) {
         super(errorReporterService);
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Orphanage getOrphanage() {
+        return Orphanage.BODY_MATERIAL;
+    }
+
+    @Override
+    public List<Orphanage> getPreconditions() {
+        return List.of(Orphanage.BODY);
     }
 
     @Override
