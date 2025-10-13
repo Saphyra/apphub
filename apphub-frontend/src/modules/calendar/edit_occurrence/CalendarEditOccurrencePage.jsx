@@ -32,9 +32,11 @@ import LocalTime from "../../../common/js/date/LocalTime";
 import Optional from "../../../common/js/collection/Optional";
 import TestableDateInput from "../common/input/TestableDateInput";
 import TestableTimeInput from "../common/input/TestableTimeInput";
+import useQueryParams from "../../../common/hook/UseQueryParams";
 
 const CalendarEditOccurrencePage = () => {
     const { occurrenceId } = useParams();
+    const queryParams = useQueryParams();
 
     const localizationHandler = new LocalizationHandler(localizationData);
 
@@ -44,6 +46,7 @@ const CalendarEditOccurrencePage = () => {
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [refreshCounter, refresh] = useRefresh();
+    const [backUrl, setBackUrl] = useState(hasValue(queryParams.backUrl) ? queryParams.backUrl : CALENDAR_PAGE);
 
     const [occurrence, setOccurrence] = useState(null);
 
@@ -206,7 +209,7 @@ const CalendarEditOccurrencePage = () => {
                     <Button
                         id="calendar-edit-occurrence-back-button"
                         key="back"
-                        onclick={() => window.location.href = CALENDAR_PAGE}
+                        onclick={() => window.location.href = backUrl}
                         label={localizationHandler.get("back")}
                     />
                 ]}

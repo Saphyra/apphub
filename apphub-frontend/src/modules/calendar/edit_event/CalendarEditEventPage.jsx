@@ -28,9 +28,11 @@ import saveEvent from "./saveEvent";
 import LocalDate from "../../../common/js/date/LocalDate";
 import Optional from "../../../common/js/collection/Optional";
 import LocalTime from "../../../common/js/date/LocalTime";
+import useQueryParams from "../../../common/hook/UseQueryParams";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
+    const queryParams = useQueryParams();
 
     const localizationHandler = new LocalizationHandler(localizationData);
 
@@ -40,6 +42,7 @@ const CalendarEditEventPage = () => {
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [refreshCounter, refresh] = useRefresh();
+    const [backUrl, setBackUrl] = useState(hasValue(queryParams.backUrl) ? queryParams.backUrl : CALENDAR_PAGE);
 
     const [event, setEvent] = useState(null);
     const [newLabels, setNewLabels] = useState([]);
@@ -178,7 +181,7 @@ const CalendarEditEventPage = () => {
                     <Button
                         id="calendar-edit-event-back-button"
                         key="back"
-                        onclick={() => window.location.href = CALENDAR_PAGE}
+                        onclick={() => window.location.href = backUrl}
                         label={localizationHandler.get("back")}
                     />
                 ]}

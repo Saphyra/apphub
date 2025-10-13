@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_LABELS_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, mapOrDefault } from "../../../../common/js/Utils";
 import Textarea from "../../../../common/component/input/Textarea";
 import repetitionTypeLocalizationData from "../../common/repetition_type/repetition_type_localization.json";
@@ -93,7 +93,7 @@ const OpenedEvent = ({
                     <Button
                         id="calendar-labels-event-edit"
                         label={localizationHandler.get("edit")}
-                        onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: eventId })}
+                        onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: eventId }, { backUrl: CALENDAR_LABELS_PAGE })}
                     />
 
                     <Button

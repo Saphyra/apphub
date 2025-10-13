@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system;
 
 import jakarta.transaction.Transactional;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -15,7 +14,8 @@ interface StarSystemRepository extends CrudRepository<StarSystemEntity, String> 
 
     Optional<StarSystemEntity> findByStarName(String starName);
 
-    List<StarSystemEntity> getByStarNameIgnoreCaseContaining(String query, PageRequest pageRequest);
+    @Query(nativeQuery = true, value = "SELECT * FROM elite_base.star_system WHERE LOWER(star_name) LIKE LOWER(CONCAT('%', :query, '%')) LIMIT 10")
+    List<StarSystemEntity> getByStarNameIgnoreCaseContaining(String query);
 
     List<StarSystemEntity> getByStarIdOrStarName(Long starId, String starName);
 

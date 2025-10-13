@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Orphanage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.Equation;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.NotExistsCondition;
@@ -10,6 +11,8 @@ import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_ID;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_MINOR_FACTION_ID;
@@ -25,6 +28,16 @@ class MinorFactionOrphanedRecordCleaner extends OrphanedRecordCleaner {
     MinorFactionOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate) {
         super(errorReporterService);
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @Override
+    public Orphanage getOrphanage() {
+        return Orphanage.MINOR_FACTION;
+    }
+
+    @Override
+    public List<Orphanage> getPreconditions() {
+        return List.of(Orphanage.STAR_SYSTEM_MINOR_FACTION_MAPPING);
     }
 
     @Override
