@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -38,6 +40,9 @@ class StarSystemDataOrphanedRecordCleanerTest {
     @Autowired
     private BufferSynchronizationService bufferSynchronizationService;
 
+    @MockBean
+    private ErrorReporterService errorReporterService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -59,7 +64,7 @@ class StarSystemDataOrphanedRecordCleanerTest {
         starSystemDataDao.save(orphanedStarSystemData);
         bufferSynchronizationService.synchronizeAll();
 
-        underTest.cleanupOrphanedRecords();
+        assertThat(underTest.cleanupOrphanedRecords()).isEqualTo(1);
 
         assertThat(starSystemDataDao.findAll()).containsExactly(starSystemData);
     }

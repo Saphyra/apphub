@@ -7,6 +7,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
+@EqualsAndHashCode(exclude = {"materials", "rings"})
 public class BodyData {
     private final UUID bodyId;
     private LocalDateTime lastUpdate;

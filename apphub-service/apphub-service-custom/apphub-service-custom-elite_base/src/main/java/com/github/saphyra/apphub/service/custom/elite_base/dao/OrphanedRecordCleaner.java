@@ -24,6 +24,7 @@ public abstract class OrphanedRecordCleaner {
             int rowsDeleted = doCleanup();
             stopwatch.stop();
             log.info("{} finished in {} ms. {} rows were deleted.", getClass().getSimpleName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), rowsDeleted);
+            errorReporterService.report("%s finished in %s ms. %s rows were deleted.".formatted(getClass().getSimpleName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), rowsDeleted));
 
             return rowsDeleted;
         } catch (Exception e) {

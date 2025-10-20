@@ -32,3 +32,4 @@ elite-base:
   orphanedRecordCleaner:
     processorParallelism: 4
     timeout: PT2H
+    batchSize: 10000

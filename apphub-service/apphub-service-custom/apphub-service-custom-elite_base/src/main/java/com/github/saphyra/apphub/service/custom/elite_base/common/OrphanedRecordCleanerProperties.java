@@ -8,4 +8,5 @@ import java.time.Duration;
 public class OrphanedRecordCleanerProperties {
     private Integer processorParallelism;
     private Duration timeout;
+    private Integer batchSize;
 }

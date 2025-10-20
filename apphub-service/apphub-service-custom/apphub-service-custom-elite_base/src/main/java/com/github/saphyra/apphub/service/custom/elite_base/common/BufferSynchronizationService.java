@@ -26,7 +26,7 @@ public class BufferSynchronizationService {
     private final ScheduledExecutorServiceBean scheduledExecutorServiceBean;
     private final ExecutorServiceBean executorServiceBean;
     private final EliteBaseProperties properties;
-    private final List<AbstractBuffer> buffers;
+    private final List<AbstractBuffer<?>> buffers;
     private final DateTimeUtil dateTimeUtil;
     private final PerformanceReporter performanceReporter;
 
@@ -67,7 +67,7 @@ public class BufferSynchronizationService {
         }
     }
 
-    private void synchronize(AbstractBuffer buffer) {
+    private void synchronize(AbstractBuffer<?> buffer) {
         CacheProperties cacheProperties = properties.getCache();
 
         int bufferSize = buffer.getSize();
@@ -78,7 +78,7 @@ public class BufferSynchronizationService {
         }
     }
 
-    private void doSynchronize(AbstractBuffer buffer) {
+    private void doSynchronize(AbstractBuffer<?> buffer) {
         performanceReporter.wrap(
             buffer::synchronize,
             PerformanceReportingTopic.ELITE_BASE_BUFFER_SYNCHRONIZATION,

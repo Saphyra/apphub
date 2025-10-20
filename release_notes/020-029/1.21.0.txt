@@ -18,6 +18,8 @@
         Store preload commodityNames during startup
         More efficient starName query
         Execution order for OrphanedRecordCleaners
+        Use SqlBuilder in all OrphanedRecordCleaners
+        Use query-delete method in OrphanedRecordCleaners with limited batch size
 
 ===ETC===
     EliteBase

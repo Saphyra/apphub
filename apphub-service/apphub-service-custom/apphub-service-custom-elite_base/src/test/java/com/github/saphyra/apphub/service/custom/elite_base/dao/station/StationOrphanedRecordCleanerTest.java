@@ -1,0 +1,73 @@
+package com.github.saphyra.apphub.service.custom.elite_base.dao.station;
+
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+class StationOrphanedRecordCleanerTest {
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
+
+    @Autowired
+    private StationDao stationDao;
+
+    @Autowired
+    private StarSystemDao starSystemDao;
+
+    @Autowired
+    private StationOrphanedRecordCleaner underTest;
+
+    @Autowired
+    private BufferSynchronizationService bufferSynchronizationService;
+
+    @Autowired
+    private List<CrudRepository<?, ?>> repositories;
+
+    @MockBean
+    private ErrorReporterService errorReporterService;
+
+    @AfterEach
+    void clear() {
+        repositories.forEach(CrudRepository::deleteAll);
+    }
+
+    @Test
+    void cleanup() {
+        StarSystem starSystem = StarSystem.builder()
+            .id(STAR_SYSTEM_ID)
+            .build();
+        starSystemDao.save(starSystem);
+        Station station = Station.builder()
+            .id(UUID.randomUUID())
+            .starSystemId(STAR_SYSTEM_ID)
+            .build();
+        stationDao.save(station);
+        Station orphanedRecord = Station.builder()
+            .id(UUID.randomUUID())
+            .starSystemId(UUID.randomUUID())
+            .build();
+        stationDao.save(orphanedRecord);
+        bufferSynchronizationService.synchronizeAll();
+
+        assertThat(underTest.cleanupOrphanedRecords()).isEqualTo(1);
+
+        assertThat(stationDao.findAll()).containsExactly(station);
+    }
+}

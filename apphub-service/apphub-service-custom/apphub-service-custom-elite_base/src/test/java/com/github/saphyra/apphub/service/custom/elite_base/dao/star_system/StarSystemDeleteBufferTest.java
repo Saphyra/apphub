@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,11 @@ class StarSystemDeleteBufferTest {
 
     @Autowired
     private StarSystemDeleteBuffer underTest;
+
+    @AfterEach
+    void clear() {
+        repository.deleteAll();
+    }
 
     @Test
     void synchronize() {
