@@ -39,12 +39,11 @@ public class CalendarIndexOccurrenceStatusTest extends SeleniumTest {
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 
+        //Done
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, CURRENT_DATE, CreateEventParameters.DEFAULT_TITLE)
             .open();
-
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOpenedOccurrenceTitle(driver)).isEqualTo(CreateEventParameters.DEFAULT_TITLE));
 
-        //Done
         CalendarIndexPageActions.markOpenedOccurrenceDone(driver);
         AwaitilityWrapper.awaitAssert(() -> {
             assertThat(CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, CURRENT_DATE, CreateEventParameters.DEFAULT_TITLE).getStatus()).isEqualTo(OccurrenceStatus.DONE);
@@ -52,6 +51,10 @@ public class CalendarIndexOccurrenceStatusTest extends SeleniumTest {
         });
 
         //Snoozed
+        CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, CURRENT_DATE, CreateEventParameters.DEFAULT_TITLE)
+            .open();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOpenedOccurrenceTitle(driver)).isEqualTo(CreateEventParameters.DEFAULT_TITLE));
+
         CalendarIndexPageActions.markOpenedOccurrenceSnoozed(driver);
         AwaitilityWrapper.awaitAssert(() -> {
             assertThat(CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, CURRENT_DATE, CreateEventParameters.DEFAULT_TITLE).getStatus()).isEqualTo(OccurrenceStatus.SNOOZED);

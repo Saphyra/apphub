@@ -24,3 +24,5 @@
 ===ETC===
     EliteBase
         Limit size of searchResult to 10
+    Calendar
+        Close opened occurrence when status set to Done or reminder confirmed

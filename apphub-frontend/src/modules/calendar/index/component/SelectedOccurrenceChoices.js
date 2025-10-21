@@ -23,7 +23,10 @@ function getChoices(args) {
         choices.push(<Button
             key="reminder"
             id="calendar-selected-occurrence-remind-button"
-            onclick={() => setReminded()}
+            onclick={() => {
+                setSelectedOccurrence(null);
+                setReminded();
+            }}
             label={localizationHandler.get("reminded")}
         />);
     }
@@ -32,7 +35,10 @@ function getChoices(args) {
         choices.push(<Button
             key="done"
             id="calendar-selected-occurrence-done-button"
-            onclick={() => editStatus(DONE)}
+            onclick={() => {
+                setSelectedOccurrence(null);
+                editStatus(DONE);
+            }}
             label={localizationHandler.get("done")}
         />);
     }
