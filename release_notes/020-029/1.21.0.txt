@@ -4,6 +4,7 @@
     Calendar
         Back button on edit event/occurrence screen actually goes back, not only to index page
         Automatically refresh index page when getting focus
+        Automatically switch to new date when day is over
 
 ===BUGFIXES===
     AdminPanel

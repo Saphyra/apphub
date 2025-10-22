@@ -44,11 +44,17 @@ const CalendarPage = () => {
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
     const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
+
+    const [currentDate, setCurrentDate] = useState(LocalDate.now());
     const [refreshCounter, refresh] = useRefresh();
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
         if (isInFocus) {
             refresh();
+            if (!currentDate.equals(LocalDate.now())) {
+                setCurrentDate(LocalDate.now());
+                setReferenceDate(LocalDate.now());
+            }
         }
     }, [isInFocus]);
 
