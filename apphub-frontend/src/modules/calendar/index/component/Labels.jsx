@@ -3,11 +3,22 @@ import useLoader from "../../../../common/hook/Loader";
 import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import Button from "../../../../common/component/input/Button";
 import Stream from "../../../../common/js/collection/Stream";
+import useRefresh from "../../../../common/hook/Refresh";
+import useHasFocus from "../../../../common/hook/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const Labels = ({ activeLabel, setActiveLabel }) => {
     const [labels, setLabels] = useState([]);
 
-    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: setLabels });
+    const [refreshCounter, refresh] = useRefresh();
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            refresh();
+        }
+    }, [isInFocus]);
+
+    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: setLabels, listener: [refreshCounter] });
 
     return (
         <div id="calendar-labels">
