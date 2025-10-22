@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -36,6 +37,9 @@ public class EventWithLabelTest extends BackEndTest {
         CustomAssertions.singleListAssertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId, labelId1))
             .returns(EVENT_WITH_LABEL_TITLE, EventResponse::getTitle)
             .returns(List.of(labelId1), EventResponse::getLabels);
+
+        CustomAssertions.singleListAssertThat(CalendarLabelActions.getLabelsOfEvent(getServerPort(), accessTokenId, eventWithLabel))
+            .returns(LABEL_1, LabelResponse::getLabel);
 
         editEvent(accessTokenId, eventWithLabel, List.of(labelId2));
 

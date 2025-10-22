@@ -24,6 +24,7 @@ class LabelControllerImplTest {
     private static final String LABEL = "label";
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID EVENT_ID = UUID.randomUUID();
 
     @Mock
     private LabelQueryService labelQueryService;
@@ -82,5 +83,12 @@ class LabelControllerImplTest {
         assertThat(underTest.editLabel(new OneParamRequest<>(LABEL), LABEL_ID, accessTokenHeader)).containsExactly(labelResponse);
 
         then(labelService).should().editLabel(USER_ID, LABEL_ID, LABEL);
+    }
+
+    @Test
+    void getLabelsOfEvent() {
+        given(labelQueryService.getByEventId(EVENT_ID)).willReturn(List.of(labelResponse));
+
+        assertThat(underTest.getLabelsOfEvent(EVENT_ID, accessTokenHeader)).containsExactly(labelResponse);
     }
 }

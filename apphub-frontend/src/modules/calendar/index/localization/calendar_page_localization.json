@@ -50,5 +50,9 @@
     "reminded": {
         "en": "Reminded",
         "hu": "Emlékeztetve"
+    },
+    "labels": {
+        "en": "Labels",
+        "hu": "Címkék"
     }
 }

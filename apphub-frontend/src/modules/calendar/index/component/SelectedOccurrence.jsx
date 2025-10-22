@@ -5,7 +5,7 @@ import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
 import { ResponseStatus } from "../../../../common/js/dao/dao";
 import getChoices from "./SelectedOccurrenceChoices";
 import getContent from "./SelectedOccurrenceContent";
-import { CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_GET_LABELS_OF_EVENT, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../common/js/Utils";
 
 const SelectedOccurrence = ({
@@ -17,6 +17,7 @@ const SelectedOccurrence = ({
     setConfirmationDialogData
 }) => {
     const [occurrence, setOccurrence] = useState(null);
+    const [labels, setLabels] = useState([]);
 
     useLoader({
         request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
@@ -28,11 +29,19 @@ const SelectedOccurrence = ({
             () => setSelectedOccurrence(null))
     });
 
+    useLoader({
+        request: () =>CALENDAR_GET_LABELS_OF_EVENT.createRequest(null, { eventId: occurrence.eventId }),
+        mapper: setLabels,
+        listener: [occurrence],
+        setDisplaySpinner: setDisplaySpinner,
+        condition: () => hasValue(occurrence)
+    });
+
     if (hasValue(occurrence)) {
         return <ConfirmationDialog
             id="calendar-selected-occurrence"
             title={occurrence.title}
-            content={getContent(occurrence)}
+            content={getContent(localizationHandler, occurrence, labels)}
             choices={
                 getChoices({
                     occurrence: occurrence,
