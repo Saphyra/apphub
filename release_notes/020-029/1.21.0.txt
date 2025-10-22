@@ -15,6 +15,7 @@
         StationEconomy is not saved with random stationId in case of already existing station
     Notebook
         Align table's content to top
+        Expand text column on demand
 
 ===PLATFORM CHANGES===
 
