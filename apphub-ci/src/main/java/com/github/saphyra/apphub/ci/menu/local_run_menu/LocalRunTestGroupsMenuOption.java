@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Component
 @RequiredArgsConstructor
 class LocalRunTestGroupsMenuOption implements MenuOption {
@@ -39,14 +41,12 @@ class LocalRunTestGroupsMenuOption implements MenuOption {
     public boolean process() {
         String testGroups = validatingInputReader.getInput(
             LocalizedText.WHICH_TEST_GROUPS_TO_RUN,
-            s -> {
-                if (s.isEmpty()) {
-                    return Optional.of(LocalizedText.ENTER_TEST_GROUP);
-                }
-
-                return Optional.empty();
-            }
+            s -> Optional.empty()
         );
+
+        if (isBlank(testGroups)) {
+            return false;
+        }
 
         propertyDao.save(PropertyName.LATEST_TEST_GROUPS, testGroups);
 

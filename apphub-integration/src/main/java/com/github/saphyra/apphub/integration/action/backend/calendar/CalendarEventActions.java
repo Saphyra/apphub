@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
 import io.restassured.response.Response;
 
 import java.util.Arrays;

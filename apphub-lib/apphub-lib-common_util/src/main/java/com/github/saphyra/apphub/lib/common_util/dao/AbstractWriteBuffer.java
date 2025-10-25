@@ -26,4 +26,9 @@ public abstract class AbstractWriteBuffer<DOMAIN_ID, DOMAIN> extends AbstractBuf
     }
 
     protected abstract Map<DOMAIN_ID, DOMAIN> getBufferMap(Collection<DOMAIN> bufferCopy);
+
+    @Override
+    public int getOrder() {
+        return DaoConstants.DEFAULT_WRITE_BUFFER_ORDER;
+    }
 }

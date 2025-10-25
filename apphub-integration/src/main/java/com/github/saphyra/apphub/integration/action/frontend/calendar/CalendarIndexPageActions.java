@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOcc
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarView;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,7 +20,7 @@ public class CalendarIndexPageActions {
     }
 
     public static void filterByLabel(WebDriver driver, String label) {
-        driver.findElements(By.className("calendar-label"))
+        getLabels(driver)
             .stream()
             .filter(webElement -> webElement.getText().equals(label))
             .findAny()
@@ -149,5 +150,9 @@ public class CalendarIndexPageActions {
     public static void closeOccurrence(WebDriver driver) {
         driver.findElement(By.id("calendar-selected-occurrence-cancel-button"))
             .click();
+    }
+
+    public static List<WebElement> getLabels(WebDriver driver) {
+        return driver.findElements(By.className("calendar-label"));
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_economy;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
@@ -8,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -22,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 class StationEconomyOrphanedRecordCleanerTest {
     private static final UUID STATION_ID = UUID.randomUUID();
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Autowired
     private StationEconomyDao stationEconomyDao;
@@ -35,6 +38,9 @@ class StationEconomyOrphanedRecordCleanerTest {
     @Autowired
     private List<CrudRepository<?, ?>> repositories;
 
+    @MockBean
+    private ErrorReporterService errorReporterService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -44,6 +50,7 @@ class StationEconomyOrphanedRecordCleanerTest {
     void cleanup() {
         Station station = Station.builder()
             .id(STATION_ID)
+            .starSystemId(STAR_SYSTEM_ID)
             .build();
         stationDao.save(station);
 
@@ -59,7 +66,7 @@ class StationEconomyOrphanedRecordCleanerTest {
             .build();
         stationEconomyDao.save(orphanedStationEconomy);
 
-        underTest.cleanupOrphanedRecords();
+        assertThat(underTest.cleanupOrphanedRecords()).isEqualTo(1);
 
         assertThat(stationEconomyDao.findAll()).containsExactly(stationEconomy);
     }

@@ -34,4 +34,14 @@
     <changeSet id="add-unique-constraint-to-fleet_carrier-market_id" author="Saphyra">
         <addUniqueConstraint schemaName="elite_base" tableName="fleet_carrier" columnNames="market_id"/>
     </changeSet>
+
+    <changeSet id="add-non-null-constraint-to-fleet_carrier-star_system_id" author="Saphyra">
+        <sql>DELETE FROM elite_base.fleet_carrier WHERE star_system_id IS NULL</sql>
+
+        <addNotNullConstraint schemaName="elite_base" tableName="fleet_carrier" columnName="star_system_id"/>
+
+        <rollback>
+            <dropNotNullConstraint schemaName="elite_base" tableName="fleet_carrier" columnName="star_system_id"/>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

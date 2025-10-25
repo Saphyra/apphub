@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityNameCache;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +14,11 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 class CommodityTradingRequestValidator {
-    private final CommodityDao commodityDao;
+    private final CommodityNameCache commodityNameCache;
 
     void validate(CommodityTradingRequest request) {
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
-        ValidationUtil.contains(request.getCommodity(), commodityDao.getCommodityNames(), "commodity");
+        ValidationUtil.contains(request.getCommodity(), commodityNameCache.getCommodityNames(), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
         ValidationUtil.notNull(request.getMaxStationDistance(), "maxStationDistance");
         ValidationUtil.notNull(request.getIncludeUnknownStationDistance(), "includeUnknownStationDistance");

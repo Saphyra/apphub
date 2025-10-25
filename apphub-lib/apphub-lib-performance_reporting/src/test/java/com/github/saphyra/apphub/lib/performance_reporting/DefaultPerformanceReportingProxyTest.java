@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporti
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopicStatus;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,9 @@ class DefaultPerformanceReportingProxyTest {
     @Mock
     private PerformanceReportingClient performanceReportingClient;
 
+    @Mock
+    private SleepService sleepService;
+
     @InjectMocks
     private DefaultPerformanceReportingProxy underTest;
 
@@ -48,6 +52,33 @@ class DefaultPerformanceReportingProxyTest {
         given(performanceReportingClient.getTopicStatus(LOCALE)).willReturn(List.of(performanceReportingTopicStatus));
 
         assertThat(underTest.getTopicStatus()).containsExactly(performanceReportingTopicStatus);
+    }
+
+    @Test
+    void getTopicStatus_retry() {
+        given(performanceReportingClient.getTopicStatus(LOCALE))
+            .willThrow(new RuntimeException())
+            .willReturn(List.of(performanceReportingTopicStatus));
+
+        assertThat(underTest.getTopicStatus()).containsExactly(performanceReportingTopicStatus);
+
+        then(sleepService).should().sleep(1000);
+        then(sleepService).shouldHaveNoMoreInteractions();
+    }
+
+    @Test
+    void getTopicStatus_retryFailed() {
+        given(performanceReportingClient.getTopicStatus(LOCALE))
+            .willThrow(new RuntimeException());
+
+        assertThat(underTest.getTopicStatus()).isEmpty();
+
+        then(sleepService).should().sleep(1000);
+        then(sleepService).should().sleep(2000);
+        then(sleepService).should().sleep(3000);
+        then(sleepService).should().sleep(4000);
+        then(sleepService).should().sleep(5000);
+        then(sleepService).shouldHaveNoMoreInteractions();
     }
 
     @Test

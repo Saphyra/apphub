@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.p
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
@@ -14,13 +15,14 @@ import com.github.saphyra.apphub.service.custom.elite_base.common.executor.Messa
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.MessageStatus;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,7 +30,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -40,7 +43,9 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 class EdMessageProcessorTest {
+    private static final SleepService SLEEP_SERVICE = new SleepService();
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final Integer MESSAGE_PROCESSOR_BATCH_SIZE = 3;
     private static final UUID EXCEPTION_ID = UUID.randomUUID();
@@ -110,14 +115,10 @@ class EdMessageProcessorTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(PerformanceReportingTopic.class), anyString());
+        //noinspection unchecked
         given(performanceReporter.wrap(any(Callable.class), any(PerformanceReportingTopic.class), anyString())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
     }
 
-    @AfterEach
-    void verify() throws ExecutionException, InterruptedException {
-        then(future).should(atLeast(1)).get();
-        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
-    }
 
     @Test
     void error() {
@@ -131,6 +132,9 @@ class EdMessageProcessorTest {
         then(edMessage).should().setExceptionId(EXCEPTION_ID);
         then(messageDao).should().save(edMessage);
         then(errorReporterService).should().report(any(), any());
+        then(future).should(atLeast(1)).get();
+        //noinspection unchecked
+        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test
@@ -147,6 +151,9 @@ class EdMessageProcessorTest {
         then(edMessage).should().setExceptionId(EXCEPTION_ID);
         then(messageDao).should().save(edMessage);
         then(errorReporterService).shouldHaveNoInteractions();
+        then(future).should(atLeast(1)).get();
+        //noinspection unchecked
+        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test
@@ -167,6 +174,9 @@ class EdMessageProcessorTest {
         then(messageDao).should().save(edMessage);
         then(errorReporterService).shouldHaveNoInteractions();
         then(performanceReporter).should().wrap(any(Runnable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), eq(PerformanceReportingKey.PROCESS_MESSAGE.formatted(SCHEMA_REF)));
+        then(future).should(atLeast(1)).get();
+        //noinspection unchecked
+        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test
@@ -186,5 +196,32 @@ class EdMessageProcessorTest {
         then(messageDao).should(times(2)).save(edMessage);
         then(messageProcessor).should(times(2)).processMessage(edMessage);
         then(performanceReporter).should(times(2)).wrap(any(Runnable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), eq(PerformanceReportingKey.PROCESS_MESSAGE.formatted(SCHEMA_REF)));
+        then(future).should(atLeast(1)).get();
+        //noinspection unchecked
+        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
+    }
+
+    @Test
+    void lockLocked() {
+        AtomicBoolean lock = new AtomicBoolean(true);
+
+        Executors.newSingleThreadExecutor()
+            .submit(() -> {
+                messageProcessingLock.writeLock().lock();
+
+                while (lock.get()) {
+                    SLEEP_SERVICE.sleep(1000);
+                }
+            });
+
+        for (int i = 0; i < 100 && !messageProcessingLock.isWriteLocked(); i++) {
+            SLEEP_SERVICE.sleep(100);
+        }
+
+        underTest.processMessages();
+
+        lock.set(false);
+
+        then(messageDao).shouldHaveNoInteractions();
     }
 }

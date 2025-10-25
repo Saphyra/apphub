@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -62,30 +63,33 @@ public class EdMessageProcessor {
     @SneakyThrows
     private List<EdMessage> doProcessMessages() {
         Lock readLock = messageProcessingLock.readLock();
-        try {
-            readLock.lock();
+        if (readLock.tryLock()) {
+            try {
+                List<EdMessage> messages = performanceReporter.wrap(
+                    () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
+                    PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                    PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
+                );
+                if (messages.isEmpty()) {
+                    return messages;
+                }
+                log.info("Processing {} messages.", messages.size());
 
-            List<EdMessage> messages = performanceReporter.wrap(
-                () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-                PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
-            );
-            if (messages.isEmpty()) {
+                List<FutureWrapper<Void>> futures = messages.stream()
+                    .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
+                    .toList();
+
+                for (FutureWrapper<Void> future : futures) {
+                    future.get();
+                }
                 return messages;
+            } finally {
+                readLock.unlock();
             }
-            log.info("Processing {} messages.", messages.size());
-
-            List<FutureWrapper<Void>> futures = messages.stream()
-                .map(edMessages -> messageProcessorExecutor.execute(() -> processMessage(edMessages)))
-                .toList();
-
-            for (FutureWrapper<Void> future : futures) {
-                future.get();
-            }
-            return messages;
-        } finally {
-            readLock.unlock();
         }
+
+        log.debug("ReadLock is not available.");
+        return Collections.emptyList();
     }
 
     public void processMessage(EdMessage edMessage) {

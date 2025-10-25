@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.station;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationRepository;
 import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -47,6 +45,7 @@ class StationRepositoryTest {
         StationEntity entity = StationEntity.builder()
             .id(ID_1)
             .marketId(MARKET_ID)
+            .starSystemId(STAR_SYSTEM_ID_1)
             .build();
         underTest.save(entity);
 

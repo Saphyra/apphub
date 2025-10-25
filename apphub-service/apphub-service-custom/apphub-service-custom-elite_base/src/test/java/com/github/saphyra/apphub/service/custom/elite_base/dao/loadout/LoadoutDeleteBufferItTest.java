@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.loadout;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ class LoadoutDeleteBufferItTest {
 
     @Autowired
     private LoadoutDeleteBuffer underTest;
+
+    @AfterEach
+    void clear(){
+        loadoutRepository.deleteAll();
+    }
 
     @Test
     void synchronize() {

@@ -82,4 +82,17 @@ public class CalendarLabelActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .delete(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_DELETE_LABEL, "labelId", labelId));
     }
+
+    public static Response getLabelsOfEventResponse(int serverPort, UUID accessTokenId, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABELS_OF_EVENT, "eventId", eventId));
+    }
+
+    public static List<LabelResponse> getLabelsOfEvent(int serverPort, UUID accessTokenId, UUID labelId) {
+        Response response = getLabelsOfEventResponse(serverPort, accessTokenId, labelId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(LabelResponse[].class));
+    }
 }

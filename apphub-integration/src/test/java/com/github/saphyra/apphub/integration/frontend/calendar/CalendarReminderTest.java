@@ -50,7 +50,6 @@ public class CalendarReminderTest extends SeleniumTest {
         CalendarIndexPageActions.confirmReminder(driver);
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(driver, event.getStartDate().minusDays(REMIND_ME_BEFORE_DAYS))).isEmpty());
-        CalendarIndexPageActions.closeOccurrence(driver);
 
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle())
             .open();

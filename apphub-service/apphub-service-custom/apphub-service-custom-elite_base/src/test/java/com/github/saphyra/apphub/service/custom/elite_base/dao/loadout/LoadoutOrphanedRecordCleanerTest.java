@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.loadout;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,6 +31,7 @@ class LoadoutOrphanedRecordCleanerTest {
     private static final UUID STATION_ID = UUID.randomUUID();
     private static final Long STATION_MARKET_ID = 1234567891L;
     private static final String LOADOUT_NAME = "loadout-name";
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Autowired
     private LoadoutDao loadoutDao;
@@ -48,6 +51,9 @@ class LoadoutOrphanedRecordCleanerTest {
     @Autowired
     private BufferSynchronizationService bufferSynchronizationService;
 
+    @MockBean
+    private ErrorReporterService errorReporterService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -58,6 +64,7 @@ class LoadoutOrphanedRecordCleanerTest {
         FleetCarrier fleetCarrier = FleetCarrier.builder()
             .id(FLEET_CARRIER_ID)
             .marketId(FLEET_CARRIER_MARKET_ID)
+            .starSystemId(STAR_SYSTEM_ID)
             .build();
         fleetCarrierDao.save(fleetCarrier);
         Station station = Station.builder()
@@ -65,6 +72,7 @@ class LoadoutOrphanedRecordCleanerTest {
             .marketId(STATION_MARKET_ID)
             .services(LazyLoadedField.loaded(List.of()))
             .economies(LazyLoadedField.loaded(List.of()))
+            .starSystemId(STAR_SYSTEM_ID)
             .build();
         stationDao.save(station);
         Loadout fcLoadout = Loadout.builder()
@@ -90,7 +98,7 @@ class LoadoutOrphanedRecordCleanerTest {
         loadoutDao.save(orphanedLoadout);
         bufferSynchronizationService.synchronizeAll();
 
-        underTest.doCleanup();
+        assertThat(underTest.cleanupOrphanedRecords()).isEqualTo(1);
 
         assertThat(loadoutDao.findAll()).containsExactlyInAnyOrder(fcLoadout, stationLoadout);
     }

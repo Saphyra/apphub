@@ -14,11 +14,13 @@ const useLoader = (args) => {
 
     const loader = () => {
         if (condition()) {
+            const r = typeof request === "function" ? request() : request;
+
             if (hasValue(errorHandler)) {
-                request.addErrorHandler(errorHandler)
+                r.addErrorHandler(errorHandler)
             }
             const fetch = async () => {
-                const response = await request.send(setDisplaySpinner);
+                const response = await r.send(setDisplaySpinner);
                 mapper(response);
             }
             fetch();

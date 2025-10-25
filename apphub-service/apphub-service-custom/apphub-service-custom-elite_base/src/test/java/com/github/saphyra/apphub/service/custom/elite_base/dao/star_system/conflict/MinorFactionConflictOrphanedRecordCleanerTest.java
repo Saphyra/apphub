@@ -1,13 +1,15 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.common.BufferSynchronizationService;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -25,7 +27,7 @@ class MinorFactionConflictOrphanedRecordCleanerTest {
     private static final UUID MINOR_FACTION_CONFLICT_ID_1 = UUID.randomUUID();
 
     @Autowired
-    private StarSystemDataDao starSystemDataDao;
+    private StarSystemDao starSystemDao;
 
     @Autowired
     private MinorFactionConflictDao minorFactionConflictDao;
@@ -34,10 +36,13 @@ class MinorFactionConflictOrphanedRecordCleanerTest {
     private MinorFactionConflictOrphanedRecordCleaner underTest;
 
     @Autowired
-    private List<CrudRepository<?, ?>> repositories;
+    private BufferSynchronizationService bufferSynchronizationService;
 
     @Autowired
-    private BufferSynchronizationService bufferSynchronizationService;
+    private List<CrudRepository<?, ?>> repositories;
+
+    @MockBean
+    private ErrorReporterService errorReporterService;
 
     @AfterEach
     void clear() {
@@ -46,10 +51,10 @@ class MinorFactionConflictOrphanedRecordCleanerTest {
 
     @Test
     void cleanup() {
-        StarSystemData starSystemData = StarSystemData.builder()
-            .starSystemId(STAR_SYSTEM_ID)
+        StarSystem starSystem = StarSystem.builder()
+            .id(STAR_SYSTEM_ID)
             .build();
-        starSystemDataDao.save(starSystemData);
+        starSystemDao.save(starSystem);
         MinorFactionConflict minorFactionConflict = MinorFactionConflict.builder()
             .id(MINOR_FACTION_CONFLICT_ID_1)
             .starSystemId(STAR_SYSTEM_ID)
@@ -62,7 +67,7 @@ class MinorFactionConflictOrphanedRecordCleanerTest {
         minorFactionConflictDao.save(orphanedMinorFactionConflict);
         bufferSynchronizationService.synchronizeAll();
 
-        underTest.cleanupOrphanedRecords();
+        assertThat(underTest.cleanupOrphanedRecords()).isEqualTo(1);
 
         assertThat(minorFactionConflictDao.findAll()).containsExactly(minorFactionConflict);
     }

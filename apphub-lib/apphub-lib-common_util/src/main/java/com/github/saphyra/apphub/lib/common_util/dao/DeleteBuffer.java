@@ -28,6 +28,11 @@ public abstract class DeleteBuffer<DOMAIN_ID> extends AbstractBuffer<DOMAIN_ID> 
         return readWriteLock.writeLock();
     }
 
+    @Override
+    public int getOrder() {
+        return DaoConstants.DEFAULT_DELETE_BUFFER_ORDER;
+    }
+
     public void add(DOMAIN_ID domainId) {
         Lock lock = readWriteLock.readLock();
         try {

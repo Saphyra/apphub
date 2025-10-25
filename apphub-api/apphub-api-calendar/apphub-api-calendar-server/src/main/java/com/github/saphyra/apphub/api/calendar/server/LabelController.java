@@ -32,4 +32,7 @@ public interface LabelController {
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_LABEL)
     List<LabelResponse> editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELS_OF_EVENT)
+    List<LabelResponse> getLabelsOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

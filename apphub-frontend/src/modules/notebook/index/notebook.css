@@ -37,3 +37,7 @@
 #calendar-labels {
     overflow: auto;
 }
+
+.notebook-content table td{
+    vertical-align: top;
+}
