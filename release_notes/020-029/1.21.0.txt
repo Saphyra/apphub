@@ -13,6 +13,7 @@
             Client does not throw exception when connection to AdminPanel failed
     EliteBase
         StationEconomy is not saved with random stationId in case of already existing station
+        Run WriteBuffers before DeleteBuffers to avoid updating deleted data
     Notebook
         Align table's content to top
         Expand text column on demand

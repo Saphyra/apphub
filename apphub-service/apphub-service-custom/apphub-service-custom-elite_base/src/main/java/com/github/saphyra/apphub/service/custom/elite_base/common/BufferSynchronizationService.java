@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.common;
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
+import com.github.saphyra.apphub.lib.common_util.dao.Buffer;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -45,6 +47,7 @@ public class BufferSynchronizationService {
     public void synchronizeAll() {
         log.info("Force-synchronizing all buffers");
         List<FutureWrapper<Void>> futures =  buffers.stream()
+            .sorted(Comparator.comparingInt(Buffer::getOrder))
             .map(abstractBuffer -> executorServiceBean.execute(() -> doSynchronize(abstractBuffer)))
             .toList();
 
@@ -58,6 +61,7 @@ public class BufferSynchronizationService {
     @SneakyThrows
     private void doSynchronize() {
         List<FutureWrapper<Void>> futures = buffers.stream()
+            .sorted(Comparator.comparingInt(Buffer::getOrder))
             .map(buffer -> executorServiceBean.execute(() -> synchronize(buffer)))
             .toList();
 
