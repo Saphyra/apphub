@@ -66,7 +66,7 @@ public class BanCrudTest extends SeleniumTest {
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
-        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("Ban Details page is not opened.");
@@ -99,7 +99,7 @@ public class BanCrudTest extends SeleniumTest {
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
-        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
             .assertTrue("Ban Details page is not opened.");

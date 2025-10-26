@@ -111,13 +111,13 @@ public class RoleManagementTest extends SeleniumTest {
             .until(() -> adminDriver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
             .assertTrue("User is not logged out");
 
-        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         SleepUtil.sleep(3000);
 
-        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> adminDriver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE))
             .assertTrue("User is not logged in");
@@ -179,13 +179,13 @@ public class RoleManagementTest extends SeleniumTest {
             .until(() -> adminDriver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
             .assertTrue("User is not logged out");
 
-        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         SleepUtil.sleep(3000);
 
-        IndexPageActions.submitLogin(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
+        IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> adminDriver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE))
             .assertTrue("User is not logged in");

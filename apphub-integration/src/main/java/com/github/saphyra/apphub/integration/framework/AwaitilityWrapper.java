@@ -100,6 +100,16 @@ public class AwaitilityWrapper {
         return result.get(0);
     }
 
+    public static <T> T getSingleItemFromListWithWait(Supplier<List<T>> supplier, Function<List<T>, Optional<T>> selector) {
+        List<T> result = getListWithWait(supplier, list -> selector.apply(list).isPresent());
+
+        if (result.size() != 1) {
+            throw new RuntimeException("List has size " + result.size() + ", but expected size is 1.");
+        }
+
+        return result.get(0);
+    }
+
     public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {
         GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
 

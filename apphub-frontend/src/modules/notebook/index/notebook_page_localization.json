@@ -250,5 +250,9 @@
     "remove-from-pin-group": {
         "en": "Remove",
         "hu": "Eltávolítás"
+    },
+    "default-list-item-title": {
+        "en": "Default list item",
+        "hu": "Alapértelmezett listaelem"
     }
 }

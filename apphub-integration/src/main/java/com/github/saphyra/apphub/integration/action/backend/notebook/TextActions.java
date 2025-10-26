@@ -2,11 +2,14 @@ package com.github.saphyra.apphub.integration.action.backend.notebook;
 
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.EditTextRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.TextResponse;
 import io.restassured.response.Response;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 
 import java.util.UUID;
 

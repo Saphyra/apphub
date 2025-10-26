@@ -6,6 +6,8 @@
         Automatically refresh index page when getting focus
         Automatically switch to new date when day is over
         Display labels of opened event
+    Notebook
+        Select default ListItem that loads automatically when opening Notebook
 
 ===BUGFIXES===
     AdminPanel

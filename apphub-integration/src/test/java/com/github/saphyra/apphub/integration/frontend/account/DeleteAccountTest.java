@@ -67,7 +67,7 @@ public class DeleteAccountTest extends SeleniumTest {
 
     private static void delete(WebDriver driver, RegistrationParameters userData) {
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.login(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(UserEndpoints.ACCOUNT_PAGE))
             .assertTrue("Account page is not opened");
@@ -79,7 +79,7 @@ public class DeleteAccountTest extends SeleniumTest {
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE)));
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_DELETED);
 
-        IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.login(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }

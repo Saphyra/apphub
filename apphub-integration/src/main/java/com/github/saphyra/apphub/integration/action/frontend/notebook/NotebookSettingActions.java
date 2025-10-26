@@ -47,4 +47,19 @@ public class NotebookSettingActions {
         checkbox.click();
         SleepUtil.sleep(1000);
     }
+
+    public static void editDefaultListItem(WebDriver driver) {
+        driver.findElement(By.id("notebook-settings-edit-default-list-item"))
+            .click();
+    }
+
+    public static void saveDefaultListItem(WebDriver driver) {
+        driver.findElement(By.id("notebook-settings-default-list-item-selector-save"))
+            .click();
+    }
+
+    public static String getDefaultListItemTitle(WebDriver driver) {
+        return driver.findElement(By.id("notebook-settings-default-list-item-title"))
+            .getText();
+    }
 }

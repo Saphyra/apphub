@@ -1,8 +1,8 @@
-import React from "react";
 import PostLabeledInputField from "../../../../../../../../common/component/input/PostLabeledInputField";
 import InputField from "../../../../../../../../common/component/input/InputField";
 import UserSettings from "../../../../../../common/UserSettings";
 import "./user_settings.css";
+import DefaultListItem from "./default_list_item/DefaultListItem";
 
 const UserSettingsDropdown = ({
     userSettings,
@@ -19,6 +19,12 @@ const UserSettingsDropdown = ({
                     onchangeCallback={(checked) => changeUserSettings(UserSettings.SHOW_ARCHIVED, checked)}
                 />}
                 label={localizationHandler.get("show-archived")}
+            />
+
+            <DefaultListItem
+                localizationHandler={localizationHandler}
+                userSettings={userSettings}
+                changeUserSettings={changeUserSettings}
             />
         </div>
     )

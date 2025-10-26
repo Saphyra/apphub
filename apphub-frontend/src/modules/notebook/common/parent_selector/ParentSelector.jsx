@@ -7,7 +7,7 @@ import Stream from "../../../../common/js/collection/Stream";
 import Child from "./Child";
 import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 
-const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
+const ParentSelector = ({ parentId, setParentId, listItemId = null, onlyCategory = true, excludedListItemTypes = [] }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [currentCategoryData, setCurrentCategoryData] = useState({ children: [] });
@@ -17,7 +17,10 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
     const loadCategory = () => {
         const fetch = async () => {
             const queryParams = {
-                type: "CATEGORY"
+            };
+
+            if (onlyCategory) {
+                queryParams.type = "CATEGORY";
             }
 
             if (parentId !== null) {
@@ -31,9 +34,15 @@ const ParentSelector = ({ parentId, setParentId, listItemId = null }) => {
             const response = await NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
                 .send();
 
-            if (response.listItemType !== "CATEGORY") {
+            if (onlyCategory && response.listItemType !== "CATEGORY") {
                 setParentId(response.parent);
             }
+
+            const filteredChildren = new Stream(response.children)
+                .filter(child => excludedListItemTypes.indexOf(child.type) < 0)
+                .toList();
+
+            response.children = filteredChildren;
 
             setCurrentCategoryData(response);
         }

@@ -85,7 +85,7 @@ public class IndexPageActions {
         submitButton.click();
     }
 
-    public static void submitLogin(int serverPort, WebDriver driver, LoginParameters loginParameters) {
+    public static void login(int serverPort, WebDriver driver, LoginParameters loginParameters) {
         AwaitilityWrapper.createDefault()
             .until(() -> isLoginPageLoaded(serverPort, driver))
             .assertTrue("LoginPage is not loaded.");
