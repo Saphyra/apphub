@@ -159,6 +159,10 @@ nonSessionExtendingUris:
 - pattern: /api/admin-panel/error-report
   method: GET
 
+delay:
+  filter:
+    enabled: false
+
 role:
   settings:
   #Global

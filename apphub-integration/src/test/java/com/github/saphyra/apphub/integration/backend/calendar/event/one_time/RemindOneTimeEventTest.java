@@ -32,7 +32,7 @@ public class RemindOneTimeEventTest extends BackEndTest {
     }
 
     private void edit(UUID accessTokenId, UUID eventId) {
-        int newRemindMeBeforeDays = EventRequestFactory.DEFAULT_FUTURE_DAYS + 1;
+        int newRemindMeBeforeDays = EventRequestFactory.DEFAULT_FUTURE_DAYS - 1;
 
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()

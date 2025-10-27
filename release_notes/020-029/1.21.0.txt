@@ -8,6 +8,8 @@
         Display labels of opened event
     Notebook
         Select default ListItem that loads automatically when opening Notebook
+    Platform
+        Random delay of calls simulating slow environment
 
 ===BUGFIXES===
     AdminPanel

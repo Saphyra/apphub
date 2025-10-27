@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.feign.FeignClientConfiguration;
@@ -79,5 +80,10 @@ public class MainGatewayBeanConfiguration {
     @Bean
     Decoder feignFormDecoder() {
         return new SpringDecoder(messageConverters);
+    }
+
+    @Bean
+    Random random() {
+        return new Random();
     }
 }

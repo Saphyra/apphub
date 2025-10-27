@@ -10,7 +10,9 @@ public enum FilterOrder {
     REQUEST_LOGGING_FILTER(Integer.MIN_VALUE),
     LOCALE_COOKIE_FILTER(0),
     CHANGE_LOCALE_FILTER(1),
-    LOGOUT_FILTER(Integer.MAX_VALUE);
+    LOGOUT_FILTER(Integer.MAX_VALUE),
+    DELAY_FILTER(Integer.MIN_VALUE),
+    ;
 
     @Getter
     private final int order;

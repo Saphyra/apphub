@@ -139,3 +139,12 @@ spring:
         uri: ws://localhost:8095
         predicates:
         - Path=/api/ws/skyxplore-game/**
+
+delay:
+  filter:
+    enabled: true
+    paths:
+    - path: /api/**
+      enabled: false
+      minDelay: PT0.5S
+      maxDelay: PT1S
