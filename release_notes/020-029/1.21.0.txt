@@ -21,6 +21,8 @@
     Notebook
         Align table's content to top
         Expand text column on demand
+    Calendar
+        Nowraps and wraps
 
 ===PLATFORM CHANGES===
 

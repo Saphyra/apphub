@@ -24,7 +24,7 @@ const SelectedDate = ({ selectedDate, activeLabel, setDisplaySpinner, setSelecte
 
     return (
         <div id="calendar-selected-date">
-            <div id="calendar-selected-date-title">{selectedDate.format()}</div>
+            <div id="calendar-selected-date-title" className="nowrap">{selectedDate.format()}</div>
 
             <div id="calendar-selected-date-content">{getContent()}</div>
 
