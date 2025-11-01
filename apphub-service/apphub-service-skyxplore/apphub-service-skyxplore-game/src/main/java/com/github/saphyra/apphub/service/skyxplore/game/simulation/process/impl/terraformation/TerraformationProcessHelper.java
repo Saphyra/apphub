@@ -37,11 +37,11 @@ class TerraformationProcessHelper {
     }
 
     void startWork(Game game, UUID processId, UUID constructionId) {
-        storedResourceService.useResources(game.getProgressDiff(), game.getData(), processId);
-
         Construction construction = game.getData()
             .getConstructions()
             .findByIdValidated(constructionId);
+
+        storedResourceService.useResources(game.getProgressDiff(), game.getData(), constructionId);
 
         workProcessFactory.save(game, construction.getLocation(), processId, construction.getRequiredWorkPoints(), SkillType.BUILDING);
     }

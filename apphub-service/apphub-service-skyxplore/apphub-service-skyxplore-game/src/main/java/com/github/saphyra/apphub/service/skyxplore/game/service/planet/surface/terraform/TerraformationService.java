@@ -54,6 +54,10 @@ class TerraformationService {
             throw ExceptionFactory.forbiddenOperation("There is already a building on surface " + surfaceId);
         }
 
+        if (gameData.getStoredResources().getByContainerId(surfaceId).stream().anyMatch(storedResource -> storedResource.getAmount() > 0)) {
+            throw ExceptionFactory.forbiddenOperation("Cannot terraform surface while abandoned resources are present on it. SurfaceId: " + surfaceId);
+        }
+
         Surface surface = gameData.getSurfaces()
             .findByIdValidated(surfaceId);
 

@@ -66,6 +66,11 @@ class ConstructConstructionAreaService {
             throw ExceptionFactory.forbiddenOperation("There is already a constructionArea on surface " + surfaceId);
         }
 
+        //Leftover resources
+        if (gameData.getStoredResources().getByContainerId(surfaceId).stream().anyMatch(storedResource -> storedResource.getAmount() > 0)) {
+            throw ExceptionFactory.forbiddenOperation("Cannot build ConstructionArea while abandoned resources are present on it. SurfaceId: " + surfaceId);
+        }
+
         ConstructionAreaData constructionAreaData = constructionAreaDataService.get(constructionAreaDataId);
         //Surface must be supported type
         if (!constructionAreaData.getSupportedSurfaces().contains(surface.getSurfaceType())) {

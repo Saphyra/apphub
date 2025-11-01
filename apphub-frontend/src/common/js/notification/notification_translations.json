@@ -118,5 +118,9 @@
     "TEMPORARILY_NOT_AVAILABLE": {
         "en": "Service is temporarily not available. Please try again later.",
         "hu": "A szolgáltatás jelenleg nem elérhető. Kérlek próbáld újra később."
+    },
+    "FORBIDDEN_OPERATION": {
+        "en": "You cannot do that.",
+        "hu": "Ezt nem teheted meg."
     }
 }

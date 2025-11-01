@@ -15,7 +15,7 @@ import java.util.List;
 public class CreateEventParameters {
     public static final LocalDate DEFAULT_START_DATE = LocalDate.now()
         .plusMonths(1)
-        .withDayOfMonth(7)
+        .withDayOfMonth(14)
         .with(DayOfWeek.MONDAY);
     public static final LocalDate DEFAULT_END_DATE = DEFAULT_START_DATE.plusWeeks(2);
     public static final LocalTime DEFAULT_TIME = LocalTime.of(12, 32);

@@ -29,6 +29,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcess;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.construct_building_module.ConstructBuildingModuleProcessFactory;
@@ -152,6 +154,12 @@ class ConstructBuildingModuleServiceTest {
     @Mock
     private ConstructionModel constructionModel;
 
+    @Mock
+    private StoredResources storedResources;
+
+    @Mock
+    private StoredResource storedResource;
+
     @Test
     void nullBuildingModuleDataId() {
         ExceptionValidator.validateInvalidParam(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, null), "buildingModuleDataId", "must not be null");
@@ -178,6 +186,24 @@ class ConstructBuildingModuleServiceTest {
     }
 
     @Test
+    void leftoverResources() {
+        given(buildingModuleDataService.get(BUILDING_MODULE_DATA_ID)).willReturn(buildingModuleData);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionArea.getLocation()).willReturn(PLANET_ID);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(CONSTRUCTION_AREA_ID)).willReturn(List.of(storedResource));
+        given(storedResource.getAmount()).willReturn(1);
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID));
+    }
+
+    @Test
     void slotNotSupported() {
         given(buildingModuleDataService.get(BUILDING_MODULE_DATA_ID)).willReturn(buildingModuleData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -195,6 +221,8 @@ class ConstructBuildingModuleServiceTest {
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
         given(buildingModule.getDataId()).willReturn(BUILDING_MODULE_DATA_ID);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(CONSTRUCTION_AREA_ID)).willReturn(List.of());
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID));
     }
@@ -217,6 +245,8 @@ class ConstructBuildingModuleServiceTest {
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
         given(buildingModule.getDataId()).willReturn(BUILDING_MODULE_DATA_ID);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(CONSTRUCTION_AREA_ID)).willReturn(List.of());
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID));
     }
@@ -261,6 +291,8 @@ class ConstructBuildingModuleServiceTest {
         given(constructionConverter.toModel(GAME_ID, construction)).willReturn(constructionModel);
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructionArea.getSurfaceId()).willReturn(SURFACE_ID);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(CONSTRUCTION_AREA_ID)).willReturn(List.of());
 
         underTest.constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID);
 

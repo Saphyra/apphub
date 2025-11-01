@@ -60,6 +60,11 @@ class ConstructBuildingModuleService {
             throw ExceptionFactory.forbiddenOperation(userId + " cannot construct constructionArea on planet " + planetId);
         }
 
+        //Leftover resources
+        if (gameData.getStoredResources().getByContainerId(constructionAreaId).stream().anyMatch(storedResource -> storedResource.getAmount() > 0)) {
+            throw ExceptionFactory.forbiddenOperation("Cannot build BuildingModule while abandoned resources are present on it. ConstructionAreaId: " + constructionAreaId);
+        }
+
         ConstructionAreaData constructionAreaData = constructionAreaDataService.get(constructionArea.getDataId());
         //ConstructionArea must available place on supported slot
         if (constructionAreaData.getSlots().getOrDefault(buildingModuleData.getCategory(), 0) <= getBuildingModuleCount(gameData, constructionAreaId, buildingModuleData.getCategory())) {
