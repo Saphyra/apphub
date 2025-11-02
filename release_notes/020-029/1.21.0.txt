@@ -1,6 +1,7 @@
 ===FEATURES===
     ApphubCI
         Return from *Services menu if input is empty
+        Scale Down option for Minikube
     Calendar
         Back button on edit event/occurrence screen actually goes back, not only to index page
         Automatically refresh index page when getting focus
@@ -25,6 +26,7 @@
         Nowraps and wraps
 
 ===PLATFORM CHANGES===
+    Dependency update
 
 ===TECHNICAL DEBTS===
     EliteBase

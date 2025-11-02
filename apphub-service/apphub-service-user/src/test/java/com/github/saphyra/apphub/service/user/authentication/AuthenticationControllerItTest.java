@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.user.authentication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
@@ -38,6 +36,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -92,7 +91,7 @@ public class AuthenticationControllerItTest {
     @MockBean
     private LocalizationClient localizationApi;
 
-    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS));
+    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper());
 
     @AfterEach
     public void clear() {

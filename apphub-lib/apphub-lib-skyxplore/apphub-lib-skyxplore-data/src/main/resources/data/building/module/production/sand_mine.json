@@ -13,7 +13,8 @@
   "produces": [
     {
       "resourceDataId": "sand",
-      "requiredSkill": "MINING"
+      "requiredSkill": "MINING",
+      "amount": 1
     }
   ]
 }

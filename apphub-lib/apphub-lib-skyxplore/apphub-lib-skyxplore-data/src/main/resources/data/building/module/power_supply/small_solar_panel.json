@@ -14,7 +14,8 @@
       "batchTicks": 10,
       "fuelLastsForTicks": 100000,
       "fuelStorage": 0,
-      "fuel": null
+      "fuel": null,
+      "humanPowered": false
     }
   ]
 }

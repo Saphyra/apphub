@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.data.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -19,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableHealthCheck
@@ -51,8 +50,6 @@ public class SkyXploreDataBeanConfiguration {
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.findAndRegisterModules();
         return new ObjectMapperWrapper(objectMapper);
     }
 }

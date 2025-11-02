@@ -18,16 +18,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>6.0.4</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.6</version>
+            <version>${versions.commons-net}</version>
         </dependency>
 
         <dependency>

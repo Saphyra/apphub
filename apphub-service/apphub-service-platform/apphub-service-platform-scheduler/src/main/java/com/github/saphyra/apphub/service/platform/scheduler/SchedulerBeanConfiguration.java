@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.scheduler;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
@@ -16,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableAutoConfiguration(exclude = {

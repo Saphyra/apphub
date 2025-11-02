@@ -19,13 +19,14 @@
         <maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.source>17</maven.compiler.source>
 
-        <versions.spring-boot>3.0.1</versions.spring-boot>
-        <versions.liquibase-core>4.18.0</versions.liquibase-core>
-        <versions.postgresql-connector>42.5.1</versions.postgresql-connector>
-        <versions.h2>2.1.214</versions.h2>
-        <versions.maven-compiler-plugin>3.10.1</versions.maven-compiler-plugin>
-        <versions.lombok>1.18.24</versions.lombok>
+        <versions.spring-boot>3.5.7</versions.spring-boot>
+        <versions.liquibase-core>5.0.1</versions.liquibase-core>
+        <versions.postgresql-connector>42.7.8</versions.postgresql-connector>
+        <versions.h2>2.4.240</versions.h2>
+        <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
+        <versions.lombok>1.18.42</versions.lombok>
         <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
+        <versions.apache-commons.commons-lang3>3.19.0</versions.apache-commons.commons-lang3>
     </properties>
 
     <dependencies>
@@ -70,6 +71,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${versions.apache-commons.commons-lang3}</version>
         </dependency>
     </dependencies>
 

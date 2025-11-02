@@ -28,6 +28,7 @@ public enum MenuOrderEnum implements MenuOrder {
     STOP_LATEST_SERVICES(1550),
     PORT_FORWARD(5000),
     APPHUB_PROXY(10_000),
+    SCALE_DOWN(50000),
     DELETE_NAMESPACE(100_000),
     STOP_VM(1_000_000),
     SETTINGS(10_000_000),

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.web_content;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -15,6 +14,7 @@ import com.github.saphyra.apphub.lib.security.access_token.AccessTokenFilterConf
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableMemoryMonitoring

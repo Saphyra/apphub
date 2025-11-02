@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -26,6 +25,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.AntPathMatcher;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @Import({
@@ -68,8 +68,8 @@ public class MainGatewayBeanConfiguration {
     }
 
     @Bean
-    ObjectMapperWrapper objectMapperWrapper(ObjectMapper objectMapper) {
-        return new ObjectMapperWrapper(objectMapper);
+    ObjectMapperWrapper objectMapperWrapper() {
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 
     @Bean

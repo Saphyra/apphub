@@ -25,15 +25,17 @@ spring:
     active: ${SPRING_ACTIVE_PROFILE:server}
   cloud:
     gateway:
-      routes:
-      - id: api
-        uri: http://localhost:${forwardedPort}
-        predicates:
-        - Path=/**
-      - id: ws
-        uri: ws://localhost:${forwardedPort}
-        predicates:
-        - Path=/**
+      server:
+        webflux:
+          routes:
+          - id: api
+            uri: http://localhost:${forwardedPort}
+            predicates:
+            - Path=/**
+          - id: ws
+            uri: ws://localhost:${forwardedPort}
+            predicates:
+            - Path=/**
 
 hystryx:
   command:

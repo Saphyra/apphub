@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
@@ -16,8 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.type.TypeReference;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -27,6 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -47,9 +47,6 @@ class FcMaterialsCapiMessageProcessorTest {
 
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
-
-    @Spy
-    private ObjectMapperWrapper objectMapperWrapper2 = new ObjectMapperWrapper(new ObjectMapper());
 
     @Mock
     private FleetCarrierDao fleetCarrierDao;
@@ -72,7 +69,6 @@ class FcMaterialsCapiMessageProcessorTest {
     void setUp() {
         underTest = FcMaterialsCapiMessageProcessor.builder()
             .objectMapperWrapper(objectMapperWrapper)
-            .objectMapperWrapper2(objectMapperWrapper2)
             .fleetCarrierDao(fleetCarrierDao)
             .commoditySaver(commoditySaver)
             .build();
@@ -154,6 +150,8 @@ class FcMaterialsCapiMessageProcessorTest {
         given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
+        given(objectMapperWrapper.convertValue(eq(List.of(purchase)), any(TypeReference.class))).willReturn(List.of(purchase));
+        given(objectMapperWrapper.convertValue(eq(Map.of(1L, sale)), any(TypeReference.class))).willReturn(Map.of(1L, sale));
 
         underTest.processMessage(edMessage);
 

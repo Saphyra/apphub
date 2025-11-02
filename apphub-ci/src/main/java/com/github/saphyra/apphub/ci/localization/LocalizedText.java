@@ -59,8 +59,6 @@ public enum LocalizedText implements LocalizationProvider {
     PRODUCTION("Prod szerver", "Production server"),
     PRODUCTION_RELEASE("Telepites prod szerverre", "Production release"),
     PREPROD_RELEASE("Telepítes preprod szerverre", "Preprod release"),
-    DOCKER_HUB_USERNAME("DockerHub felhasznalonev:", "DockerHub username:"),
-    DOCKER_HUB_PASSWORD("DockerHub jelszo:", "DockerHub password:"),
     MUST_NOT_BE_BLANK("Nem lehet ures!", "Must not be blank."),
     PRODUCTION_PROXY("ProdProxy inditasa", "Start Production Proxy"),
     PREPROD_PROXY("PreprodProxy inditasa", "Start Preprod Proxy"),

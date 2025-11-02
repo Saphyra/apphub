@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.service.condition;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.OccurrenceRepetitionTypeAware;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.type.TypeReference;
 
 import java.time.DayOfWeek;
 import java.util.Set;

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -14,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;

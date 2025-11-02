@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.lib.config.whitelist.WhiteListedEndpointPropert
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -18,7 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
-@RequiredArgsConstructor
 @Slf4j
 @Component
 public class AuthenticatedFilter implements GlobalFilter, Ordered {
@@ -26,6 +25,13 @@ public class AuthenticatedFilter implements GlobalFilter, Ordered {
     private final AntPathMatcher antPathMatcher;
     private final AuthenticationService authenticationService;
     private final WhiteListedEndpointProperties endpointProperties;
+
+    public AuthenticatedFilter(UriUtils uriUtils, AntPathMatcher antPathMatcher, @Lazy AuthenticationService authenticationService, WhiteListedEndpointProperties endpointProperties) {
+        this.uriUtils = uriUtils;
+        this.antPathMatcher = antPathMatcher;
+        this.authenticationService = authenticationService;
+        this.endpointProperties = endpointProperties;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

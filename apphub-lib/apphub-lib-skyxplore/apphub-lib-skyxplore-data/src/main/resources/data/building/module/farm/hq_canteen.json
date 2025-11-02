@@ -10,7 +10,8 @@
   "produces": [
     {
       "resourceDataId": "survival_food",
-      "requiredSkill": "FARMING"
+      "requiredSkill": "FARMING",
+      "amount": 1
     }
   ]
 }

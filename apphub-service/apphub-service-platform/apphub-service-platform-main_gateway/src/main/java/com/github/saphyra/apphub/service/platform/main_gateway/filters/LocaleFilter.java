@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
@@ -15,11 +15,15 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class LocaleFilter implements GlobalFilter, Ordered {
     private final UriUtils uriUtils;
     private final ApphubLocaleResolver apphubLocaleResolver;
+
+    public LocaleFilter(UriUtils uriUtils, @Lazy ApphubLocaleResolver apphubLocaleResolver) {
+        this.uriUtils = uriUtils;
+        this.apphubLocaleResolver = apphubLocaleResolver;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

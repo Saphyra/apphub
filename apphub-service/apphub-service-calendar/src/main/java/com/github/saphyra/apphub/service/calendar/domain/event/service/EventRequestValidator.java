@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -11,9 +10,11 @@ import com.github.saphyra.apphub.service.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.core.type.TypeReference;
 
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -66,7 +67,7 @@ class EventRequestValidator {
                 break;
 
             case DAYS_OF_WEEK:
-                TypeReference<Set<DayOfWeek>> daysOfWeekTypeReference = new TypeReference<>() {
+                TypeReference<HashSet<DayOfWeek>> daysOfWeekTypeReference = new TypeReference<>() {
                 };
                 Set<DayOfWeek> dayOfWeeks = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfWeekTypeReference), "repetitionData");
                 ValidationUtil.doesNotContainNull(dayOfWeeks, "repetitionData");

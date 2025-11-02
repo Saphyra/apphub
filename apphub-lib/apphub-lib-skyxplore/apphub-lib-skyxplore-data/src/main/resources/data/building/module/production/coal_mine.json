@@ -13,7 +13,8 @@
   "produces": [
     {
       "resourceDataId": "coal",
-      "requiredSkill": "MINING"
+      "requiredSkill": "MINING",
+      "amount": 1
     }
   ]
 }

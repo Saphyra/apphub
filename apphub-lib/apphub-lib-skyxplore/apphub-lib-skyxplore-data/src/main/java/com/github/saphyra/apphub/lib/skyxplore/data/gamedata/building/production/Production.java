@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Production {
     private String resourceDataId;
-    @Builder.Default
-    private Integer amount = 1;
+    private Integer amount;
     private SkillType requiredSkill;
 }

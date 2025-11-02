@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.encryption.base.DefaultEncryptor;
 import com.github.saphyra.apphub.lib.encryption.base.EncryptedEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.JacksonException;
 
 import java.util.Objects;
 
@@ -59,7 +59,7 @@ public class DefaultStringEncryptor implements StringEncryptor {
             }
 
             return encryptedEntity.getEntity();
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.info("Deprecated encryption structure detected.");
             return decrypted;
         }

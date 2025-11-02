@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.menu.preprod;
+package com.github.saphyra.apphub.ci.menu.minikube;
 
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
@@ -6,18 +6,20 @@ import com.github.saphyra.apphub.ci.menu.Menu;
 import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
-import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodScaleDownProcess;
+import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
+import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class PreprodScaleDownMenuOption implements MenuOption {
-    private final PreprodScaleDownProcess preprodScaleDownProcess;
+public class MinikubeScaleDownMenuOption implements MenuOption {
+    private final MinikubeScaleProcess minikubeScaleProcess;
+    private final NamespaceNameProvider namespaceNameProvider;
 
     @Override
     public Menu getMenu() {
-        return Menu.PREPROD_MENU;
+        return Menu.MINIKUBE_MENU;
     }
 
     @Override
@@ -32,7 +34,7 @@ class PreprodScaleDownMenuOption implements MenuOption {
 
     @Override
     public boolean process() {
-        preprodScaleDownProcess.scaleDown();
+        minikubeScaleProcess.scale(namespaceNameProvider.getNamespaceName(), 0);
 
         return false;
     }

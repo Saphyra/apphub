@@ -10,11 +10,13 @@
   "produces": [
     {
       "resourceDataId": "steel_ingot",
-      "requiredSkill": "ENGINEERING"
+      "requiredSkill": "ENGINEERING",
+      "amount": 1
     },
     {
       "resourceDataId": "glass",
-      "requiredSkill": "ENGINEERING"
+      "requiredSkill": "ENGINEERING",
+      "amount": 1
     }
   ]
 }
