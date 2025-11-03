@@ -27,6 +27,7 @@
 
 ===PLATFORM CHANGES===
     Dependency update
+    Java 25
 
 ===TECHNICAL DEBTS===
     EliteBase

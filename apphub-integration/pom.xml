@@ -10,8 +10,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.source>17</maven.compiler.source>
+        <java.version>25</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
 
         <!-- Platform Versions -->
         <versions.maven-surefire-plugin>3.5.4</versions.maven-surefire-plugin>
@@ -31,8 +32,8 @@
         <versions.gson>2.13.2</versions.gson>
 
         <!-- Plugin Versions -->
-        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
-        <versions.lombok>1.18.24</versions.lombok>
+        <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
+        <versions.lombok>1.18.42</versions.lombok>
         <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
     </properties>
 
@@ -137,7 +138,22 @@
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
+                    <!--suppress MavenModelInspection -->
                     <threadCount>${threadCount}</threadCount>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${versions.maven-compiler-plugin}</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${versions.lombok}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

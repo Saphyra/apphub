@@ -122,7 +122,7 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * RAM: 24 GB
 * Empty Disk Space: 20GB
 * maven installed
-* JDK17 installed
+* JDK25 installed
 * npm installed
 * PostgreSQL installed and running
 * PgAdmin (or any PostgreSQL-compatible database manager) installed
