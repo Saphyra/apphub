@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
@@ -22,6 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 
@@ -54,7 +53,6 @@ class NotebookBeanConfiguration {
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return new ObjectMapperWrapper(objectMapper);
     }
 }

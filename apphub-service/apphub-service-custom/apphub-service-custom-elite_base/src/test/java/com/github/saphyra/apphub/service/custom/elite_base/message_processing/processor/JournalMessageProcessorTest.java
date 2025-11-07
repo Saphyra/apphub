@@ -1,35 +1,41 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.SecurityLevel;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.body_data.ReserveLevel;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarType;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.powerplay_conflict.PowerplayConflict;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.powerplay_conflict.PowerplayConflictFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Faction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.NamePercentPair;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Ring;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.*;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.SecurityLevel;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodyDataSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.MinorFactionSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemDataSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.EdConflict;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Faction;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.NamePercentPair;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.Ring;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CodexEntryJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.FsdJumpJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.PowerplayConflictProgress;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.SaaSignalFoundJournalMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.ScanJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.ControllingFactionParser;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaverUtil;
 import org.junit.jupiter.api.Test;
@@ -37,6 +43,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.JsonNode;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -154,7 +161,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("asdfaf");
+        given(jsonNode.asString()).willReturn("asdfaf");
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
@@ -168,7 +175,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("Scan");
+        given(jsonNode.asString()).willReturn("Scan");
 
         NamePercentPair[] materials = new NamePercentPair[]{new NamePercentPair(MATERIAL, PERCENT)};
         Ring[] rings = new Ring[]{ring};
@@ -208,7 +215,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("FSDJump");
+        given(jsonNode.asString()).willReturn("FSDJump");
 
         Faction[] factions = new Faction[]{faction};
         EdConflict[] conflicts = new EdConflict[]{edConflict};
@@ -277,7 +284,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("FSDJump");
+        given(jsonNode.asString()).willReturn("FSDJump");
 
         Faction[] factions = new Faction[]{faction};
         EdConflict[] conflicts = new EdConflict[]{edConflict};
@@ -346,7 +353,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("Docked");
+        given(jsonNode.asString()).willReturn("Docked");
 
         String[] services = new String[]{SERVICE};
         Economy[] economies = new Economy[]{economy};
@@ -402,7 +409,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("CarrierJump");
+        given(jsonNode.asString()).willReturn("CarrierJump");
 
         Faction[] factions = new Faction[]{faction};
         EdConflict[] conflicts = new EdConflict[]{edConflict};
@@ -471,7 +478,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("Location");
+        given(jsonNode.asString()).willReturn("Location");
 
         Faction[] factions = new Faction[]{faction};
         EdConflict[] conflicts = new EdConflict[]{edConflict};
@@ -542,7 +549,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("SAASignalsFound");
+        given(jsonNode.asString()).willReturn("SAASignalsFound");
 
         SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = new SaaSignalFoundJournalMessage();
         saaSignalFoundJournalMessage.setTimestamp(TIMESTAMP);
@@ -566,7 +573,7 @@ class JournalMessageProcessorTest {
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
-        given(jsonNode.asText()).willReturn("CodexEntry");
+        given(jsonNode.asString()).willReturn("CodexEntry");
 
         CodexEntryJournalMessage codexEntryJournalMessage = new CodexEntryJournalMessage();
         codexEntryJournalMessage.setTimestamp(TIMESTAMP);

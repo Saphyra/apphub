@@ -10,7 +10,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
@@ -103,8 +102,7 @@ class StarSystemDaoTest {
 
     @Test
     void getByStarNameLike() {
-        given(properties.getStarSystemSuggestionListSize()).willReturn(PAGE_SIZE);
-        given(repository.getByStarNameIgnoreCaseContaining(STAR_NAME, PageRequest.of(0, PAGE_SIZE))).willReturn(List.of(entity));
+        given(repository.getByStarNameIgnoreCaseContaining(STAR_NAME)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain1));
 
         assertThat(underTest.getByStarNameLike(STAR_NAME)).containsExactly(domain1);

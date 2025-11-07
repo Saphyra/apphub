@@ -2,32 +2,18 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.ListCachedBufferedDao;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
 import com.google.common.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_COMMODITY_NAME;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_COMMODITY;
 
 @Component
 @Slf4j
 public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodity, CommodityEntityId, CommodityCacheKey, CommodityDomainId, CommodityRepository> {
-    private final Set<String> commodityNameCache = ConcurrentHashMap.newKeySet();
-    private volatile boolean commodityNamesLoaded = false;
-
     private final UuidConverter uuidConverter;
-    private final JdbcTemplate jdbcTemplate;
+    private final CommodityNameCache commodityNameCache;
 
     CommodityDao(
         CommodityConverter converter,
@@ -36,7 +22,7 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
         CommodityWriteBuffer writeBuffer,
         CommodityDeleteBuffer deleteBuffer,
         UuidConverter uuidConverter,
-        JdbcTemplate jdbcTemplate
+        CommodityNameCache commodityNameCache
     ) {
         super(
             converter,
@@ -46,7 +32,7 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
             deleteBuffer
         );
         this.uuidConverter = uuidConverter;
-        this.jdbcTemplate = jdbcTemplate;
+        this.commodityNameCache = commodityNameCache;
     }
 
     public List<Commodity> getByMarketIdAndType(Long marketId, CommodityType type) {
@@ -56,34 +42,6 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
             .build();
 
         return searchList(cacheKey, () -> repository.getByMarketIdAndType(marketId, type));
-    }
-
-    public List<String> getCommodityNames() {
-        if (commodityNamesLoaded) {
-            return new ArrayList<>(commodityNameCache);
-        }
-
-        String sql = SqlBuilder.select()
-            .column(new DefaultColumn(COLUMN_COMMODITY_NAME))
-            .from(new QualifiedTable(SCHEMA, TABLE_COMMODITY))
-            .groupBy(new DefaultColumn(COLUMN_COMMODITY_NAME))
-            .build();
-        log.debug(sql);
-
-        List<String> result = jdbcTemplate.query(sql, rs -> {
-            List<String> r = new ArrayList<>();
-
-            while (rs.next()) {
-                r.add(rs.getString(COLUMN_COMMODITY_NAME));
-            }
-
-            return r;
-        });
-
-        commodityNameCache.addAll(result);
-        commodityNamesLoaded = true;
-
-        return result;
     }
 
     public List<Commodity> findSuppliers(String commodityName, Integer minStock, Integer minPrice, Integer maxPrice) {

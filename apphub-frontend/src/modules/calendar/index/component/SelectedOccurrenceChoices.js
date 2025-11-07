@@ -1,5 +1,5 @@
 import Button from "../../../../common/component/input/Button";
-import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_OCCURRENCE_REMINDED } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_OCCURRENCE_REMINDED, CALENDAR_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import NotificationService from "../../../../common/js/notification/NotificationService";
 import { hasValue } from "../../../../common/js/Utils";
 import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
@@ -23,7 +23,10 @@ function getChoices(args) {
         choices.push(<Button
             key="reminder"
             id="calendar-selected-occurrence-remind-button"
-            onclick={() => setReminded()}
+            onclick={() => {
+                setSelectedOccurrence(null);
+                setReminded();
+            }}
             label={localizationHandler.get("reminded")}
         />);
     }
@@ -32,7 +35,10 @@ function getChoices(args) {
         choices.push(<Button
             key="done"
             id="calendar-selected-occurrence-done-button"
-            onclick={() => editStatus(DONE)}
+            onclick={() => {
+                setSelectedOccurrence(null);
+                editStatus(DONE);
+            }}
             label={localizationHandler.get("done")}
         />);
     }
@@ -58,14 +64,14 @@ function getChoices(args) {
     choices.push(<Button
         key="edit-occurrence"
         id="calendar-selected-occurrence-edit-button"
-        onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId })}
+        onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId }, { backUrl: CALENDAR_PAGE })}
         label={localizationHandler.get("edit-occurrence")}
     />);
 
     choices.push(<Button
         key="edit-event"
         id="calendar-selected-occurrence-edit-event-button"
-        onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: occurrence.eventId })}
+        onclick={() => window.location.href = CALENDAR_EDIT_EVENT_PAGE.assembleUrl({ eventId: occurrence.eventId }, { backUrl: CALENDAR_PAGE })}
         label={localizationHandler.get("edit-event")}
     />);
 

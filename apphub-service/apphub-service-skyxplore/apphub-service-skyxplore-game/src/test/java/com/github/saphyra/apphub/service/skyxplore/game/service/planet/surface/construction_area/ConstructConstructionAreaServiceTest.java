@@ -26,6 +26,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Plane
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.reserved_storage.ReservedStorageFactory;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
@@ -123,6 +125,36 @@ class ConstructConstructionAreaServiceTest {
     @Mock
     private ConstructionArea constructionArea;
 
+    @Mock
+    private StoredResources storedResources;
+
+    @Mock
+    private StoredResource storedResource;
+
+    @Mock
+    private ConstructionRequirements constructionRequirements;
+
+    @Mock
+    private EventLoop eventLoop;
+
+    @Mock
+    private GameProgressDiff progressDiff;
+
+    @Mock
+    private ConstructConstructionAreaProcess process;
+
+    @Mock
+    private Processes processes;
+
+    @Mock
+    private ProcessModel processModel;
+
+    @Mock
+    private ConstructionAreaModel constructionAreaModel;
+
+    @Mock
+    private ConstructionModel constructionModel;
+
     @Test
     void nullDataId() {
         ExceptionValidator.validateInvalidParam(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, null), "dataId", "must not be null");
@@ -185,6 +217,28 @@ class ConstructConstructionAreaServiceTest {
     }
 
     @Test
+    void leftoverResources() {
+        constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
+        given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
+        given(game.getData()).willReturn(gameData);
+        given(gameData.getSurfaces()).willReturn(surfaces);
+        given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
+        given(surface.getPlanetId()).willReturn(PLANET_ID);
+        given(gameData.getPlanets()).willReturn(planets);
+        given(planets.findByIdValidated(PLANET_ID)).willReturn(planet);
+        given(planet.getOwner()).willReturn(USER_ID);
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of(storedResource));
+        given(storedResource.getAmount()).willReturn(23);
+
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID));
+    }
+
+    @Test
     void unsupportedSurfaceType() {
         constructionAreaDataService.put(CONSTRUCTION_AREA_DATA_ID, constructionAreaData);
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -201,33 +255,11 @@ class ConstructConstructionAreaServiceTest {
         given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
         given(constructionAreaData.getSupportedSurfaces()).willReturn(Collections.emptyList());
         given(surface.getSurfaceType()).willReturn(SurfaceType.DESERT);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of());
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.constructConstructionArea(USER_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID));
     }
-
-    @Mock
-    private ConstructionRequirements constructionRequirements;
-
-    @Mock
-    private EventLoop eventLoop;
-
-    @Mock
-    private GameProgressDiff progressDiff;
-
-    @Mock
-    private ConstructConstructionAreaProcess process;
-
-    @Mock
-    private Processes processes;
-
-    @Mock
-    private ProcessModel processModel;
-
-    @Mock
-    private ConstructionAreaModel constructionAreaModel;
-
-    @Mock
-    private ConstructionModel constructionModel;
 
     @Test
     void constructConstructionArea() {
@@ -265,6 +297,8 @@ class ConstructConstructionAreaServiceTest {
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(constructionAreaConverter.convert(GAME_ID, constructionArea)).willReturn(constructionAreaModel);
         given(constructionConverter.toModel(GAME_ID, construction)).willReturn(constructionModel);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of());
 
         underTest.constructConstructionArea(USER_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID);
 

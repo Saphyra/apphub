@@ -28,9 +28,14 @@ import saveEvent from "./saveEvent";
 import LocalDate from "../../../common/js/date/LocalDate";
 import Optional from "../../../common/js/collection/Optional";
 import LocalTime from "../../../common/js/date/LocalTime";
+import useQueryParams from "../../../common/hook/UseQueryParams";
+import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
+import TestableDateInput from "../common/input/TestableDateInput";
+import createOccurrence from "./createOccurrence";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
+    const queryParams = useQueryParams();
 
     const localizationHandler = new LocalizationHandler(localizationData);
 
@@ -40,9 +45,11 @@ const CalendarEditEventPage = () => {
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [refreshCounter, refresh] = useRefresh();
+    const [backUrl, setBackUrl] = useState(hasValue(queryParams.backUrl) ? queryParams.backUrl : CALENDAR_PAGE);
 
     const [event, setEvent] = useState(null);
     const [newLabels, setNewLabels] = useState([]);
+    const [newOccurrenceDate, setNewOccurrenceDate] = useState(null);
 
     const [title, setTitle] = useExtractAsync(o => o.title, event, "");
     const [content, setContent] = useExtractAsync(o => o.content, event, "");
@@ -142,6 +149,31 @@ const CalendarEditEventPage = () => {
                         setNewLabels={setNewLabels}
                     />
                 </fieldset>
+
+                <fieldset>
+                    <legend>{localizationHandler.get("create-occurrence")}</legend>
+
+                    <PreLabeledInputField
+                        label={localizationHandler.get("new-occurrence-date")}
+                        input={<TestableDateInput
+                            id="calendar-edit-event-new-occurrence-date"
+                            date={newOccurrenceDate}
+                            setDate={setNewOccurrenceDate}
+                        />}
+                    />
+
+                    <Button
+                        id="calendar-edit-event-create-occurrence-button"
+                        label={localizationHandler.get("create-occurrence")}
+                        onclick={() => createOccurrence(
+                            eventId,
+                            newOccurrenceDate,
+                            setNewOccurrenceDate,
+                            setDisplaySpinner,
+                            localizationHandler
+                        )}
+                    />
+                </fieldset>
             </main>
 
             <Footer
@@ -178,7 +210,7 @@ const CalendarEditEventPage = () => {
                     <Button
                         id="calendar-edit-event-back-button"
                         key="back"
-                        onclick={() => window.location.href = CALENDAR_PAGE}
+                        onclick={() => window.location.href = backUrl}
                         label={localizationHandler.get("back")}
                     />
                 ]}
@@ -225,7 +257,8 @@ const CalendarEditEventPage = () => {
                         existingLabels,
                         setDisplaySpinner,
                         newLabels,
-                        setConfirmationDialogData
+                        setConfirmationDialogData,
+                        backUrl
                     )}
                 />,
                 <Button

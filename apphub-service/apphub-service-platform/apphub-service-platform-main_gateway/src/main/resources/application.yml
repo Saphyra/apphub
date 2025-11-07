@@ -6,150 +6,152 @@ spring:
     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   cloud:
     gateway:
-      predicate:
-        weight:
-          enabled: false
-      globalcors:
-        enabled: false
-      routes:
-      #FRONTEND
-      - id: frontend
-        uri: http://frontend:3000
-        predicates:
-        - "Path=\
-            /,\
-            /web,\
-            /web/error,\
-            /web/modules,\
-            /web/skyxplore,\
-            /web/skyxplore/character,\
-            /web/skyxplore/lobby,\
-            /web/skyxplore/game,\
-            /web/notebook,\
-            /web/notebook/**,\
-            /web/admin-panel/memory-monitoring,\
-            /web/admin-panel/migration-tasks,\
-            /web/admin-panel/roles-for-all,\
-            /web/admin-panel/role-management,\
-            /web/admin-panel/disabled-role-management,\
-            /web/admin-panel/error-report,\
-            /web/admin-panel/error-report/*,\
-            /web/admin-panel/ban,\
-            /web/admin-panel/ban/*,\
-            /web/admin-panel/performance-reporting,\
-            /web/villany-atesz,\
-            /web/villany-atesz/**,\
-            /web/utils/base64,\
-            /web/utils/json-formatter,\
-            /web/elite-base,\
-            /web/elite-base/*,\
-            /web/random-direction,\
-            /web/calendar,\
-            /web/calendar/**,\
-            /web/user/account"
-        filters:
-        - StripPrefix=10
-      - id: frontend-resources
-        uri: http://frontend:3000
-        predicates:
-        - Path=/web/static/**
-        filters:
-        - StripPrefix=1
-      #RESOURCES
-      - id: common-resources
-        uri: http://web-content:8080
-        predicates:
-        - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/utils/**, /res/user/**
-      - id: training-resources
-        uri: http://training:8080
-        predicates:
-        - Path=/res/training/**
+      server:
+        webflux:
+          predicate:
+            weight:
+              enabled: false
+          globalcors:
+            enabled: false
+          routes:
+          #FRONTEND
+          - id: frontend
+            uri: http://frontend:3000
+            predicates:
+            - "Path=\
+                /,\
+                /web,\
+                /web/error,\
+                /web/modules,\
+                /web/skyxplore,\
+                /web/skyxplore/character,\
+                /web/skyxplore/lobby,\
+                /web/skyxplore/game,\
+                /web/notebook,\
+                /web/notebook/**,\
+                /web/admin-panel/memory-monitoring,\
+                /web/admin-panel/migration-tasks,\
+                /web/admin-panel/roles-for-all,\
+                /web/admin-panel/role-management,\
+                /web/admin-panel/disabled-role-management,\
+                /web/admin-panel/error-report,\
+                /web/admin-panel/error-report/*,\
+                /web/admin-panel/ban,\
+                /web/admin-panel/ban/*,\
+                /web/admin-panel/performance-reporting,\
+                /web/villany-atesz,\
+                /web/villany-atesz/**,\
+                /web/utils/base64,\
+                /web/utils/json-formatter,\
+                /web/elite-base,\
+                /web/elite-base/*,\
+                /web/random-direction,\
+                /web/calendar,\
+                /web/calendar/**,\
+                /web/user/account"
+            filters:
+            - StripPrefix=10
+          - id: frontend-resources
+            uri: http://frontend:3000
+            predicates:
+            - Path=/web/static/**
+            filters:
+            - StripPrefix=1
+          #RESOURCES
+          - id: common-resources
+            uri: http://web-content:8080
+            predicates:
+            - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/utils/**, /res/user/**
+          - id: training-resources
+            uri: http://training:8080
+            predicates:
+            - Path=/res/training/**
 
-      #PAGES
-      - id: common-pages
-        uri: http://web-content:8080
-        predicates:
-        - Path=/web/community
-      - id: training-pages
-        uri: http://training:8080
-        predicates:
-        - Path=/web/training/**
+          #PAGES
+          - id: common-pages
+            uri: http://web-content:8080
+            predicates:
+            - Path=/web/community
+          - id: training-pages
+            uri: http://training:8080
+            predicates:
+            - Path=/web/training/**
 
-      #MODULES
-      - id: user
-        uri: http://user:8080
-        predicates:
-        - Path=/api/user/**
-      - id: notebook
-        uri: http://notebook:8080
-        predicates:
-        - Path=/api/notebook/**
-      - id: admin-panel
-        uri: http://admin-panel:8080
-        predicates:
-        - Path=/api/admin-panel/**
-      - id: modules
-        uri: http://modules:8080
-        predicates:
-        - Path=/api/modules/**
-      - id: utils
-        uri: http://utils:8080
-        predicates:
-        - Path=/api/utils/**
-      - id: skyxplore-data
-        uri: http://skyxplore-data:8080
-        predicates:
-        - Path=/api/skyxplore/data/**
-      - id: skyxplore-lobby
-        uri: http://skyxplore-lobby:8080
-        predicates:
-        - Path=/api/skyxplore/lobby/**
-      - id: skyxplore-game
-        uri: http://skyxplore-game:8080
-        predicates:
-        - Path=/api/skyxplore/game/**
-      - id: training
-        uri: http://training:8080
-        predicates:
-        - Path=/api/training/**
-      - id: community
-        uri: http://community:8080
-        predicates:
-        - Path=/api/community/**
-      - id: calendar
-        uri: http://calendar:8080
-        predicates:
-        - Path=/api/calendar/**
-      - id: storage
-        uri: http://storage:8080
-        predicates:
-        - Path=/api/storage/**
-      - id: villany-atesz
-        uri: http://villany-atesz:8080
-        predicates:
-        - Path=/api/villany-atesz/**
-      - id: elite-base
-        uri: http://elite-base:8080
-        predicates:
-        - Path=/api/elite-base/**
+          #MODULES
+          - id: user
+            uri: http://user:8080
+            predicates:
+            - Path=/api/user/**
+          - id: notebook
+            uri: http://notebook:8080
+            predicates:
+            - Path=/api/notebook/**
+          - id: admin-panel
+            uri: http://admin-panel:8080
+            predicates:
+            - Path=/api/admin-panel/**
+          - id: modules
+            uri: http://modules:8080
+            predicates:
+            - Path=/api/modules/**
+          - id: utils
+            uri: http://utils:8080
+            predicates:
+            - Path=/api/utils/**
+          - id: skyxplore-data
+            uri: http://skyxplore-data:8080
+            predicates:
+            - Path=/api/skyxplore/data/**
+          - id: skyxplore-lobby
+            uri: http://skyxplore-lobby:8080
+            predicates:
+            - Path=/api/skyxplore/lobby/**
+          - id: skyxplore-game
+            uri: http://skyxplore-game:8080
+            predicates:
+            - Path=/api/skyxplore/game/**
+          - id: training
+            uri: http://training:8080
+            predicates:
+            - Path=/api/training/**
+          - id: community
+            uri: http://community:8080
+            predicates:
+            - Path=/api/community/**
+          - id: calendar
+            uri: http://calendar:8080
+            predicates:
+            - Path=/api/calendar/**
+          - id: storage
+            uri: http://storage:8080
+            predicates:
+            - Path=/api/storage/**
+          - id: villany-atesz
+            uri: http://villany-atesz:8080
+            predicates:
+            - Path=/api/villany-atesz/**
+          - id: elite-base
+            uri: http://elite-base:8080
+            predicates:
+            - Path=/api/elite-base/**
 
-      #WS
-      - id: web-socket-admin-panel
-        uri: ws://admin-panel:8080
-        predicates:
-        - Path=/api/ws/admin-panel/**
-      - id: web-socket-skyxplore-lobby
-        uri: ws://skyxplore-lobby:8080
-        predicates:
-        - Path=/api/ws/skyxplore-lobby/**
-      - id: web-socket-skyxplore-data
-        uri: ws://skyxplore-data:8080
-        predicates:
-        - Path=/api/ws/skyxplore-data/**
-      - id: web-socket-skyxplore-game
-        uri: ws://skyxplore-game:8080
-        predicates:
-        - Path=/api/ws/skyxplore-game/**
+          #WS
+          - id: web-socket-admin-panel
+            uri: ws://admin-panel:8080
+            predicates:
+            - Path=/api/ws/admin-panel/**
+          - id: web-socket-skyxplore-lobby
+            uri: ws://skyxplore-lobby:8080
+            predicates:
+            - Path=/api/ws/skyxplore-lobby/**
+          - id: web-socket-skyxplore-data
+            uri: ws://skyxplore-data:8080
+            predicates:
+            - Path=/api/ws/skyxplore-data/**
+          - id: web-socket-skyxplore-game
+            uri: ws://skyxplore-game:8080
+            predicates:
+            - Path=/api/ws/skyxplore-game/**
 
 nonSessionExtendingUris:
 - pattern: /api/user/authentication/session
@@ -158,6 +160,10 @@ nonSessionExtendingUris:
   method: GET
 - pattern: /api/admin-panel/error-report
   method: GET
+
+delay:
+  filter:
+    enabled: false
 
 role:
   settings:

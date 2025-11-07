@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction;
 
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.minor_faction.StarSystemMinorFactionMapping;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.minor_faction.StarSystemMinorFactionMappingDao;
 import org.junit.jupiter.api.AfterEach;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -35,6 +37,9 @@ class MinorFactionOrphanedRecordCleanerTest {
     @Autowired
     private List<CrudRepository<?, ?>> repositories;
 
+    @MockBean
+    private ErrorReporterService errorReporterService;
+
     @AfterEach
     void clear() {
         repositories.forEach(CrudRepository::deleteAll);
@@ -56,7 +61,7 @@ class MinorFactionOrphanedRecordCleanerTest {
             .build();
         minorFactionDao.save(orphanedMinorFaction);
 
-        underTest.cleanupOrphanedRecords();
+        assertThat(underTest.cleanupOrphanedRecords()).isEqualTo(1);
 
         assertThat(minorFactionDao.findAll()).containsExactly(minorFaction);
     }

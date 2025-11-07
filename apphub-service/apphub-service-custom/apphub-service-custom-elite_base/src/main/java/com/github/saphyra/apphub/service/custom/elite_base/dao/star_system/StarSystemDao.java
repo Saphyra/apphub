@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_util.dao.CachedBufferedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.google.common.cache.Cache;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -57,7 +56,7 @@ public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSyste
     }
 
     public List<StarSystem> getByStarNameLike(String query) {
-        return converter.convertEntity(repository.getByStarNameIgnoreCaseContaining(query, PageRequest.of(0, properties.getStarSystemSuggestionListSize())));
+        return converter.convertEntity(repository.getByStarNameIgnoreCaseContaining(query));
     }
 
     public StarSystem findByIdValidated(UUID id) {

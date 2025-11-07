@@ -64,16 +64,14 @@ const CalendarLabelsPage = () => {
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
 
-                {hasValue(selectedLabel) &&
-                    <Events
-                        localizationHandler={localizationHandler}
-                        selectedLabel={selectedLabel}
-                        setDisplaySpinner={setDisplaySpinner}
-                        selectedEvent={selectedEvent}
-                        setSelectedEvent={changeSelectedEvent}
-                        refreshCounter={refreshCount}
-                    />
-                }
+                <Events
+                    localizationHandler={localizationHandler}
+                    selectedLabel={selectedLabel}
+                    setDisplaySpinner={setDisplaySpinner}
+                    selectedEvent={selectedEvent}
+                    setSelectedEvent={changeSelectedEvent}
+                    refreshCounter={refreshCount}
+                />
 
                 {hasValue(selectedEvent) &&
                     <OpenedEvent

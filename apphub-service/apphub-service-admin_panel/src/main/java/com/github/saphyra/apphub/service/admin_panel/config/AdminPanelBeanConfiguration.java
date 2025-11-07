@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.admin_panel.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
@@ -19,6 +18,7 @@ import com.github.saphyra.apphub.lib.web_socket.WebSocketConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @Import({

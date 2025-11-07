@@ -8,4 +8,6 @@ public interface Buffer {
     LocalDateTime getLastSynchronized();
 
     int getSize();
+
+    int getOrder();
 }

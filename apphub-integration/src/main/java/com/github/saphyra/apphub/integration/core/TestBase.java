@@ -4,16 +4,17 @@ import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverProvider;
 import com.github.saphyra.apphub.integration.core.exception.ExceptionConverter;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
+import com.github.saphyra.apphub.integration.core.testng.MethodCollectorSuiteListener;
+import com.github.saphyra.apphub.integration.core.testng.RetryAnalyzerAnnotatorSuiteListener;
+import com.github.saphyra.apphub.integration.core.testng.SkipDisabledTestsInterceptor;
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
-import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.testng.ITestContext;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -39,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 import static java.util.Objects.isNull;
 
 @Slf4j
-@Listeners(SkipDisabledTestsInterceptor.class)
+@Listeners({SkipDisabledTestsInterceptor.class, MethodCollectorSuiteListener.class, RetryAnalyzerAnnotatorSuiteListener.class})
 public abstract class TestBase {
     public static final ExecutorServiceBean EXECUTOR_SERVICE = new ExecutorServiceBean(Executors.newCachedThreadPool());
     public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper();
@@ -61,7 +62,7 @@ public abstract class TestBase {
     }
 
     @BeforeSuite(alwaysRun = true)
-    public void setUpSuite(ITestContext context) {
+    public void setUpSuite() {
         log.info("Thread count: {}", TestConfiguration.AVAILABLE_PERMITS);
         log.info("Disabled test groups: {}", TestConfiguration.DISABLED_TEST_GROUPS);
         log.info("Enabled test groups: {}", TestConfiguration.ENABLED_TEST_GROUPS);
@@ -76,9 +77,9 @@ public abstract class TestBase {
         log.info("Database connection cache enabled: {}", TestConfiguration.DATABASE_CONNECTION_CACHE_ENABLED);
         log.info("Namespace name: {}", TestConfiguration.NAMESPACE_NAME);
         log.info("Browser startup limit: {}", TestConfiguration.BROWSER_STARTUP_LIMIT);
+        log.info("Retry enabled: {}", TestConfiguration.RETRY_ENABLED);
 
         IntegrationServer.start();
-        StatusLogger.setTotalTestCount(context);
 
         //Checking if database is accessible
         // noinspection unused
@@ -98,16 +99,6 @@ public abstract class TestBase {
             System.exit(0);
         }
 
-        for (ITestNGMethod method : context.getAllTestMethods()) {
-            method.getXmlTest()
-                .getSuite()
-                .addListener(SkipDisabledTestsInterceptor.class.getName());
-
-            if (Boolean.parseBoolean(System.getProperty("retryEnabled"))) {
-                method.setRetryAnalyzerClass(RetryAnalyzerImpl.class);
-            }
-        }
-
         System.setProperty("testng.show.stack.frames", "true");
     }
 
@@ -121,13 +112,11 @@ public abstract class TestBase {
     }
 
     @AfterSuite(alwaysRun = true)
-    public void tearDownSuite(ITestContext context) {
+    public void tearDownSuite() {
         WebDriverProvider.stopDrivers();
         ConnectionProvider.shutdownCaches();
 
         StatusLogger.logTestStartOrder();
-
-        IntegrationServer.stop(context.getFailedTests().size() == 0 ? Constants.PASSED : Constants.FAILED);
     }
 
     @BeforeMethod(alwaysRun = true)

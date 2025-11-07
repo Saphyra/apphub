@@ -74,6 +74,14 @@ class EventControllerImplTest {
     }
 
     @Test
+    void getLabellessEvents() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(eventQueryService.getLabellessEvents(USER_ID)).willReturn(List.of(eventResponse));
+
+        assertThat(underTest.getLabellessEvents(accessTokenHeader)).containsExactly(eventResponse);
+    }
+
+    @Test
     void deleteEvent() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 

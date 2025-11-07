@@ -21,6 +21,8 @@ import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Ut
 import SelectedOccurrence from "./component/SelectedOccurrence";
 import useRefresh from "../../../common/hook/Refresh";
 import SelectedDate from "./component/SelectedDate";
+import useHasFocus from "../../../common/hook/UseHasFocus";
+import { useUpdateEffect } from "react-use";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
@@ -42,7 +44,19 @@ const CalendarPage = () => {
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
     const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
+
+    const [currentDate, setCurrentDate] = useState(LocalDate.now());
     const [refreshCounter, refresh] = useRefresh();
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            refresh();
+            if (!currentDate.equals(LocalDate.now())) {
+                setCurrentDate(LocalDate.now());
+                setReferenceDate(LocalDate.now());
+            }
+        }
+    }, [isInFocus]);
 
     return (
         <div id="calendar" className="main-page">

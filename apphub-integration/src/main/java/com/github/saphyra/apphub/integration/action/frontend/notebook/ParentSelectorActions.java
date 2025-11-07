@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -9,10 +10,10 @@ import java.util.stream.Stream;
 
 public class ParentSelectorActions {
     public static void selectParent(WebDriver driver, String parentTitle) {
-        getAvailableParents(driver)
-            .filter(webElement -> webElement.getText().equals(parentTitle))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("No parent available with title " + parentTitle))
+        AwaitilityWrapper.getSingleItemFromListWithWait(
+                () -> getAvailableParents(driver).toList(),
+                webElements -> webElements.stream().filter(element -> element.getText().equals(parentTitle)).findFirst()
+            )
             .click();
 
         SleepUtil.sleep(1000);

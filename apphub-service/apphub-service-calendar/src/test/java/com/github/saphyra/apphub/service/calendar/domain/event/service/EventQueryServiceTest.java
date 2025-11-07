@@ -59,10 +59,29 @@ class EventQueryServiceTest {
     }
 
     @Test
-    void getEvent() {
+    void getEvents() {
         given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
         given(eventMapper.toResponse(event)).willReturn(eventResponse);
 
         assertThat(underTest.getEvent(EVENT_ID)).isEqualTo(eventResponse);
+    }
+
+    @Test
+    void getLabellessEvents_hasLabel() {
+        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event, event));
+        given(eventLabelMappingService.getLabelIds(EVENT_ID)).willReturn(List.of(UUID.randomUUID()));
+        given(event.getEventId()).willReturn(EVENT_ID);
+
+        assertThat(underTest.getLabellessEvents(USER_ID)).isEmpty();
+    }
+
+    @Test
+    void getLabellessEvents_hasNoLabel() {
+        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event, event));
+        given(eventLabelMappingService.getLabelIds(EVENT_ID)).willReturn(List.of());
+        given(event.getEventId()).willReturn(EVENT_ID);
+        given(eventMapper.toResponse(event)).willReturn(eventResponse);
+
+        assertThat(underTest.getLabellessEvents(USER_ID)).contains(eventResponse);
     }
 }

@@ -28,7 +28,7 @@ const Label = ({
         <div>
             <div
                 onClick={() => setSelectedLabel((labelId))}
-                className={"calendar-labels-label button" + (selected ? " selected" : "")}
+                className={"calendar-labels-label dynamic button" + (selected ? " selected" : "")}
             >
                 <span className="calendar-labels-label-title">{label}</span>
 

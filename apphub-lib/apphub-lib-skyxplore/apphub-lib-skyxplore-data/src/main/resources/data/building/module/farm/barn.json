@@ -10,7 +10,8 @@
   "produces": [
     {
       "resourceDataId": "meat",
-      "requiredSkill": "FARMING"
+      "requiredSkill": "FARMING",
+      "amount": 1
     }
   ]
 }

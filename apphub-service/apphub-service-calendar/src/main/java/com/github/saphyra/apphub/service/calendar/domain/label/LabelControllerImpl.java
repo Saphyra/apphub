@@ -71,4 +71,11 @@ class LabelControllerImpl implements LabelController {
 
         return getLabels(accessTokenHeader);
     }
+
+    @Override
+    public List<LabelResponse> getLabelsOfEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to get labels of event {}.", accessTokenHeader.getUserId(), eventId);
+
+        return labelQueryService.getByEventId(eventId);
+    }
 }

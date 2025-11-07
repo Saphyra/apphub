@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./notebook.css";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import localizationData from "./notebook_page_localization.json";
@@ -11,12 +11,14 @@ import Button from "../../../common/component/input/Button";
 import Constants from "../../../common/js/Constants";
 import OpenedListItem from "./notebook_modules/OpenedListItem";
 import OpenedPageType from "../common/OpenedPageType";
-import UserSettings from "../common/UserSettings";
+import UserSettings, { USER_SETTING_CATEGORY_NOTEBOOK } from "../common/UserSettings";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
 import PinnedItems from "./notebook_modules/pin/PinnedItems";
-import { throwException } from "../../../common/js/Utils";
+import { hasValue, throwException } from "../../../common/js/Utils";
 import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "../../../common/js/dao/endpoints/UserEndpoints";
+import Optional from "../../../common/js/collection/Optional";
+import { NOTEBOOK_GET_LIST_ITEM } from "../../../common/js/dao/endpoints/NotebookEndpoints";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -47,10 +49,18 @@ const NotebookPage = () => {
 
     const loadUserSettings = () => {
         const fetch = async () => {
-            const response = await GET_USER_SETTINGS.createRequest(null, { category: "notebook" })
+            const response = await GET_USER_SETTINGS.createRequest(null, { category: USER_SETTING_CATEGORY_NOTEBOOK })
                 .send();
 
-            setSettingsFromResponse(response);
+            const parsed = setSettingsFromResponse(response);
+
+            const defaultListItemId = parsed[UserSettings.DEFAULT_LIST_ITEM_ID];
+            if (!sessionStorage.openedListItem && hasValue(defaultListItemId)) {
+                const listItem = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: defaultListItemId })
+                    .send();
+
+                setOpenedListItemD({ id: listItem.id, type: listItem.type });
+            }
         }
         fetch();
     }
@@ -59,15 +69,19 @@ const NotebookPage = () => {
         const settings = {
         }
 
-
         settings[UserSettings.SHOW_ARCHIVED] = response[UserSettings.SHOW_ARCHIVED] === "true";
+        settings[UserSettings.DEFAULT_LIST_ITEM_ID] = new Optional(response[UserSettings.DEFAULT_LIST_ITEM_ID])
+            .filter(v => v !== "")
+            .orElse(null);
 
         setUserSettings(settings);
+
+        return settings;
     }
 
     const changeUserSettings = async (key, value) => {
         const payload = {
-            category: "notebook",
+            category: USER_SETTING_CATEGORY_NOTEBOOK,
             key: key,
             value: value
         };

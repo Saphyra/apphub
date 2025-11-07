@@ -1,5 +1,8 @@
-package com.github.saphyra.apphub.integration.core;
+package com.github.saphyra.apphub.integration.core.testng;
 
+import com.github.saphyra.apphub.integration.core.TestBase;
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
+import com.github.saphyra.apphub.integration.core.TestUtils;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.IMethodInstance;
@@ -13,15 +16,13 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static com.github.saphyra.apphub.integration.core.TestBase.isEnabled;
-
 @Slf4j
 public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
     @Override
     public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestContext context) {
         Map<String, Long> durations = new HashMap<>();
         List<IMethodInstance> methodsToRun = methods.stream()
-            .filter(iMethodInstance -> isEnabled(iMethodInstance.getMethod()))
+            .filter(iMethodInstance -> TestBase.isEnabled(iMethodInstance.getMethod()))
             .toList();
         if (TestConfiguration.INTEGRATION_SERVER_ENABLED) {
             durations = methodsToRun.stream()

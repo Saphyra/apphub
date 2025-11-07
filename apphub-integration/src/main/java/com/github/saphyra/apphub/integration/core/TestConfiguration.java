@@ -23,6 +23,7 @@ public class TestConfiguration {
         .filter(s -> !isBlank(s))
         .orElse("be,fe")
         .split(","));
+    public static final boolean RETRY_ENABLED = Boolean.parseBoolean(System.getProperty("retryEnabled", "false"));
 
     //Integration server
     public static final boolean INTEGRATION_SERVER_ENABLED = Boolean.parseBoolean(System.getProperty("integrationServerEnabled", "false"));

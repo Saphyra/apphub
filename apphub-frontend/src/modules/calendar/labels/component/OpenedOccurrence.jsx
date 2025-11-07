@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE, CALENDAR_LABELS_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../common/js/Utils";
 import LocalTime from "../../../../common/js/date/LocalTime";
 import Textarea from "../../../../common/component/input/Textarea";
@@ -91,7 +91,7 @@ const OpenedOccurrence = ({ occurrenceId, localizationHandler, setConfirmationDi
                 }
 
                 <Button
-                    onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId })}
+                    onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId }, { backUrl: CALENDAR_LABELS_PAGE })}
                     label={localizationHandler.get("edit-occurrence")}
                 />
 

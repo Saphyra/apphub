@@ -18,7 +18,6 @@ import com.github.saphyra.apphub.integration.structure.view.notebook.table.colum
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.LinkTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.NumberTableColumn;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.Arrays;
@@ -50,10 +49,11 @@ public class NotebookUtils {
         }
     }
 
-    public static void newLink(int serverPort, WebDriver driver, String title, String url) {
+    public static void newLink(int serverPort, WebDriver driver, String title, String url, String... parents) {
         NotebookActions.newListItem(serverPort, driver);
         NotebookNewListItemActions.selectListItemType(serverPort, driver, ListItemType.LINK);
 
+        selectParent(driver, parents);
         NewLinkActions.fillTitle(driver, title);
         NewLinkActions.fillUrl(driver, url);
         NewLinkActions.submit(driver);

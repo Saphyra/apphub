@@ -17,7 +17,8 @@
       "batchTicks": 10,
       "fuelLastsForTicks": 600,
       "fuelStorage": "10",
-      "fuel": "coal"
+      "fuel": "coal",
+      "humanPowered": false
     },
     {
       "id": "burn_logs",
@@ -25,7 +26,8 @@
       "batchTicks": 10,
       "fuelLastsForTicks": 300,
       "fuelStorage": "10",
-      "fuel": "log"
+      "fuel": "log",
+      "humanPowered": false
     },
     {
       "id": "burn_oil",
@@ -33,7 +35,8 @@
       "batchTicks": 10,
       "fuelLastsForTicks": 600,
       "fuelStorage": "10",
-      "fuel": "oil"
+      "fuel": "oil",
+      "humanPowered": false
     }
   ]
 }

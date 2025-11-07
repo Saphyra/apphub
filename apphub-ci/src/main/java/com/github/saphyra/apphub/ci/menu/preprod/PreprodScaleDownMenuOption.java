@@ -22,7 +22,7 @@ class PreprodScaleDownMenuOption implements MenuOption {
 
     @Override
     public MenuOrder getOrder() {
-        return MenuOrderEnum.DELETE_NAMESPACE;
+        return MenuOrderEnum.SCALE_DOWN;
     }
 
     @Override

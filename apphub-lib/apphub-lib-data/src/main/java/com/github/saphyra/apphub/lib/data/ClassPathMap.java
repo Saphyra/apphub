@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.data;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.InputStream;
 import java.util.HashMap;

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ class CommodityDeleteBufferItTest {
 
     @Autowired
     private CommodityRepository commodityRepository;
+
+    @AfterEach
+    void clear() {
+        commodityRepository.deleteAll();
+    }
 
     @Test
     void synchronize() {

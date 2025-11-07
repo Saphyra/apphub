@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.lib.common_util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,56 +24,32 @@ public class ObjectMapperWrapper {
     }
 
     public <T> T readValue(InputStream in, TypeReference<T> type) {
-        try {
-            return objectMapper.readValue(in, type);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.readValue(in, type);
     }
 
     public <T> T readValue(String source, Class<T> type) {
-        try {
-            return objectMapper.readValue(source, type);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.readValue(source, type);
     }
 
     public <T> T readValue(String source, TypeReference<T> type) {
-        try {
-            return objectMapper.readValue(source, type);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.readValue(source, type);
     }
 
     public <T> List<T> readArrayValue(String source, Class<T[]> type) {
-        try {
-            return new ArrayList<>(Arrays.asList(objectMapper.readValue(source, type)));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return new ArrayList<>(Arrays.asList(objectMapper.readValue(source, type)));
     }
 
     public String writeValueAsString(Object value) {
-        try {
-            return objectMapper.writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.writeValueAsString(value);
     }
 
     public String writeValueAsPrettyString(Object value) {
-        try {
-            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
     }
 
     public <V> V readValue(URL url, Class<V> clazz) {
         try {
-            return objectMapper.readValue(url, clazz);
+            return objectMapper.readValue(url.openStream(), clazz);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

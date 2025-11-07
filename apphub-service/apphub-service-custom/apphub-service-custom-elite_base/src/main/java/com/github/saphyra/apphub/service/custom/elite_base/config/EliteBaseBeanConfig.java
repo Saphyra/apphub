@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
@@ -10,7 +8,6 @@ import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.DefaultExecutorServiceBeanConfig;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
-import com.github.saphyra.apphub.lib.concurrency.FixedExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
 import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
@@ -26,6 +23,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableLiquibase
@@ -53,10 +51,7 @@ class EliteBaseBeanConfig {
 
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
-        objectMapper.findAndRegisterModules();
-        return new ObjectMapperWrapper(objectMapper);
+        return new ObjectMapperWrapper(new ObjectMapper());
     }
 
     @Bean

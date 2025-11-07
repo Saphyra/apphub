@@ -47,7 +47,7 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, registrationParameters);
         ModulesPageActions.logout(getServerPort(), driver);
 
-        IndexPageActions.submitLogin(getServerPort(), driver, LoginParameters.builder().userIdentifier(registrationParameters.getUsername()).password(registrationParameters.getPassword()).build());
+        IndexPageActions.login(getServerPort(), driver, LoginParameters.builder().userIdentifier(registrationParameters.getUsername()).password(registrationParameters.getPassword()).build());
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
@@ -55,28 +55,28 @@ public class LoginTest extends SeleniumTest {
     }
 
     private static void emptyEmail(WebDriver driver) {
-        IndexPageActions.submitLogin(getServerPort(), driver, emptyEmail());
+        IndexPageActions.login(getServerPort(), driver, emptyEmail());
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);
     }
 
     private static void emptyPassword(WebDriver driver) {
-        IndexPageActions.submitLogin(getServerPort(), driver, emptyPassword());
+        IndexPageActions.login(getServerPort(), driver, emptyPassword());
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_EMPTY_CREDENTIALS);
     }
 
     private static void incorrectEmail(WebDriver driver, RegistrationParameters registrationParameters) {
-        IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
+        IndexPageActions.login(getServerPort(), driver, new LoginParameters(RegistrationParameters.validParameters().getEmail(), registrationParameters.getPassword()));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 
     private static void incorrectPassword(WebDriver driver, RegistrationParameters registrationParameters) {
-        IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+        IndexPageActions.login(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 
     private static LoginParameters successfulLogin(WebDriver driver, RegistrationParameters registrationParameters) {
         LoginParameters loginParameters = LoginParameters.fromRegistrationParameters(registrationParameters);
-        IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
+        IndexPageActions.login(getServerPort(), driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
@@ -90,19 +90,19 @@ public class LoginTest extends SeleniumTest {
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
-                IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+                IndexPageActions.login(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
                 ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
             });
 
-        IndexPageActions.submitLogin(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
+        IndexPageActions.login(getServerPort(), driver, new LoginParameters(registrationParameters.getEmail(), INCORRECT_PASSWORD));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
+        IndexPageActions.login(getServerPort(), driver, loginParameters);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
 
-        IndexPageActions.submitLogin(getServerPort(), driver, loginParameters);
+        IndexPageActions.login(getServerPort(), driver, loginParameters);
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))

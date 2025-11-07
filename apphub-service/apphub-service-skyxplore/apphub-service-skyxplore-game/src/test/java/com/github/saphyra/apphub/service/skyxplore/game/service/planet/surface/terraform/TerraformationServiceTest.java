@@ -22,6 +22,8 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planets;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.processes.Processes;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResource;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.stored_resource.StoredResources;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surfaces;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
@@ -135,6 +137,12 @@ public class TerraformationServiceTest {
     @Mock
     private Planet planet;
 
+    @Mock
+    private StoredResources storedResources;
+
+    @Mock
+    private StoredResource storedResource;
+
     @BeforeEach
     void setUp() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -181,6 +189,21 @@ public class TerraformationServiceTest {
     }
 
     @Test
+    void leftoverResources() {
+        given(gameData.getConstructions()).willReturn(constructions);
+        given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getConstructionAreas()).willReturn(constructionAreas);
+        given(constructionAreas.findBySurfaceId(SURFACE_ID)).willReturn(Optional.empty());
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of(storedResource));
+        given(storedResource.getAmount()).willReturn(5);
+
+        Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
+
+        ExceptionValidator.validateForbiddenOperation(ex);
+    }
+
+    @Test
     public void surfaceTypeCannotBeTerraformed() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByExternalReference(SURFACE_ID)).willReturn(Optional.empty());
@@ -190,6 +213,8 @@ public class TerraformationServiceTest {
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.empty());
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of());
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
 
@@ -206,6 +231,8 @@ public class TerraformationServiceTest {
         given(terraformingPossibilitiesService.getOptional(SurfaceType.DESERT)).willReturn(Optional.of(new TerraformingPossibilities()));
         given(gameData.getSurfaces()).willReturn(surfaces);
         given(surfaces.findByIdValidated(SURFACE_ID)).willReturn(surface);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of());
 
         Throwable ex = catchThrowable(() -> underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name()));
 
@@ -236,6 +263,8 @@ public class TerraformationServiceTest {
         given(terraformationProcess.toModel()).willReturn(processModel);
         given(constructionConverter.toModel(GAME_ID, terraformation)).willReturn(constructionModel);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(gameData.getStoredResources()).willReturn(storedResources);
+        given(storedResources.getByContainerId(SURFACE_ID)).willReturn(List.of());
 
         underTest.terraform(USER_ID, PLANET_ID, SURFACE_ID, SurfaceType.CONCRETE.name());
 

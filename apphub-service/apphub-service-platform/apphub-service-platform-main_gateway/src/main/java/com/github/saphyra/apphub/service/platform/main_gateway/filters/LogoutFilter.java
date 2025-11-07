@@ -6,10 +6,10 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenIdConverter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpMethod;
@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class LogoutFilter implements GlobalFilter, Ordered {
     private static final Map<String, HttpMethod> ENDPOINT_MAP = new HashMap<>() {{
@@ -37,6 +36,13 @@ public class LogoutFilter implements GlobalFilter, Ordered {
     private final ErrorReporterService errorReporterService;
     private final AccessTokenCache accessTokenCache;
     private final AccessTokenIdConverter accessTokenIdConverter;
+
+    public LogoutFilter(AntPathMatcher antPathMatcher, @Lazy ErrorReporterService errorReporterService, @Lazy AccessTokenCache accessTokenCache, @Lazy AccessTokenIdConverter accessTokenIdConverter) {
+        this.antPathMatcher = antPathMatcher;
+        this.errorReporterService = errorReporterService;
+        this.accessTokenCache = accessTokenCache;
+        this.accessTokenIdConverter = accessTokenIdConverter;
+    }
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

@@ -15,7 +15,8 @@
   "produces": [
     {
       "resourceDataId": "water",
-      "requiredSkill": "MINING"
+      "requiredSkill": "MINING",
+      "amount": 1
     }
   ]
 }

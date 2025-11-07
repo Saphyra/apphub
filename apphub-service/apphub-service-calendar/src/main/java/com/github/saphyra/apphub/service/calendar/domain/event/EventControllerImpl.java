@@ -48,6 +48,13 @@ class EventControllerImpl implements EventController {
     }
 
     @Override
+    public List<EventResponse> getLabellessEvents(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know their labelless events", accessTokenHeader.getUserId());
+
+        return eventQueryService.getLabellessEvents(accessTokenHeader.getUserId());
+    }
+
+    @Override
     public EventResponse getEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to get event {}", accessTokenHeader.getUserId(), eventId);
 

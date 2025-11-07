@@ -1,5 +1,9 @@
 defaultLocale: hu
 
+delay:
+  filter:
+    enabled: true
+
 endpoint:
   whitelisting:
     whiteListedEndpoints:

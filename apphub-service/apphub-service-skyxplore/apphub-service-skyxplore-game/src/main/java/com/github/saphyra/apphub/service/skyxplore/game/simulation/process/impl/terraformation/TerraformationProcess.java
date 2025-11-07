@@ -99,7 +99,7 @@ public class TerraformationProcess implements Process {
         TerraformationProcessConditions conditions = applicationContextProxy.getBean(TerraformationProcessConditions.class);
         GameData gameData = game.getData();
 
-        if (!conditions.resourcesAvailable(gameData, terraformationId)) {
+        if (!conditions.hasWorkProcesses(gameData, processId) && !conditions.resourcesAvailable(gameData, terraformationId)) {
             log.info("Waiting for resources...");
             return;
         }

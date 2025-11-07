@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.service.condition;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.DayOfWeek;
 import java.util.List;

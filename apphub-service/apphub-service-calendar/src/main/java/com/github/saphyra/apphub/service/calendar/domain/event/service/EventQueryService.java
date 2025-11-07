@@ -29,6 +29,14 @@ public class EventQueryService {
             .collect(Collectors.toList());
     }
 
+    public List<EventResponse> getLabellessEvents(UUID userId) {
+        return eventDao.getByUserId(userId)
+            .stream()
+            .filter(event -> eventLabelMappingService.getLabelIds(event.getEventId()).isEmpty())
+            .map(eventMapper::toResponse)
+            .collect(Collectors.toList());
+    }
+
     public EventResponse getEvent(UUID eventId) {
         return eventMapper.toResponse(eventDao.findByIdValidated(eventId));
     }

@@ -24,6 +24,7 @@ import org.testng.annotations.Test;
 import java.time.LocalDate;
 import java.util.List;
 
+import static com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory.NEW_TITLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarLabelsTest extends SeleniumTest {
@@ -87,10 +88,46 @@ public class CalendarLabelsTest extends SeleniumTest {
 
         //Open occurrence
         WebElement occurrence = AwaitilityWrapper.getListWithWait(() -> CalendarLabelsPageActions.getOpenedEventOccurrences(driver), occurrences -> !occurrences.isEmpty())
-            .get(0);
+            .getFirst();
         LocalDate occurrenceDate = LocalDate.parse(occurrence.getText());
         occurrence.click();
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(driver)).isEqualTo(occurrenceDate));
+    }
+
+    @Test(groups = {"fe", "calendar"})
+    public void getLabelsWithoutLabel(){
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(getServerPort(), driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
+        CommonUtils.enableTestMode(driver);
+
+        //Event with label
+        CalendarIndexPageActions.openCreateEventPage(driver);
+        CreateEventParameters withLabelParameters = CreateEventParameters.valid(RepetitionType.EVERY_X_DAYS)
+            .toBuilder()
+            .newLabels(List.of(LABEL_1))
+            .build();
+        CalendarEventPageActions.fillForm(driver, withLabelParameters);
+        CalendarEventPageActions.create(driver);
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
+
+        //Event without label
+        CalendarIndexPageActions.openCreateEventPage(driver);
+        CreateEventParameters withoutLabelParamters = CreateEventParameters.valid(RepetitionType.EVERY_X_DAYS)
+            .toBuilder()
+            .title(NEW_TITLE)
+            .build();
+        CalendarEventPageActions.fillForm(driver, withoutLabelParamters);
+        CalendarEventPageActions.create(driver);
+        ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
+
+        //Verify filter
+        CalendarIndexPageActions.toLabelsPage(driver);
+        CalendarLabelsPageActions.selectNoLabelFilter(driver);
+
+        AwaitilityWrapper.awaitAssert(() -> CustomAssertions.singleListAssertThat(CalendarLabelsPageActions.getEvents(driver)).returns(NEW_TITLE, WebElement::getText));
     }
 }

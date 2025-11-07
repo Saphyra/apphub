@@ -78,8 +78,21 @@ const Stream = class {
     }
 
     join(delimiter = "") {
-        return this.toList()
-            .join(delimiter);
+        return this.items.join(delimiter);
+    }
+
+    joinToArray(delimiter) {
+        if (this.items.length <= 1) {
+            return this.items;
+        };
+
+        const d = typeof delimiter === "function" ? delimiter : () => delimiter;
+
+        const r = this.items.flatMap((item, index) =>
+            index === 0 ? [item] : [d(), item]
+        );
+
+        return r;
     }
 
     last() {

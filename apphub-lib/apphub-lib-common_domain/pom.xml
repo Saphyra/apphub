@@ -30,7 +30,13 @@
         <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
-            <version>${versions.jakartaValidationApi}</version>
+            <version>${versions.jakarta-validation-api}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${versions.jackson-annotations}</version>
         </dependency>
     </dependencies>
 </project>

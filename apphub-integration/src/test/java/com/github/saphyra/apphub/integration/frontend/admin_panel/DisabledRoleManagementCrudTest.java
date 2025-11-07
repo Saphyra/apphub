@@ -72,7 +72,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
@@ -116,7 +116,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             .assertTrue("User is not logged out.");
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.submitLogin(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
+        IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))
             .assertTrue("Disabled role management page is not opened.");

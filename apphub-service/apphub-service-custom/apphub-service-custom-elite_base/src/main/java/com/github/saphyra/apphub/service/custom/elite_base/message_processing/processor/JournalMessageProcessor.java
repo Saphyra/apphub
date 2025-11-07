@@ -67,7 +67,7 @@ class JournalMessageProcessor implements MessageProcessor {
     public void processMessage(EdMessage message) {
         String event = objectMapperWrapper.readTree(message.getMessage())
             .get("event")
-            .asText();
+            .asString();
 
         performanceReporter.wrap(
             () -> {

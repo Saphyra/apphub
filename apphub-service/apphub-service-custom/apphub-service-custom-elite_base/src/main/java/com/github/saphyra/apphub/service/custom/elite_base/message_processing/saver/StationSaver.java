@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
@@ -33,7 +32,6 @@ public class StationSaver {
     private final StationDao stationDao;
     private final StationFactory stationFactory;
     private final StationEconomyFactory stationEconomyFactory;
-    private final IdGenerator idGenerator;
     private final MinorFactionSaver minorFactionSaver;
 
     public void save(LocalDateTime timestamp, UUID starSystemId, UUID bodyId, String stationName, Long marketId, Allegiance allegiance, EconomyEnum economy, String[] stationServices, Economy[] economies) {
@@ -67,37 +65,39 @@ public class StationSaver {
         List<StationServiceEnum> parsedServices = Optional.ofNullable(stationServices)
             .map(ss -> Arrays.stream(ss).map(StationServiceEnum::parse).toList())
             .orElse(null);
-        UUID stationId = idGenerator.randomUuid();
-        List<StationEconomy> parsedEconomies = Optional.ofNullable(economies)
-            .map(es -> Arrays.stream(es).map(e -> stationEconomyFactory.create(stationId, e)).toList())
-            .orElse(null);
         UUID controllingFactionId = Optional.ofNullable(controllingFactionName)
             .map(s -> minorFactionSaver.save(timestamp, controllingFactionName, controllingFactionState))
             .map(MinorFaction::getId)
             .orElse(null);
 
-        Station station = stationDao.findByMarketId(marketId)
-            .orElseGet(() -> {
-                Station created = stationFactory.create(
-                    stationId,
-                    timestamp,
-                    starSystemId,
-                    bodyId,
-                    stationName,
-                    stationType,
-                    marketId,
-                    allegiance,
-                    economy,
-                    parsedServices,
-                    parsedEconomies,
-                    controllingFactionId
-                );
-                log.debug("Saving new {}", created);
-                stationDao.save(created);
-                return created;
-            });
+        Optional<Station> maybeExistingStation = stationDao.findByMarketId(marketId);
+        Station station;
+        List<StationEconomy> parsedEconomies;
+        if (maybeExistingStation.isPresent()) {
+            station = maybeExistingStation.get();
+            UUID stationId = station.getId();
+            parsedEconomies = Optional.ofNullable(economies)
+                .map(es -> Arrays.stream(es).map(e -> stationEconomyFactory.create(stationId, e)).toList())
+                .orElse(null);
 
-        updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
+            updateFields(timestamp, station, bodyId, allegiance, economy, parsedServices, parsedEconomies, stationType, controllingFactionId, marketId, starSystemId);
+        } else {
+            station = stationFactory.create(
+                timestamp,
+                starSystemId,
+                bodyId,
+                stationName,
+                stationType,
+                marketId,
+                allegiance,
+                economy,
+                parsedServices,
+                Optional.ofNullable(economies).map(Arrays::asList).orElse(null),
+                controllingFactionId
+            );
+            log.debug("Saving new {}", station);
+            stationDao.save(station);
+        }
 
         log.debug("Saved station {}", stationName);
 

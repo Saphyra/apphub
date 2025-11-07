@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
@@ -28,6 +26,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -90,7 +89,6 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     ObjectMapperWrapper objectMapperWrapper() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return new ObjectMapperWrapper(objectMapper);
     }
 }

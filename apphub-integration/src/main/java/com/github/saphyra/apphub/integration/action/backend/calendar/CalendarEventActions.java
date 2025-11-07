@@ -92,4 +92,17 @@ public class CalendarEventActions {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENTS, Map.of(), Map.of("labelId", labelId)));
     }
+
+    public static Response getGetLabellessEventsResponse(int serverPort, UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABELLESS_EVENTS));
+    }
+
+    public static List<EventResponse> getEventsWithoutLabel(int serverPort, UUID accessTokenId) {
+        Response response = getGetLabellessEventsResponse(serverPort, accessTokenId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(EventResponse[].class));
+    }
 }

@@ -115,5 +115,10 @@ class AbstractBufferTest {
         protected void doSynchronize(Collection<String> bufferCopy) {
             doSynchronize.accept(bufferCopy);
         }
+
+        @Override
+        public int getOrder() {
+            return 0;
+        }
     }
 }

@@ -47,7 +47,6 @@ public class CalendarEditEventTest extends SeleniumTest {
         CalendarEventPageActions.save(driver);
         CalendarEventPageActions.confirmSave(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_SAVED);
-        CalendarEventPageActions.backFromEdit(driver);
 
         CalendarIndexPageActions.setReferenceDate(driver, updatedEvent.getStartDate());
         AwaitilityWrapper.awaitAssert(() -> {

@@ -17,7 +17,8 @@
       "batchTicks": 10,
       "fuelLastsForTicks": 1200,
       "fuelStorage": 10,
-      "fuel": "fissile_material"
+      "fuel": "fissile_material",
+      "humanPowered": false
     }
   ]
 }

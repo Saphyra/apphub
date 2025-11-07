@@ -62,5 +62,21 @@
     "event-saved": {
         "en": "Event saved.",
         "hu": "Esemény mentve."
+    },
+    "create-occurrence": {
+        "en": "Create occurrence",
+        "hu": "Előfordulás létrehozása"
+    },
+    "new-occurrence-date": {
+        "en": "New occurrence date",
+        "hu": "Új előfordulás dátuma"
+    },
+    "no-date-selected": {
+        "en": "No date selected.",
+        "hu": "Nincs dátum kiválasztva."
+    },
+    "occurrence-created": {
+        "en": "Occurrence created.",
+        "hu": "Előfordulás létrehozva."
     }
 }

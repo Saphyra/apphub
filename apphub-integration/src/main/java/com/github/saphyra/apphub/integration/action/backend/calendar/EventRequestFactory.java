@@ -12,7 +12,7 @@ import java.util.List;
 public class EventRequestFactory {
     public static final Integer DEFAULT_REPEAT_FOR_DAYS = 1;
     public static final int DEFAULT_FUTURE_DAYS = 5;
-    public static final LocalDate DEFAULT_START_DATE = LocalDate.now().plusMonths(1).withDayOfMonth(1);
+    public static final LocalDate DEFAULT_START_DATE = LocalDate.now().plusMonths(2).withDayOfMonth(1);
     public static final String DEFAULT_TITLE = "default-title";
     public static final String DEFAULT_CONTENT = "default-content";
     public static final LocalTime DEFAULT_TIME = LocalTime.of(12, 0);

@@ -32,7 +32,7 @@ public class RemindOneTimeEventTest extends BackEndTest {
     }
 
     private void edit(UUID accessTokenId, UUID eventId) {
-        int newRemindMeBeforeDays = EventRequestFactory.DEFAULT_FUTURE_DAYS + 1;
+        int newRemindMeBeforeDays = EventRequestFactory.DEFAULT_FUTURE_DAYS - 1;
 
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
@@ -43,7 +43,7 @@ public class RemindOneTimeEventTest extends BackEndTest {
 
         assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRemindMeBeforeDays()).isEqualTo(newRemindMeBeforeDays);
 
-        Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(getServerPort(), accessTokenId, LocalDate.now(), EventRequestFactory.DEFAULT_START_DATE)
+        Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(getServerPort(), accessTokenId, LocalDate.now(), EventRequestFactory.DEFAULT_START_DATE.plusDays(10))
             .stream()
             .collect(Collectors.toMap(OccurrenceResponse::getDate, o -> o));
 

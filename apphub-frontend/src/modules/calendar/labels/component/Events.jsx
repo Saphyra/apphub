@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_GET_EVENTS, CALENDAR_GET_LABEL } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_GET_EVENTS, CALENDAR_GET_LABEL, CALENDAR_GET_LABELLESS_EVENTS } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../common/js/Utils";
 import Stream from "../../../../common/js/collection/Stream";
 import Event from "./Event";
@@ -14,12 +14,21 @@ const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selecte
         mapper: setEvents,
         setDisplaySpinner: setDisplaySpinner,
         listener: [selectedLabel, refreshCounter],
+        condition: () => hasValue(selectedLabel)
     });
     useLoader({
         request: CALENDAR_GET_LABEL.createRequest(null, { labelId: selectedLabel }),
         mapper: setLabel,
         setDisplaySpinner: setDisplaySpinner,
         listener: [selectedLabel],
+        condition: () => hasValue(selectedLabel)
+    });
+    useLoader({
+        request: CALENDAR_GET_LABELLESS_EVENTS.createRequest(),
+        mapper: setEvents,
+        setDisplaySpinner: setDisplaySpinner,
+        listener: [selectedLabel, refreshCounter],
+        condition: () => !hasValue(selectedLabel)
     });
 
     return (
@@ -27,6 +36,12 @@ const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selecte
             {hasValue(label) &&
                 <div id="calendar-labels-events-title">
                     {localizationHandler.get("events-of-label", { label: label.label })}
+                </div>
+            }
+
+            {!hasValue(label) &&
+                <div id="calendar-labels-events-title">
+                    {localizationHandler.get("events-without-label")}
                 </div>
             }
 

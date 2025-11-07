@@ -10,7 +10,8 @@
   "produces": [
     {
       "resourceDataId": "energy_cell",
-      "requiredSkill": "ENGINEERING"
+      "requiredSkill": "ENGINEERING",
+      "amount": 1
     }
   ]
 }

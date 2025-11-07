@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -37,6 +38,9 @@ public class EventWithLabelTest extends BackEndTest {
             .returns(EVENT_WITH_LABEL_TITLE, EventResponse::getTitle)
             .returns(List.of(labelId1), EventResponse::getLabels);
 
+        CustomAssertions.singleListAssertThat(CalendarLabelActions.getLabelsOfEvent(getServerPort(), accessTokenId, eventWithLabel))
+            .returns(LABEL_1, LabelResponse::getLabel);
+
         editEvent(accessTokenId, eventWithLabel, List.of(labelId2));
 
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId, labelId1)).isEmpty();
@@ -51,6 +55,21 @@ public class EventWithLabelTest extends BackEndTest {
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId, labelId1)).isEmpty();
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId, labelId2)).isEmpty();
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId)).hasSize(2);
+    }
+
+    @Test(groups = {"be", "calendar"})
+    public void getEventsWithoutLabel(){
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+
+        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessTokenId, LABEL_1);
+
+        createEvent(accessTokenId, EVENT_WITH_LABEL_TITLE, List.of(labelId));
+        UUID eventWithoutLabel = createEvent(accessTokenId, EVENT_WITHOUT_LABEL_TITLE, List.of());
+
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsWithoutLabel(getServerPort(), accessTokenId))
+            .returns(eventWithoutLabel, EventResponse::getEventId)
+            .returns(EVENT_WITHOUT_LABEL_TITLE, EventResponse::getTitle);
     }
 
     private void editEvent(UUID accessTokenId, UUID eventWithLabel, List<UUID> labelIds) {

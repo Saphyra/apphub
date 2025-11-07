@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -76,7 +75,6 @@ public class StorageControllerImplTest {
     }
 
     @Test
-    @Disabled
     public void uploadFile() throws IOException {
         given(multipartFile.getSize()).willReturn(SIZE);
         given(multipartFile.getInputStream()).willReturn(inputStream);

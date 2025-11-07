@@ -10,29 +10,30 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>17</maven.compiler.target>
-        <maven.compiler.source>17</maven.compiler.source>
+        <java.version>25</java.version>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
 
         <!-- Platform Versions -->
-        <versions.maven-surefire-plugin>3.0.0-M8</versions.maven-surefire-plugin>
-        <versions.postgresql-connector>42.5.1</versions.postgresql-connector>
+        <versions.maven-surefire-plugin>3.5.4</versions.maven-surefire-plugin>
+        <versions.postgresql-connector>42.7.8</versions.postgresql-connector>
 
         <!-- Lib Versions -->
-        <versions.assertj-core>3.24.1</versions.assertj-core>
-        <versions.jackson-datatype>2.14.1</versions.jackson-datatype>
-        <versions.rest-assured>5.3.0</versions.rest-assured>
-        <versions.selenium>4.36.0</versions.selenium>
-        <versions.testng>7.7.1</versions.testng>
-        <versions.logback>1.2.3</versions.logback>
-        <versions.awaitility>4.2.0</versions.awaitility>
-        <versions.java-websocket>1.5.3</versions.java-websocket>
-        <versions.guava>31.1-jre</versions.guava>
-        <versions.apache-commons-pool>2.9.0</versions.apache-commons-pool>
-        <versions.gson>2.10.1</versions.gson>
+        <versions.assertj-core>3.27.6</versions.assertj-core>
+        <versions.jackson-datatype>2.20.1</versions.jackson-datatype>
+        <versions.rest-assured>5.5.6</versions.rest-assured>
+        <versions.selenium>4.38.0</versions.selenium>
+        <versions.testng>7.11.0</versions.testng>
+        <versions.logback-classic>1.5.20</versions.logback-classic>
+        <versions.awaitility>4.3.0</versions.awaitility>
+        <versions.java-websocket>1.6.0</versions.java-websocket>
+        <versions.guava>33.5.0-jre</versions.guava>
+        <versions.apache-commons-pool>2.12.1</versions.apache-commons-pool>
+        <versions.gson>2.13.2</versions.gson>
 
         <!-- Plugin Versions -->
-        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
-        <versions.lombok>1.18.24</versions.lombok>
+        <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
+        <versions.lombok>1.18.42</versions.lombok>
         <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
     </properties>
 
@@ -59,7 +60,7 @@
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${versions.logback}</version>
+            <version>${versions.logback-classic}</version>
         </dependency>
 
         <dependency>
@@ -137,7 +138,22 @@
                 <version>${versions.maven-surefire-plugin}</version>
                 <configuration>
                     <parallel>methods</parallel>
+                    <!--suppress MavenModelInspection -->
                     <threadCount>${threadCount}</threadCount>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${versions.maven-compiler-plugin}</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${versions.lombok}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
         </plugins>

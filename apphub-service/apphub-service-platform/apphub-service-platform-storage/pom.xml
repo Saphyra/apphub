@@ -18,16 +18,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>6.0.4</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
-            <version>3.6</version>
+            <version>${versions.commons-net}</version>
         </dependency>
 
         <dependency>
@@ -119,8 +112,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${versions.maven-compiler-plugin}</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

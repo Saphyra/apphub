@@ -13,6 +13,7 @@ import static java.util.Objects.nonNull;
 public class SelectQuery extends AbstractQuery<SelectQuery> {
     private final List<Column> columns = new ArrayList<>();
     private final List<Join> joins = new ArrayList<>();
+    private final List<Except> excepts = new ArrayList<>();
     private Column groupBy;
 
     @Override
@@ -42,6 +43,8 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
         }
 
         conditions.forEach(segmentProvider -> segments.add(segmentProvider.get()));
+
+        excepts.forEach(except -> segments.add(except.get()));
 
         if(nonNull(orderBy)){
             segments.add(orderBy.get());
@@ -90,6 +93,12 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
         return this;
     }
 
+    public SelectQuery except(SelectQuery except){
+        this.excepts.add(new Except(except));
+
+        return this;
+    }
+
     @RequiredArgsConstructor
     enum JoinType{
         LEFT("LEFT JOIN"),
@@ -108,7 +117,7 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
 
         @Override
         public String get() {
-            return "%s %s on %s = %s".formatted(joinType.value, table.get(), column1.get(), column2.get());
+            return "%s %s ON %s = %s".formatted(joinType.value, table.get(), column1.get(), column2.get());
         }
     }
 }

@@ -15,7 +15,6 @@ public class EnergyProduction {
     private Integer batchTicks; //How often the building produces energy
     private Integer fuelLastsForTicks; //How often the building requires new fuel
     private Integer fuelStorage; //Building can store this amount of fuel for auto-refuel before it stops
-    @Builder.Default
-    private Boolean humanPowered = false;
+    private Boolean humanPowered;
     private String fuel;
 }

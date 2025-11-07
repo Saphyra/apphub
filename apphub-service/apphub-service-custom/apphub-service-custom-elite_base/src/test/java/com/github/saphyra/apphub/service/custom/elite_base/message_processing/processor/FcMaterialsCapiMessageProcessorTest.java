@@ -1,31 +1,32 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_capi.FcMaterialCapiItems;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_capi.FcMaterialsCapiMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_capi.FcMaterialCapiItems;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_capi.FcMaterialsCapiMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.type.TypeReference;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -47,11 +48,8 @@ class FcMaterialsCapiMessageProcessorTest {
     @Mock
     private ObjectMapperWrapper objectMapperWrapper;
 
-    @Spy
-    private ObjectMapperWrapper objectMapperWrapper2 = new ObjectMapperWrapper(new ObjectMapper());
-
     @Mock
-    private FleetCarrierSaver fleetCarrierSaver;
+    private FleetCarrierDao fleetCarrierDao;
 
     @Mock
     private CommoditySaver commoditySaver;
@@ -71,8 +69,7 @@ class FcMaterialsCapiMessageProcessorTest {
     void setUp() {
         underTest = FcMaterialsCapiMessageProcessor.builder()
             .objectMapperWrapper(objectMapperWrapper)
-            .objectMapperWrapper2(objectMapperWrapper2)
-            .fleetCarrierSaver(fleetCarrierSaver)
+            .fleetCarrierDao(fleetCarrierDao)
             .commoditySaver(commoditySaver)
             .build();
     }
@@ -98,12 +95,33 @@ class FcMaterialsCapiMessageProcessorTest {
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
-        given(fleetCarrierSaver.save(TIMESTAMP, CARRIER_ID, MARKET_ID)).willReturn(fleetCarrier);
+        given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
 
         underTest.processMessage(edMessage);
 
         then(commoditySaver).should().saveAll(TIMESTAMP, CommodityType.FC_MATERIAL, CommodityLocation.FLEET_CARRIER, FLEET_CARRIER_ID, MARKET_ID, Collections.emptyList());
+    }
+
+    @Test
+    void fleetCarrierNotFound() {
+        FcMaterialsCapiMessage fcMaterialsCapiMessage = FcMaterialsCapiMessage.builder()
+            .timestamp(TIMESTAMP)
+            .carrierId(CARRIER_ID)
+            .marketId(MARKET_ID)
+            .items(FcMaterialCapiItems.builder()
+                .purchases("[]")
+                .sales("[]")
+                .build())
+            .build();
+
+        given(edMessage.getMessage()).willReturn(MESSAGE);
+        given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
+        given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.empty());
+
+        underTest.processMessage(edMessage);
+
+        then(commoditySaver).shouldHaveNoInteractions();
     }
 
     @Test
@@ -130,8 +148,10 @@ class FcMaterialsCapiMessageProcessorTest {
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
         given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
-        given(fleetCarrierSaver.save(TIMESTAMP, CARRIER_ID, MARKET_ID)).willReturn(fleetCarrier);
+        given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
+        given(objectMapperWrapper.convertValue(eq(List.of(purchase)), any(TypeReference.class))).willReturn(List.of(purchase));
+        given(objectMapperWrapper.convertValue(eq(Map.of(1L, sale)), any(TypeReference.class))).willReturn(Map.of(1L, sale));
 
         underTest.processMessage(edMessage);
 

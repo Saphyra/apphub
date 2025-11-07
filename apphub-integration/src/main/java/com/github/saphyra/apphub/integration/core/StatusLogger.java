@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.testng.ITestContext;
+import org.testng.ISuite;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -15,8 +15,8 @@ public class StatusLogger {
     private static final Set<String> FINISHED_TESTS = ConcurrentHashMap.newKeySet();
     private static final List<String> TEST_START_ORDER = new Vector<>();
 
-    public static void setTotalTestCount(ITestContext context) {
-        TOTAL_TEST_COUNT = (int) context.getSuite()
+    public static void setTotalTestCount(ISuite suite) {
+        TOTAL_TEST_COUNT = (int) suite
             .getAllMethods()
             .stream()
             .filter(TestBase::isEnabled)

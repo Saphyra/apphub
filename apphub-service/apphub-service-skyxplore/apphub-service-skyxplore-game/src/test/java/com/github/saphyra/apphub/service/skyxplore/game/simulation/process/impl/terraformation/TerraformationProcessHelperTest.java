@@ -110,7 +110,7 @@ class TerraformationProcessHelperTest {
 
         underTest.startWork(game, PROCESS_ID, CONSTRUCTION_ID);
 
-        then(storedResourceService).should().useResources(game.getProgressDiff(), gameData, PROCESS_ID);
+        then(storedResourceService).should().useResources(game.getProgressDiff(), gameData, CONSTRUCTION_ID);
         then(workProcessFactory).should().save(game, LOCATION, PROCESS_ID, REQUIRED_WORK_POINTS, SkillType.BUILDING);
     }
 

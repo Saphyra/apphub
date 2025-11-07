@@ -13,7 +13,8 @@
   "produces": [
     {
       "resourceDataId": "stone",
-      "requiredSkill": "MINING"
+      "requiredSkill": "MINING",
+      "amount": 1
     }
   ]
 }

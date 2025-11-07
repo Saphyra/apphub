@@ -10,4 +10,6 @@ public class CacheProperties {
     private Duration bufferSynchronizationInterval;
     private Duration bufferSynchronizationCheckInterval;
     private int maxBufferSize;
+    private Duration cacheReadTimeout;
+    private Duration loadRetryDelay;
 }

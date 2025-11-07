@@ -34,6 +34,6 @@
     font-size: 20px;
 }
 
-#calendar-labels {
-    overflow: auto;
+.notebook-content table td {
+    vertical-align: top;
 }

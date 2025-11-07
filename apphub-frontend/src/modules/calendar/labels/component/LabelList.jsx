@@ -3,7 +3,7 @@ import useLoader from "../../../../common/hook/Loader";
 import { CALENDAR_GET_LABELS } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import InputField from "../../../../common/component/input/InputField";
 import Stream from "../../../../common/js/collection/Stream";
-import { cacheAndUpdate, cachedOrDefault, isBlank } from "../../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, hasValue, isBlank } from "../../../../common/js/Utils";
 import Label from "./Label";
 
 const CACHE_KEY_SEARCH_TEXT = "calendar.labels.searchText"
@@ -28,6 +28,11 @@ const LabelList = ({ selectedLabel, setSelectedLabel, localizationHandler, setDi
             />
 
             <div id="calendar-labels-list-content">
+                <NoLabelFilter
+                    selected={!hasValue(selectedLabel)}
+                    setSelectedLabel={setSelectedLabel}
+                    localizationHandler={localizationHandler}
+                />
                 {getLabelList()}
             </div>
         </div>
@@ -51,6 +56,20 @@ const LabelList = ({ selectedLabel, setSelectedLabel, localizationHandler, setDi
             />)
             .toList();
     }
+}
+
+const NoLabelFilter = ({ selected, setSelectedLabel, localizationHandler }) => {
+    return (
+        <div>
+            <div
+                id="calendar-labels-label-no-label"
+                onClick={() => setSelectedLabel((null))}
+                className={"calendar-labels-label button" + (selected ? " selected" : "")}
+            >
+                <span className="calendar-labels-label-title">{localizationHandler.get("no-label")}</span>
+            </div>
+        </div>
+    );
 }
 
 export default LabelList;

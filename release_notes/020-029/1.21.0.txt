@@ -1,0 +1,50 @@
+===FEATURES===
+    ApphubCI
+        Return from *Services menu if input is empty
+        Scale Down option for Minikube
+        Considering startup limit when deploying to minikube
+    Calendar
+        Back button on edit event/occurrence screen actually goes back, not only to index page
+        Automatically refresh index page when getting focus
+        Automatically switch to new date when day is over
+        Display labels of opened event
+        Filter for events without label
+        Create occurrence on selected date
+    Notebook
+        Select default ListItem that loads automatically when opening Notebook
+    Platform
+        Random delay of calls simulating slow environment
+
+===BUGFIXES===
+    AdminPanel
+        PerformanceReporting
+            Client does not throw exception when connection to AdminPanel failed
+    EliteBase
+        StationEconomy is not saved with random stationId in case of already existing station
+        Run WriteBuffers before DeleteBuffers to avoid updating deleted data
+    Notebook
+        Align table's content to top
+        Expand text column on demand
+    Calendar
+        Nowraps and wraps
+
+===PLATFORM CHANGES===
+    Dependency update
+    Java 25
+
+===TECHNICAL DEBTS===
+    EliteBase
+        Store preload commodityNames during startup
+        More efficient starName query
+        Execution order for OrphanedRecordCleaners
+        Use SqlBuilder in all OrphanedRecordCleaners
+        Use query-delete method in OrphanedRecordCleaners with limited batch size
+
+===ETC===
+    EliteBase
+        Limit size of searchResult to 10
+    Calendar
+        Close opened occurrence when status set to Done or reminder confirmed
+        Editing event automatically redirects user to backUrl
+    SkyXplore
+        Cannot terraform or build ConstructionArea or BuildingModule while leftover resources are present.

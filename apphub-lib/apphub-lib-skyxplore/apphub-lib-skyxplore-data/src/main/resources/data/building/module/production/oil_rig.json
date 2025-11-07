@@ -13,7 +13,8 @@
   "produces": [
     {
       "resourceDataId": "oil",
-      "requiredSkill": "MINING"
+      "requiredSkill": "MINING",
+      "amount": 1
     }
   ]
 }

@@ -95,6 +95,7 @@ public enum LocalizedText {
     CALENDAR_EVENT_SAVED("Event saved."),
     CALENDAR_EMPTY_DATE("Date is empty."),
     CALENDAR_OCCURRENCE_SAVED("Occurrence saved."),
+    CALENDAR_OCCURRENCE_CREATED("Occurrence created."),
     ;
 
     private final String text;
