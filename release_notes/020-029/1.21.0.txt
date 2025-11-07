@@ -8,6 +8,7 @@
         Automatically switch to new date when day is over
         Display labels of opened event
         Filter for events without label
+        Create occurrence on selected date
     Notebook
         Select default ListItem that loads automatically when opening Notebook
     Platform

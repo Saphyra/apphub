@@ -109,4 +109,13 @@ public class CalendarEventPageActions {
         driver.findElement(By.id("calendar-edit-event-back-button"))
             .click();
     }
+
+    public static void setCreateOccurrenceDate(WebDriver driver, LocalDate date) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-event-new-occurrence-date")), date);
+    }
+
+    public static void createOccurrence(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-event-create-occurrence-button"))
+            .click();
+    }
 }

@@ -29,6 +29,9 @@ import LocalDate from "../../../common/js/date/LocalDate";
 import Optional from "../../../common/js/collection/Optional";
 import LocalTime from "../../../common/js/date/LocalTime";
 import useQueryParams from "../../../common/hook/UseQueryParams";
+import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
+import TestableDateInput from "../common/input/TestableDateInput";
+import createOccurrence from "./createOccurrence";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -46,6 +49,7 @@ const CalendarEditEventPage = () => {
 
     const [event, setEvent] = useState(null);
     const [newLabels, setNewLabels] = useState([]);
+    const [newOccurrenceDate, setNewOccurrenceDate] = useState(null);
 
     const [title, setTitle] = useExtractAsync(o => o.title, event, "");
     const [content, setContent] = useExtractAsync(o => o.content, event, "");
@@ -143,6 +147,31 @@ const CalendarEditEventPage = () => {
                         setDisplaySpinner={setDisplaySpinner}
                         newLabels={newLabels}
                         setNewLabels={setNewLabels}
+                    />
+                </fieldset>
+
+                <fieldset>
+                    <legend>{localizationHandler.get("create-occurrence")}</legend>
+
+                    <PreLabeledInputField
+                        label={localizationHandler.get("new-occurrence-date")}
+                        input={<TestableDateInput
+                            id="calendar-edit-event-new-occurrence-date"
+                            date={newOccurrenceDate}
+                            setDate={setNewOccurrenceDate}
+                        />}
+                    />
+
+                    <Button
+                        id="calendar-edit-event-create-occurrence-button"
+                        label={localizationHandler.get("create-occurrence")}
+                        onclick={() => createOccurrence(
+                            eventId,
+                            newOccurrenceDate,
+                            setNewOccurrenceDate,
+                            setDisplaySpinner,
+                            localizationHandler
+                        )}
                     />
                 </fieldset>
             </main>

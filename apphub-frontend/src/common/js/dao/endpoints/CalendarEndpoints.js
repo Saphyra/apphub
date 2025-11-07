@@ -25,3 +25,4 @@ export const CALENDAR_DELETE_EVENT = new Endpoint(RequestMethod.DELETE, "/api/ca
 export const CALENDAR_DELETE_OCCURRENCE = new Endpoint(RequestMethod.DELETE, "/api/calendar/occurrences/{occurrenceId}");
 export const CALENDAR_EDIT_OCCURRENCE = new Endpoint(RequestMethod.POST, "/api/calendar/occurrences/{occurrenceId}");
 export const CALENDAR_GET_LABELS_OF_EVENT = new Endpoint(RequestMethod.GET, "/api/calendar/events/{eventId}/labels");
+export const CALENDAR_CREATE_OCCURRENCE = new Endpoint(RequestMethod.PUT, "/api/calendar/occurrences/{eventId}");
