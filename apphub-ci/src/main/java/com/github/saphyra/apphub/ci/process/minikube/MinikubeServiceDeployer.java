@@ -1,10 +1,12 @@
 package com.github.saphyra.apphub.ci.process.minikube;
 
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.stream.Stream;
 public class MinikubeServiceDeployer {
     private final Services services;
     private final MinikubePodStartupWaiter minikubePodStartupWaiter;
+    private final PropertyDao propertyDao;
 
     public void deploy(String namespaceName, String serviceDir, List<String> servicesToStart, int waitCount) {
         services.getServices()
@@ -40,12 +43,18 @@ public class MinikubeServiceDeployer {
     }
 
     private void deploy(String namespaceName, String serviceDir, Integer group, List<Service> serviceList, int waitCount) {
-        log.info("");
-        log.info("Starting up serviceGroup {}", group);
+        Integer batchSize = propertyDao.getStartupCountLimit();
 
-        serviceList.forEach(service -> deploy(namespaceName, serviceDir, service));
+        List<List<Service>> batches = ListUtils.partition(serviceList, batchSize);
 
-        minikubePodStartupWaiter.waitForPods(namespaceName, waitCount);
+        for (int batch = 0; batch < batches.size(); batch++) {
+            log.info("");
+            log.info("Starting up serviceGroup {}, batch {}/{}", group, batch + 1, batches.size());
+
+            batches.get(batch).forEach(service -> deploy(namespaceName, serviceDir, service));
+
+            minikubePodStartupWaiter.waitForPods(namespaceName, waitCount);
+        }
     }
 
     @SneakyThrows
