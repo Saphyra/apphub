@@ -150,5 +150,13 @@
     "reset": {
         "en": "Reset",
         "hu": "Visszaállítás"
+    },
+    "no-label": {
+        "en": "No label",
+        "hu": "Nincs címke"
+    },
+    "events-without-label": {
+        "en": "Events without label",
+        "hu": "Címke nélküli események"
     }
 }

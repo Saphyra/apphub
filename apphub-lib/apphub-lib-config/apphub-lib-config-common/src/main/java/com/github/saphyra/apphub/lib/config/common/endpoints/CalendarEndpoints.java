@@ -5,6 +5,7 @@ public class CalendarEndpoints {
 
     public static final String CALENDAR_CREATE_EVENT = "/api/calendar/events";
     public static final String CALENDAR_GET_EVENTS = "/api/calendar/events";
+    public static final String CALENDAR_LABELLESS_GET_EVENTS = "/api/calendar/events/labelless";
     public static final String CALENDAR_DELETE_EVENT = "/api/calendar/events/{eventId}";
     public static final String CALENDAR_EDIT_EVENT = "/api/calendar/events/{eventId}";
     public static final String CALENDAR_CREATE_LABEL = "/api/calendar/labels";

@@ -57,6 +57,21 @@ public class EventWithLabelTest extends BackEndTest {
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId)).hasSize(2);
     }
 
+    @Test(groups = {"be", "calendar"})
+    public void getEventsWithoutLabel(){
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+
+        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessTokenId, LABEL_1);
+
+        createEvent(accessTokenId, EVENT_WITH_LABEL_TITLE, List.of(labelId));
+        UUID eventWithoutLabel = createEvent(accessTokenId, EVENT_WITHOUT_LABEL_TITLE, List.of());
+
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsWithoutLabel(getServerPort(), accessTokenId))
+            .returns(eventWithoutLabel, EventResponse::getEventId)
+            .returns(EVENT_WITHOUT_LABEL_TITLE, EventResponse::getTitle);
+    }
+
     private void editEvent(UUID accessTokenId, UUID eventWithLabel, List<UUID> labelIds) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.ONE_TIME)
             .toBuilder()

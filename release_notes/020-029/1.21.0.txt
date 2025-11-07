@@ -7,6 +7,7 @@
         Automatically refresh index page when getting focus
         Automatically switch to new date when day is over
         Display labels of opened event
+        Filter for events without label
     Notebook
         Select default ListItem that loads automatically when opening Notebook
     Platform

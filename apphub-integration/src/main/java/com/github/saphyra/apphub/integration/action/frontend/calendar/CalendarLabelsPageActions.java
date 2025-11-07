@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class CalendarLabelsPageActions {
     public static List<CalendarLabel> getLabels(WebDriver driver) {
-        return driver.findElements(By.className("calendar-labels-label"))
+        return driver.findElements(By.cssSelector(".calendar-labels-label.dynamic"))
             .stream()
             .map(CalendarLabel::new)
             .collect(Collectors.toList());
@@ -48,5 +48,10 @@ public class CalendarLabelsPageActions {
 
     public static LocalDate getOpenedOccurrenceDate(WebDriver driver) {
         return LocalDate.parse(driver.findElement(By.id("calendar-labels-opened-occurrence-title")).getText());
+    }
+
+    public static void selectNoLabelFilter(WebDriver driver) {
+        driver.findElement(By.id("calendar-labels-label-no-label"))
+            .click();
     }
 }

@@ -28,6 +28,9 @@ public interface EventController {
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
     );
 
+    @GetMapping(CalendarEndpoints.CALENDAR_LABELLESS_GET_EVENTS)
+    List<EventResponse> getLabellessEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENT)
     EventResponse getEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 

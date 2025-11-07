@@ -14,6 +14,7 @@ export const CALENDAR_EDIT_EVENT = new Endpoint(RequestMethod.POST, "/api/calend
 export const CALENDAR_DELETE_LABEL = new Endpoint(RequestMethod.DELETE, "/api/calendar/labels/{labelId}");
 export const CALENDAR_EDIT_LABEL = new Endpoint(RequestMethod.POST, "/api/calendar/labels/{labelId}");
 export const CALENDAR_GET_EVENTS = new Endpoint(RequestMethod.GET, "/api/calendar/events");
+export const CALENDAR_GET_LABELLESS_EVENTS = new Endpoint(RequestMethod.GET, "/api/calendar/events/labelless");
 export const CALENDAR_GET_LABEL = new Endpoint(RequestMethod.GET, "/api/calendar/labels/{labelId}");
 export const CALENDAR_GET_EVENT = new Endpoint(RequestMethod.GET, "/api/calendar/events/{eventId}");
 export const CALENDAR_GET_OCCURRENCES_OF_EVENT = new Endpoint(RequestMethod.GET, "/api/calendar/events/{eventId}/occurrences");

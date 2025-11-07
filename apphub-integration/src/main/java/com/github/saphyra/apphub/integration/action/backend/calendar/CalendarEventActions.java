@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
-import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
 import io.restassured.response.Response;
 
 import java.util.Arrays;
@@ -92,5 +91,18 @@ public class CalendarEventActions {
     private static Response getGetEventsResponse(int serverPort, UUID accessTokenId, UUID labelId) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENTS, Map.of(), Map.of("labelId", labelId)));
+    }
+
+    public static Response getGetLabellessEventsResponse(int serverPort, UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABELLESS_EVENTS));
+    }
+
+    public static List<EventResponse> getEventsWithoutLabel(int serverPort, UUID accessTokenId) {
+        Response response = getGetLabellessEventsResponse(serverPort, accessTokenId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
 }
