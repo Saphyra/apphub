@@ -11,7 +11,8 @@ async function save({
     remindMeBeforeDays,
     reminded,
     occurrenceId,
-    setDisplaySpinner
+    setDisplaySpinner,
+    backUrl
 }) {
     const payload = {
         date: date,
@@ -30,7 +31,7 @@ async function save({
         .send(setDisplaySpinner);
 
     NotificationService.storeSuccessText(localizationHandler.get("saved"));
-    window.location.href = CALENDAR_PAGE;
+    window.location.href = backUrl;
 }
 
 export default save;

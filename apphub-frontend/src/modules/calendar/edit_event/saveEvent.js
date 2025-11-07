@@ -7,7 +7,7 @@ import localizationData from "./calendar_edit_event_page_localization.json";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 
-async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, newLabels, setConfirmationDialogData) {
+async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, newLabels, setConfirmationDialogData, backUrl) {
     if (!validateEventRequest(payload)) {
         return;
     }
@@ -21,7 +21,8 @@ async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, ne
     await CALENDAR_EDIT_EVENT.createRequest(payload, { eventId: eventId })
         .send(setDisplaySpinner);
 
-    NotificationService.showSuccess(localizationHandler.get("event-saved"));
+    NotificationService.storeSuccessText(localizationHandler.get("event-saved"));
+    window.location.href = backUrl;
 
     async function createLabels() {
         return await Promise.all(newLabels.map(label => createLabel(label)));

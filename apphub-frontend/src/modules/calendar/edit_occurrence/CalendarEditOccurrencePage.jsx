@@ -201,7 +201,8 @@ const CalendarEditOccurrencePage = () => {
                             reminded: reminded,
                             setDisplaySpinner: setDisplaySpinner,
                             setConfirmationDialogData: setConfirmationDialogData,
-                            refresh: refresh
+                            refresh: refresh,
+                            backUrl: backUrl
                         })}
                     />
                 ]}

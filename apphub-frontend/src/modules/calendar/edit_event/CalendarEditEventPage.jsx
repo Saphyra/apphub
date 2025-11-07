@@ -228,7 +228,8 @@ const CalendarEditEventPage = () => {
                         existingLabels,
                         setDisplaySpinner,
                         newLabels,
-                        setConfirmationDialogData
+                        setConfirmationDialogData,
+                        backUrl
                     )}
                 />,
                 <Button
