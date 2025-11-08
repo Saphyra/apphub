@@ -1,4 +1,3 @@
-import React from "react";
 import Stream from "../../js/collection/Stream";
 import InputField from "./InputField";
 import PostLabeledInputField from "./PostLabeledInputField";

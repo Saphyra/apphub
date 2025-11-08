@@ -1,4 +1,8 @@
 ===FEATURES===
+    AdminPanel
+        MemoryMonitoring
+            Display max memory used
+            Order services by parameters
 
 ===BUGFIXES===
 

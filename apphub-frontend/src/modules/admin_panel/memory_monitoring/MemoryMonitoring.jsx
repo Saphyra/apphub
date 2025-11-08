@@ -19,6 +19,8 @@ import WebSocketEndpoint from "../../../common/hook/ws/WebSocketEndpoint.js";
 import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName.js";
 import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade.js";
 import { hasValue } from "../../../common/js/Utils.js";
+import SortSelector from "./sort_selector/SortSelector.jsx";
+import { ORDER_ASCENDING, ORDER_BY_SERVICE_NAME } from "./sort_selector/Order.js";
 
 const MemoryMonitoring = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -27,6 +29,8 @@ const MemoryMonitoring = () => {
     const [reports, setReports] = useState([]);
     const [duration, setDuration] = useState(30);
     const [switches, setSwitches] = useState(new Stream(serviceList).toMapStream(key => key, key => true).toObject());
+    const [orderBy, setOrderBy] = useState(ORDER_BY_SERVICE_NAME);
+    const [order, setOrder] = useState(ORDER_ASCENDING);
 
     useConnectToWebSocket(
         WebSocketEndpoint.ADMIN_PANEL_MEMORY_MONITORING,
@@ -54,10 +58,21 @@ const MemoryMonitoring = () => {
             <Header label={localizationHandler.get("page-title")} />
 
             <main>
-                <Durations
-                    duration={duration}
-                    setDuration={setDuration}
-                />
+                <div id="memory-monitoring-header">
+                    <Durations
+                        duration={duration}
+                        setDuration={setDuration}
+                    />
+
+                    <SortSelector
+                        orderBy={orderBy}
+                        setOrderBy={setOrderBy}
+                        order={order}
+                        setOrder={setOrder}
+                        localizationHandler={localizationHandler}
+                    />
+                </div>
+
 
                 <Switches
                     services={switches}
@@ -68,6 +83,8 @@ const MemoryMonitoring = () => {
                     services={switches}
                     reports={reports}
                     duration={duration}
+                    orderBy={orderBy}
+                    order={order}
                     localizationHandler={localizationHandler}
                 />
             </main>

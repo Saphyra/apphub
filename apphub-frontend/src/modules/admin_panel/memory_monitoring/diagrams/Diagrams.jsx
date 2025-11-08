@@ -1,26 +1,24 @@
-import React from "react";
 import Stream from "../../../../common/js/collection/Stream";
 import Diagram from "./Diagram";
 import MapStream from "../../../../common/js/collection/MapStream";
-import Utils from "../../../../common/js/Utils";
+import Reports from "../Reports";
+import { Order, OrderBy } from "../sort_selector/Order";
 
-const Diagrams = ({ services, reports, duration, localizationHandler }) => {
+const Diagrams = ({ services, reports, duration, orderBy, order, localizationHandler }) => {
     const getDiagrams = () => {
         const grouped = new Stream(reports)
             .groupBy((item) => item.service)
             .toObject();
 
-        const c1 = new MapStream(services).toObject();
-
         return new MapStream(services)
             .filter((service, shouldDisplay) => shouldDisplay)
             .toListStream((service, shouldDisplay) => service)
-            .sorted((a, b) => a.localeCompare(b))
-            .map(service =>
+            .map(service => new Reports(service, grouped[service]))
+            .sorted((a, b) => Order[order](OrderBy[orderBy](a, b)))
+            .map(r =>
                 <Diagram
-                    key={service}
-                    service={service}
-                    reports={grouped[service]}
+                    key={r.serviceName}
+                    reports={r}
                     duration={duration}
                     localizationHandler={localizationHandler}
                 />
