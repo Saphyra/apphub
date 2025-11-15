@@ -20,3 +20,4 @@
     AdminPanel
         ErrorReport
             Put a page selector to the bottom of the table
+            Use spinner for loading
