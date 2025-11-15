@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportResponse;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
+import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
@@ -75,6 +76,9 @@ public class ErrorReporterControllerImplTest {
     @Mock
     private ExceptionModel exceptionModel;
 
+    @Mock
+    private GetErrorReportsResponse getErrorReportsResponse;
+
     @Test
     public void reportError() {
         underTest.reportError(errorReport);
@@ -84,11 +88,11 @@ public class ErrorReporterControllerImplTest {
 
     @Test
     public void getErrorReports() {
-        given(errorReportOverviewQueryService.query(getErrorReportsRequest)).willReturn(Arrays.asList(errorReportOverview));
+        given(errorReportOverviewQueryService.query(getErrorReportsRequest)).willReturn(getErrorReportsResponse);
 
-        List<ErrorReportOverview> result = underTest.getErrorReports(getErrorReportsRequest, accessTokenHeader);
+        GetErrorReportsResponse result = underTest.getErrorReports(getErrorReportsRequest, accessTokenHeader);
 
-        assertThat(result).containsExactly(errorReportOverview);
+        assertThat(result).isEqualTo(getErrorReportsResponse);
     }
 
     @Test

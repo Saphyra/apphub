@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.service.overv
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
+import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsResponse;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,16 @@ public class ErrorReportOverviewQueryService {
     private final ErrorReportToOverviewConverter converter;
     private final ErrorReportOverviewSpecificationFactory specificationFactory;
 
-    public List<ErrorReportOverview> query(GetErrorReportsRequest request) {
+    public GetErrorReportsResponse query(GetErrorReportsRequest request) {
         validator.validate(request);
 
-        return errorReportDao.getOverview(specificationFactory.create(request), PageRequest.of(request.getPage() - 1, request.getPageSize(), Sort.by(Sort.Direction.DESC, "createdAt")))
+        List<ErrorReportOverview> reports = errorReportDao.getOverview(specificationFactory.create(request), PageRequest.of(request.getPage() - 1, request.getPageSize(), Sort.by(Sort.Direction.DESC, "createdAt")))
             .stream()
             .map(converter::convert)
             .collect(Collectors.toList());
+        return GetErrorReportsResponse.builder()
+            .totalCount(errorReportDao.count())
+            .reports(reports)
+            .build();
     }
 }

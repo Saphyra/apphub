@@ -2,8 +2,9 @@ package com.github.saphyra.apphub.service.admin_panel.error_report.service.overv
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
-import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
+import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsResponse;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
+import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -23,6 +23,7 @@ import static org.mockito.Mockito.verify;
 public class ErrorReportOverviewQueryServiceTest {
     private static final Integer PAGE_SIZE = 24;
     private static final Integer PAGE = 53;
+    private static final long TOTAL_COUNT = 23L;
 
     @Mock
     private GetErrorReportsRequestValidator validator;
@@ -58,10 +59,12 @@ public class ErrorReportOverviewQueryServiceTest {
         given(request.getPage()).willReturn(PAGE);
         given(errorReportDao.getOverview(specification, PageRequest.of(PAGE - 1, PAGE_SIZE, Sort.by(Sort.Direction.DESC, "createdAt")))).willReturn(Arrays.asList(errorReport));
         given(converter.convert(errorReport)).willReturn(errorReportOverview);
+        given(errorReportDao.count()).willReturn(TOTAL_COUNT);
 
-        List<ErrorReportOverview> result = underTest.query(request);
+        GetErrorReportsResponse result = underTest.query(request);
 
-        assertThat(result).containsExactly(errorReportOverview);
+        assertThat(result.getReports()).containsExactly(errorReportOverview);
+        assertThat(result.getTotalCount()).isEqualTo(TOTAL_COUNT);
         verify(validator).validate(request);
     }
 }

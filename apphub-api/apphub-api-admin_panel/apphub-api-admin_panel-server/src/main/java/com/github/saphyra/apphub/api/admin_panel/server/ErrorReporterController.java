@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.api.admin_panel.server;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportResponse;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
+import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
@@ -23,7 +23,7 @@ public interface ErrorReporterController {
     void reportError(@RequestBody ErrorReport model);
 
     @PostMapping(AdminPanelEndpoints.ADMIN_PANEL_GET_ERROR_REPORTS)
-    List<ErrorReportOverview> getErrorReports(@RequestBody GetErrorReportsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GetErrorReportsResponse getErrorReports(@RequestBody GetErrorReportsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     @DeleteMapping(AdminPanelEndpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS)
     void deleteErrorReports(@RequestBody List<UUID> ids, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);

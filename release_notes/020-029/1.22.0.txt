@@ -6,6 +6,8 @@
         PerformanceReporting
             Hide keys
             Display spinner when loading reports
+        ErrorReport
+            Display total count
 
 ===BUGFIXES===
 

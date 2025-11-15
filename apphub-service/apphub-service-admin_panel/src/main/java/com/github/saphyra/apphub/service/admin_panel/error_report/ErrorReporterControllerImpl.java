@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportOverview;
+import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
 import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReportResponse;
 import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsRequest;
+import com.github.saphyra.apphub.api.admin_panel.model.model.GetErrorReportsResponse;
+import com.github.saphyra.apphub.api.admin_panel.server.ErrorReporterController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.admin_panel.error_report.repository.ErrorReportDao;
@@ -10,15 +12,11 @@ import com.github.saphyra.apphub.service.admin_panel.error_report.repository.Err
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.MarkErrorReportService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.details.ErrorReportDetailsQueryService;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.overview.ErrorReportOverviewQueryService;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
-import com.github.saphyra.apphub.api.admin_panel.server.ErrorReporterController;
 import com.github.saphyra.apphub.service.admin_panel.error_report.service.report.ReportErrorService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import jakarta.transaction.Transactional;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -41,8 +39,9 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     }
 
     @Override
-    public List<ErrorReportOverview> getErrorReports(GetErrorReportsRequest request, AccessTokenHeader accessTokenHeader) {
+    public GetErrorReportsResponse getErrorReports(GetErrorReportsRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query the errorReports with parameters {}", accessTokenHeader.getUserId(), request);
+
         return errorReportOverviewQueryService.query(request);
     }
 

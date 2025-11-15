@@ -14,5 +14,9 @@
     "message": {
         "en": "Message",
         "hu": "Üzenet"
+    },
+    "total-count": {
+        "en": "Total count: {value}",
+        "hu": "Jelentések száma: {value}"
     }
 }

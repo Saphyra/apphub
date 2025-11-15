@@ -27,6 +27,7 @@ const ErrorReportOverviewPage = () => {
     const [selectedErrorReports, setSelectedErrorReports] = useState([]);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [errorReports, setErrorReports] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
     const [filterData, setFilterData] = useState({
         service: "",
         message: "",
@@ -64,7 +65,8 @@ const ErrorReportOverviewPage = () => {
 
             const response = await ADMIN_PANEL_GET_ERROR_REPORTS.createRequest(payload)
                 .send();
-            setErrorReports(response)
+            setErrorReports(response.reports);
+            setTotalCount(response.totalCount);
         }
         fetch();
     }
@@ -213,6 +215,7 @@ const ErrorReportOverviewPage = () => {
                 />
 
                 <ErrorReportList
+                    totalCount={totalCount}
                     errorReports={errorReports}
                     refreshCallback={load}
                     selectedErrorReports={selectedErrorReports}
