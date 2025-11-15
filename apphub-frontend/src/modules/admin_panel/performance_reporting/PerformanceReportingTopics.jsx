@@ -1,4 +1,3 @@
-import React from "react";
 import Stream from "../../../common/js/collection/Stream";
 import Button from "../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
@@ -7,6 +6,7 @@ import { ADMIN_PANEL_PERFORMANCE_REPORTING_DISABLE_TOPIC, ADMIN_PANEL_PERFORMANC
 const PerformanceReportingTopics = ({ topics, setTopics, localizationHandler, setConfirmationDialogData }) => {
     const getContent = () => {
         return new Stream(topics)
+            .sorted((a, b) => a.topic.localeCompare(b.topic))
             .map(topic =>
                 <Button
                     key={topic.topic}

@@ -30,6 +30,7 @@ DIRECTION[DESCENDING] = value => -1 * value;
 const PerformanceReportingReports = ({ reports, localizationHandler, loadReports }) => {
     const getContent = () => {
         return new MapStream(reports)
+            .sorted((a, b) => a.key.localeCompare(b.key))
             .toList((topic, topicReports) => <TopicReports
                 key={topic}
                 topic={topic}

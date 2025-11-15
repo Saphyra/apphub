@@ -6,6 +6,7 @@
         PerformanceReporting
             Hide keys
             Display spinner when loading reports
+            Periodically sync topic status
         ErrorReport
             Display total count
 
