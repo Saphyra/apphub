@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import localizationData from "./performance_reporting_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import Header from "../../../common/component/Header";

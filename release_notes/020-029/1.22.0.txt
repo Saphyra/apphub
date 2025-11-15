@@ -3,6 +3,8 @@
         MemoryMonitoring
             Display max memory used
             Order services by parameters
+        PerformanceReporting
+            Hide keys
 
 ===BUGFIXES===
 

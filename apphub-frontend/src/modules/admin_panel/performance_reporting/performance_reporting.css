@@ -12,9 +12,14 @@
     padding: 10px;
 }
 
-.performance-reproting-reports-topic-reports{
+.performance-reproting-reports-topic-reports {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     justify-content: center;
+}
+
+.performance-reproting-reports-topic-reports-item-hide-button {
+    margin: 0;
+    font-size: 10px;
 }
