@@ -223,6 +223,12 @@ const ErrorReportOverviewPage = () => {
                     setConfirmationDialogData={setConfirmationDialogData}
                 />
 
+                <ErrorReportPageSelector
+                    filterData={filterData}
+                    setFilterData={setFilterData}
+                    refreshCallback={load}
+                />
+
             </main>
 
             <Footer
