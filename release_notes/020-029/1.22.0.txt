@@ -5,6 +5,7 @@
             Order services by parameters
         PerformanceReporting
             Hide keys
+            Display spinner when loading reports
 
 ===BUGFIXES===
 

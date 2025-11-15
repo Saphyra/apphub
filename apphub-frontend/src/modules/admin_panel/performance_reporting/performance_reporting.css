@@ -5,6 +5,7 @@
 
 #performance-reporting-operations {
     border-bottom: 3px ridge white;
+    position: relative;
 }
 
 #performance-reporting-reports {
@@ -22,4 +23,17 @@
 .performance-reproting-reports-topic-reports-item-hide-button {
     margin: 0;
     font-size: 10px;
+}
+
+#performance-reporting-mini-spinner{
+    position: absolute;
+    right: 0;
+    top: 0;
+    left: initial;
+    bottom: initial;
+    height: 50px;
+    width: 50px;
+    background-size: 40px;
+    background-attachment: initial;
+    background-color: transparent;
 }

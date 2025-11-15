@@ -13,6 +13,7 @@ import PerformanceReportingTopics from "./PerformanceReportingTopics";
 import Stream from "../../../common/js/collection/Stream";
 import RefreshIntervalSelector from "./RefreshIntervalSelector";
 import PerformanceReportingReports from "./PerformanceReportingReports";
+import Spinner from "../../../common/component/Spinner";
 
 const PerformanceReporting = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,6 +24,7 @@ const PerformanceReporting = ({ }) => {
     const [refreshInterval, setRefreshInterval] = useState(0);
     const [interval, sInterval] = useState(null);
     const [reports, setReports] = useState({});
+    const [displayMiniSpinner, setDisplayMiniSpinner] = useState(false);
 
     useLoader({ request: ADMIN_PANEL_PERFORMANCE_REPORTING_GET_TOPICS.createRequest(), mapper: setTopics });
 
@@ -52,7 +54,7 @@ const PerformanceReporting = ({ }) => {
                 const topic = enabledTopics[i];
 
                 const response = await ADMIN_PANEL_PERFORMANCE_REPORTING_GET_REPORTS.createRequest(null, { topic: topic.topic })
-                    .send();
+                    .send(setDisplayMiniSpinner);
 
                 newReports[topic.topic] = response;
             }
@@ -81,6 +83,8 @@ const PerformanceReporting = ({ }) => {
                         localizationHandler={localizationHandler}
                         setConfirmationDialogData={setConfirmationDialogData}
                     />
+
+                    {displayMiniSpinner &&  <Spinner id="performance-reporting-mini-spinner" />}
                 </div>
 
                 <PerformanceReportingReports
