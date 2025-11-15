@@ -1,0 +1,14 @@
+===FEATURES===
+
+===BUGFIXES===
+    Platform
+        Use IP instead of host.docker.internal, because that actually works
+    EliteBase
+        Support Dodec station type
+
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
