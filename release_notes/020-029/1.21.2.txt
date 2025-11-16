@@ -1,0 +1,10 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+    Increase JVM's memory
+
+===TECHNICAL DEBTS===
+
+===ETC===
