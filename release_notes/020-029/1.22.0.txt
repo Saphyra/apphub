@@ -11,6 +11,7 @@
             Display total count
     ApphubCI
         Dedicated setting for remote startup limit
+        Chain commands
 
 ===BUGFIXES===
 
