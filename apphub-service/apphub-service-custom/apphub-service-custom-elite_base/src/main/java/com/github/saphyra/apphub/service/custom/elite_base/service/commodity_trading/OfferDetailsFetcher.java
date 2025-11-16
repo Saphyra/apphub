@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
@@ -33,6 +36,7 @@ class OfferDetailsFetcher {
     private final BodyDao bodyDao;
     private final FleetCarrierDao fleetCarrierDao;
     private final OfferMapper offerMapper;
+    private final PerformanceReporter performanceReporter;
 
     List<CommodityTradingResponse> assembleResponses(TradeMode tradeMode, StarSystem referenceSystem, List<Commodity> offers, boolean includeFleetCarriers) {
         Map<UUID, CommodityLocationData> commodityLocationDatas = new HashMap<>();
@@ -41,7 +45,11 @@ class OfferDetailsFetcher {
         List<UUID> locationIds = offers.stream()
             .map(Commodity::getExternalReference)
             .toList();
-        stationDao.findAllById(locationIds)
+        performanceReporter.wrap(
+                () -> stationDao.findAllById(locationIds),
+                PerformanceReportingTopic.ELITE_BASE_QUERY,
+                PerformanceReportingKey.COMMODITY_TRADING_GET_STATIONS.name()
+            )
             .stream()
             .map(station -> CommodityLocationData.builder()
                 .externalReference(station.getId())
@@ -54,7 +62,11 @@ class OfferDetailsFetcher {
 
         //Fetch Fleet carriers for commodities, if client requests it
         if (includeFleetCarriers) {
-            fleetCarrierDao.findAllById(locationIds)
+            performanceReporter.wrap(
+                    () -> fleetCarrierDao.findAllById(locationIds),
+                    PerformanceReportingTopic.ELITE_BASE_QUERY,
+                    PerformanceReportingKey.COMMODITY_TRADING_GET_FLEET_CARRIERS.name()
+                )
                 .stream()
                 .map(fleetCarrier -> CommodityLocationData.builder()
                     .externalReference(fleetCarrier.getId())
@@ -70,12 +82,20 @@ class OfferDetailsFetcher {
             .map(CommodityLocationData::getStarSystemId)
             .filter(Objects::nonNull)
             .toList();
-        Map<UUID, StarSystem> stars = starSystemDao.findAllById(starIds)
+        Map<UUID, StarSystem> stars = performanceReporter.wrap(
+                () -> starSystemDao.findAllById(starIds),
+                PerformanceReportingTopic.ELITE_BASE_QUERY,
+                PerformanceReportingKey.COMMODITY_TRADING_GET_STAR_SYSTEMS.name()
+            )
             .stream()
             .collect(Collectors.toMap(StarSystem::getId, Function.identity()));
 
         //Fetch starSystemData for Powerplay data
-        Map<UUID, StarSystemData> systemDatas = starSystemDataDao.findAllById(starIds)
+        Map<UUID, StarSystemData> systemDatas = performanceReporter.wrap(
+                () -> starSystemDataDao.findAllById(starIds),
+                PerformanceReportingTopic.ELITE_BASE_QUERY,
+                PerformanceReportingKey.COMMODITY_TRADING_GET_STAR_SYSTEM_DATA.name()
+            )
             .stream()
             .collect(Collectors.toMap(StarSystemData::getStarSystemId, Function.identity()));
 
@@ -85,7 +105,11 @@ class OfferDetailsFetcher {
             .map(CommodityLocationData::getBodyId)
             .filter(Objects::nonNull)
             .toList();
-        Map<UUID, Body> bodies = bodyDao.findAllById(bodyIds)
+        Map<UUID, Body> bodies = performanceReporter.wrap(
+            () -> bodyDao.findAllById(bodyIds),
+            PerformanceReportingTopic.ELITE_BASE_QUERY,
+            PerformanceReportingKey.COMMODITY_TRADING_GET_BODIES.name()
+            )
             .stream()
             .collect(Collectors.toMap(Body::getId, Function.identity()));
 

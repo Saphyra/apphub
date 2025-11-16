@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,6 +62,9 @@ class OfferDetailsFetcherTest {
 
     @Mock
     private OfferMapper offerMapper;
+
+    @Mock
+    private PerformanceReporter performanceReporter;
 
     @InjectMocks
     private OfferDetailsFetcher underTest;
@@ -117,6 +122,7 @@ class OfferDetailsFetcherTest {
             any()
         ))
             .willReturn(Optional.of(response));
+        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
         assertThat(underTest.assembleResponses(TradeMode.SELL, referenceSystem, List.of(commodity), false)).containsExactly(response);
 
@@ -154,6 +160,7 @@ class OfferDetailsFetcherTest {
         given(starSystemDataDao.findAllById(List.of(STAR_SYSTEM_ID))).willReturn(List.of(starSystemData));
         given(starSystemData.getStarSystemId()).willReturn(STAR_SYSTEM_ID);
 
+        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
         given(offerMapper.mapOffer(
             any(),
             any(),
