@@ -18,6 +18,9 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    Calendar
+        Drop old event and occurrence tables
+        Delete migration
 
 ===ETC===
     AdminPanel

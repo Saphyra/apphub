@@ -62,4 +62,12 @@
 
         <renameTable schemaName="calendar" oldTableName="event" newTableName="event_old"/>
     </changeSet>
+
+    <changeSet id="drop-table-event_old" author="saphyra">
+        <preConditions>
+            <tableExists schemaName="calendar" tableName="event_old"/>
+        </preConditions>
+
+        <dropTable schemaName="calendar" tableName="event_old"/>
+    </changeSet>
 </databaseChangeLog>
