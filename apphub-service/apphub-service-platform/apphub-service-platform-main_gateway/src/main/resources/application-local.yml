@@ -148,5 +148,5 @@ delay:
     paths:
     - path: /api/**
       enabled: false
-      minDelay: PT0.5S
-      maxDelay: PT1S
+      minDelay: PT3S
+      maxDelay: PT5S

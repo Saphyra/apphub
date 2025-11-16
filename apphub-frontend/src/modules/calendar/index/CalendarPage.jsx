@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Footer from "../../../common/component/Footer";
 import { ToastContainer } from "react-toastify";
 import localizationData from "./localization/calendar_page_localization.json";
@@ -38,7 +38,7 @@ const CalendarPage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
     const [viewName, setViewName] = useState(cachedOrDefault(CACHE_KEY_VIEW, MONTH));
     const [referenceDate, setReferenceDate] = useState(cachedOrDefault(CACHE_KEY_REFERENCE_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
@@ -57,6 +57,10 @@ const CalendarPage = () => {
             }
         }
     }, [isInFocus]);
+
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
+    }
 
     return (
         <div id="calendar" className="main-page">
@@ -88,7 +92,7 @@ const CalendarPage = () => {
                     <CalendarContent
                         view={View[viewName]}
                         activeLabel={activeLabel}
-                        setDisplaySpinner={setDisplaySpinner}
+                        setDisplaySpinner={updateDisplaySpinner}
                         referenceDate={referenceDate}
                         selectedDate={selectedDate}
                         setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
@@ -100,7 +104,7 @@ const CalendarPage = () => {
                 <SelectedDate
                     selectedDate={selectedDate}
                     activeLabel={activeLabel}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
                     setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
                     refreshCounter={refreshCounter}
                 />
@@ -120,7 +124,7 @@ const CalendarPage = () => {
             {selectedOccurrence &&
                 <SelectedOccurrence
                     occurrenceId={selectedOccurrence}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
                     localizationHandler={localizationHandler}
                     setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
                     refresh={refresh}
@@ -137,7 +141,7 @@ const CalendarPage = () => {
                 />
             }
 
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
         </div>
     );
 }

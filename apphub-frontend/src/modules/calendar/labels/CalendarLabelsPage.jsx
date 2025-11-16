@@ -30,7 +30,7 @@ const CalendarLabelsPage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
     const [refreshCount, refresh] = useRefresh();
 
     const [selectedLabel, setSelectedLabel] = useState(cachedOrDefault(CACHE_KEY_SELECTED_LABEL, null));
@@ -51,6 +51,10 @@ const CalendarLabelsPage = () => {
         cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, occurrenceId, setSelectedOccurrence)
     }
 
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
+    }
+
     return (
         <div id="calendar-labels" className="main-page">
             <Header label={localizationHandler.get("page-title")} />
@@ -58,7 +62,7 @@ const CalendarLabelsPage = () => {
             <main>
                 <LabelList
                     localizationHandler={localizationHandler}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
                     selectedLabel={selectedLabel}
                     setSelectedLabel={changeSelectedLabel}
                     setConfirmationDialogData={setConfirmationDialogData}
@@ -67,7 +71,7 @@ const CalendarLabelsPage = () => {
                 <Events
                     localizationHandler={localizationHandler}
                     selectedLabel={selectedLabel}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
                     selectedEvent={selectedEvent}
                     setSelectedEvent={changeSelectedEvent}
                     refreshCounter={refreshCount}
@@ -76,7 +80,7 @@ const CalendarLabelsPage = () => {
                 {hasValue(selectedEvent) &&
                     <OpenedEvent
                         localizationHandler={localizationHandler}
-                        setDisplaySpinner={setDisplaySpinner}
+                        setDisplaySpinner={updateDisplaySpinner}
                         eventId={selectedEvent}
                         selectedOccurrence={selectedOccurrence}
                         setSelectedOccurrence={changeSelectedOccurrence}
@@ -92,7 +96,7 @@ const CalendarLabelsPage = () => {
                         occurrenceId={selectedOccurrence}
                         localizationHandler={localizationHandler}
                         setConfirmationDialogData={setConfirmationDialogData}
-                        setDisplaySpinner={setDisplaySpinner}
+                        setDisplaySpinner={updateDisplaySpinner}
                         setSelectedOccurrence={changeSelectedOccurrence}
                         refreshCounter={refreshCount}
                         refresh={refresh}
@@ -120,7 +124,7 @@ const CalendarLabelsPage = () => {
                 />
             }
 
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
         </div>
     );
 }
