@@ -59,7 +59,7 @@ class ServiceStarter {
         log.info("");
         log.info("Starting up serviceGroup {}", group);
 
-        ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(Executors.newFixedThreadPool(propertyDao.getStartupCountLimit()));
+        ExecutorServiceBean executorServiceBean = new ExecutorServiceBean(Executors.newFixedThreadPool(propertyDao.getLocalStartupCountLimit()));
 
         try {
             Map<Service, FutureWrapper<Void>> executionResults = groupMembers.stream()

@@ -9,6 +9,8 @@
             Periodically sync topic status
         ErrorReport
             Display total count
+    ApphubCI
+        Dedicated setting for remote startup limit
 
 ===BUGFIXES===
 

@@ -1,30 +1,32 @@
-package com.github.saphyra.apphub.ci.menu.local_run_menu.edit_configuration_menu;
+package com.github.saphyra.apphub.ci.menu;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizationProvider;
 import com.github.saphyra.apphub.ci.localization.LocalizationService;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
-import com.github.saphyra.apphub.ci.menu.Menu;
-import com.github.saphyra.apphub.ci.menu.MenuOption;
-import com.github.saphyra.apphub.ci.menu.MenuOrder;
-import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-class LocalRunMaxServiceStartupCountMenuOption implements MenuOption {
+public class RemoteServiceStartupSettingMenuOption implements MenuOption {
     private final PropertyDao propertyDao;
     private final ValidatingInputReader validatingInputReader;
     private final LocalizationService localizationService;
 
     @Override
     public Menu getMenu() {
-        return Menu.LOCAL_RUN_EDIT_CONFIGURATION_MENU;
+        throw new UnsupportedOperationException("This should not be called");
+    }
+
+    @Override
+    public List<Menu> getMenus() {
+        return List.of(Menu.MINIKUBE_EDIT_CONFIGURATION_MENU, Menu.PRODUCTION_EDIT_CONFIGURATIONS_MENU, Menu.PREPROD_EDIT_CONFIGURATION_MENU);
     }
 
     @Override
@@ -34,7 +36,7 @@ class LocalRunMaxServiceStartupCountMenuOption implements MenuOption {
 
     @Override
     public LocalizationProvider getName() {
-        return language -> LocalizedText.SERVICE_STARTUP_COUNT_LIMIT.getLocalizedText(language).formatted(propertyDao.getLocalStartupCountLimit());
+        return language -> LocalizedText.SERVICE_STARTUP_COUNT_LIMIT.getLocalizedText(language).formatted(propertyDao.getRemoteStartupCountLimit());
     }
 
     @Override
@@ -51,7 +53,7 @@ class LocalRunMaxServiceStartupCountMenuOption implements MenuOption {
             }
         );
 
-        propertyDao.save(PropertyName.LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT, String.valueOf(limit));
+        propertyDao.save(PropertyName.REMOTE_SERVICE_STARTUP_COUNT_LIMIT, String.valueOf(limit));
 
         localizationService.writeMessage(LocalizedText.STARTUP_LIMIT_SAVED);
 

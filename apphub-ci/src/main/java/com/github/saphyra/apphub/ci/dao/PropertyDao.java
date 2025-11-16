@@ -80,11 +80,18 @@ public class PropertyDao {
             .orElseGet(() -> Language.valueOf(defaultProperties.getDefaultLocale()));
     }
 
-    public Integer getStartupCountLimit() {
+    public Integer getLocalStartupCountLimit() {
         return propertyRepository.findById(PropertyName.LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT)
             .map(Property::getValue)
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getLocalServiceStartupCountLimit);
+    }
+
+    public Integer getRemoteStartupCountLimit() {
+        return propertyRepository.findById(PropertyName.REMOTE_SERVICE_STARTUP_COUNT_LIMIT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getRemoteServiceStartupCountLimit);
     }
 
     public List<String> getDisabledServices() {
