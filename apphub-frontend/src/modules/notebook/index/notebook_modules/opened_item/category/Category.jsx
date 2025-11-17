@@ -21,7 +21,8 @@ const Category = ({
     setLastEvent,
     userSettings,
     changeUserSettings,
-    setConfirmationDialogData
+    setConfirmationDialogData,
+    setDisplaySpinner
 }) => {
     const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
     const [selectedItems, setSelectedItems] = useState([]);
@@ -58,7 +59,7 @@ const Category = ({
 
             const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
             const response = await NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
-                .send();
+                .send(setDisplaySpinner);
 
             if (openedListItem.id === listItemId) {
                 setOpenedCategoryContent(response);
@@ -91,6 +92,7 @@ const Category = ({
                     setConfirmationDialogData={setConfirmationDialogData}
                     selectedItems={selectedItems}
                     setSelectedItems={setSelectedItems}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             )
             .toList();
@@ -130,6 +132,7 @@ const Category = ({
                 setSelectedItems={setSelectedItems}
                 handleOnDrop={handleOnDrop}
                 handleOnDragOver={handleOnDragOver}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <div id="notebook-category-content-list">

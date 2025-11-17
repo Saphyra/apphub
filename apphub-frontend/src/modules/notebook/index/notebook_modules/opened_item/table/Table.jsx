@@ -32,12 +32,12 @@ const Table = ({
     const [rows, setRows] = useState([]);
     const [files, setFiles] = useState([]);
 
-    useEffect(() => loadTable(openedListItem.id, setDataFromResponse), [openedListItem]);
+    useEffect(() => loadTable(openedListItem.id, setDataFromResponse, setDisplaySpinner), [openedListItem]);
 
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
         if (isInFocus && !editingEnabled) {
-            loadTable(openedListItem.id, setDataFromResponse);
+            loadTable(openedListItem.id, setDataFromResponse, setDisplaySpinner);
         }
     }, [isInFocus]);
 
@@ -106,7 +106,7 @@ const Table = ({
                             />
                         }
 
-                        {getTableRows(rows, checklist, editingEnabled, setRows, custom, addFile)}
+                        {getTableRows(rows, checklist, editingEnabled, setRows, custom, addFile, setDisplaySpinner)}
 
                         {editingEnabled &&
                             <AddRowButton
@@ -134,7 +134,7 @@ const Table = ({
                     <Button
                         id="notebook-content-table-delete-checked-button"
                         label={localizationHandler.get("delete-checked")}
-                        onclick={() => confirmDeleteChcecked(setConfirmationDialogData, localizationHandler, openedListItem.id, setDataFromResponse)}
+                        onclick={() => confirmDeleteChcecked(setConfirmationDialogData, localizationHandler, openedListItem.id, setDataFromResponse, setDisplaySpinner)}
                     />
                 }
 

@@ -6,7 +6,7 @@ import { useUpdateEffect } from "react-use";
 import useHasFocus from "../../../../common/hook/UseHasFocus";
 import { NOTEBOOK_GET_CATEGORY_TREE } from "../../../../common/js/dao/endpoints/NotebookEndpoints";
 
-const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings }) => {
+const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings, setDisplaySpinner }) => {
     const [tree, setTree] = useState([]);
     const [openedLeaves, setOpenedLeavesD] = useState(sessionStorage.openedLeaves ? JSON.parse(sessionStorage.openedLeaves) : [null]);
 
@@ -43,7 +43,7 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLa
     const loadTree = () => {
         const fetch = async () => {
             const response = await NOTEBOOK_GET_CATEGORY_TREE.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setTree(response);
         }
         fetch();

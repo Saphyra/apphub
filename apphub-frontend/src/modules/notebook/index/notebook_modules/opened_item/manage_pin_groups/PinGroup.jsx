@@ -12,7 +12,7 @@ import Stream from "../../../../../../common/js/collection/Stream";
 import PinnedItem from "./PinnedItem";
 import { NOTEBOOK_DELETE_PIN_GROUP, NOTEBOOK_GET_PINNED_ITEMS, NOTEBOOK_RENAME_PIN_GROUP } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
-const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent, setConfirmationDialogData, setPinGroups, lastEvent }) => {
+const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent, setConfirmationDialogData, setPinGroups, lastEvent, setDisplaySpinner }) => {
     const [contentEditingEnabled, setContentEditingEnabled] = useState(false);
     const [newPinGroupName, setNewPinGroupName] = useState(pinGroupName);
     const [displayItems, setDisplayItems] = useState(false);
@@ -26,7 +26,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
 
         const fetch = async () => {
             const response = await NOTEBOOK_GET_PINNED_ITEMS.createRequest(null, null, { pinGroupId: pinGroupId })
-                .send();
+                .send(setDisplaySpinner);
             setItems(response);
         }
         fetch();
@@ -75,7 +75,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
 
     const deleteGroup = async () => {
         const response = await NOTEBOOK_DELETE_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId })
-            .send();
+            .send(setDisplaySpinner);
 
         setPinGroups(response);
         setLastEvent(new Event(EventName.NOTEBOOK_PIN_GROUP_MODIFIED));
@@ -90,7 +90,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
         }
 
         const response = await NOTEBOOK_RENAME_PIN_GROUP.createRequest({ value: newPinGroupName }, { pinGroupId: pinGroupId })
-            .send();
+            .send(setDisplaySpinner);
 
         setPinGroups(response);
         setLastEvent(new Event(EventName.NOTEBOOK_PIN_GROUP_MODIFIED));
@@ -107,6 +107,7 @@ const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent,
                 setLastEvent={setLastEvent}
                 pinGroupId={pinGroupId}
                 setItems={setItems}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

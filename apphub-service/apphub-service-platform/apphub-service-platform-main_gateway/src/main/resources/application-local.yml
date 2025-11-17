@@ -146,7 +146,7 @@ delay:
   filter:
     enabled: true
     paths:
-    - path: /api/**
+    - path: /api/notebook/**
       enabled: false
       minDelay: PT3S
       maxDelay: PT5S

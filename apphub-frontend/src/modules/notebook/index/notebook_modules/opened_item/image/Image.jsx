@@ -6,7 +6,7 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import { NOTEBOOK_GET_LIST_ITEM } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 import { STORAGE_DOWNLOAD_FILE } from "../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
-const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
+const Image = ({ localizationHandler, openedListItem, setOpenedListItem, setDisplaySpinner }) => {
     const [title, setTitle] = useState("");
     const [parent, setParent] = useState(null);
     const [storedFileId, setStoredFileId] = useState(null);
@@ -16,7 +16,7 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
     const loadListItem = () => {
         const fetch = async () => {
             const listItemData = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: openedListItem.id })
-                .send();
+                .send(setDisplaySpinner);
 
             setTitle(listItemData.title);
             setParent(listItemData.parentId);

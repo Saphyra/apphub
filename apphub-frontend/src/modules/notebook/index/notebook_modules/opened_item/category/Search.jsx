@@ -20,7 +20,8 @@ const Search = ({
     setLastEvent,
     userSettings,
     changeUserSettings,
-    setConfirmationDialogData
+    setConfirmationDialogData,
+    setDisplaySpinner
 }) => {
     const [searchResult, setSearchResult] = useState([]);
     const [selectedItems, setSelectedItems] = useState([]);
@@ -38,7 +39,7 @@ const Search = ({
     const loadSearchResult = () => {
         const fetch = async () => {
             const response = await NOTEBOOK_SEARCH.createRequest({ value: openedListItem.id })
-                .send();
+                .send(setDisplaySpinner);
 
             setSearchResult(response);
         }
@@ -83,6 +84,7 @@ const Search = ({
                     setConfirmationDialogData={setConfirmationDialogData}
                     selectedItems={selectedItems}
                     setSelectedItems={setSelectedItems}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             )
             .toList();
@@ -108,6 +110,7 @@ const Search = ({
                 selectedItems={selectedItems}
                 setLastEvent={setLastEvent}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <div id="notebook-category-content-list">
