@@ -101,4 +101,12 @@ public class ViewChecklistActions {
         driver.findElement(By.id("notebook-add-checklist-item-to-the-edge-cancel-button"))
             .click();
     }
+
+    public static int getCheckedItemCount(WebDriver driver) {
+        return Integer.parseInt(driver.findElement(By.id("notebook-content-checklist-checked-item-count")).getText());
+    }
+
+    public static int getTotalItemCount(WebDriver driver) {
+        return Integer.parseInt(driver.findElement(By.id("notebook-content-checklist-total-item-count")).getText());
+    }
 }

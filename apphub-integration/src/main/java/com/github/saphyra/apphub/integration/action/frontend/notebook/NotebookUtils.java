@@ -87,16 +87,15 @@ public class NotebookUtils {
 
         if (items.isEmpty()) {
             NewChecklistActions.getItems(driver)
-                .get(0)
+                .getFirst()
                 .remove();
-        } else {
-            ChecklistItem firstItem = NewChecklistActions.getItems(driver)
-                .get(0);
-            firstItem.setValue(items.get(0).getEntity1());
-            firstItem.setChecked(items.get(0).getEntity2());
+        } else if (items.size() > 1) {
+            while (NewChecklistActions.getItems(driver).size() < items.size()) {
+                NewChecklistActions.addItemToEnd(driver);
+            }
         }
 
-        for (int i = 1; i < items.size(); i++) {
+        for (int i = 0; i < items.size(); i++) {
             ChecklistItem checklistItem = NewChecklistActions.getItems(driver)
                 .get(i);
             checklistItem.setValue(items.get(i).getEntity1());
@@ -119,15 +118,15 @@ public class NotebookUtils {
 
         if (columns.isEmpty()) {
             NewTableActions.getRows(driver)
-                .get(0)
+                .getFirst()
                 .remove();
         } else {
             List<TableColumn> firstColumns = NewTableActions.getRows(driver)
-                .get(0)
+                .getFirst()
                 .getColumns();
-            for (int i = 0; i < columns.get(0).size(); i++) {
+            for (int i = 0; i < columns.getFirst().size(); i++) {
                 firstColumns.get(i)
-                    .setValue(columns.get(0).get(i));
+                    .setValue(columns.getFirst().get(i));
             }
 
             for (int rowIndex = 1; rowIndex < columns.size(); rowIndex++) {
@@ -158,15 +157,15 @@ public class NotebookUtils {
 
         if (rows.isEmpty()) {
             NewTableActions.getRows(driver)
-                .get(0)
+                .getFirst()
                 .remove();
         } else {
             List<TableColumn> firstColumns = NewTableActions.getRows(driver)
-                .get(0)
+                .getFirst()
                 .getColumns();
-            for (int i = 0; i < rows.get(0).getEntity2().size(); i++) {
+            for (int i = 0; i < rows.getFirst().getEntity2().size(); i++) {
                 firstColumns.get(i)
-                    .setValue(rows.get(0).getEntity2().get(i));
+                    .setValue(rows.getFirst().getEntity2().get(i));
             }
 
             for (int rowIndex = 1; rowIndex < rows.size(); rowIndex++) {
@@ -196,12 +195,12 @@ public class NotebookUtils {
     private static void setTableHeads(WebDriver driver, List<String> tableHeads) {
         if (tableHeads.isEmpty()) {
             NewTableActions.getTableHeads(driver)
-                .get(0)
+                .getFirst()
                 .remove();
         } else {
             NewTableActions.getTableHeads(driver)
-                .get(0)
-                .setValue(tableHeads.get(0));
+                .getFirst()
+                .setValue(tableHeads.getFirst());
 
             for (int i = 1; i < tableHeads.size(); i++) {
                 NewTableActions.getTableHeads(driver)
@@ -230,10 +229,10 @@ public class NotebookUtils {
         NewTableActions.fillTitle(driver, title);
 
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .remove();
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .remove();
 
         if (!rows.isEmpty()) {
@@ -241,7 +240,7 @@ public class NotebookUtils {
                 NewTableActions.addRowToEnd(driver);
             }
 
-            for (int i = 0; i < rows.get(0).size(); i++) {
+            for (int i = 0; i < rows.getFirst().size(); i++) {
                 NewTableActions.addColumnToEnd(driver);
             }
         }

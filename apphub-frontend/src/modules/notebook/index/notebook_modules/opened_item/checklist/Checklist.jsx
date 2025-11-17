@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import "./checklist.css";
 import { useUpdateEffect } from "react-use";
@@ -12,6 +12,7 @@ import InputField from "../../../../../../common/component/input/InputField";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import { hasValue } from "../../../../../../common/js/Utils";
+import Stream from "../../../../../../common/js/collection/Stream";
 
 const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -164,6 +165,12 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                         onclick={() => save(title, items, openedListItem, setEditingEnabled, setLastEvent, setDataFromResponse)}
                     />
                 }
+
+                <span>
+                    <span id="notebook-content-checklist-checked-item-count">{new Stream(items).filter(item => item.checked).count()}</span>
+                    <span> / </span>
+                    <span id="notebook-content-checklist-total-item-count">{items.length}</span>
+                </span>
             </div>
 
             {hasValue(newItemIndex) && getNewItemConfirmationDialog()}

@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewChecklistActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
@@ -23,6 +24,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -70,6 +72,26 @@ public class ChecklistCrudTest extends SeleniumTest {
         delete(driver);
     }
 
+    @Test(groups = {"fe", "notebook"})
+    public void checklistCount() {
+        WebDriver driver = extractDriver();
+        Navigation.toIndexPage(getServerPort(), driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.NOTEBOOK);
+
+        NotebookUtils.newChecklist(getServerPort(), driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CHECKLIST_VALUE_1, false), new BiWrapper<>(CHECKLIST_VALUE_2, true)));
+
+        NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
+            .open();
+
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewChecklistActions.getCheckedItemCount(driver)).isEqualTo(1);
+            assertThat(ViewChecklistActions.getTotalItemCount(driver)).isEqualTo(2);
+        });
+    }
+
     private static void create_emptyTitle(WebDriver driver) {
         NewChecklistActions.fillTitle(driver, " ");
         NewChecklistActions.submit(driver);
@@ -79,7 +101,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void create_removeItem(WebDriver driver) {
         NewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .remove();
 
         assertThat(NewChecklistActions.getItems(driver)).isEmpty();
@@ -100,7 +122,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void create_moveItemDown(WebDriver driver) {
         NewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .moveDown();
 
         assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::getValue).containsExactly(CHECKLIST_VALUE_2, CHECKLIST_VALUE_1);
@@ -116,7 +138,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void create_checkItem(WebDriver driver) {
         NewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .check();
 
         assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(true, false);
@@ -124,7 +146,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void create_uncheckItem(WebDriver driver) {
         NewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .uncheck();
 
         assertThat(NewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(false, false);
@@ -153,7 +175,7 @@ public class ChecklistCrudTest extends SeleniumTest {
     private static void edit_discard(WebDriver driver) {
         ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);
         ChecklistItem checklistItem = ViewChecklistActions.getItems(driver)
-            .get(0);
+            .getFirst();
         checklistItem.check();
         checklistItem.setValue(NEW_VALUE);
         NewChecklistActions.getItems(driver)
@@ -176,7 +198,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
         ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);
         checklistItem = ViewChecklistActions.getItems(driver)
-            .get(0);
+            .getFirst();
         checklistItem.check();
         checklistItem.setValue(NEW_VALUE);
         ViewChecklistActions.getItems(driver)
@@ -226,7 +248,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void checkItem(WebDriver driver) {
         ViewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .check();
 
         assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(true, false);
@@ -234,7 +256,7 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void uncheckItem(WebDriver driver) {
         ViewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .uncheck();
 
         assertThat(ViewChecklistActions.getItems(driver)).extracting(ChecklistItem::isChecked).containsExactly(false, false);
@@ -242,14 +264,14 @@ public class ChecklistCrudTest extends SeleniumTest {
 
     private static void editChecklistItem(WebDriver driver) {
         ViewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .edit(driver, NEW_VALUE);
 
         ViewChecklistActions.close(driver);
         NotebookActions.findListItemByTitleValidated(driver, NEW_CHECKLIST_TITLE)
             .open();
 
-        assertThat(ViewChecklistActions.getItems(driver).get(0).getValue()).isEqualTo(NEW_VALUE);
+        assertThat(ViewChecklistActions.getItems(driver).getFirst().getValue()).isEqualTo(NEW_VALUE);
     }
 
     private static void delete(WebDriver driver) {

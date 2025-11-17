@@ -12,6 +12,8 @@
     ApphubCI
         Dedicated setting for remote startup limit
         Chain commands
+    Notebook
+        Display checked and total count of checklist items
 
 ===BUGFIXES===
     Calendar
