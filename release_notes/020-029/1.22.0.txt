@@ -19,6 +19,7 @@
 ===BUGFIXES===
     Calendar
         Spinner is displayed until all calls are finished
+        Set selected date to today after midnight
     Notebook
         Limit width of confirmation dialog
 

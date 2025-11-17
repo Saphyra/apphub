@@ -51,9 +51,12 @@ const CalendarPage = () => {
     useUpdateEffect(() => {
         if (isInFocus) {
             refresh();
-            if (!currentDate.equals(LocalDate.now())) {
-                setCurrentDate(LocalDate.now());
-                setReferenceDate(LocalDate.now());
+
+            const now = LocalDate.now();
+            if (!currentDate.equals(now)) {
+                setCurrentDate(now);
+                setReferenceDate(now);
+                setSelectedDate(now);
             }
         }
     }, [isInFocus]);
