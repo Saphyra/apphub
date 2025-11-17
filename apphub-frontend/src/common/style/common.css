@@ -383,6 +383,7 @@ textarea {
     font-size: 20px;
     overflow: auto;
     max-height: 50vh;
+    max-width: 90vw;
 }
 
 .confirmation-dialog-button-container {

@@ -18,6 +18,8 @@
 ===BUGFIXES===
     Calendar
         Spinner is displayed until all calls are finished
+    Notebook
+        Limit width of confirmation dialog
 
 ===PLATFORM CHANGES===
 
