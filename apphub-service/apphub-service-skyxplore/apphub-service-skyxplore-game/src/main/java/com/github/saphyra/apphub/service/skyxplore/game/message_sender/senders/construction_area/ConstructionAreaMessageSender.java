@@ -64,7 +64,6 @@ public class ConstructionAreaMessageSender implements MessageSender {
                 return true;
             } catch (Exception e) {
                 String errorMessage = String.format("Failed sending ConstructionArea update for user %s to ConstructionArea %s", userId, constructionAreaId);
-                log.error(errorMessage, e);
                 errorReporterService.report(errorMessage, e);
                 return false;
             }

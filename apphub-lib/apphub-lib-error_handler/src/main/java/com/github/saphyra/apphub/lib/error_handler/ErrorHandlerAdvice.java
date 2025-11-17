@@ -53,7 +53,7 @@ class ErrorHandlerAdvice {
     @ExceptionHandler(LoggedException.class)
     ResponseEntity<ErrorResponse> loggedException(LoggedException exception) {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
-        log.info("Returning errorResponse: {}", errorResponse, exception);
+        log.warn("Returning errorResponse: {}", errorResponse, exception);
 
         return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
     }
@@ -61,7 +61,7 @@ class ErrorHandlerAdvice {
     @ExceptionHandler(ReportedException.class)
     ResponseEntity<ErrorResponse> reportedException(ReportedException exception) {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
-        log.info("Returning errorResponse: {}", errorResponse, exception);
+        log.warn("Returning errorResponse: {}", errorResponse, exception);
 
         errorReporterService.report(errorResponse.getStatus(), errorResponse.getErrorResponse(), exception);
 

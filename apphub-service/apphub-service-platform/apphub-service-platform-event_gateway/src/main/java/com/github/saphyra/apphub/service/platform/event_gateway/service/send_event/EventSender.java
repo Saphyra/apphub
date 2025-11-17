@@ -40,7 +40,6 @@ class EventSender {
         } catch (ResourceAccessException e) {
             log.warn("Failed sending event with name {} to processor {}: {}", sendEventRequest.getEventName(), processor, e.getMessage());
         } catch (Exception e) {
-            log.warn("Failed sending event with name {} to processor {}", sendEventRequest.getEventName(), processor, e);
             errorReporterService.report("Failed sending event with name " + sendEventRequest.getEventName() + " to processor " + processor, e);
         }
     }

@@ -55,7 +55,6 @@ public class ScheduledExecutorServiceBean {
             try {
                 command.run();
             } catch (Exception e) {
-                log.error("Unexpected error during processing:", e);
                 errorReporterService.report("Unexpected error during processing: " + e.getMessage(), e);
             }
         };

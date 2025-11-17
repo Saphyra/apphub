@@ -63,7 +63,6 @@ class SaveGameItemService {
                 .collect(Collectors.toList());
             gameItemService.save(models);
         } catch (Exception e) {
-            log.error("Failed to save gameItem {}", gameItemType, e);
             errorReporterService.report("Failed to save gameItem " + gameItemType, e);
         }
     }

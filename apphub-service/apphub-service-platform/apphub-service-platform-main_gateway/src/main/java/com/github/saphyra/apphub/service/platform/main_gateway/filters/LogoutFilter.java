@@ -63,7 +63,6 @@ public class LogoutFilter implements GlobalFilter, Ordered {
                 accessTokenId.ifPresent(accessTokenCache::invalidate);
             }
         } catch (Exception e) {
-            log.error("Failed clearing accessToken cache", e);
             errorReporterService.report("Failed clearing accessToken cache", e);
         }
         return result;

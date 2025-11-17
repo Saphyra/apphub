@@ -47,8 +47,6 @@ const NotebookPage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadUserSettings(), []);
 
-    console.log(displaySpinner) //TODO remove
-
     const updateDisplaySpinner = (display) => {
         setDisplaySpinner(prev => prev + (display ? 1 : -1));
     }

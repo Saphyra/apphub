@@ -105,7 +105,6 @@ public class CommodityNameCache {
             latch.countDown();
         } catch (Exception e) {
             tryCount++;
-            log.error("Failed loading CommodityNameCache. TryCount: " + tryCount, e);
             errorReporterService.report("Failed loading CommodityNameCache. TryCount: " + tryCount, e);
             sleepService.sleep(eliteBaseProperties.getCache().getLoadRetryDelay().toMillis());
         }

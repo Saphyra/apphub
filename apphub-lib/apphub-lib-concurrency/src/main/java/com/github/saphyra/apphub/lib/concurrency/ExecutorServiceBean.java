@@ -54,7 +54,6 @@ public class ExecutorServiceBean {
                 log.error("Exception occurred during async processing", e);
                 return ExecutionResult.failure(e);
             } catch (Exception e) {
-                log.error("Unexpected error during async processing:", e);
                 errorReporterService.report("Unexpected error during processing: " + e.getMessage(), e);
                 return ExecutionResult.failure(e);
             }

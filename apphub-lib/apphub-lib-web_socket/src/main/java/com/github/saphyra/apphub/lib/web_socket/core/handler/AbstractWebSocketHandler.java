@@ -172,7 +172,6 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             }
             sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime());
         } catch (Exception e) {
-            log.error("Failed to send {} event to {} in messageGroup {}", event.getEventName(), session.getPrincipal().getName(), getEndpoint(), e);
             context.getErrorReporterService()
                 .report(String.format("Failed to send %s event to %s in messageGroup %s", event.getEventName(), session.getPrincipal().getName(), getEndpoint()), e);
             afterConnectionClosed(session, null);

@@ -149,7 +149,6 @@ public class EdMessageProcessor {
             exceptionId,
             edMessage.getSchemaRef()
         );
-        log.error(errorMessage, e);
         errorReporterService.report(errorMessage, e);
         updateStatus(MessageStatus.ERROR, edMessage, exceptionId);
     }
