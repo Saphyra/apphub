@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.view.ViewC
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
@@ -73,7 +74,7 @@ public class ChecklistCrudTest extends SeleniumTest {
     }
 
     @Test(groups = {"fe", "notebook"})
-    public void checklistCount() {
+    public void checklistSearchAndCount() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();
@@ -86,6 +87,16 @@ public class ChecklistCrudTest extends SeleniumTest {
         NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
             .open();
 
+        //Search
+        ViewChecklistActions.setSearchText(driver, "2");
+        AwaitilityWrapper.awaitAssert(() -> {
+            CustomAssertions.singleListAssertThat(ViewChecklistActions.getItems(driver))
+                .extracting(ChecklistItem::getValue)
+                .isEqualTo(CHECKLIST_VALUE_2);
+        });
+        ViewChecklistActions.setSearchText(driver, "");
+
+        //Count
         AwaitilityWrapper.awaitAssert(() -> {
             assertThat(ViewChecklistActions.getCheckedItemCount(driver)).isEqualTo(1);
             assertThat(ViewChecklistActions.getTotalItemCount(driver)).isEqualTo(2);

@@ -14,6 +14,7 @@
         Chain commands
     Notebook
         Display checked and total count of checklist items
+        Search checklist items
 
 ===BUGFIXES===
     Calendar

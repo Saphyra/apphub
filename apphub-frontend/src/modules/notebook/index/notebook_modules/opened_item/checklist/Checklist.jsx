@@ -22,6 +22,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const [newItemIndex, setNewItemIndex] = useState(null);
     const [newItemContent, setNewItemContent] = useState("");
     const [lastIndexRange, setLastIndexRange] = useState(null);
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => loadChecklist(openedListItem.id, setDataFromResponse), [openedListItem]);
 
@@ -115,10 +116,18 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             />
 
             <div id="notebook-content-checklist-content" className="notebook-content-view-main">
+                <InputField
+                    id="notebook-content-checklist-search"
+                    type="text"
+                    placeholder={localizationHandler.get("search")}
+                    value={searchText}
+                    onchangeCallback={setSearchText}
+                />
+
                 {addButton(IndexRange.MIN, "notebook-content-checklist-add-item-to-start")}
 
                 <div>
-                    {getItems(items, localizationHandler, editingEnabled, setItems, setConfirmationDialogData)}
+                    {getItems(items, searchText, localizationHandler, editingEnabled, setItems, setConfirmationDialogData)}
                 </div>
 
                 {addButton(IndexRange.MAX, "notebook-content-checklist-add-item-to-end")}

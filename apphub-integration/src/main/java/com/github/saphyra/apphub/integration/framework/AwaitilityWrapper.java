@@ -132,7 +132,7 @@ public class AwaitilityWrapper {
     }
 
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier) {
-        return assertWithWaitList(supplier, list -> list.size() == 1, list -> list.get(0));
+        return assertWithWaitList(supplier, list -> list.size() == 1, list -> list.getFirst());
     }
 
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier, Predicate<List<T>> predicate, Function<List<T>, T> selector) {

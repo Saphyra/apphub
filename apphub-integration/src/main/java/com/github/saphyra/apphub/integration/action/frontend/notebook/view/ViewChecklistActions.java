@@ -109,4 +109,8 @@ public class ViewChecklistActions {
     public static int getTotalItemCount(WebDriver driver) {
         return Integer.parseInt(driver.findElement(By.id("notebook-content-checklist-total-item-count")).getText());
     }
+
+    public static void setSearchText(WebDriver driver, String searchText) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-checklist-search")), searchText);
+    }
 }
