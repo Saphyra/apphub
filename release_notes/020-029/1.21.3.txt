@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    Storage
+        Use host's IP for FTP connection instead of host.docker.internal
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
