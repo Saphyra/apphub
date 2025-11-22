@@ -9,12 +9,8 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
-import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
-import com.github.saphyra.apphub.lib.config.liquibase.EnableLiquibase;
-import com.github.saphyra.apphub.lib.error_handler.EnableErrorHandler;
 import com.github.saphyra.apphub.lib.monitoring.MemoryMonitoringEventController;
 import com.github.saphyra.apphub.lib.monitoring.MemoryStatusModelFactory;
-import com.github.saphyra.apphub.lib.request_validation.locale.EnableLocaleMandatoryRequestValidation;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.RequestContextProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +19,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
 import tools.jackson.databind.ObjectMapper;
@@ -32,11 +27,6 @@ import tools.jackson.databind.ObjectMapper;
 @EnableJpaRepositories
 @EntityScan
 @ComponentScan(basePackages = "com.github.saphyra.util", basePackageClasses = ExecutorServiceBeanFactory.class)
-@EnableLiquibase
-@EnableErrorHandler
-@Import(CommonConfigProperties.class)
-@EnableHealthCheck
-@EnableLocaleMandatoryRequestValidation
 class EventGatewayBeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(ExecutorServiceBean.class)
@@ -63,7 +53,6 @@ class EventGatewayBeanConfiguration {
     }
 
     @Bean
-    //@LoadBalanced
     RestTemplate restTemplate() {
         return new RestTemplate();
     }

@@ -51,7 +51,6 @@ event:
   processor:
     heartbeat:
       interval: 60000
-    enabled: true
     registration:
       failure:
         delay:

@@ -24,6 +24,7 @@
         Limit width of confirmation dialog
 
 ===PLATFORM CHANGES===
+    Use AutoConfigurations instead of EnableXYConfiguration annotations
 
 ===TECHNICAL DEBTS===
     Calendar

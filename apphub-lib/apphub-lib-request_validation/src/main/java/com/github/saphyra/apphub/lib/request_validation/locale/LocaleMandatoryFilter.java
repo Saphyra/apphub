@@ -31,7 +31,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
     private final ErrorResponseFactory errorResponseFactory;
     private final LocaleProvider localeProvider;
     private final ObjectMapperWrapper objectMapperWrapper;
-    private final LocaleMandatoryFilterConfiguration localeMandatoryFilterConfiguration;
+    private final LocaleMandatoryFilterAutoConfiguration localeMandatoryFilterAutoConfiguration;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -60,7 +60,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
         String method = request.getMethod();
         String requestUri = request.getRequestURI();
 
-        return localeMandatoryFilterConfiguration.getWhiteListedEndpoints()
+        return localeMandatoryFilterAutoConfiguration.getWhiteListedEndpoints()
             .stream()
             .anyMatch(whiteListedEndpoint -> antPathMatcher.match(whiteListedEndpoint.getPattern(), requestUri) && whiteListedEndpoint.getMethod().equals(method));
     }

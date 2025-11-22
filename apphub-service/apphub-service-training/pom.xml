@@ -42,9 +42,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-thymeleaf</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${versions.spring-boot}</version>
         </dependency>
     </dependencies>
 

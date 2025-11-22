@@ -30,9 +30,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.thymeleaf</groupId>
-            <artifactId>thymeleaf-spring5</artifactId>
-            <version>${versions.thymeleaf-spring}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${versions.spring-boot}</version>
         </dependency>
 
         <dependency>
@@ -51,12 +51,6 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-user-client</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-thymeleaf</artifactId>
             <version>${project.version}</version>
         </dependency>
 
