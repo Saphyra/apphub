@@ -44,6 +44,7 @@ public enum MenuOrderEnum implements MenuOrder {
 
     SETTINGS_BROWSER_STARTUP_LIMIT(1),
     SETTINGS_CHANGE_LANGUAGE(10),
+    SETTINGS_GUI_ENABLED(100),
 
     //Settings Thread count
     SETTINGS_THREAD_COUNT_DEFAULT(1),

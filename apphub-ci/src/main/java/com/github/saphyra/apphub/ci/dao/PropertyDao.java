@@ -141,4 +141,11 @@ public class PropertyDao {
             .map(Property::getValue)
             .orElse(null);
     }
+
+    public boolean isGuiEnabled() {
+        return propertyRepository.findById(PropertyName.GUI_ENABLED)
+            .map(Property::getValue)
+            .map(Boolean::parseBoolean)
+            .orElseGet(defaultProperties::getGuiEnabled);
+    }
 }

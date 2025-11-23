@@ -44,7 +44,7 @@ public abstract class MenuBase {
                 List<MenuOption> options = getOption();
 
                 for (MenuOption option : options) {
-                    if (options == exitOption) {
+                    if (option == exitOption) {
                         return;
                     }
 

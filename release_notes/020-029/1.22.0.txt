@@ -12,6 +12,7 @@
     ApphubCI
         Dedicated setting for remote startup limit
         Chain commands
+        GUI indicator for service startup
     Notebook
         Display checked and total count of checklist items
         Search checklist items

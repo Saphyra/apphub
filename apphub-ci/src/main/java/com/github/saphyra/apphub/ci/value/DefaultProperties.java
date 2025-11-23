@@ -21,4 +21,5 @@ public class DefaultProperties {
     private Integer remoteRunTestsPreCreateDriverCount;
     private String bashFileLocation;
     private Integer browserStartupLimit;
+    private Boolean guiEnabled;
 }

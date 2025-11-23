@@ -4,6 +4,7 @@ public enum PropertyName {
     //Platform
     LANGUAGE,
     BROWSER_STARTUP_LIMIT,
+    GUI_ENABLED,
 
     //Local run
     LOCAL_DEPLOY_MODE,
