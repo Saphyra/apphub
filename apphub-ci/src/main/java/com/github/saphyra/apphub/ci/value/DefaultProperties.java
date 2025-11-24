@@ -22,4 +22,5 @@ public class DefaultProperties {
     private String bashFileLocation;
     private Integer browserStartupLimit;
     private Boolean guiEnabled;
+    private Integer integrationRetryCount;
 }

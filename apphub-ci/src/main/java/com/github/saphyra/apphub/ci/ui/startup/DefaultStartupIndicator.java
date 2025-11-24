@@ -14,7 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 class DefaultStartupIndicator implements StartupIndicator {
     private static final int PANEL_WIDTH = 500;
@@ -24,16 +23,6 @@ class DefaultStartupIndicator implements StartupIndicator {
 
     private JFrame frame;
     private JProgressBar progressBar;
-
-    static void main() {
-        SwingUtilities.invokeLater(() -> {
-            List<String> services = Stream.iterate(0, n -> n + 1)
-                .limit(20)
-                .map(n -> "Service-" + n)
-                .collect(Collectors.toList());
-            new DefaultStartupIndicator(services, null).run();
-        });
-    }
 
     DefaultStartupIndicator(List<String> serviceNames, StartupIndicatorContext startupIndicatorContext) {
         this.startupIndicatorContext = startupIndicatorContext;

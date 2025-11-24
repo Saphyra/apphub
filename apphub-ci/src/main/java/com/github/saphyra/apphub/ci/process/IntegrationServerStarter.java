@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
+import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class IntegrationServerStarter {
     private final PlatformProperties testProperties;
     private final ServicePinger servicePinger;
+    private final StartupIndicatorFactory startupIndicatorFactory;
 
     @SneakyThrows
     public void start() {
@@ -30,6 +32,7 @@ public class IntegrationServerStarter {
             LocalStartTask.builder()
                 .servicePinger(servicePinger)
                 .service(integrationServer)
+                .startupIndicator(startupIndicatorFactory.noOpIndicator())
                 .build()
                 .run();
         } else {

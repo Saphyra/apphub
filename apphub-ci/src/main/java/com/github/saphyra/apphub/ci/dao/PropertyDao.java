@@ -148,4 +148,18 @@ public class PropertyDao {
             .map(Boolean::parseBoolean)
             .orElseGet(defaultProperties::getGuiEnabled);
     }
+
+    public Integer getLocalIntegrationRetryCount() {
+        return propertyRepository.findById(PropertyName.LOCAL_INTEGRATION_RETRY_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getIntegrationRetryCount);
+    }
+
+    public Integer getRemoteIntegrationRetryCount() {
+        return propertyRepository.findById(PropertyName.REMOTE_INTEGRATION_RETRY_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getIntegrationRetryCount);
+    }
 }

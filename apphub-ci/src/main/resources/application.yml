@@ -78,6 +78,7 @@ defaults:
   bashFileLocation: bash
   browserStartupLimit: 3
   guiEnabled: true
+  integrationRetryCount: 2
 
 services:
 #Crutial platform

@@ -22,6 +22,10 @@ public class StartupIndicatorFactory {
     }
 
     public StartupIndicator createFromServiceNames(List<String> serviceNames) {
-        return propertyDao.isGuiEnabled() ? new DefaultStartupIndicator(serviceNames, startupIndicatorContext).run() : new NoOpStartupIndicator();
+        return propertyDao.isGuiEnabled() ? new DefaultStartupIndicator(serviceNames, startupIndicatorContext).run() : noOpIndicator();
+    }
+
+    public StartupIndicator noOpIndicator() {
+        return new NoOpStartupIndicator();
     }
 }
