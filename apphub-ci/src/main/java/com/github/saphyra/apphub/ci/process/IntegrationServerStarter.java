@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
+import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -29,10 +30,11 @@ public class IntegrationServerStarter {
 
             process.waitFor();
 
+            StartupIndicator startupIndicator = startupIndicatorFactory.noOpIndicator();
             LocalStartTask.builder()
                 .servicePinger(servicePinger)
                 .service(integrationServer)
-                .startupIndicator(startupIndicatorFactory.noOpIndicator())
+                .startupIndicator(startupIndicator)
                 .build()
                 .run();
         } else {

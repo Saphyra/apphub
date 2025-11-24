@@ -7,7 +7,9 @@ public enum MaterialType {
     UNKNOWN,
     MANUFACTURED,
     ENCODED,
-    RAW;
+    RAW,
+    NONE,
+    ;
 
     public static MaterialType parse(String in) {
         if (isNull(in)) {

@@ -41,5 +41,6 @@
             Use spinner for loading
     EliteBase
         Performance reporting for commodity trading
+        Allow "No material trader" override
     Notebook
         Use spinner for all BE queries

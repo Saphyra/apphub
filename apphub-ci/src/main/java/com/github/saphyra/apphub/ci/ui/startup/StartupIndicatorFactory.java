@@ -10,6 +10,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class StartupIndicatorFactory {
+    private static final StartupIndicator NO_OP_INDICATOR = new NoOpStartupIndicator();
+
     private final PropertyDao propertyDao;
     private final StartupIndicatorContext startupIndicatorContext;
 
@@ -22,10 +24,10 @@ public class StartupIndicatorFactory {
     }
 
     public StartupIndicator createFromServiceNames(List<String> serviceNames) {
-        return propertyDao.isGuiEnabled() ? new DefaultStartupIndicator(serviceNames, startupIndicatorContext).run() : noOpIndicator();
+        return propertyDao.isGuiEnabled() ? new DefaultStartupIndicator(serviceNames, startupIndicatorContext).run() : NO_OP_INDICATOR;
     }
 
     public StartupIndicator noOpIndicator() {
-        return new NoOpStartupIndicator();
+        return NO_OP_INDICATOR;
     }
 }

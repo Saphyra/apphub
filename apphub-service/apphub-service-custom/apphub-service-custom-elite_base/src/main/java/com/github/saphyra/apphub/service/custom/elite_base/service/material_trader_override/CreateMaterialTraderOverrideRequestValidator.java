@@ -17,7 +17,7 @@ import java.util.EnumSet;
 @RequiredArgsConstructor
 @Slf4j
 class CreateMaterialTraderOverrideRequestValidator {
-    private static final EnumSet<MaterialType> ACCEPTED_MATERIAL_TYPES = EnumSet.of(MaterialType.RAW, MaterialType.ENCODED, MaterialType.MANUFACTURED);
+    private static final EnumSet<MaterialType> ACCEPTED_MATERIAL_TYPES = EnumSet.of(MaterialType.RAW, MaterialType.ENCODED, MaterialType.MANUFACTURED, MaterialType.NONE);
 
     private final MaterialTraderOverrideDao materialTraderOverrideDao;
 

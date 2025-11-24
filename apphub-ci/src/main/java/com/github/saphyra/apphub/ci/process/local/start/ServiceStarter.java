@@ -38,6 +38,8 @@ class ServiceStarter {
             .map(serviceName -> services.findByName(serviceName).orElseThrow(() -> new RuntimeException("Service not found with name " + serviceName)))
             .collect(Collectors.groupingBy(Service::getGroup))
             .forEach((group, groupMembers) -> startServices(startupIndicator, group, groupMembers));
+
+        startupIndicator.scheduleShutdown();
     }
 
     void startServices() {

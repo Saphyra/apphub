@@ -42,6 +42,7 @@ const SearchResultRow = ({ localizationHandler, record, reload }) => {
         <tr>
             <td>
                 <span>{record.materialType}</span>
+                {record.materialType !== record.originalMaterialType && <span> ({record.originalMaterialType})</span>}
                 <MaterialTraderOverride
                     localizationHandler={localizationHandler}
                     record={record}

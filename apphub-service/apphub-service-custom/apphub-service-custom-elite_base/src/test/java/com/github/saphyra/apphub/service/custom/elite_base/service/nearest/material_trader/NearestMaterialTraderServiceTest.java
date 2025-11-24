@@ -145,7 +145,6 @@ class NearestMaterialTraderServiceTest {
             .bodyId(BODY_ID)
             .economy(EconomyEnum.INDUSTRIAL)
             .services(LazyLoadedField.loaded(List.of(StationServiceEnum.MATERIAL_TRADER)))
-            .economy(EconomyEnum.INDUSTRIAL)
             .economies(LazyLoadedField.loaded(Collections.emptyList()))
             .build();
         stationDao.save(station);

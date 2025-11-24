@@ -18,6 +18,8 @@ import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.IsNullEquation;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.ListValue;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.NamedColumn;
+import com.github.saphyra.apphub.service.custom.elite_base.util.sql.NotEqualCondition;
+import com.github.saphyra.apphub.service.custom.elite_base.util.sql.NullCondition;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.OrderType;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.PowerSegment;
 import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedColumn;
@@ -39,7 +41,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.*;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_BODY_ID;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_DISTANCE_FROM_REFERENCE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_DISTANCE_FROM_STAR;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_ECONOMY;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_ID;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_MATERIAL_TYPE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_SERVICE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STAR_NAME;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STAR_SYSTEM_ID;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STATION_ID;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_STATION_NAME;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_VERIFIED;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_X_POS;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_Y_POS;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_Z_POS;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_BODY;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_MATERIAL_TRADER_OVERRIDE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STATION;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STATION_SERVICE;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -90,6 +112,8 @@ public class NearestMaterialTraderService {
             ))
             .and()
             .condition(getMaterialTypeCondition(materialType))
+            .and()
+            .condition(filterNoneOverride())
             .orderBy(new DefaultColumn(COLUMN_DISTANCE_FROM_REFERENCE), OrderType.ASC)
             .limit(properties.getSearchPageSize())
             .offset(page * properties.getSearchPageSize())
@@ -117,6 +141,15 @@ public class NearestMaterialTraderService {
 
             return result;
         });
+    }
+
+    private Condition filterNoneOverride() {
+        return new ConditionGroup()
+            .condition(new NullCondition(new DefaultColumn(COLUMN_MATERIAL_TYPE)))
+            .or()
+            .condition(new NotEqualCondition(new DefaultColumn(COLUMN_MATERIAL_TYPE), new WrappedValue(MaterialType.NONE)))
+            .or()
+            .condition(new Equation(new DefaultColumn(COLUMN_VERIFIED), () -> "false"));
     }
 
     private MaterialType getMaterialType(EconomyEnum economy, MaterialType materialType) {
