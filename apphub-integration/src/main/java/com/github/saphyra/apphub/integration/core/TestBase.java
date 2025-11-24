@@ -78,6 +78,7 @@ public abstract class TestBase {
         log.info("Namespace name: {}", TestConfiguration.NAMESPACE_NAME);
         log.info("Browser startup limit: {}", TestConfiguration.BROWSER_STARTUP_LIMIT);
         log.info("Retry enabled: {}", TestConfiguration.RETRY_ENABLED);
+        log.info("Retry count: {}", TestConfiguration.MAX_RETRY_COUNT);
 
         IntegrationServer.start();
 

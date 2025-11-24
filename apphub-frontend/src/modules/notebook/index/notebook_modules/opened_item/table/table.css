@@ -12,3 +12,9 @@
     margin: auto;
     width: 75%;
 }
+
+#notebook-content-table-content-table thead{
+    position: sticky;
+    top: 0;
+    background: black;
+}

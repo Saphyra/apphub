@@ -140,6 +140,7 @@ public class RunTestsTask {
             "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
             "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
             "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
+            "-DmaxRetryCount=%s".formatted(retryCount),
             "\"",
             "clean",
             "test"

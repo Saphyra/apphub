@@ -24,6 +24,7 @@
         Set selected date to today after midnight
     Notebook
         Limit width of confirmation dialog
+        Sticky table header
 
 ===PLATFORM CHANGES===
     Use AutoConfigurations instead of EnableXYConfiguration annotations
