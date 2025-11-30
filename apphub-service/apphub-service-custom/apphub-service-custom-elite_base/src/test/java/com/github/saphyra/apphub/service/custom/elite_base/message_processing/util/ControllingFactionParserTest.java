@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +15,7 @@ class ControllingFactionParserTest {
     private static final Object VALUE = "value";
 
     @Spy
-    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @InjectMocks
     private ControllingFactionParser underTest;

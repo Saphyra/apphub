@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Link;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ class LinkColumnDataServiceTest {
     private static final UUID COLUMN_ID = UUID.randomUUID();
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private ContentDao contentDao;
@@ -39,7 +39,7 @@ class LinkColumnDataServiceTest {
 
     @Test
     void stringifyContent() {
-        given(objectMapperWrapper.writeValueAsString(DATA)).willReturn(STRINGIFIED_DATA);
+        given(objectMapper.writeValueAsString(DATA)).willReturn(STRINGIFIED_DATA);
 
         assertThat(underTest.stringifyContent(DATA)).isEqualTo(STRINGIFIED_DATA);
     }
@@ -56,7 +56,7 @@ class LinkColumnDataServiceTest {
         given(contentDao.findByParentValidated(COLUMN_ID)).willReturn(content);
         given(content.getContent()).willReturn(DATA);
         Link link = new Link();
-        given(objectMapperWrapper.readValue(DATA, Link.class)).willReturn(link);
+        given(objectMapper.readValue(DATA, Link.class)).willReturn(link);
 
         assertThat(underTest.getData(COLUMN_ID)).isEqualTo(link);
     }
@@ -67,7 +67,7 @@ class LinkColumnDataServiceTest {
             .url(URL)
             .label(" ")
             .build();
-        given(objectMapperWrapper.convertValue(DATA, Link.class)).willReturn(link);
+        given(objectMapper.convertValue(DATA, Link.class)).willReturn(link);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -80,7 +80,7 @@ class LinkColumnDataServiceTest {
             .url(null)
             .label(LABEL)
             .build();
-        given(objectMapperWrapper.convertValue(DATA, Link.class)).willReturn(link);
+        given(objectMapper.convertValue(DATA, Link.class)).willReturn(link);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -93,7 +93,7 @@ class LinkColumnDataServiceTest {
             .url(URL)
             .label(LABEL)
             .build();
-        given(objectMapperWrapper.convertValue(DATA, Link.class)).willReturn(link);
+        given(objectMapper.convertValue(DATA, Link.class)).willReturn(link);
 
         underTest.validateData(DATA);
     }

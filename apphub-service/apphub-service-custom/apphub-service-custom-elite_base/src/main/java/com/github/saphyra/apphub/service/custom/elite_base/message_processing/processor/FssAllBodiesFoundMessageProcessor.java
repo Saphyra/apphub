@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_all_bodies_found.FssAllBodiesFoundMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_all_bodies_found.FssAllBodiesFoundMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class FssAllBodiesFoundMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
 
     @Override
@@ -22,7 +22,7 @@ class FssAllBodiesFoundMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        FssAllBodiesFoundMessage fssAllBodiesFoundMessage = objectMapperWrapper.readValue(message.getMessage(), FssAllBodiesFoundMessage.class);
+        FssAllBodiesFoundMessage fssAllBodiesFoundMessage = objectMapper.readValue(message.getMessage(), FssAllBodiesFoundMessage.class);
 
         starSystemSaver.save(
             fssAllBodiesFoundMessage.getTimestamp(),

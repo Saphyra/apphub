@@ -1,20 +1,20 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.springframework.stereotype.Component;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReportDto> {
     private final UuidConverter uuidConverter;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected ErrorReportDto processEntityConversion(ErrorReportEntity entity) {
@@ -24,7 +24,7 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReportD
             .message(entity.getMessage())
             .responseStatus(entity.getResponseStatus())
             .responseBody(entity.getResponseBody())
-            .exception(objectMapperWrapper.readValue(entity.getException(), ExceptionModel.class))
+            .exception(objectMapper.readValue(entity.getException(), ExceptionModel.class))
             .status(ErrorReportStatus.valueOf(entity.getStatus()))
             .service(entity.getService())
             .build();
@@ -38,7 +38,7 @@ class ErrorReportConverter extends ConverterBase<ErrorReportEntity, ErrorReportD
             .message(domain.getMessage())
             .responseStatus(domain.getResponseStatus())
             .responseBody(domain.getResponseBody())
-            .exception(objectMapperWrapper.writeValueAsString(domain.getException()))
+            .exception(objectMapper.writeValueAsString(domain.getException()))
             .status(domain.getStatus().name())
             .service(domain.getService())
             .build();

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.custom.villany_atesz.config;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.custom.villany_atesz.VillanyAteszApplication;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @Slf4j
@@ -26,10 +24,5 @@ public class VillanyAteszBeanConfig {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

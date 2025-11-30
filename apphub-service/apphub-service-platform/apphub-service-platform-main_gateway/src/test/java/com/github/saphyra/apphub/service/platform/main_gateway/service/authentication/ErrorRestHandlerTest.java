@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authenti
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,7 +31,7 @@ public class ErrorRestHandlerTest {
     private ErrorResponseWrapper errorResponseWrapper;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private ErrorRestHandler underTest;
@@ -66,7 +66,7 @@ public class ErrorRestHandlerTest {
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.BAD_REQUEST);
         given(response.getHeaders()).willReturn(httpHeaders);
         given(errorResponseWrapper.getErrorResponse()).willReturn(errorResponse);
-        given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(SERIALIZED_PAYLOAD);
+        given(objectMapper.writeValueAsString(errorResponse)).willReturn(SERIALIZED_PAYLOAD);
         given(response.bufferFactory()).willReturn(dataBufferFactory);
         given(dataBufferFactory.wrap(SERIALIZED_PAYLOAD.getBytes())).willReturn(dataBuffer);
         given(response.writeAndFlushWith(any())).willReturn(mono);

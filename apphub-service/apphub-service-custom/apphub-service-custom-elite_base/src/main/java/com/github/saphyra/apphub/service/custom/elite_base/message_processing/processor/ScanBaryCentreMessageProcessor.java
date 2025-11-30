@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.scan_bary_centre.ScanBaryCentreMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.scan_bary_centre.ScanBaryCentreMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class ScanBaryCentreMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
 
     @Override
@@ -22,7 +22,7 @@ class ScanBaryCentreMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        ScanBaryCentreMessage scanBaryCentreMessage = objectMapperWrapper.readValue(message.getMessage(), ScanBaryCentreMessage.class);
+        ScanBaryCentreMessage scanBaryCentreMessage = objectMapper.readValue(message.getMessage(), ScanBaryCentreMessage.class);
 
         starSystemSaver.save(
             scanBaryCentreMessage.getTimestamp(),

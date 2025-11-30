@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.admin_panel.error_report.repository;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,7 +30,7 @@ public class ErrorReportConverterTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private ErrorReportConverter underTest;
@@ -41,7 +41,7 @@ public class ErrorReportConverterTest {
     @Test
     public void convertEntity() {
         given(uuidConverter.convertEntity(ID_STRING)).willReturn(ID);
-        given(objectMapperWrapper.readValue(EXCEPTION_STRING, ExceptionModel.class)).willReturn(exceptionModel);
+        given(objectMapper.readValue(EXCEPTION_STRING, ExceptionModel.class)).willReturn(exceptionModel);
 
         ErrorReportEntity entity = ErrorReportEntity.builder()
             .id(ID_STRING)
@@ -69,7 +69,7 @@ public class ErrorReportConverterTest {
     @Test
     public void convertDomain() {
         given(uuidConverter.convertDomain(ID)).willReturn(ID_STRING);
-        given(objectMapperWrapper.writeValueAsString(exceptionModel)).willReturn(EXCEPTION_STRING);
+        given(objectMapper.writeValueAsString(exceptionModel)).willReturn(EXCEPTION_STRING);
 
         ErrorReportDto domain = ErrorReportDto.builder()
             .id(ID)

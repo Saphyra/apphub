@@ -3,12 +3,12 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
@@ -16,10 +16,10 @@ import org.springframework.stereotype.Component;
 public class MessageFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     public EdMessage create(String content) {
-        ParsedMessage parsedMessage = objectMapperWrapper.readValue(content, ParsedMessage.class);
+        ParsedMessage parsedMessage = objectMapper.readValue(content, ParsedMessage.class);
         log.debug("Message arrived: {}", parsedMessage.getSchemaRef());
 
         return EdMessage.builder()
@@ -27,8 +27,8 @@ public class MessageFactory {
             .createdAt(dateTimeUtil.getCurrentDateTime())
             .status(MessageStatus.ARRIVED)
             .schemaRef(parsedMessage.getSchemaRef())
-            .header(objectMapperWrapper.writeValueAsString(parsedMessage.getHeader()))
-            .message(objectMapperWrapper.writeValueAsString(parsedMessage.getMessage()))
+            .header(objectMapper.writeValueAsString(parsedMessage.getHeader()))
+            .message(objectMapper.writeValueAsString(parsedMessage.getMessage()))
             .build();
     }
 

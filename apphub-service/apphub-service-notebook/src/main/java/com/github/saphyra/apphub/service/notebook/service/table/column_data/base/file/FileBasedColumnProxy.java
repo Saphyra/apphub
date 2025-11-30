@@ -18,7 +18,7 @@ import java.util.UUID;
 public class FileBasedColumnProxy {
     private final FileBasedColumnSaver fileBasedColumnSaver;
     private final FileBasedColumnDeleter fileBasedColumnDeleter;
-    private final FileBasedColumnEditer fileBasedColumnEditer;
+    private final FileBasedColumnEditor fileBasedColumnEditor;
     private final FileBasedColumnCloner fileBasedColumnCloner;
 
     Optional<TableFileUploadResponse> save(UUID userId, UUID rowId, TableColumnModel model, ColumnType columnType) {
@@ -30,7 +30,7 @@ public class FileBasedColumnProxy {
     }
 
     public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
-        return fileBasedColumnEditer.edit(listItem, rowId, model);
+        return fileBasedColumnEditor.edit(listItem, rowId, model);
     }
 
     public void clone(ListItem clone, UUID rowId, Dimension originalColumn, ColumnType columnType) {

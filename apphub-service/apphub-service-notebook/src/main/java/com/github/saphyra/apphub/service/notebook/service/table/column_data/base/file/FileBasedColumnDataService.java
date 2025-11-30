@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
@@ -12,6 +11,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
 import lombok.RequiredArgsConstructor;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public abstract class FileBasedColumnDataService implements ColumnDataService {
     protected final ColumnType columnType;
     private final FileBasedColumnProxy proxy;
     private final FileDao fileDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final FileMetadataValidator fileMetadataValidator;
 
     @Override
@@ -65,7 +65,7 @@ public abstract class FileBasedColumnDataService implements ColumnDataService {
         if (isNull(data)) {
             return;
         }
-        FileMetadata request = ValidationUtil.parse(data, (d) -> objectMapperWrapper.convertValue(d, FileMetadata.class), "fileMetadata");
+        FileMetadata request = ValidationUtil.parse(data, (d) -> objectMapper.convertValue(d, FileMetadata.class), "fileMetadata");
 
         fileMetadataValidator.validate(request);
     }

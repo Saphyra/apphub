@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.data.loader;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;
 import com.github.saphyra.apphub.lib.data.ContentLoader;
 import lombok.Builder;
@@ -8,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 
@@ -15,7 +15,7 @@ import java.io.IOException;
 @Builder
 @Slf4j
 class ClassPathLoader<K, V> implements ContentLoader {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final PathMatchingResourcePatternResolver patternResolver;
 
     private final AbstractDataService<K, V> dataService;
@@ -29,7 +29,7 @@ class ClassPathLoader<K, V> implements ContentLoader {
 
             Resource[] resources = patternResolver.getResources(locationPattern);
             for (Resource resource : resources) {
-                dataService.addItem(objectMapperWrapper.readValue(resource.getURL(), clazz), resource.getFilename());
+                dataService.addItem(objectMapper.readValue(resource.getInputStream(), clazz), resource.getFilename());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

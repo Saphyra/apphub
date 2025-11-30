@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
@@ -21,7 +20,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.client.RestTemplate;
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableJpaRepositories
@@ -85,10 +83,5 @@ class EventGatewayBeanConfiguration {
             .memoryStatusModelFactory(memoryStatusModelFactory)
             .serviceName(serviceName)
             .build();
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

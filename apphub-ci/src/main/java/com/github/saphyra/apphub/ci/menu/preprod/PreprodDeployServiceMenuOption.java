@@ -9,11 +9,11 @@ import com.github.saphyra.apphub.ci.menu.MenuOption;
 import com.github.saphyra.apphub.ci.menu.MenuOrder;
 import com.github.saphyra.apphub.ci.menu.MenuOrderEnum;
 import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodReleaseProcess;
-import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ class PreprodDeployServiceMenuOption implements MenuOption {
     private final PreprodReleaseProcess preprodReleaseProcess;
     private final Services services;
     private final PropertyDao propertyDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public Menu getMenu() {
@@ -57,7 +57,7 @@ class PreprodDeployServiceMenuOption implements MenuOption {
         List<String> serviceNames = Arrays.asList(servicesToStartArr);
         preprodReleaseProcess.deployServices(serviceNames);
 
-        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapperWrapper.writeValueAsString(serviceNames));
+        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapper.writeValueAsString(serviceNames));
 
         return false;
     }

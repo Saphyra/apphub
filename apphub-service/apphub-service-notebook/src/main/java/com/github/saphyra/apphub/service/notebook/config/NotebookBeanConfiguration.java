@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.config;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.cache.CacheConfiguration;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.NotebookApplication;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 
@@ -28,11 +26,5 @@ class NotebookBeanConfiguration {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return new ObjectMapperWrapper(objectMapper);
     }
 }

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import static java.util.Objects.isNull;
 
@@ -12,7 +12,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class ControllingFactionParser {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     public ControllingFaction parse(Object controllingFaction) {
         if (isNull(controllingFaction)) {
@@ -25,6 +25,6 @@ public class ControllingFactionParser {
                 .build();
         }
 
-        return objectMapperWrapper.convertValue(controllingFaction, ControllingFaction.class);
+        return objectMapper.convertValue(controllingFaction, ControllingFaction.class);
     }
 }

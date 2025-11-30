@@ -1,15 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.outfitting.OutfittingMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.LoadoutSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.outfitting.OutfittingMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaveResult;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaverUtil;
 import org.junit.jupiter.api.Test;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,7 +42,7 @@ class OutfittingMessageProcessorTest {
     private static final String MODULE = "module";
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -88,7 +88,7 @@ class OutfittingMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, OutfittingMessage.class)).willReturn(outfittingMessage);
+        given(objectMapper.readValue(MESSAGE, OutfittingMessage.class)).willReturn(outfittingMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_NAME)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(stationSaverUtil.saveStationOrFleetCarrier(TIMESTAMP, STAR_SYSTEM_ID, MARKET_ID, STATION_NAME)).willReturn(saveResult);
@@ -111,7 +111,7 @@ class OutfittingMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, OutfittingMessage.class)).willReturn(outfittingMessage);
+        given(objectMapper.readValue(MESSAGE, OutfittingMessage.class)).willReturn(outfittingMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_NAME)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(stationSaverUtil.saveStationOrFleetCarrier(TIMESTAMP, STAR_SYSTEM_ID, MARKET_ID, STATION_NAME)).willReturn(saveResult);

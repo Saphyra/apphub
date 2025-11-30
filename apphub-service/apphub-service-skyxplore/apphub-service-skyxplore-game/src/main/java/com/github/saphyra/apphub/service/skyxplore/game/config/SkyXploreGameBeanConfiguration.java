@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGa
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -16,7 +15,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -63,11 +61,5 @@ public class SkyXploreGameBeanConfiguration {
     @Bean
     ApplicationContextProxy applicationContextProxy(ConfigurableApplicationContext applicationContext) {
         return new ApplicationContextProxy(applicationContext);
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        return new ObjectMapperWrapper(objectMapper);
     }
 }

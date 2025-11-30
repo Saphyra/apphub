@@ -1,17 +1,17 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.docking_denied.DockingDeniedMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class DockingDeniedMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -20,7 +20,7 @@ class DockingDeniedMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        DockingDeniedMessage dockingDeniedMessage = objectMapperWrapper.readValue(message.getMessage(), DockingDeniedMessage.class);
+        DockingDeniedMessage dockingDeniedMessage = objectMapper.readValue(message.getMessage(), DockingDeniedMessage.class);
 
         log.debug("Processing docking denied message: {}", dockingDeniedMessage);
     }

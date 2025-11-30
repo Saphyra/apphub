@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.localization;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.core.TestBase;
 import lombok.experimental.UtilityClass;
+import tools.jackson.core.type.TypeReference;
 
 import java.io.InputStream;
 import java.util.HashMap;
@@ -26,7 +26,7 @@ public class LocalizationProperties {
                     throw new IllegalStateException(String.format("File not found: %s", fileName));
                 }
 
-                TypeReference<Map<String, String>> ref = new TypeReference<Map<String, String>>() {
+                TypeReference<Map<String, String>> ref = new TypeReference<>() {
                 };
                 Map<String, String> propertyMap = TestBase.OBJECT_MAPPER_WRAPPER.readValue(inputStream, ref);
 

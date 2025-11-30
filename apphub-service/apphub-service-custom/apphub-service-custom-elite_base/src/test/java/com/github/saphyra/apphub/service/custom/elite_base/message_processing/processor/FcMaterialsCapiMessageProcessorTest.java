@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
@@ -17,6 +16,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -46,7 +46,7 @@ class FcMaterialsCapiMessageProcessorTest {
     private static final Integer STOCK = 34637;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private FleetCarrierDao fleetCarrierDao;
@@ -68,7 +68,7 @@ class FcMaterialsCapiMessageProcessorTest {
     @BeforeEach
     void setUp() {
         underTest = FcMaterialsCapiMessageProcessor.builder()
-            .objectMapperWrapper(objectMapperWrapper)
+            .objectMapper(objectMapper)
             .fleetCarrierDao(fleetCarrierDao)
             .commoditySaver(commoditySaver)
             .build();
@@ -94,7 +94,7 @@ class FcMaterialsCapiMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
+        given(objectMapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
 
@@ -116,7 +116,7 @@ class FcMaterialsCapiMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
+        given(objectMapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.empty());
 
         underTest.processMessage(edMessage);
@@ -147,11 +147,11 @@ class FcMaterialsCapiMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
+        given(objectMapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
-        given(objectMapperWrapper.convertValue(eq(List.of(purchase)), any(TypeReference.class))).willReturn(List.of(purchase));
-        given(objectMapperWrapper.convertValue(eq(Map.of(1L, sale)), any(TypeReference.class))).willReturn(Map.of(1L, sale));
+        given(objectMapper.convertValue(eq(List.of(purchase)), any(TypeReference.class))).willReturn(List.of(purchase));
+        given(objectMapper.convertValue(eq(Map.of(1L, sale)), any(TypeReference.class))).willReturn(Map.of(1L, sale));
 
         underTest.processMessage(edMessage);
 

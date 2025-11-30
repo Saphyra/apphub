@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.platform.main_gateway.config;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -40,18 +39,13 @@ public class MainGatewayBeanConfiguration {
     }
 
     @Bean
-    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
-        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
+    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapper objectMapper) {
+        return new AccessTokenHeaderConverter(base64Encoder, objectMapper);
     }
 
     @Bean
     Base64Encoder base64Encoder() {
         return new Base64Encoder();
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
     }
 
     @Bean

@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.service.condition;
 
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.service.OccurrenceRepetitionTypeAware;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.DayOfWeek;
 import java.util.Set;
@@ -43,7 +43,7 @@ interface RepetitionTypeConditionFactory extends OccurrenceRepetitionTypeAware {
     @Component
     @RequiredArgsConstructor
     class DaysOfWeekRepetitionTypeConditionFactory implements RepetitionTypeConditionFactory {
-        private final ObjectMapperWrapper objectMapperWrapper;
+        private final ObjectMapper objectMapper;
 
         @Override
         public RepetitionType getRepetitionType() {
@@ -54,7 +54,7 @@ interface RepetitionTypeConditionFactory extends OccurrenceRepetitionTypeAware {
         public RepetitionTypeCondition create(Object repetitionData) {
             TypeReference<Set<DayOfWeek>> typeReference = new TypeReference<>() {
             };
-            Set<DayOfWeek> daysOfWeek = parseOrConvert(repetitionData, typeReference, objectMapperWrapper);
+            Set<DayOfWeek> daysOfWeek = parseOrConvert(repetitionData, typeReference, objectMapper);
 
             return new DaysOfWeekCondition(daysOfWeek);
         }
@@ -63,7 +63,7 @@ interface RepetitionTypeConditionFactory extends OccurrenceRepetitionTypeAware {
     @Component
     @RequiredArgsConstructor
     class DaysOfMonthRepetitionTypeConditionFactory implements RepetitionTypeConditionFactory {
-        private final ObjectMapperWrapper objectMapperWrapper;
+        private final ObjectMapper objectMapper;
 
         @Override
         public RepetitionType getRepetitionType() {
@@ -74,16 +74,16 @@ interface RepetitionTypeConditionFactory extends OccurrenceRepetitionTypeAware {
         public RepetitionTypeCondition create(Object repetitionData) {
             TypeReference<Set<Integer>> typeReference = new TypeReference<>() {
             };
-            Set<Integer> daysOfMonth = parseOrConvert(repetitionData, typeReference, objectMapperWrapper);
+            Set<Integer> daysOfMonth = parseOrConvert(repetitionData, typeReference, objectMapper);
 
             return new DaysOfMonthCondition(daysOfMonth);
         }
     }
 
-    private static <T> T parseOrConvert(Object repetitionData, TypeReference<T> typeReference, ObjectMapperWrapper objectMapperWrapper) {
+    private static <T> T parseOrConvert(Object repetitionData, TypeReference<T> typeReference, ObjectMapper objectMapper) {
         if (repetitionData instanceof String) {
-            return objectMapperWrapper.readValue((String) repetitionData, typeReference);
+            return objectMapper.readValue((String) repetitionData, typeReference);
         }
-        return objectMapperWrapper.convertValue(repetitionData, typeReference);
+        return objectMapper.convertValue(repetitionData, typeReference);
     }
 }

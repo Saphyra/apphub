@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -35,7 +35,7 @@ class EventMapperTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private EventLabelMappingDao eventLabelMappingDao;
@@ -61,7 +61,7 @@ class EventMapperTest {
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .build();
 
-        given(objectMapperWrapper.readValue(REPETITION_DATA, Object.class)).willReturn(PARSED_REPETITION_DATA);
+        given(objectMapper.readValue(REPETITION_DATA, Object.class)).willReturn(PARSED_REPETITION_DATA);
         given(eventLabelMappingDao.getByEventId(EVENT_ID)).willReturn(List.of(eventLabelMapping));
         given(eventLabelMapping.getLabelId()).willReturn(LABEL_ID);
 

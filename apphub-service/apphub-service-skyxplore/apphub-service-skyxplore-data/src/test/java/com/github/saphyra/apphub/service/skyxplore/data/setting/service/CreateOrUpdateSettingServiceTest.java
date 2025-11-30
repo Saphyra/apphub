@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.setting.service;
 
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.skyxplore.data.common.GameProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.Setting;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingDao;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +42,7 @@ class CreateOrUpdateSettingServiceTest {
     private SettingFactory settingFactory;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private CreateOrUpdateSettingService underTest;
@@ -72,7 +72,7 @@ class CreateOrUpdateSettingServiceTest {
     void create() {
         given(settingDao.findByUserIdAndGameIdAndTypeAndLocation(USER_ID, GAME_ID, SettingType.POPULATION_ORDER, LOCATION)).willReturn(Optional.empty());
         given(settingFactory.create(GAME_ID, USER_ID, SettingType.POPULATION_ORDER, LOCATION)).willReturn(setting);
-        given(objectMapperWrapper.writeValueAsString(DATA)).willReturn(STRINGIFIED_DATA);
+        given(objectMapper.writeValueAsString(DATA)).willReturn(STRINGIFIED_DATA);
 
         underTest.createOrUpdate(USER_ID, settingModel);
     }
@@ -80,7 +80,7 @@ class CreateOrUpdateSettingServiceTest {
     @Test
     void update() {
         given(settingDao.findByUserIdAndGameIdAndTypeAndLocation(USER_ID, GAME_ID, SettingType.POPULATION_ORDER, LOCATION)).willReturn(Optional.of(setting));
-        given(objectMapperWrapper.writeValueAsString(DATA)).willReturn(STRINGIFIED_DATA);
+        given(objectMapper.writeValueAsString(DATA)).willReturn(STRINGIFIED_DATA);
 
         underTest.createOrUpdate(USER_ID, settingModel);
     }

@@ -4,7 +4,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class SaveGameItemServiceTest {
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private GameItemService gameItemService;
@@ -41,16 +41,16 @@ public class SaveGameItemServiceTest {
 
         underTest = new SaveGameItemService(
             Arrays.asList(gameItemService),
-            objectMapperWrapper,
+            objectMapper,
             errorReporterService
         );
     }
 
     @Test
     public void error() {
-        given(objectMapperWrapper.convertValue(gameModel, GameItem.class)).willReturn(gameModel);
+        given(objectMapper.convertValue(gameModel, GameItem.class)).willReturn(gameModel);
         given(gameModel.getType()).willReturn(GameItemType.GAME);
-        given(objectMapperWrapper.convertValue(gameModel, GameModel.class)).willThrow(new RuntimeException());
+        given(objectMapper.convertValue(gameModel, GameModel.class)).willThrow(new RuntimeException());
 
         underTest.save(Arrays.asList(gameModel));
 
@@ -60,9 +60,9 @@ public class SaveGameItemServiceTest {
 
     @Test
     public void saveGameData() {
-        given(objectMapperWrapper.convertValue(gameModel, GameItem.class)).willReturn(gameModel);
+        given(objectMapper.convertValue(gameModel, GameItem.class)).willReturn(gameModel);
         given(gameModel.getType()).willReturn(GameItemType.GAME);
-        given(objectMapperWrapper.convertValue(gameModel, GameModel.class)).willReturn(gameModel);
+        given(objectMapper.convertValue(gameModel, GameModel.class)).willReturn(gameModel);
 
         underTest.save(Arrays.asList(gameModel));
 

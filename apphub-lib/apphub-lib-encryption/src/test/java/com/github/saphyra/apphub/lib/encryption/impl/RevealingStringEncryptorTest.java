@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import static com.github.saphyra.apphub.lib.encryption.impl.RevealingStringEncryptor.ENCRYPTED;
 import static com.github.saphyra.apphub.lib.encryption.impl.RevealingStringEncryptor.RAW;
@@ -30,7 +30,7 @@ class RevealingStringEncryptorTest {
     private DefaultStringEncryptor defaultStringEncryptor;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private RevealingStringEncryptor underTest;
@@ -38,12 +38,12 @@ class RevealingStringEncryptorTest {
     @Test
     void encrypt() {
         given(defaultStringEncryptor.encrypt(ENTITY, KEY, ENTITY_ID, COLUMN)).willReturn(ENCRYPTED_ENTITY);
-        given(objectMapperWrapper.writeValueAsString(any(StringStringMap.class))).willReturn(SERIALIZED);
+        given(objectMapper.writeValueAsString(any(StringStringMap.class))).willReturn(SERIALIZED);
 
         assertThat(underTest.encrypt(ENTITY, KEY, ENTITY_ID, COLUMN)).isEqualTo(SERIALIZED);
 
         ArgumentCaptor<StringStringMap> argumentCaptor = ArgumentCaptor.forClass(StringStringMap.class);
-        then(objectMapperWrapper).should().writeValueAsString(argumentCaptor.capture());
+        then(objectMapper).should().writeValueAsString(argumentCaptor.capture());
         StringStringMap map = argumentCaptor.getValue();
         assertThat(map).hasSize(3);
         assertThat(map).containsEntry(ENCRYPTED, ENCRYPTED_ENTITY);
@@ -53,7 +53,7 @@ class RevealingStringEncryptorTest {
 
     @Test
     void decrypt() {
-        given(objectMapperWrapper.readValue(SERIALIZED, StringStringMap.class)).willReturn(CollectionUtils.singleValueMap(ENCRYPTED, ENCRYPTED_ENTITY, new StringStringMap()));
+        given(objectMapper.readValue(SERIALIZED, StringStringMap.class)).willReturn(CollectionUtils.singleValueMap(ENCRYPTED, ENCRYPTED_ENTITY, new StringStringMap()));
         given(defaultStringEncryptor.decrypt(ENCRYPTED_ENTITY, KEY, ENTITY_ID, COLUMN)).willReturn(ENTITY);
 
         assertThat(underTest.decrypt(SERIALIZED, KEY, ENTITY_ID, COLUMN)).isEqualTo(ENTITY);

@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.test.common.TestConstants;
@@ -22,6 +21,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.util.AntPathMatcher;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -52,7 +52,7 @@ public class LocaleMandatoryFilterTest {
     private LocaleProvider localeProvider;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private LocaleMandatoryFilterAutoConfiguration localeMandatoryFilterAutoConfiguration;
@@ -95,7 +95,7 @@ public class LocaleMandatoryFilterTest {
         given(errorResponseFactory.create(TestConstants.DEFAULT_LOCALE, HttpStatus.BAD_REQUEST, ErrorCode.LOCALE_NOT_FOUND)).willReturn(errorResponseWrapper);
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.BAD_REQUEST);
         given(errorResponseWrapper.getErrorResponse()).willReturn(errorResponse);
-        given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(RESPONSE_BODY);
+        given(objectMapper.writeValueAsString(errorResponse)).willReturn(RESPONSE_BODY);
         given(localeMandatoryFilterAutoConfiguration.getWhiteListedEndpoints()).willReturn(Collections.emptyList());
 
         underTest.doFilterInternal(request, response, filterChain);

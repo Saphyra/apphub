@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.lobby.config;
 
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.FilterOrder;
 import com.github.saphyra.apphub.service.skyxplore.lobby.controller.filter.LobbyLastAccessInterceptorFilter;
@@ -10,7 +9,6 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 public class SkyXploreLobbyBeanConfiguration {
@@ -36,10 +34,5 @@ public class SkyXploreLobbyBeanConfiguration {
     @Bean
     ApplicationContextProxy applicationContextProxy(ConfigurableApplicationContext applicationContext) {
         return new ApplicationContextProxy(applicationContext);
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }

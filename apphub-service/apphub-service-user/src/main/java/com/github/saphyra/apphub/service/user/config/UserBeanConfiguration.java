@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.user.config;
 
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @Slf4j
@@ -49,11 +47,6 @@ class UserBeanConfiguration {
     @ConditionalOnMissingBean(SleepService.class)
     SleepService sleepService() {
         return new SleepService();
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
     }
 }
 

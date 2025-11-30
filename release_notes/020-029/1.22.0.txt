@@ -34,6 +34,7 @@
         Drop old event and occurrence tables
         Delete migration
     ErrorReporterService automatically logs errors
+    Get rid of ObjectMapperWrapper
 
 ===ETC===
     AdminPanel

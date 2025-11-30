@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_body_signals.FssBodySignalsMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_body_signals.FssBodySignalsMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,7 +31,7 @@ class FssBodySignalsMessageProcessorTest {
     private static final String BODY_NAME = "body-name";
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -67,7 +67,7 @@ class FssBodySignalsMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, FssBodySignalsMessage.class)).willReturn(fssAllBodiesFoundMessage);
+        given(objectMapper.readValue(MESSAGE, FssBodySignalsMessage.class)).willReturn(fssAllBodiesFoundMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
 

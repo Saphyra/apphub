@@ -1,26 +1,26 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyType;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.approach_settlement.ApproachSettlementMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
-import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
+import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.MinorFactionSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.SettlementSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StationSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.approach_settlement.ApproachSettlementMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -48,7 +48,7 @@ class ApproachSettlementMessageProcessorTest {
     private static final Double LATITUDE = 786787.87;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -114,7 +114,7 @@ class ApproachSettlementMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, ApproachSettlementMessage.class)).willReturn(approachSettlementMessage);
+        given(objectMapper.readValue(MESSAGE, ApproachSettlementMessage.class)).willReturn(approachSettlementMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(bodySaver.save(TIMESTAMP, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME)).willReturn(body);

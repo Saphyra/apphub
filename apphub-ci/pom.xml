@@ -30,16 +30,10 @@
         <versions.postgresql-connector>42.7.8</versions.postgresql-connector>
         <versions.guava>33.5.0-jre</versions.guava>
         <versions.spring-web>6.2.12</versions.spring-web>
-        <versions.jackson-datatype>2.20.1</versions.jackson-datatype>
+        <versions.jackson-databind>3.0.1</versions.jackson-databind>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${versions.jackson-datatype}</version>
-        </dependency>
-
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
@@ -99,6 +93,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <version>${versions.spring-web}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${versions.jackson-databind}</version>
         </dependency>
     </dependencies>
 

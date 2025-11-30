@@ -1,18 +1,26 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.SecurityLevel;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.body_data.ReserveLevel;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.powerplay_conflict.PowerplayConflictFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.powerplay_conflict.PowerplayConflictFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodyDataSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.MinorFactionSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemDataSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CarrierJumpJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.CodexEntryJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.DockedJournalMessage;
@@ -20,20 +28,12 @@ import com.github.saphyra.apphub.service.custom.elite_base.message_processing.st
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.LocationJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.SaaSignalFoundJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.message.ScanJournalMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.SecurityLevel;
-import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodyDataSaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.MinorFactionSaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemDataSaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.ControllingFactionParser;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -47,7 +47,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 class JournalMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
     private final BodySaver bodySaver;
     private final BodyDataSaver bodyDataSaver;
@@ -65,7 +65,7 @@ class JournalMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        String event = objectMapperWrapper.readTree(message.getMessage())
+        String event = objectMapper.readTree(message.getMessage())
             .get("event")
             .asString();
 
@@ -73,31 +73,31 @@ class JournalMessageProcessor implements MessageProcessor {
             () -> {
                 switch (event) {
                     case "Scan" -> {
-                        ScanJournalMessage scanJournalMessage = objectMapperWrapper.readValue(message.getMessage(), ScanJournalMessage.class);
+                        ScanJournalMessage scanJournalMessage = objectMapper.readValue(message.getMessage(), ScanJournalMessage.class);
                         processScanJournalMessage(scanJournalMessage);
                     }
                     case "FSDJump" -> {
-                        FsdJumpJournalMessage fsdJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), FsdJumpJournalMessage.class);
+                        FsdJumpJournalMessage fsdJumpJournalMessage = objectMapper.readValue(message.getMessage(), FsdJumpJournalMessage.class);
                         processFsdJumpJournalMessage(fsdJumpJournalMessage);
                     }
                     case "Docked" -> {
-                        DockedJournalMessage dockedJournalMessage = objectMapperWrapper.readValue(message.getMessage(), DockedJournalMessage.class);
+                        DockedJournalMessage dockedJournalMessage = objectMapper.readValue(message.getMessage(), DockedJournalMessage.class);
                         processDockedJournalMessage(dockedJournalMessage);
                     }
                     case "CarrierJump" -> {
-                        CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
+                        CarrierJumpJournalMessage carrierJumpJournalMessage = objectMapper.readValue(message.getMessage(), CarrierJumpJournalMessage.class);
                         processCarrierJumpJournalMessage(carrierJumpJournalMessage);
                     }
                     case "Location" -> {
-                        LocationJournalMessage locationJournalMessage = objectMapperWrapper.readValue(message.getMessage(), LocationJournalMessage.class);
+                        LocationJournalMessage locationJournalMessage = objectMapper.readValue(message.getMessage(), LocationJournalMessage.class);
                         processLocationJournalMessage(locationJournalMessage);
                     }
                     case "SAASignalsFound" -> {
-                        SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapperWrapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
+                        SaaSignalFoundJournalMessage saaSignalFoundJournalMessage = objectMapper.readValue(message.getMessage(), SaaSignalFoundJournalMessage.class);
                         processSaaSignalFoundJournalMessage(saaSignalFoundJournalMessage);
                     }
                     case "CodexEntry" -> {
-                        CodexEntryJournalMessage codexEntryJournalMessage = objectMapperWrapper.readValue(message.getMessage(), CodexEntryJournalMessage.class);
+                        CodexEntryJournalMessage codexEntryJournalMessage = objectMapper.readValue(message.getMessage(), CodexEntryJournalMessage.class);
                         processCodexEntryMessage(codexEntryJournalMessage);
                     }
                     default -> throw new IllegalArgumentException("Unhandled event: " + event);

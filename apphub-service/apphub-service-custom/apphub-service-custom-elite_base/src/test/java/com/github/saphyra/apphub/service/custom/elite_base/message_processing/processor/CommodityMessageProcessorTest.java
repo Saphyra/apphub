@@ -1,16 +1,15 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.CommodityMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.EdCommodity;
-import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.CommodityMessage;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.EdCommodity;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaveResult;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaverUtil;
 import org.junit.jupiter.api.Test;
@@ -18,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -43,7 +43,7 @@ class CommodityMessageProcessorTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -88,7 +88,7 @@ class CommodityMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, CommodityMessage.class)).willReturn(commodityMessage);
+        given(objectMapper.readValue(MESSAGE, CommodityMessage.class)).willReturn(commodityMessage);
         given(starSystemSaver.save(TIMESTAMP, SYSTEM_NAME)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(stationSaverUtil.saveStationOrFleetCarrier(
@@ -126,7 +126,7 @@ class CommodityMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, CommodityMessage.class)).willReturn(commodityMessage);
+        given(objectMapper.readValue(MESSAGE, CommodityMessage.class)).willReturn(commodityMessage);
         given(starSystemSaver.save(TIMESTAMP, SYSTEM_NAME)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(stationSaverUtil.saveStationOrFleetCarrier(

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.lib.web_socket.core.handler;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import lombok.SneakyThrows;
@@ -15,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -41,7 +41,7 @@ class AbstractWebSocketHandlerTest {
     private static final String SERIALIZED_EVENT = "serialized-event";
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -72,7 +72,7 @@ class AbstractWebSocketHandlerTest {
             .dateTimeUtil(dateTimeUtil)
             .errorReporterService(errorReporterService)
             .webSocketSessionExpirationSeconds(SESSION_EXPIRATION_SECONDS)
-            .objectMapperWrapper(objectMapperWrapper)
+            .objectMapper(objectMapper)
             .uuidConverter(uuidConverter)
             .build();
 
@@ -112,7 +112,7 @@ class AbstractWebSocketHandlerTest {
 
     @Test
     void sendPingRequest() throws IOException {
-        given(objectMapperWrapper.writeValueAsString(any())).willReturn(SERIALIZED_EVENT);
+        given(objectMapper.writeValueAsString(any())).willReturn(SERIALIZED_EVENT);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
         WebSocketSessionWrapper sessionWrapper = WebSocketSessionWrapper.builder().session(session).build();
@@ -122,7 +122,7 @@ class AbstractWebSocketHandlerTest {
         underTest.sendPingRequest();
 
         ArgumentCaptor<WebSocketEvent> argumentCaptor = ArgumentCaptor.forClass(WebSocketEvent.class);
-        then(objectMapperWrapper).should().writeValueAsString(argumentCaptor.capture());
+        then(objectMapper).should().writeValueAsString(argumentCaptor.capture());
         WebSocketEvent event = argumentCaptor.getValue();
         assertThat(event.getEventName()).isEqualTo(WebSocketEventName.PING);
 
@@ -139,7 +139,7 @@ class AbstractWebSocketHandlerTest {
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(session.getId()).willReturn(SESSION_ID);
         RuntimeException ex = new RuntimeException();
-        given(objectMapperWrapper.writeValueAsString(event)).willThrow(ex);
+        given(objectMapper.writeValueAsString(event)).willThrow(ex);
 
         underTest.sendEventToSession(sessionWrapper, event);
 
@@ -156,7 +156,7 @@ class AbstractWebSocketHandlerTest {
         underTest.sessions.put(SESSION_ID, sessionWrapper);
         given(session.getPrincipal()).willReturn(principal);
         given(principal.getName()).willReturn(USER_ID_STRING);
-        given(objectMapperWrapper.writeValueAsString(event)).willReturn(SERIALIZED_EVENT);
+        given(objectMapper.writeValueAsString(event)).willReturn(SERIALIZED_EVENT);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(session.isOpen()).willReturn(true);
@@ -174,7 +174,7 @@ class AbstractWebSocketHandlerTest {
         given(session.getPrincipal()).willReturn(principal);
         given(principal.getName()).willReturn(USER_ID_STRING);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(objectMapperWrapper.readValue(SERIALIZED_EVENT, WebSocketEvent.class)).willReturn(event);
+        given(objectMapper.readValue(SERIALIZED_EVENT, WebSocketEvent.class)).willReturn(event);
         TextMessage message = new TextMessage(SERIALIZED_EVENT);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(session.getId()).willReturn(SESSION_ID);

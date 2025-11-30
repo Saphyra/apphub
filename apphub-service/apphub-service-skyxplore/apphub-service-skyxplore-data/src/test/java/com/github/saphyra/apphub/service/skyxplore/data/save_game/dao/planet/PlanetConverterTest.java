@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.planet;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.UuidStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
@@ -38,7 +38,7 @@ public class PlanetConverterTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private PlanetConverter underTest;
@@ -61,7 +61,7 @@ public class PlanetConverterTest {
         given(uuidConverter.convertDomain(SOLAR_SYSTEM_ID)).willReturn(SOLAR_SYSTEM_ID_STRING);
         given(uuidConverter.convertDomain(OWNER)).willReturn(OWNER_STRING);
 
-        given(objectMapperWrapper.writeValueAsString(CUSTOM_NAMES)).willReturn(CUSTOM_NAMES_STRING);
+        given(objectMapper.writeValueAsString(CUSTOM_NAMES)).willReturn(CUSTOM_NAMES_STRING);
 
         PlanetEntity result = underTest.convertDomain(model);
 
@@ -95,7 +95,7 @@ public class PlanetConverterTest {
         given(uuidConverter.convertEntity(SOLAR_SYSTEM_ID_STRING)).willReturn(SOLAR_SYSTEM_ID);
         given(uuidConverter.convertEntity(OWNER_STRING)).willReturn(OWNER);
 
-        given(objectMapperWrapper.readValue(CUSTOM_NAMES_STRING, UuidStringMap.class)).willReturn(CUSTOM_NAMES);
+        given(objectMapper.readValue(CUSTOM_NAMES_STRING, UuidStringMap.class)).willReturn(CUSTOM_NAMES);
 
         PlanetModel result = underTest.convertEntity(entity);
 

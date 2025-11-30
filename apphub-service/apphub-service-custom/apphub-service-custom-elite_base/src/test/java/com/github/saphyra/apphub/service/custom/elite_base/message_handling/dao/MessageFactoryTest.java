@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -33,7 +33,7 @@ class MessageFactoryTest {
     private DateTimeUtil dateTimeUtil;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private MessageFactory underTest;
@@ -45,12 +45,12 @@ class MessageFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(MESSAGE_ID);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CREATED_AT);
-        given(objectMapperWrapper.readValue(CONTENT, MessageFactory.ParsedMessage.class)).willReturn(parsedMessage);
+        given(objectMapper.readValue(CONTENT, MessageFactory.ParsedMessage.class)).willReturn(parsedMessage);
         given(parsedMessage.getSchemaRef()).willReturn(SCHEMA_REF);
         given(parsedMessage.getHeader()).willReturn(HEADER);
         given(parsedMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.writeValueAsString(HEADER)).willReturn(HEADER_STRING);
-        given(objectMapperWrapper.writeValueAsString(MESSAGE)).willReturn(MESSAGE_STRING);
+        given(objectMapper.writeValueAsString(HEADER)).willReturn(HEADER_STRING);
+        given(objectMapper.writeValueAsString(MESSAGE)).willReturn(MESSAGE_STRING);
 
         assertThat(underTest.create(CONTENT))
             .returns(MESSAGE_ID, EdMessage::getMessageId)

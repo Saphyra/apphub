@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.lib.request_validation.locale;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import jakarta.servlet.FilterChain;
@@ -17,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,7 +30,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
     private final CommonConfigProperties commonConfigProperties;
     private final ErrorResponseFactory errorResponseFactory;
     private final LocaleProvider localeProvider;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final LocaleMandatoryFilterAutoConfiguration localeMandatoryFilterAutoConfiguration;
 
     @Override
@@ -50,7 +50,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
             response.setCharacterEncoding("UTF-8");
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             PrintWriter writer = response.getWriter();
-            writer.write(objectMapperWrapper.writeValueAsString(errorResponse.getErrorResponse()));
+            writer.write(objectMapper.writeValueAsString(errorResponse.getErrorResponse()));
             writer.flush();
             writer.close();
         }

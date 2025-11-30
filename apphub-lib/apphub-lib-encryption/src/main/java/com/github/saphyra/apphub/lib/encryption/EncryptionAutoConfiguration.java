@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.encryption;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.DefaultStringEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.DoubleEncryptor;
@@ -16,6 +15,7 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import tools.jackson.databind.ObjectMapper;
 
 @AutoConfiguration
 public class EncryptionAutoConfiguration {
@@ -25,15 +25,15 @@ public class EncryptionAutoConfiguration {
     }
 
     @Bean
-    public DefaultStringEncryptor stringEncryptor(Base64Encoder encoder, ObjectMapperWrapper objectMapperWrapper) {
-        return new DefaultStringEncryptor(encoder, objectMapperWrapper);
+    public DefaultStringEncryptor stringEncryptor(Base64Encoder encoder, ObjectMapper objectMapper) {
+        return new DefaultStringEncryptor(encoder, objectMapper);
     }
 
     @Bean
     @Primary
     @ConditionalOnProperty(value = "encryptionStrategy", havingValue = "revealing")
-    RevealingStringEncryptor revealingStringEncryptor(DefaultStringEncryptor defaultStringEncryptor, ObjectMapperWrapper objectMapperWrapper) {
-        return new RevealingStringEncryptor(defaultStringEncryptor, objectMapperWrapper);
+    RevealingStringEncryptor revealingStringEncryptor(DefaultStringEncryptor defaultStringEncryptor, ObjectMapper objectMapper) {
+        return new RevealingStringEncryptor(defaultStringEncryptor, objectMapper);
     }
 
     @Bean

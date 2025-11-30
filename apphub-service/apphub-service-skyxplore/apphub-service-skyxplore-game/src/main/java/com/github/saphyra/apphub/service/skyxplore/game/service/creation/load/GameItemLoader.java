@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.ws.LoadPageForGameRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
@@ -13,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class GameItemLoader {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final WebSocketClientCache wsClientCache;
     private final IdGenerator idGenerator;
 
@@ -48,7 +48,7 @@ public class GameItemLoader {
 
             SkyXploreWsEvent response = wsClient.awaitForEvent(ev -> ev.getEventName() == SkyXploreWsEventName.LOAD_PAGE_FOR_GAME && ev.getId().equals(requestId));
 
-            return Arrays.asList(objectMapperWrapper.convertValue(response.getPayload(), clazz));
+            return Arrays.asList(objectMapper.convertValue(response.getPayload(), clazz));
         } finally {
             wsClientCache.returnObject(wsClient);
         }

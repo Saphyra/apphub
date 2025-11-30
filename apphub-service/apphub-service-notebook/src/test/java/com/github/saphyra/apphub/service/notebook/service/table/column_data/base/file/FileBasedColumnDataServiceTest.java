@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.file.File;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
@@ -17,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -42,7 +42,7 @@ class FileBasedColumnDataServiceTest {
     private FileDao fileDao;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private FileMetadataValidator fileMetadataValidator;
@@ -73,7 +73,7 @@ class FileBasedColumnDataServiceTest {
             .columnType(ColumnType.FILE)
             .proxy(proxy)
             .fileDao(fileDao)
-            .objectMapperWrapper(objectMapperWrapper)
+            .objectMapper(objectMapper)
             .fileMetadataValidator(fileMetadataValidator)
             .build();
     }
@@ -127,7 +127,7 @@ class FileBasedColumnDataServiceTest {
 
     @Test
     void validateData_parseError() {
-        given(objectMapperWrapper.convertValue(DATA, FileMetadata.class)).willThrow(new RuntimeException());
+        given(objectMapper.convertValue(DATA, FileMetadata.class)).willThrow(new RuntimeException());
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -136,7 +136,7 @@ class FileBasedColumnDataServiceTest {
 
     @Test
     void validateData() {
-        given(objectMapperWrapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
+        given(objectMapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
 
         underTest.validateData(DATA);
 
@@ -145,8 +145,8 @@ class FileBasedColumnDataServiceTest {
 
     private static class FileBasedColumnDataServiceImpl extends FileBasedColumnDataService {
         @Builder
-        FileBasedColumnDataServiceImpl(ColumnType columnType, FileBasedColumnProxy proxy, FileDao fileDao, ObjectMapperWrapper objectMapperWrapper, FileMetadataValidator fileMetadataValidator) {
-            super(columnType, proxy, fileDao, objectMapperWrapper, fileMetadataValidator);
+        FileBasedColumnDataServiceImpl(ColumnType columnType, FileBasedColumnProxy proxy, FileDao fileDao, ObjectMapper objectMapper, FileMetadataValidator fileMetadataValidator) {
+            super(columnType, proxy, fileDao, objectMapper, fileMetadataValidator);
         }
     }
 }

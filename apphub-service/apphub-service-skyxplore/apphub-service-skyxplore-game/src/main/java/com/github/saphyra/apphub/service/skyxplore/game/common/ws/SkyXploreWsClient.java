@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common.ws;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import lombok.Builder;
@@ -8,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
+import tools.jackson.databind.ObjectMapper;
 
 import java.net.URI;
 import java.util.Collections;
@@ -18,20 +18,20 @@ import java.util.function.Predicate;
 
 @Slf4j
 public class SkyXploreWsClient extends WebSocketClient {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final SleepService sleepService;
 
     private final List<SkyXploreWsEvent> messages = new Vector<>();
 
     @Builder
-    SkyXploreWsClient(String url, ObjectMapperWrapper objectMapperWrapper, SleepService sleepService) throws Exception {
+    SkyXploreWsClient(String url, ObjectMapper objectMapper, SleepService sleepService) throws Exception {
         super(
             new URI(url),
             new Draft_6455(),
             Collections.emptyMap(),
             10000
         );
-        this.objectMapperWrapper = objectMapperWrapper;
+        this.objectMapper = objectMapper;
         this.sleepService = sleepService;
         connect();
 
@@ -47,13 +47,13 @@ public class SkyXploreWsClient extends WebSocketClient {
     }
 
     public void send(SkyXploreWsEvent event) {
-        send(objectMapperWrapper.writeValueAsString(event));
+        send(objectMapper.writeValueAsString(event));
     }
 
     @Override
     public void onMessage(String message) {
         log.debug("Message arrived: {}", message);
-        SkyXploreWsEvent event = objectMapperWrapper.readValue(message, SkyXploreWsEvent.class);
+        SkyXploreWsEvent event = objectMapper.readValue(message, SkyXploreWsEvent.class);
         synchronized (messages) {
             messages.add(event);
         }

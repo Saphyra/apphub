@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.web_content;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
 import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
@@ -20,11 +19,6 @@ public class WebContentBeanConfiguration {
     }
 
     @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
-    }
-
-    @Bean
     ClassLoaderTemplateResolver thymeLeafTemplateResolverConfig() {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("html/");
@@ -38,10 +32,10 @@ public class WebContentBeanConfiguration {
 
     @Bean
      ContentLoaderFactory contentLoaderFactory(
-        ObjectMapperWrapper objectMapperWrapper,
+        ObjectMapper objectMapper,
         PathMatchingResourcePatternResolver pathMatchingResourcePatternResolver
     ) {
-        return new ContentLoaderFactory(objectMapperWrapper, pathMatchingResourcePatternResolver);
+        return new ContentLoaderFactory(objectMapper, pathMatchingResourcePatternResolver);
     }
 
     @Bean

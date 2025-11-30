@@ -3,12 +3,12 @@ package com.github.saphyra.apphub.service.calendar.domain.event.dao;
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -34,7 +34,7 @@ class EventFactoryTest {
     private IdGenerator idGenerator;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private EventFactory underTest;
@@ -52,7 +52,7 @@ class EventFactoryTest {
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .build();
         given(idGenerator.randomUuid()).willReturn(EVENT_ID);
-        given(objectMapperWrapper.writeValueAsString(request.getRepetitionData())).willReturn(STRINGIFIED_REPETITION_DATA);
+        given(objectMapper.writeValueAsString(request.getRepetitionData())).willReturn(STRINGIFIED_REPETITION_DATA);
 
         assertThat(underTest.create(USER_ID, request))
             .returns(EVENT_ID, Event::getEventId)

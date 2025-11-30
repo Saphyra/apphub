@@ -1,17 +1,17 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialJournalItem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialsJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialJournalItem;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialsJournalMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class FcMaterialsJournalMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final FleetCarrierSaver fleetCarrierSaver;
     private final CommoditySaver commoditySaver;
 
@@ -31,7 +31,7 @@ class FcMaterialsJournalMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        FcMaterialsJournalMessage fcMaterialsJournalMessage = objectMapperWrapper.readValue(message.getMessage(), FcMaterialsJournalMessage.class);
+        FcMaterialsJournalMessage fcMaterialsJournalMessage = objectMapper.readValue(message.getMessage(), FcMaterialsJournalMessage.class);
 
         FleetCarrier fleetCarrier = fleetCarrierSaver.save(
             fcMaterialsJournalMessage.getTimestamp(),

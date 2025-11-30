@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.scheduler;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -20,11 +19,6 @@ import tools.jackson.databind.ObjectMapper;
 })
 @EnableScheduling
 public class SchedulerBeanConfiguration {
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
-    }
-
     @Bean
     ScheduledExecutorServiceBean scheduledExecutorServiceBean(ExecutorServiceBeanFactory executorServiceBeanFactory) {
         return executorServiceBeanFactory.createScheduled(1);

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 
 import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class FileBasedColumnEditerTest {
+class FileBasedColumnEditorTest {
     private static final UUID ROW_ID = UUID.randomUUID();
     private static final UUID COLUMN_ID = UUID.randomUUID();
     private static final Integer COLUMN_INDEX = 24;
@@ -31,7 +31,7 @@ class FileBasedColumnEditerTest {
     private DimensionDao dimensionDao;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private FileDeletionService fileDeletionService;
@@ -40,7 +40,7 @@ class FileBasedColumnEditerTest {
     private FileSaver fileSaver;
 
     @InjectMocks
-    private FileBasedColumnEditer underTest;
+    private FileBasedColumnEditor underTest;
 
     @Mock
     private ListItem listItem;
@@ -60,7 +60,7 @@ class FileBasedColumnEditerTest {
         given(model.getColumnIndex()).willReturn(COLUMN_INDEX);
         given(model.getData()).willReturn(DATA);
         given(dimensionDao.findByIdValidated(COLUMN_ID)).willReturn(column);
-        given(objectMapperWrapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
+        given(objectMapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
         given(fileMetadata.getStoredFileId()).willReturn(UUID.randomUUID());
 
         assertThat(underTest.edit(listItem, ROW_ID, model)).isEmpty();
@@ -78,7 +78,7 @@ class FileBasedColumnEditerTest {
         given(model.getColumnIndex()).willReturn(COLUMN_INDEX);
         given(model.getData()).willReturn(DATA);
         given(dimensionDao.findByIdValidated(COLUMN_ID)).willReturn(column);
-        given(objectMapperWrapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
+        given(objectMapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
         given(fileMetadata.getStoredFileId()).willReturn(null);
         given(listItem.getUserId()).willReturn(USER_ID);
         given(column.getDimensionId()).willReturn(COLUMN_ID);

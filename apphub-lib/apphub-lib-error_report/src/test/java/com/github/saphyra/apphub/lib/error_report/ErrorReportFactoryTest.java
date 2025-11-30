@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +31,7 @@ public class ErrorReportFactoryTest {
     private DateTimeUtil dateTimeUtil;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private ExceptionMapper exceptionMapper;
@@ -54,7 +54,7 @@ public class ErrorReportFactoryTest {
     @Test
     public void create() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
-        given(objectMapperWrapper.writeValueAsString(errorResponse)).willReturn(ERROR_RESPONSE);
+        given(objectMapper.writeValueAsString(errorResponse)).willReturn(ERROR_RESPONSE);
         given(exceptionMapper.map(exception)).willReturn(exceptionModel);
         given(exception.getMessage()).willReturn(MESSAGE);
         given(exceptionModel.getThread()).willReturn(THREAD);

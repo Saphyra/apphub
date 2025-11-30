@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
@@ -37,7 +37,7 @@ public class ProcessConverterTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private ProcessConverter underTest;
@@ -58,7 +58,7 @@ public class ProcessConverterTest {
         given(uuidConverter.convertDomain(LOCATION)).willReturn(LOCATION_STRING);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
-        given(objectMapperWrapper.writeValueAsString(CollectionUtils.singleValueMap(KEY, VALUE))).willReturn(DATA_STRING);
+        given(objectMapper.writeValueAsString(CollectionUtils.singleValueMap(KEY, VALUE))).willReturn(DATA_STRING);
 
         ProcessEntity result = underTest.convertDomain(model);
 
@@ -87,7 +87,7 @@ public class ProcessConverterTest {
         given(uuidConverter.convertEntity(LOCATION_STRING)).willReturn(LOCATION);
         given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
 
-        given(objectMapperWrapper.readValue(DATA_STRING, StringStringMap.class)).willReturn(CollectionUtils.singleValueMap(KEY, VALUE, new StringStringMap()));
+        given(objectMapper.readValue(DATA_STRING, StringStringMap.class)).willReturn(CollectionUtils.singleValueMap(KEY, VALUE, new StringStringMap()));
 
         ProcessModel result = underTest.convertEntity(entity);
 

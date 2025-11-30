@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.ServiceListValidator;
 import com.github.saphyra.apphub.ci.process.ProcessKiller;
-import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;
@@ -15,6 +14,7 @@ import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +31,7 @@ public class LocalStopProcess {
     private final ExecutorServiceBean executorServiceBean;
     private final ValidatingInputReader validatingInputReader;
     private final PropertyDao propertyDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final ServiceListValidator serviceListValidator;
 
     public void stopAllServices() {
@@ -67,7 +67,7 @@ public class LocalStopProcess {
 
         List<String> serviceNames = Arrays.asList(servicesToStartArr);
 
-        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapperWrapper.writeValueAsString(serviceNames));
+        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapper.writeValueAsString(serviceNames));
 
         List<Service> servicesToStop = serviceNames.stream()
             .map(services::findByNameValidated)

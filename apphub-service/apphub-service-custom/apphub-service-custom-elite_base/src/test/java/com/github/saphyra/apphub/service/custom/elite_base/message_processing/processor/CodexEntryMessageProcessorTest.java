@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.codex_entry.CodexEntryMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.codex_entry.CodexEntryMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ class CodexEntryMessageProcessorTest {
     private static final String MESSAGE = "message";
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -53,7 +53,7 @@ class CodexEntryMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, CodexEntryMessage.class)).willReturn(codexEntryMessage);
+        given(objectMapper.readValue(MESSAGE, CodexEntryMessage.class)).willReturn(codexEntryMessage);
 
         underTest.processMessage(edMessage);
 

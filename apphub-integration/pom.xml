@@ -30,6 +30,7 @@
         <versions.guava>33.5.0-jre</versions.guava>
         <versions.apache-commons-pool>2.12.1</versions.apache-commons-pool>
         <versions.gson>2.13.2</versions.gson>
+        <versions.jackson-databind>3.0.1</versions.jackson-databind>
 
         <!-- Plugin Versions -->
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
@@ -127,6 +128,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${versions.gson}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${versions.jackson-databind}</version>
         </dependency>
     </dependencies>
 
