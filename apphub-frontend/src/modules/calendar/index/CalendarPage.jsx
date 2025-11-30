@@ -8,21 +8,19 @@ import Constants from "../../../common/js/Constants";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
 import { MONTH, View } from "./common/View";
-import ViewSelector from "./component/ViewSelector";
+import ViewSelector from "./component/navigation/ViewSelector";
 import LocalDate from "../../../common/js/date/LocalDate";
-import ReferenceDateSelector from "./component/ReferenceDateSelector";
-import SelectedDateDispalyer from "./component/SelectedDateDisplayer";
+import ReferenceDateSelector from "./component/navigation/ReferenceDateSelector";
 import "./calendar.css";
-import Labels from "./component/Labels";
 import CalendarContent from "./component/content/CalendarContent";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
-import SelectedOccurrence from "./component/SelectedOccurrence";
+import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
 import useRefresh from "../../../common/hook/Refresh";
-import SelectedDate from "./component/SelectedDate";
 import useHasFocus from "../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import RightPanel from "./component/right_panel/RightPanel";
+import Labels from "./component/navigation/Labels";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
@@ -81,10 +79,9 @@ const CalendarPage = () => {
                             view={View[viewName]}
                         />
 
-                        <SelectedDateDispalyer
-                            referenceDate={referenceDate}
-                            view={View[viewName]}
-                        />
+                        <div id="calendar-navigation-selected-date" className="nowrap">
+                            {View[viewName].format(referenceDate)}
+                        </div>
                     </div>
 
                     <Labels
@@ -104,12 +101,16 @@ const CalendarPage = () => {
                     />
                 </div>
 
-                <SelectedDate
+                <RightPanel
                     selectedDate={selectedDate}
                     activeLabel={activeLabel}
                     setDisplaySpinner={updateDisplaySpinner}
+                    selectedOccurrence={selectedOccurrence}
                     setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
                     refreshCounter={refreshCounter}
+                    refresh={refresh}
+                    setConfirmationDialogData={setConfirmationDialogData}
+                    localizationHandler={localizationHandler}
                 />
             </main>
 
@@ -123,17 +124,6 @@ const CalendarPage = () => {
             ]} />
 
             <ToastContainer />
-
-            {selectedOccurrence &&
-                <SelectedOccurrence
-                    occurrenceId={selectedOccurrence}
-                    setDisplaySpinner={updateDisplaySpinner}
-                    localizationHandler={localizationHandler}
-                    setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
-                    refresh={refresh}
-                    setConfirmationDialogData={setConfirmationDialogData}
-                />
-            }
 
             {confirmationDialogData &&
                 <ConfirmationDialog

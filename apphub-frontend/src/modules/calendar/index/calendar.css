@@ -10,8 +10,12 @@
     flex-grow: 2;
 }
 
-#calendar-selected-date {
+#calendar-right-panel {
     border-left: 5px ridge white;
+    display: flex;
+    flex-direction: column;
+    max-width: 25vw;
+    overflow: auto;
 }
 
 #calendar-navigation {
@@ -109,18 +113,18 @@
     border-color: red;
 }
 
-#calendar-selected-date {
-    display: flex;
-    flex-direction: column;
-}
-
 #calendar-selected-date-content {
     flex-grow: 2;
     padding: 0 5px;
+    overflow: auto;
+    min-height: 100px;
 }
 
 #calendar-selected-occurrence {
-    width: 50vw;
+    border: 3px ridge white;
+    padding: 5px;
+    margin: 10px;
+    position: relative;
 }
 
 #calendar-selected-occurrence-content {
@@ -133,4 +137,16 @@
 
 #calendar-labels {
     overflow: auto;
+}
+
+#calendar-selected-occurrence-choices{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+#calendar-selected-occurrence-close-button{
+    position: absolute;
+    top: 0;
+    right: 0;
 }

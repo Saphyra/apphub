@@ -1,11 +1,11 @@
 import React from "react";
-import SelectInput, { SelectOption } from "../../../../common/component/input/SelectInput";
-import MapStream from "../../../../common/js/collection/MapStream";
-import { View } from "../common/View";
-import viewLocalizationData from "../localization/view_localization.json";
-import LocalizationHandler from "../../../../common/js/LocalizationHandler";
-import PreLabeledInputField from "../../../../common/component/input/PreLabeledInputField";
-import localizationData from "../localization/view_selector_localization.json";
+import SelectInput, { SelectOption } from "../../../../../common/component/input/SelectInput";
+import MapStream from "../../../../../common/js/collection/MapStream";
+import { View } from "../../common/View";
+import viewLocalizationData from "../../localization/view_localization.json";
+import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
+import PreLabeledInputField from "../../../../../common/component/input/PreLabeledInputField";
+import localizationData from "../../localization/view_selector_localization.json";
 
 const ViewSelector = ({ view, setView }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

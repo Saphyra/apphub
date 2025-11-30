@@ -46,3 +46,5 @@
         Allow "No material trader" override
     Notebook
         Use spinner for all BE queries
+    Calendar
+        Open occurrences on the right panel

@@ -1,10 +1,10 @@
-import Button from "../../../../common/component/input/Button";
-import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_OCCURRENCE_REMINDED, CALENDAR_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
-import NotificationService from "../../../../common/js/notification/NotificationService";
-import { hasValue } from "../../../../common/js/Utils";
-import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
-import confirmOccurrenceDeletion from "../../common/delete_occurrence/DeleteOccurrence";
-import { DONE, PENDING, SNOOZED } from "../../common/OccurrenceStatus";
+import Button from "../../../../../common/component/input/Button";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_OCCURRENCE_REMINDED, CALENDAR_PAGE } from "../../../../../common/js/dao/endpoints/CalendarEndpoints";
+import NotificationService from "../../../../../common/js/notification/NotificationService";
+import { hasValue } from "../../../../../common/js/Utils";
+import confirmEventDeletion from "../../../common/delete_event/DeleteEvent";
+import confirmOccurrenceDeletion from "../../../common/delete_occurrence/DeleteOccurrence";
+import { DONE, PENDING, SNOOZED } from "../../../common/OccurrenceStatus";
 
 function getChoices(args) {
     const {
@@ -24,7 +24,6 @@ function getChoices(args) {
             key="reminder"
             id="calendar-selected-occurrence-remind-button"
             onclick={() => {
-                setSelectedOccurrence(null);
                 setReminded();
             }}
             label={localizationHandler.get("reminded")}
@@ -36,7 +35,6 @@ function getChoices(args) {
             key="done"
             id="calendar-selected-occurrence-done-button"
             onclick={() => {
-                setSelectedOccurrence(null);
                 editStatus(DONE);
             }}
             label={localizationHandler.get("done")}
@@ -108,13 +106,6 @@ function getChoices(args) {
             }
         )}
         label={localizationHandler.get("delete-event")}
-    />);
-
-    choices.push(<Button
-        key="cancel"
-        id="calendar-selected-occurrence-cancel-button"
-        onclick={() => setSelectedOccurrence(null)}
-        label={localizationHandler.get("cancel")}
     />);
 
     return choices;

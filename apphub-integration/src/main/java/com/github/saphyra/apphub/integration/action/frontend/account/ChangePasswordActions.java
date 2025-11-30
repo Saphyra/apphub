@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.change_password.ChPasswordPasswordValidationResult;
@@ -31,28 +32,30 @@ public class ChangePasswordActions {
     }
 
     public static void verifyChangePasswordForm(WebDriver driver, ChangePasswordValidationResult validationResult) {
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-password-new-password-input-validation"),
-            validationResult.getNewPassword() != NewPasswordValidationResult.VALID,
-            validationResult.getNewPassword().getErrorMessage()
-        );
+        AwaitilityWrapper.awaitAssert(() -> {
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-password-new-password-input-validation"),
+                validationResult.getNewPassword() != NewPasswordValidationResult.VALID,
+                validationResult.getNewPassword().getErrorMessage()
+            );
 
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-password-confirm-password-input-validation"),
-            validationResult.getConfirmPassword() != ConfirmPasswordValidationResult.VALID,
-            validationResult.getConfirmPassword().getErrorMessage()
-        );
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-password-confirm-password-input-validation"),
+                validationResult.getConfirmPassword() != ConfirmPasswordValidationResult.VALID,
+                validationResult.getConfirmPassword().getErrorMessage()
+            );
 
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-password-current-password-input-validation"),
-            validationResult.getPassword() != ChPasswordPasswordValidationResult.VALID,
-            validationResult.getPassword().getErrorMessage()
-        );
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-password-current-password-input-validation"),
+                validationResult.getPassword() != ChPasswordPasswordValidationResult.VALID,
+                validationResult.getPassword().getErrorMessage()
+            );
 
-        assertThat(changePasswordButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+            assertThat(changePasswordButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+        });
     }
 
     private static WebElement changePasswordButton(WebDriver driver) {

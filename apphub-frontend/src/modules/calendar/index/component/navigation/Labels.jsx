@@ -1,11 +1,11 @@
 import { useState } from "react";
-import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
-import Button from "../../../../common/component/input/Button";
-import Stream from "../../../../common/js/collection/Stream";
-import useRefresh from "../../../../common/hook/Refresh";
-import useHasFocus from "../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import useRefresh from "../../../../../common/hook/Refresh";
+import useHasFocus from "../../../../../common/hook/UseHasFocus";
+import useLoader from "../../../../../common/hook/Loader";
+import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "../../../../../common/js/dao/endpoints/CalendarEndpoints";
+import Button from "../../../../../common/component/input/Button";
+import Stream from "../../../../../common/js/collection/Stream";
 
 const Labels = ({ activeLabel, setActiveLabel }) => {
     const [labels, setLabels] = useState([]);

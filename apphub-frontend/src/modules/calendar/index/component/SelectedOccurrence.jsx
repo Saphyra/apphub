@@ -3,7 +3,7 @@ import ConfirmationDialog from "../../../../common/component/confirmation_dialog
 import useLoader from "../../../../common/hook/Loader";
 import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
 import { ResponseStatus } from "../../../../common/js/dao/dao";
-import getChoices from "./SelectedOccurrenceChoices";
+import getChoices from "./right_panel/SelectedOccurrenceChoices";
 import getContent from "./SelectedOccurrenceContent";
 import { CALENDAR_GET_LABELS_OF_EVENT, CALENDAR_GET_OCCURRENCE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "../../../../common/js/Utils";

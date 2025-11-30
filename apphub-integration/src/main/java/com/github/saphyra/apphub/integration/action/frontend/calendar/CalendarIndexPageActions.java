@@ -64,7 +64,7 @@ public class CalendarIndexPageActions {
     }
 
     public static String getOpenedOccurrenceTitle(WebDriver driver) {
-        return driver.findElement(By.cssSelector("#calendar-selected-occurrence .confirmation-dialog-title"))
+        return driver.findElement(By.id("calendar-selected-occurrence-title"))
             .getText();
     }
 
