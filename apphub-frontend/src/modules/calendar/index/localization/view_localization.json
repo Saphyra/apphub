@@ -7,6 +7,10 @@
         "en": "Surrounding weeks",
         "hu": "Környező hetek"
     },
+    "FOLLOWING_WEEKS": {
+        "en": "Following weeks",
+        "hu": "Következő hetek"
+    },
     "MONTH": {
         "en": "Month",
         "hu": "Hónap"

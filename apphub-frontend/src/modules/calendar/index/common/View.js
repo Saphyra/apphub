@@ -5,6 +5,7 @@ import { MONDAY, SUNDAY } from "../../../../common/js/date/DayOfWeek";
 
 export const WEEK = "WEEK";
 export const SURROUNDING_WEEKS = "SURROUNDING_WEEKS";
+export const FOLLOWING_WEEKS = "FOLLOWING_WEEKS";
 export const MONTH = "MONTH";
 
 export const View = {};
@@ -66,6 +67,41 @@ View[SURROUNDING_WEEKS] = {
     },
     endDate: (referenceDate) => {
         let result = referenceDate.plusDays(DAYS_IN_WEEK);
+        while (result.getDayOfWeek() !== SUNDAY) {
+            result = result.plusDays(1);
+        }
+
+        return result;
+    }
+};
+
+View[FOLLOWING_WEEKS] = {
+    back: (referenceDate, setReferenceDate) => {
+        setReferenceDate(referenceDate.minusDays(DAYS_IN_WEEK));
+    },
+    forward: (referenceDate, setReferenceDate) => {
+        setReferenceDate(referenceDate.plusDays(DAYS_IN_WEEK));
+    },
+    format: (referenceDate) => {
+        return localizationHandler.get(
+            "view-format-following-weeks",
+            {
+                year: referenceDate.getYear(),
+                startWeek: referenceDate.minusDays(DAYS_IN_WEEK).getWeekOfYear(),
+                endWeek: referenceDate.plusDays(DAYS_IN_WEEK * 3).getWeekOfYear(),
+            }
+        );
+    },
+    startDate: (referenceDate) => {
+        let result = referenceDate.minusDays(DAYS_IN_WEEK);
+        while (result.getDayOfWeek() !== MONDAY) {
+            result = result.minusDays(1);
+        }
+
+        return result;
+    },
+    endDate: (referenceDate) => {
+        let result = referenceDate.plusDays(DAYS_IN_WEEK * 3);
         while (result.getDayOfWeek() !== SUNDAY) {
             result = result.plusDays(1);
         }

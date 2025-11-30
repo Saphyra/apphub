@@ -55,6 +55,10 @@
         "en": "Week {startWeek} - {endWeek}, {year}",
         "hu": "{year}, {startWeek} - {endWeek}. hét"
     },
+    "view-format-following-weeks": {
+        "en": "Week {startWeek} - {endWeek}, {year}",
+        "hu": "{year}, {startWeek} - {endWeek}. hét"
+    },
     "view-format-week": {
         "en": "Week {week}, {year}",
         "hu": "{year} Hét {week}"
