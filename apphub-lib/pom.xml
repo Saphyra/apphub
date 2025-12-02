@@ -74,5 +74,6 @@
         <module>apphub-lib-monitoring</module>
         <module>apphub-lib-web_socket</module>
         <module>apphub-lib-performance_reporting</module>
+        <module>apphub-lib-sql_builder</module>
     </modules>
 </project>

@@ -28,6 +28,7 @@
 
 ===PLATFORM CHANGES===
     Use AutoConfigurations instead of EnableXYConfiguration annotations
+    Extract SqlBuilder to lib
 
 ===TECHNICAL DEBTS===
     Calendar

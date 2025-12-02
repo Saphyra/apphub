@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict.minor_faction;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.sql_builder.Equation;
+import com.github.saphyra.apphub.lib.sql_builder.NotExistsCondition;
+import com.github.saphyra.apphub.lib.sql_builder.QualifiedColumn;
+import com.github.saphyra.apphub.lib.sql_builder.QualifiedTable;
+import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Orphanage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.Equation;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.NotExistsCondition;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedColumn;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
