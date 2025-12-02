@@ -1,4 +1,5 @@
 import React from "react";
+import { hasValue } from "../../js/Utils";
 
 const NumberInput = ({
     id,
@@ -15,6 +16,10 @@ const NumberInput = ({
     autoFocus = false
 }) => {
     const onchange = (e) => {
+        if (hasValue(min) &&e.target.value < min) {
+            e.target.value = min;
+        }
+
         if (onchangeCallback) {
             if (!isNaN(e.target.value)) {
                 const number = Number(e.target.value);

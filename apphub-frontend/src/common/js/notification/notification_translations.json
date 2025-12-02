@@ -60,8 +60,8 @@
         "hu": "Az összes játékos ugyanabban a szövetségben van. A játék unalmas, ha nincs kit meghódítani."
     },
     "INVALID_PARAM": {
-        "en": "Invalid parameter.",
-        "hu": "Érvénytelen paraméter."
+        "en": "Invalid parameter: {value}",
+        "hu": "Érvénytelen paraméter: {value}"
     },
     "GENERAL_ERROR": {
         "en": "General error",

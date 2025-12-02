@@ -25,6 +25,7 @@
     Notebook
         Limit width of confirmation dialog
         Sticky table header
+    Do not allow number input's value fall below min
 
 ===PLATFORM CHANGES===
     Use AutoConfigurations instead of EnableXYConfiguration annotations
@@ -49,3 +50,4 @@
         Use spinner for all BE queries
     Calendar
         Open occurrences on the right panel
+    Display invalid parameters if INVALID_PARAM returned

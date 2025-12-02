@@ -36,8 +36,6 @@ public class CalendarEventPageValidationTest extends SeleniumTest {
         emptyEndDate(driver);
         endDateBeforeStartDate(driver);
         blankTitle(driver);
-        repeatForDaysTooLow(driver);
-        everyXDays_repetitionDataTooLow(driver);
         daysOfWeek_noDaySelected(driver);
         daysOfMonth_noDaySelected(driver);
     }
@@ -103,30 +101,6 @@ public class CalendarEventPageValidationTest extends SeleniumTest {
         CalendarEventPageActions.fillForm(driver, parameters);
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_NO_DAYS_DEFINED);
-        ToastMessageUtil.clearToasts(driver);
-    }
-
-    private void everyXDays_repetitionDataTooLow(WebDriver driver) {
-        CreateEventParameters parameters = CreateEventParameters.valid(RepetitionType.EVERY_X_DAYS)
-            .toBuilder()
-            .repetitionData(0)
-            .build();
-
-        CalendarEventPageActions.fillForm(driver, parameters);
-        CalendarEventPageActions.create(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_EVERY_X_DAYS_REPETITION_DATA_TOO_LOW);
-        ToastMessageUtil.clearToasts(driver);
-    }
-
-    private void repeatForDaysTooLow(WebDriver driver) {
-        CreateEventParameters parameters = CreateEventParameters.valid(RepetitionType.ONE_TIME)
-            .toBuilder()
-            .repeatForDays(0)
-            .build();
-
-        CalendarEventPageActions.fillForm(driver, parameters);
-        CalendarEventPageActions.create(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_REPEAT_FOR_DAYS_TOO_LOW);
         ToastMessageUtil.clearToasts(driver);
     }
 
