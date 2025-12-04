@@ -1,0 +1,10 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+    Decrease max heap size
+
+===TECHNICAL DEBTS===
+
+===ETC===
