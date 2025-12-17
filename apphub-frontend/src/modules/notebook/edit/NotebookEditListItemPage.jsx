@@ -16,6 +16,7 @@ import "./notebook_edit_page.css";
 import save from "./service/NotebookEditListItemSaverService";
 import loadItemData from "./service/NotebookEditListItemDataLoader";
 import OpenedPageType from "../common/OpenedPageType";
+import Spinner from "../../../common/component/Spinner";
 
 const NotebookEditListItemPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -27,6 +28,7 @@ const NotebookEditListItemPage = () => {
     const [listItemTitle, setListItemTitle] = useState("");
     const [value, setValue] = useState(null);
     const [listItemType, setListItemType] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
@@ -56,6 +58,7 @@ const NotebookEditListItemPage = () => {
                         parentId={parentId}
                         setParentId={setParentId}
                         listItemId={listItemId}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
 
                     {listItemType !== null && listItemType === OpenedPageType.LINK &&
@@ -80,7 +83,7 @@ const NotebookEditListItemPage = () => {
                     centerButtons={
                         <Button
                             id="notebook-edit-save-button"
-                            onclick={() => save(listItemTitle, listItemType, value, parentId, listItemId)}
+                            onclick={() => save(listItemTitle, listItemType, value, parentId, listItemId, setDisplaySpinner)}
                             label={localizationHandler.get("save")}
                         />
                     }
@@ -88,6 +91,8 @@ const NotebookEditListItemPage = () => {
             </div>
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

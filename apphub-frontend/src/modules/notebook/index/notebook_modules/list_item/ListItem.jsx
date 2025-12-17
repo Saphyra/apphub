@@ -62,7 +62,6 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                 />
             ]
         ));
-        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_DELETED, data));
     }
 
     const deleteListItem = async () => {

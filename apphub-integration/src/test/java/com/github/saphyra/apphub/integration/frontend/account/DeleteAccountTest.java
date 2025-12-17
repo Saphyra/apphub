@@ -46,7 +46,7 @@ public class DeleteAccountTest extends SeleniumTest {
     }
 
     private static void incorrectPassword(WebDriver driver) {
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         Stream.generate(() -> "")
             .limit(2)
             .forEach(s -> {
@@ -66,21 +66,24 @@ public class DeleteAccountTest extends SeleniumTest {
     }
 
     private static void delete(WebDriver driver, RegistrationParameters userData) {
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
-        IndexPageActions.login(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
-        AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(UserEndpoints.ACCOUNT_PAGE))
-            .assertTrue("Account page is not opened");
+        int serverPort = getServerPort();
 
-        DeleteAccountActions.fillDeleteAccountForm(getServerPort(), driver, DataConstants.VALID_PASSWORD);
+        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
+
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_PAGE));
+        });
+
+        DeleteAccountActions.fillDeleteAccountForm(serverPort, driver, DataConstants.VALID_PASSWORD);
         DeleteAccountActions.deleteAccount(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE)));
+            .until(() -> driver.getCurrentUrl().equals(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE)));
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ACCOUNT_DELETED);
 
-        IndexPageActions.login(getServerPort(), driver, LoginParameters.fromRegistrationParameters(userData));
-        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE));
+        IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
+        assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INDEX_BAD_CREDENTIALS);
     }
 }

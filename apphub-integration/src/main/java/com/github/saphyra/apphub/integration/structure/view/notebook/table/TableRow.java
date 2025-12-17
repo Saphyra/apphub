@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.view.notebook.table.column.TableColumn;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class TableRow {
             .collect(Collectors.toList());
     }
 
-    public void check() {
+    public void check(WebDriver driver) {
         if (!isChecklistRow()) {
             throw new IllegalStateException("Row is not a checklist row.");
         }
@@ -37,6 +38,8 @@ public class TableRow {
         }
 
         checkbox.click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private WebElement getCheckbox() {
@@ -63,7 +66,7 @@ public class TableRow {
             .click();
     }
 
-    public void uncheck() {
+    public void uncheck(WebDriver driver) {
         if (!isChecklistRow()) {
             throw new IllegalStateException("Row is not a checklist row.");
         }
@@ -75,16 +78,18 @@ public class TableRow {
         }
 
         checkbox.click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
-    public void setChecked(boolean checked) {
+    public void setChecked(WebDriver driver, boolean checked) {
         if (checked) {
             if (!isChecked()) {
-                check();
+                check(driver);
             }
         } else {
             if (isChecked()) {
-                uncheck();
+                uncheck(driver);
             }
         }
     }

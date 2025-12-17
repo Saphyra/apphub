@@ -163,7 +163,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                     <Button
                         id="notebook-content-checklist-discard-button"
                         label={localizationHandler.get("discard")}
-                        onclick={() => discard(setConfirmationDialogData, localizationHandler, setEditingEnabled, openedListItem.id, setDataFromResponse)}
+                        onclick={() => discard(setConfirmationDialogData, localizationHandler, setEditingEnabled, openedListItem.id, setDataFromResponse, setDisplaySpinner)}
                     />
                 }
 

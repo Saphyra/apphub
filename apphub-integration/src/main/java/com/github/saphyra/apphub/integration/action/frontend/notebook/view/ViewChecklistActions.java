@@ -61,7 +61,8 @@ public class ViewChecklistActions {
     }
 
     public static void orderItems(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-checklist-order-items-button"))
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("notebook-content-checklist-order-items-button")))
+            .orElseThrow()
             .click();
 
         SleepUtil.sleep(1000);

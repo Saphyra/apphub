@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_i
 import com.github.saphyra.apphub.integration.action.frontend.notebook.new_list_item.NewTextActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.Number;
@@ -65,6 +66,8 @@ public class NotebookUtils {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Notebook page is not opened");
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void newText(int serverPort, WebDriver driver, String title, String content, String... parents) {
@@ -184,7 +187,7 @@ public class NotebookUtils {
         for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
             NewTableActions.getRows(driver)
                 .get(rowIndex)
-                .setChecked(rows.get(rowIndex).getEntity1());
+                .setChecked(driver, rows.get(rowIndex).getEntity1());
         }
 
         NewTableActions.submit(driver);

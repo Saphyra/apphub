@@ -50,7 +50,7 @@ public class NotebookActions {
         driver.findElement(By.id("notebook-content-category-content-up-button"))
             .click();
 
-        SleepUtil.sleep(1000);
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void cancelListItemDeletion(WebDriver driver) {
@@ -77,6 +77,8 @@ public class NotebookActions {
     public static void selectAll(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-select-all-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void unselectAll(WebDriver driver) {
@@ -87,21 +89,29 @@ public class NotebookActions {
     public static void archiveSelected(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-archive-selected-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void unarchiveSelected(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-unarchive-selected-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void pinSelected(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-pin-selected-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void unpinSelected(WebDriver driver) {
         driver.findElement(By.id("notebook-content-category-content-unpin-selected-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void deleteSelected(WebDriver driver) {
@@ -110,5 +120,7 @@ public class NotebookActions {
 
         driver.findElement(By.id("notebook-delete-selected-items-confirm-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 }

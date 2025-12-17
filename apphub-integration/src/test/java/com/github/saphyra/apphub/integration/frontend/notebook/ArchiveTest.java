@@ -42,7 +42,7 @@ public class ArchiveTest extends SeleniumTest {
 
         CategoryTreeLeaf leaf = NotebookActions.getCategoryTree(driver);
         leaf = leaf.getChildren()
-            .get(0);
+            .getFirst();
         assertThat(leaf.isArchived()).isTrue();
 
         //Unarchive item
@@ -53,7 +53,7 @@ public class ArchiveTest extends SeleniumTest {
 
         leaf = NotebookActions.getCategoryTree(driver);
         leaf = leaf.getChildren()
-            .get(0);
+            .getFirst();
         assertThat(leaf.isArchived()).isFalse();
     }
 
@@ -71,7 +71,7 @@ public class ArchiveTest extends SeleniumTest {
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .archive(driver)
-            .open();
+            .open(driver);
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(NotebookActions.findListItemByTitleValidated(driver, LIST_ITEM_TITLE).isArchived()).isTrue());
     }

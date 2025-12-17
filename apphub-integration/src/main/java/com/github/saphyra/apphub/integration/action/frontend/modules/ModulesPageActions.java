@@ -70,7 +70,7 @@ public class ModulesPageActions {
             .orElseThrow(() -> new RuntimeException("Module not found for moduleLocation " + moduleLocation))
             .open();
 
-        AwaitilityWrapper.createDefault()
+        AwaitilityWrapper.create(10, 1)
             .until(() -> moduleLocation.pageLoaded(driver))
             .assertTrue(String.format("Failed to open module %s. Current url: %s", moduleLocation, driver.getCurrentUrl()));
     }

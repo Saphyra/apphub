@@ -40,7 +40,8 @@ public class MigrationTasksTest extends SeleniumTest {
         driver.navigate().refresh();
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MIGRATION_TASKS);
 
-        MigrationTask task = MigrationTasksActions.findMigrationTaskByEventValidated(driver, EVENT);
+        MigrationTask task = AwaitilityWrapper.getWithWait(() -> MigrationTasksActions.findMigrationTaskByEventValidated(driver, EVENT))
+            .orElseThrow(() -> new IllegalStateException("MigrationTask not found."));
         assertThat(task.isCompleted()).isFalse();
         task.trigger(driver);
 

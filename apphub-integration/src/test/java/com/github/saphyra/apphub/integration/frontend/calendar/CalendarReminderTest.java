@@ -46,13 +46,13 @@ public class CalendarReminderTest extends SeleniumTest {
         AwaitilityWrapper.getWithWait(() -> CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate().minusDays(REMIND_ME_BEFORE_DAYS), event.getTitle()))
             .filter(calendarOccurrence -> calendarOccurrence.getStatus() == OccurrenceStatus.REMINDER)
             .orElseThrow(() -> new IllegalStateException("Occurrence not found"))
-            .open();
+            .open(driver);
         CalendarIndexPageActions.confirmReminder(driver);
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(driver, event.getStartDate().minusDays(REMIND_ME_BEFORE_DAYS))).isEmpty());
 
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle())
-            .open();
+            .open(driver);
         CalendarIndexPageActions.editOccurrence(driver);
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarOccurrencePageActions.isReminded(driver)).isTrue());
     }

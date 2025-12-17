@@ -37,6 +37,7 @@
         Delete migration
     ErrorReporterService automatically logs errors
     Get rid of ObjectMapperWrapper
+    Timing of integration tests improved
 
 ===ETC===
     AdminPanel

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.integration.action.frontend.community;
 
 import com.github.saphyra.apphub.integration.action.frontend.common.CommonPageActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupMember;
@@ -23,12 +22,10 @@ public class GroupActions {
 
         fillAddGroupMemberInput(driver, query);
 
-        SleepUtil.sleep(2000);
-
-        assertThat(CommunityPage.groupAddMemberSearchResult(driver).isDisplayed()).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CommunityPage.groupAddMemberSearchResult(driver).isDisplayed()).isTrue());
 
         CommunityPage.groupAddMemberSearchResultItems(driver)
-            .get(0)
+            .getFirst()
             .click();
     }
 
@@ -134,11 +131,11 @@ public class GroupActions {
     }
 
     public static void verifyAddMemberUserNotFound(WebDriver driver) {
-        assertThat(CommunityPage.groupAddMemberResultNoResult(driver).isDisplayed()).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CommunityPage.groupAddMemberResultNoResult(driver).isDisplayed()).isTrue());
     }
 
     public static void verifyAddMemberQueryTooShort(WebDriver driver) {
-        assertThat(CommunityPage.groupAddMemberResultQueryTooShort(driver).isDisplayed()).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CommunityPage.groupAddMemberResultQueryTooShort(driver).isDisplayed()).isTrue());
     }
 
     public static List<GroupMember> getMembers(WebDriver driver) {

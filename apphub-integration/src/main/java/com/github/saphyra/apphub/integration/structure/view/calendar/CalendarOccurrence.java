@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.Optional;
@@ -19,8 +20,10 @@ public class CalendarOccurrence {
             .getText();
     }
 
-    public void open() {
+    public void open(WebDriver driver) {
         webElement.click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public OccurrenceStatus getStatus() {

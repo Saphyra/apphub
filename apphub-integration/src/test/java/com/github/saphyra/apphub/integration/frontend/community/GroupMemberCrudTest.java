@@ -27,7 +27,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
 
     @Test(groups = {"fe", "community"})
     public void groupMemberCrud() {
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
 
         List<WebDriver> drivers = extractDrivers(3);
         WebDriver driver1 = drivers.get(0);
@@ -60,9 +60,9 @@ public class GroupMemberCrudTest extends SeleniumTest {
     }
 
     private static void checkOwnerRoles(WebDriver driver1, RegistrationParameters userData1) {
-        List<GroupMember> groupMembers = GroupActions.getMembers(driver1);
+        List<GroupMember> groupMembers = AwaitilityWrapper.getListWithWait(() -> GroupActions.getMembers(driver1), m -> !m.isEmpty());
         assertThat(groupMembers).hasSize(1);
-        GroupMember groupMember = groupMembers.get(0);
+        GroupMember groupMember = groupMembers.getFirst();
         assertThat(groupMember.getUsername()).isEqualTo(userData1.getUsername());
         assertThat(groupMember.getEmail()).isEqualTo(userData1.getEmail());
         assertThat(groupMember.getCanInviteCheckbox().isEnabled()).isFalse();
@@ -80,13 +80,11 @@ public class GroupMemberCrudTest extends SeleniumTest {
         GroupActions.openAddGroupMemberWindow(driver1);
 
         GroupActions.fillAddGroupMemberInput(driver1, UUID.randomUUID().toString());
-        SleepUtil.sleep(2000);
         GroupActions.verifyAddMemberUserNotFound(driver1);
     }
 
     private static void search_queryTooShort(WebDriver driver1) {
         GroupActions.fillAddGroupMemberInput(driver1, "as");
-        SleepUtil.sleep(2000);
         GroupActions.verifyAddMemberQueryTooShort(driver1);
     }
 
@@ -114,10 +112,10 @@ public class GroupMemberCrudTest extends SeleniumTest {
 
         CommunityActions.openGroupsTab(driver2);
 
-        GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
+        WebElement group = AwaitilityWrapper.getSingleItemFromListWithWait(() -> GroupActions.getGroups(driver2));
+        GroupActions.openGroup(driver2, group);
 
-        groupMembers = GroupActions.getMembers(driver2);
-        assertThat(groupMembers).hasSize(2);
+        groupMembers = AwaitilityWrapper.getListWithWait(() -> GroupActions.getMembers(driver2), m -> m.size() == 2);
         groupMember = groupMembers.get(1);
         assertThat(groupMember.getUsername()).isEqualTo(userData2.getUsername());
         assertThat(groupMember.getEmail()).isEqualTo(userData2.getEmail());
@@ -132,8 +130,6 @@ public class GroupMemberCrudTest extends SeleniumTest {
     }
 
     private static void modifyRoles(WebDriver driver1, RegistrationParameters userData2) {
-        List<GroupMember> groupMembers;
-        GroupMember groupMember;
         GroupActions.getMembers(driver1)
             .get(1)
             .getCanInviteCheckbox()
@@ -155,27 +151,30 @@ public class GroupMemberCrudTest extends SeleniumTest {
         CommonPageActions.confirmConfirmationDialog(driver1, "grant-role-to-member-confirmation-dialog");
         SleepUtil.sleep(1000);
 
-        groupMembers = GroupActions.getMembers(driver1);
-        assertThat(groupMembers).hasSize(2);
-        groupMember = groupMembers.get(1);
-        assertThat(groupMember.getUsername()).isEqualTo(userData2.getUsername());
-        assertThat(groupMember.getEmail()).isEqualTo(userData2.getEmail());
-        assertThat(groupMember.getCanInviteCheckbox().isEnabled()).isTrue();
-        assertThat(groupMember.getCanInviteCheckbox().isSelected()).isTrue();
-        assertThat(groupMember.getCanKickCheckbox().isEnabled()).isTrue();
-        assertThat(groupMember.getCanKickCheckbox().isSelected()).isTrue();
-        assertThat(groupMember.getCanModifyRolesCheckbox().isEnabled()).isTrue();
-        assertThat(groupMember.getCanModifyRolesCheckbox().isSelected()).isTrue();
-        assertThat(groupMember.getKickButton().isEnabled()).isTrue();
-        assertThat(groupMember.getTransferLeadershipButton()).isNotEmpty();
-        assertThat(groupMember.getTransferLeadershipButton().get().isEnabled()).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> {
+            List<GroupMember> groupMembers = GroupActions.getMembers(driver1);
+            assertThat(groupMembers).hasSize(2);
+            GroupMember groupMember = groupMembers.get(1);
+
+            assertThat(groupMember.getUsername()).isEqualTo(userData2.getUsername());
+            assertThat(groupMember.getEmail()).isEqualTo(userData2.getEmail());
+            assertThat(groupMember.getCanInviteCheckbox().isEnabled()).isTrue();
+            assertThat(groupMember.getCanInviteCheckbox().isSelected()).isTrue();
+            assertThat(groupMember.getCanKickCheckbox().isEnabled()).isTrue();
+            assertThat(groupMember.getCanKickCheckbox().isSelected()).isTrue();
+            assertThat(groupMember.getCanModifyRolesCheckbox().isEnabled()).isTrue();
+            assertThat(groupMember.getCanModifyRolesCheckbox().isSelected()).isTrue();
+            assertThat(groupMember.getKickButton().isEnabled()).isTrue();
+            assertThat(groupMember.getTransferLeadershipButton()).isNotEmpty();
+            assertThat(groupMember.getTransferLeadershipButton().get().isEnabled()).isTrue();
+        });
     }
 
     private static GroupMember inviteMember(WebDriver driver2, RegistrationParameters userData3) {
         List<GroupMember> groupMembers;
         GroupMember groupMember;
         GroupActions.closeGroupDetails(driver2);
-        GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
+        GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).getFirst());
 
         GroupActions.addMember(driver2, userData3.getUsername());
 
@@ -223,7 +222,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
     }
 
     private static void leaveGroup(WebDriver driver1, WebDriver driver2) {
-        GroupActions.openGroup(driver1, GroupActions.getGroups(driver1).get(0));
+        GroupActions.openGroup(driver1, GroupActions.getGroups(driver1).getFirst());
 
         GroupActions.leaveGroup(driver1);
         NotificationUtil.verifySuccessNotification(driver1, "Group left.");
@@ -233,7 +232,7 @@ public class GroupMemberCrudTest extends SeleniumTest {
             .assertTrue("Group list is not empty.");
 
         GroupActions.closeGroupDetails(driver2);
-        GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).get(0));
+        GroupActions.openGroup(driver2, GroupActions.getGroups(driver2).getFirst());
 
         assertThat(GroupActions.getMembers(driver2)).hasSize(1);
     }

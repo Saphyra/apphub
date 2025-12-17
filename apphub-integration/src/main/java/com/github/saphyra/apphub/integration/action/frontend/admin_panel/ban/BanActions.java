@@ -29,7 +29,7 @@ public class BanActions {
     }
 
     public static boolean isUserDetailsPageOpened(WebDriver driver) {
-        return WebElementUtils.isPresent(driver, By.id("ban-details"));
+        return WebElementUtils.isPresent(driver, By.id("ban-details")) && !WebElementUtils.isPresent(driver, By.className("spinner"));
     }
 
     public static void setUpAdminForm(WebDriver driver, String bannedRole, boolean permanent, int duration, String chronoUnit, String reason, String password) {

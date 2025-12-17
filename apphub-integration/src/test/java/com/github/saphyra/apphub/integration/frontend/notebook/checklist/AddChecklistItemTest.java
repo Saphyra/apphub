@@ -40,13 +40,13 @@ public class AddChecklistItemTest extends SeleniumTest {
         NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CHECKLIST);
         NewChecklistActions.fillTitle(driver, TITLE);
         NewChecklistActions.getItems(driver)
-            .get(0)
+            .getFirst()
             .setValue(CONTENT);
         NewChecklistActions.submit(driver);
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("List item not found."))
-            .open();
+            .open(driver);
 
         ViewChecklistActions.addItem(driver);
         ViewChecklistActions.setNewChecklistItemContent(driver, LAST_CONTENT);
@@ -60,6 +60,6 @@ public class AddChecklistItemTest extends SeleniumTest {
 
         items = AwaitilityWrapper.getListWithWait(() -> ViewChecklistActions.getItems(driver), checklistItems -> checklistItems.size() == 3);
         assertThat(items).hasSize(3);
-        assertThat(items.get(0).getValue()).isEqualTo(FIRST_CONTENT);
+        assertThat(items.getFirst().getValue()).isEqualTo(FIRST_CONTENT);
     }
 }

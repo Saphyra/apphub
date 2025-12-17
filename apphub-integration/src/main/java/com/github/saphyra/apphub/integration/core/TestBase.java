@@ -198,7 +198,7 @@ public abstract class TestBase {
         String[] split = className.split("\\.");
         String clazz = split[split.length - 1];
 
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh_mm_ss")) + "/" + getTestType() + "/" + clazz + "_" + method + "_" + className.hashCode();
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss")) + "/" + getTestType() + "/" + clazz + "_" + method + "_" + className.hashCode();
     }
 
     protected abstract String getTestType();

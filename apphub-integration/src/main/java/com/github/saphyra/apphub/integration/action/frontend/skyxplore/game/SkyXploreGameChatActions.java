@@ -34,11 +34,10 @@ public class SkyXploreGameChatActions {
     }
 
     public static void selectChatRoom(WebDriver driver, String roomName) {
-        getRooms(driver)
-            .stream()
-            .filter(gameChatRoom -> roomName.equals(gameChatRoom.getName()))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Chat room not found with name " + roomName))
+        AwaitilityWrapper.getSingleItemFromListWithWait(
+                () -> getRooms(driver),
+                gameChatRooms -> gameChatRooms.stream().filter(gameChatRoom -> roomName.equals(gameChatRoom.getName())).findFirst()
+            )
             .select();
     }
 
@@ -72,7 +71,7 @@ public class SkyXploreGameChatActions {
             .forEach(s -> inviteUserToChatRoom(driver, s));
 
         driver.findElement(By.id("skyxplore-game-chat-room-save-button"))
-                .click();
+            .click();
 
         AwaitilityWrapper.createDefault()
             .until(() -> getRooms(driver).stream().map(GameChatRoom::getName).anyMatch(s -> s.equals(roomName)))
@@ -80,11 +79,10 @@ public class SkyXploreGameChatActions {
     }
 
     private static void inviteUserToChatRoom(WebDriver driver, String username) {
-        driver.findElements(By.cssSelector("#skyxplore-game-chat-room-creator-available-players .skyxplore-game-chat-room-creator-player"))
-            .stream()
-            .filter(element -> element.getText().equals(username))
-            .findFirst()
-            .orElseThrow(() -> new RuntimeException("Player not found"))
+        AwaitilityWrapper.getSingleItemFromListWithWait(
+                () -> driver.findElements(By.cssSelector("#skyxplore-game-chat-room-creator-available-players .skyxplore-game-chat-room-creator-player")),
+                webElements -> webElements.stream().filter(webElement -> webElement.getText().equals(username)).findFirst()
+            )
             .click();
     }
 

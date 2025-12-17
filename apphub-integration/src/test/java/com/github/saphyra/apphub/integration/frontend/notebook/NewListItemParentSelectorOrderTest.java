@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNe
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.StringUtils;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -24,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class NewListItemParentSelectorOrderTest extends SeleniumTest {
     private static final List<String> CATEGORY_TITLES = Stream.generate(() -> StringUtils.randomCase("category-") + UUID.randomUUID())
-        .limit(20)
+        .limit(10)
         .toList();
 
     @Test(groups = {"fe", "notebook"})
@@ -41,6 +42,6 @@ public class NewListItemParentSelectorOrderTest extends SeleniumTest {
         NotebookActions.newListItem(getServerPort(), driver);
         NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CATEGORY);
 
-        assertThat(ParentSelectorActions.getAvailableParents(driver).map(WebElement::getText)).containsAll(CATEGORY_TITLES.stream().sorted(String::compareTo).toList());
+        AwaitilityWrapper.awaitAssert(() -> assertThat(ParentSelectorActions.getAvailableParents(driver).map(WebElement::getText)).containsAll(CATEGORY_TITLES.stream().sorted(String::compareTo).toList()));
     }
 }

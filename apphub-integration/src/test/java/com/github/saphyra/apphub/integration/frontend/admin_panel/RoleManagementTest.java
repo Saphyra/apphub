@@ -106,7 +106,7 @@ public class RoleManagementTest extends SeleniumTest {
         RoleManagementActions.confirmRevokeRole(adminDriver);
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
             .until(() -> adminDriver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
             .assertTrue("User is not logged out");
@@ -119,7 +119,7 @@ public class RoleManagementTest extends SeleniumTest {
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
-            .until(() -> adminDriver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE))
+            .until(() -> adminDriver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
             .assertTrue("User is not logged in");
     }
 
@@ -128,7 +128,7 @@ public class RoleManagementTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("TestUser not found as search result."));
 
         testUser.getGrantedRoles()
-            .get(0)
+            .getFirst()
             .revoke(adminDriver);
 
         RoleManagementActions.confirmRevokeRole(adminDriver);
@@ -174,10 +174,12 @@ public class RoleManagementTest extends SeleniumTest {
         RoleManagementActions.confirmGrantRole(adminDriver);
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
             .until(() -> adminDriver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
             .assertTrue("User is not logged out");
+
+        ToastMessageUtil.clearToasts(adminDriver);
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
@@ -186,8 +188,8 @@ public class RoleManagementTest extends SeleniumTest {
         SleepUtil.sleep(3000);
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
-        AwaitilityWrapper.createDefault()
-            .until(() -> adminDriver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE))
+        AwaitilityWrapper.create(10, 1)
+            .until(() -> adminDriver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
             .assertTrue("User is not logged in");
     }
 
@@ -198,7 +200,7 @@ public class RoleManagementTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("TestUser not found as search result."));
 
         testUser.getAvailableRoles()
-            .get(0)
+            .getFirst()
             .grant(adminDriver);
 
         RoleManagementActions.confirmGrantRole(adminDriver);

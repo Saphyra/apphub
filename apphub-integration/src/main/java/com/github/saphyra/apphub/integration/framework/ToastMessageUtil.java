@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.framework;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,13 +23,13 @@ public class ToastMessageUtil {
     }
 
     private static void verifyErrorToast(WebDriver driver, String message) {
-        AwaitilityWrapper.create(3, 1)
+        AwaitilityWrapper.createDefault()
             .until(() -> !getErrorToasts(driver, message).isEmpty())
             .assertTrue("No error toast found with message " + message);
     }
 
     private static void verifySuccessToast(WebDriver driver, String message) {
-        AwaitilityWrapper.create(3, 1)
+        AwaitilityWrapper.createDefault()
             .until(() -> !getSuccessToasts(driver, message).isEmpty())
             .assertTrue("No success toast found with message " + message);
     }
@@ -73,7 +74,7 @@ public class ToastMessageUtil {
         try {
             getAllToasts(driver)
                 .forEach(webElement -> webElement.findElement(By.tagName("button")).click());
-        } catch (StaleElementReferenceException e) {
+        } catch (StaleElementReferenceException | ElementNotInteractableException e) {
             log.debug("Failed clearing toasts.", e);
         }
     }

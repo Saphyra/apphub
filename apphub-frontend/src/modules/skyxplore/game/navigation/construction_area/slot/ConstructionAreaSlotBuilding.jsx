@@ -19,13 +19,13 @@ const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildi
             [
                 <Button
                     key="deconstruct"
-                    id="skyxplore-game-constuction-area-deconstruct-module-confirm-button"
+                    id="skyxplore-game-construction-area-deconstruct-module-confirm-button"
                     label={localizationHandler.get("deconstruct")}
                     onclick={deconstructBuilding}
                 />,
                 <Button
                     key="cancel"
-                    id="skyxplore-game-constuction-area-deconstruct-module-cancel-button"
+                    id="skyxplore-game-construction-area-deconstruct-module-cancel-button"
                     label={localizationHandler.get("cancel")}
                     onclick={() => setConfirmationDialogData(null)}
                 />

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetBuildingOverview;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetQueueItem;
@@ -69,7 +70,7 @@ public class SkyXplorePlanetActions {
     }
 
     private static List<Surface> getSurfaces(WebDriver driver) {
-        return driver.findElements(By.className("skyxplore-game-planet-surface-tile"))
+        return AwaitilityWrapper.getListWithWait(() -> driver.findElements(By.className("skyxplore-game-planet-surface-tile")), webElements -> !webElements.isEmpty())
             .stream()
             .map(Surface::new)
             .collect(Collectors.toList());

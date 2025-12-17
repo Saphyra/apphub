@@ -60,5 +60,7 @@ public class CommonUtils {
 
     public static void enableTestMode(WebDriver driver) {
         ((JavascriptExecutor) driver).executeScript("enableTestMode()");
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 }

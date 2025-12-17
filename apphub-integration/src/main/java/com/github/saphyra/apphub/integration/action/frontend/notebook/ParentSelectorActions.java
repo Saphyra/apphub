@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.notebook;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,7 +16,9 @@ public class ParentSelectorActions {
             )
             .click();
 
-        SleepUtil.sleep(1000);
+        AwaitilityWrapper.createDefault()
+            .until(() -> driver.findElement(By.id("notebook-parent-selector-selected-parent-title")).getText().equals(parentTitle))
+            .assertTrue("Parent is not selected");
     }
 
     public static Stream<WebElement> getAvailableParents(WebDriver driver) {
@@ -27,6 +29,8 @@ public class ParentSelectorActions {
     public static void up(WebDriver driver) {
         driver.findElement(By.className("notebook-parent-selector-up-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static String getParent(WebDriver driver) {

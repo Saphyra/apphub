@@ -27,7 +27,7 @@ public class RunTestsTask {
                 platformProperties.getLocalServerPort(),
                 platformProperties.getLocalDatabasePort(),
                 platformProperties.getLocalDatabaseName(),
-                "",
+                "villany-atesz",
                 testGroups.length() > 0 ? 0 : propertyDao.getLocalRunPreCreateDriverCount(),
                 false,
                 false,

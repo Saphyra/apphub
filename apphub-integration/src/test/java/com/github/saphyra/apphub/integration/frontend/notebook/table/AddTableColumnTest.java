@@ -40,19 +40,19 @@ public class AddTableColumnTest extends SeleniumTest {
         NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CHECKLIST_TABLE);
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_NAME);
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_VALUE);
         NewTableActions.submit(driver);
 
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Table not found."))
-            .open();
+            .open(driver);
 
         ViewTableActions.enableEditing(driver);
 
@@ -66,7 +66,7 @@ public class AddTableColumnTest extends SeleniumTest {
         List<TableHead> tableHeads = ViewTableActions.getTableHeads(driver);
         assertThat(tableHeads).hasSize(2);
 
-        TableHead tableHead = tableHeads.get(0);
+        TableHead tableHead = tableHeads.getFirst();
         assertThat(tableHead.getValue()).isEmpty();
 
         tableHead.setValue(NEW_COLUMN_NAME);

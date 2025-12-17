@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
@@ -48,9 +49,9 @@ public class CloneListItemTest extends SeleniumTest {
     private static final String TEXT_CONTENT = "text-content";
     private static final String CHECKLIST_TITLE = "checklist-title";
     private static final String CHECKLIST_CONTENT = "checklist-content";
-    private static final String TABLE_TITLE = "table-title0";
-    private static final String TABLE_HEAD = "table-head0";
-    private static final String TABLE_CONTENT = "table-content0";
+    private static final String TABLE_TITLE = "table-title";
+    private static final String TABLE_HEAD = "table-head";
+    private static final String TABLE_CONTENT = "table-content";
     private static final String CHECKLIST_TABLE_CONTENT = "checklist-table-content";
     private static final String CHECKLIST_TABLE_TITLE = "checklist-table-title";
     private static final String ONLY_TITLE_TITLE = "only-title-title";
@@ -117,7 +118,7 @@ public class CloneListItemTest extends SeleniumTest {
         NotebookActions.up(driver);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
-            .cloneListItem();
+            .cloneListItem(driver);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
             .edit(getServerPort(), driver);
@@ -126,10 +127,10 @@ public class CloneListItemTest extends SeleniumTest {
 
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
-            .assertTrue("Category is not modified.");
+            .assertTrue("Category is not modified. Current URL: " + driver.getCurrentUrl());
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
-            .open();
+            .open(driver);
 
         verifyContent(driver);
 
@@ -137,7 +138,7 @@ public class CloneListItemTest extends SeleniumTest {
         NotebookActions.up(driver);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_TITLE)
-            .open();
+            .open(driver);
 
         verifyContent(driver);
 
@@ -159,84 +160,93 @@ public class CloneListItemTest extends SeleniumTest {
 
     private void verifyCustomTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, CUSTOM_TABLE_TITLE)
-            .open();
+            .open(driver);
 
-        assertThat(ViewTableActions.getRows(driver)).hasSize(4);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewTableActions.getRows(driver)).hasSize(4);
+        });
 
         CheckedTableColumn checkedColumn = ViewTableActions.getRows(driver)
             .get(0)
             .getColumns()
-            .get(0)
+            .getFirst()
             .as(ColumnType.CHECKBOX);
         assertThat(checkedColumn.isChecked()).isTrue();
 
         LinkTableColumn linkColumn = ViewTableActions.getRows(driver)
             .get(1)
             .getColumns()
-            .get(0)
+            .getFirst()
             .as(ColumnType.LINK);
         linkColumn.open();
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).getFirst());
 
         NumberTableColumn numberColumn = ViewTableActions.getRows(driver)
             .get(2)
             .getColumns()
-            .get(0)
+            .getFirst()
             .as(ColumnType.NUMBER);
         assertThat(numberColumn.getValue()).isEqualTo(String.valueOf(CUSTOM_TABLE_NUMBER_VALUE.intValue()));
 
-        assertThat(ViewTableActions.getRows(driver).get(3).getColumns().get(0).getValue()).isEqualTo(CUSTOM_TABLE_TEXT);
+        assertThat(ViewTableActions.getRows(driver).get(3).getColumns().getFirst().getValue()).isEqualTo(CUSTOM_TABLE_TEXT);
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
 
         ViewTableActions.close(driver);
     }
 
     private void verifyOnlyTitle(WebDriver driver) {
-        assertThat(NotebookActions.findListItemByTitle(driver, ONLY_TITLE_TITLE)).isNotEmpty();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(NotebookActions.findListItemByTitle(driver, ONLY_TITLE_TITLE)).isNotEmpty());
     }
 
     private void verifyChecklistTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TABLE_TITLE)
-            .open();
+            .open(driver);
 
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(CHECKLIST_TABLE_HEAD);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(CHECKLIST_TABLE_HEAD);
 
-        assertThat(ViewTableActions.getRows(driver)).hasSize(1);
-        TableRow tableRow = ViewTableActions.getRows(driver)
-            .get(0);
-        assertThat(tableRow.isChecked()).isTrue();
-        assertThat(tableRow.getColumns())
-            .hasSize(1)
-            .extracting(TableColumn::getValue)
-            .containsExactly(CHECKLIST_TABLE_CONTENT);
+            assertThat(ViewTableActions.getRows(driver)).hasSize(1);
+            TableRow tableRow = ViewTableActions.getRows(driver)
+                .getFirst();
+            assertThat(tableRow.isChecked()).isTrue();
+            assertThat(tableRow.getColumns())
+                .hasSize(1)
+                .extracting(TableColumn::getValue)
+                .containsExactly(CHECKLIST_TABLE_CONTENT);
+        });
 
         ViewTableActions.close(driver);
     }
 
     private void verifyTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
-            .open();
+            .open(driver);
 
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD);
-        assertThat(ViewTableActions.getRows(driver))
-            .hasSize(1)
-            .extracting(TableRow::getColumns)
-            .hasSize(1)
-            .extracting(tableColumns -> tableColumns.get(0).getValue())
-            .containsExactly(TABLE_CONTENT);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD);
+            assertThat(ViewTableActions.getRows(driver))
+                .hasSize(1)
+                .extracting(TableRow::getColumns)
+                .hasSize(1)
+                .extracting(tableColumns -> tableColumns.getFirst().getValue())
+                .containsExactly(TABLE_CONTENT);
+
+        });
 
         ViewTableActions.close(driver);
     }
 
     private void verifyChecklist(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
-            .open();
+            .open(driver);
 
-        ChecklistItem checklistItem = ViewChecklistActions.getItems(driver)
-            .get(0);
+        ChecklistItem checklistItem = AwaitilityWrapper.getListWithWait(() -> ViewChecklistActions.getItems(driver), checklistItems -> !checklistItems.isEmpty())
+            .getFirst();
 
         assertThat(checklistItem.getValue()).isEqualTo(CHECKLIST_CONTENT);
         assertThat(checklistItem.isChecked()).isTrue();
@@ -246,23 +256,25 @@ public class CloneListItemTest extends SeleniumTest {
 
     private void verifyText(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
-            .open();
+            .open(driver);
 
-        assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT));
 
         ViewTextActions.close(driver);
     }
 
     private static void verifyLink(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
-            .open();
+            .open(driver);
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).getFirst());
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static void verifyCategory(WebDriver driver) {
-        assertThat(NotebookActions.findListItemByTitle(driver, CHILD_CATEGORY_TITLE)).isNotEmpty();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(NotebookActions.findListItemByTitle(driver, CHILD_CATEGORY_TITLE)).isNotEmpty());
     }
 }

@@ -3,7 +3,7 @@ import Button from "../../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../../common/OpenedPageType";
 import { loadChecklist } from "./ChecklistDao";
 
-export const discard = (setConfirmationDialogData, localizationHandler, setEditingEnabled, listItemId, setDataFromResponse) => {
+export const discard = (setConfirmationDialogData, localizationHandler, setEditingEnabled, listItemId, setDataFromResponse, setDisplaySpinner) => {
     setConfirmationDialogData(new ConfirmationDialogData(
         "notebook-content-checklist-discard-confirmation",
         localizationHandler.get("confirm-discard-title"),
@@ -15,7 +15,7 @@ export const discard = (setConfirmationDialogData, localizationHandler, setEditi
                 label={localizationHandler.get("discard")}
                 onclick={() => {
                     setEditingEnabled(false);
-                    loadChecklist(listItemId, setDataFromResponse);
+                    loadChecklist(listItemId, setDataFromResponse, setDisplaySpinner);
                     setConfirmationDialogData(null);
                 }}
             />,

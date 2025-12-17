@@ -70,8 +70,10 @@ public class TextCrudTest extends SeleniumTest {
             .orElseThrow(() -> new RuntimeException("Text not found"))
             .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-text"))).isPresent());
 
-        assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
-        assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
+            assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+        });
     }
 
     private static void edit_emptyTitle(WebDriver driver) {
@@ -89,8 +91,10 @@ public class TextCrudTest extends SeleniumTest {
 
         ViewTextActions.discardChanges(driver);
 
-        assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
-        assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewTextActions.getContent(driver)).isEqualTo(TEXT_CONTENT);
+            assertThat(ViewTextActions.getTitle(driver)).isEqualTo(TEXT_TITLE);
+        });
     }
 
     private static void edit(WebDriver driver) {
@@ -102,6 +106,8 @@ public class TextCrudTest extends SeleniumTest {
 
         assertThat(ViewTextActions.getContent(driver)).isEqualTo(NEW_TEXT_CONTENT);
         assertThat(ViewTextActions.getTitle(driver)).isEqualTo(NEW_TEXT_TITLE);
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static void delete(WebDriver driver) {

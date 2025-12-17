@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -36,8 +37,10 @@ public class CreateOccurrenceTest extends SeleniumTest {
         CalendarIndexPageActions.setReferenceDate(driver, event.getStartDate());
         AwaitilityWrapper.getWithWait(() -> CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle()))
             .orElseThrow(() -> new IllegalStateException("Occurrence not found"))
-            .open();
+            .open(driver);
         CalendarIndexPageActions.editEvent(driver);
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
 
         CalendarEventPageActions.setCreateOccurrenceDate(driver, event.getStartDate().plusDays(1));
         CalendarEventPageActions.createOccurrence(driver);

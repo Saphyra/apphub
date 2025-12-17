@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookSe
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -53,16 +54,20 @@ public class NotebookSettingsTest extends SeleniumTest {
 
         NotebookSettingActions.hideArchived(driver);
 
-        assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
-        assertThat(PinActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
-        assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
+            assertThat(PinActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1);
+            assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1);
+        });
     }
 
     private static void showArchivedItems(WebDriver driver) {
         NotebookSettingActions.showArchived(driver);
 
-        assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
-        assertThat(PinActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
-        assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(NotebookActions.getListItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+            assertThat(PinActions.getPinnedItems(driver)).extracting(ListItem::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+            assertThat(NotebookActions.getCategoryTree(driver).getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_1, CATEGORY_2);
+        });
     }
 }

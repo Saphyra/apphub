@@ -39,7 +39,7 @@ public class CalendarEditEventTest extends SeleniumTest {
         CalendarIndexPageActions.setReferenceDate(driver, event.getStartDate());
         AwaitilityWrapper.getWithWait(() -> CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle()))
             .orElseThrow(() -> new IllegalStateException("Occurrence not found"))
-            .open();
+            .open(driver);
         CalendarIndexPageActions.editEvent(driver);
 
         CreateEventParameters updatedEvent = CreateEventParameters.edit(RepetitionType.EVERY_X_DAYS);

@@ -1,4 +1,3 @@
-import React from "react";
 import OpenedPageType from "../../common/OpenedPageType";
 import Category from "./opened_item/category/Category";
 import Text from "./opened_item/text/Text";

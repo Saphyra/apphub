@@ -105,7 +105,7 @@ const NotebookPage = () => {
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
                         userSettings={userSettings}
-                        setDisplaySpinner={setDisplaySpinner}
+                        setDisplaySpinner={updateDisplaySpinner}
                     />
 
                     <PinnedItems
@@ -115,7 +115,7 @@ const NotebookPage = () => {
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
                         userSettings={userSettings}
-                        setDisplaySpinner={setDisplaySpinner}
+                        setDisplaySpinner={updateDisplaySpinner}
                     />
                 </div>
 

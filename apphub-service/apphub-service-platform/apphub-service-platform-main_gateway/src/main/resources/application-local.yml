@@ -150,3 +150,7 @@ delay:
       enabled: false
       minDelay: PT3S
       maxDelay: PT5S
+    - path: /api/**
+      enabled: false
+      minDelay: PT2S
+      maxDelay: PT2S

@@ -73,7 +73,7 @@ public class RolesForAllTest extends SeleniumTest {
     private void addToAll_incorrectPassword(WebDriver driver, RegistrationParameters userData) {
         Stream.generate(() -> "")
             .limit(2)
-            .forEach(s -> {
+            .forEach(_ -> {
                 RolesForAllActions.fillPassword(driver, DataConstants.INCORRECT_PASSWORD);
                 RolesForAllActions.confirmAddToAll(driver);
                 ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
@@ -83,7 +83,7 @@ public class RolesForAllTest extends SeleniumTest {
         RolesForAllActions.confirmAddToAll(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged out");
@@ -96,7 +96,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged in");
     }
 
@@ -132,7 +132,7 @@ public class RolesForAllTest extends SeleniumTest {
     private void revokeFromAll_incorrectPassword(WebDriver driver, RegistrationParameters userData) {
         Stream.generate(() -> "")
             .limit(2)
-            .forEach(s -> {
+            .forEach(_ -> {
                 RolesForAllActions.fillPassword(driver, DataConstants.INCORRECT_PASSWORD);
                 RolesForAllActions.confirmRevokeFromAll(driver);
                 ToastMessageUtil.verifyErrorToast(driver, LocalizedText.INCORRECT_PASSWORD);
@@ -142,7 +142,7 @@ public class RolesForAllTest extends SeleniumTest {
         RolesForAllActions.confirmRevokeFromAll(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         AwaitilityWrapper.create(20, 2)
             .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged out");
@@ -155,7 +155,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
-            .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE))
+            .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
             .assertTrue("User is not logged in");
     }
 }

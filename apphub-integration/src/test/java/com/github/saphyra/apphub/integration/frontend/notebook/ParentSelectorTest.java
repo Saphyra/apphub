@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookNe
 import com.github.saphyra.apphub.integration.action.frontend.notebook.NotebookUtils;
 import com.github.saphyra.apphub.integration.action.frontend.notebook.ParentSelectorActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -34,13 +35,13 @@ public class ParentSelectorTest extends SeleniumTest {
         NotebookUtils.newText(getServerPort(), driver, TITLE, CONTENT, PARENT_TITLE);
 
         NotebookActions.findListItemByTitleValidated(driver, PARENT_TITLE)
-            .open();
+            .open(driver);
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
-            .open();
+            .open(driver);
 
         NotebookActions.newListItem(getServerPort(), driver);
         NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.TEXT);
 
-        assertThat(ParentSelectorActions.getParent(driver)).isEqualTo(PARENT_TITLE);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(ParentSelectorActions.getParent(driver)).isEqualTo(PARENT_TITLE));
     }
 }

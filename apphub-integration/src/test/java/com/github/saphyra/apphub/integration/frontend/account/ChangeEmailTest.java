@@ -83,7 +83,7 @@ public class ChangeEmailTest extends SeleniumTest {
 
     private static void change(WebDriver driver, RegistrationParameters userData) {
         ChangeEmailParameters changeParameters = ChangeEmailParameters.valid();
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         ChangeEmailActions.fillChangeEmailForm(serverPort, driver, changeParameters);
         ChangeEmailActions.verifyChangeEmailForm(driver, valid());
         ChangeEmailActions.changeEmail(driver);

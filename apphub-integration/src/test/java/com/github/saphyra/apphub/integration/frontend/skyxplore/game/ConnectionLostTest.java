@@ -96,7 +96,7 @@ public class ConnectionLostTest extends SeleniumTest {
                 SkyXploreCharacterActions.submitForm(biWrapper.getEntity1());
                 AwaitilityWrapper.createDefault()
                     .until(() -> biWrapper.getEntity1().getCurrentUrl().endsWith(SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE))
-                    .assertTrue();
+                    .assertTrue("Player is not redirected to main menu.");
             }))
             .map(FutureWrapper::get)
             .forEach(ExecutionResult::getOrThrow);
