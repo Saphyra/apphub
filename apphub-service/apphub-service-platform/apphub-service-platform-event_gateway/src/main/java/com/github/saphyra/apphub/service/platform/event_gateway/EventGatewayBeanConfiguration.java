@@ -8,11 +8,13 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.event.processor.EventProcessorAutoConfiguration;
 import com.github.saphyra.apphub.lib.monitoring.MemoryMonitoringEventController;
 import com.github.saphyra.apphub.lib.monitoring.MemoryStatusModelFactory;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.lib.web_utils.RequestContextProvider;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +27,7 @@ import org.springframework.web.client.RestTemplate;
 @EnableJpaRepositories
 @EntityScan
 @ComponentScan(basePackages = "com.github.saphyra.util", basePackageClasses = ExecutorServiceBeanFactory.class)
+@EnableAutoConfiguration(exclude = EventProcessorAutoConfiguration.class)
 class EventGatewayBeanConfiguration {
     @Bean
     @ConditionalOnMissingBean(ExecutorServiceBean.class)

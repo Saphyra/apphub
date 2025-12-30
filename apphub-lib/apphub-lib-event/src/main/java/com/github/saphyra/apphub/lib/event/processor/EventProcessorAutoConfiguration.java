@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 @AutoConfiguration
 @ComponentScan
 @ConditionalOnProperty(value = "event.processor.enabled", havingValue = "true", matchIfMissing = true)
-class EventProcessorAutoConfiguration {
+public class EventProcessorAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(SleepService.class)
     SleepService sleepService() {
