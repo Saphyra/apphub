@@ -10,7 +10,7 @@ liquibase:
 
 ftp:
   client:
-    server: host.docker.internal
+    server: ${hostIp}
     port: 21
     username: ${FTP_CLIENT_USERNAME}
     password: ${FTP_CLIENT_PASSWORD:}}
