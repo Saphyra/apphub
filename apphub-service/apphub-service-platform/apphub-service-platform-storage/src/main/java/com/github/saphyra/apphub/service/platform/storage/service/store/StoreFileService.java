@@ -58,7 +58,6 @@ public class StoreFileService {
         }
 
         try (FtpClientWrapper ftpClient = ftpClientFactory.create()) {
-
             ftpClient.storeFile(uuidConverter.convertDomain(storedFileId), file);
 
             storedFile.setFileUploaded(true);

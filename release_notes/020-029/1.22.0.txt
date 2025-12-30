@@ -52,3 +52,5 @@
     Calendar
         Open occurrences on the right panel
     Display invalid parameters if INVALID_PARAM returned
+    Storage
+        Check FTP connection on startup

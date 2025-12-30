@@ -60,4 +60,9 @@ public class FtpClientWrapper implements AutoCloseable {
     public void close() {
         client.disconnect();
     }
+
+    @SneakyThrows
+    public void listFiles(String path) {
+        client.listFiles(path);
+    }
 }
