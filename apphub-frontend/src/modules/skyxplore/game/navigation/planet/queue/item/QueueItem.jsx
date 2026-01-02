@@ -8,6 +8,7 @@ import Button from "../../../../../../../common/component/input/Button";
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import QueueItemHeader from "./header/QueueItemHeader";
 import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "../../../../../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import ProgressBar from "../../../../../../../common/component/progress_bar/ProgressBar";
 
 const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -59,8 +60,9 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
             />
 
             <ProgressBar
-                currentWorkPoints={queueItem.currentWorkPoints}
-                requiredWorkPoints={queueItem.requiredWorkPoints}
+                className="skyxplore-game-planet-queue-item-progress-bar"
+                currentPoints={queueItem.currentWorkPoints}
+                targetPoints={queueItem.requiredWorkPoints}
             />
 
             <div className="skyxplore-game-planet-queue-item-priority-wrapper">
@@ -85,26 +87,6 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
                 label={localizationHandler.get("cancel")}
                 onclick={confirmCancelQueueItem}
             />
-        </div>
-    );
-}
-
-const ProgressBar = ({ currentWorkPoints, requiredWorkPoints }) => {
-    const progress = currentWorkPoints / requiredWorkPoints * 100;
-
-    return (
-        <div className="skyxplore-game-planet-queue-item-progress-bar">
-            <div
-                className="skyxplore-game-planet-queue-item-progress-bar-status"
-                style={{
-                    width: progress + "%"
-                }}
-            />
-
-            <div className="skyxplore-game-planet-queue-item-progress-bar-label">
-                <span className="skyxplore-game-planet-queue-item-progress-bar-label-value">{Math.floor(progress)}</span>
-                <span>%</span>
-            </div>
         </div>
     );
 }

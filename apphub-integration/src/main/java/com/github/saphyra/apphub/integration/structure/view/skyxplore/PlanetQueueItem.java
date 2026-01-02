@@ -23,7 +23,7 @@ public class PlanetQueueItem {
     }
 
     public double getStatus() {
-        String stringValue = webElement.findElement(By.className("skyxplore-game-planet-queue-item-progress-bar-label-value"))
+        String stringValue = webElement.findElement(By.className("progress-bar-content-percentage"))
             .getText();
         return Double.parseDouble(stringValue);
     }

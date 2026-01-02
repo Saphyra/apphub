@@ -41,6 +41,7 @@
     SkyXplore
         Periodically delete 0 StoredResources
         Periodically merge StoredResources
+        Use the common ProgressBar for Surface and Queue
 
 ===ETC===
     AdminPanel
