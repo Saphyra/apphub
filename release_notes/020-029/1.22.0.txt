@@ -38,6 +38,8 @@
     ErrorReporterService automatically logs errors
     Get rid of ObjectMapperWrapper
     Timing of integration tests improved
+    SkyXplore
+        Periodically delete 0 StoredResources
 
 ===ETC===
     AdminPanel
