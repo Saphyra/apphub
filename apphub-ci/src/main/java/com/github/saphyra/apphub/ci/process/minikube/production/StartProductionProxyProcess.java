@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.ci.process.ProcessKiller;
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubePodStartupWaiter;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -19,6 +20,7 @@ public class StartProductionProxyProcess {
     private final ServicePinger servicePinger;
     private final PortForwardTask portForwardTask;
     private final MinikubePodStartupWaiter minikubePodStartupWaiter;
+    private final StartupIndicatorFactory startupIndicatorFactory;
 
     @SneakyThrows
     public void startProductionProxy() {
@@ -36,6 +38,7 @@ public class StartProductionProxyProcess {
         LocalStartTask.builder()
             .servicePinger(servicePinger)
             .service(platformProperties.getProductionProxy())
+            .startupIndicator(startupIndicatorFactory.noOpIndicator())
             .build()
             .run();
     }

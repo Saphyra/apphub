@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.ci.ui.startup;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-class NoOpStartupIndicator implements StartupIndicator{
+class NoOpStartupIndicator implements StartupIndicator {
     @Override
     public void startupInitiated(String name) {
         log.debug("Startup initiated: {}", name);
