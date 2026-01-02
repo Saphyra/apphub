@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./file.css";
@@ -14,7 +14,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem, setDispl
     const [storedFileId, setStoredFileId] = useState(null);
     const [fileMetadata, setFileMetadata] = useState(null);
 
-    useEffect(() => loadListItem(), null);
+    useEffect(() => loadListItem(), []);
     useEffect(() => loadMetadata(), [storedFileId]);
 
     const loadListItem = () => {

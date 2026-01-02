@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 @Profile("!test")
-//TODO unit test
 public class FtpConnectionChecker {
     private final FtpClientFactory ftpClientFactory;
 

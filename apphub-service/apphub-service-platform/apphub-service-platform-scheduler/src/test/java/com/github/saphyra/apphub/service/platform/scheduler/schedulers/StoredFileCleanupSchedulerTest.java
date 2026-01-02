@@ -34,7 +34,7 @@ public class StoredFileCleanupSchedulerTest {
     private ArgumentCaptor<SendEventRequest<?>> argumentCaptor;
 
     @Test
-    public void storedFileCleanup() {
+    void storedFileCleanup() {
         given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.storedFileCleanup();
@@ -43,5 +43,17 @@ public class StoredFileCleanupSchedulerTest {
 
         SendEventRequest<?> request = argumentCaptor.getValue();
         assertThat(request.getEventName()).isEqualTo(EmptyEvent.STORAGE_CLEAN_UP_STORED_FILES);
+    }
+
+    @Test
+    void fileCleanup() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
+        underTest.fileCleanup();
+
+        verify(eventGatewayApi).sendEvent(argumentCaptor.capture(), eq(LOCALE));
+
+        SendEventRequest<?> request = argumentCaptor.getValue();
+        assertThat(request.getEventName()).isEqualTo(EmptyEvent.STORAGE_FILE_CLEANUP);
     }
 }

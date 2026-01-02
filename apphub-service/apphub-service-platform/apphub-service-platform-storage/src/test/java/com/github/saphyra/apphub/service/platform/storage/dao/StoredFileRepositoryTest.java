@@ -76,4 +76,24 @@ public class StoredFileRepositoryTest {
 
         assertThat(underTest.findAll()).containsExactlyInAnyOrder(entity1, entity2);
     }
+
+    @Test
+    void getAllView() {
+        StoredFileEntity entity1 = StoredFileEntity.builder()
+            .storedFileId(STORED_FILE_ID_1)
+            .fileUploaded(true)
+            .build();
+        underTest.save(entity1);
+        StoredFileEntity entity2 = StoredFileEntity.builder()
+            .storedFileId(STORED_FILE_ID_2)
+            .fileUploaded(false)
+            .build();
+        underTest.save(entity2);
+
+        assertThat(underTest.getAllView())
+            .containsExactlyInAnyOrder(
+                new StoredFileView(STORED_FILE_ID_1, true),
+                new StoredFileView(STORED_FILE_ID_2, false)
+            );
+    }
 }

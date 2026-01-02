@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -45,6 +46,9 @@ public class StoredFileDaoTest {
 
     @Mock
     private StoredFileEntity entity;
+
+    @Mock
+    private StoredFileView storedFileView;
 
     @Test
     public void findByIdValidated_notFound() {
@@ -94,5 +98,21 @@ public class StoredFileDaoTest {
         underTest.deleteExpired(EXPIRATION_TIME);
 
         verify(repository).deleteByFileUploadedAndCreatedAtBefore(false, EXPIRATION_TIME);
+    }
+
+    @Test
+    void getAllView() {
+        given(repository.getAllView()).willReturn(List.of(storedFileView));
+
+        assertThat(underTest.getAllView()).containsExactly(storedFileView);
+    }
+
+    @Test
+    void deleteAllById() {
+        given(uuidConverter.convertDomain(List.of(STORED_FILE_ID))).willReturn(List.of(STORED_FILE_ID_STRING));
+
+        underTest.deleteAllById(List.of(STORED_FILE_ID));
+
+        then(repository).should().deleteAllById(List.of(STORED_FILE_ID_STRING));
     }
 }
