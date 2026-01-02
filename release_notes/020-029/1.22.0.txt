@@ -55,6 +55,7 @@
         Use spinner for all BE queries
     Calendar
         Open occurrences on the right panel
+        Increased memory limit
     Display invalid parameters if INVALID_PARAM returned
     Storage
         Check FTP connection on startup
