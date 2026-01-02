@@ -40,6 +40,7 @@
     Timing of integration tests improved
     SkyXplore
         Periodically delete 0 StoredResources
+        Periodically merge StoredResources
 
 ===ETC===
     AdminPanel
