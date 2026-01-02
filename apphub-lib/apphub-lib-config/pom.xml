@@ -42,7 +42,5 @@
         <module>apphub-lib-config-feign</module>
         <module>apphub-lib-config-health</module>
         <module>apphub-lib-config-liquibase</module>
-        <module>apphub-lib-config-thymeleaf</module>
-        <module>apphub-lib-config-whitelist</module>
     </modules>
 </project>

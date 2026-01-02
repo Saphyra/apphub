@@ -64,7 +64,6 @@ class PlanetMessageSender implements MessageSender {
                 return true;
             } catch (Exception e) {
                 String errorMessage = String.format("Failed sending PlanetOverview update for user %s to planet %s", userId, planetId);
-                log.error(errorMessage, e);
                 errorReporterService.report(errorMessage, e);
                 return false;
             }

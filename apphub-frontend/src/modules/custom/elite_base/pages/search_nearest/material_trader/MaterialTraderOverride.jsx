@@ -90,6 +90,7 @@ const NoOverride = ({ localizationHandler, record, reload }) => {
     function getOptions() {
         return new MapStream(MaterialType)
             .toListStream()
+            .add("NONE")
             .map(materialType => new SelectOption(materialType, materialType))
             .toList();
     }

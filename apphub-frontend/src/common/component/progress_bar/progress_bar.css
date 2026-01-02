@@ -14,9 +14,13 @@
 .progress-bar-content {
     position: relative;
     padding: 3px;
+    text-align: center;
+}
+
+.progress-bar-content button {
+    margin: 0;
 }
 
 .progress-bar-content-percentage {
-    float: right;
     margin-right: 3px;
 }

@@ -4,10 +4,13 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 public class FtpClientWrapper implements AutoCloseable {
@@ -59,5 +62,10 @@ public class FtpClientWrapper implements AutoCloseable {
     @Override
     public void close() {
         client.disconnect();
+    }
+
+    @SneakyThrows
+    public List<FTPFile> listFiles(String path) {
+        return Arrays.asList(client.listFiles(path));
     }
 }

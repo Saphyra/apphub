@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.calendar.config.CalendarParams;
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
@@ -22,7 +22,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 class EventRequestValidator {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final CalendarParams calendarParams;
     private final LabelDao labelDao;
 
@@ -69,7 +69,7 @@ class EventRequestValidator {
             case DAYS_OF_WEEK:
                 TypeReference<HashSet<DayOfWeek>> daysOfWeekTypeReference = new TypeReference<>() {
                 };
-                Set<DayOfWeek> dayOfWeeks = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfWeekTypeReference), "repetitionData");
+                Set<DayOfWeek> dayOfWeeks = ValidationUtil.parse(repetitionData, o -> objectMapper.convertValue(o, daysOfWeekTypeReference), "repetitionData");
                 ValidationUtil.doesNotContainNull(dayOfWeeks, "repetitionData");
                 ValidationUtil.notEmpty(dayOfWeeks, "repetitionData");
                 break;
@@ -77,7 +77,7 @@ class EventRequestValidator {
             case DAYS_OF_MONTH:
                 TypeReference<List<Integer>> daysOfMonthTypeReference = new TypeReference<>() {
                 };
-                List<Integer> values = ValidationUtil.parse(repetitionData, o -> objectMapperWrapper.convertValue(o, daysOfMonthTypeReference), "repetitionData");
+                List<Integer> values = ValidationUtil.parse(repetitionData, o -> objectMapper.convertValue(o, daysOfMonthTypeReference), "repetitionData");
                 ValidationUtil.notEmpty(values, "repetitionData");
                 ValidationUtil.doesNotContainNull(values, "repetitionData");
                 values.forEach(integer -> {

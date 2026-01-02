@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
@@ -44,6 +43,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -81,7 +81,7 @@ class JournalMessageProcessorTest {
     private static final Double POWERPLAY_STATE_UNDERMINING = 54d;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private PowerplayConflictFactory powerplayConflictFactory;
@@ -159,7 +159,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_unhandledEvent() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("asdfaf");
         doAnswer(invocation -> {
@@ -173,7 +173,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_scan() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("Scan");
 
@@ -195,7 +195,7 @@ class JournalMessageProcessorTest {
         scanJournalMessage.setRings(rings);
         scanJournalMessage.setReserveLevel(ReserveLevel.PRISTINE.getValue());
 
-        given(objectMapperWrapper.readValue(MESSAGE, ScanJournalMessage.class)).willReturn(scanJournalMessage);
+        given(objectMapper.readValue(MESSAGE, ScanJournalMessage.class)).willReturn(scanJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION, StarType.A)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(bodySaver.save(TIMESTAMP, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(body);
@@ -213,7 +213,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_fsdJump() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("FSDJump");
 
@@ -248,7 +248,7 @@ class JournalMessageProcessorTest {
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
-        given(objectMapperWrapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
+        given(objectMapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
@@ -282,7 +282,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_fsdJump_nullBodyIdentifiers() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("FSDJump");
 
@@ -317,7 +317,7 @@ class JournalMessageProcessorTest {
             return null;
         }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
 
-        given(objectMapperWrapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
+        given(objectMapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
@@ -351,7 +351,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_docked() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("Docked");
 
@@ -376,7 +376,7 @@ class JournalMessageProcessorTest {
         dockedJournalMessage.setEconomies(economies);
         dockedJournalMessage.setBodyType("Planet");
 
-        given(objectMapperWrapper.readValue(MESSAGE, DockedJournalMessage.class)).willReturn(dockedJournalMessage);
+        given(objectMapper.readValue(MESSAGE, DockedJournalMessage.class)).willReturn(dockedJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(bodySaver.saveOptional(TIMESTAMP, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR)).willReturn(Optional.of(body));
@@ -407,7 +407,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_carrierJump() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("CarrierJump");
 
@@ -439,7 +439,7 @@ class JournalMessageProcessorTest {
         carrierJumpJournalMessage.setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
         carrierJumpJournalMessage.setPowerplayConflictProgresses(new PowerplayConflictProgress[]{powerplayConflictProgress});
 
-        given(objectMapperWrapper.readValue(MESSAGE, CarrierJumpJournalMessage.class)).willReturn(carrierJumpJournalMessage);
+        given(objectMapper.readValue(MESSAGE, CarrierJumpJournalMessage.class)).willReturn(carrierJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
@@ -476,7 +476,7 @@ class JournalMessageProcessorTest {
     @Test
     void processMessage_location() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("Location");
 
@@ -509,7 +509,7 @@ class JournalMessageProcessorTest {
         locationJournalMessage.setPowerplayStateUndermining(POWERPLAY_STATE_UNDERMINING);
         locationJournalMessage.setPowerplayConflictProgresses(new PowerplayConflictProgress[]{powerplayConflictProgress});
 
-        given(objectMapperWrapper.readValue(MESSAGE, LocationJournalMessage.class)).willReturn(locationJournalMessage);
+        given(objectMapper.readValue(MESSAGE, LocationJournalMessage.class)).willReturn(locationJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(minorFactionSaver.save(TIMESTAMP, factions)).willReturn(List.of(minorFaction));
@@ -547,7 +547,7 @@ class JournalMessageProcessorTest {
     @Test
     void saaSignalsFound() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("SAASignalsFound");
 
@@ -557,7 +557,7 @@ class JournalMessageProcessorTest {
         saaSignalFoundJournalMessage.setStarName(STAR_NAME);
         saaSignalFoundJournalMessage.setStarPosition(STAR_POSITION);
 
-        given(objectMapperWrapper.readValue(MESSAGE, SaaSignalFoundJournalMessage.class)).willReturn(saaSignalFoundJournalMessage);
+        given(objectMapper.readValue(MESSAGE, SaaSignalFoundJournalMessage.class)).willReturn(saaSignalFoundJournalMessage);
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
@@ -571,7 +571,7 @@ class JournalMessageProcessorTest {
     @Test
     void codexEntry() {
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readTree(MESSAGE)).willReturn(jsonNode);
+        given(objectMapper.readTree(MESSAGE)).willReturn(jsonNode);
         given(jsonNode.get("event")).willReturn(jsonNode);
         given(jsonNode.asString()).willReturn("CodexEntry");
 
@@ -581,7 +581,7 @@ class JournalMessageProcessorTest {
         codexEntryJournalMessage.setStarName(STAR_NAME);
         codexEntryJournalMessage.setStarPosition(STAR_POSITION);
 
-        given(objectMapperWrapper.readValue(MESSAGE, CodexEntryJournalMessage.class)).willReturn(codexEntryJournalMessage);
+        given(objectMapper.readValue(MESSAGE, CodexEntryJournalMessage.class)).willReturn(codexEntryJournalMessage);
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;

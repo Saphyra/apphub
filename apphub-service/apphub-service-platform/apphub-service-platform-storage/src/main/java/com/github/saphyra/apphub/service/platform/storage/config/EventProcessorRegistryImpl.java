@@ -34,6 +34,11 @@ class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .host(host)
                 .eventName(EmptyEvent.STORAGE_CLEAN_UP_STORED_FILES)
                 .url(StorageEndpoints.EVENT_CLEAN_UP_STORED_FILES)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .host(host)
+                .eventName(EmptyEvent.STORAGE_FILE_CLEANUP)
+                .url(StorageEndpoints.EVENT_FILE_CLEANUP)
                 .build()
         );
     }

@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.test.common.AwaitilityWrapper;
@@ -28,7 +27,7 @@ import java.util.function.Predicate;
 @Slf4j
 public class ApphubWsClient extends WebSocketClient {
     private static final ThreadLocal<List<WebSocketClient>> WS_CONNECTIONS = ThreadLocal.withInitial(Vector::new);
-    private static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper(new ObjectMapper());
+    private static final ObjectMapper OBJECT_MAPPER_WRAPPER = new ObjectMapper();
     private static final AccessTokenHeaderConverter ACCESS_TOKEN_HEADER_CONVERTER = new AccessTokenHeaderConverter(
         new Base64Encoder(),
         OBJECT_MAPPER_WRAPPER

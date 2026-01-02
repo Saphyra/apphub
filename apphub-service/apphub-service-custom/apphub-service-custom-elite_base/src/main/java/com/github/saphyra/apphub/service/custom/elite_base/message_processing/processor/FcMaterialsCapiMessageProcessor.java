@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
@@ -16,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Builder
 class FcMaterialsCapiMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final CommoditySaver commoditySaver;
     private final FleetCarrierDao fleetCarrierDao;
 
@@ -39,7 +39,7 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        FcMaterialsCapiMessage fcMaterialsCapiMessage = objectMapperWrapper.readValue(message.getMessage(), FcMaterialsCapiMessage.class);
+        FcMaterialsCapiMessage fcMaterialsCapiMessage = objectMapper.readValue(message.getMessage(), FcMaterialsCapiMessage.class);
 
         fleetCarrierDao.findByCarrierId(fcMaterialsCapiMessage.getCarrierId())
             .ifPresent(fleetCarrier -> commoditySaver.saveAll(
@@ -58,7 +58,7 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
             TypeReference<List<Purchase>> typeReference = new TypeReference<>() {
             };
 
-            List<Purchase> purchaseList = objectMapperWrapper.convertValue(items.getPurchases(), typeReference);
+            List<Purchase> purchaseList = objectMapper.convertValue(items.getPurchases(), typeReference);
 
             purchaseList.stream()
                 .map(purchase -> CommoditySaver.CommodityData.builder()
@@ -74,7 +74,7 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
             TypeReference<Map<Long, Sale>> typeReference = new TypeReference<>() {
             };
 
-            Map<Long, Sale> saleMap = objectMapperWrapper.convertValue(items.getSales(), typeReference);
+            Map<Long, Sale> saleMap = objectMapper.convertValue(items.getSales(), typeReference);
 
             saleMap.values()
                 .stream()

@@ -34,7 +34,7 @@ class LocalRunMaxServiceStartupCountMenuOption implements MenuOption {
 
     @Override
     public LocalizationProvider getName() {
-        return language -> LocalizedText.SERVICE_STARTUP_COUNT_LIMIT.getLocalizedText(language).formatted(propertyDao.getStartupCountLimit());
+        return language -> LocalizedText.SERVICE_STARTUP_COUNT_LIMIT.getLocalizedText(language).formatted(propertyDao.getLocalStartupCountLimit());
     }
 
     @Override

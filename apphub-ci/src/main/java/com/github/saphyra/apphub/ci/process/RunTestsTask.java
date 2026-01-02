@@ -27,11 +27,12 @@ public class RunTestsTask {
                 platformProperties.getLocalServerPort(),
                 platformProperties.getLocalDatabasePort(),
                 platformProperties.getLocalDatabaseName(),
-                "",
+                "villany-atesz",
                 testGroups.length() > 0 ? 0 : propertyDao.getLocalRunPreCreateDriverCount(),
                 false,
                 false,
-                ""
+                "",
+                propertyDao.getLocalIntegrationRetryCount()
             );
         } finally {
             killChromeDriverTask.run();
@@ -52,7 +53,8 @@ public class RunTestsTask {
                 testGroups.length() > 0 ? 0 : propertyDao.getRemoteRunPreCreateDriverCount(),
                 true,
                 true,
-                namespaceNameProvider.getNamespaceName()
+                namespaceNameProvider.getNamespaceName(),
+                propertyDao.getRemoteIntegrationRetryCount()
             );
         } finally {
             killChromeDriverTask.run();
@@ -72,7 +74,8 @@ public class RunTestsTask {
                 enabledGroups.equals("") ? propertyDao.getRemoteRunPreCreateDriverCount() : 0,
                 true,
                 true,
-                Constants.NAMESPACE_NAME_PREPROD
+                Constants.NAMESPACE_NAME_PREPROD,
+                propertyDao.getRemoteIntegrationRetryCount()
             );
         } finally {
             killChromeDriverTask.run();
@@ -92,7 +95,8 @@ public class RunTestsTask {
                 propertyDao.getRemoteRunPreCreateDriverCount(),
                 true,
                 false,
-                Constants.NAMESPACE_NAME_PRODUCTION
+                Constants.NAMESPACE_NAME_PRODUCTION,
+                propertyDao.getRemoteIntegrationRetryCount()
             );
         } finally {
             killChromeDriverTask.run();
@@ -109,7 +113,8 @@ public class RunTestsTask {
         Integer preCreateDrivers,
         boolean serverConnectionCacheEnabled,
         boolean databaseConnectionCacheEnabled,
-        String namespace
+        String namespace,
+        Integer retryCount
     ) {
         List<String> command = List.of(
             "cmd",
@@ -135,6 +140,7 @@ public class RunTestsTask {
             "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
             "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
             "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
+            "-DmaxRetryCount=%s".formatted(retryCount),
             "\"",
             "clean",
             "test"

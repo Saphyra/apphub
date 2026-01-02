@@ -13,7 +13,7 @@ import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import { hasValue } from "../../../../../../common/js/Utils";
 import { NOTEBOOK_ADD_ITEM_TO_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS, NOTEBOOK_PIN_GROUP_OPENED } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
-const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListItem, lastEvent, setLastEvent }) => {
+const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListItem, lastEvent, setLastEvent, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [pinGroups, setPinGroups] = useState([]);
@@ -78,7 +78,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
     const setOpened = async (pinGroupId) => {
         if (hasValue(pinGroupId)) {
             const response = await NOTEBOOK_PIN_GROUP_OPENED.createRequest(null, { pinGroupId: pinGroupId })
-                .send();
+                .send(setDisplaySpinner);
             setPinGroups(response);
         }
 
@@ -100,6 +100,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
                 pinGroupId={null}
                 pinGroupName={localizationHandler.get("show-all")}
                 setLastEvent={setLastEvent}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             {getCustomGroups()}
@@ -107,7 +108,7 @@ const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListIte
     );
 }
 
-const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName, setLastEvent }) => {
+const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName, setLastEvent, setDisplaySpinner }) => {
     //Drag & Drop
     const handleOnDragOver = (e) => {
         if (hasValue(pinGroupId)) {
@@ -119,7 +120,7 @@ const PinGroup = ({ selectedPinGroupId, setPinGroupId, pinGroupId, pinGroupName,
         const pinnedItemId = e.dataTransfer.getData("id");
 
         const response = await NOTEBOOK_ADD_ITEM_TO_PIN_GROUP.createRequest(null, { pinGroupId: pinGroupId, listItemId: pinnedItemId })
-            .send();
+            .send(setDisplaySpinner);
 
         setLastEvent(new Event(
             EventName.NOTEBOOK_PINNED_ITEM_MOVED,

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StorageEventControllerImpl implements StorageEventController {
     private final DeleteAccountEventProcessor deleteAccountEventProcessor;
     private final StoredFileCleanupEventProcessor storedFileCleanupEventProcessor;
+    private final FileCleanupEventProcessor fileCleanupEventProcessor;
 
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
@@ -24,5 +25,10 @@ public class StorageEventControllerImpl implements StorageEventController {
     public void cleanUpStoredFiles() {
         log.info("Cleaning up StoredFiles...");
         storedFileCleanupEventProcessor.cleanup();
+    }
+
+    @Override
+    public void cleanupFiles() {
+        fileCleanupEventProcessor.cleanup();
     }
 }

@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
@@ -69,7 +68,8 @@ public class GameCrudTest extends SeleniumTest {
 
     private static void createLobby(WebDriver driver1) {
         SkyXploreMainMenuActions.fillGameName(driver1, "game-name");
-        SkyXploreMainMenuActions.verifyValidGameName(driver1);
+
+        AwaitilityWrapper.awaitAssert(() -> SkyXploreMainMenuActions.verifyValidGameName(driver1));
 
         SkyXploreMainMenuActions.submitGameCreationForm(driver1);
 
@@ -112,7 +112,7 @@ public class GameCrudTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.openSavedGames(driver1);
         AwaitilityWrapper.getListWithWait(() -> SkyXploreMainMenuActions.getSavedGames(driver1), savedGames -> !savedGames.isEmpty())
-            .get(0)
+            .getFirst()
             .load(driver1);
 
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
@@ -125,7 +125,7 @@ public class GameCrudTest extends SeleniumTest {
     }
 
     private static void checkIfNotMemberFriendIsNotAvailableToInvite(WebDriver driver1) {
-        assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty());
     }
 
     private static void checkIfMemberFriendIsAvailableToInvite(WebDriver driver1, WebDriver driver2) {
@@ -139,7 +139,6 @@ public class GameCrudTest extends SeleniumTest {
         SkyXploreLobbyActions.setReady(driver1);
 
         SkyXploreLobbyActions.startGameCreation(driver1);
-        SleepUtil.sleep(1000);
         SkyXploreLobbyActions.startGameWithMissingPlayers(driver1);
 
         AwaitilityWrapper.create(120, 5)

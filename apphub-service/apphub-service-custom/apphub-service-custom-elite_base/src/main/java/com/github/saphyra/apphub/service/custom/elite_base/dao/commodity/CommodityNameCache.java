@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.sql_builder.DefaultColumn;
+import com.github.saphyra.apphub.lib.sql_builder.QualifiedTable;
+import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -105,7 +105,6 @@ public class CommodityNameCache {
             latch.countDown();
         } catch (Exception e) {
             tryCount++;
-            log.error("Failed loading CommodityNameCache. TryCount: " + tryCount, e);
             errorReporterService.report("Failed loading CommodityNameCache. TryCount: " + tryCount, e);
             sleepService.sleep(eliteBaseProperties.getCache().getLoadRetryDelay().toMillis());
         }

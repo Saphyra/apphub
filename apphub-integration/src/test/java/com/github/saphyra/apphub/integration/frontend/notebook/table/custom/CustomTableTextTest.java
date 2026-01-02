@@ -60,13 +60,16 @@ public class CustomTableTextTest extends SeleniumTest {
 
     private static void openTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
-            .open();
-        TableColumn tableColumn = getColumnAsLink(NewTableActions.getRows(driver));
+            .open(driver);
+        List<TableRow> rows = AwaitilityWrapper.getListWithWait(() -> NewTableActions.getRows(driver), r -> !r.isEmpty());
+        TableColumn tableColumn = getColumnAsLink(rows);
         assertThat(tableColumn.getValue()).isEqualTo(TEXT);
     }
 
-    private static TableColumn getColumnAsLink(List<TableRow> driver) {
-        return driver.get(0).getColumns().get(0);
+    private static TableColumn getColumnAsLink(List<TableRow> rows) {
+        return rows.getFirst()
+            .getColumns()
+            .getFirst();
     }
 
     private static void createCustomTableWithTextCell(WebDriver driver) {
@@ -75,7 +78,7 @@ public class CustomTableTextTest extends SeleniumTest {
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_CONTENT);
 
         NewTableActions.setColumnType(driver, 0, 0, ColumnType.TEXT);

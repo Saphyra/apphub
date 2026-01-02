@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
@@ -91,7 +90,7 @@ public class AuthenticationControllerItTest {
     @MockBean
     private LocalizationClient localizationApi;
 
-    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @AfterEach
     public void clear() {
@@ -134,7 +133,7 @@ public class AuthenticationControllerItTest {
         request.setEventName(EmptyEvent.DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME);
 
         Response response = RequestFactory.createRequest()
-            .body(objectMapperWrapper.writeValueAsString(request))
+            .body(objectMapper.writeValueAsString(request))
             .post(UrlFactory.create(serverPort, UserEndpoints.EVENT_DELETE_EXPIRED_ACCESS_TOKENS));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -159,7 +158,7 @@ public class AuthenticationControllerItTest {
         request.setPayload(new RefreshAccessTokenExpirationEvent(ACCESS_TOKEN_ID_1));
 
         Response response = RequestFactory.createRequest()
-            .body(objectMapperWrapper.writeValueAsString(request))
+            .body(objectMapper.writeValueAsString(request))
             .post(UrlFactory.create(serverPort, UserEndpoints.EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -179,7 +178,7 @@ public class AuthenticationControllerItTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
 
-        ErrorResponse errorResponse = objectMapperWrapper.readValue(response.getBody().asString(), ErrorResponse.class);
+        ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS);
         assertThat(errorResponse.getParams()).isEqualTo(new HashMap<>());
     }
@@ -198,7 +197,7 @@ public class AuthenticationControllerItTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        LoginResponse loginResponse = objectMapperWrapper.readValue(response.getBody().asString(), LoginResponse.class);
+        LoginResponse loginResponse = objectMapper.readValue(response.getBody().asString(), LoginResponse.class);
         assertThat(loginResponse.getAccessTokenId()).isNotNull();
         assertThat(loginResponse.getExpirationDays()).isEqualTo(365);
 
@@ -221,7 +220,7 @@ public class AuthenticationControllerItTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        LoginResponse loginResponse = objectMapperWrapper.readValue(response.getBody().asString(), LoginResponse.class);
+        LoginResponse loginResponse = objectMapper.readValue(response.getBody().asString(), LoginResponse.class);
         assertThat(loginResponse.getAccessTokenId()).isNotNull();
         assertThat(loginResponse.getExpirationDays()).isNull();
 
@@ -233,7 +232,7 @@ public class AuthenticationControllerItTest {
     private Response getLoginResponse(LoginRequest loginRequest) {
         return RequestFactory.createRequest()
             .header(Constants.LOCALE_HEADER, LOCALE)
-            .body(objectMapperWrapper.writeValueAsString(loginRequest))
+            .body(objectMapper.writeValueAsString(loginRequest))
             .post(UrlFactory.create(serverPort, UserEndpoints.LOGIN));
     }
 
@@ -255,7 +254,7 @@ public class AuthenticationControllerItTest {
             .build();
 
         Response response = RequestFactory.createRequest()
-            .header(Constants.ACCESS_TOKEN_HEADER, base64Encoder.encode(objectMapperWrapper.writeValueAsString(accessTokenHeader)))
+            .header(Constants.ACCESS_TOKEN_HEADER, base64Encoder.encode(objectMapper.writeValueAsString(accessTokenHeader)))
             .post(UrlFactory.create(serverPort, UserEndpoints.LOGOUT));
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
@@ -310,7 +309,7 @@ public class AuthenticationControllerItTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
-        InternalAccessTokenResponse internalAccessTokenResponse = objectMapperWrapper.readValue(response.getBody().asString(), InternalAccessTokenResponse.class);
+        InternalAccessTokenResponse internalAccessTokenResponse = objectMapper.readValue(response.getBody().asString(), InternalAccessTokenResponse.class);
         assertThat(internalAccessTokenResponse.getAccessTokenId()).isEqualTo(ACCESS_TOKEN_ID_1);
         assertThat(internalAccessTokenResponse.getUserId()).isEqualTo(USER_ID);
         assertThat(internalAccessTokenResponse.getRoles()).containsExactly(ROLE);

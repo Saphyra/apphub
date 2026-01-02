@@ -23,12 +23,10 @@ public abstract class OrphanedRecordCleaner {
             Stopwatch stopwatch = Stopwatch.createStarted();
             int rowsDeleted = doCleanup();
             stopwatch.stop();
-            log.info("{} finished in {} ms. {} rows were deleted.", getClass().getSimpleName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), rowsDeleted);
             errorReporterService.report("%s finished in %s ms. %s rows were deleted.".formatted(getClass().getSimpleName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), rowsDeleted));
 
             return rowsDeleted;
         } catch (Exception e) {
-            log.error("Exception occurred while running {}", getClass().getSimpleName(), e);
             errorReporterService.report("Exception occurred while running " + getClass().getSimpleName(), e);
             return 0;
         }

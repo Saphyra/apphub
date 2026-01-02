@@ -18,7 +18,7 @@ import java.util.UUID;
 public class StoredFileDao extends AbstractDao<StoredFileEntity, StoredFile, String, StoredFileRepository> {
     private final UuidConverter uuidConverter;
 
-    public StoredFileDao(StoredFileConverter converter, StoredFileRepository repository, UuidConverter uuidConverter) {
+    StoredFileDao(StoredFileConverter converter, StoredFileRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -39,5 +39,13 @@ public class StoredFileDao extends AbstractDao<StoredFileEntity, StoredFile, Str
     @Transactional
     public void deleteExpired(LocalDateTime expirationTime) {
         repository.deleteByFileUploadedAndCreatedAtBefore(false, expirationTime);
+    }
+
+    public List<StoredFileView> getAllView() {
+        return repository.getAllView();
+    }
+
+    public void deleteAllById(List<UUID> recordsToDelete) {
+        repository.deleteAllById(uuidConverter.convertDomain(recordsToDelete));
     }
 }

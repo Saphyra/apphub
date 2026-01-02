@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.setting.service;
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingIdentifier;
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.skyxplore.data.common.GameProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.Setting;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingDao;
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -39,7 +39,7 @@ class SettingQueryServiceTest {
     private GameProxy gameProxy;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private SettingQueryService underTest;
@@ -58,7 +58,7 @@ class SettingQueryServiceTest {
         given(setting.getType()).willReturn(SettingType.POPULATION_ORDER);
         given(setting.getLocation()).willReturn(LOCATION);
         given(setting.getData()).willReturn(STRINGIFIED_DATA);
-        given(objectMapperWrapper.readValue(STRINGIFIED_DATA, Object.class)).willReturn(DATA);
+        given(objectMapper.readValue(STRINGIFIED_DATA, Object.class)).willReturn(DATA);
 
         assertThat(underTest.getSetting(USER_ID, SETTING_IDENTIFIER))
             .returns(SettingType.POPULATION_ORDER, SettingModel::getType)
@@ -73,7 +73,7 @@ class SettingQueryServiceTest {
         given(setting.getType()).willReturn(SettingType.POPULATION_ORDER);
         given(setting.getLocation()).willReturn(LOCATION);
         given(setting.getData()).willReturn(STRINGIFIED_DATA);
-        given(objectMapperWrapper.readValue(STRINGIFIED_DATA, Object.class)).willReturn(DATA);
+        given(objectMapper.readValue(STRINGIFIED_DATA, Object.class)).willReturn(DATA);
 
         assertThat(underTest.getSetting(USER_ID, SETTING_IDENTIFIER))
             .returns(SettingType.POPULATION_ORDER, SettingModel::getType)

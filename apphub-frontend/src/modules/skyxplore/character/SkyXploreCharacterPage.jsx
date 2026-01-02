@@ -19,6 +19,7 @@ import NotificationKey from "../../../common/js/notification/NotificationKey";
 import InputField from "../../../common/component/input/InputField";
 import { SKYXPLORE_CREATE_OR_UPDATE_CHARACTER, SKYXPLORE_GET_CHARACTER_NAME, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 import { USER_DATA_GET_USERNAME } from "../../../common/js/dao/endpoints/UserEndpoints";
+import Spinner from "../../../common/component/Spinner";
 
 const SkyXploreCharacterPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -27,6 +28,7 @@ const SkyXploreCharacterPage = () => {
     const [hasCharacter, setHasCharacter] = useState(false);
     const [characterName, setCharacterName] = useState("");
     const [validationResult, setValidationResult] = useState({});
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(() => checkRedirection(), []);
     useEffect(sessionChecker, []);
@@ -42,7 +44,7 @@ const SkyXploreCharacterPage = () => {
     const fetchCharacterExistence = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setHasCharacter(response.value);
         }
         fetch();
@@ -79,7 +81,7 @@ const SkyXploreCharacterPage = () => {
         }
 
         await SKYXPLORE_CREATE_OR_UPDATE_CHARACTER.createRequest(request)
-            .send();
+            .send(setDisplaySpinner);
 
         sessionStorage.successCode = NotificationKey.SKYXPLORE_CHARACTER_SAVED;
 
@@ -135,6 +137,8 @@ const SkyXploreCharacterPage = () => {
                 <Footer leftButtons={[backButton]} />
 
                 <ToastContainer />
+
+                {displaySpinner && <Spinner />}
             </div>
         </div>
     );

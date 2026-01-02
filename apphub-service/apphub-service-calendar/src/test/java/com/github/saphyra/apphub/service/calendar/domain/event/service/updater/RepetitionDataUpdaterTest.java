@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.calendar.domain.event.service.updater;
 
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import org.junit.jupiter.api.Test;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -20,7 +20,7 @@ class RepetitionDataUpdaterTest {
     private static final String STRINGIFIED_REPETITION_DATA = "stringified-repetition-data";
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private RepetitionDataUpdater underTest;
@@ -51,7 +51,7 @@ class RepetitionDataUpdaterTest {
     @Test
     void doUpdate() {
         given(request.getRepetitionData()).willReturn(REPETITION_DATA);
-        given(objectMapperWrapper.writeValueAsPrettyString(REPETITION_DATA)).willReturn(STRINGIFIED_REPETITION_DATA);
+        given(objectMapper.writeValueAsString(REPETITION_DATA)).willReturn(STRINGIFIED_REPETITION_DATA);
 
         underTest.doUpdate(context, request, event);
 

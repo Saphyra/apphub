@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.config.whitelist.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
+import com.github.saphyra.apphub.service.platform.main_gateway.config.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
 import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;

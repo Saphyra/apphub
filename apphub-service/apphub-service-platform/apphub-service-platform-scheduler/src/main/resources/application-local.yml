@@ -10,3 +10,5 @@ interval:
       deletion: 10000 #10 sec
   eliteBase:
     processMessages: PT5S
+  storage:
+    fileCleanupCron: "0 * * * * *" #every minute

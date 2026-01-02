@@ -134,5 +134,13 @@
     "descending": {
         "en": "Descending",
         "hu": "Csökkenő"
+    },
+    "hide": {
+        "en": "Hide",
+        "hu": "Elrejtés"
+    },
+    "hidden": {
+        "en": "Hidden",
+        "hu": "Elrejtve"
     }
 }

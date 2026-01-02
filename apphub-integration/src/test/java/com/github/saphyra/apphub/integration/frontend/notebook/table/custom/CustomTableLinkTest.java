@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
@@ -74,7 +75,7 @@ public class CustomTableLinkTest extends SeleniumTest {
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).getFirst());
     }
 
     private void editColumn_blankLabel(WebDriver driver) {
@@ -88,8 +89,10 @@ public class CustomTableLinkTest extends SeleniumTest {
 
     private static void openTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
-            .open();
-        LinkTableColumn column = getColumnAsLink(ViewTableActions.getRows(driver));
+            .open(driver);
+        List<TableRow> rows = AwaitilityWrapper.getListWithWait(() -> ViewTableActions.getRows(driver), rows1 -> !rows1.isEmpty());
+
+        LinkTableColumn column = getColumnAsLink(rows);
         assertThat(column.getLabel()).isEqualTo(LABEL);
 
         column.open();
@@ -97,13 +100,15 @@ public class CustomTableLinkTest extends SeleniumTest {
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).getFirst());
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
-    private static LinkTableColumn getColumnAsLink(List<TableRow> driver) {
-        return driver.get(0)
+    private static LinkTableColumn getColumnAsLink(List<TableRow> rows) {
+        return rows.getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .as(ColumnType.LINK);
     }
 
@@ -125,7 +130,7 @@ public class CustomTableLinkTest extends SeleniumTest {
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_CONTENT);
 
         NewTableActions.setColumnType(driver, 0, 0, ColumnType.LINK);

@@ -21,7 +21,7 @@ spec:
         image: saphyra/apphub-service-platform-storage:latest
         env:
         - name: FTP_CLIENT_USERNAME
-          value: ftp_prod
+          value: ftp_dev
         - name: SPRING_ACTIVE_PROFILE
           value: server,preprod
         ports:

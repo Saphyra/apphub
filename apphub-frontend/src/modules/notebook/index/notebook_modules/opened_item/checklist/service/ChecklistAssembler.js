@@ -2,7 +2,7 @@ import Stream from "../../../../../../../common/js/collection/Stream";
 import ChecklistItem from "../../../../../common/checklist_item/ChecklistItem";
 import { moveItem, removeItem, updateItem } from "./ChecklistCrudService";
 
-const getItems = (items, localizationHandler, editingEnabled, setItems, setConfirmationDialogData) => {
+const getItems = (items, searchText, localizationHandler, editingEnabled, setItems, setConfirmationDialogData, setDisplaySpinner) => {
     if (items.length === 0) {
         return (
             <div id="notebook-view-checklist-empty">
@@ -13,13 +13,14 @@ const getItems = (items, localizationHandler, editingEnabled, setItems, setConfi
 
     return new Stream(items)
         .sorted((a, b) => a.index - b.index)
+        .filter(item => item.content.toLowerCase().includes(searchText.toLowerCase()))
         .map((item, tabIndex) =>
             <ChecklistItem
                 key={item.checklistItemId}
                 localizationHandler={localizationHandler}
                 item={item}
-                updateItem={(item, updateType) => updateItem(item, updateType, editingEnabled, items, setItems)}
-                removeItem={(item) => removeItem(item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler)}
+                updateItem={(item, updateType) => updateItem(item, updateType, editingEnabled, items, setItems, setDisplaySpinner)}
+                removeItem={(item) => removeItem(item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler, setDisplaySpinner)}
                 moveItem={(item, moveDirection) => moveItem(item, moveDirection, items, setItems)}
                 editingEnabled={editingEnabled}
                 tabIndex={tabIndex + 1}

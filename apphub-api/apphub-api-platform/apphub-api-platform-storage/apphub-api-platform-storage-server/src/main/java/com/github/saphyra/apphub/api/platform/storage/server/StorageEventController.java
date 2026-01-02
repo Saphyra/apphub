@@ -16,4 +16,10 @@ public interface StorageEventController {
      */
     @PostMapping(StorageEndpoints.EVENT_CLEAN_UP_STORED_FILES)
     void cleanUpStoredFiles();
+
+    /**
+     * Deleting files from FTP server that has no corresponding database record and vice versa
+     */
+    @PostMapping(StorageEndpoints.EVENT_FILE_CLEANUP)
+    void cleanupFiles();
 }

@@ -3,7 +3,6 @@ import { hasValue, throwException } from "../Utils";
 const fromEpochSeconds = (epoch) => {
     const d = new Date(0);
     d.setUTCSeconds(epoch);
-    console.log(epoch, d);
     return new LocalDateTimeObj(d);
 }
 

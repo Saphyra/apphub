@@ -40,7 +40,6 @@ public class ChangeLocaleFilter implements GlobalFilter, Ordered {
                 userSettingLocaleResolver.invalidate(request.getCookies());
             }
         } catch (Exception e) {
-            log.error("ChangeLocaleFilter process failed.");
             errorReporterService.report("ChangeLocaleFilter processing failed.", e);
         }
         return result;

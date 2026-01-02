@@ -1,8 +1,11 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
+import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
@@ -23,14 +26,23 @@ public class CommodityTradingService {
     private final StarSystemDao starSystemDao;
     private final OfferFilterService offerFilterService;
     private final OfferDetailsFetcher offerDetailsFetcher;
+    private final PerformanceReporter performanceReporter;
 
     public List<CommodityTradingResponse> getTradeOffers(CommodityTradingRequest request) {
         commodityTradingRequestValidator.validate(request);
         TradeMode tradeMode = ValidationUtil.convertToEnumChecked(request.getTradeMode(), TradeMode::valueOf, "tradeMode");
 
-        StarSystem referenceSystem = starSystemDao.findByIdValidated(request.getReferenceStarId());
+        StarSystem referenceSystem = performanceReporter.wrap(
+            ()-> starSystemDao.findByIdValidated(request.getReferenceStarId()),
+            PerformanceReportingTopic.ELITE_BASE_QUERY,
+            PerformanceReportingKey.COMMODITY_TRADING_REFERENCE_SYSTEM_RETRIEVAL.name()
+        );
 
-        List<Commodity> offers = tradeMode.getOfferProvider().apply(commodityDao, request);
+        List<Commodity> offers = performanceReporter.wrap(
+            () -> tradeMode.getOfferProvider().apply(commodityDao, request),
+            PerformanceReportingTopic.ELITE_BASE_QUERY,
+            PerformanceReportingKey.COMMODITY_TRADING_OFFER_QUERY.name()
+        );
 
         List<CommodityTradingResponse> responses = offerDetailsFetcher.assembleResponses(tradeMode, referenceSystem, offers, request.getIncludeFleetCarriers());
 

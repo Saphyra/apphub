@@ -90,6 +90,12 @@
             <artifactId>apphub-lib-performance_reporting</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-sql_builder</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

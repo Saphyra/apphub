@@ -83,7 +83,6 @@ public class OrphanedRecordCleanerScheduler {
                 sleepService.sleep(4000);
             }
             stopwatch.stop();
-            log.info("Orphaned record cleanup finished. {} rows were deleted.", rowsDeleted);
             errorReporterService.report("EliteBase orphanedRecordCleanup finished in %s seconds. %s rows were deleted.".formatted(stopwatch.elapsed(TimeUnit.SECONDS), rowsDeleted));
         } finally {
             writeLock.unlock();

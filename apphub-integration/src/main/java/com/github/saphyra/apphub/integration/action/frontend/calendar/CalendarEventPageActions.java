@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.calendar;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import org.openqa.selenium.By;
@@ -15,6 +16,10 @@ import java.util.Optional;
 
 public class CalendarEventPageActions {
     public static void fillForm(WebDriver driver, CreateEventParameters parameters) {
+        AwaitilityWrapper.createDefault()
+            .until(() -> !WebElementUtils.isPresent(driver, By.className("spinner")))
+            .assertTrue("Spinner is still loading");
+
         WebElementUtils.selectOptionByValue(driver.findElement(By.id("calendar-event-repetition-type")), parameters.getRepetitionType().name());
 
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-event-start-date")), Optional.ofNullable(parameters.getStartDate()).map(LocalDate::toString).orElse(" "));

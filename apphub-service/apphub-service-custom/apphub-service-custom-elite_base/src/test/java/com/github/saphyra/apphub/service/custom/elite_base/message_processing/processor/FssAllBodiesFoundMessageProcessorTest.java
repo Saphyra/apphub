@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_all_bodies_found.FssAllBodiesFoundMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_all_bodies_found.FssAllBodiesFoundMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +25,7 @@ class FssAllBodiesFoundMessageProcessorTest {
     private static final Double[] STAR_POSITION = new Double[]{343.4};
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private StarSystemSaver starSystemSaver;
@@ -53,7 +53,7 @@ class FssAllBodiesFoundMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, FssAllBodiesFoundMessage.class)).willReturn(fssAllBodiesFoundMessage);
+        given(objectMapper.readValue(MESSAGE, FssAllBodiesFoundMessage.class)).willReturn(fssAllBodiesFoundMessage);
 
         underTest.processMessage(edMessage);
 

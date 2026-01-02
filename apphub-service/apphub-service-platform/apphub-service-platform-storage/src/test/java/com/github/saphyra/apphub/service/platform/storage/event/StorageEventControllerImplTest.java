@@ -10,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
 
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -18,6 +19,9 @@ public class StorageEventControllerImplTest {
 
     @Mock
     private DeleteAccountEventProcessor deleteAccountEventProcessor;
+
+    @Mock
+    private FileCleanupEventProcessor fileCleanupEventProcessor;
 
     @Mock
     private StoredFileCleanupEventProcessor storedFileCleanupEventProcessor;
@@ -41,5 +45,12 @@ public class StorageEventControllerImplTest {
         underTest.cleanUpStoredFiles();
 
         verify(storedFileCleanupEventProcessor).cleanup();
+    }
+
+    @Test
+    void cleanupFiled() {
+        underTest.cleanupFiles();
+
+        then(fileCleanupEventProcessor).should().cleanup();
     }
 }

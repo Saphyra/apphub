@@ -23,7 +23,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 public class SkyXploreLobbyActions {
     public static void startGameCreation(WebDriver driver) {
-        LobbyPage.startGameCreationButton(driver).click();
+        AwaitilityWrapper.getWithWait(() -> LobbyPage.startGameCreationButton(driver))
+            .orElseThrow(() -> new RuntimeException("Start game creation button not found"))
+            .click();
     }
 
     public static void setReady(WebDriver driver) {
@@ -73,7 +75,7 @@ public class SkyXploreLobbyActions {
     }
 
     public static OnlineFriend getOnlineFriend(WebDriver driver, String username) {
-        return AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getOnlineFriends(driver), webElements -> !webElements.isEmpty())
+        return AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getOnlineFriends(driver), webElements -> !webElements.isEmpty(), 15, 1)
             .stream()
             .filter(element -> element.getName().equals(username))
             .findFirst()
@@ -105,7 +107,8 @@ public class SkyXploreLobbyActions {
     }
 
     public static void startGameWithMissingPlayers(WebDriver driver) {
-        LobbyPage.startGameAnywaysButton(driver)
+        AwaitilityWrapper.getWithWait(() -> LobbyPage.startGameAnywaysButton(driver))
+            .orElseThrow(() -> new RuntimeException("Start game anyways button not found"))
             .click();
     }
 

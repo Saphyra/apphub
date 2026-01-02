@@ -30,7 +30,7 @@ public class PinListItemTest extends SeleniumTest {
         NotebookUtils.newCategory(getServerPort(), driver, CATEGORY_2, CATEGORY_1);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_1)
-            .open();
+            .open(driver);
 
         NotebookActions.findListItemByTitleValidated(driver, CATEGORY_2)
             .pin(driver);
@@ -41,7 +41,7 @@ public class PinListItemTest extends SeleniumTest {
             .assertTrue("Not moved up");
 
         PinActions.getPinnedItems(driver)
-            .get(0)
+            .getFirst()
             .openParent();
 
         AwaitilityWrapper.createDefault()

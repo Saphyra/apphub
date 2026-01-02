@@ -102,7 +102,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
 
     private static void create_removeRow(WebDriver driver) {
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .remove();
 
         assertThat(NewTableActions.getRows(driver)).hasSize(1);
@@ -112,51 +112,51 @@ public class ChecklistTableCrudTest extends SeleniumTest {
         NewTableActions.addColumnToEnd(driver);
 
         assertThat(NewTableActions.getTableHeads(driver)).hasSize(2);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
+        assertThat(NewTableActions.getRows(driver).getFirst().getColumns()).hasSize(2);
     }
 
     private static void create_removeColumn(WebDriver driver) {
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .remove();
 
         assertThat(NewTableActions.getTableHeads(driver)).hasSize(1);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).hasSize(1);
+        assertThat(NewTableActions.getRows(driver).getFirst().getColumns()).hasSize(1);
     }
 
     private static void create_checkRow(WebDriver driver) {
         NewTableActions.getRows(driver)
-            .get(0)
-            .check();
+            .getFirst()
+            .check(driver);
 
-        assertThat(NewTableActions.getRows(driver).get(0).isChecked()).isTrue();
+        assertThat(NewTableActions.getRows(driver).getFirst().isChecked()).isTrue();
     }
 
     private static void create_moveColumnRight(WebDriver driver) {
         NewTableActions.addColumnToEnd(driver);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_1);
         NewTableActions.getTableHeads(driver)
             .get(1)
             .setValue(TABLE_HEAD_2);
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_1);
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
             .get(1)
             .setValue(COLUMN_2);
 
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .moveRight();
 
         assertThat(NewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2, TABLE_HEAD_1);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
+        assertThat(NewTableActions.getRows(driver).getFirst().getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
     }
 
     private static void create_moveColumnLeft(WebDriver driver) {
@@ -165,7 +165,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             .moveLeft();
 
         assertThat(NewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1, TABLE_HEAD_2);
-        assertThat(NewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
+        assertThat(NewTableActions.getRows(driver).getFirst().getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
     }
 
     private static void create_moveRowDown(WebDriver driver) {
@@ -177,14 +177,14 @@ public class ChecklistTableCrudTest extends SeleniumTest {
         NewTableActions.getRows(driver)
             .get(1)
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_2);
 
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .moveDown();
 
-        assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
+        assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_2, COLUMN_1);
     }
 
     private static void create_moveRowUp(WebDriver driver) {
@@ -192,7 +192,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             .get(1)
             .moveUp();
 
-        assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
+        assertThat(NewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_1, COLUMN_2);
     }
 
     private static void create(WebDriver driver) {
@@ -210,9 +210,11 @@ public class ChecklistTableCrudTest extends SeleniumTest {
         NotebookActions.findListItemByTitleValidated(driver, TABLE_TITLE)
             .open(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("notebook-content-table"))).isPresent());
 
-        assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1);
-        assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1);
+            assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
+            assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_1, COLUMN_2);
+        });
     }
 
     private static void edit_blankTitle(WebDriver driver) {
@@ -228,7 +230,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
         ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
 
         ViewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(" ");
 
         ViewTableActions.saveChanges(driver);
@@ -256,7 +258,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
 
     private static void edit_removeRow(WebDriver driver) {
         ViewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .remove();
 
         assertThat(ViewTableActions.getRows(driver)).hasSize(2);
@@ -266,41 +268,41 @@ public class ChecklistTableCrudTest extends SeleniumTest {
         ViewTableActions.addColumnToEnd(driver);
 
         assertThat(ViewTableActions.getTableHeads(driver)).hasSize(2);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(2);
+        assertThat(ViewTableActions.getRows(driver).getFirst().getColumns()).hasSize(2);
     }
 
     private static void edit_checkRow(WebDriver driver) {
         ViewTableActions.getRows(driver)
-            .get(0)
-            .check();
+            .getFirst()
+            .check(driver);
 
         assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
     }
 
     private static void edit_moveColumnRight(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_1);
         ViewTableActions.getTableHeads(driver)
             .get(1)
             .setValue(TABLE_HEAD_2);
         ViewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_1);
         ViewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
             .get(1)
             .setValue(COLUMN_2);
 
         ViewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .moveRight();
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2, TABLE_HEAD_1);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
+        assertThat(ViewTableActions.getRows(driver).getFirst().getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_2, COLUMN_1);
     }
 
     private static void edit_moveColumnLeft(WebDriver driver) {
@@ -309,35 +311,37 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             .moveLeft();
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_1, TABLE_HEAD_2);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
+        assertThat(ViewTableActions.getRows(driver).getFirst().getColumns()).extracting(TableColumn::getValue).containsExactly(COLUMN_1, COLUMN_2);
     }
 
     private static void edit_removeColumn(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .remove();
 
+        WebElementUtils.waitForSpinnerToDisappear(driver);
+
         assertThat(ViewTableActions.getTableHeads(driver)).hasSize(1);
-        assertThat(ViewTableActions.getRows(driver).get(0).getColumns()).hasSize(1);
+        assertThat(ViewTableActions.getRows(driver).getFirst().getColumns()).hasSize(1);
     }
 
     private static void edit_moveRowDown(WebDriver driver) {
         ViewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_1);
         ViewTableActions.getRows(driver)
             .get(1)
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_2);
 
         ViewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .moveDown();
 
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
+        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_2, COLUMN_1);
     }
 
     private static void edit_moveRowUp(WebDriver driver) {
@@ -345,25 +349,25 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             .get(1)
             .moveUp();
 
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1, COLUMN_2);
+        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_1, COLUMN_2);
     }
 
     private static void edit(WebDriver driver) {
         ViewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_2);
         ViewTableActions.getRows(driver)
-            .get(0)
-            .uncheck();
+            .getFirst()
+            .uncheck(driver);
         ViewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_2);
         ViewTableActions.getRows(driver)
             .get(1)
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_1);
         ViewTableActions.setTitle(driver, NEW_TABLE_TITLE);
 
@@ -375,29 +379,29 @@ public class ChecklistTableCrudTest extends SeleniumTest {
 
         assertThat(ViewTableActions.getTableHeads(driver)).extracting(TableHead::getValue).containsExactly(TABLE_HEAD_2);
         assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(false, false);
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_2, COLUMN_1);
+        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_2, COLUMN_1);
     }
 
     private static void checkRow(WebDriver driver) {
         ViewTableActions.getRows(driver)
-            .get(0)
-            .check();
+            .getFirst()
+            .check(driver);
 
         assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(true, false);
     }
 
     private static void uncheckRow(WebDriver driver) {
         ViewTableActions.getRows(driver)
-            .get(0)
-            .uncheck();
+            .getFirst()
+            .uncheck(driver);
 
         assertThat(ViewTableActions.getRows(driver)).extracting(TableRow::isChecked).containsExactly(false, false);
     }
 
     private static void deleteChecked(WebDriver driver) {
         ViewTableActions.getRows(driver)
-            .get(0)
-            .check();
+            .getFirst()
+            .check(driver);
 
         ViewTableActions.deleteChecked(driver);
 
@@ -405,7 +409,7 @@ public class ChecklistTableCrudTest extends SeleniumTest {
             .until(() -> ViewTableActions.getRows(driver).size() == 1)
             .assertTrue("Checked row is not deleted.");
 
-        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().get(0).getValue()).containsExactly(COLUMN_1);
+        assertThat(ViewTableActions.getRows(driver)).extracting(tableRow -> tableRow.getColumns().getFirst().getValue()).containsExactly(COLUMN_1);
     }
 
     private static void delete(WebDriver driver) {

@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
@@ -40,8 +41,9 @@ public class CalendarIndexOccurrenceStatusTest extends SeleniumTest {
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 
         //Done
+        WebElementUtils.waitForSpinnerToDisappear(driver);
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, CURRENT_DATE, CreateEventParameters.DEFAULT_TITLE)
-            .open();
+            .open(driver);
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOpenedOccurrenceTitle(driver)).isEqualTo(CreateEventParameters.DEFAULT_TITLE));
 
         CalendarIndexPageActions.markOpenedOccurrenceDone(driver);
@@ -52,7 +54,7 @@ public class CalendarIndexOccurrenceStatusTest extends SeleniumTest {
 
         //Snoozed
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, CURRENT_DATE, CreateEventParameters.DEFAULT_TITLE)
-            .open();
+            .open(driver);
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOpenedOccurrenceTitle(driver)).isEqualTo(CreateEventParameters.DEFAULT_TITLE));
 
         CalendarIndexPageActions.markOpenedOccurrenceSnoozed(driver);

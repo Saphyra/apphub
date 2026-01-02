@@ -1,4 +1,3 @@
-import React from "react";
 import "./error_report_list.css";
 import ErrorReportListItem from "./item/ErrorReportListItem";
 import LocalizationHandler from "../../../../../common/js/LocalizationHandler";
@@ -6,7 +5,7 @@ import localizationData from "./error_report_list_localization.json";
 import InputField from "../../../../../common/component/input/InputField";
 import Stream from "../../../../../common/js/collection/Stream";
 
-const ErrorReportList = ({ errorReports, refreshCallback, selectedErrorReports, setSelectedErrorReports, setConfirmationDialogData }) => {
+const ErrorReportList = ({ totalCount, errorReports, refreshCallback, selectedErrorReports, setSelectedErrorReports, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const selectAll = () => {
@@ -56,7 +55,7 @@ const ErrorReportList = ({ errorReports, refreshCallback, selectedErrorReports, 
                         <th>{localizationHandler.get("status-code")}</th>
                         <th>{localizationHandler.get("service")}</th>
                         <th>{localizationHandler.get("message")}</th>
-                        <th></th>
+                        <th>{localizationHandler.get("total-count", {value: totalCount})}</th>
                     </tr>
                 </thead>
 

@@ -97,23 +97,34 @@ public class AwaitilityWrapper {
             throw new RuntimeException("Expected list size exceeded.");
         }
 
-        return result.get(0);
+        return result.getFirst();
     }
 
+    /**
+     * Polls the supplier until it returns the list containing the desired item.
+     *
+     * @return the desired item
+     */
     public static <T> T getSingleItemFromListWithWait(Supplier<List<T>> supplier, Function<List<T>, Optional<T>> selector) {
         List<T> result = getListWithWait(supplier, list -> selector.apply(list).isPresent());
 
-        if (result.size() != 1) {
-            throw new RuntimeException("List has size " + result.size() + ", but expected size is 1.");
-        }
-
-        return result.get(0);
+        return selector.apply(result)
+            .orElseThrow();
     }
 
     public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate) {
         GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
 
         createDefault()
+            .until(helper::get);
+
+        return helper.getResult(result -> Optional.ofNullable(result).orElseThrow(() -> new RuntimeException("Expected list not found.")));
+    }
+
+    public static <T> List<T> getListWithWait(Supplier<List<T>> supplier, Predicate<List<T>> predicate, int timeoutSeconds, int pollInterval) {
+        GetWithWaitHelper<List<T>> helper = new GetWithWaitHelper<>(supplier, predicate);
+
+        create(timeoutSeconds, pollInterval)
             .until(helper::get);
 
         return helper.getResult(result -> Optional.ofNullable(result).orElseThrow(() -> new RuntimeException("Expected list not found.")));
@@ -132,7 +143,7 @@ public class AwaitilityWrapper {
     }
 
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier) {
-        return assertWithWaitList(supplier, list -> list.size() == 1, list -> list.get(0));
+        return assertWithWaitList(supplier, list -> list.size() == 1, list -> list.getFirst());
     }
 
     public static <T> ObjectAssert<T> assertWithWaitList(Supplier<List<T>> supplier, Predicate<List<T>> predicate, Function<List<T>, T> selector) {

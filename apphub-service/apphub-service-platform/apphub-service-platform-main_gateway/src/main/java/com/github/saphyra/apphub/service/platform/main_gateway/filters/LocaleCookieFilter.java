@@ -41,7 +41,6 @@ public class LocaleCookieFilter implements GlobalFilter, Ordered {
             exchange.getResponse()
                 .addCookie(cookie);
         } catch (Exception e) {
-            log.error("Failed setting locale cookie", e);
             errorReporterService.report("Failed setting locale cookie", e);
         }
         return result;

@@ -1,20 +1,20 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_body_signals.FssBodySignalsMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fss_body_signals.FssBodySignalsMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class FssBodySignalsMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
     private final BodySaver bodySaver;
 
@@ -25,7 +25,7 @@ class FssBodySignalsMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        FssBodySignalsMessage fssBodySignalsMessage = objectMapperWrapper.readValue(message.getMessage(), FssBodySignalsMessage.class);
+        FssBodySignalsMessage fssBodySignalsMessage = objectMapper.readValue(message.getMessage(), FssBodySignalsMessage.class);
 
         StarSystem starSystem = starSystemSaver.save(
             fssBodySignalsMessage.getTimestamp(),

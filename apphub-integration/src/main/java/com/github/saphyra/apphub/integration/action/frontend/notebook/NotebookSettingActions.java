@@ -15,6 +15,8 @@ public class NotebookSettingActions {
         }
 
         button.click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static WebElement getToggleSettingsButton(WebDriver driver) {

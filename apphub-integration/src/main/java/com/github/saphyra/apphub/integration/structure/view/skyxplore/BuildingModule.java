@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.view.skyxplore;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
@@ -24,7 +25,7 @@ public class BuildingModule {
     }
 
     public void cancelConstruction() {
-        if(!isConstructionInProgress()){
+        if (!isConstructionInProgress()) {
             throw new RuntimeException("Construction is not in progress.");
         }
 
@@ -33,11 +34,16 @@ public class BuildingModule {
     }
 
     public void deconstruct(WebDriver driver) {
-        webElement.findElement(By.className("skyxplore-game-construction-area-building-module-deconstruct-button"))
+        AwaitilityWrapper.getWithWait(() -> webElement.findElement(By.className("skyxplore-game-construction-area-building-module-deconstruct-button")))
+            .orElseThrow()
             .click();
 
-        driver.findElement(By.id("skyxplore-game-constuction-area-deconstruct-module-confirm-button"))
+        driver.findElement(By.id("skyxplore-game-construction-area-deconstruct-module-confirm-button"))
             .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !WebElementUtils.isPresent(driver, By.className("confirmation-dialog")))
+            .assertTrue("Deconstruction confirmation dialog still present.");
     }
 
     public Boolean isDeconstructionInProgress() {

@@ -6,6 +6,8 @@ import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -39,14 +41,16 @@ public abstract class MenuBase {
     public void enter() {
         while (true) {
             try {
-                MenuOption option = getOption();
+                List<MenuOption> options = getOption();
 
-                if (option == exitOption) {
-                    return;
-                }
+                for (MenuOption option : options) {
+                    if (option == exitOption) {
+                        return;
+                    }
 
-                if (option.process()) {
-                    return;
+                    if (option.process()) {
+                        return;
+                    }
                 }
             } catch (Exception e) {
                 log.error("Exception occurred in the menu.", e);
@@ -54,16 +58,23 @@ public abstract class MenuBase {
         }
     }
 
-    private MenuOption getOption() {
+    private List<MenuOption> getOption() {
         Map<Integer, MenuOption> options = mapOptions();
         while (true) {
             printOptions();
 
-            Optional<MenuOption> maybeResult = getInput()
-                .map(options::get);
 
-            if (maybeResult.isPresent()) {
-                return maybeResult.get();
+            List<Integer> selectedOptions = getInput();
+            List<MenuOption> result = new ArrayList<>();
+            for (Integer selectedOption : selectedOptions) {
+                MenuOption option = options.get(selectedOption);
+                if (option != null) {
+                    result.add(option);
+                }
+            }
+
+            if (!result.isEmpty()) {
+                return result;
             } else {
                 localizationService.writeMessage(LocalizedText.INVALID_COMMAND);
             }
@@ -82,14 +93,18 @@ public abstract class MenuBase {
 
     protected abstract LocalizationProvider getName();
 
-    private Optional<Integer> getInput() {
+    private List<Integer> getInput() {
         try {
             localizationService.writeMessage(LocalizedText.WHAT_WOULD_YOU_LIKE_TO_DO);
 
             Scanner scanner = new Scanner(System.in);
-            return Optional.of(Integer.parseInt(scanner.nextLine()));
+            String input = scanner.nextLine();
+            String[] parts = input.split(",");
+            return Arrays.stream(parts)
+                .map(Integer::parseInt)
+                .toList();
         } catch (NumberFormatException e) {
-            return Optional.empty();
+            return List.of();
         }
     }
 

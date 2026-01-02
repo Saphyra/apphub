@@ -41,19 +41,19 @@ public class AddTableRowTest extends SeleniumTest {
         NotebookNewListItemActions.selectListItemType(getServerPort(), driver, ListItemType.CHECKLIST_TABLE);
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_NAME);
         NewTableActions.getRows(driver)
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .setValue(COLUMN_VALUE);
         NewTableActions.submit(driver);
 
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Table not found."))
-            .open();
+            .open(driver);
 
         ViewTableActions.enableEditing(driver);
 
@@ -64,12 +64,12 @@ public class AddTableRowTest extends SeleniumTest {
     private static void addRowToStart(WebDriver driver) {
         ViewTableActions.addRowToStart(driver);
 
-        List<TableRow> rows = ViewTableActions.getRows(driver);
+        List<TableRow> rows = AwaitilityWrapper.getListWithWait(() -> ViewTableActions.getRows(driver), list -> list.size() == 2);
         assertThat(rows).hasSize(2);
-        TableRow row = rows.get(0);
+        TableRow row = rows.getFirst();
         assertThat(row.isChecked()).isFalse();
         TableColumn column = row.getColumns()
-            .get(0);
+            .getFirst();
         assertThat(column.getValue()).isEmpty();
         column.setValue(FIRST_COLUMN);
     }
@@ -82,7 +82,7 @@ public class AddTableRowTest extends SeleniumTest {
         TableRow row = rows.get(2);
         assertThat(row.isChecked()).isFalse();
         TableColumn column = row.getColumns()
-            .get(0);
+            .getFirst();
         assertThat(column.getValue()).isEmpty();
     }
 }

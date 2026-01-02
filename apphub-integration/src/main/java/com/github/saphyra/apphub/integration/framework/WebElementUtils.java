@@ -106,7 +106,7 @@ public class WebElementUtils {
         }
     }
 
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public static void verifyInvalidFieldState(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
         if (shouldBeVisible) {
             assertThat(inputValid).isNotEmpty();
@@ -116,7 +116,7 @@ public class WebElementUtils {
         }
     }
 
-    @Deprecated
+    @Deprecated(forRemoval = true)
     public static void verifyInvalidFieldStateLegacy(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
         assertThat(inputValid).isNotNull();
 
@@ -205,5 +205,19 @@ public class WebElementUtils {
             .stream()
             .map(WebElement::getText)
             .toList();
+    }
+
+    /**
+     * Waits until spinner disappears.
+     *
+     * @param driver the driver
+     * @return true, so it can be used in composite conditions
+     */
+    public static boolean waitForSpinnerToDisappear(WebDriver driver) {
+        AwaitilityWrapper.create(10, 1)
+            .until(() -> !isPresent(driver, By.className("spinner")))
+            .assertTrue("Spinner is still displayed");
+
+        return true;
     }
 }

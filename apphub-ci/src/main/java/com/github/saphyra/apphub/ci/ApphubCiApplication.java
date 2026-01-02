@@ -26,7 +26,7 @@ public class ApphubCiApplication implements CommandLineRunner {
     private final MainMenu mainMenu;
     private final List<StartupProcessor> startupProcessors;
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(ApphubCiApplication.class, args);
     }
 
@@ -37,6 +37,8 @@ public class ApphubCiApplication implements CommandLineRunner {
         argList.stream()
             .flatMap(arg -> startupProcessors.stream().filter(startupProcessor -> startupProcessor.canProcess(arg)))
             .forEach(startupProcessor -> startupProcessor.process(argList));
+
+        System.setProperty("java.awt.headless", "false");
 
         mainMenu.enter();
 

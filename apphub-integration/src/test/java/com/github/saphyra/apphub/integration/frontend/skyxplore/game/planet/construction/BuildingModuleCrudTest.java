@@ -13,13 +13,14 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.Sky
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.BuildingModule;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class BuildingModuleCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "skyxplore"})
@@ -81,16 +82,17 @@ public class BuildingModuleCrudTest extends SeleniumTest {
 
     private static void cancelDeconstruction(WebDriver driver) {
         SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY)
-            .get(0)
+            .getFirst()
             .cancelDeconstruction();
 
-        AwaitilityWrapper.assertWithWaitList(() -> SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY))
-            .returns(false, BuildingModule::isDeconstructionInProgress);
+        AwaitilityWrapper.create(10, 1)
+            .until(() -> !SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY).getFirst().isConstructionInProgress())
+            .assertTrue("Deconstruction is not cancelled.");
     }
 
     private static void deconstruct(WebDriver driver) {
         SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY)
-            .get(0)
+            .getFirst()
             .deconstruct(driver);
 
         AwaitilityWrapper.assertWithWaitList(() -> SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY))
@@ -110,7 +112,7 @@ public class BuildingModuleCrudTest extends SeleniumTest {
 
     private static void cancelConstruction(WebDriver driver) {
         SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY)
-            .get(0)
+            .getFirst()
             .cancelConstruction();
 
         AwaitilityWrapper.createDefault()
@@ -121,7 +123,7 @@ public class BuildingModuleCrudTest extends SeleniumTest {
     private static void construct(WebDriver driver) {
         SkyXploreConstructionAreaActions.constructBuildingModule(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY, Constants.BUILDING_MODULE_HAMSTER_WHEEL);
 
-        CustomAssertions.singleListAssertThat(SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY))
+        assertThat(AwaitilityWrapper.getSingleItemFromListWithWait(() -> SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY)))
             .returns(Constants.BUILDING_MODULE_HAMSTER_WHEEL, BuildingModule::getDataId)
             .returns(true, BuildingModule::isConstructionInProgress);
     }

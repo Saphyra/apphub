@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
-import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityNameCache;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
@@ -20,7 +18,6 @@ import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,9 +54,8 @@ class CommodityTradingControllerImplTest {
 
     @Test
     void bestTradeLocations() {
-        given(performanceReporter.wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), eq(PerformanceReportingKey.API_BEST_TRADE_LOCATIONS.name())))
-            .willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
         given(commodityTradingService.getTradeOffers(request)).willReturn(List.of(response));
+        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
         assertThat(underTest.bestTradeLocations(request, accessTokenHeader)).containsExactly(response);
     }

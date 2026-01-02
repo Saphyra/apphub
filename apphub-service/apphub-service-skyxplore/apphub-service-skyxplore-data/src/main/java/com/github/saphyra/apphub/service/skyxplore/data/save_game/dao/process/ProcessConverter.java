@@ -4,20 +4,20 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ProcessConverter extends ConverterBase<ProcessEntity, ProcessModel> {
     private final UuidConverter uuidConverter;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected ProcessModel processEntityConversion(ProcessEntity entity) {
@@ -29,7 +29,7 @@ public class ProcessConverter extends ConverterBase<ProcessEntity, ProcessModel>
         model.setStatus(ProcessStatus.valueOf(entity.getStatus()));
         model.setLocation(uuidConverter.convertEntity(entity.getLocation()));
         model.setExternalReference(uuidConverter.convertEntity(entity.getExternalReference()));
-        model.setData(objectMapperWrapper.readValue(entity.getData(), StringStringMap.class));
+        model.setData(objectMapper.readValue(entity.getData(), StringStringMap.class));
         return model;
     }
 
@@ -42,7 +42,7 @@ public class ProcessConverter extends ConverterBase<ProcessEntity, ProcessModel>
             .status(domain.getStatus().name())
             .location(uuidConverter.convertDomain(domain.getLocation()))
             .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-            .data(objectMapperWrapper.writeValueAsString(domain.getData()))
+            .data(objectMapper.writeValueAsString(domain.getData()))
             .build();
     }
 }

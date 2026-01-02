@@ -1,17 +1,10 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.config;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.feign.FeignClientConfiguration;
-import com.github.saphyra.apphub.lib.config.health.EnableHealthCheck;
-import com.github.saphyra.apphub.lib.config.whitelist.EnableWhiteListedEndpointProperties;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.lib.monitoring.EnableMemoryMonitoring;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.form.spring.SpringFormEncoder;
@@ -21,23 +14,11 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.util.AntPathMatcher;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration
-@Import({
-    CommonConfigProperties.class,
-    FeignClientConfiguration.class
-})
-@EnableHealthCheck
-@EnableWhiteListedEndpointProperties
-@ComponentScan(basePackageClasses = {
-    ErrorReporterService.class
-})
-@EnableMemoryMonitoring
 public class MainGatewayBeanConfiguration {
     private final ObjectFactory<HttpMessageConverters> messageConverters = HttpMessageConverters::new;
 
@@ -58,18 +39,13 @@ public class MainGatewayBeanConfiguration {
     }
 
     @Bean
-    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapperWrapper objectMapperWrapper) {
-        return new AccessTokenHeaderConverter(base64Encoder, objectMapperWrapper);
+    AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapper objectMapper) {
+        return new AccessTokenHeaderConverter(base64Encoder, objectMapper);
     }
 
     @Bean
     Base64Encoder base64Encoder() {
         return new Base64Encoder();
-    }
-
-    @Bean
-    ObjectMapperWrapper objectMapperWrapper() {
-        return new ObjectMapperWrapper(new ObjectMapper());
     }
 
     @Bean

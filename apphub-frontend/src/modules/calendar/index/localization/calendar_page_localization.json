@@ -54,5 +54,9 @@
     "labels": {
         "en": "Labels",
         "hu": "Címkék"
+    },
+    "create-new": {
+        "en": "New event",
+        "hu": "Új esemény"
     }
 }

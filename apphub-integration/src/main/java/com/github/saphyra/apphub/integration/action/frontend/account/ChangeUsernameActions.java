@@ -32,21 +32,23 @@ public class ChangeUsernameActions {
     }
 
     public static void verifyChangeUsernameForm(WebDriver driver, ChangeUsernameValidationResult validationResult) {
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-username-username-input-validation"),
-            validationResult.getUsername() != UsernameValidationResult.VALID,
-            validationResult.getUsername().getErrorMessage()
-        );
+        AwaitilityWrapper.awaitAssert(() -> {
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-username-username-input-validation"),
+                validationResult.getUsername() != UsernameValidationResult.VALID,
+                validationResult.getUsername().getErrorMessage()
+            );
 
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-username-password-input-validation"),
-            validationResult.getPassword() != ChUsernamePasswordValidationResult.VALID,
-            validationResult.getPassword().getErrorMessage()
-        );
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-username-password-input-validation"),
+                validationResult.getPassword() != ChUsernamePasswordValidationResult.VALID,
+                validationResult.getPassword().getErrorMessage()
+            );
 
-        assertThat(changeUsernameButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+            assertThat(changeUsernameButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+        });
     }
 
     private static WebElement changeUsernameButton(WebDriver driver) {

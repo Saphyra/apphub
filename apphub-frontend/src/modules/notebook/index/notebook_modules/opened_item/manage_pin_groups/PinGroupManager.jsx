@@ -15,7 +15,7 @@ import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import { NOTEBOOK_CREATE_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
-const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, lastEvent }) => {
+const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, lastEvent, setDisplaySpinner }) => {
     const [pinGroups, setPinGroups] = useState([]);
     const [newPinGroupName, setNewPinGroupName] = useState("");
     const [loadPinGroupsTrigger, setLoadPinGroupsTrigger] = useState(0);
@@ -37,7 +37,7 @@ const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListIte
         }
 
         const response = await NOTEBOOK_CREATE_PIN_GROUP.createRequest({ value: newPinGroupName })
-            .send();
+            .send(setDisplaySpinner);
 
         setNewPinGroupName("");
         setPinGroups(response);
@@ -55,6 +55,7 @@ const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListIte
                 setLastEvent={setLastEvent}
                 setPinGroups={setPinGroups}
                 lastEvent={lastEvent}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

@@ -48,7 +48,7 @@ public class CustomTableNumberTest extends SeleniumTest {
     private static void editColumn(WebDriver driver) {
         ViewTableActions.enableEditing(driver);
 
-        NumberTableColumn column = getColumnAsNumber(ViewTableActions.getRows(driver));
+        NumberTableColumn column = getColumnAsNumber(getRowsWithWait(driver));
         column.setValue(NEW_VALUE);
         column.setStep(NEW_STEP);
 
@@ -61,14 +61,18 @@ public class CustomTableNumberTest extends SeleniumTest {
             .until(() -> !ViewTableActions.isEditingEnabled(driver))
             .assertTrue("Editing is still enabled.");
 
-        assertThat(getColumnAsNumber(ViewTableActions.getRows(driver)).getValue()).isEqualTo(String.valueOf(NEW_VALUE));
+        assertThat(getColumnAsNumber(getRowsWithWait(driver)).getValue()).isEqualTo(String.valueOf(NEW_VALUE));
     }
 
     private static void openTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
-            .open();
-        NumberTableColumn checkedColumn = getColumnAsNumber(ViewTableActions.getRows(driver));
+            .open(driver);
+        NumberTableColumn checkedColumn = getColumnAsNumber(getRowsWithWait(driver));
         assertThat(checkedColumn.getValue()).isEqualTo(String.valueOf(VALUE));
+    }
+
+    private static List<TableRow> getRowsWithWait(WebDriver driver) {
+        return AwaitilityWrapper.getListWithWait(() -> ViewTableActions.getRows(driver), rows -> !rows.isEmpty());
     }
 
     private static void createCustomTableWithNumberCell(WebDriver driver) {
@@ -77,7 +81,7 @@ public class CustomTableNumberTest extends SeleniumTest {
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_CONTENT);
 
         NewTableActions.setColumnType(driver, 0, 0, ColumnType.NUMBER);
@@ -97,6 +101,6 @@ public class CustomTableNumberTest extends SeleniumTest {
     }
 
     private static NumberTableColumn getColumnAsNumber(List<TableRow> driver) {
-        return driver.get(0).getColumns().get(0).as(ColumnType.NUMBER);
+        return driver.getFirst().getColumns().getFirst().as(ColumnType.NUMBER);
     }
 }

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.setting.service;
 
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
 import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.skyxplore.data.common.GameProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.Setting;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingDao;
@@ -10,6 +9,7 @@ import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingFacto
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class CreateOrUpdateSettingService {
     private final GameProxy gameProxy;
     private final SettingDao settingDao;
     private final SettingFactory settingFactory;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     public void createOrUpdate(UUID userId, SettingModel request) {
         settingValidator.validate(request);
@@ -30,7 +30,7 @@ public class CreateOrUpdateSettingService {
 
         Setting setting = getOrCreate(gameId, userId, request.getType(), request.getLocation());
 
-        setting.setData(objectMapperWrapper.writeValueAsString(request.getData()));
+        setting.setData(objectMapper.writeValueAsString(request.getData()));
 
         settingDao.save(setting);
     }

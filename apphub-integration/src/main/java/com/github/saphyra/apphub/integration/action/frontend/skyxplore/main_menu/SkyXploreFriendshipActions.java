@@ -1,11 +1,13 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.Friend;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.IncomingFriendRequest;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.SentFriendRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -32,6 +34,10 @@ public class SkyXploreFriendshipActions {
         findFriendCandidate(driver1, username2)
             .click();
 
+        AwaitilityWrapper.createDefault()
+            .until(() -> getFriendCandidates(driver1).isEmpty())
+            .assertTrue("Friend candidate still present.");
+
         AwaitilityWrapper.getListWithWait(() -> getIncomingFriendRequests(driver2), incomingFriendRequests -> !incomingFriendRequests.isEmpty())
             .stream()
             .filter(incomingFriendRequest -> incomingFriendRequest.getSenderName().equals(username1))
@@ -49,7 +55,7 @@ public class SkyXploreFriendshipActions {
     }
 
     public static WebElement findFriendCandidate(WebDriver driver, String username) {
-        return AwaitilityWrapper.getListWithWait(() -> getFriendCandidates(driver), webElements -> !webElements.isEmpty())
+        return AwaitilityWrapper.getListWithWait(() -> getFriendCandidates(driver), webElements -> !webElements.isEmpty(), 10, 1)
             .stream()
             .filter(element -> element.getText().equals(username))
             .findFirst()
@@ -58,6 +64,10 @@ public class SkyXploreFriendshipActions {
 
     public static void fillSearchCharacterForm(WebDriver driver, String username) {
         clearAndFill(MainMenuPage.newFriendName(driver), username);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !WebElementUtils.isPresent(driver, By.id("skyxplore-character-searching")))
+            .assertTrue("Friend candidate search is still in progress.");
     }
 
     public static List<Friend> getFriends(WebDriver driver) {

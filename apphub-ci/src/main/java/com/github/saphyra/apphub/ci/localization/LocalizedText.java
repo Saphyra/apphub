@@ -79,6 +79,11 @@ public enum LocalizedText implements LocalizationProvider {
     PREPROD("Preprod szerver", "Preprod server"),
     SCALE_DOWN("Leállítás", "Scale down"),
     PORT_FORWARD("Port tovabbitas", "Port forward"),
+    GUI_ENABLED_MENU_OPTION_LABEL("Grafikus interfesz engedelyezve (%s)", "GUI enabled (%s)"),
+    ENABLE_GUI("Grafikus interfesz engedelyezese?", "Enable GUI?"),
+    PROVIDE_YES_OR_NO("Ervenytelen valasz. Igen/nem?", "Invalid answer. Yes/No?"),
+    INTEGRATION_RETRY_COUNT("Integractios tesztek ujra probalasa (%s)", "Integration test retry count (%s)"),
+    INTEGRATION_RETRY_COUNT_LABEL("Hanyszor probalja ujra a sikertelen teszteket?", "How many times should it retry failed tests?"),
     ;
 
     private final String hu;

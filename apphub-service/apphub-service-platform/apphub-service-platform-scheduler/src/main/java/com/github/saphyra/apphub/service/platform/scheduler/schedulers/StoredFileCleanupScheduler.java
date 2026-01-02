@@ -27,4 +27,16 @@ class StoredFileCleanupScheduler {
             commonConfigProperties.getDefaultLocale()
         );
     }
+
+    @Scheduled(cron = "${interval.storage.fileCleanupCron}")
+    void fileCleanup() {
+        String eventName = EmptyEvent.STORAGE_FILE_CLEANUP;
+        log.info("Sending event with name {}", eventName);
+        eventGatewayApi.sendEvent(
+            SendEventRequest.builder()
+                .eventName(eventName)
+                .build(),
+            commonConfigProperties.getDefaultLocale()
+        );
+    }
 }

@@ -30,7 +30,7 @@ class FileBasedColumnProxyTest {
     private FileBasedColumnDeleter fileBasedColumnDeleter;
 
     @Mock
-    private FileBasedColumnEditer fileBasedColumnEditer;
+    private FileBasedColumnEditor fileBasedColumnEditor;
 
     @Mock
     private FileBasedColumnCloner fileBasedColumnCloner;
@@ -66,7 +66,7 @@ class FileBasedColumnProxyTest {
 
     @Test
     void edit() {
-        given(fileBasedColumnEditer.edit(listItem, ROW_ID, model)).willReturn(Optional.of(fileUpload));
+        given(fileBasedColumnEditor.edit(listItem, ROW_ID, model)).willReturn(Optional.of(fileUpload));
 
         assertThat(underTest.edit(listItem, ROW_ID, model)).contains(fileUpload);
     }

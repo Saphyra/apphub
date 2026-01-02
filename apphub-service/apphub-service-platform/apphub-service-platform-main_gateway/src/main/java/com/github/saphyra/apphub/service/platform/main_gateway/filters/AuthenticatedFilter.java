@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
-import com.github.saphyra.apphub.lib.config.whitelist.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
+import com.github.saphyra.apphub.service.platform.main_gateway.config.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
 import lombok.extern.slf4j.Slf4j;

@@ -28,6 +28,8 @@ public class ErrorReporterService {
 
     public void report(String message) {
         try {
+            log.warn(message);
+
             ErrorReport model = errorReportFactory.create(message);
             errorReporterClient.reportError(model, commonConfigProperties.getDefaultLocale());
         } catch (Exception e) {
@@ -37,6 +39,8 @@ public class ErrorReporterService {
 
     public void report(String message, Throwable exception) {
         try {
+            log.error(message, exception);
+
             ErrorReport model = errorReportFactory.create(message, exception);
             errorReporterClient.reportError(model, commonConfigProperties.getDefaultLocale());
         } catch (Exception e) {

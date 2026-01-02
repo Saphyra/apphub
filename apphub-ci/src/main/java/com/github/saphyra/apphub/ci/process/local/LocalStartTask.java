@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.process.local;
 
+import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Service;
@@ -21,6 +22,7 @@ public class LocalStartTask implements Runnable {
     private final Service service;
     @Builder.Default
     private final String activeProfiles = Constants.PROFILE_LOCAL;
+    private final StartupIndicator startupIndicator;
 
     @Override
     @SneakyThrows
@@ -31,12 +33,15 @@ public class LocalStartTask implements Runnable {
         new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx1024m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=%s".formatted(activeProfiles), "-jar", service.getLocation())
             .start();
 
+        startupIndicator.startupInitiated(service.getName());
+
         servicePinger.pingLocal(Optional.ofNullable(service.getHealthCheckPort()).orElse(service.getPort()))
             .ifPresent(cause -> {
                 throw new IllegalStateException(service.getName() + " failed to start.", cause);
             });
 
         stopwatch.stop();
+        startupIndicator.startupCompleted(service.getName());
         log.info("{} successfully started in {}s.", service.getName(), (stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000d));
     }
 }

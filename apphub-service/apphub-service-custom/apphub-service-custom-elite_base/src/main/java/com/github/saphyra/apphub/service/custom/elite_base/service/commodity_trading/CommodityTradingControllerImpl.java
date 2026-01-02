@@ -31,7 +31,7 @@ class CommodityTradingControllerImpl implements CommodityTradingController {
 
         return performanceReporter.wrap(
             () -> commodityTradingService.getTradeOffers(request),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            PerformanceReportingTopic.ELITE_BASE_QUERY,
             PerformanceReportingKey.API_BEST_TRADE_LOCATIONS.name()
         );
     }

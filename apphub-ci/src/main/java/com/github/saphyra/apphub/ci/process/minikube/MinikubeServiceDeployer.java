@@ -43,7 +43,7 @@ public class MinikubeServiceDeployer {
     }
 
     private void deploy(String namespaceName, String serviceDir, Integer group, List<Service> serviceList, int waitCount) {
-        Integer batchSize = propertyDao.getStartupCountLimit();
+        Integer batchSize = propertyDao.getRemoteStartupCountLimit();
 
         List<List<Service>> batches = ListUtils.partition(serviceList, batchSize);
 

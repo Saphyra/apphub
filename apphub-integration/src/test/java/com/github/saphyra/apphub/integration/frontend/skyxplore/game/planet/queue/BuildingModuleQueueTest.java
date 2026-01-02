@@ -118,8 +118,7 @@ public class BuildingModuleQueueTest extends SeleniumTest {
         //Create deconstruction item
         SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId)
             .openConstructionArea();
-        SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY)
-            .get(0)
+        AwaitilityWrapper.getSingleItemFromListWithWait(() -> SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY))
             .deconstruct(driver);
         SkyXploreConstructionAreaActions.close(driver);
 
@@ -146,8 +145,7 @@ public class BuildingModuleQueueTest extends SeleniumTest {
         //Finish deconstruction
         SkyXplorePlanetActions.findBySurfaceIdValidated(driver, surfaceId)
             .openConstructionArea();
-        SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY)
-            .get(0)
+        AwaitilityWrapper.getSingleItemFromListWithWait(() -> SkyXploreConstructionAreaActions.getBuildingModules(driver, Constants.BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY))
             .deconstruct(driver);
         SkyXploreConstructionAreaActions.close(driver);
 

@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 class MinikubeDeleteNamespaceMenuOption implements MenuOption {
@@ -45,7 +47,7 @@ class MinikubeDeleteNamespaceMenuOption implements MenuOption {
         boolean result = validatingInputReader.getInput(
             language -> LocalizedText.CONFIRM_DELETE_NAMESPACE.getLocalizedText(language).formatted(namespaceName),
             booleanParser::parse,
-            aBoolean -> Optional.empty()
+            aBoolean -> isNull(aBoolean) ? Optional.of(LocalizedText.PROVIDE_YES_OR_NO) : Optional.empty()
         );
 
         if(result){

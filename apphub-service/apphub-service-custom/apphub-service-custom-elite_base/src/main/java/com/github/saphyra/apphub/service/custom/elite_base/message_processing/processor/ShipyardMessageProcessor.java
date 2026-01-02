@@ -1,22 +1,22 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.shipyard.outfitting.ShipyardMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.LoadoutSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.shipyard.outfitting.ShipyardMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaveResult;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import static java.util.Objects.isNull;
 
@@ -24,7 +24,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 class ShipyardMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
     private final StationSaverUtil stationSaverUtil;
     private final LoadoutSaver loadoutSaver;
@@ -37,7 +37,7 @@ class ShipyardMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        ShipyardMessage shipyardMessage = objectMapperWrapper.readValue(message.getMessage(), ShipyardMessage.class);
+        ShipyardMessage shipyardMessage = objectMapper.readValue(message.getMessage(), ShipyardMessage.class);
 
         StarSystem starSystem = performanceReporter.wrap(
             () -> starSystemSaver.save(shipyardMessage.getTimestamp(), shipyardMessage.getSystemName()),

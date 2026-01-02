@@ -1,6 +1,8 @@
 server:
   port: 8080
 
+hostIp: 192.168.0.199
+
 serviceUrls:
   adminPanel: admin-panel:8080
   eventGateway: event-gateway:8080

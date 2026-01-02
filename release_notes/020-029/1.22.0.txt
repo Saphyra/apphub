@@ -1,0 +1,63 @@
+===FEATURES===
+    AdminPanel
+        MemoryMonitoring
+            Display max memory used
+            Order services by parameters
+        PerformanceReporting
+            Hide keys
+            Display spinner when loading reports
+            Periodically sync topic status
+        ErrorReport
+            Display total count
+    ApphubCI
+        Dedicated setting for remote startup limit
+        Chain commands
+        GUI indicator for service startup
+        Set integration retry count
+    Notebook
+        Display checked and total count of checklist items
+        Search checklist items
+
+===BUGFIXES===
+    Calendar
+        Spinner is displayed until all calls are finished
+        Set selected date to today after midnight
+    Notebook
+        Limit width of confirmation dialog
+        Sticky table header
+    Do not allow number input's value fall below min
+
+===PLATFORM CHANGES===
+    Use AutoConfigurations instead of EnableXYConfiguration annotations
+    Extract SqlBuilder to lib
+
+===TECHNICAL DEBTS===
+    Calendar
+        Drop old event and occurrence tables
+        Delete migration
+    ErrorReporterService automatically logs errors
+    Get rid of ObjectMapperWrapper
+    Timing of integration tests improved
+    SkyXplore
+        Periodically delete 0 StoredResources
+        Periodically merge StoredResources
+        Use the common ProgressBar for Surface and Queue
+    Storage
+        Periodically delete unknown files
+
+===ETC===
+    AdminPanel
+        ErrorReport
+            Put a page selector to the bottom of the table
+            Use spinner for loading
+    EliteBase
+        Performance reporting for commodity trading
+        Allow "No material trader" override
+    Notebook
+        Use spinner for all BE queries
+    Calendar
+        Open occurrences on the right panel
+        Increased memory limit
+    Display invalid parameters if INVALID_PARAM returned
+    Storage
+        Check FTP connection on startup

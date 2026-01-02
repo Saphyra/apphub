@@ -49,12 +49,4 @@
             <column name="repeatable" valueBoolean="true"/>
         </insert>
     </changeSet>
-
-    <changeSet id="create-migration-task-calendar_v2" author="Saphyra">
-        <insert schemaName="admin_panel" tableName="migration_task">
-            <column name="event" value="calendar-v2"/>
-            <column name="name" value="Calendar - Migrate events"/>
-            <column name="repeatable" valueBoolean="false"/>
-        </insert>
-    </changeSet>
 </databaseChangeLog>

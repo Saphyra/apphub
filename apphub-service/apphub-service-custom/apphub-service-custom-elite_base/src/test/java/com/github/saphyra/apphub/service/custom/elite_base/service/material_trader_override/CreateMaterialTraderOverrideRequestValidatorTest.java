@@ -54,7 +54,7 @@ class CreateMaterialTraderOverrideRequestValidatorTest {
     }
 
     @ParameterizedTest
-    @EnumSource(value = MaterialType.class, mode = EnumSource.Mode.EXCLUDE, names = {"RAW", "ENCODED", "MANUFACTURED"})
+    @EnumSource(value = MaterialType.class, mode = EnumSource.Mode.EXCLUDE, names = {"RAW", "ENCODED", "MANUFACTURED", "NONE"})
     void unacceptableMaterialType(MaterialType materialType) {
         CreateMaterialTraderOverrideRequest request = CreateMaterialTraderOverrideRequest.builder()
             .stationId(STATION_ID)

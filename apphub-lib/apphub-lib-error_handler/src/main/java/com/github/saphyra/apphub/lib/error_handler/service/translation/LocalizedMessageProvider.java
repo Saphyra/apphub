@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated
 public class LocalizedMessageProvider {
     private final LocalizationClient localizationApi;
     private final MessageAssembler messageAssembler;

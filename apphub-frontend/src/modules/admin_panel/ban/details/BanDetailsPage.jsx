@@ -17,6 +17,7 @@ import BanUserRole from "./role/BanUserRole";
 import BanUserBannedRoles from "./table/BanUserBannedRoles";
 import { hasValue } from "../../../../common/js/Utils";
 import { ACCOUNT_GET_BANS } from "../../../../common/js/dao/endpoints/UserEndpoints";
+import Spinner from "../../../../common/component/Spinner";
 
 const BanDetailsPage = () => {
     const { userId } = useParams();
@@ -25,10 +26,11 @@ const BanDetailsPage = () => {
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [userData, setUserdata] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useLoader({ request: ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), mapper: setUserdata });
+    useLoader({ request: ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), mapper: setUserdata, setDisplaySpinner: setDisplaySpinner });
 
     return (
         <div id="ban-details" className="main-page">
@@ -77,6 +79,8 @@ const BanDetailsPage = () => {
                     choices={confirmationDialogData.choices}
                 />
             }
+
+            {displaySpinner && <Spinner />}
 
             <ToastContainer />
         </div>

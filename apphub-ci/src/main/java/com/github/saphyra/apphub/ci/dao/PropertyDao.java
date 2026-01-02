@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.ci.dao;
 
 import com.github.saphyra.apphub.ci.localization.Language;
-import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.DeployMode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class PropertyDao {
     private final PropertyRepository propertyRepository;
     private final DefaultProperties defaultProperties;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     public Integer getBuildThreadCountSkipTests() {
         return propertyRepository.findById(PropertyName.BUILD_THREAD_COUNT_SKIP_TESTS)
@@ -42,7 +43,7 @@ public class PropertyDao {
     }
 
     public void save(PropertyName propertyName, Object value) {
-        propertyRepository.save(new Property(propertyName, objectMapperWrapper.writeValueAsString(value)));
+        propertyRepository.save(new Property(propertyName, objectMapper.writeValueAsString(value)));
     }
 
     public Integer getBuildThreadCountDefault() {
@@ -80,17 +81,24 @@ public class PropertyDao {
             .orElseGet(() -> Language.valueOf(defaultProperties.getDefaultLocale()));
     }
 
-    public Integer getStartupCountLimit() {
+    public Integer getLocalStartupCountLimit() {
         return propertyRepository.findById(PropertyName.LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT)
             .map(Property::getValue)
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getLocalServiceStartupCountLimit);
     }
 
+    public Integer getRemoteStartupCountLimit() {
+        return propertyRepository.findById(PropertyName.REMOTE_SERVICE_STARTUP_COUNT_LIMIT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getRemoteServiceStartupCountLimit);
+    }
+
     public List<String> getDisabledServices() {
         List<String> disabledServices = propertyRepository.findById(PropertyName.DISABLED_SERVICES)
             .map(Property::getValue)
-            .map(value -> objectMapperWrapper.readArrayValue(value, String[].class))
+            .map(value -> Arrays.asList(objectMapper.readValue(value, String[].class)))
             .orElse(Collections.emptyList());
         return new ArrayList<>(disabledServices);
     }
@@ -125,7 +133,7 @@ public class PropertyDao {
     public List<String> getLatestServices() {
         return propertyRepository.findById(PropertyName.LATEST_SERVICES)
             .map(Property::getValue)
-            .map(s -> objectMapperWrapper.readArrayValue(s, String[].class))
+            .map(s -> Arrays.asList(objectMapper.readValue(s, String[].class)))
             .orElse(Collections.emptyList());
     }
 
@@ -133,5 +141,26 @@ public class PropertyDao {
         return propertyRepository.findById(PropertyName.LATEST_TEST_GROUPS)
             .map(Property::getValue)
             .orElse(null);
+    }
+
+    public boolean isGuiEnabled() {
+        return propertyRepository.findById(PropertyName.GUI_ENABLED)
+            .map(Property::getValue)
+            .map(Boolean::parseBoolean)
+            .orElseGet(defaultProperties::getGuiEnabled);
+    }
+
+    public Integer getLocalIntegrationRetryCount() {
+        return propertyRepository.findById(PropertyName.LOCAL_INTEGRATION_RETRY_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getIntegrationRetryCount);
+    }
+
+    public Integer getRemoteIntegrationRetryCount() {
+        return propertyRepository.findById(PropertyName.REMOTE_INTEGRATION_RETRY_COUNT)
+            .map(Property::getValue)
+            .map(Integer::parseInt)
+            .orElseGet(defaultProperties::getIntegrationRetryCount);
     }
 }

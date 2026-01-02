@@ -72,7 +72,6 @@ public class PopulationMessageSender implements MessageSender {
                 return true;
             } catch (Exception e) {
                 String errorMessage = String.format("Failed sending Population update for user %s on planet %s", userId, planetId);
-                log.error(errorMessage, e);
                 errorReporterService.report(errorMessage, e);
                 return false;
             }

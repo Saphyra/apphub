@@ -1,6 +1,5 @@
 import ConfirmationDialogData from "../../../../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "../../../../../../../common/component/input/Button";
-import Constants from "../../../../../../../common/js/Constants";
 import { copyAndSet, getBrowserLanguage } from "../../../../../../../common/js/Utils";
 import Stream from "../../../../../../../common/js/collection/Stream";
 import getDefaultErrorHandler from "../../../../../../../common/js/dao/DefaultErrorHandler";
@@ -12,10 +11,10 @@ import validateColumnData from "../../../../../common/validator/ColumnDataValida
 import validateListItemTitle from "../../../../../common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "../../../../../common/validator/TableHeadNameValidator";
 
-export const loadTable = (listItemId, setDataFromResponse) => {
+export const loadTable = (listItemId, setDataFromResponse, setDisplaySpinner) => {
     const fetch = async () => {
         const response = await NOTEBOOK_GET_TABLE.createRequest(null, { listItemId: listItemId })
-            .send();
+            .send(setDisplaySpinner);
 
         setDataFromResponse(response);
     }
@@ -58,7 +57,7 @@ export const save = async (
     }
 
     const response = await NOTEBOOK_EDIT_TABLE.createRequest(tablePayload, { listItemId: listItemId })
-        .send();
+        .send(setDisplaySpinner);
 
     if (response.fileUpload.length > 0) {
         uploadFiles(setDisplaySpinner, response.fileUpload, files);
@@ -112,7 +111,7 @@ const doUpload = async (fileUpload, file, setDisplaySpinner) => {
         });
 }
 
-export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHandler, listItemId, setDataFromResponse) => {
+export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHandler, listItemId, setDataFromResponse, setDisplaySpinner) => {
     setConfirmationDialogData(new ConfirmationDialogData(
         "notebook-content-table-delete-checked-confirmation",
         localizationHandler.get("confirm-delete-checked-title"),
@@ -122,7 +121,7 @@ export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHan
                 key="delete"
                 id="notebook-content-table-delete-checked-confirm-button"
                 label={localizationHandler.get("delete-checked")}
-                onclick={() => deleteChecked(listItemId, setDataFromResponse, setConfirmationDialogData)}
+                onclick={() => deleteChecked(listItemId, setDataFromResponse, setConfirmationDialogData, setDisplaySpinner)}
             />,
             <Button
                 key="cancel"
@@ -134,18 +133,18 @@ export const confirmDeleteChcecked = (setConfirmationDialogData, localizationHan
     ));
 }
 
-const deleteChecked = async (listItemId, setDataFromResponse, setConfirmationDialogData) => {
+const deleteChecked = async (listItemId, setDataFromResponse, setConfirmationDialogData, setDisplaySpinner) => {
     const response = await NOTEBOOK_TABLE_DELETE_CHECKED.createRequest(null, { listItemId: listItemId })
-        .send();
+        .send(setDisplaySpinner);
 
     setDataFromResponse(response);
     setConfirmationDialogData(null);
 }
 
-export const updateChecked = (row, rows, setRows, editingEnabled) => {
+export const updateChecked = (row, rows, setRows, editingEnabled, setDisplaySpinner) => {
     if (!editingEnabled) {
         NOTEBOOK_TABLE_SET_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
-            .send();
+            .send(setDisplaySpinner);
     }
 
     copyAndSet(rows, setRows);

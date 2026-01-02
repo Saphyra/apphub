@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.encryption.base.DefaultEncryptor;
 import com.github.saphyra.apphub.lib.encryption.base.EncryptedEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Objects;
 
@@ -16,7 +16,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class DefaultStringEncryptor implements StringEncryptor {
     private final Base64Encoder base64Encoder;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
 
     @Override
     public String encrypt(String entity, String key, String entityId, String column) {
@@ -26,7 +26,7 @@ public class DefaultStringEncryptor implements StringEncryptor {
             .column(column)
             .build();
 
-        String stringified = objectMapperWrapper.writeValueAsString(encryptedEntity);
+        String stringified = objectMapper.writeValueAsString(encryptedEntity);
 
         DefaultEncryptor encryption = new DefaultEncryptor(base64Encoder, key);
         return encryption.encrypt(stringified);
@@ -47,8 +47,7 @@ public class DefaultStringEncryptor implements StringEncryptor {
 
     private String extractEntity(String decrypted, String entityId, String column) {
         try {
-            EncryptedEntity encryptedEntity = objectMapperWrapper.getObjectMapper()
-                .readValue(decrypted, EncryptedEntity.class);
+            EncryptedEntity encryptedEntity = objectMapper.readValue(decrypted, EncryptedEntity.class);
 
             if (!Objects.equals(encryptedEntity.getEntityId(), entityId)) {
                 throw new IllegalStateException("EntityId mismatch");

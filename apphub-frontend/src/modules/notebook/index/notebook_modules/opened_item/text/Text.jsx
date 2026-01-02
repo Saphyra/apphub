@@ -13,7 +13,7 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import useHasFocus from "../../../../../../common/hook/UseHasFocus";
 import { NOTEBOOK_EDIT_TEXT, NOTEBOOK_GET_TEXT } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 
-const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData }) => {
+const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, setDisplaySpinner }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
@@ -31,7 +31,7 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     const loadText = () => {
         const fetch = async () => {
             const response = await NOTEBOOK_GET_TEXT.createRequest(null, { listItemId: openedListItem.id })
-                .send();
+                .send(setDisplaySpinner);
             setTitle(response.title);
             setContent(response.content);
             setParent(response.parent);
@@ -77,8 +77,8 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
             content: content
         }
 
-        const response = await NOTEBOOK_EDIT_TEXT.createRequest(payload, { listItemId: openedListItem.id })
-            .send();
+        await NOTEBOOK_EDIT_TEXT.createRequest(payload, { listItemId: openedListItem.id })
+            .send(setDisplaySpinner);
 
         setEditingEnabled(false);
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED));

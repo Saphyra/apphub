@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
@@ -16,8 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -43,6 +46,9 @@ class CommodityTradingServiceTest {
 
     @Mock
     private OfferDetailsFetcher offerDetailsFetcher;
+
+    @Mock
+    private PerformanceReporter performanceReporter;
 
     @InjectMocks
     private CommodityTradingService underTest;
@@ -85,6 +91,7 @@ class CommodityTradingServiceTest {
         given(commodityDao.findConsumers(COMMODITY, MIN_TRADE_AMOUNT, MIN_PRICE, MAX_PRICE)).willReturn(List.of(commodity));
         given(offerDetailsFetcher.assembleResponses(TradeMode.SELL, starSystem, List.of(commodity), true)).willReturn(List.of(response));
         given(offerFilterService.filterOffers(List.of(response), request)).willReturn(List.of(filteredResponse));
+        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
         assertThat(underTest.getTradeOffers(request)).containsExactly(filteredResponse);
 

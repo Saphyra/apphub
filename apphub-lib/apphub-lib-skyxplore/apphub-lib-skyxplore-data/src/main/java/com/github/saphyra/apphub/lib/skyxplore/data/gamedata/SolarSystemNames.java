@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.lib.skyxplore.data.gamedata;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.Random;
 import com.github.saphyra.apphub.lib.common_util.RomanNumberConverter;
 import com.github.saphyra.apphub.lib.data.ClassPathList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class SolarSystemNames extends ClassPathList<String> {
     private final RomanNumberConverter romanNumberConverter;
     private final Random random;
 
-    public SolarSystemNames(ObjectMapperWrapper objectMapper, RomanNumberConverter romanNumberConverter, Random random) {
+    public SolarSystemNames(ObjectMapper objectMapper, RomanNumberConverter romanNumberConverter, Random random) {
         super(objectMapper, "data/name/solar_system_names.json");
         this.romanNumberConverter = romanNumberConverter;
         this.random = random;

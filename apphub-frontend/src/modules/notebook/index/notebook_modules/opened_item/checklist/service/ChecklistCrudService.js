@@ -6,16 +6,16 @@ import { NOTEBOOK_DELETE_CHECKLIST_ITEM, NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT,
 import MoveDirection from "../../../../../common/MoveDirection";
 import UpdateType from "../../../../../common/checklist_item/UpdateType";
 
-export const updateItem = (item, updateType, editingEnabled, items, setItems) => {
+export const updateItem = (item, updateType, editingEnabled, items, setItems, setDisplaySpinner) => {
     if (!editingEnabled) {
         switch (updateType) {
             case UpdateType.TOGGLE_CHECKED:
                 NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { checklistItemId: item.checklistItemId })
-                    .send();
+                    .send(setDisplaySpinner);
                 break;
             case UpdateType.CONTENT_MODIFIED:
                 NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
-                    .send();
+                    .send(setDisplaySpinner);
                 break;
             default:
                 throwException("IllegalArgument", "Unsupported updateType: " + updateType);
@@ -25,7 +25,7 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems) =>
     copyAndSet(items, setItems);
 }
 
-export const removeItem = async (item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler) => {
+export const removeItem = async (item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler, setDisplaySpinner) => {
     const doRemoveItem = (item) => {
         const copy = new Stream(items)
             .remove(i => i === item)
@@ -45,7 +45,7 @@ export const removeItem = async (item, items, setItems, editingEnabled, setConfi
                     label={localizationHandler.get("delete")}
                     onclick={async () => {
                         await NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
-                            .send();
+                            .send(setDisplaySpinner);
                         setConfirmationDialogData(null);
                         doRemoveItem(item);
                     }}

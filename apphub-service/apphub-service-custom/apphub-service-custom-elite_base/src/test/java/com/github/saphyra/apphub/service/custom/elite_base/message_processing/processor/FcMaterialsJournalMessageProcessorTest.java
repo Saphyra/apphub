@@ -1,19 +1,19 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialJournalItem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialsJournalMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialJournalItem;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_journal.FcMaterialsJournalMessage;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,7 +37,7 @@ class FcMaterialsJournalMessageProcessorTest {
     private static final Integer DEMAND = 67;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private FleetCarrierSaver fleetCarrierSaver;
@@ -77,7 +77,7 @@ class FcMaterialsJournalMessageProcessorTest {
             .build();
 
         given(edMessage.getMessage()).willReturn(MESSAGE);
-        given(objectMapperWrapper.readValue(MESSAGE, FcMaterialsJournalMessage.class)).willReturn(fcMaterialsJournalMessage);
+        given(objectMapper.readValue(MESSAGE, FcMaterialsJournalMessage.class)).willReturn(fcMaterialsJournalMessage);
         given(fleetCarrierSaver.save(TIMESTAMP, CARRIER_ID, CARRIER_NAME, MARKET_ID)).willReturn(fleetCarrier);
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
 

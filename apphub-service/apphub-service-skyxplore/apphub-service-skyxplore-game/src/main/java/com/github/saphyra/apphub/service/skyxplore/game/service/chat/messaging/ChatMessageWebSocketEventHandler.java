@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.chat.messaging;
 
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
@@ -14,6 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.ws.main.handler.WebSocke
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @Slf4j
 class ChatMessageWebSocketEventHandler implements WebSocketEventHandler {
     private final GameDao gameDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final CharacterProxy characterProxy;
     private final ChatRoomMemberFilter chatRoomMemberFilter;
 
@@ -34,7 +34,7 @@ class ChatMessageWebSocketEventHandler implements WebSocketEventHandler {
 
     @Override
     public void handle(UUID from, WebSocketEvent event, SkyXploreGameMainWebSocketHandler webSocketHandler) {
-        IncomingChatMessage incomingChatMessage = objectMapperWrapper.convertValue(event.getPayload(), IncomingChatMessage.class);
+        IncomingChatMessage incomingChatMessage = objectMapper.convertValue(event.getPayload(), IncomingChatMessage.class);
         log.info("{} sent a message to room {}", from, incomingChatMessage.getRoom());
 
         ValidationUtil.maxLength(incomingChatMessage.getMessage(), GameConstants.MAXIMUM_CHAT_MESSAGE_LENGTH, "message");

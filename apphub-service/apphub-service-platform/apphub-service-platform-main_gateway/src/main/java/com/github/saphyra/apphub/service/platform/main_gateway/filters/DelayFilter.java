@@ -39,9 +39,9 @@ class DelayFilter implements GlobalFilter, Ordered {
 
             log.info("{} - {} is delayed for {} ms", exchange.getRequest().getMethod(), exchange.getRequest().getURI(), delayMillis);
 
-            return chain.filter(exchange)
+            return Mono.just("a")
                 .then(Mono.delay(Duration.ofMillis(delayMillis)))
-                .then();
+                .flatMap(_ -> chain.filter(exchange));
         }
 
         return chain.filter(exchange);

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.api.modules;
 
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
@@ -11,6 +12,7 @@ import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEnd
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 import java.util.function.Predicate;
@@ -50,7 +52,7 @@ public enum ModuleLocation {
     private final Predicate<WebDriver> predicate;
 
     public boolean pageLoaded(WebDriver driver) {
-        return predicate.test(driver);
+        return predicate.test(driver) && !WebElementUtils.isPresent(() -> driver.findElement(By.className("spinner")));
     }
 
     ModuleLocation(String categoryId, String moduleId, String pageUrl, String label) {

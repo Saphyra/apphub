@@ -22,7 +22,8 @@ const CategoryNavigation = ({
     setLastEvent,
     setConfirmationDialogData,
     handleOnDrop = () => { },
-    handleOnDragOver = () => { }
+    handleOnDragOver = () => { },
+    setDisplaySpinner
 }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
@@ -37,7 +38,7 @@ const CategoryNavigation = ({
     const setArchiveStatusSelected = async (status) => {
         for (let index in selectedItems) {
             await NOTEBOOK_ARCHIVE_ITEM.createRequest({ value: status }, { listItemId: selectedItems[index] })
-                .send();
+                .send(setDisplaySpinner);
         }
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_ARCHIVED));
@@ -54,7 +55,7 @@ const CategoryNavigation = ({
     const setPinStatusSelected = async (status) => {
         for (let index in selectedItems) {
             await NOTEBOOK_PIN_LIST_ITEM.createRequest({ value: status }, { listItemId: selectedItems[index] })
-                .send();
+                .send(setDisplaySpinner);
         }
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_PINNED));
@@ -89,7 +90,7 @@ const CategoryNavigation = ({
     const deleteSelected = async () => {
         for (let index in selectedItems) {
             await NOTEBOOK_DELETE_LIST_ITEM.createRequest(null, { listItemId: selectedItems[index] })
-                .send();
+                .send(setDisplaySpinner);
         }
 
 

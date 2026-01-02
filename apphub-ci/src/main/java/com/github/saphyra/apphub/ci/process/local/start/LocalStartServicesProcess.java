@@ -5,11 +5,11 @@ import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.localization.LocalizedText;
 import com.github.saphyra.apphub.ci.menu.ServiceListValidator;
 import com.github.saphyra.apphub.ci.process.ProcessKiller;
-import com.github.saphyra.apphub.ci.utils.ObjectMapperWrapper;
 import com.github.saphyra.apphub.ci.utils.ValidatingInputReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +25,7 @@ public class LocalStartServicesProcess {
     private final ProcessKiller processKiller;
     private final ServiceStarter serviceStarter;
     private final PropertyDao propertyDao;
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final ServiceListValidator serviceListValidator;
 
     public void start() {
@@ -43,7 +43,7 @@ public class LocalStartServicesProcess {
 
         startServices(servicesToStart);
 
-        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapperWrapper.writeValueAsString(servicesToStart));
+        propertyDao.save(PropertyName.LATEST_SERVICES, objectMapper.writeValueAsString(servicesToStart));
     }
 
     public void startLatestServices() {

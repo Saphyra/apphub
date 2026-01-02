@@ -14,7 +14,6 @@ import com.github.saphyra.apphub.integration.core.driver.WebDriverMode;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -69,10 +68,11 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
         driver.close();
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
 
-        SleepUtil.sleep(1000);
-        assertThat(NotebookActions.getCategoryTree(driver).getChildren().get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
-        assertThat(PinActions.getPinnedItems(driver).get(0).getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
-        assertThat(NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE)).isNotEmpty();
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(NotebookActions.getCategoryTree(driver).getChildren().getFirst().getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
+            assertThat(PinActions.getPinnedItems(driver).getFirst().getTitle()).isEqualTo(NEW_CATEGORY_TITLE);
+            assertThat(NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE)).isNotEmpty();
+        });
     }
 
     @Test(groups = {"fe", "notebook", "headed-only"})
@@ -124,7 +124,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
         NotebookUtils.newChecklist(getServerPort(), driver, CHECKLIST_TITLE, List.of(new BiWrapper<>(CONTENT, false)));
 
         NotebookActions.findListItemByTitleValidated(driver, CHECKLIST_TITLE)
-            .open();
+            .open(driver);
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
@@ -132,11 +132,15 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, CHECKLIST_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
-            .open();
+            .open(driver);
 
         ViewChecklistActions.enableEditing(driver);
         ViewChecklistActions.fillTitle(driver, NEW_CHECKLIST_TITLE);
         ViewChecklistActions.saveChanges(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !ViewChecklistActions.isEditingEnabled(driver))
+            .assertTrue("Editing is still enabled");
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         driver.close();
@@ -160,7 +164,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE), Optional::isPresent)
             .orElseThrow(() -> new RuntimeException("Table not found."))
-            .open();
+            .open(driver);
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
@@ -168,7 +172,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TABLE_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
-            .open();
+            .open(driver);
 
         ViewTableActions.enableEditing(driver);
         ViewTableActions.fillTitle(driver, NEW_TABLE_TITLE);
@@ -195,7 +199,7 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
         NotebookUtils.newText(getServerPort(), driver, TEXT_TITLE, CONTENT);
 
         NotebookActions.findListItemByTitleValidated(driver, TEXT_TITLE)
-            .open();
+            .open(driver);
 
         driver.switchTo()
             .newWindow(WindowType.TAB);
@@ -203,11 +207,15 @@ public class AutoRefreshContentTest extends HeadedSeleniumTest {
 
         AwaitilityWrapper.getOptionalWithWait(() -> NotebookActions.findListItemByTitle(driver, TEXT_TITLE))
             .orElseThrow(() -> new RuntimeException("Checklist not found"))
-            .open();
+            .open(driver);
 
         ViewTextActions.enableEditing(driver);
         ViewTextActions.fillTitle(driver, NEW_TEXT_TITLE);
         ViewTextActions.saveChanges(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> !ViewTextActions.isEditingEnabled(driver))
+            .assertTrue("Editing is still enabled.");
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         driver.close();

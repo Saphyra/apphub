@@ -74,16 +74,16 @@ public class CategoryCrudTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.NOTEBOOK_TITLE_MUST_NOT_BE_BLANK);
 
         //Edit
-        EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
         ParentSelectorActions.selectParent(driver, CATEGORY_2_TITLE);
+        EditListItemActions.fillTitle(driver, NEW_CATEGORY_TITLE);
         EditListItemActions.submitForm(driver);
 
         NotebookUtils.waitForNotebookPageOpened(driver);
 
         List<ListItem> listItems = NotebookActions.getListItems(driver);
         assertThat(listItems).hasSize(1);
-        listItems.get(0)
-            .open();
+        listItems.getFirst()
+            .open(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> NotebookActions.findListItemByTitle(driver, NEW_CATEGORY_TITLE).isPresent())
@@ -92,7 +92,7 @@ public class CategoryCrudTest extends SeleniumTest {
         CategoryTreeLeaf leaf = NotebookActions.getCategoryTree(driver);
         assertThat(leaf.getChildren()).extracting(CategoryTreeLeaf::getTitle).containsExactly(CATEGORY_2_TITLE);
         CategoryTreeLeaf child = leaf.getChildren()
-            .get(0);
+            .getFirst();
         child.open();
 
         assertThat(child.getChildren()).hasSize(1)
@@ -139,7 +139,7 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(root.getChildren()).hasSize(1);
 
         CategoryTreeLeaf child = root.getChildren()
-            .get(0);
+            .getFirst();
         assertThat(child.getTitle()).isEqualTo(CATEGORY_1_TITLE);
         assertThat(child.hasChildren()).isTrue();
         assertThat(child.isOpened()).isFalse();
@@ -150,7 +150,7 @@ public class CategoryCrudTest extends SeleniumTest {
         assertThat(child.getChildren()).hasSize(1);
 
         CategoryTreeLeaf grandchild = child.getChildren()
-            .get(0);
+            .getFirst();
         assertThat(grandchild.hasChildren()).isFalse();
 
         //Open categories

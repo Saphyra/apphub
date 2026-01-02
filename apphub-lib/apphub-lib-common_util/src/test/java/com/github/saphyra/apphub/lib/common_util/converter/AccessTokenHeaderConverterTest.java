@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.lib.common_util.converter;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -21,7 +21,7 @@ public class AccessTokenHeaderConverterTest {
     private Base64Encoder base64Encoder;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private AccessTokenHeaderConverter underTest;
@@ -32,7 +32,7 @@ public class AccessTokenHeaderConverterTest {
     @Test
     public void convert() {
         given(base64Encoder.decode(INPUT)).willReturn(DECODED);
-        given(objectMapperWrapper.readValue(DECODED, AccessTokenHeader.class)).willReturn(accessTokenHeader);
+        given(objectMapper.readValue(DECODED, AccessTokenHeader.class)).willReturn(accessTokenHeader);
 
         AccessTokenHeader result = underTest.convert(INPUT);
 

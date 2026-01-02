@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -28,8 +29,10 @@ public class CharacterCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
-        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("New character");
-        assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("New character");
+            assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData1.getUsername());
+        });
 
         SkyXploreCharacterActions.fillCharacterName(driver, "aa");
         SkyXploreCharacterActions.verifyInvalidCharacterName(driver, "Character name too short. (Minimum 3 characters)");
@@ -52,6 +55,10 @@ public class CharacterCrudTest extends SeleniumTest {
 
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 
+        AwaitilityWrapper.createDefault()
+            .until(() -> !SkyXploreCharacterActions.getCharacterName(driver).isEmpty())
+            .assertTrue("Character name is not loaded.");
+
         SkyXploreCharacterActions.fillCharacterName(driver, userData1.getUsername());
         SkyXploreCharacterActions.submitForm(driver);
 
@@ -64,8 +71,10 @@ public class CharacterCrudTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.editCharacter(driver);
 
-        assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Edit character");
-        assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData2.getUsername());
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(SkyXploreCharacterActions.getBoxTitle(driver)).isEqualTo("Edit character");
+            assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(userData2.getUsername());
+        });
 
         String newCharacterName = RegistrationParameters.validParameters()
             .getUsername();
@@ -75,6 +84,7 @@ public class CharacterCrudTest extends SeleniumTest {
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.SKYXPLORE_CHARACTER_SAVED);
 
         SkyXploreMainMenuActions.editCharacter(driver);
-        assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName);
+
+        AwaitilityWrapper.awaitAssert(() -> assertThat(SkyXploreCharacterActions.getCharacterName(driver)).isEqualTo(newCharacterName));
     }
 }

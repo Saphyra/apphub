@@ -61,7 +61,7 @@ class TickScheduler implements Runnable {
                 () -> context.getTickTasks()
                     .stream()
                     .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
-                    .forEach(tickTask -> tickTask.process(game)));
+                    .forEach(this::processTickTask));
 
         return game.getEventLoop()
             .processWithResponse(() -> {
@@ -71,5 +71,14 @@ class TickScheduler implements Runnable {
                 log.info("Tick finished for game {} in {} ms", game.getGameId(), processingTime);
                 return processingTime;
             });
+    }
+
+    private void processTickTask(TickTask tickTask) {
+        try {
+            tickTask.process(game);
+        } catch (Exception e) {
+            context.getErrorReporterService()
+                .report("Failed processing tick task " + tickTask.getClass().getSimpleName() + " for game " + game.getGameId(), e);
+        }
     }
 }

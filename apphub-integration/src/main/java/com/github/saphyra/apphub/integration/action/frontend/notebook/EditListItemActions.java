@@ -12,6 +12,8 @@ public class EditListItemActions {
     public static void submitForm(WebDriver driver) {
         driver.findElement(By.id("notebook-edit-save-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void fillValue(WebDriver driver, String value) {

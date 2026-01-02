@@ -68,7 +68,7 @@ game:
       FIELD: 3
       CONCRETE: 1
   citizen:
-    workPointsPerTick: 100
+    workPointsPerTick: 50
     maxWorkPointsBatch: 1000
     morale:
       workEfficiencyDropUnder: 5000

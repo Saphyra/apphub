@@ -17,6 +17,8 @@ public class CalendarIndexPageActions {
     public static void openCreateEventPage(WebDriver driver) {
         driver.findElement(By.id("calendar-selected-date-create-new"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void filterByLabel(WebDriver driver, String label) {
@@ -64,7 +66,7 @@ public class CalendarIndexPageActions {
     }
 
     public static String getOpenedOccurrenceTitle(WebDriver driver) {
-        return driver.findElement(By.cssSelector("#calendar-selected-occurrence .confirmation-dialog-title"))
+        return driver.findElement(By.id("calendar-selected-occurrence-title"))
             .getText();
     }
 
@@ -114,6 +116,8 @@ public class CalendarIndexPageActions {
     }
 
     public static void setView(WebDriver driver, CalendarView view) {
+        WebElementUtils.waitForSpinnerToDisappear(driver);
+
         WebElementUtils.selectOptionByValue(driver.findElement(By.id("calendar-view-selector")), view.name());
     }
 
@@ -125,8 +129,12 @@ public class CalendarIndexPageActions {
     }
 
     public static void toLabelsPage(WebDriver driver) {
+        WebElementUtils.waitForSpinnerToDisappear(driver);
+
         driver.findElement(By.id("modify-labels-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static void editEvent(WebDriver driver) {

@@ -62,7 +62,7 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
         try {
             userId = getUserId(session.getPrincipal());
             String payload = message.getPayload();
-            event = context.getObjectMapperWrapper().readValue(payload, WebSocketEvent.class);
+            event = context.getObjectMapper().readValue(payload, WebSocketEvent.class);
             Optional.ofNullable(sessions.get(session.getId()))
                 .ifPresent(sessionWrapper -> sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime()));
             handleMessage(userId, event, session.getId());
@@ -164,7 +164,7 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     protected void sendEventToSession(WebSocketSessionWrapper sessionWrapper, WebSocketEvent event) {
         WebSocketSession session = sessionWrapper.getSession();
         try {
-            TextMessage textMessage = new TextMessage(context.getObjectMapperWrapper().writeValueAsString(event));
+            TextMessage textMessage = new TextMessage(context.getObjectMapper().writeValueAsString(event));
             synchronized (session) {
                 if (session.isOpen()) {
                     session.sendMessage(textMessage);
@@ -172,7 +172,6 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
             }
             sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime());
         } catch (Exception e) {
-            log.error("Failed to send {} event to {} in messageGroup {}", event.getEventName(), session.getPrincipal().getName(), getEndpoint(), e);
             context.getErrorReporterService()
                 .report(String.format("Failed to send %s event to %s in messageGroup %s", event.getEventName(), session.getPrincipal().getName(), getEndpoint()), e);
             afterConnectionClosed(session, null);

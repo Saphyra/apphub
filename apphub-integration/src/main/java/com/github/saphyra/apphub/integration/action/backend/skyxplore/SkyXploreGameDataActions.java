@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.integration.action.backend.skyxplore;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import io.restassured.response.Response;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.Arrays;
 import java.util.List;

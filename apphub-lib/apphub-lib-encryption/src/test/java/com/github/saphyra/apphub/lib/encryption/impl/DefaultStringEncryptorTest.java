@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.encryption.impl;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.encryption.base.DefaultEncryptor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +25,7 @@ public class DefaultStringEncryptorTest {
     private final Base64Encoder base64Encoder = new Base64Encoder();
 
     @Spy
-    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @InjectMocks
     private DefaultStringEncryptor underTest;

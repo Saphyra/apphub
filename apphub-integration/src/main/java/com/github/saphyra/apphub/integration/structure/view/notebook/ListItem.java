@@ -91,13 +91,12 @@ public class ListItem {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().startsWith(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_LIST_ITEM_PAGE)))
             .assertTrue("Edit ListItem page is not opened");
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
-    public void open() {
-        open(() -> {
-            SleepUtil.sleep(1000);
-            return true;
-        });
+    public void open(WebDriver driver) {
+        open(() -> WebElementUtils.waitForSpinnerToDisappear(driver));
     }
 
     public void open(Callable<Boolean> verify) {
@@ -145,11 +144,11 @@ public class ListItem {
 
     }
 
-    public void cloneListItem() {
+    public void cloneListItem(WebDriver driver) {
         webElement.findElement(By.cssSelector(":scope .notebook-content-category-content-list-item-clone-button"))
             .click();
 
-        SleepUtil.sleep(1000);
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public boolean isSelected() {
@@ -157,7 +156,7 @@ public class ListItem {
             .isSelected();
     }
 
-    public void toggleSelect(){
+    public void toggleSelect() {
         webElement.findElement(By.className("notebook-content-category-content-list-item-selected"))
             .click();
     }

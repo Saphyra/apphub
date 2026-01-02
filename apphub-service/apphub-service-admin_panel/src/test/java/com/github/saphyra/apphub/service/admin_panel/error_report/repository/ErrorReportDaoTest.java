@@ -24,6 +24,7 @@ import static org.mockito.Mockito.verify;
 public class ErrorReportDaoTest {
     private static final UUID ID = UUID.randomUUID();
     private static final String ID_STRING = "id";
+    private static final Long COUNT = 32L;
 
     @Mock
     private ErrorReportConverter converter;
@@ -107,5 +108,12 @@ public class ErrorReportDaoTest {
         underTest.deleteAllExceptStatus(List.of(ErrorReportStatus.UNREAD));
 
         then(repository).should().deleteByStatusNotIn(List.of(ErrorReportStatus.UNREAD.name()));
+    }
+
+    @Test
+    void count() {
+        given(repository.count()).willReturn(COUNT);
+
+        assertThat(underTest.count()).isEqualTo(COUNT);
     }
 }

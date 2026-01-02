@@ -1,4 +1,3 @@
-import React from "react";
 import OpenedPageType from "../../common/OpenedPageType";
 import Category from "./opened_item/category/Category";
 import Text from "./opened_item/text/Text";
@@ -36,6 +35,7 @@ const OpenedListItem = ({
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.CATEGORY:
                 return <Category
@@ -47,6 +47,7 @@ const OpenedListItem = ({
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.TEXT:
                 return <Text
@@ -55,6 +56,7 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.CHECKLIST:
                 return <Checklist
@@ -63,6 +65,7 @@ const OpenedListItem = ({
                     setOpenedListItem={setOpenedListItem}
                     setLastEvent={setLastEvent}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.TABLE:
                 return <Table
@@ -72,6 +75,7 @@ const OpenedListItem = ({
                     setLastEvent={setLastEvent}
                     checklist={false}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.CHECKLIST_TABLE:
                 return <Table
@@ -81,18 +85,21 @@ const OpenedListItem = ({
                     setLastEvent={setLastEvent}
                     checklist={true}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.IMAGE:
                 return <Image
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.FILE:
                 return <File
                     localizationHandler={localizationHandler}
                     openedListItem={openedListItem}
                     setOpenedListItem={setOpenedListItem}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             case OpenedPageType.CUSTOM_TABLE:
                 return <Table
@@ -113,6 +120,7 @@ const OpenedListItem = ({
                     setLastEvent={setLastEvent}
                     setConfirmationDialogData={setConfirmationDialogData}
                     lastEvent={lastEvent}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             default:
                 throwException("IllegalArgument", "Unhandled ListItemType in OpenedListItem: " + openedListItem.type);

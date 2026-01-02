@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Footer from "../../../common/component/Footer";
 import { ToastContainer } from "react-toastify";
 import localizationData from "./localization/calendar_page_localization.json";
@@ -8,21 +8,19 @@ import Constants from "../../../common/js/Constants";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
 import { MONTH, View } from "./common/View";
-import ViewSelector from "./component/ViewSelector";
+import ViewSelector from "./component/navigation/ViewSelector";
 import LocalDate from "../../../common/js/date/LocalDate";
-import ReferenceDateSelector from "./component/ReferenceDateSelector";
-import SelectedDateDispalyer from "./component/SelectedDateDisplayer";
+import ReferenceDateSelector from "./component/navigation/ReferenceDateSelector";
 import "./calendar.css";
-import Labels from "./component/Labels";
 import CalendarContent from "./component/content/CalendarContent";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
-import SelectedOccurrence from "./component/SelectedOccurrence";
+import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
 import useRefresh from "../../../common/hook/Refresh";
-import SelectedDate from "./component/SelectedDate";
 import useHasFocus from "../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
+import RightPanel from "./component/right_panel/RightPanel";
+import Labels from "./component/navigation/Labels";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
@@ -38,7 +36,7 @@ const CalendarPage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
     const [viewName, setViewName] = useState(cachedOrDefault(CACHE_KEY_VIEW, MONTH));
     const [referenceDate, setReferenceDate] = useState(cachedOrDefault(CACHE_KEY_REFERENCE_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
@@ -51,12 +49,19 @@ const CalendarPage = () => {
     useUpdateEffect(() => {
         if (isInFocus) {
             refresh();
-            if (!currentDate.equals(LocalDate.now())) {
-                setCurrentDate(LocalDate.now());
-                setReferenceDate(LocalDate.now());
+
+            const now = LocalDate.now();
+            if (!currentDate.equals(now)) {
+                setCurrentDate(now);
+                setReferenceDate(now);
+                setSelectedDate(now);
             }
         }
     }, [isInFocus]);
+
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
+    }
 
     return (
         <div id="calendar" className="main-page">
@@ -74,10 +79,9 @@ const CalendarPage = () => {
                             view={View[viewName]}
                         />
 
-                        <SelectedDateDispalyer
-                            referenceDate={referenceDate}
-                            view={View[viewName]}
-                        />
+                        <div id="calendar-navigation-selected-date" className="nowrap">
+                            {View[viewName].format(referenceDate)}
+                        </div>
                     </div>
 
                     <Labels
@@ -88,7 +92,7 @@ const CalendarPage = () => {
                     <CalendarContent
                         view={View[viewName]}
                         activeLabel={activeLabel}
-                        setDisplaySpinner={setDisplaySpinner}
+                        setDisplaySpinner={updateDisplaySpinner}
                         referenceDate={referenceDate}
                         selectedDate={selectedDate}
                         setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
@@ -97,12 +101,16 @@ const CalendarPage = () => {
                     />
                 </div>
 
-                <SelectedDate
+                <RightPanel
                     selectedDate={selectedDate}
                     activeLabel={activeLabel}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
+                    selectedOccurrence={selectedOccurrence}
                     setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
                     refreshCounter={refreshCounter}
+                    refresh={refresh}
+                    setConfirmationDialogData={setConfirmationDialogData}
+                    localizationHandler={localizationHandler}
                 />
             </main>
 
@@ -117,17 +125,6 @@ const CalendarPage = () => {
 
             <ToastContainer />
 
-            {selectedOccurrence &&
-                <SelectedOccurrence
-                    occurrenceId={selectedOccurrence}
-                    setDisplaySpinner={setDisplaySpinner}
-                    localizationHandler={localizationHandler}
-                    setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
-                    refresh={refresh}
-                    setConfirmationDialogData={setConfirmationDialogData}
-                />
-            }
-
             {confirmationDialogData &&
                 <ConfirmationDialog
                     id={confirmationDialogData.id}
@@ -137,7 +134,7 @@ const CalendarPage = () => {
                 />
             }
 
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
         </div>
     );
 }

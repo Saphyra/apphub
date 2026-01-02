@@ -64,12 +64,6 @@
             <artifactId>apphub-api-platform-web_content-client</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-config-whitelist</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

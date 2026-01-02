@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.notebook.ListItem;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -110,9 +109,13 @@ public class SearchListItemTest extends SeleniumTest {
     private void search(WebDriver driver, String searchText, String resultTitle, ListItemType resultType) {
         NotebookActions.search(driver, searchText);
 
-        List<ListItem> listItems = NotebookActions.getListItems(driver);
-        assertThat(listItems).hasSize(1);
-        assertThat(listItems.get(0).getTitle()).isEqualTo(resultTitle);
-        assertThat(listItems.get(0).getType()).isEqualTo(resultType);
+        AwaitilityWrapper.awaitAssert(
+            () -> NotebookActions.getListItems(driver),
+            listItems -> {
+                assertThat(listItems).hasSize(1);
+                assertThat(listItems.getFirst().getTitle()).isEqualTo(resultTitle);
+                assertThat(listItems.getFirst().getType()).isEqualTo(resultType);
+            }
+        );
     }
 }

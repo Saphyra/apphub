@@ -57,7 +57,6 @@ public class SendEventTask implements Runnable {
         try {
             localEventProcessor.process(sendEventRequest);
         } catch (Exception e) {
-            log.error("Failed processing event {} with localProcessor {}", sendEventRequest.getEventName(), localEventProcessor, e);
             errorReporterService.report(String.format("Failed processing event %s with localProcessor %s", sendEventRequest.getEventName(), localEventProcessor), e);
         }
     }

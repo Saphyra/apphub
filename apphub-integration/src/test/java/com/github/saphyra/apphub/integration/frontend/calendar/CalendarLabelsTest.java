@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -115,12 +116,14 @@ public class CalendarLabelsTest extends SeleniumTest {
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 
         //Event without label
+        WebElementUtils.waitForSpinnerToDisappear(driver);
+
         CalendarIndexPageActions.openCreateEventPage(driver);
-        CreateEventParameters withoutLabelParamters = CreateEventParameters.valid(RepetitionType.EVERY_X_DAYS)
+        CreateEventParameters withoutLabelParameters = CreateEventParameters.valid(RepetitionType.EVERY_X_DAYS)
             .toBuilder()
             .title(NEW_TITLE)
             .build();
-        CalendarEventPageActions.fillForm(driver, withoutLabelParamters);
+        CalendarEventPageActions.fillForm(driver, withoutLabelParameters);
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
 

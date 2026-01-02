@@ -29,6 +29,10 @@ const Stream = class {
         return this.items.some(predicate);
     }
 
+    count() {
+        return this.items.length;
+    }
+
     filter(predicate) {
         const result = [];
 

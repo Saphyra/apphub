@@ -4,9 +4,16 @@
     padding: 0;
 }
 
-#duration-choices {
-    text-align: center;
+#memory-monitoring-header {
+    display: flex;
+    justify-content: space-evenly;
     border-bottom: 2px ridge white;
+    position: sticky;
+    top: 0;
+    background-color: black;
+}
+
+#duration-choices {
 }
 
 .duration-choice.active {
@@ -19,6 +26,9 @@
 
 #memory-monitoring-switches {
     text-align: center;
+    position: sticky;
+    top: 39px;
+    background-color: black;
 }
 
 .memory-monitoring-switch {}

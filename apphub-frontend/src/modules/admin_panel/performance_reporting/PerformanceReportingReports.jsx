@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MapStream from "../../../common/js/collection/MapStream";
 import Stream from "../../../common/js/collection/Stream";
-import { formatDuration } from "../../../common/js/Utils";
+import { addAndSet, formatDuration, removeAndSet } from "../../../common/js/Utils";
 import Button from "../../../common/component/input/Button";
 import { ADMIN_PANEL_PERFORMANCE_REPORTING_DELETE_REPORTS } from "../../../common/js/dao/endpoints/AdminPanelEndpoints";
 import InputField from "../../../common/component/input/InputField";
@@ -30,6 +30,7 @@ DIRECTION[DESCENDING] = value => -1 * value;
 const PerformanceReportingReports = ({ reports, localizationHandler, loadReports }) => {
     const getContent = () => {
         return new MapStream(reports)
+            .sorted((a, b) => a.key.localeCompare(b.key))
             .toList((topic, topicReports) => <TopicReports
                 key={topic}
                 topic={topic}
@@ -50,6 +51,7 @@ const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
     const [searchText, setSearchText] = useState("");
     const [orderBy, setOrderBy] = useState(KEY);
     const [direction, setDirection] = useState(ASCENDING);
+    const [hiddenKeys, setHiddenKeys] = useState([]);
 
     return (
         <fieldset className={"performance-reporting-reports-topic " + topic}>
@@ -83,6 +85,14 @@ const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
                     options={getDirectionOptions()}
                     onchangeCallback={setDirection}
                 />
+
+                {hiddenKeys.length > 0 &&
+                    <span>
+                        <span>{localizationHandler.get("hidden")}</span>
+                        <span>: </span>
+                        <span>{getHiddenKeys()}</span>
+                    </span>
+                }
             </legend>
 
             <div className="performance-reproting-reports-topic-reports">
@@ -109,10 +119,24 @@ const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
         return new Stream(reports)
             .sorted((a, b) => DIRECTION[direction](ORDER_BY[orderBy](a, b)))
             .filter(report => report.key.toLowerCase().indexOf(searchText.toLowerCase()) > -1)
+            .filter(report => !hiddenKeys.includes(report.key))
             .map(report => <TopicReportItem
                 key={report.key}
                 report={report}
                 localizationHandler={localizationHandler}
+                hide={(key) => addAndSet(hiddenKeys, key, setHiddenKeys)}
+            />)
+            .toList();
+    }
+
+    function getHiddenKeys() {
+        return new Stream(hiddenKeys)
+            .sorted((a, b) => a.localeCompare(b))
+            .map(key => <Button
+                key={key}
+                className="performance-reproting-reports-topic-reports-show-button"
+                label={key}
+                onclick={() => removeAndSet(hiddenKeys, k => k == key, setHiddenKeys)}
             />)
             .toList();
     }
@@ -125,13 +149,18 @@ const TopicReports = ({ topic, reports, localizationHandler, loadReports }) => {
     }
 }
 
-const TopicReportItem = ({ report, localizationHandler }) => {
+const TopicReportItem = ({ report, localizationHandler, hide }) => {
     return (
         <div>
             <table className="formatted-table">
                 <thead>
                     <tr>
-                        <td colSpan={2}>{report.key}</td>
+                        <td>{report.key}</td>
+                        <td className="centered">{<Button
+                            className="performance-reproting-reports-topic-reports-item-hide-button"
+                            label={localizationHandler.get("hide")}
+                            onclick={() => hide(report.key)}
+                        />}</td>
                     </tr>
                 </thead>
                 <tbody>

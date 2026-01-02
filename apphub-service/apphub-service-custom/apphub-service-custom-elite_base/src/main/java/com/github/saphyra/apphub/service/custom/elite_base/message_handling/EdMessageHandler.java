@@ -65,7 +65,6 @@ public class EdMessageHandler implements MessageHandler {
             log.warn(e.getMessage());
         } catch (Exception e) {
             errorReporterService.report("Failed processing message", e);
-            log.error("Failed processing message", e);
         }
     }
 

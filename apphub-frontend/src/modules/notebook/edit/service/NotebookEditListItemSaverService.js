@@ -5,7 +5,7 @@ import OpenedPageType from "../../common/OpenedPageType";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateUrl from "../../common/validator/UrlValidator";
 
-const save = async (listItemTitle, listItemType, value, parent, listItemId) => {
+const save = async (listItemTitle, listItemType, value, parent, listItemId, setDisplaySpinner) => {
     const listItemTitleResult = validateListItemTitle(listItemTitle);
     if (!listItemTitleResult.valid) {
         NotificationService.showError(listItemTitleResult.message);
@@ -27,7 +27,7 @@ const save = async (listItemTitle, listItemType, value, parent, listItemId) => {
     }
 
     await NOTEBOOK_EDIT_LIST_ITEM.createRequest(payload, { listItemId: listItemId })
-        .send();
+        .send(setDisplaySpinner);
 
     window.location.href = Constants.NOTEBOOK_PAGE;
 }

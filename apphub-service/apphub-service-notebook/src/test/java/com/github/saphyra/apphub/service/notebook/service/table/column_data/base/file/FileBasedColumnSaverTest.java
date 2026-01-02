@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
 import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeFactory;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -45,7 +45,7 @@ class FileBasedColumnSaverTest {
     private ColumnTypeDao columnTypeDao;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private FileSaver fileSaver;
@@ -75,7 +75,7 @@ class FileBasedColumnSaverTest {
         given(column.getDimensionId()).willReturn(COLUMN_ID);
         given(columnTypeFactory.create(COLUMN_ID, USER_ID, ColumnType.FILE)).willReturn(columnTypeDto);
         given(model.getData()).willReturn(DATA);
-        given(objectMapperWrapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
+        given(objectMapper.convertValue(DATA, FileMetadata.class)).willReturn(fileMetadata);
         given(fileSaver.saveFile(USER_ID, ROW_ID, model, column, fileMetadata)).willReturn(Optional.of(fileUpload));
 
         assertThat(underTest.save(USER_ID, ROW_ID, model, ColumnType.FILE)).contains(fileUpload);

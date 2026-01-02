@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.integration.core.testng.SkipDisabledTestsInterc
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.ObjectMapperWrapper;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
@@ -22,6 +21,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Listeners;
+import tools.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
 import java.nio.file.Files;
@@ -43,7 +43,7 @@ import static java.util.Objects.isNull;
 @Listeners({SkipDisabledTestsInterceptor.class, MethodCollectorSuiteListener.class, RetryAnalyzerAnnotatorSuiteListener.class})
 public abstract class TestBase {
     public static final ExecutorServiceBean EXECUTOR_SERVICE = new ExecutorServiceBean(Executors.newCachedThreadPool());
-    public static final ObjectMapperWrapper OBJECT_MAPPER_WRAPPER = new ObjectMapperWrapper();
+    public static final ObjectMapper OBJECT_MAPPER_WRAPPER = new ObjectMapper();
 
     private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS, true);
 
@@ -78,6 +78,7 @@ public abstract class TestBase {
         log.info("Namespace name: {}", TestConfiguration.NAMESPACE_NAME);
         log.info("Browser startup limit: {}", TestConfiguration.BROWSER_STARTUP_LIMIT);
         log.info("Retry enabled: {}", TestConfiguration.RETRY_ENABLED);
+        log.info("Retry count: {}", TestConfiguration.MAX_RETRY_COUNT);
 
         IntegrationServer.start();
 
@@ -181,7 +182,7 @@ public abstract class TestBase {
         String fileName = directory + "/exception.json";
         log.debug("Exception fileName: {}", fileName);
 
-        String exception = isNull(throwable) ? "null" : OBJECT_MAPPER_WRAPPER.writeValueAsPrettyString(ExceptionConverter.map(throwable));
+        String exception = isNull(throwable) ? "null" : OBJECT_MAPPER_WRAPPER.writeValueAsString(ExceptionConverter.map(throwable));
 
         Path filePath = Paths.get(fileName);
         Path dirPath = Paths.get(directory);
@@ -197,7 +198,7 @@ public abstract class TestBase {
         String[] split = className.split("\\.");
         String clazz = split[split.length - 1];
 
-        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_hh_mm_ss")) + "/" + getTestType() + "/" + clazz + "_" + method + "_" + className.hashCode();
+        return "error_report/" + TEST_START_TIME.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss")) + "/" + getTestType() + "/" + clazz + "_" + method + "_" + className.hashCode();
     }
 
     protected abstract String getTestType();

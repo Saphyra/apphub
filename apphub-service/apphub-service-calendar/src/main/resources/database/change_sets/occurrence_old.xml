@@ -61,4 +61,12 @@
 
         <renameTable schemaName="calendar" oldTableName="occurrence" newTableName="occurrence_old"/>
     </changeSet>
+
+    <changeSet id="drop-table-occurrence_old" author="saphyra">
+        <preConditions>
+            <tableExists schemaName="calendar" tableName="occurrence_old"/>
+        </preConditions>
+
+        <dropTable schemaName="calendar" tableName="occurrence_old"/>
+    </changeSet>
 </databaseChangeLog>

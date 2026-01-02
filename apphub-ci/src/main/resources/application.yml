@@ -72,10 +72,13 @@ defaults:
   localRunTestsThreadCount: 20
   remoteTestsThreadCount: 6
   localServiceStartupCountLimit: 5
+  remoteServiceStartupCountLimit: 5
   localRunTestsPreCreateDriverCount: 0
   remoteRunTestsPreCreateDriverCount: 0
   bashFileLocation: bash
   browserStartupLimit: 3
+  guiEnabled: true
+  integrationRetryCount: 2
 
 services:
 #Crutial platform

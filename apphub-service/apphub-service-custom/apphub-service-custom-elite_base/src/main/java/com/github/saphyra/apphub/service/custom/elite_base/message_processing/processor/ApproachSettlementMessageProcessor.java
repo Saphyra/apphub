@@ -1,22 +1,22 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.approach_settlement.ApproachSettlementMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.BodySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.MinorFactionSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.SettlementSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StationSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.approach_settlement.ApproachSettlementMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.Optional;
 
@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 class ApproachSettlementMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
     private final BodySaver bodySaver;
     private final MinorFactionSaver minorFactionSaver;
@@ -40,7 +40,7 @@ class ApproachSettlementMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        ApproachSettlementMessage approachSettlementMessage = objectMapperWrapper.readValue(message.getMessage(), ApproachSettlementMessage.class);
+        ApproachSettlementMessage approachSettlementMessage = objectMapper.readValue(message.getMessage(), ApproachSettlementMessage.class);
 
         StarSystem starSystem = starSystemSaver.save(
             approachSettlementMessage.getTimestamp(),

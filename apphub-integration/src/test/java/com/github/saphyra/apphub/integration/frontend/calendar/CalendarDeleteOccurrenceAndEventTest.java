@@ -43,7 +43,8 @@ public class CalendarDeleteOccurrenceAndEventTest extends SeleniumTest {
         });
 
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate().plusDays(CreateEventParameters.DEFAULT_REPETITION_DATA_EVERY_X_DAYS), event.getTitle())
-            .open();
+            .open(driver);
+
         CalendarIndexPageActions.deleteOccurrence(driver);
         AwaitilityWrapper.awaitAssert(() -> {
             assertThat(CalendarIndexPageActions.getOccurrencesOnDate(driver, event.getStartDate())).isNotEmpty();
@@ -52,7 +53,7 @@ public class CalendarDeleteOccurrenceAndEventTest extends SeleniumTest {
         });
 
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle())
-            .open();
+            .open(driver);
         CalendarIndexPageActions.deleteEvent(driver);
         AwaitilityWrapper.awaitAssert(() -> {
             assertThat(CalendarIndexPageActions.getOccurrencesOnDate(driver, event.getStartDate())).isEmpty();

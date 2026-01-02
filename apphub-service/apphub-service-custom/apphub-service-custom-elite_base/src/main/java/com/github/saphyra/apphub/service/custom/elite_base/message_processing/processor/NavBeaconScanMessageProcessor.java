@@ -1,18 +1,18 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.nav_beacon_scan.NavBeaconScanMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.nav_beacon_scan.NavBeaconScanMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class NavBeaconScanMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
 
     @Override
@@ -22,7 +22,7 @@ class NavBeaconScanMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        NavBeaconScanMessage navBeaconScanMessage = objectMapperWrapper.readValue(message.getMessage(), NavBeaconScanMessage.class);
+        NavBeaconScanMessage navBeaconScanMessage = objectMapper.readValue(message.getMessage(), NavBeaconScanMessage.class);
 
         starSystemSaver.save(
             navBeaconScanMessage.getTimestamp(),

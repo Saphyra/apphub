@@ -40,6 +40,10 @@ public class ViewTextActions {
             .click();
     }
 
+    public static boolean isEditingEnabled(WebDriver driver) {
+        return driver.findElement(By.id("notebook-content-text-content")).isEnabled();
+    }
+
     public static void setContent(WebDriver driver, String content) {
         WebElementUtils.clearAndFill(getContentInput(driver), content);
     }

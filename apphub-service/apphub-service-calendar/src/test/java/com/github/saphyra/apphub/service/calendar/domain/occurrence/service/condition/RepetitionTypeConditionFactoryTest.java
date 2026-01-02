@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.service.condition;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -13,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class RepetitionTypeConditionFactoryTest {
-    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
     void oneTime() {
@@ -32,7 +31,7 @@ class RepetitionTypeConditionFactoryTest {
 
     @Test
     void daysOfWeek() {
-        RepetitionTypeConditionFactory underTest = new RepetitionTypeConditionFactory.DaysOfWeekRepetitionTypeConditionFactory(objectMapperWrapper);
+        RepetitionTypeConditionFactory underTest = new RepetitionTypeConditionFactory.DaysOfWeekRepetitionTypeConditionFactory(objectMapper);
 
         assertThat(underTest.create("[\"MONDAY\"]")).isInstanceOf(DaysOfWeekCondition.class);
         assertThat(underTest.create(List.of(DayOfWeek.MONDAY))).isInstanceOf(DaysOfWeekCondition.class);
@@ -40,7 +39,7 @@ class RepetitionTypeConditionFactoryTest {
 
     @Test
     void daysOfMonth() {
-        RepetitionTypeConditionFactory underTest = new RepetitionTypeConditionFactory.DaysOfMonthRepetitionTypeConditionFactory(objectMapperWrapper);
+        RepetitionTypeConditionFactory underTest = new RepetitionTypeConditionFactory.DaysOfMonthRepetitionTypeConditionFactory(objectMapper);
 
         assertThat(underTest.create("[1,2,3]")).isInstanceOf(DaysOfMonthCondition.class);
         assertThat(underTest.create(List.of(1, 2, 3))).isInstanceOf(DaysOfMonthCondition.class);

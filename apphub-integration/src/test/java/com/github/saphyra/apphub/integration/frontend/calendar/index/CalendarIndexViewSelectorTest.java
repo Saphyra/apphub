@@ -29,6 +29,9 @@ public class CalendarIndexViewSelectorTest extends SeleniumTest {
         CalendarIndexPageActions.setView(driver, CalendarView.SURROUNDING_WEEKS);
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getDays(driver)).hasSize(21));
 
+        CalendarIndexPageActions.setView(driver, CalendarView.FOLLOWING_WEEKS);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getDays(driver)).hasSize(35));
+
         CalendarIndexPageActions.setView(driver, CalendarView.MONTH);
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getDays(driver).size()).isGreaterThanOrEqualTo(28));
     }

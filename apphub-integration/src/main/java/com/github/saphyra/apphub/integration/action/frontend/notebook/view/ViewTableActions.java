@@ -28,6 +28,8 @@ public class ViewTableActions {
     public static void saveChanges(WebDriver driver) {
         driver.findElement(By.id("notebook-content-table-save-button"))
             .click();
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     public static List<TableHead> getTableHeads(WebDriver driver) {

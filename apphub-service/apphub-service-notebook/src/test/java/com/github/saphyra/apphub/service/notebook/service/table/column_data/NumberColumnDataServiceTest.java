@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Number;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.UUID;
 
@@ -27,7 +27,7 @@ class NumberColumnDataServiceTest {
     private ContentDao contentDao;
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @InjectMocks
     private NumberColumnDataService underTest;
@@ -40,7 +40,7 @@ class NumberColumnDataServiceTest {
 
     @Test
     void stringifyContent() {
-        given(objectMapperWrapper.writeValueAsString(DATA)).willReturn(STRINGIFIED);
+        given(objectMapper.writeValueAsString(DATA)).willReturn(STRINGIFIED);
 
         assertThat(underTest.stringifyContent(DATA)).isEqualTo(STRINGIFIED);
     }
@@ -49,7 +49,7 @@ class NumberColumnDataServiceTest {
     void getData() {
         given(contentDao.findByParentValidated(COLUMN_ID)).willReturn(content);
         given(content.getContent()).willReturn(STRINGIFIED);
-        given(objectMapperWrapper.readValue(STRINGIFIED, Number.class)).willReturn(number);
+        given(objectMapper.readValue(STRINGIFIED, Number.class)).willReturn(number);
 
         assertThat(underTest.getData(COLUMN_ID)).isEqualTo(number);
     }
@@ -63,7 +63,7 @@ class NumberColumnDataServiceTest {
 
     @Test
     void validateData_parseError() {
-        given(objectMapperWrapper.convertValue(DATA, Number.class)).willThrow(new RuntimeException());
+        given(objectMapper.convertValue(DATA, Number.class)).willThrow(new RuntimeException());
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -72,7 +72,7 @@ class NumberColumnDataServiceTest {
 
     @Test
     void validateData_nullValue() {
-        given(objectMapperWrapper.convertValue(DATA, Number.class)).willReturn(number);
+        given(objectMapper.convertValue(DATA, Number.class)).willReturn(number);
         given(number.getValue()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
@@ -82,7 +82,7 @@ class NumberColumnDataServiceTest {
 
     @Test
     void validateData_nullStep() {
-        given(objectMapperWrapper.convertValue(DATA, Number.class)).willReturn(number);
+        given(objectMapper.convertValue(DATA, Number.class)).willReturn(number);
         given(number.getValue()).willReturn(11D);
         given(number.getStep()).willReturn(null);
 
@@ -93,7 +93,7 @@ class NumberColumnDataServiceTest {
 
     @Test
     void validateData_stepTooLow() {
-        given(objectMapperWrapper.convertValue(DATA, Number.class)).willReturn(number);
+        given(objectMapper.convertValue(DATA, Number.class)).willReturn(number);
         given(number.getValue()).willReturn(11D);
         given(number.getStep()).willReturn(0d);
 
@@ -104,7 +104,7 @@ class NumberColumnDataServiceTest {
 
     @Test
     void validateData() {
-        given(objectMapperWrapper.convertValue(DATA, Number.class)).willReturn(number);
+        given(objectMapper.convertValue(DATA, Number.class)).willReturn(number);
         given(number.getValue()).willReturn(11D);
         given(number.getStep()).willReturn(1d);
 

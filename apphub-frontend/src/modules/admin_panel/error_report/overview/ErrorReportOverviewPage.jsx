@@ -19,6 +19,7 @@ import useHasFocus from "../../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import { hasValue, nullIfEmpty } from "../../../../common/js/Utils";
 import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DELETE_ALL, ADMIN_PANEL_ERROR_REPORT_DELETE_READ, ADMIN_PANEL_GET_ERROR_REPORTS, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../../../common/js/dao/endpoints/AdminPanelEndpoints";
+import Spinner from "../../../../common/component/Spinner";
 
 const ErrorReportOverviewPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -26,7 +27,9 @@ const ErrorReportOverviewPage = () => {
 
     const [selectedErrorReports, setSelectedErrorReports] = useState([]);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
     const [errorReports, setErrorReports] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
     const [filterData, setFilterData] = useState({
         service: "",
         message: "",
@@ -63,8 +66,9 @@ const ErrorReportOverviewPage = () => {
             }
 
             const response = await ADMIN_PANEL_GET_ERROR_REPORTS.createRequest(payload)
-                .send();
-            setErrorReports(response)
+                .send(setDisplaySpinner);
+            setErrorReports(response.reports);
+            setTotalCount(response.totalCount);
         }
         fetch();
     }
@@ -93,7 +97,7 @@ const ErrorReportOverviewPage = () => {
 
     const deleteAll = async () => {
         await ADMIN_PANEL_ERROR_REPORT_DELETE_ALL.createRequest()
-            .send();
+            .send(setDisplaySpinner);
 
         load();
         setConfirmationDialogData(null);
@@ -123,7 +127,7 @@ const ErrorReportOverviewPage = () => {
 
     const deleteRead = async () => {
         await ADMIN_PANEL_ERROR_REPORT_DELETE_READ.createRequest()
-            .send();
+            .send(setDisplaySpinner);
 
         load();
         setConfirmationDialogData(null);
@@ -153,7 +157,7 @@ const ErrorReportOverviewPage = () => {
 
     const deleteChecked = async () => {
         await ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest(selectedErrorReports)
-            .send();
+            .send(setDisplaySpinner);
 
         load();
         setConfirmationDialogData(null);
@@ -161,7 +165,7 @@ const ErrorReportOverviewPage = () => {
 
     const markCheckedAs = async (status) => {
         await ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest(selectedErrorReports, { status: status })
-            .send();
+            .send(setDisplaySpinner);
 
         load();
     }
@@ -213,11 +217,18 @@ const ErrorReportOverviewPage = () => {
                 />
 
                 <ErrorReportList
+                    totalCount={totalCount}
                     errorReports={errorReports}
                     refreshCallback={load}
                     selectedErrorReports={selectedErrorReports}
                     setSelectedErrorReports={setSelectedErrorReports}
                     setConfirmationDialogData={setConfirmationDialogData}
+                />
+
+                <ErrorReportPageSelector
+                    filterData={filterData}
+                    setFilterData={setFilterData}
+                    refreshCallback={load}
                 />
 
             </main>
@@ -260,6 +271,8 @@ const ErrorReportOverviewPage = () => {
             }
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

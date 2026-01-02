@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.skyxplore.data.ws.load_game.handler;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.ws.LoadPageForGameRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
@@ -15,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.socket.WebSocketSession;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,7 +32,7 @@ class LoadPageForGameHandlerTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private LoadGameItemService loadGameItemService;
@@ -61,7 +61,7 @@ class LoadPageForGameHandlerTest {
     @Test
     void handle() {
         given(event.getPayload()).willReturn(PAYLOAD);
-        given(objectMapperWrapper.convertValue(PAYLOAD, LoadPageForGameRequest.class)).willReturn(new LoadPageForGameRequest(
+        given(objectMapper.convertValue(PAYLOAD, LoadPageForGameRequest.class)).willReturn(new LoadPageForGameRequest(
             GAME_ID,
             GameItemType.CONSTRUCTION,
             PAGE

@@ -95,7 +95,7 @@ class ConvoyProcessHelper {
         UUID citizenId = gameData.getCitizenAllocations()
             .findByProcessIdValidated(processId)
             .getCitizenId();
-        ReferredCoordinate waypoint = route.get(0);
+        ReferredCoordinate waypoint = route.getFirst();
         int requiredWorkPoints = calculateRequiredWorkPoints(gameData, location, waypoint);
 
         convoyMovementProcessFactory.save(game, location, processId, citizenId, requiredWorkPoints);

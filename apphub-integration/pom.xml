@@ -22,7 +22,7 @@
         <versions.assertj-core>3.27.6</versions.assertj-core>
         <versions.jackson-datatype>2.20.1</versions.jackson-datatype>
         <versions.rest-assured>5.5.6</versions.rest-assured>
-        <versions.selenium>4.38.0</versions.selenium>
+        <versions.selenium>4.39.0</versions.selenium>
         <versions.testng>7.11.0</versions.testng>
         <versions.logback-classic>1.5.20</versions.logback-classic>
         <versions.awaitility>4.3.0</versions.awaitility>
@@ -30,6 +30,7 @@
         <versions.guava>33.5.0-jre</versions.guava>
         <versions.apache-commons-pool>2.12.1</versions.apache-commons-pool>
         <versions.gson>2.13.2</versions.gson>
+        <versions.jackson-databind>3.0.1</versions.jackson-databind>
 
         <!-- Plugin Versions -->
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
@@ -127,6 +128,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>${versions.gson}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${versions.jackson-databind}</version>
         </dependency>
     </dependencies>
 

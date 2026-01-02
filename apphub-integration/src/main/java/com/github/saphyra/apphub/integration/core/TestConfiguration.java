@@ -39,4 +39,5 @@ public class TestConfiguration {
 
     //Defaults
     public static final Language DEFAULT_LANGUAGE = Language.ENGLISH;
+    public static final Integer MAX_RETRY_COUNT = Integer.parseInt(System.getProperty("maxRetryCount", "2"));
 }

@@ -50,4 +50,8 @@ public class ErrorReportDao extends AbstractDao<ErrorReportEntity, ErrorReportDt
     public void deleteAllExceptStatus(List<ErrorReportStatus> statuses){
         repository.deleteByStatusNotIn(statuses.stream().map(Enum::name).toList());
     }
+
+    public long count() {
+        return repository.count();
+    }
 }

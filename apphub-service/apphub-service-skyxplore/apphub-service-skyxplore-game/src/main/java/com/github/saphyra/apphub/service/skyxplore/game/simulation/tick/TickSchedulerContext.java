@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +18,5 @@ class TickSchedulerContext {
     private final SleepService sleepService;
     private final DateTimeUtil dateTimeUtil;
     private final GameProperties gameProperties;
+    private final ErrorReporterService errorReporterService;
 }

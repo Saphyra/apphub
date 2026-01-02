@@ -60,7 +60,6 @@ class EdMessageHandlerHelper {
 
         boolean result = expirationTime.isAfter(lastMessage);
         if (result) {
-            log.error("Last message arrived at {}. Shutting down service...", lastMessage);
             errorReporterService.report(String.format("Last message came at %s. Shutting down service...", lastMessage));
         }
         return result;

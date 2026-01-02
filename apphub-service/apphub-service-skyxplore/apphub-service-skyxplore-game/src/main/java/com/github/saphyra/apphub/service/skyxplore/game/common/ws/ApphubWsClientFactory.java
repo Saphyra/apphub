@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common.ws;
 
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class ApphubWsClientFactory {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final SleepService sleepService;
 
     public SkyXploreWsClient create(String service, String endpoint) throws Exception {
@@ -18,7 +18,7 @@ public class ApphubWsClientFactory {
         log.info("ApphubWsClient URL: {}", url);
         return SkyXploreWsClient.builder()
             .url(url)
-            .objectMapperWrapper(objectMapperWrapper)
+            .objectMapper(objectMapper)
             .sleepService(sleepService)
             .build();
     }

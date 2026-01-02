@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.DeleteBuffer;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.DefaultColumn;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.InCondition;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.ListValue;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.QualifiedTable;
-import com.github.saphyra.apphub.service.custom.elite_base.util.sql.SqlBuilder;
+import com.github.saphyra.apphub.lib.sql_builder.DefaultColumn;
+import com.github.saphyra.apphub.lib.sql_builder.InCondition;
+import com.github.saphyra.apphub.lib.sql_builder.ListValue;
+import com.github.saphyra.apphub.lib.sql_builder.QualifiedTable;
+import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

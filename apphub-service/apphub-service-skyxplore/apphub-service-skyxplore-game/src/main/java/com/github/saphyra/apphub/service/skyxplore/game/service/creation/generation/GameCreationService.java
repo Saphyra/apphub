@@ -79,7 +79,6 @@ public class GameCreationService {
                     BiWrapper<SkyXploreGameCreationRequest, UUID> biWrapper = requests.take();
                     executorServiceBean.execute(() -> create(biWrapper.getEntity1(), biWrapper.getEntity2()));
                 } catch (Exception e) {
-                    log.error("Execution failed", e);
                     errorReporterService.report("GameCreation failed.", e);
                 }
                 //Sleeping is not necessary, because requests.take() blocks the thread until new item is put into the queue

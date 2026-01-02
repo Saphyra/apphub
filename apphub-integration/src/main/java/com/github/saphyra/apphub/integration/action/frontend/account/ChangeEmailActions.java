@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.account;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.change_email.ChEmailPasswordValidationResult;
@@ -29,21 +30,23 @@ public class ChangeEmailActions {
     }
 
     public static void verifyChangeEmailForm(WebDriver driver, ChangeEmailValidationResult validationResult) {
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-email-email-input-validation"),
-            validationResult.getEmail() != EmailValidationResult.VALID,
-            validationResult.getEmail().getErrorMessage()
-        );
+        AwaitilityWrapper.awaitAssert(() -> {
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-email-email-input-validation"),
+                validationResult.getEmail() != EmailValidationResult.VALID,
+                validationResult.getEmail().getErrorMessage()
+            );
 
-        verifyInvalidFieldState(
-            driver,
-            By.id("account-change-email-password-input-validation"),
-            validationResult.getPassword() != ChEmailPasswordValidationResult.VALID,
-            validationResult.getPassword().getErrorMessage()
-        );
+            verifyInvalidFieldState(
+                driver,
+                By.id("account-change-email-password-input-validation"),
+                validationResult.getPassword() != ChEmailPasswordValidationResult.VALID,
+                validationResult.getPassword().getErrorMessage()
+            );
 
-        assertThat(changeEmailButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+            assertThat(changeEmailButton(driver).isEnabled()).isEqualTo(validationResult.allValid());
+        });
     }
 
     private static WebElement changeEmailButton(WebDriver driver) {

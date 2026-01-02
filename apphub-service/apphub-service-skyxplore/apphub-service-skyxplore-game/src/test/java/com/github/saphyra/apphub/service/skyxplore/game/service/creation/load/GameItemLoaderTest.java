@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.ws.LoadPageForGameRequest;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEvent;
 import com.github.saphyra.apphub.lib.skyxplore.ws.SkyXploreWsEventName;
@@ -16,6 +15,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +34,7 @@ class GameItemLoaderTest {
     private static final Object PAYLOAD = "payload";
 
     @Mock
-    private ObjectMapperWrapper objectMapperWrapper;
+    private ObjectMapper objectMapper;
 
     @Mock
     private WebSocketClientCache wsClientCache;
@@ -64,7 +64,7 @@ class GameItemLoaderTest {
         given(wsClient.awaitForEvent(any())).willReturn(response);
         given(response.getPayload()).willReturn(PAYLOAD);
         PlanetModel[] convertedPayload = {planetModel};
-        given(objectMapperWrapper.convertValue(PAYLOAD, PlanetModel[].class)).willReturn(convertedPayload);
+        given(objectMapper.convertValue(PAYLOAD, PlanetModel[].class)).willReturn(convertedPayload);
 
         List<PlanetModel> result = underTest.loadPageForGame(GAME_ID, PAGE, GameItemType.PLANET, PlanetModel[].class);
 

@@ -14,7 +14,7 @@ import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_I
 import InputField from "../../../../../common/component/input/InputField";
 import Stream from "../../../../../common/js/collection/Stream";
 
-const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData, selectedItems, setSelectedItems }) => {
+const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData, selectedItems, setSelectedItems, setDisplaySpinner }) => {
     const handleOnclick = () => {
         if (!data.enabled) {
             NotificationService.showError(localizationHandler.get("list-item-disabled"));
@@ -62,12 +62,11 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                 />
             ]
         ));
-        setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_DELETED, data));
     }
 
     const deleteListItem = async () => {
         await NOTEBOOK_DELETE_LIST_ITEM.createRequest(null, { listItemId: data.id })
-            .send();
+            .send(setDisplaySpinner);
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_DELETED, data));
         setConfirmationDialogData(null);
@@ -79,7 +78,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         }
 
         await NOTEBOOK_ARCHIVE_ITEM.createRequest(payload, { listItemId: data.id })
-            .send();
+            .send(setDisplaySpinner);
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_ARCHIVED, data));
     }
@@ -90,14 +89,14 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
         }
 
         await NOTEBOOK_PIN_LIST_ITEM.createRequest(payload, { listItemId: data.id })
-            .send();
+            .send(setDisplaySpinner);
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_PINNED, data));
     }
 
     const cloneListItem = async () => {
         await NOTEBOOK_CLONE_LIST_ITEM.createRequest(null, { listItemId: data.id })
-            .send();
+            .send(setDisplaySpinner);
 
         setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_CLONED, data));
     }

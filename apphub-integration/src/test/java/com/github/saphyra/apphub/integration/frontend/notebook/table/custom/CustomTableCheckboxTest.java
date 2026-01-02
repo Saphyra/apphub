@@ -48,7 +48,7 @@ public class CustomTableCheckboxTest extends SeleniumTest {
 
         ViewTableActions.close(driver);
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
-            .open();
+            .open(driver);
 
         assertThat(getColumnAsChecked(ViewTableActions.getRows(driver)).isChecked()).isFalse();
     }
@@ -66,13 +66,13 @@ public class CustomTableCheckboxTest extends SeleniumTest {
 
     private static void openTable(WebDriver driver) {
         NotebookActions.findListItemByTitleValidated(driver, TITLE)
-            .open();
+            .open(driver);
         CheckedTableColumn checkedColumn = getColumnAsChecked(ViewTableActions.getRows(driver));
         assertThat(checkedColumn.isChecked()).isTrue();
     }
 
     private static CheckedTableColumn getColumnAsChecked(List<TableRow> driver) {
-        return driver.get(0).getColumns().get(0).as(ColumnType.CHECKBOX);
+        return driver.getFirst().getColumns().getFirst().as(ColumnType.CHECKBOX);
     }
 
     private static void createCustomTableWithCheckedCell(WebDriver driver) {
@@ -81,7 +81,7 @@ public class CustomTableCheckboxTest extends SeleniumTest {
 
         NewTableActions.fillTitle(driver, TITLE);
         NewTableActions.getTableHeads(driver)
-            .get(0)
+            .getFirst()
             .setValue(TABLE_HEAD_CONTENT);
 
         NewTableActions.setColumnType(driver, 0, 0, ColumnType.CHECKBOX);

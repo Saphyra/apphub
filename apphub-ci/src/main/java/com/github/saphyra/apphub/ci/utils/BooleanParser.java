@@ -12,8 +12,23 @@ public class BooleanParser {
         "igen",
         "i"
     );
+    private static final List<String> NO_OPTIONS = List.of(
+        "no",
+        "n",
+        "nem"
+    );
 
     public Boolean parse(String string) {
-        return YES_OPTIONS.contains(string.toLowerCase());
+        String s = string.toLowerCase();
+
+        if(YES_OPTIONS.contains(s)){
+            return true;
+        }
+
+        if(NO_OPTIONS.contains(s)){
+            return false;
+        }
+
+        return null;
     }
 }

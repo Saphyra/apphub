@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.integration.action.backend;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.saphyra.apphub.integration.core.TestBase;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -9,6 +8,7 @@ import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.ModulesResponse;
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
+import tools.jackson.core.type.TypeReference;
 
 import java.util.HashMap;
 import java.util.List;

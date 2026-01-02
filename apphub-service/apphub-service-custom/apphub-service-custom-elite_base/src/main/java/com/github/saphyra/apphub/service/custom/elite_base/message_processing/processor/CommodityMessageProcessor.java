@@ -1,21 +1,21 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.CommodityMessage;
-import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StarSystemSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.CommodityMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaveResult;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.util.StationSaverUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import static java.util.Objects.isNull;
 
@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 class CommodityMessageProcessor implements MessageProcessor {
-    private final ObjectMapperWrapper objectMapperWrapper;
+    private final ObjectMapper objectMapper;
     private final StarSystemSaver starSystemSaver;
     private final CommoditySaver commoditySaver;
     private final StationSaverUtil stationSaverUtil;
@@ -36,7 +36,7 @@ class CommodityMessageProcessor implements MessageProcessor {
 
     @Override
     public void processMessage(EdMessage message) {
-        CommodityMessage commodityMessage = objectMapperWrapper.readValue(message.getMessage(), CommodityMessage.class);
+        CommodityMessage commodityMessage = objectMapper.readValue(message.getMessage(), CommodityMessage.class);
 
         StarSystem starSystem = performanceReporter.wrap(
             () -> starSystemSaver.save(

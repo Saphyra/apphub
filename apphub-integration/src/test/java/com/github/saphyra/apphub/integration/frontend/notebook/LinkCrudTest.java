@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
@@ -87,12 +88,14 @@ public class LinkCrudTest extends SeleniumTest {
             .open(() -> NotebookActions.findListItemByTitle(driver, LINK_TITLE).isPresent());
 
         NotebookActions.findListItemByTitleValidated(driver, LINK_TITLE)
-            .open();
+            .open(driver);
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
         driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).getFirst());
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static void edit_blankTitle(WebDriver driver) {
@@ -123,6 +126,8 @@ public class LinkCrudTest extends SeleniumTest {
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(NotebookEndpoints.NOTEBOOK_PAGE))
             .assertTrue("Modifications are not saved.");
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static void openEdited(WebDriver driver) {
@@ -130,12 +135,14 @@ public class LinkCrudTest extends SeleniumTest {
 
         AwaitilityWrapper.findWithWait(() -> NotebookActions.getListItems(driver), listItem -> listItem.getTitle().equals(NEW_LINK_TITLE))
             .orElseThrow(() -> new RuntimeException("Modified Link not found"))
-            .open();
+            .open(driver);
 
         driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(1));
         assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));
         driver.close();
-        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).get(0));
+        driver.switchTo().window(new ArrayList<>(driver.getWindowHandles()).getFirst());
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static void delete(WebDriver driver) {

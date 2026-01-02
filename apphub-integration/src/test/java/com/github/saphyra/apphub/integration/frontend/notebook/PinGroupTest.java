@@ -104,6 +104,8 @@ public class PinGroupTest extends SeleniumTest {
             PinActions.findPinGroupByNameValidated(driver, NEW_PIN_GROUP_NAME).getWebElement()
         );
 
+        WebElementUtils.waitForSpinnerToDisappear(driver);
+
         PinActions.findPinGroupByNameValidated(driver, NEW_PIN_GROUP_NAME)
             .open(driver);
 

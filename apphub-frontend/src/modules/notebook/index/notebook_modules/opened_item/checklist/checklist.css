@@ -32,3 +32,10 @@
 #notebook-add-checklist-item-to-the-edge-input {
     min-width: 250px;
 }
+
+#notebook-content-checklist-search {
+    display: block;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
+}

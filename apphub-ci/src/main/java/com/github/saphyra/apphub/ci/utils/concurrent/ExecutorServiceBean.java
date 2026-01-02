@@ -6,12 +6,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -20,9 +22,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Builder
+@Component
 public class ExecutorServiceBean {
     @NonNull
     private final ExecutorService executor;
+
+    ExecutorServiceBean() {
+        executor = Executors.newCachedThreadPool();
+    }
 
     public FutureWrapper<Void> execute(Runnable command) {
         return asyncProcess(() -> {

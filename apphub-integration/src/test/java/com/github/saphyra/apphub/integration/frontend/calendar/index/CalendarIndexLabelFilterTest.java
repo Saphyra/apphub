@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -42,11 +43,13 @@ public class CalendarIndexLabelFilterTest extends SeleniumTest {
         CalendarEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).build());
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
+        WebElementUtils.waitForSpinnerToDisappear(driver);
 
         CalendarIndexPageActions.openCreateEventPage(driver);
         CalendarEventPageActions.fillForm(driver, CreateEventParameters.valid(RepetitionType.ONE_TIME).toBuilder().startDate(CURRENT_DATE).title(LABELED_EVENT).newLabels(List.of(LABEL)).build());
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
+        WebElementUtils.waitForSpinnerToDisappear(driver);
 
         CalendarIndexPageActions.filterByLabel(driver, LABEL);
 

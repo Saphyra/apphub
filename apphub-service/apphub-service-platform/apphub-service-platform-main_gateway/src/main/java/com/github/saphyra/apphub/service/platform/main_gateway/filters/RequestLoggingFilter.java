@@ -21,10 +21,13 @@ public class RequestLoggingFilter implements GlobalFilter, Ordered {
         HttpMethod method = request.getMethod();
         String uri = request.getURI().getPath();
         log.info("Handling request: {} - {}", method, uri);
-        Mono<Void> result = chain.filter(exchange);
-        ServerHttpResponse response = exchange.getResponse();
-        log.info("Response status of {} - {}: {}", method, uri, response.getStatusCode());
-        return result;
+        return chain.filter(exchange)
+            .doOnNext(unused -> {
+                ServerHttpResponse response = exchange.getResponse();
+                if (!response.getStatusCode().is2xxSuccessful()) {
+                    log.info("Response status of {} - {}: {}", method, uri, response.getStatusCode());
+                }
+            });
     }
 
     @Override

@@ -28,7 +28,7 @@ const NotebookPage = () => {
     const [lastEvent, setLastEvent] = useState(null);
     const [userSettings, setUserSettings] = useState({});
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
 
     const setOpenedListItem = (newListItem) => {
         if (!newListItem) {
@@ -47,17 +47,21 @@ const NotebookPage = () => {
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadUserSettings(), []);
 
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
+    }
+
     const loadUserSettings = () => {
         const fetch = async () => {
             const response = await GET_USER_SETTINGS.createRequest(null, { category: USER_SETTING_CATEGORY_NOTEBOOK })
-                .send();
+                .send(updateDisplaySpinner);
 
             const parsed = setSettingsFromResponse(response);
 
             const defaultListItemId = parsed[UserSettings.DEFAULT_LIST_ITEM_ID];
             if (!sessionStorage.openedListItem && hasValue(defaultListItemId)) {
                 const listItem = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: defaultListItemId })
-                    .send();
+                    .send(updateDisplaySpinner);
 
                 setOpenedListItemD({ id: listItem.id, type: listItem.type });
             }
@@ -86,7 +90,7 @@ const NotebookPage = () => {
             value: value
         };
         const response = await SET_USER_SETTINGS.createRequest(payload)
-            .send();
+            .send(updateDisplaySpinner);
 
         setSettingsFromResponse(response);
     }
@@ -101,6 +105,7 @@ const NotebookPage = () => {
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
                         userSettings={userSettings}
+                        setDisplaySpinner={updateDisplaySpinner}
                     />
 
                     <PinnedItems
@@ -110,6 +115,7 @@ const NotebookPage = () => {
                         lastEvent={lastEvent}
                         setLastEvent={setLastEvent}
                         userSettings={userSettings}
+                        setDisplaySpinner={updateDisplaySpinner}
                     />
                 </div>
 
@@ -122,7 +128,7 @@ const NotebookPage = () => {
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
                     setConfirmationDialogData={setConfirmationDialogData}
-                    setDisplaySpinner={setDisplaySpinner}
+                    setDisplaySpinner={updateDisplaySpinner}
                 />
             </main>
 
@@ -152,7 +158,7 @@ const NotebookPage = () => {
                 />
             }
 
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
 
             <ToastContainer />
         </div>

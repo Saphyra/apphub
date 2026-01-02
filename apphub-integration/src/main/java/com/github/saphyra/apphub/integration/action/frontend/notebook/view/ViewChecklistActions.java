@@ -61,7 +61,8 @@ public class ViewChecklistActions {
     }
 
     public static void orderItems(WebDriver driver) {
-        driver.findElement(By.id("notebook-content-checklist-order-items-button"))
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("notebook-content-checklist-order-items-button")))
+            .orElseThrow()
             .click();
 
         SleepUtil.sleep(1000);
@@ -100,5 +101,17 @@ public class ViewChecklistActions {
     public static void cancelAddItem(WebDriver driver) {
         driver.findElement(By.id("notebook-add-checklist-item-to-the-edge-cancel-button"))
             .click();
+    }
+
+    public static int getCheckedItemCount(WebDriver driver) {
+        return Integer.parseInt(driver.findElement(By.id("notebook-content-checklist-checked-item-count")).getText());
+    }
+
+    public static int getTotalItemCount(WebDriver driver) {
+        return Integer.parseInt(driver.findElement(By.id("notebook-content-checklist-total-item-count")).getText());
+    }
+
+    public static void setSearchText(WebDriver driver, String searchText) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("notebook-content-checklist-search")), searchText);
     }
 }

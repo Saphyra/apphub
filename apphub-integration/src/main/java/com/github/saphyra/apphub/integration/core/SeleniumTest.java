@@ -112,7 +112,7 @@ public abstract class SeleniumTest extends TestBase {
 
     protected static WebDriver extractDriver() {
         return extractDrivers(1)
-            .get(0);
+            .getFirst();
     }
 
     public static WebDriver extractDriver(WebDriverMode mode) {

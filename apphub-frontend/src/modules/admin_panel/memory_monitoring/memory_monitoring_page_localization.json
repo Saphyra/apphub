@@ -26,5 +26,41 @@
     "not-connected": {
         "en": "Not connected",
         "hu": "Nem csatlakozott"
+    },
+    "max-used": {
+        "en": "Max used",
+        "hu": "Max felhasznált"
+    },
+    "order-by": {
+        "en": "Order by",
+        "hu": "Rendezés"
+    },
+    "ORDER_BY_SERVICE_NAME": {
+        "en": "Service name",
+        "hu": "Szolgáltatás név"
+    },
+    "ORDER_BY_AVAILABLE_MEMORY": {
+        "en": "Available memory",
+        "hu": "Elérhető memória"
+    },
+    "ORDER_BY_ALLOCATED_MEMORY": {
+        "en": "Allocated memory",
+        "hu": "Lefoglalt memória"
+    },
+    "ORDER_BY_USED_MEMORY": {
+        "en": "Used memory",
+        "hu": "Felhasznált memória"
+    },
+    "ORDER_BY_MAX_USED_MEMORY": {
+        "en": "Max used memory",
+        "hu": "Max felhasznált memória"
+    },
+    "ORDER_ASCENDING": {
+        "en": "Ascending",
+        "hu": "Növekvő"
+    },
+    "ORDER_DESCENDING": {
+        "en": "Descending",
+        "hu": "Csökkenő"
     }
 }

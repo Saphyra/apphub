@@ -101,6 +101,8 @@ public class ChecklistItem {
         AwaitilityWrapper.createDefault()
             .until(() -> WebElementUtils.getIfPresent(() -> getEditContentInput(driver)).isEmpty())
             .assertTrue("Edit checklist item content dialog did not disappear");
+
+        WebElementUtils.waitForSpinnerToDisappear(driver);
     }
 
     private static WebElement getEditContentInput(WebDriver driver) {

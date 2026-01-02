@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
-import com.github.saphyra.apphub.lib.common_util.ObjectMapperWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.calendar.config.CalendarParams;
 import com.github.saphyra.apphub.service.calendar.domain.label.dao.LabelDao;
@@ -27,7 +26,7 @@ class EventRequestValidatorTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
 
     @Spy
-    private final ObjectMapperWrapper objectMapperWrapper = new ObjectMapperWrapper(new ObjectMapper());
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
     private CalendarParams calendarParams;

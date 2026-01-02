@@ -1,3 +1,4 @@
+import MapStream from "../collection/MapStream";
 import Constants from "../Constants";
 import NotificationKey from "../notification/NotificationKey";
 import NotificationService from "../notification/NotificationService";
@@ -15,6 +16,13 @@ const getDefaultErrorHandler = () => {
                     case "NO_SESSION_AVAILABLE":
                         sessionStorage.errorCode = NotificationKey.NO_VALID_SESSION;
                         window.location.href = Constants.INDEX_PAGE + "?redirect=/" + (window.location.pathname + window.location.search).substr(1);
+                        break;
+                    case "INVALID_PARAM":
+                        const value = new MapStream(errorResponse.params)
+                            .toListStream((key, value) => `${key}=${value}`)
+                            .join(", ");
+
+                        NotificationService.showErrorCode(errorResponse.errorCode, {value: value});
                         break;
                     default:
                         NotificationService.showErrorCode(errorResponse.errorCode, errorResponse.params);

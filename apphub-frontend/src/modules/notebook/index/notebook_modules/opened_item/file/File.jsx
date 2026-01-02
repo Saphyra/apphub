@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./file.css";
@@ -8,19 +8,19 @@ import { formatFileSize } from "../../../../../../common/js/Utils";
 import { NOTEBOOK_GET_LIST_ITEM } from "../../../../../../common/js/dao/endpoints/NotebookEndpoints";
 import { STORAGE_DOWNLOAD_FILE, STORAGE_GET_METADATA } from "../../../../../../common/js/dao/endpoints/StorageEndpoints";
 
-const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
+const File = ({ localizationHandler, openedListItem, setOpenedListItem, setDisplaySpinner }) => {
     const [title, setTitle] = useState("");
     const [parent, setParent] = useState(null);
     const [storedFileId, setStoredFileId] = useState(null);
     const [fileMetadata, setFileMetadata] = useState(null);
 
-    useEffect(() => loadListItem(), null);
+    useEffect(() => loadListItem(), []);
     useEffect(() => loadMetadata(), [storedFileId]);
 
     const loadListItem = () => {
         const fetch = async () => {
             const listItemData = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: openedListItem.id })
-                .send();
+                .send(setDisplaySpinner);
 
             setTitle(listItemData.title);
             setParent(listItemData.parentId);
@@ -36,7 +36,7 @@ const File = ({ localizationHandler, openedListItem, setOpenedListItem }) => {
 
         const fetch = async () => {
             const response = await STORAGE_GET_METADATA.createRequest(null, { storedFileId: storedFileId })
-                .send();
+                .send(setDisplaySpinner);
             setFileMetadata(response);
         }
         fetch();
