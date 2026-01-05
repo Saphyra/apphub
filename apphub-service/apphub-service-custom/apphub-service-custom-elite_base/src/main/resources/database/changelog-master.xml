@@ -9,6 +9,12 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="enable-extension-pg_trgm" author="Saphyra" dbms="postgresql">
+        <sql>
+            CREATE EXTENSION IF NOT EXISTS pg_trgm;
+        </sql>
+    </changeSet>
+
     <include file="database/change_sets/message.xml"/>
     <include file="database/change_sets/star_system.xml"/>
     <include file="database/change_sets/body.xml"/>

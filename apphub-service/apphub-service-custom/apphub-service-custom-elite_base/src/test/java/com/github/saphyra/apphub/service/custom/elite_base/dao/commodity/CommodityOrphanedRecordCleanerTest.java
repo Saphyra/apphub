@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CommodityOrphanedRecordCleanerTest {
     private static final UUID STATION_ID = UUID.randomUUID();
     private static final UUID FLEET_CARRIER_ID = UUID.randomUUID();
-    private static final String COMMODITY_NAME = "commodity-name"   ;
+    private static final String COMMODITY_NAME = "commodity-name";
 
     @Autowired
     private StationDao stationDao;
@@ -56,7 +56,7 @@ class CommodityOrphanedRecordCleanerTest {
     }
 
     @Test
-    void cleanup(){
+    void cleanup() {
         Station station = Station.builder()
             .id(STATION_ID)
             .starSystemId(UUID.randomUUID())

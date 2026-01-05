@@ -21,19 +21,24 @@ spec:
         ports:
         - containerPort: 3000
         imagePullPolicy: Never
+        startupProbe:
+          httpGet:
+            path: /
+            port: 3000
+          periodSeconds: 5
+          failureThreshold: 3600
         livenessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 30
-          periodSeconds: 10
+          periodSeconds: 5
+          failureThreshold: 1
         readinessProbe:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          failureThreshold: 3
+          periodSeconds: 5
+          failureThreshold: 1
         resources:
           limits:
             memory: 200Mi

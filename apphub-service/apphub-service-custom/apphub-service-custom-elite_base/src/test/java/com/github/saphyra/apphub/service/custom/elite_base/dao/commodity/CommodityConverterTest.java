@@ -1,12 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
+import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityEntityId;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceFactory;
@@ -62,7 +57,7 @@ class CommodityConverterTest {
     @Test
     void convertDomain() {
         Commodity domain = Commodity.builder()
-            .lastUpdate(LAST_UPDATE)
+            .lastUpdate(LazyLoadedField.loaded(LAST_UPDATE))
             .type(CommodityType.COMMODITY)
             .commodityLocation(CommodityLocation.FLEET_CARRIER)
             .externalReference(EXTERNAL_REFERENCE)
@@ -122,6 +117,7 @@ class CommodityConverterTest {
             .returns(BUY_PRICE, Commodity::getBuyPrice)
             .returns(SELL_PRICE, Commodity::getSellPrice)
             .returns(STOCK, Commodity::getStock)
-            .returns(DEMAND, Commodity::getDemand);
+            .returns(DEMAND, Commodity::getDemand)
+            .returns(LAST_UPDATE, Commodity::getLastUpdate);
     }
 }

@@ -14,8 +14,8 @@ interface StarSystemRepository extends CrudRepository<StarSystemEntity, String> 
 
     Optional<StarSystemEntity> findByStarName(String starName);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM elite_base.star_system WHERE LOWER(star_name) LIKE LOWER(CONCAT('%', :query, '%')) LIMIT 10")
-    List<StarSystemEntity> getByStarNameIgnoreCaseContaining(String query);
+    @Query(nativeQuery = true, value = "SELECT * FROM elite_base.star_system WHERE star_name ILIKE CONCAT('%', :query, '%') LIMIT 10")
+    List<StarSystemEntity> getByStarNameIgnoreCaseContaining(@Param("query") String query);
 
     List<StarSystemEntity> getByStarIdOrStarName(Long starId, String starName);
 

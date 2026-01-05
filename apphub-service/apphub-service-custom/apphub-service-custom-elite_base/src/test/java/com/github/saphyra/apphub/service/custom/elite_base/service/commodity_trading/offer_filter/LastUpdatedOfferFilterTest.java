@@ -34,7 +34,7 @@ class LastUpdatedOfferFilterTest {
         given(expirationCache.getExpiration(request)).willReturn(EXPIRATION);
         given(response.getLastUpdated()).willReturn(EXPIRATION.plusSeconds(1));
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.filter(response, request)).isTrue();
     }
 
     @Test
@@ -42,6 +42,6 @@ class LastUpdatedOfferFilterTest {
         given(expirationCache.getExpiration(request)).willReturn(EXPIRATION);
         given(response.getLastUpdated()).willReturn(EXPIRATION.minusSeconds(1));
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.filter(response, request)).isFalse();
     }
 }

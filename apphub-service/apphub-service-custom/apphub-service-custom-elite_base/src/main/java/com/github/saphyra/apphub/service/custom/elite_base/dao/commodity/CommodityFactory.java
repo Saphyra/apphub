@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
+import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public class CommodityFactory {
         Integer averagePrice
     ) {
         return Commodity.builder()
-            .lastUpdate(timestamp)
+            .lastUpdate(LazyLoadedField.loaded(timestamp))
             .type(type)
             .commodityLocation(commodityLocation)
             .externalReference(externalReference)

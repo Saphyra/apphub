@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
@@ -21,6 +24,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
@@ -35,6 +39,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class OfferDetailsFetcherTest {
@@ -65,6 +70,9 @@ class OfferDetailsFetcherTest {
 
     @Mock
     private PerformanceReporter performanceReporter;
+
+    @Spy
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
 
     @InjectMocks
     private OfferDetailsFetcher underTest;

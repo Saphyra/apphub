@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @Builder(access = AccessLevel.PACKAGE)
 public class ExecutorServiceBean {
     @NonNull
+    @Getter
     private final ExecutorService executor;
 
     @NonNull

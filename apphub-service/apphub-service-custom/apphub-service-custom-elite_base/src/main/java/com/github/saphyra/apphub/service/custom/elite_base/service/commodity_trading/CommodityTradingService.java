@@ -37,15 +37,20 @@ public class CommodityTradingService {
             PerformanceReportingTopic.ELITE_BASE_QUERY,
             PerformanceReportingKey.COMMODITY_TRADING_REFERENCE_SYSTEM_RETRIEVAL.name()
         );
+        log.info("ReferenceSystem found: {}", referenceSystem);
 
         List<Commodity> offers = performanceReporter.wrap(
             () -> tradeMode.getOfferProvider().apply(commodityDao, request),
             PerformanceReportingTopic.ELITE_BASE_QUERY,
             PerformanceReportingKey.COMMODITY_TRADING_OFFER_QUERY.name()
         );
+        log.info("Found {} offers", offers.size());
 
         List<CommodityTradingResponse> responses = offerDetailsFetcher.assembleResponses(tradeMode, referenceSystem, offers, request.getIncludeFleetCarriers());
+        log.info("CommodityTradingResponses assembled");
 
-        return offerFilterService.filterOffers(responses, request);
+        List<CommodityTradingResponse> result = offerFilterService.filterOffers(responses, request);
+        log.info("{} offers are returned after filtering", result.size());
+        return result;
     }
 }

@@ -40,7 +40,7 @@ public class ExecutorServiceBeanFactory {
 
     private static synchronized ExecutorService defaultExecutor() {
         if (isNull(DEFAULT_EXECUTOR)) {
-            DEFAULT_EXECUTOR = Executors.newCachedThreadPool();
+            DEFAULT_EXECUTOR = Executors.newVirtualThreadPerTaskExecutor();
         }
 
         return DEFAULT_EXECUTOR;

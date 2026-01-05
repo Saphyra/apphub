@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
+import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateId;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -45,15 +46,17 @@ class CommodityConverter extends ConverterBase<CommodityEntity, Commodity> {
         String externalReference = entity.getId().getExternalReference();
         String commodityName = entity.getId().getCommodityName();
         return Commodity.builder()
-            .lastUpdate(lastUpdateDao.findById(LastUpdateId.builder()
-                    .externalReference(externalReference)
-                    .type(entity.getType().get())
-                    .build())
-                .map(LastUpdate::getLastUpdate)
-                .orElse(null))
+            .lastUpdate(new LazyLoadedField<>(
+                () -> lastUpdateDao.findById(LastUpdateId.builder()
+                        .externalReference(externalReference)
+                        .type(entity.getType().get())
+                        .build())
+                    .map(LastUpdate::getLastUpdate)
+                    .orElse(null)
+            ))
             .type(entity.getType())
             .commodityLocation(entity.getCommodityLocation())
-            .externalReference( uuidConverter.convertEntity(externalReference))
+            .externalReference(uuidConverter.convertEntity(externalReference))
             .marketId(entity.getMarketId())
             .commodityName(commodityName)
             .buyPrice(entity.getBuyPrice())

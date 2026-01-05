@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.commodity;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.google.common.cache.Cache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +12,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -19,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 class CommodityDaoTest {
@@ -55,6 +60,9 @@ class CommodityDaoTest {
     @Mock
     private CommodityDeleteBuffer deleteBuffer;
 
+    @Spy
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
+
     @InjectMocks
     private CommodityDao underTest;
 
@@ -75,7 +83,7 @@ class CommodityDaoTest {
     @Test
     void findSuppliers() {
         given(repository.getSellOffers(COMMODITY_NAME, MIN_STOCK, MIN_PRICE, MAX_PRICE)).willReturn(List.of(entity));
-        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+        given(converter.convertEntity(entity)).willReturn(domain);
 
         assertThat(underTest.findSuppliers(COMMODITY_NAME, MIN_STOCK, MIN_PRICE, MAX_PRICE)).containsExactly(domain);
     }
@@ -83,7 +91,7 @@ class CommodityDaoTest {
     @Test
     void findConsumers() {
         given(repository.getBuyOffers(COMMODITY_NAME, MIN_DEMAND, MIN_PRICE, MAX_PRICE)).willReturn(List.of(entity));
-        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+        given(converter.convertEntity(entity)).willReturn(domain);
 
         assertThat(underTest.findConsumers(COMMODITY_NAME, MIN_DEMAND, MIN_PRICE, MAX_PRICE)).containsExactly(domain);
     }

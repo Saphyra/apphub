@@ -38,7 +38,7 @@ class OfferMapper {
     ) {
         CommodityLocationData commodityLocationData = commodityLocationDatas.get(commodity.getExternalReference());
         if (isNull(commodityLocationData)) {
-            log.info("CommodityLocationData not found for externalReference {}", commodity.getExternalReference());
+            log.debug("CommodityLocationData not found for externalReference {}", commodity.getExternalReference());
             return Optional.empty();
         }
 
