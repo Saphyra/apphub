@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
 import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
@@ -42,10 +41,10 @@ class OfferDetailsFetcher {
     private final PerformanceReporter performanceReporter;
     private final ExecutorServiceBean executorServiceBean;
 
-    List<CommodityTradingResponse> assembleResponses(TradeMode tradeMode, StarSystem referenceSystem, List<Commodity> offers, boolean includeFleetCarriers) {
+    List<OfferDetail> assembleOffers(TradeMode tradeMode, StarSystem referenceSystem, List<Tradeable> offers, boolean includeFleetCarriers) {
         //Fetch ids of stations for commodities
         List<UUID> locationIds = offers.stream()
-            .map(Commodity::getExternalReference)
+            .map(Tradeable::getExternalReference)
             .toList();
 
 
@@ -59,7 +58,7 @@ class OfferDetailsFetcher {
             .toList();
     }
 
-    private List<CommodityTradingResponse> assemblePartition(TradeMode tradeMode, StarSystem referenceSystem, List<UUID> locationIds, List<Commodity> offers, boolean includeFleetCarriers) {
+    private List<OfferDetail> assemblePartition(TradeMode tradeMode, StarSystem referenceSystem, List<UUID> locationIds, List<Tradeable> offers, boolean includeFleetCarriers) {
         Map<UUID, CommodityLocationData> commodityLocationDatas = getCommodityLocationDatas(locationIds, includeFleetCarriers);
 
         //Fetch starSystems

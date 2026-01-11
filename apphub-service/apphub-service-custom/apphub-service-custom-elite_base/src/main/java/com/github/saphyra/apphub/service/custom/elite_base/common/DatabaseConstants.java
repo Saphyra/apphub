@@ -10,8 +10,6 @@ public class DatabaseConstants {
     public static final String TABLE_STATION_ECONOMY = "station_economy";
     public static final String TABLE_BODY = "body";
     public static final String TABLE_MATERIAL_TRADER_OVERRIDE = "material_trader_override";
-    public static final String TABLE_COMMODITY = "commodity";
-    public static final String TABLE_LOADOUT = "loadout";
     public static final String TABLE_BODY_DATA = "body_data";
     public static final String TABLE_BODY_MATERIAL = "body_material";
     public static final String TABLE_BODY_RING = "body_ring";
@@ -24,9 +22,13 @@ public class DatabaseConstants {
     public static final String TABLE_CONFLICTING_MINOR_FACTION = "conflicting_minor_faction";
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING = "star_system_power_mapping";
     public static final String TABLE_POWERPLAY_CONFLICT = "powerplay_conflict";
+    public static final String TABLE_ITEM_TYPE = "item_type";
+    public static final String TABLE_ITEM_COMMODITY = "item_commodity";
+    public static final String TABLE_ITEM_FC_MATERIAL = "item_fc_material";
+    public static final String TABLE_ITEM_EQUIPMENT = "item_equipment";
+    public static final String TABLE_ITEM_SPACESHIP = "item_spaceship";
 
     public static final String COLUMN_ID = "id";
-    public static final String COLUMN_MARKET_ID = "market_id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";
     public static final String COLUMN_STAR_NAME = "star_name";
     public static final String COLUMN_X_POS = "x_pos";
@@ -40,12 +42,10 @@ public class DatabaseConstants {
     public static final String COLUMN_SERVICE = "service";
     public static final String COLUMN_ECONOMY = "economy";
     public static final String COLUMN_MATERIAL_TYPE = "material_type";
-    public static final String COLUMN_COMMODITY_NAME = "commodity_name";
     public static final String COLUMN_VERIFIED = "verified";
     public static final String COLUMN_EXTERNAL_REFERENCE = "external_reference";
     public static final String COLUMN_MINOR_FACTION_ID = "minor_faction_id";
     public static final String COLUMN_CONFLICT_ID = "conflict_id";
-    public static final String COLUMN_NAME = "name";
-    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_ITEM_NAME = "item_name";
 }
 

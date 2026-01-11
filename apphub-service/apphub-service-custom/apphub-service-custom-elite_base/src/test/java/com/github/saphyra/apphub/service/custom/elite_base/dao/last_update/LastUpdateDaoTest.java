@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,23 +51,23 @@ class LastUpdateDaoTest {
     @Test
     void extractId() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(domain.getType()).willReturn(EntityType.COMMODITY);
+        given(domain.getType()).willReturn(ItemType.COMMODITY);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         assertThat(underTest.extractId(domain))
             .returns(EXTERNAL_REFERENCE_STRING, LastUpdateId::getExternalReference)
-            .returns(EntityType.COMMODITY, LastUpdateId::getType);
+            .returns(ItemType.COMMODITY, LastUpdateId::getType);
     }
 
     @Test
     void shouldSave_newEntity() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(domain.getType()).willReturn(EntityType.COMMODITY);
+        given(domain.getType()).willReturn(ItemType.COMMODITY);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(EXTERNAL_REFERENCE_STRING)
-            .type(EntityType.COMMODITY)
+            .type(ItemType.COMMODITY)
             .build();
         given(cache.getIfPresent(id)).willReturn(Optional.empty());
         given(repository.findById(id)).willReturn(Optional.empty());
@@ -77,12 +78,12 @@ class LastUpdateDaoTest {
     @Test
     void shouldSave_matchingLastUpdate() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(domain.getType()).willReturn(EntityType.COMMODITY);
+        given(domain.getType()).willReturn(ItemType.COMMODITY);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(EXTERNAL_REFERENCE_STRING)
-            .type(EntityType.COMMODITY)
+            .type(ItemType.COMMODITY)
             .build();
         given(cache.getIfPresent(id)).willReturn(Optional.of(storedDomain));
         given(domain.getLastUpdate()).willReturn(LAST_UPDATE);
@@ -94,12 +95,12 @@ class LastUpdateDaoTest {
     @Test
     void shouldSave_differentLastUpdate() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(domain.getType()).willReturn(EntityType.COMMODITY);
+        given(domain.getType()).willReturn(ItemType.COMMODITY);
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(EXTERNAL_REFERENCE_STRING)
-            .type(EntityType.COMMODITY)
+            .type(ItemType.COMMODITY)
             .build();
         given(cache.getIfPresent(id)).willReturn(Optional.of(storedDomain));
         given(domain.getLastUpdate()).willReturn(LAST_UPDATE);
@@ -112,24 +113,24 @@ class LastUpdateDaoTest {
     void findByIdValidated_notFound() {
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(EXTERNAL_REFERENCE_STRING)
-            .type(EntityType.SHIP_MODULE)
+            .type(ItemType.EQUIPMENT)
             .build();
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(cache.getIfPresent(id)).willReturn(Optional.empty());
         given(repository.findById(id)).willReturn(Optional.empty());
 
-        ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(EXTERNAL_REFERENCE, EntityType.SHIP_MODULE), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+        ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(EXTERNAL_REFERENCE, ItemType.EQUIPMENT), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test
     void findByIdValidated() {
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(EXTERNAL_REFERENCE_STRING)
-            .type(EntityType.SHIP_MODULE)
+            .type(ItemType.EQUIPMENT)
             .build();
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(cache.getIfPresent(id)).willReturn(Optional.of(domain));
 
-        assertThat(underTest.findByIdValidated(EXTERNAL_REFERENCE, EntityType.SHIP_MODULE)).isEqualTo(domain);
+        assertThat(underTest.findByIdValidated(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).isEqualTo(domain);
     }
 }

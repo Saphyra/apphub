@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer_filter;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.CommodityLocationData;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.OfferDetail;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,38 +24,44 @@ class SurfaceStationOfferFilterTest {
     private CommodityTradingRequest request;
 
     @Mock
-    private CommodityTradingResponse response;
+    private OfferDetail offerDetail;
+
+    @Mock
+    private CommodityLocationData commodityLocationData;
 
     @Test
     void includeSurfaceStation() {
         given(request.getIncludeSurfaceStations()).willReturn(true);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @ParameterizedTest
     @EnumSource(value = StationType.class, mode = EnumSource.Mode.INCLUDE, names = {"SURFACE_STATION", "ON_FOOT_SETTLEMENT"})
     void excludeSurfaceStation(StationType stationType) {
-        given(response.getLocationType()).willReturn(stationType.name());
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(stationType);
         given(request.getIncludeSurfaceStations()).willReturn(false);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 
     @Test
     void unknownLocationType() {
-        given(response.getLocationType()).willReturn(null);
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(null);
         given(request.getIncludeSurfaceStations()).willReturn(false);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 
     @ParameterizedTest
     @EnumSource(value = StationType.class, mode = EnumSource.Mode.EXCLUDE, names = {"SURFACE_STATION", "ON_FOOT_SETTLEMENT"})
     void includeNotSurfaceStations(StationType stationType) {
-        given(response.getLocationType()).willReturn(stationType.name());
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(stationType);
         given(request.getIncludeSurfaceStations()).willReturn(false);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 }

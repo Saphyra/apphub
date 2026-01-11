@@ -319,7 +319,7 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
             const request = {
                 tradeMode: tradeMode,
                 referenceStarId: starId,
-                commodity: commodity,
+                itemName: commodity,
                 minPrice: minPrice,
                 maxPrice: maxPrice,
                 maxStarSystemDistance: maxStarSystemDistance,

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.last_update;
 
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,6 +14,6 @@ import java.util.UUID;
 @Data
 public class LastUpdate {
     private final UUID externalReference;
-    private final EntityType type;
+    private final ItemType type;
     private LocalDateTime lastUpdate;
 }

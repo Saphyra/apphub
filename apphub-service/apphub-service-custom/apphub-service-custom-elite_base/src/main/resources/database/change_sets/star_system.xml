@@ -40,14 +40,14 @@
 
     <changeSet id="drop-old-star_name-index-from-star_system" author="Saphyra">
         <preConditions onFail="MARK_RAN">
-            <indexExists indexName="index-star_system-star_name"/>
+            <indexExists schemaName="elite_base" tableName="star_system" indexName="index-star_system-star_name"/>
         </preConditions>
 
         <dropIndex schemaName="elite_base" tableName="star_system" indexName="index-star_system-star_name"/>
     </changeSet>
 
     <changeSet id="create-trigram-index-on-star_name-to-star_system" author="Saphyra" dbms="postgresql">
-        <preConditions onFail="HALT">
+        <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="index-star_system-star_name"/>
             </not>

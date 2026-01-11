@@ -4,11 +4,15 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.StreamSupport;
 
 @Component
 public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastUpdateId, LastUpdateRepository> {
@@ -34,16 +38,45 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
         return maybeLastUpdate.isEmpty() || !maybeLastUpdate.get().getLastUpdate().equals(lastUpdate.getLastUpdate());
     }
 
-    public LastUpdate findByIdValidated(UUID externalReference, EntityType entityType) {
-        LastUpdateId id = LastUpdateId.builder()
-            .externalReference(uuidConverter.convertDomain(externalReference))
-            .type(entityType)
-            .build();
-        return findById(id)
+    public LastUpdate findByIdValidated(UUID externalReference, ItemType itemType) {
+        return findById(externalReference, itemType)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(
                 HttpStatus.NOT_FOUND,
                 ErrorCode.DATA_NOT_FOUND,
-                "LastUpdate not found by externalReference %s and type %s".formatted(externalReference, entityType)
+                "LastUpdate not found by externalReference %s and type %s".formatted(externalReference, itemType)
             ));
+    }
+
+    //TODO unit test
+    public Optional<LastUpdate> findById(UUID externalReference, ItemType type) {
+        LastUpdateId id = LastUpdateId.builder()
+            .externalReference(uuidConverter.convertDomain(externalReference))
+            .type(type)
+            .build();
+        return findById(id);
+    }
+
+    //TODO unit test
+    public List<LastUpdate> getLastUpdates(ItemType itemType, List<UUID> externalReferences) {
+        List<LastUpdateId> ids = externalReferences.stream()
+            .map(externalReference -> LastUpdateId.builder()
+                .externalReference(uuidConverter.convertDomain(externalReference))
+                .type(itemType)
+                .build())
+            .toList();
+
+        return converter.convertEntity(StreamSupport.stream(repository.findAllById(ids).spliterator(), false).toList());
+    }
+
+    //TODO unit test
+    public List<LastUpdate> findAllById(Map<UUID, ItemType> lastUpdateIdMap) {
+        List<LastUpdateId> ids = lastUpdateIdMap.entrySet().stream()
+            .map(entry -> LastUpdateId.builder()
+                .externalReference(uuidConverter.convertDomain(entry.getKey()))
+                .type(entry.getValue())
+                .build())
+            .toList();
+
+        return findAllById(ids);
     }
 }

@@ -1,0 +1,22 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-item_spaceship" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="item_spaceship"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="item_spaceship">
+            <column name="item_name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="external_reference" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="location_type" type="varchar(255)"/>
+            <column name="market_id" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="item_spaceship" columnNames="item_name,external_reference" constraintName="item_spaceship-pk"/>
+    </changeSet>
+</databaseChangeLog>

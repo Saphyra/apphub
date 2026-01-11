@@ -4,10 +4,12 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporti
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.TradingDaoSupport;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.type.ItemTypeDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.EdCommodity;
@@ -33,20 +35,24 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class CommoditySaver {
     private static final Striped<Lock> LOCKS = Striped.lock(8);
 
-    private final CommodityDao commodityDao;
+    private final TradingDaoSupport tradingDaoSupport;
     private final CommodityDataTransformer commodityDataTransformer;
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
     private final PerformanceReporter performanceReporter;
+    private final CommodityAveragePriceSaver commodityAveragePriceSaver;
+    private final ItemTypeDao itemTypeDao;
 
-    public void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, EdCommodity[] commodities) {
+    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, EdCommodity[] commodities) {
         List<CommodityData> commodityDataList = Arrays.stream(commodities)
             .map(edCommodity -> CommodityData.builder()
                 .name(edCommodity.getName())
@@ -58,16 +64,16 @@ public class CommoditySaver {
                 .build())
             .toList();
 
-        saveAll(timestamp, type, commodityLocation, externalReference, marketId, commodityDataList);
+        saveAll(timestamp, type, locationType, externalReference, marketId, commodityDataList);
     }
 
     @SneakyThrows
-    public void saveAll(LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, List<CommodityData> commodities) {
+    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<CommodityData> commodities) {
         if (isNull(marketId)) {
-            throw new IllegalArgumentException("Both commodityLocation or externalReference and marketId is null");
+            throw new IllegalArgumentException("Both locationType or externalReference and marketId is null");
         }
 
-        log.debug("Saving commodities for location {} and type {}", commodityLocation, type);
+        log.debug("Saving commodities for location {} and type {}", locationType, type);
 
         LockKey key = new LockKey(externalReference, type);
         Lock lock = LOCKS.get(key);
@@ -76,63 +82,85 @@ public class CommoditySaver {
         }
 
         try {
-            commodities = commodities.stream()
-                .filter(commodityData -> commodityData.getStock() > 0 || commodityData.getDemand() > 0)
-                .toList();
+            commodities = filterEmptyCommodities(commodities);
 
-            lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
-            log.debug("LastUpdate saved for location {} and type {}", externalReference, type);
+            LastUpdate lastUpdate = saveLastUpdate(timestamp, type, externalReference);
 
-            Map<String, Commodity> existingCommodities = getExistingCommodities(externalReference, type, marketId)
+            Map<String, Tradeable> existingCommodities = getExistingCommodities(externalReference, type, marketId)
                 .stream()
-                .collect(Collectors.toMap(Commodity::getCommodityName, Function.identity()));
+                .collect(Collectors.toMap(Tradeable::getItemName, Function.identity()));
 
-            List<Commodity> modifiedCommodities = commodities.stream()
-                .map(edCommodity -> commodityDataTransformer.transform(existingCommodities.get(edCommodity.getName()), timestamp, type, commodityLocation, externalReference, marketId, edCommodity))
+            List<Tradeable> modifiedCommodities = commodities.stream()
+                .map(commodity -> commodityDataTransformer.transform(existingCommodities.get(commodity.getName()), timestamp, type, locationType, externalReference, marketId, commodity, lastUpdate))
                 .flatMap(Optional::stream)
                 .toList();
 
             List<String> newCommodityNames = commodities.stream()
                 .map(CommodityData::getName)
                 .toList();
-            List<Commodity> deletedCommodities = existingCommodities.values()
+            List<Tradeable> deletedCommodities = existingCommodities.values()
                 .stream()
-                .filter(c -> !newCommodityNames.contains(c.getCommodityName()))
+                .filter(c -> !newCommodityNames.contains(c.getItemName()))
                 .toList();
 
+            Map<String, Integer> commodityPrices = commodities.stream()
+                .filter(commodityData -> nonNull(commodityData.getAveragePrice()))
+                .filter(commodityData -> commodityData.getAveragePrice() > 0)
+                .collect(Collectors.toMap(CommodityData::getName, CommodityData::getAveragePrice));
+            commodityAveragePriceSaver.saveAveragePrices(lastUpdate.getLastUpdate(), commodityPrices);
+
+            List<String> commodityNames = commodities.stream()
+                .map(CommodityData::getName)
+                .toList();
+            itemTypeDao.saveAll(type, commodityNames);
+
             performanceReporter.wrap(
-                () -> commodityDao.deleteAll(deletedCommodities),
+                () -> tradingDaoSupport.deleteAll(type, deletedCommodities),
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
                 PerformanceReportingKey.SAVE_COMMODITIES_DELETE_ALL.name()
             );
             log.debug("Deleted {} commodities", deletedCommodities.size());
 
             performanceReporter.wrap(
-                () -> commodityDao.saveAll(modifiedCommodities),
+                () -> tradingDaoSupport.saveAll(type, modifiedCommodities),
                 PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
                 PerformanceReportingKey.SAVE_COMMODITIES_SAVE_ALL.name()
             );
             log.debug("Saved {} commodities", modifiedCommodities.size());
 
-            log.debug("Saved commodities for location {} and type {}", commodityLocation, type);
+            log.debug("Saved commodities for location {} and type {}", locationType, type);
         } finally {
             lock.unlock();
         }
     }
 
-    private List<Commodity> getExistingCommodities(UUID externalReference, CommodityType type, Long marketId) {
-        List<Commodity> commodities = performanceReporter.wrap(
-            () -> commodityDao.getByMarketIdAndType(marketId, type),
+    private LastUpdate saveLastUpdate(LocalDateTime timestamp, ItemType type, UUID externalReference) {
+        LastUpdate lastUpdate = lastUpdateFactory.create(externalReference, type, timestamp);
+        lastUpdateDao.save(lastUpdate);
+        log.debug("LastUpdate saved for location {} and type {}", externalReference, type);
+
+        return lastUpdate;
+    }
+
+    private static List<CommodityData> filterEmptyCommodities(List<CommodityData> commodities) {
+        return commodities.stream()
+            .filter(commodityData -> commodityData.getStock() > 0 || commodityData.getDemand() > 0)
+            .toList();
+    }
+
+    private List<Tradeable> getExistingCommodities(UUID externalReference, ItemType type, Long marketId) {
+        List<Tradeable> commodities = performanceReporter.wrap(
+            () -> tradingDaoSupport.getByMarketId(type, marketId),
             PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.SAVE_COMMODITIES_QUERY.name()
         );
 
-        List<Commodity> incorrectCommodities = commodities.stream()
+        List<Tradeable> incorrectCommodities = commodities.stream()
             .filter(commodity -> !commodity.getExternalReference().equals(externalReference))
             .toList();
         log.debug("Found {} incorrect commodities.", incorrectCommodities.size());
         if (!incorrectCommodities.isEmpty()) {
-            commodityDao.deleteAll(incorrectCommodities);
+            tradingDaoSupport.deleteAll(type, incorrectCommodities);
             log.debug("{} incorrect commodities were deleted.", incorrectCommodities.size());
         }
 
@@ -173,6 +201,6 @@ public class CommoditySaver {
     @Data
     private static class LockKey {
         private final UUID externalReference;
-        private final CommodityType commodityType;
+        private final ItemType itemType;
     }
 }

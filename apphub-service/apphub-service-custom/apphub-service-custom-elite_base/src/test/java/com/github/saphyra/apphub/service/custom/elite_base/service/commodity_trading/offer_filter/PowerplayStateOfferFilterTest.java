@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer_filter;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.OfferDetail;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ class PowerplayStateOfferFilterTest {
     private PowerplayStateOfferFilter underTest;
 
     @Mock
-    private CommodityTradingResponse response;
+    private OfferDetail offerDetail;
 
     @Mock
     private CommodityTradingRequest request;
@@ -28,32 +28,32 @@ class PowerplayStateOfferFilterTest {
     void noFiltering() {
         given(request.getPowerplayState()).willReturn(null);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
 
-        then(response).shouldHaveNoInteractions();
+        then(offerDetail).shouldHaveNoInteractions();
     }
 
     @Test
     void nullPowerplayState() {
         given(request.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
-        given(response.getPowerplayState()).willReturn(null);
+        given(offerDetail.getPowerplayState()).willReturn(null);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 
     @Test
     void matchingPowerplayState() {
         given(request.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
-        given(response.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
+        given(offerDetail.getPowerplayState()).willReturn(PowerplayState.FORTIFIED);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @Test
     void nonMatchingPowerplayState() {
         given(request.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
-        given(response.getPowerplayState()).willReturn(PowerplayState.UNOCCUPIED.name());
+        given(offerDetail.getPowerplayState()).willReturn(PowerplayState.UNOCCUPIED);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 }

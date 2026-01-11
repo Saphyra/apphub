@@ -39,4 +39,10 @@
     <include file="database/change_sets/loadout.xml"/>
     <include file="database/change_sets/material_trader_override.xml"/>
     <include file="database/change_sets/powerplay_conflict.xml"/>
+    <include file="database/change_sets/item_type.xml"/>
+    <include file="database/change_sets/item_commodity.xml"/>
+    <include file="database/change_sets/item_fc_material.xml"/>
+    <include file="database/change_sets/item_equipment.xml"/>
+    <include file="database/change_sets/item_spaceship.xml"/>
+    <include file="database/change_sets/migration_commodities.xml"/>
 </databaseChangeLog>

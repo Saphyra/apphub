@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.p
 
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
@@ -105,7 +105,7 @@ class CommodityMessageProcessorTest {
             DOCKING_ACCESS,
             null
         ))
-            .willReturn(StationSaveResult.builder().commodityLocation(CommodityLocation.UNKNOWN).build());
+            .willReturn(StationSaveResult.builder().locationType(ItemLocationType.UNKNOWN).build());
         given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
         assertThat(catchThrowable(() -> underTest.processMessage(edMessage))).isInstanceOf(MessageProcessingDelayedException.class);
@@ -143,7 +143,7 @@ class CommodityMessageProcessorTest {
             DOCKING_ACCESS,
             null
         ))
-            .willReturn(StationSaveResult.builder().commodityLocation(CommodityLocation.STATION).externalReference(EXTERNAL_REFERENCE).build());
+            .willReturn(StationSaveResult.builder().locationType(ItemLocationType.STATION).externalReference(EXTERNAL_REFERENCE).build());
         given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
@@ -152,6 +152,6 @@ class CommodityMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(TIMESTAMP, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodities);
+        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodities);
     }
 }

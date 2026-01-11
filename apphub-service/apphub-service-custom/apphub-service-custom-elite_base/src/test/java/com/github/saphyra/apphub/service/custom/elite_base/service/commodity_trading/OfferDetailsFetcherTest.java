@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
@@ -8,9 +7,9 @@ import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.body.BodyDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
@@ -78,10 +77,10 @@ class OfferDetailsFetcherTest {
     private OfferDetailsFetcher underTest;
 
     @Mock
-    private Commodity commodity;
+    private Tradeable tradeable;
 
     @Mock
-    private CommodityTradingResponse response;
+    private OfferDetail offerDetail;
 
     @Mock
     private StarSystem referenceSystem;
@@ -106,7 +105,7 @@ class OfferDetailsFetcherTest {
 
     @Test
     void excludeFleetCarriers() {
-        given(commodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(tradeable.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(stationDao.findAllById(List.of(EXTERNAL_REFERENCE))).willReturn(List.of(station));
         given(station.getId()).willReturn(EXTERNAL_REFERENCE);
         given(station.getStarSystemId()).willReturn(STAR_SYSTEM_ID);
@@ -129,10 +128,10 @@ class OfferDetailsFetcherTest {
             any(),
             any()
         ))
-            .willReturn(Optional.of(response));
+            .willReturn(Optional.of(offerDetail));
         given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
-        assertThat(underTest.assembleResponses(TradeMode.SELL, referenceSystem, List.of(commodity), false)).containsExactly(response);
+        assertThat(underTest.assembleOffers(TradeMode.SELL, referenceSystem, List.of(tradeable), false)).containsExactly(offerDetail);
 
         then(offerMapper).should().mapOffer(
             eq(TradeMode.SELL),
@@ -141,7 +140,7 @@ class OfferDetailsFetcherTest {
             eq(Map.of(STAR_SYSTEM_ID, starSystem)),
             eq(Map.of(STAR_SYSTEM_ID, starSystemData)),
             eq(Map.of(BODY_ID, body)),
-            eq(commodity)
+            eq(tradeable)
         );
 
         CustomAssertions.singleMapAssert(argumentCaptor.getValue(), EXTERNAL_REFERENCE)
@@ -156,7 +155,7 @@ class OfferDetailsFetcherTest {
 
     @Test
     void includeFleetCarriers() {
-        given(commodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(tradeable.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(stationDao.findAllById(List.of(EXTERNAL_REFERENCE))).willReturn(Collections.emptyList());
         given(fleetCarrierDao.findAllById(List.of(EXTERNAL_REFERENCE))).willReturn(List.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(EXTERNAL_REFERENCE);
@@ -178,9 +177,9 @@ class OfferDetailsFetcherTest {
             any(),
             any()
         ))
-            .willReturn(Optional.of(response));
+            .willReturn(Optional.of(offerDetail));
 
-        assertThat(underTest.assembleResponses(TradeMode.SELL, referenceSystem, List.of(commodity), true)).containsExactly(response);
+        assertThat(underTest.assembleOffers(TradeMode.SELL, referenceSystem, List.of(tradeable), true)).containsExactly(offerDetail);
 
         then(offerMapper).should().mapOffer(
             eq(TradeMode.SELL),
@@ -189,7 +188,7 @@ class OfferDetailsFetcherTest {
             eq(Map.of(STAR_SYSTEM_ID, starSystem)),
             eq(Map.of(STAR_SYSTEM_ID, starSystemData)),
             eq(Map.of()),
-            eq(commodity)
+            eq(tradeable)
         );
 
         CustomAssertions.singleMapAssert(argumentCaptor.getValue(), EXTERNAL_REFERENCE)

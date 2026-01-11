@@ -1,0 +1,48 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="migrate-item_types" author="Saphyra">
+        <sql>
+            INSERT INTO elite_base.item_type (item_name, type)
+            SELECT
+            name,
+            CASE
+            WHEN type = 'OUTFITTING' THEN 'EQUIPMENT'
+            WHEN type = 'SHIPYARD' THEN 'SPACESHIP'
+            END
+            FROM elite_base.loadout
+            GROUP BY name, type;
+        </sql>
+
+        <sql>
+            INSERT INTO elite_base.item_type (item_name, type)
+            SELECT commodity_name, type FROM elite_base.commodity GROUP BY commodity_name, type;
+        </sql>
+    </changeSet>
+
+    <changeSet id="migrate-item_commodities" author="Saphyra">
+        <sql>
+            INSERT INTO elite_base.item_commodity(item_name, external_reference, location_type, market_id, buy_price, sell_price, demand, stock)
+            SELECT commodity_name, external_reference, commodity_location, market_id, buy_price, sell_price, demand, stock FROM elite_base.commodity WHERE type='COMMODITY';
+        </sql>
+    </changeSet>
+
+    <changeSet id="migrate-item_fc_materials" author="Saphyra">
+        <sql>
+            INSERT INTO elite_base.item_fc_material(item_name, external_reference, location_type, market_id, buy_price, sell_price, demand, stock)
+            SELECT commodity_name, external_reference, commodity_location, market_id, buy_price, sell_price, demand, stock FROM elite_base.commodity WHERE type='FC_MATERIAL';
+        </sql>
+    </changeSet>
+
+    <changeSet id="migrate-item_equipments" author="Saphyra">
+        <sql>
+            INSERT INTO elite_base.item_equipment(item_name, external_reference, location_type, market_id)
+            SELECT name, external_reference, commodity_location, market_id FROM elite_base.loadout WHERE type='OUTFITTING';
+        </sql>
+    </changeSet>
+
+    <changeSet id="migrate-item_spaceships" author="Saphyra">
+        <sql>
+            INSERT INTO elite_base.item_spaceship(item_name, external_reference, location_type, market_id)
+            SELECT name, external_reference, commodity_location, market_id FROM elite_base.loadout WHERE type='SHIPYARD';
+        </sql>
+    </changeSet>
+</databaseChangeLog>

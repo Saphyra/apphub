@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.fc_materials_capi.FcMaterialCapiItems;
@@ -100,7 +100,7 @@ class FcMaterialsCapiMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(TIMESTAMP, CommodityType.FC_MATERIAL, CommodityLocation.FLEET_CARRIER, FLEET_CARRIER_ID, MARKET_ID, Collections.emptyList());
+        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.FC_MATERIAL, ItemLocationType.FLEET_CARRIER, FLEET_CARRIER_ID, MARKET_ID, Collections.emptyList());
     }
 
     @Test
@@ -155,7 +155,7 @@ class FcMaterialsCapiMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(eq(TIMESTAMP), eq(CommodityType.FC_MATERIAL), eq(CommodityLocation.FLEET_CARRIER), eq(FLEET_CARRIER_ID), eq(MARKET_ID), argumentCaptor.capture());
+        then(commoditySaver).should().saveAll(eq(TIMESTAMP), eq(ItemType.FC_MATERIAL), eq(ItemLocationType.FLEET_CARRIER), eq(FLEET_CARRIER_ID), eq(MARKET_ID), argumentCaptor.capture());
 
         assertThat(argumentCaptor.getValue()).containsExactlyInAnyOrder(
             CommoditySaver.CommodityData.builder()

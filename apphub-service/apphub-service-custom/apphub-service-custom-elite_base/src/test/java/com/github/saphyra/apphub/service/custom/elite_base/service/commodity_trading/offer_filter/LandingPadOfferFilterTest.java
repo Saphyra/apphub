@@ -1,8 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer_filter;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.api.custom.elite_base.model.LandingPad;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.CommodityLocationData;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.OfferDetail;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,61 +25,63 @@ class LandingPadOfferFilterTest {
     private LandingPadOfferFilter underTest;
 
     @Mock
-    private CommodityTradingResponse response;
+    private OfferDetail offerDetail;
 
     @Mock
     private CommodityTradingRequest request;
 
+    @Mock
+    private CommodityLocationData commodityLocationData;
+
     @Test
     void includeUnknownLandingPad() {
-        given(response.getLandingPad()).willReturn(null);
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(null);
         given(request.getIncludeUnknownLandingPad()).willReturn(true);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @Test
     void excludeUnknownLandingPad() {
-        given(response.getLandingPad()).willReturn(null);
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(null);
         given(request.getIncludeUnknownLandingPad()).willReturn(false);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 
     @ParameterizedTest
     @MethodSource("matchingLandingPads")
-    void landingPadLargeEnough(LandingPad expected, LandingPad actual) {
-        given(response.getLandingPad()).willReturn(actual);
-        given(request.getMinLandingPad()).willReturn(expected);
+    void landingPadLargeEnough(StationType stationType, LandingPad minimumLandingPad) {
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(stationType);
+        given(request.getMinLandingPad()).willReturn(minimumLandingPad);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @ParameterizedTest
     @MethodSource("smallLandingPads")
-    void landingPadTooSmall(LandingPad expected, LandingPad actual) {
-        given(response.getLandingPad()).willReturn(actual);
-        given(request.getMinLandingPad()).willReturn(expected);
+    void landingPadTooSmall(StationType stationType, LandingPad minimumLandingPad) {
+        given(offerDetail.getCommodityLocationData()).willReturn(commodityLocationData);
+        given(commodityLocationData.getStationType()).willReturn(stationType);
+        given(request.getMinLandingPad()).willReturn(minimumLandingPad);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 
     private static Stream<Arguments> matchingLandingPads() {
         return Stream.of(
-            Arguments.of(LandingPad.LARGE, LandingPad.LARGE),
-            Arguments.of(LandingPad.MEDIUM, LandingPad.LARGE),
-            Arguments.of(LandingPad.MEDIUM, LandingPad.MEDIUM),
-            Arguments.of(LandingPad.SMALL, LandingPad.SMALL),
-            Arguments.of(LandingPad.SMALL, LandingPad.MEDIUM),
-            Arguments.of(LandingPad.SMALL, LandingPad.LARGE)
+            Arguments.of(StationType.CORIOLIS, LandingPad.MEDIUM),
+            Arguments.of(StationType.CORIOLIS, LandingPad.LARGE),
+            Arguments.of(StationType.OUTPOST, LandingPad.MEDIUM)
         );
     }
 
     private static Stream<Arguments> smallLandingPads() {
         return Stream.of(
-            Arguments.of(LandingPad.LARGE, LandingPad.MEDIUM),
-            Arguments.of(LandingPad.LARGE, LandingPad.SMALL),
-            Arguments.of(LandingPad.MEDIUM, LandingPad.SMALL)
+            Arguments.of(StationType.OUTPOST, LandingPad.LARGE)
         );
     }
 }

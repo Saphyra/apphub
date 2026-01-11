@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer_filter;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
 import com.github.saphyra.apphub.api.custom.elite_base.model.Relation;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.OfferDetail;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,21 +24,21 @@ class PowersOfferFilterTest {
     private CommodityTradingRequest request;
 
     @Mock
-    private CommodityTradingResponse response;
+    private OfferDetail offerDetail;
 
     @Test
     void matches(){
         given(request.getPowersRelation()).willReturn(Relation.ANY);
-        given(response.getPowers()).willReturn(List.of(Power.NAKATO_KAINE.name()));
+        given(offerDetail.getPowers()).willReturn(List.of(Power.NAKATO_KAINE));
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @Test
     void doesNotMatch(){
         given(request.getPowersRelation()).willReturn(Relation.EMPTY);
-        given(response.getPowers()).willReturn(List.of(Power.NAKATO_KAINE.name()));
+        given(offerDetail.getPowers()).willReturn(List.of(Power.NAKATO_KAINE));
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 }

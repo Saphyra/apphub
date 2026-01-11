@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer_filter;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.OfferDetail;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +19,7 @@ class SystemDistanceOfferFilterTest {
     private SystemDistanceOfferFilter underTest;
 
     @Mock
-    private CommodityTradingResponse response;
+    private OfferDetail offerDetail;
 
     @Mock
     private CommodityTradingRequest request;
@@ -27,16 +27,16 @@ class SystemDistanceOfferFilterTest {
     @Test
     void systemCloseEnough() {
         given(request.getMaxStarSystemDistance()).willReturn(MAX_SYSTEM_DISTANCE);
-        given(response.getStarSystemDistance()).willReturn((double) MAX_SYSTEM_DISTANCE);
+        given(offerDetail.getDistanceFromReferenceSystem()).willReturn((double) MAX_SYSTEM_DISTANCE);
 
-        assertThat(underTest.matches(response, request)).isTrue();
+        assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @Test
     void systemTooFar() {
         given(request.getMaxStarSystemDistance()).willReturn(MAX_SYSTEM_DISTANCE);
-        given(response.getStarSystemDistance()).willReturn((double) MAX_SYSTEM_DISTANCE + 1);
+        given(offerDetail.getDistanceFromReferenceSystem()).willReturn((double) MAX_SYSTEM_DISTANCE + 1);
 
-        assertThat(underTest.matches(response, request)).isFalse();
+        assertThat(underTest.matches(offerDetail, request)).isFalse();
     }
 }

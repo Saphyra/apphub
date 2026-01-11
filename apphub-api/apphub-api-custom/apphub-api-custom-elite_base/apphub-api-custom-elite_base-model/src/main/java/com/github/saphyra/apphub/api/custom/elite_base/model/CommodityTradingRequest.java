@@ -16,7 +16,7 @@ import java.util.UUID;
 public class CommodityTradingRequest {
     private String tradeMode;
     private UUID referenceStarId;
-    private String commodity;
+    private String itemName;
     private Integer minPrice;
     private Integer maxPrice;
     private Integer maxStarSystemDistance;
