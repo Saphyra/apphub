@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    Calendar
+        Right panel disappears on mobile
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
