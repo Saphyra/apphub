@@ -18,7 +18,7 @@ class PowersOfferFilter implements OfferFilter {
         boolean result = request.getPowersRelation()
             .apply(
                 request.getPowers(),
-                Optional.ofNullable(offerDetail.getPowers())
+                () -> Optional.ofNullable(offerDetail.getPowers())
                     .map(powers -> powers.stream().map(Enum::name).toList())
                     .orElse(Collections.emptyList())
             );

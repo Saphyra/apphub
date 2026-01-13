@@ -19,7 +19,7 @@ class ControllingPowerOfferFilter implements OfferFilter {
         boolean result = request.getControllingPowerRelation()
             .apply(
                 request.getControllingPowers(),
-                Optional.ofNullable(offerDetail.getControllingPower())
+                () -> Optional.ofNullable(offerDetail.getControllingPower())
                     .map(Enum::name)
                     .map(List::of)
                     .orElse(Collections.emptyList())

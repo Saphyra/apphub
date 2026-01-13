@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
@@ -17,14 +18,22 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseConstants.COMMODITY_TRADING_BATCH_SIZE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseConstants.COMMODITY_TRADING_THREAD_COUNT;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
 class OfferDetailConverter {
     private final LastUpdateDao lastUpdateDao;
+    private final ExecutorServiceBean executorServiceBean;
 
     public List<CommodityTradingResponse> convert(List<OfferDetail> filteredOffers) {
+        return executorServiceBean.processBatch(filteredOffers, this::convertBatch, COMMODITY_TRADING_BATCH_SIZE, COMMODITY_TRADING_THREAD_COUNT);
+    }
+
+    private List<CommodityTradingResponse> convertBatch(List<OfferDetail> filteredOffers) {
         Map<UUID, ItemType> lastUpdateIdMap = filteredOffers.stream()
             .collect(Collectors.toMap(offerDetail -> offerDetail.getCommodityLocationData().getExternalReference(), o -> o.getTradingItem().getItemType()));
 
@@ -50,7 +59,7 @@ class OfferDetailConverter {
             .tradeAmount(offerDetail.getTradingItem().getTradeAmount(offerDetail.getTradeMode()))
             .price(offerDetail.getTradingItem().getPrice(offerDetail.getTradeMode()))
             .controllingPower(Optional.ofNullable(offerDetail.getStarSystemData()).map(StarSystemData::getControllingPower).map(Enum::name).orElse(null))
-            .powers(Optional.ofNullable(offerDetail.getStarSystemData()).map(StarSystemData::getPowers).map(powers -> powers.stream().map(Enum::name).toList()).orElse(null))
+            .powers(Optional.ofNullable(offerDetail.getStarSystemData()).map(StarSystemData::getPowers).map(powers -> powers.stream().map(Enum::name).toList()).orElse(null)) //TODO batch power query
             .powerplayState(Optional.ofNullable(offerDetail.getStarSystemData()).map(StarSystemData::getPowerplayState).map(Enum::name).orElse(null))
             .lastUpdated(lastUpdates.get(offerDetail.getCommodityLocationData().getExternalReference()))
             .build();

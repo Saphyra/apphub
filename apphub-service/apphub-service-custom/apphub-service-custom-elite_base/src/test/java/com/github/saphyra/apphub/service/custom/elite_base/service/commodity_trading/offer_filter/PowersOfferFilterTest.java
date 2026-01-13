@@ -27,15 +27,16 @@ class PowersOfferFilterTest {
     private OfferDetail offerDetail;
 
     @Test
-    void matches(){
-        given(request.getPowersRelation()).willReturn(Relation.ANY);
+    void matches() {
+        given(request.getPowersRelation()).willReturn(Relation.ANY_MATCH);
+        given(request.getPowers()).willReturn(List.of(Power.NAKATO_KAINE.name()));
         given(offerDetail.getPowers()).willReturn(List.of(Power.NAKATO_KAINE));
 
         assertThat(underTest.matches(offerDetail, request)).isTrue();
     }
 
     @Test
-    void doesNotMatch(){
+    void doesNotMatch() {
         given(request.getPowersRelation()).willReturn(Relation.EMPTY);
         given(offerDetail.getPowers()).willReturn(List.of(Power.NAKATO_KAINE));
 

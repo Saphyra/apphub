@@ -26,7 +26,6 @@ class ControllingPowerOfferFilterTest {
 
     @Test
     void matches() {
-        given(offerDetail.getControllingPower()).willReturn(null);
         given(request.getControllingPowerRelation()).willReturn(Relation.ANY);
 
         assertThat(underTest.matches(offerDetail, request)).isTrue();

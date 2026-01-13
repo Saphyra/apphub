@@ -13,9 +13,9 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarS
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemDataDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.StationDao;
+import com.github.saphyra.apphub.service.custom.elite_base.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -24,9 +24,11 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseConstants.COMMODITY_TRADING_BATCH_SIZE;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseConstants.COMMODITY_TRADING_THREAD_COUNT;
 
 @Component
 @RequiredArgsConstructor
@@ -47,66 +49,74 @@ class OfferDetailsFetcher {
             .map(Tradeable::getExternalReference)
             .toList();
 
-
-        return ListUtils.partition(locationIds, 5000)
-            .stream()
-            .map(partition -> CompletableFuture.supplyAsync(
-                () -> assemblePartition(tradeMode, referenceSystem, partition, offers, includeFleetCarriers).stream(),
-                executorServiceBean.getExecutor()
-            ))
-            .flatMap(CompletableFuture::join)
-            .toList();
+        return executorServiceBean.processBatch(locationIds, partition -> assemblePartition(tradeMode, referenceSystem, partition, offers, includeFleetCarriers), COMMODITY_TRADING_BATCH_SIZE, COMMODITY_TRADING_THREAD_COUNT);
     }
 
     private List<OfferDetail> assemblePartition(TradeMode tradeMode, StarSystem referenceSystem, List<UUID> locationIds, List<Tradeable> offers, boolean includeFleetCarriers) {
-        Map<UUID, CommodityLocationData> commodityLocationDatas = getCommodityLocationDatas(locationIds, includeFleetCarriers);
+        log.info("Querying CommodityLocationData for {} offers", locationIds.size());
+        Map<UUID, CommodityLocationData> commodityLocationDatas = Utils.measuredOperation(
+            () -> getCommodityLocationDatas(locationIds, includeFleetCarriers),
+            "Queried %s commodityLocationDatas in {} ms".formatted(locationIds.size())
+        );
 
         //Fetch starSystems
-        List<UUID> starIds = commodityLocationDatas.values()
-            .stream()
-            .map(CommodityLocationData::getStarSystemId)
-            .filter(Objects::nonNull)
-            .toList();
-        Map<UUID, StarSystem> stars = performanceReporter.wrap(
-                () -> starSystemDao.findAllById(starIds),
-                PerformanceReportingTopic.ELITE_BASE_QUERY,
-                PerformanceReportingKey.COMMODITY_TRADING_GET_STAR_SYSTEMS.name()
-            )
-            .stream()
-            .collect(Collectors.toMap(StarSystem::getId, Function.identity()));
+        List<UUID> starIds = getStarIds(commodityLocationDatas);
+        Map<UUID, StarSystem> starSystems = getStarSystems(starIds);
 
         //Fetch starSystemData for Powerplay data
-        Map<UUID, StarSystemData> systemDatas = performanceReporter.wrap(
-                () -> starSystemDataDao.findAllById(starIds),
-                PerformanceReportingTopic.ELITE_BASE_QUERY,
-                PerformanceReportingKey.COMMODITY_TRADING_GET_STAR_SYSTEM_DATA.name()
-            )
-            .stream()
-            .collect(Collectors.toMap(StarSystemData::getStarSystemId, Function.identity()));
+        Map<UUID, StarSystemData> starSystemDatas = getStarSystemDatas(starIds);
 
         //Fetch bodies for stationDistance
+        Map<UUID, Body> bodies = getBodies(commodityLocationDatas, starIds);
+
+        //Convert fetched data to response
+        return executorServiceBean.processCollectionWithWait(offers, offer -> offerMapper.mapOffer(tradeMode, referenceSystem, commodityLocationDatas, starSystems, starSystemDatas, bodies, offer))
+            .stream()
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
+    }
+
+    private Map<UUID, Body> getBodies(Map<UUID, CommodityLocationData> commodityLocationDatas, List<UUID> starIds) {
         List<UUID> bodyIds = commodityLocationDatas.values()
             .stream()
             .map(CommodityLocationData::getBodyId)
             .filter(Objects::nonNull)
             .toList();
-        Map<UUID, Body> bodies = performanceReporter.wrap(
-                () -> bodyDao.findAllById(bodyIds),
+        return performanceReporter.wrap(
+                () -> Utils.measuredOperation(() -> bodyDao.findAllById(bodyIds), "Queried %s of Bodies in {} ms".formatted(starIds.size())),
                 PerformanceReportingTopic.ELITE_BASE_QUERY,
                 PerformanceReportingKey.COMMODITY_TRADING_GET_BODIES.name()
             )
             .stream()
             .collect(Collectors.toMap(Body::getId, Function.identity()));
+    }
 
-        //Convert fetched data to response
-        return offers.stream()
-            .map(commodity -> CompletableFuture.supplyAsync(
-                () -> offerMapper.mapOffer(tradeMode, referenceSystem, commodityLocationDatas, stars, systemDatas, bodies, commodity),
-                executorServiceBean.getExecutor()
-            ))
-            .map(CompletableFuture::join)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+    private Map<UUID, StarSystemData> getStarSystemDatas(List<UUID> starIds) {
+        return performanceReporter.wrap(
+                () -> Utils.measuredOperation(() -> starSystemDataDao.findAllById(starIds), "Queried %s of StarSystemDatas in {} ms".formatted(starIds.size())),
+                PerformanceReportingTopic.ELITE_BASE_QUERY,
+                PerformanceReportingKey.COMMODITY_TRADING_GET_STAR_SYSTEM_DATA.name()
+            )
+            .stream()
+            .collect(Collectors.toMap(StarSystemData::getStarSystemId, Function.identity()));
+    }
+
+    private Map<UUID, StarSystem> getStarSystems(List<UUID> starIds) {
+        return performanceReporter.wrap(
+                () -> Utils.measuredOperation(() -> starSystemDao.findAllById(starIds), "Queried %s of StarSystems in {} ms".formatted(starIds.size())),
+                PerformanceReportingTopic.ELITE_BASE_QUERY,
+                PerformanceReportingKey.COMMODITY_TRADING_GET_STAR_SYSTEMS.name()
+            )
+            .stream()
+            .collect(Collectors.toMap(StarSystem::getId, Function.identity()));
+    }
+
+    private static List<UUID> getStarIds(Map<UUID, CommodityLocationData> commodityLocationDatas) {
+        return commodityLocationDatas.values()
+            .stream()
+            .map(CommodityLocationData::getStarSystemId)
+            .filter(Objects::nonNull)
             .toList();
     }
 

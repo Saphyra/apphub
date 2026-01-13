@@ -34,6 +34,20 @@ public class CommodityTradingService {
         commodityTradingRequestValidator.validate(request);
         TradeMode tradeMode = ValidationUtil.convertToEnumChecked(request.getTradeMode(), TradeMode::valueOf, "tradeMode");
 
+        List<OfferDetail> filteredOffers = getFilteredOffers(request, tradeMode);
+        return offerDetailConverter.convert(filteredOffers);
+    }
+
+    private List<OfferDetail> getFilteredOffers(CommodityTradingRequest request, TradeMode tradeMode) {
+        List<OfferDetail> offerDetails = getOfferDetails(request, tradeMode);
+
+        log.info("Filtering {} offers", offerDetails.size());
+        List<OfferDetail> filteredOffers = offerFilterService.filterOffers(offerDetails, request);
+        log.info("{} offers are returned after filtering", filteredOffers.size());
+        return filteredOffers;
+    }
+
+    private List<OfferDetail> getOfferDetails(CommodityTradingRequest request, TradeMode tradeMode) {
         StarSystem referenceSystem = performanceReporter.wrap(
             ()-> starSystemDao.findByIdValidated(request.getReferenceStarId()),
             PerformanceReportingTopic.ELITE_BASE_QUERY,
@@ -49,10 +63,7 @@ public class CommodityTradingService {
         log.info("Found {} offers", offers.size());
 
         List<OfferDetail> offerDetails = offerDetailsFetcher.assembleOffers(tradeMode, referenceSystem, offers, request.getIncludeFleetCarriers());
-        log.info("CommodityTradingResponses assembled");
-
-        List<OfferDetail> filteredOffers = offerFilterService.filterOffers(offerDetails, request);
-        log.info("{} offers are returned after filtering", filteredOffers.size());
-        return offerDetailConverter.convert(filteredOffers);
+        log.info("OfferDetails assembled");
+        return offerDetails;
     }
 }

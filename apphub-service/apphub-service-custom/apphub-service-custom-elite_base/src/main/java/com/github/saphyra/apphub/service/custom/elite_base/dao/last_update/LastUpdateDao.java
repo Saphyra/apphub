@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.StreamSupport;
 
 @Component
 public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastUpdateId, LastUpdateRepository> {
@@ -65,7 +64,7 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
                 .build())
             .toList();
 
-        return converter.convertEntity(StreamSupport.stream(repository.findAllById(ids).spliterator(), false).toList());
+        return findAllById(ids);
     }
 
     //TODO unit test
