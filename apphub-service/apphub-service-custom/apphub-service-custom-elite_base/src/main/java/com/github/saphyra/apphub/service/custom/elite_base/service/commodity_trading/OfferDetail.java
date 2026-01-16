@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -35,12 +34,6 @@ public class OfferDetail {
     public Power getControllingPower() {
         return Optional.ofNullable(starSystemData)
             .map(StarSystemData::getControllingPower)
-            .orElse(null);
-    }
-
-    public List<Power> getPowers() {
-        return Optional.ofNullable(starSystemData)
-            .map(StarSystemData::getPowers)
             .orElse(null);
     }
 

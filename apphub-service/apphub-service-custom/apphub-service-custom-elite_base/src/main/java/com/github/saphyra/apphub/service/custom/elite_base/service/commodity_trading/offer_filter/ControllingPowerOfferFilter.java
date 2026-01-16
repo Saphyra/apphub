@@ -15,7 +15,13 @@ import java.util.Optional;
 @Slf4j
 class ControllingPowerOfferFilter implements OfferFilter {
     @Override
-    public boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
+    public List<OfferDetail> filter(List<OfferDetail> offers, CommodityTradingRequest request) {
+        return offers.stream()
+            .filter(offerDetail -> matches(offerDetail, request))
+            .toList();
+    }
+
+    private boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
         boolean result = request.getControllingPowerRelation()
             .apply(
                 request.getControllingPowers(),
@@ -24,9 +30,14 @@ class ControllingPowerOfferFilter implements OfferFilter {
                     .map(List::of)
                     .orElse(Collections.emptyList())
             );
-        if (!result) {
+        if (!result && log.isDebugEnabled()) {
             log.debug("Filtered offer with incorrect controllingFaction: {}", offerDetail);
         }
         return result;
+    }
+
+    @Override
+    public int getOrder() {
+        return OfferFilterOrder.DEFAULT_ORDER.getOrder();
     }
 }

@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -36,7 +38,7 @@ class TradeAmountOfferFilterTest {
         given(offerDetail.getTradingItem()).willReturn(tradeItem);
         given(tradeItem.getTradeAmount(TradeMode.BUY)).willReturn(MIN_TRADE_AMOUNT);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -46,6 +48,6 @@ class TradeAmountOfferFilterTest {
         given(offerDetail.getTradingItem()).willReturn(tradeItem);
         given(tradeItem.getTradeAmount(TradeMode.BUY)).willReturn(MIN_TRADE_AMOUNT - 1);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 }

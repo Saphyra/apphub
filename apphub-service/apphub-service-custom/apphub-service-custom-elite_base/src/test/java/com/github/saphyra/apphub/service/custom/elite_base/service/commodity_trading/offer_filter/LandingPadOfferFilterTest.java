@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +40,7 @@ class LandingPadOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(null);
         given(request.getIncludeUnknownLandingPad()).willReturn(true);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -48,7 +49,7 @@ class LandingPadOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(null);
         given(request.getIncludeUnknownLandingPad()).willReturn(false);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 
     @ParameterizedTest
@@ -58,7 +59,7 @@ class LandingPadOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(stationType);
         given(request.getMinLandingPad()).willReturn(minimumLandingPad);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @ParameterizedTest
@@ -68,7 +69,7 @@ class LandingPadOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(stationType);
         given(request.getMinLandingPad()).willReturn(minimumLandingPad);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 
     private static Stream<Arguments> matchingLandingPads() {

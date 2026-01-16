@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static java.util.Objects.isNull;
 
 @Component
@@ -13,19 +15,30 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class StationDistanceOfferFilter implements OfferFilter {
     @Override
-    public boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
+    public List<OfferDetail> filter(List<OfferDetail> offers, CommodityTradingRequest request) {
+        return offers.stream()
+            .filter(offerDetail -> matches(offerDetail, request))
+            .toList();
+    }
+
+    private boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
         if (isNull(offerDetail.getStationDistanceFromStar())) {
             Boolean result = request.getIncludeUnknownStationDistance();
-            if (!result) {
+            if (!result && log.isDebugEnabled()) {
                 log.debug("Filtered offer from station with unknown distance: {}", offerDetail);
             }
             return result;
         }
 
         boolean result = offerDetail.getStationDistanceFromStar() <= request.getMaxStationDistance();
-        if (!result) {
+        if (!result && log.isDebugEnabled()) {
             log.debug("Filtered offer from too far station: {}", offerDetail);
         }
         return result;
+    }
+
+    @Override
+    public int getOrder() {
+        return OfferFilterOrder.DEFAULT_ORDER.getOrder();
     }
 }

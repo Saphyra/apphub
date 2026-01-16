@@ -1,9 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
 interface StarSystemPowerMappingRepository extends CrudRepository<StarSystemPowerMappingEntity, StarSystemPowerMappingEntity> {
     List<StarSystemPowerMappingEntity> getByStarSystemId(String starSystemId);
+
+    //TODO unit test
+    @Query("SELECT e from StarSystemPowerMappingEntity e WHERE e.starSystemId IN :starSystemIds")
+    List<StarSystemPowerMappingEntity> getByStarSystemIds(List<String> starSystemIds);
 }

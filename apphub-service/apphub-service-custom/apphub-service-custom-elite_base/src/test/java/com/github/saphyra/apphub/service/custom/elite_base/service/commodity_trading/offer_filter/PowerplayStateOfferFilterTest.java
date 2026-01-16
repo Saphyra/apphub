@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -28,7 +30,7 @@ class PowerplayStateOfferFilterTest {
     void noFiltering() {
         given(request.getPowerplayState()).willReturn(null);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
 
         then(offerDetail).shouldHaveNoInteractions();
     }
@@ -38,7 +40,7 @@ class PowerplayStateOfferFilterTest {
         given(request.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
         given(offerDetail.getPowerplayState()).willReturn(null);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 
     @Test
@@ -46,7 +48,7 @@ class PowerplayStateOfferFilterTest {
         given(request.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
         given(offerDetail.getPowerplayState()).willReturn(PowerplayState.FORTIFIED);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -54,6 +56,6 @@ class PowerplayStateOfferFilterTest {
         given(request.getPowerplayState()).willReturn(PowerplayState.FORTIFIED.name());
         given(offerDetail.getPowerplayState()).willReturn(PowerplayState.UNOCCUPIED);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 }

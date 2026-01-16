@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -25,10 +27,10 @@ class ControllingPowerOfferFilterTest {
     private CommodityTradingRequest request;
 
     @Test
-    void matches() {
+    void filter() {
         given(request.getControllingPowerRelation()).willReturn(Relation.ANY);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -36,6 +38,6 @@ class ControllingPowerOfferFilterTest {
         given(offerDetail.getControllingPower()).willReturn(Power.NAKATO_KAINE);
         given(request.getControllingPowerRelation()).willReturn(Relation.EMPTY);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 }

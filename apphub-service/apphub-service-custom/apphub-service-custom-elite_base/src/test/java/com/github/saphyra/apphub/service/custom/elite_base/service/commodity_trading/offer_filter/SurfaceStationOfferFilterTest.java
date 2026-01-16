@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -33,7 +35,7 @@ class SurfaceStationOfferFilterTest {
     void includeSurfaceStation() {
         given(request.getIncludeSurfaceStations()).willReturn(true);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @ParameterizedTest
@@ -43,7 +45,7 @@ class SurfaceStationOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(stationType);
         given(request.getIncludeSurfaceStations()).willReturn(false);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 
     @Test
@@ -52,7 +54,7 @@ class SurfaceStationOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(null);
         given(request.getIncludeSurfaceStations()).willReturn(false);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 
     @ParameterizedTest
@@ -62,6 +64,6 @@ class SurfaceStationOfferFilterTest {
         given(commodityLocationData.getStationType()).willReturn(stationType);
         given(request.getIncludeSurfaceStations()).willReturn(false);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 }

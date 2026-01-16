@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -17,22 +18,33 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class LandingPadOfferFilter implements OfferFilter {
     @Override
-    public boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
+    public List<OfferDetail> filter(List<OfferDetail> offers, CommodityTradingRequest request) {
+        return offers.stream()
+            .filter(offerDetail -> matches(offerDetail, request))
+            .toList();
+    }
+
+    private boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
         LandingPad landingPad = Optional.ofNullable(offerDetail.getCommodityLocationData().getStationType())
             .map(StationType::getLandingPad)
             .orElse(null);
         if (isNull(landingPad)) {
             boolean result = request.getIncludeUnknownLandingPad();
-            if (!result) {
+            if (!result && log.isDebugEnabled()) {
                 log.debug("Filtered offer from station with unknown landing pad: {}", offerDetail);
             }
             return result;
         }
 
         boolean result = landingPad.isLargeEnough(request.getMinLandingPad());
-        if (!result) {
+        if (!result && log.isDebugEnabled()) {
             log.debug("Filtered offer from station with too small landing pad: {}", offerDetail);
         }
         return result;
+    }
+
+    @Override
+    public int getOrder() {
+        return OfferFilterOrder.DEFAULT_ORDER.getOrder();
     }
 }

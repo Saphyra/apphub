@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 import static java.util.Objects.isNull;
@@ -16,7 +17,13 @@ import static java.util.Objects.isNull;
 @Slf4j
 class PowerplayStateOfferFilter implements OfferFilter {
     @Override
-    public boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
+    public List<OfferDetail> filter(List<OfferDetail> offers, CommodityTradingRequest request) {
+        return offers.stream()
+            .filter(offerDetail -> matches(offerDetail, request))
+            .toList();
+    }
+
+    private boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
         if (isNull(request.getPowerplayState())) {
             //User does not filter for powerplayState
             return true;
@@ -25,9 +32,14 @@ class PowerplayStateOfferFilter implements OfferFilter {
         boolean result = Optional.ofNullable(offerDetail.getPowerplayState())
             .filter(powerplayState -> powerplayState.equals(PowerplayState.valueOf(request.getPowerplayState())))
             .isPresent();
-        if (!result) {
+        if (!result && log.isDebugEnabled()) {
             log.debug("Filtering offer from system with incorrect powerplayState {}", offerDetail);
         }
         return result;
+    }
+
+    @Override
+    public int getOrder() {
+        return OfferFilterOrder.DEFAULT_ORDER.getOrder();
     }
 }

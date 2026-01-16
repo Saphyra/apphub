@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -29,7 +31,7 @@ class StationDistanceOfferFilterTest {
         given(offerDetail.getStationDistanceFromStar()).willReturn(null);
         given(request.getIncludeUnknownStationDistance()).willReturn(true);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -37,7 +39,7 @@ class StationDistanceOfferFilterTest {
         given(offerDetail.getStationDistanceFromStar()).willReturn(null);
         given(request.getIncludeUnknownStationDistance()).willReturn(false);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 
     @Test
@@ -45,7 +47,7 @@ class StationDistanceOfferFilterTest {
         given(request.getMaxStationDistance()).willReturn(MAX_STATION_DISTANCE);
         given(offerDetail.getStationDistanceFromStar()).willReturn((double) MAX_STATION_DISTANCE);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -53,6 +55,6 @@ class StationDistanceOfferFilterTest {
         given(request.getMaxStationDistance()).willReturn(MAX_STATION_DISTANCE);
         given(offerDetail.getStationDistanceFromStar()).willReturn((double) MAX_STATION_DISTANCE + 1);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 }

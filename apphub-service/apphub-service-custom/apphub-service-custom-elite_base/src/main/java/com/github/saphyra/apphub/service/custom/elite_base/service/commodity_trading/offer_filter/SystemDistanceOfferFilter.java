@@ -6,16 +6,29 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class SystemDistanceOfferFilter implements OfferFilter {
     @Override
-    public boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
+    public List<OfferDetail> filter(List<OfferDetail> offers, CommodityTradingRequest request) {
+        return offers.stream()
+            .filter(offerDetail -> matches(offerDetail, request))
+            .toList();
+    }
+
+    private boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
         boolean result = offerDetail.getDistanceFromReferenceSystem() <= request.getMaxStarSystemDistance();
-        if (!result) {
+        if (!result && log.isDebugEnabled()) {
             log.debug("Filtered offer because system is too far: {}", offerDetail);
         }
         return result;
+    }
+
+    @Override
+    public int getOrder() {
+        return OfferFilterOrder.DEFAULT_ORDER.getOrder();
     }
 }

@@ -26,12 +26,13 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.EliteBa
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class LastUpdatedOfferFilter {
+class LastUpdatedOfferFilter implements OfferFilter {
     private final DateTimeUtil dateTimeUtil;
     private final LastUpdateDao lastUpdateDao;
     private final ItemTypeDao itemTypeDao;
     private final ExecutorServiceBean executorServiceBean;
 
+    @Override
     public List<OfferDetail> filter(List<OfferDetail> offerDetails, CommodityTradingRequest request) {
         LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
             .minus(request.getMaxTimeSinceLastUpdated());
@@ -63,5 +64,10 @@ class LastUpdatedOfferFilter {
         return lastUpdateDao.getLastUpdates(itemType, externalReferences)
             .stream()
             .collect(Collectors.toMap(LastUpdate::getExternalReference, LastUpdate::getLastUpdate));
+    }
+
+    @Override
+    public int getOrder() {
+        return OfferFilterOrder.LAST_UPDATED_FILTER_ORDER.getOrder();
     }
 }

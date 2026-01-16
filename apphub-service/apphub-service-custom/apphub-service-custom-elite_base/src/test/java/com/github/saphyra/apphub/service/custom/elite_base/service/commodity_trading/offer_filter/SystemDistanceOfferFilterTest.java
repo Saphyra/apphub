@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
@@ -29,7 +31,7 @@ class SystemDistanceOfferFilterTest {
         given(request.getMaxStarSystemDistance()).willReturn(MAX_SYSTEM_DISTANCE);
         given(offerDetail.getDistanceFromReferenceSystem()).willReturn((double) MAX_SYSTEM_DISTANCE);
 
-        assertThat(underTest.matches(offerDetail, request)).isTrue();
+        assertThat(underTest.filter(List.of(offerDetail), request)).containsExactly(offerDetail);
     }
 
     @Test
@@ -37,6 +39,6 @@ class SystemDistanceOfferFilterTest {
         given(request.getMaxStarSystemDistance()).willReturn(MAX_SYSTEM_DISTANCE);
         given(offerDetail.getDistanceFromReferenceSystem()).willReturn((double) MAX_SYSTEM_DISTANCE + 1);
 
-        assertThat(underTest.matches(offerDetail, request)).isFalse();
+        assertThat(underTest.filter(List.of(offerDetail), request)).isEmpty();
     }
 }
