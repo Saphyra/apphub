@@ -31,11 +31,12 @@ public class OfferFilterService {
         List<OfferDetail> result = offers;
         for (OfferFilter filter : filters.stream().sorted(Comparator.comparingInt(Ordered::getOrder)).toList()) {
             result = executorServiceBean.processBatch(
-                offers,
+                result,
                 o -> filter.filter(o, request),
                 COMMODITY_TRADING_BATCH_SIZE,
                 COMMODITY_TRADING_THREAD_COUNT
             );
+            log.info("Remaining offers after running {}: {}", filter.getClass().getSimpleName(), result.size());
         }
 
         log.debug("Remaining offers after filtering: {}", result.size());
