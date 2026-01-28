@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading;
 
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.TradeMode;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.TradeMode;
 
 import java.util.UUID;
 

@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.comm
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.commodity.CommodityFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.fc_material.FcMaterialDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.fc_material.FcMaterialFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.TradeMode;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.TradeMode;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

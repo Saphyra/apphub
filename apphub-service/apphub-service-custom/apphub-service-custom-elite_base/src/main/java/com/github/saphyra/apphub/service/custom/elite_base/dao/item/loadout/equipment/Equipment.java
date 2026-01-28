@@ -17,4 +17,5 @@ public class Equipment implements Loadout {
     private final String itemName;
     private final ItemLocationType locationType;
     private final Long marketId;
+    private final UUID starSystemId;
 }

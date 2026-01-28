@@ -47,5 +47,12 @@ public class DatabaseConstants {
     public static final String COLUMN_MINOR_FACTION_ID = "minor_faction_id";
     public static final String COLUMN_CONFLICT_ID = "conflict_id";
     public static final String COLUMN_ITEM_NAME = "item_name";
+    public static final String COLUMN_LAST_UPDATE = "last_update";
+    public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_LOCATION_TYPE = "location_type";
+    public static final String COLUMN_SELL_PRICE = "sell_price";
+    public static final String COLUMN_BUY_PRICE = "buy_price";
+    public static final String COLUMN_STOCK = "stock";
+    public static final String COLUMN_DEMAND = "demand";
 }
 

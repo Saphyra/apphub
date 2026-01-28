@@ -15,6 +15,7 @@
             </column>
             <column name="location_type" type="varchar(255)"/>
             <column name="market_id" type="numeric"/>
+            <column name="star_system_id" type="varchar(255)"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="item_spaceship" columnNames="item_name,external_reference" constraintName="item_spaceship-pk"/>

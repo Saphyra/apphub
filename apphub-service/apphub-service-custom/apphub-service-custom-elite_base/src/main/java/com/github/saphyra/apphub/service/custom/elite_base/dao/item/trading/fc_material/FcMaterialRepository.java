@@ -10,9 +10,11 @@ import java.util.List;
 interface FcMaterialRepository extends CrudRepository<FcMaterialEntity, ItemEntityId> {
     List<FcMaterialEntity> getByMarketId(Long marketId);
 
+    //TODO remove
     @Query("SELECT f FROM FcMaterialEntity f WHERE f.id.itemName = :itemName AND f.stock >= :minTradeAmount AND f.sellPrice BETWEEN :minPrice AND :maxPrice")
     List<FcMaterialEntity> getSellOffers(String itemName, Integer minTradeAmount, Integer minPrice, Integer maxPrice);
 
+    //TODO remove
     @Query("SELECT f FROM FcMaterialEntity f WHERE f.id.itemName = :itemName AND f.demand >= :minTradeAmount AND f.buyPrice BETWEEN :minPrice AND :maxPrice")
     List<FcMaterialEntity> getBuyOffers(String itemName, Integer minTradeAmount, Integer minPrice, Integer maxPrice);
 }

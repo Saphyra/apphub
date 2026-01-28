@@ -31,4 +31,5 @@ class FcMaterialEntity {
     private Integer sellPrice;
     private Integer demand;
     private Integer stock;
+    private String starSystemId;
 }

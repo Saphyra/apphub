@@ -1,16 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
-import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
-import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.TradingDaoSupport;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer_filter.OfferFilterService;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,49 +15,19 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-public class CommodityTradingService {
+class CommodityTradingService {
     private final CommodityTradingRequestValidator commodityTradingRequestValidator;
-    private final StarSystemDao starSystemDao;
-    private final OfferFilterService offerFilterService;
-    private final OfferDetailsFetcher offerDetailsFetcher;
-    private final PerformanceReporter performanceReporter;
-    private final TradingDaoSupport tradingDaoSupport;
-    private final OfferDetailConverter offerDetailConverter;
+    private final OfferQueryService offerQueryService;
+    private final OfferConverter offerConverter;
 
-    public List<CommodityTradingResponse> getTradeOffers(CommodityTradingRequest request) {
+    CommodityTradingResponse getTradeOffers(CommodityTradingRequest request) {
         commodityTradingRequestValidator.validate(request);
-        TradeMode tradeMode = ValidationUtil.convertToEnumChecked(request.getTradeMode(), TradeMode::valueOf, "tradeMode");
 
-        List<OfferDetail> filteredOffers = getFilteredOffers(request, tradeMode);
-        return offerDetailConverter.convert(filteredOffers);
-    }
+        BiWrapper<Integer, List<OfferDetail>> offers = offerQueryService.getOffers(request);
 
-    private List<OfferDetail> getFilteredOffers(CommodityTradingRequest request, TradeMode tradeMode) {
-        List<OfferDetail> offerDetails = getOfferDetails(request, tradeMode);
-
-        log.info("Filtering {} offers", offerDetails.size());
-        List<OfferDetail> filteredOffers = offerFilterService.filterOffers(offerDetails, request);
-        log.info("{} offers are returned after filtering", filteredOffers.size());
-        return filteredOffers;
-    }
-
-    private List<OfferDetail> getOfferDetails(CommodityTradingRequest request, TradeMode tradeMode) {
-        StarSystem referenceSystem = performanceReporter.wrap(
-            ()-> starSystemDao.findByIdValidated(request.getReferenceStarId()),
-            PerformanceReportingTopic.ELITE_BASE_QUERY,
-            PerformanceReportingKey.COMMODITY_TRADING_REFERENCE_SYSTEM_RETRIEVAL.name()
-        );
-        log.info("ReferenceSystem found: {}", referenceSystem);
-
-        List<Tradeable> offers = performanceReporter.wrap(
-            () -> tradingDaoSupport.getOffers(tradeMode, request.getItemName(), request.getMinTradeAmount(), request.getMinPrice(), request.getMaxPrice()),
-            PerformanceReportingTopic.ELITE_BASE_QUERY,
-            PerformanceReportingKey.COMMODITY_TRADING_OFFER_QUERY.name()
-        );
-        log.info("Found {} offers", offers.size());
-
-        List<OfferDetail> offerDetails = offerDetailsFetcher.assembleOffers(tradeMode, referenceSystem, offers, request.getIncludeFleetCarriers());
-        log.info("OfferDetails assembled");
-        return offerDetails;
+        return CommodityTradingResponse.builder()
+            .offset(offers.getEntity1())
+            .items(offerConverter.convert(offers.getEntity2()))
+            .build();
     }
 }

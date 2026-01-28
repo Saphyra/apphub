@@ -21,6 +21,7 @@ class SpaceshipConverter extends ConverterBase<SpaceshipEntity, Spaceship> {
                 .build())
             .locationType(domain.getLocationType())
             .marketId(domain.getMarketId())
+            .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .build();
     }
 
@@ -31,6 +32,7 @@ class SpaceshipConverter extends ConverterBase<SpaceshipEntity, Spaceship> {
             .itemName(entity.getId().getItemName())
             .locationType(entity.getLocationType())
             .marketId(entity.getMarketId())
+            .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .build();
     }
 }

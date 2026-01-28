@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
@@ -55,10 +55,10 @@ class CommodityTradingControllerImplTest {
 
     @Test
     void bestTradeLocations() {
-        given(commodityTradingService.getTradeOffers(request)).willReturn(List.of(response));
+        given(commodityTradingService.getTradeOffers(request)).willReturn(response);
         given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
-        assertThat(underTest.bestTradeLocations(request, accessTokenHeader)).containsExactly(response);
+        assertThat(underTest.bestTradeLocations(request, accessTokenHeader)).isEqualTo(response);
     }
 
     @Test

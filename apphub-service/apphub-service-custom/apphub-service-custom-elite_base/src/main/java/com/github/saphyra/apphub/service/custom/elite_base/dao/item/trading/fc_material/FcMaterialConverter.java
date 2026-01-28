@@ -25,6 +25,7 @@ class FcMaterialConverter extends ConverterBase<FcMaterialEntity, FcMaterial> {
             .sellPrice(domain.getSellPrice())
             .demand(domain.getDemand())
             .stock(domain.getStock())
+            .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .build();
     }
 
@@ -39,6 +40,7 @@ class FcMaterialConverter extends ConverterBase<FcMaterialEntity, FcMaterial> {
             .sellPrice(entity.getSellPrice())
             .demand(entity.getDemand())
             .stock(entity.getStock())
+            .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .build();
     }
 }

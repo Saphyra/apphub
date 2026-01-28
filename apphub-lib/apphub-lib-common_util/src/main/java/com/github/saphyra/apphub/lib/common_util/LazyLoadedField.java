@@ -24,6 +24,10 @@ public class LazyLoadedField<T> {
         return new LazyLoadedField<>(value);
     }
 
+    public static <T> LazyLoadedField<T> of(Supplier<T> supplier) {
+        return new LazyLoadedField<>(supplier);
+    }
+
     public synchronized T get() {
         if (loaded) {
             log.debug("Cached value is returned.");

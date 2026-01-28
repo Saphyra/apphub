@@ -22,6 +22,7 @@ public class FcMaterial implements Tradeable {
     private Integer sellPrice;
     private Integer demand;
     private Integer stock;
+    private final UUID starSystemId;
 
     @Override
     public ItemType getItemType() {

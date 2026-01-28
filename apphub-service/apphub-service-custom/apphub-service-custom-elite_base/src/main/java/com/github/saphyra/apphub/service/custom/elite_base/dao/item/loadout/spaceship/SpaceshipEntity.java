@@ -27,4 +27,5 @@ class SpaceshipEntity {
     @Enumerated(EnumType.STRING)
     private ItemLocationType locationType;
     private Long marketId;
+    private String starSystemId;
 }

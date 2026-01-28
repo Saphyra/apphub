@@ -19,6 +19,7 @@
             <column name="sell_price" type="numeric"/>
             <column name="demand" type="numeric"/>
             <column name="stock" type="numeric"/>
+            <column name="star_system_id" type="varchar(255)"/>
         </createTable>
 
         <addPrimaryKey schemaName="elite_base" tableName="item_commodity" columnNames="item_name,external_reference" constraintName="item_commodity-pk"/>
@@ -33,34 +34,6 @@
 
         <createIndex schemaName="elite_base" tableName="item_commodity" indexName="index-item_commodity-market_id">
             <column name="market_id"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="create-index-item_name-stock-sell_price-on-item_commodity" author="Saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="item_commodity" indexName="index-item_commodity-item_name-stock-sell_price"/>
-            </not>
-        </preConditions>
-
-        <createIndex schemaName="elite_base" tableName="item_commodity" indexName="index-item_commodity-item_name-stock-sell_price">
-            <column name="item_name"/>
-            <column name="stock"/>
-            <column name="sell_price"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="create-index-item_name-demand-buy_price-on-item_commodity" author="Saphyra">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists schemaName="elite_base" tableName="item_commodity" indexName="index-item_commodity-item_name-demand-buy_price"/>
-            </not>
-        </preConditions>
-
-        <createIndex schemaName="elite_base" tableName="item_commodity" indexName="index-item_commodity-item_name-demand-buy_price">
-            <column name="item_name"/>
-            <column name="demand"/>
-            <column name="buy_price"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>
