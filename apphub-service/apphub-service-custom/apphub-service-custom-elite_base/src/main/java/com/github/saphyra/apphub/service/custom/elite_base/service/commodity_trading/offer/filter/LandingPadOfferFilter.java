@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.LandingPad;
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +23,7 @@ public class LandingPadOfferFilter implements OfferFilter {
     }
 
     private boolean matches(OfferDetail offerDetail, CommodityTradingRequest request) {
-        LandingPad landingPad = offerDetail.getStationType()
-            .map(StationType::getLandingPad)
-            .orElse(null);
+        LandingPad landingPad = offerDetail.getStationType().getLandingPad();
         if (isNull(landingPad)) {
             boolean result = request.getIncludeUnknownLandingPad();
             if (!result && log.isDebugEnabled()) {

@@ -27,8 +27,7 @@ class SurfaceStationOfferFilter implements OfferFilter {
             return true;
         }
 
-        StationType stationType = offerDetail.getStationType()
-            .orElse(null);
+        StationType stationType = offerDetail.getStationType();
         if (isNull(stationType)) {
             if (log.isDebugEnabled()) {
                 log.debug("Filtered offer with unknown station type: {}", offerDetail);

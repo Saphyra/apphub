@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponseItem;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,7 @@ class OfferConverter {
             .locationName(offerDetail.getLocationName())
             .locationType(offerDetail.getLocationType().name())
             .stationDistance(offerDetail.getStationDistanceFromStar().orElse(null))
-            .landingPad(offerDetail.getStationType().map(StationType::getLandingPad).orElse(null))
+            .landingPad(offerDetail.getStationType().getLandingPad())
             .tradeAmount(offerDetail.getAmount())
             .price(offerDetail.getPrice())
             .controllingPower(offerDetail.getControllingPower().map(Enum::name).orElse(null))

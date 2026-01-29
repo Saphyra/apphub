@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.sql_builder.BetweenCondition;
 import com.github.saphyra.apphub.lib.sql_builder.Column;
 import com.github.saphyra.apphub.lib.sql_builder.Equation;
 import com.github.saphyra.apphub.lib.sql_builder.NamedColumn;
+import com.github.saphyra.apphub.lib.sql_builder.NumberValue;
 import com.github.saphyra.apphub.lib.sql_builder.Operation;
 import com.github.saphyra.apphub.lib.sql_builder.OperationCondition;
 import com.github.saphyra.apphub.lib.sql_builder.OrderType;
@@ -59,6 +60,7 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 
 @Slf4j
+//TODO unit test
 abstract class OfferDaoBase implements OfferDao {
     private final JdbcTemplate jdbcTemplate;
     private final DateTimeUtil dateTimeUtil;
@@ -85,7 +87,8 @@ abstract class OfferDaoBase implements OfferDao {
             request.getMinPrice(),
             request.getMaxPrice(),
             request.getMaxTimeSinceLastUpdated(),
-            request.getItemName()
+            request.getItemName(),
+            request.getMaxStarSystemDistance()
         );
 
         return query(sql, request.getTradeMode());
@@ -116,33 +119,39 @@ abstract class OfferDaoBase implements OfferDao {
             .build();
     }
 
-    private String getSql(int offset, OrderType orderType, TradeMode tradeMode, StarSystem referenceSystem, int minTradeAmount, int minPrice, int maxPrice, Duration maxAge, String itemName) {
+    private String getSql(int offset, OrderType orderType, TradeMode tradeMode, StarSystem referenceSystem, int minTradeAmount, int minPrice, int maxPrice, Duration maxAge, String itemName, int maxDistance) {
         SelectQuery query = SqlBuilder.select()
             .from(new QualifiedTable(SCHEMA, TABLE_ITEM_COMMODITY));
         addColumns(query, tradeMode, referenceSystem);
         addJoins(query);
-        addConditions(query, tradeMode, minTradeAmount, minPrice, maxPrice, maxAge, itemName);
+        addConditions(query, tradeMode, minTradeAmount, minPrice, maxPrice, maxAge, itemName, maxDistance, referenceSystem);
         query.orderBy(getOrderByColumn(tradeMode), orderType);
         query.offset(offset);
         query.limit(eliteBaseProperties.getSearchPageSize());
 
         String sql = query.build();
-        log.debug("Get offers SQL: {}", sql);
+        log.info("Get offers SQL: {}", sql);
 
         return sql;
     }
 
-    private void addConditions(SelectQuery query, TradeMode tradeMode, int minTradeAmount, int minPrice, int maxPrice, Duration maxAge, String itemName) {
-        query.condition(new OperationCondition(
+    private void addConditions(SelectQuery query, TradeMode tradeMode, int minTradeAmount, int minPrice, int maxPrice, Duration maxAge, String itemName, int maxDistance, StarSystem referenceSystem) {
+        query
+            .condition(new Equation(
+                new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_ITEM_NAME),
+                new WrappedValue(itemName)
+            ))
+            .and()
+            .condition(new OperationCondition(
                 new QualifiedColumn(TABLE_ITEM_COMMODITY, getAmountColumn(tradeMode)),
                 Operation.GREATER_OR_EQUAL,
-                new WrappedValue(minTradeAmount)
+                new NumberValue(minTradeAmount)
             ))
             .and()
             .condition(new BetweenCondition(
                 new QualifiedColumn(TABLE_ITEM_COMMODITY, getPriceColumn(tradeMode)),
-                new WrappedValue(minPrice),
-                new WrappedValue(maxPrice)
+                new NumberValue(minPrice),
+                new NumberValue(maxPrice)
             ))
             .and()
             .condition(new OperationCondition(
@@ -151,9 +160,10 @@ abstract class OfferDaoBase implements OfferDao {
                 new WrappedValue(dateTimeConverter.convertDomain(dateTimeUtil.getCurrentDateTime().minus(maxAge)))
             ))
             .and()
-            .condition(new Equation(
-                new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_ITEM_NAME),
-                new WrappedValue(itemName)
+            .condition(new OperationCondition(
+                distanceSumSegment(referenceSystem),
+                Operation.LOWER_OR_EQUAL,
+                new NumberValue(Math.pow(maxDistance, 2))
             ));
     }
 
@@ -190,32 +200,36 @@ abstract class OfferDaoBase implements OfferDao {
         query.column(new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_STAR_NAME));
         query.column(new NamedColumn(
             new SquareRootSegment(
-                new SumSegment(
-                    new PowerSegment(
-                        new SubtractSegment(
-                            new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_X_POS),
-                            new WrappedValue(referenceSystem.getPosition().getX())
-                        ),
-                        2
-                    ),
-                    new PowerSegment(
-                        new SubtractSegment(
-                            new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_Y_POS),
-                            new WrappedValue(referenceSystem.getPosition().getY())
-                        ),
-                        2
-                    ),
-                    new PowerSegment(
-                        new SubtractSegment(
-                            new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_Z_POS),
-                            new WrappedValue(referenceSystem.getPosition().getZ())
-                        ),
-                        2
-                    )
-                )
+                distanceSumSegment(referenceSystem)
             ),
             COLUMN_DISTANCE_FROM_REFERENCE
         ));
+    }
+
+    private static SumSegment distanceSumSegment(StarSystem referenceSystem) {
+        return new SumSegment(
+            new PowerSegment(
+                new SubtractSegment(
+                    new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_X_POS),
+                    new NumberValue(referenceSystem.getPosition().getX())
+                ),
+                2
+            ),
+            new PowerSegment(
+                new SubtractSegment(
+                    new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_Y_POS),
+                    new NumberValue(referenceSystem.getPosition().getY())
+                ),
+                2
+            ),
+            new PowerSegment(
+                new SubtractSegment(
+                    new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_Z_POS),
+                    new NumberValue(referenceSystem.getPosition().getZ())
+                ),
+                2
+            )
+        );
     }
 
     private String getPriceColumn(TradeMode tradeMode) {

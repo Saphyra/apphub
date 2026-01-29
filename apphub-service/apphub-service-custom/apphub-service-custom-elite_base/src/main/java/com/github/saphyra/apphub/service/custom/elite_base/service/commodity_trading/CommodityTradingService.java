@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.C
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferQueryService;
+import com.github.saphyra.apphub.service.custom.elite_base.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,8 +24,18 @@ class CommodityTradingService {
     CommodityTradingResponse getTradeOffers(CommodityTradingRequest request) {
         commodityTradingRequestValidator.validate(request);
 
-        BiWrapper<Integer, List<OfferDetail>> offers = offerQueryService.getOffers(request);
+        BiWrapper<Integer, List<OfferDetail>> offers = Utils.measuredOperation(
+            () -> offerQueryService.getOffers(request),
+            "OfferDetails query took {} ms"
+        );
 
+        return Utils.measuredOperation(
+            () -> convert(offers),
+            "Response assembly took {} ms"
+        );
+    }
+
+    private CommodityTradingResponse convert(BiWrapper<Integer, List<OfferDetail>> offers) {
         return CommodityTradingResponse.builder()
             .offset(offers.getEntity1())
             .items(offerConverter.convert(offers.getEntity2()))

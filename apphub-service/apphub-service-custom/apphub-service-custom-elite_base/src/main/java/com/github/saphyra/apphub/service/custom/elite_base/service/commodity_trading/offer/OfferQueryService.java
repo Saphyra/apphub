@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarS
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.dao.OfferDao;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.filter.OfferFilter;
+import com.github.saphyra.apphub.service.custom.elite_base.util.Utils;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,10 @@ public class OfferQueryService {
     }
 
     public BiWrapper<Integer, List<OfferDetail>> getOffers(CommodityTradingRequest request) {
-        StarSystem referenceSystem = starSystemDao.findByIdValidated(request.getReferenceStarId());
+        StarSystem referenceSystem = Utils.measuredOperation(
+            () -> starSystemDao.findByIdValidated(request.getReferenceStarId()),
+            "Reference StarSystem query took {} ms"
+        );
 
         List<OfferDetail> result = new ArrayList<>();
 
@@ -63,9 +67,15 @@ public class OfferQueryService {
     }
 
     private List<OfferDetail> query(int offset, CommodityTradingRequest request, StarSystem referenceSystem) {
-        List<Offer> offers = offerDaos.get(request.getOrderBy()).getOffers(offset, request, referenceSystem);
+        List<Offer> offers = Utils.measuredOperation(
+            () -> offerDaos.get(request.getOrderBy()).getOffers(offset, request, referenceSystem),
+            "Querying offers took {} ms"
+        );
 
-        return offerDetailFactory.create(offers);
+        return Utils.measuredOperation(
+            () -> offerDetailFactory.create(offers),
+            "OfferDetail assembly took {} ms for %s offers".formatted(offers.size())
+        );
     }
 
     @PostConstruct

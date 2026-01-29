@@ -27,9 +27,8 @@ public class OfferDetail {
     private final List<Power> powers;
     private final Body body;
 
-    public Optional<StationType> getStationType() {
-        return Optional.ofNullable(locationData)
-            .map(ItemLocationData::getType);
+    public StationType getStationType() {
+        return locationData.getType();
     }
 
     public Optional<PowerplayState> getPowerplayState() {
