@@ -57,4 +57,18 @@
             CREATE INDEX "index-star_system-star_name" ON elite_base.star_system USING gin (star_name gin_trgm_ops);
         </sql>
     </changeSet>
+
+    <changeSet id="create-index-on-x_pos-y_pos-z_pos-to-start_system" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="star_system" columnNames="x_pos,y_pos,z_pos"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="star_system" indexName="index-star_system_positions">
+            <column name="x_pos"/>
+            <column name="y_pos"/>
+            <column name="z_pos"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

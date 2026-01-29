@@ -18,6 +18,18 @@
         </sql>
     </changeSet>
 
+    <!--TODO reactivate
+    <changeSet id="migrate-last_update-types" author="Saphyra">
+        <sql>
+            UPDATE elite_base.last_update set type='SPACESHIP' WHERE type = 'SHIP';
+        </sql>
+
+        <sql>
+            UPDATE elite_base.last_update set type='EQUIPMENT' WHERE type = 'SHIP_MODULE';
+        </sql>
+    </changeSet>
+    -->
+
     <changeSet id="migrate-item_commodities" author="Saphyra">
         <sql>
             INSERT INTO elite_base.item_commodity(item_name, external_reference, location_type, market_id, buy_price, sell_price, demand, stock, star_system_id)
@@ -60,4 +72,5 @@
             WHERE loadout.type='SHIPYARD';
         </sql>
     </changeSet>
+
 </databaseChangeLog>

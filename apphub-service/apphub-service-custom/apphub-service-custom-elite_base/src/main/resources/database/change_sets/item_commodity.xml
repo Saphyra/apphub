@@ -36,4 +36,17 @@
             <column name="market_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="create-index-trade_offer-on-item_commodity" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="item_commodity" indexName="index_item_commodity_trade_offer"/>
+            </not>
+        </preConditions>
+
+        <sql>
+            CREATE INDEX index_item_commodity_trade_offer ON elite_base.item_commodity (item_name)
+            INCLUDE(external_reference, star_system_id, buy_price, sell_price, demand, stock);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
