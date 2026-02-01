@@ -8,12 +8,10 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Component
 public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastUpdateId, LastUpdateRepository> {
@@ -55,34 +53,6 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
             .type(type)
             .build();
         return findById(id);
-    }
-
-    //TODO unit test
-    public List<LastUpdate> getLastUpdates(ItemType itemType, List<UUID> externalReferences) {
-        List<LastUpdate> cached = new ArrayList<>();
-        List<UUID> missing = new ArrayList<>();
-
-        externalReferences.forEach(externalReference -> {
-            cache.getIfPresent(new LastUpdateId(uuidConverter.convertDomain(externalReference), itemType))
-                .ifPresentOrElse(
-                    cached::add,
-                    () -> missing.add(externalReference)
-                );
-        });
-
-        List<LastUpdate> queried = repository.getByItemTypeAndExternalReferences(itemType, uuidConverter.convertDomain(missing))
-            .stream()
-            .map(entity -> {
-                LastUpdate lastUpdate = converter.convertEntity(entity);
-
-                cache.put(entity.getId(), lastUpdate);
-
-                return lastUpdate;
-            })
-            .toList();
-
-        return Stream.concat(cached.stream(), queried.stream())
-            .toList();
     }
 
     //TODO unit test

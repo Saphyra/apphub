@@ -20,8 +20,7 @@ public class StarSystemPowerMappingDao extends AbstractDao<StarSystemPowerMappin
         return converter.convertEntity(repository.getByStarSystemId(uuidConverter.convertDomain(starSystemId)));
     }
 
-    //TODO unit test
     public List<StarSystemPowerMapping> getByStarSystemIds(List<UUID> starSystemIds) {
-        return converter.convertEntity(repository.getByStarSystemIds( uuidConverter.convertDomain(starSystemIds)));
+        return converter.convertEntity(repository.getByStarSystemIds(uuidConverter.convertDomain(starSystemIds)));
     }
 }

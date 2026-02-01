@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class FcMaterialConverter extends ConverterBase<FcMaterialEntity, FcMaterial> {
     private final UuidConverter uuidConverter;
 

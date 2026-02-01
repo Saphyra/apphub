@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class LoadoutDaoSupport {
     private final Map<ItemType, LoadoutDao> daos;
     private final EquipmentFactory equipmentFactory;

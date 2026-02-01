@@ -8,7 +8,6 @@ import java.util.List;
 interface StarSystemPowerMappingRepository extends CrudRepository<StarSystemPowerMappingEntity, StarSystemPowerMappingEntity> {
     List<StarSystemPowerMappingEntity> getByStarSystemId(String starSystemId);
 
-    //TODO unit test
     @Query("SELECT e from StarSystemPowerMappingEntity e WHERE e.starSystemId IN :starSystemIds")
     List<StarSystemPowerMappingEntity> getByStarSystemIds(List<String> starSystemIds);
 }

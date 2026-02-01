@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import org.springframework.stereotype.Component;
 
 @Component
-//TODO unit test
 class ItemTypeConverter extends ConverterBase<ItemTypeEntity, ItemTypeDto> {
     @Override
     protected ItemTypeEntity processDomainConversion(ItemTypeDto domain) {

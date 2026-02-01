@@ -17,7 +17,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommodityAveragePriceSaver {
     private final CommodityAveragePriceDao commodityAveragePriceDao;
     private final CommodityAveragePriceFactory commodityAveragePriceFactory;
@@ -33,10 +32,17 @@ class CommodityAveragePriceSaver {
             .filter(cap -> {
                 CommodityAveragePrice existingCap = existing.get(cap.getCommodityName());
                 if (isNull(existingCap)) {
+                    //New entry
                     return true;
                 }
 
-                return !existingCap.getAveragePrice().equals(cap.getAveragePrice()) && lastUpdate.isAfter(existingCap.getLastUpdate());
+                if (existingCap.getAveragePrice().equals(cap.getAveragePrice())) {
+                    //No need to save if value is not changed
+                    return false;
+                }
+
+                //Update existing only if the new update is more recent
+                return lastUpdate.isAfter(existingCap.getLastUpdate());
             })
             .toList();
 

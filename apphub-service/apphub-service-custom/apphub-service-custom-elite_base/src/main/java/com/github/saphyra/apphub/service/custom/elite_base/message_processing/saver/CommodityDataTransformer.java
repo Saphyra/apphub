@@ -18,7 +18,6 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-//TODO unit test
 public class CommodityDataTransformer {
     private final TradingDaoSupport tradingDaoSupport;
 
@@ -30,7 +29,7 @@ public class CommodityDataTransformer {
         UUID externalReference,
         Long marketId,
         CommoditySaver.CommodityData commodityData,
-        LastUpdate lastUpdate
+        LastUpdate originalLastUpdate
     ) {
         Tradeable created = tradingDaoSupport.create(
             type,
@@ -49,7 +48,7 @@ public class CommodityDataTransformer {
             return Optional.of(created);
         }
 
-        if (lastUpdate.getLastUpdate().isAfter(timestamp)) {
+        if (originalLastUpdate.getLastUpdate().isAfter(timestamp)) {
             //Existing commodity is newer version than the updated one
             return Optional.empty();
         }

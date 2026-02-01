@@ -83,6 +83,8 @@ public class CommoditySaver {
 
         try {
             commodities = filterEmptyCommodities(commodities);
+            LastUpdate originalLastUpdate = lastUpdateDao.findById(externalReference, type)
+                .orElse(null);
 
             LastUpdate lastUpdate = saveLastUpdate(timestamp, type, externalReference);
 
@@ -91,7 +93,7 @@ public class CommoditySaver {
                 .collect(Collectors.toMap(Tradeable::getItemName, Function.identity()));
 
             List<Tradeable> modifiedCommodities = commodities.stream()
-                .map(commodity -> commodityDataTransformer.transform(existingCommodities.get(commodity.getName()), timestamp, type, locationType, externalReference, marketId, commodity, lastUpdate))
+                .map(commodity -> commodityDataTransformer.transform(existingCommodities.get(commodity.getName()), timestamp, type, locationType, externalReference, marketId, commodity, originalLastUpdate))
                 .flatMap(Optional::stream)
                 .toList();
 
