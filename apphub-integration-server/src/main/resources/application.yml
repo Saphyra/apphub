@@ -4,7 +4,7 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: jdbc:postgresql://localhost:5432/apphub-integration
+    url: jdbc:postgresql://localhost:5432/apphub_integration
     driverClassName: org.postgresql.Driver
     hikari:
       maximumPoolSize: 3
