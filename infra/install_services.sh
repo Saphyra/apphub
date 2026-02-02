@@ -5,7 +5,7 @@ SERVICES=$3
 eval "$(minikube docker-env)"
 docker rmi -f $(docker images -a -q)
 
-if [ "$1" == "SKIP_TESTS" ]; then
+if [ "$BUILD_MODE" == "SKIP_TESTS" ]; then
   mvn -T $THREAD_COUNT clean install -pl "$SERVICES" -am -DskipTests
 else
   mvn -T $THREAD_COUNT clean install -pl "$SERVICES" -am

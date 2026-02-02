@@ -7,7 +7,6 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: jdbc:postgresql://postgres:5432/postgres?ApplicationName=${spring.application.name}
     driverClassName: org.postgresql.Driver
     hikari:
       maximumPoolSize: 20

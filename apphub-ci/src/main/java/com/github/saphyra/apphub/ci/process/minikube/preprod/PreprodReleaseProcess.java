@@ -39,19 +39,18 @@ public class PreprodReleaseProcess {
 
         minikubeScaleProcess.scale(Constants.NAMESPACE_NAME_PREPROD, 0);
 
-        minikubeNamespaceSetupTask.setupNamespace(Constants.NAMESPACE_NAME_PREPROD);
+        minikubeNamespaceSetupTask.createNamespace(Constants.NAMESPACE_NAME_PREPROD);
 
         minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, 30);
 
         portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
 
         addDisabledRolesIfMissing();
     }
 
     @SneakyThrows
     private void addDisabledRolesIfMissing() {
-        try (Connection connection = DatabaseUtil.getConnection(platformProperties.getMinikubeDatabasePort(), "postgres")) {
+        try (Connection connection = DatabaseUtil.getConnection(platformProperties.getLocalDatabasePort(), "apphub_preprod")) {
             platformProperties.getProdDisabledRoles()
                 .forEach(role -> DatabaseUtil.insertDisabledRoleIfNotPresent(connection, role));
         }
@@ -65,10 +64,9 @@ public class PreprodReleaseProcess {
             return;
         }
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_DEVELOP, serviceNames, 15);
+        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, serviceNames, 15);
 
         portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
 
         log.info("Deployment finished.");
     }

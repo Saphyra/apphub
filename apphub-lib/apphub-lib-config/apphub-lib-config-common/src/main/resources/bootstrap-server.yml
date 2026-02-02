@@ -1,7 +1,7 @@
 server:
   port: 8080
 
-hostIp: 192.168.0.199
+hostIp: 192.168.0.198
 
 serviceUrls:
   adminPanel: admin-panel:8080

@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${hostIp}:5432/${databaseName}?ApplicationName=${spring.application.name}
+
+hostIp: 192.168.0.198
+databaseName: apphub_preprod
