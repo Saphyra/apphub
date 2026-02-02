@@ -2,7 +2,7 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: jdbc:postgresql://localhost:5432/apphub-ci
+    url: jdbc:postgresql://localhost:5432/apphub_ci
     driverClassName: org.postgresql.Driver
     hikari:
       maximumPoolSize: 3
