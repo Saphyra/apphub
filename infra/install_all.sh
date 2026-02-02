@@ -1,11 +1,14 @@
 THREAD_COUNT=$1
 BUILD_MODE=$2
 
+echo "Using $THREAD_COUNT with build mode $BUILD_MODE"
+
 eval "$(minikube docker-env)"
 docker rmi -f $(docker images -a -q)
 
-if [ "$1" == "SKIP_TESTS" ]; then
-  mvn -T $THREAD_COUNT clean install -DskipTests
+if [ "$BUILD_MODE" == "SKIP_TESTS" ]; then
+  echo "Skipping tests"
+  mvn -T $THREAD_COUNT clean install -Dmaven.test.skip=true
 else
   mvn -T $THREAD_COUNT clean install
 fi

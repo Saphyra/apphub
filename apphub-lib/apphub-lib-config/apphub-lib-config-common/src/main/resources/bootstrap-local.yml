@@ -3,6 +3,8 @@ event:
   processor:
     enabled: true
 
+hostIp: localhost
+
 serviceUrls:
   adminPanel: localhost:8089
   eventGateway: localhost:8081

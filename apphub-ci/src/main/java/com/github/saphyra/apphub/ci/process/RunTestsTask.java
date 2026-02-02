@@ -68,12 +68,12 @@ public class RunTestsTask {
                 enabledGroups,
                 propertyDao.getRemoteRunTestsThreadCount(),
                 platformProperties.getMinikubeTestServerPort(),
-                platformProperties.getMinikubeTestDatabasePort(),
-                platformProperties.getMinikubeDatabaseName(),
+                platformProperties.getLocalDatabasePort(),
+                "apphub_preprod",
                 String.join(",", platformProperties.getProdDisabledTestGroups()),
                 enabledGroups.equals("") ? propertyDao.getRemoteRunPreCreateDriverCount() : 0,
                 true,
-                true,
+                false,
                 Constants.NAMESPACE_NAME_PREPROD,
                 propertyDao.getRemoteIntegrationRetryCount()
             );
