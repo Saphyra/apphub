@@ -27,6 +27,6 @@ class FtpClientProperties {
 
     @PostConstruct
     public void postConstruct() {
-        log.debug("{}", this);
+        log.info("{}", this);
     }
 }
