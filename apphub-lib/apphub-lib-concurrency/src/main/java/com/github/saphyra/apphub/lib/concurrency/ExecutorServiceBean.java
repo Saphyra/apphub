@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -27,6 +29,7 @@ import java.util.stream.Collectors;
 @Builder(access = AccessLevel.PACKAGE)
 public class ExecutorServiceBean {
     @NonNull
+    @Getter
     private final ExecutorService executor;
 
     @NonNull
@@ -67,6 +70,16 @@ public class ExecutorServiceBean {
         });
     }
 
+    /**
+     * Applies the mapper on each item of dataList
+     *
+     * @param dataList    the data to process
+     * @param mapper      mapping the data
+     * @param parallelism max batch size
+     * @param <I>         type of the input
+     * @param <R>         type of the output
+     * @return the processed list
+     */
     public <I, R> List<R> processCollectionWithWait(List<I> dataList, Function<I, R> mapper, int parallelism) {
         if (parallelism < 1) {
             throw ExceptionFactory.reportedException("Parallelism must not be lower than 1. It was " + parallelism);
@@ -77,6 +90,39 @@ public class ExecutorServiceBean {
             .map(part -> processCollectionWithWait(part, mapper))
             .flatMap(Collection::stream)
             .collect(Collectors.toList());
+    }
+
+    /**
+     * Splits the input to smaller batches, and processes each batch parallel
+     *
+     * @param input     the data to process
+     * @param mapper    processing the data
+     * @param batchSize size of each batch
+     * @param <I>       type of the input
+     * @param <R>       type of the output
+     * @return the processed list
+     */
+    public <I, R> List<R> processBatch(List<I> input, Function<List<I>, List<R>> mapper, int batchSize, int threadCount) {
+        List<List<I>> batches = Lists.partition(input, batchSize);
+
+        Semaphore semaphore = new Semaphore(threadCount);
+
+        return processCollectionWithWait(
+            batches,
+            batch -> {
+                try {
+                    semaphore.acquire();
+                    return mapper.apply(batch);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } finally {
+                    semaphore.release();
+                }
+            }
+        )
+            .stream()
+            .flatMap(List::stream)
+            .toList();
     }
 
     public <I, R> List<R> processCollectionWithWait(Collection<I> dataList, Function<I, R> mapper) {

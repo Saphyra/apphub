@@ -32,13 +32,13 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
 
         joins.forEach(join -> segments.add(join.get()));
 
-        if(nonNull(groupBy)){
+        if (nonNull(groupBy)) {
             segments.add("GROUP BY");
             String groupBySegment = groupBy.get();
             segments.add(groupBySegment);
         }
 
-        if(!conditions.isEmpty()){
+        if (!conditions.isEmpty()) {
             segments.add("WHERE");
         }
 
@@ -46,11 +46,11 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
 
         excepts.forEach(except -> segments.add(except.get()));
 
-        if(nonNull(orderBy)){
+        if (nonNull(orderBy)) {
             segments.add(orderBy.get());
         }
 
-        if(nonNull(limit)){
+        if (nonNull(limit)) {
             segments.add("LIMIT %s".formatted(limit));
 
             segments.add("OFFSET %s".formatted(offset));
@@ -76,13 +76,19 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
     }
 
     public SelectQuery innerJoin(Table table, Column column1, Column column2) {
-        joins.add(new Join(JoinType.INNER, table, column1, column2));
+        joins.add(new Join(JoinType.INNER, table, List.of(new Equation(column1, column2))));
+
+        return this;
+    }
+
+    public SelectQuery innerJoin(Table table, Equation... equations) {
+        joins.add(new Join(JoinType.INNER, table, Arrays.asList(equations)));
 
         return this;
     }
 
     public SelectQuery leftJoin(Table table, Column column1, Column column2) {
-        joins.add(new Join(JoinType.LEFT, table, column1, column2));
+        joins.add(new Join(JoinType.LEFT, table, List.of(new Equation(column1, column2))));
 
         return this;
     }
@@ -93,14 +99,14 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
         return this;
     }
 
-    public SelectQuery except(SelectQuery except){
+    public SelectQuery except(SelectQuery except) {
         this.excepts.add(new Except(except));
 
         return this;
     }
 
     @RequiredArgsConstructor
-    enum JoinType{
+    enum JoinType {
         LEFT("LEFT JOIN"),
         INNER("INNER JOIN"),
         ;
@@ -109,15 +115,14 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
     }
 
     @AllArgsConstructor
-    static class Join implements SegmentProvider{
+    static class Join implements SegmentProvider {
         private final JoinType joinType;
         private final Table table;
-        private final Column column1;
-        private final Column column2;
+        private final List<Condition> conditions;
 
         @Override
         public String get() {
-            return "%s %s ON %s = %s".formatted(joinType.value, table.get(), column1.get(), column2.get());
+            return "%s %s ON %s".formatted(joinType.value, table.get(), conditions.stream().map(Condition::get).collect(Collectors.joining(" AND ")));
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.nearest.material_trader;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.MaterialType;
-import com.github.saphyra.apphub.api.custom.elite_base.model.NearestMaterialTraderResponse;
+import com.github.saphyra.apphub.api.custom.elite_base.model.material_trader.NearestMaterialTraderResponse;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.sql_builder.Condition;
 import com.github.saphyra.apphub.lib.sql_builder.ConditionGroup;

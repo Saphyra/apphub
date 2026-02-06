@@ -1,4 +1,3 @@
-import React from "react";
 import localizationData from "./last_updated_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";

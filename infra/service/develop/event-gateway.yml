@@ -25,19 +25,24 @@ spec:
         ports:
         - containerPort: 8080
         imagePullPolicy: Never
+        startupProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          periodSeconds: 5
+          failureThreshold: 3600
         livenessProbe:
           httpGet:
             path: /platform/health
             port: 8080
-          initialDelaySeconds: 10
           periodSeconds: 5
+          failureThreshold: 1
         readinessProbe:
           httpGet:
             path: /platform/health
             port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 1
-          failureThreshold: 10
+          periodSeconds: 5
+          failureThreshold: 1
         resources:
           limits:
             memory: 500Mi

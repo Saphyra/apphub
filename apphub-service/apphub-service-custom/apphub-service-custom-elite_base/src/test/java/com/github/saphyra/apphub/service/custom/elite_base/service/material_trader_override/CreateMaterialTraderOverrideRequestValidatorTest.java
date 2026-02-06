@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.material_trader_override;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.CreateMaterialTraderOverrideRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.MaterialType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.material_trader_override.MaterialTraderOverride;

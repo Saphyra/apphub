@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SumSegment implements SegmentProvider {
-    private final List<SegmentProvider> numbers;
+    private final List<SegmentProvider> values;
 
-    public SumSegment(SegmentProvider... numbers) {
-        this.numbers = Arrays.asList(numbers);
+    public SumSegment(SegmentProvider... values) {
+        this.values = Arrays.asList(values);
     }
 
     @Override
     public String get() {
-        return numbers.stream()
+        return values.stream()
             .map(SegmentProvider::get)
             .collect(Collectors.joining(" + "));
     }

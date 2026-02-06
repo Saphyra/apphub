@@ -1,11 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power.StarSystemPowerMapping;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power.StarSystemPowerMappingConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power.StarSystemPowerMappingDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power.StarSystemPowerMappingEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power.StarSystemPowerMappingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,5 +43,14 @@ class StarSystemPowerMappingDaoTest {
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         assertThat(underTest.getByStarSystemId(STAR_SYSTEM_ID)).containsExactly(domain);
+    }
+
+    @Test
+    void getByStarSystemIds() {
+        given(uuidConverter.convertDomain(List.of(STAR_SYSTEM_ID))).willReturn(List.of(STAR_SYSTEM_ID_STRING));
+        given(repository.getByStarSystemIds(List.of(STAR_SYSTEM_ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByStarSystemIds(List.of(STAR_SYSTEM_ID))).containsExactly(domain);
     }
 }

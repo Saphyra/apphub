@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepositor
         return converter.convertEntity(repository.findByBodyName(bodyName));
     }
 
-    public List<Body> findAllById(List<UUID> bodyIds) {
+    public List<Body> findAllById(Collection<UUID> bodyIds) {
         List<BodyEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(bodyIds)).spliterator(), false)
             .toList();
 

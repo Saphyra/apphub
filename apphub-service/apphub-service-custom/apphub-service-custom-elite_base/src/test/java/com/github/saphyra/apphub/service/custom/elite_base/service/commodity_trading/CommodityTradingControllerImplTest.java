@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingResponse;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityNameCache;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePrice;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.avg_price.CommodityAveragePriceDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePrice;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePriceDao;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.type.ItemTypeDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ class CommodityTradingControllerImplTest {
     private CommodityTradingService commodityTradingService;
 
     @Mock
-    private CommodityNameCache commodityNameCache;
+    private ItemTypeDao itemTypeDao;
 
     @Mock
     private PerformanceReporter performanceReporter;
@@ -54,15 +55,15 @@ class CommodityTradingControllerImplTest {
 
     @Test
     void bestTradeLocations() {
-        given(commodityTradingService.getTradeOffers(request)).willReturn(List.of(response));
+        given(commodityTradingService.getTradeOffers(request)).willReturn(response);
         given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
 
-        assertThat(underTest.bestTradeLocations(request, accessTokenHeader)).containsExactly(response);
+        assertThat(underTest.bestTradeLocations(request, accessTokenHeader)).isEqualTo(response);
     }
 
     @Test
     void getCommodities() {
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         assertThat(underTest.getCommodities(accessTokenHeader)).containsExactly(COMMODITY_NAME);
     }

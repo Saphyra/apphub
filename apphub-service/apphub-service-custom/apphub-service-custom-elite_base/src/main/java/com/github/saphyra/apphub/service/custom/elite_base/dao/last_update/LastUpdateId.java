@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.last_update;
 
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,5 +19,5 @@ import java.io.Serializable;
 public class LastUpdateId implements Serializable {
     private String externalReference;
     @Enumerated(EnumType.STRING)
-    private EntityType type;
+    private ItemType type;
 }

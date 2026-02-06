@@ -21,7 +21,6 @@ class StarSystemRepositoryTest {
     private static final String ID_1 = "id-1";
     private static final String ID_2 = "id-2";
     private static final String ID_3 = "id-3";
-    private static final String ID_4 = "id-4";
     private static final Long STAR_ID_1 = 34L;
     private static final Long STAR_ID_2 = 35L;
     private static final Long STAR_ID_3 = 36L;
@@ -76,7 +75,7 @@ class StarSystemRepositoryTest {
                 underTest.save(entity);
             });
 
-        assertThat(underTest.getByStarNameIgnoreCaseContaining("star_NAME"))
+        assertThat(underTest.getByStarNameIgnoreCaseContaining("tar_NAME"))
             .hasSize(10)
             .doesNotContain(entity1);
     }

@@ -9,6 +9,9 @@ public class PowerSegment implements SegmentProvider {
 
     @Override
     public String get() {
+        if (power == 2) {
+            return "(%s) * (%s)".formatted(value.get(), value.get());
+        }
         return "power(%s, %s)".formatted(value.get(), power);
     }
 }

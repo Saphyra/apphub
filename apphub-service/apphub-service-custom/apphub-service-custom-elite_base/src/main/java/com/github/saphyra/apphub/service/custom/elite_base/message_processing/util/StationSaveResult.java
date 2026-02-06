@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,5 +13,5 @@ import java.util.UUID;
 @Builder
 public class StationSaveResult {
     private final UUID externalReference;
-    private final CommodityLocation commodityLocation;
+    private final ItemLocationType locationType;
 }

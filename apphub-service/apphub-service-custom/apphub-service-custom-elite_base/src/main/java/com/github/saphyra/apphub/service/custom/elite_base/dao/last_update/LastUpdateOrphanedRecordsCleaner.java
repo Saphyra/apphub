@@ -19,9 +19,11 @@ import java.util.List;
 
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.COLUMN_EXTERNAL_REFERENCE;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_COMMODITY;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_ITEM_COMMODITY;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_ITEM_EQUIPMENT;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_ITEM_FC_MATERIAL;
+import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_ITEM_SPACESHIP;
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE;
-import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_LOADOUT;
 
 @Component
 @Slf4j
@@ -42,7 +44,7 @@ class LastUpdateOrphanedRecordsCleaner extends BatchOrphanedRecordCleaner {
 
     @Override
     public List<Orphanage> getPreconditions() {
-        return List.of(Orphanage.COMMODITY, Orphanage.LOADOUT);
+        return List.of(Orphanage.ITEM_COMMODITY, Orphanage.ITEM_EQUIPMENT, Orphanage.ITEM_FC_MATERIAL, Orphanage.ITEM_SPACESHIP);
     }
 
     @Override
@@ -50,8 +52,10 @@ class LastUpdateOrphanedRecordsCleaner extends BatchOrphanedRecordCleaner {
         String sql = SqlBuilder.select()
             .column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE)))
             .from(new QualifiedTable(SCHEMA, TABLE_LAST_UPDATE))
-            .except(SqlBuilder.select().column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE))).from(new QualifiedTable(SCHEMA, TABLE_COMMODITY)))
-            .except(SqlBuilder.select().column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE))).from(new QualifiedTable(SCHEMA, TABLE_LOADOUT)))
+            .except(SqlBuilder.select().column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE))).from(new QualifiedTable(SCHEMA, TABLE_ITEM_COMMODITY)))
+            .except(SqlBuilder.select().column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE))).from(new QualifiedTable(SCHEMA, TABLE_ITEM_FC_MATERIAL)))
+            .except(SqlBuilder.select().column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE))).from(new QualifiedTable(SCHEMA, TABLE_ITEM_EQUIPMENT)))
+            .except(SqlBuilder.select().column(new DistinctColumn(new DefaultColumn(COLUMN_EXTERNAL_REFERENCE))).from(new QualifiedTable(SCHEMA, TABLE_ITEM_SPACESHIP)))
             .limit(eliteBaseProperties.getOrphanedRecordCleaner().getBatchSize())
             .build();
 

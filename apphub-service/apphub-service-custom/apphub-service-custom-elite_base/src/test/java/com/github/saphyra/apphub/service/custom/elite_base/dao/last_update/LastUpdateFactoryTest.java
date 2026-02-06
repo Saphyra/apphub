@@ -1,9 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.last_update;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.EntityType;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,9 +21,9 @@ class LastUpdateFactoryTest {
 
     @Test
     void create() {
-        assertThat(underTest.create(EXTERNAL_REFERENCE, CommodityType.COMMODITY, LAST_UPDATE))
+        assertThat(underTest.create(EXTERNAL_REFERENCE, ItemType.COMMODITY, LAST_UPDATE))
             .returns(EXTERNAL_REFERENCE, LastUpdate::getExternalReference)
-            .returns(EntityType.COMMODITY, LastUpdate::getType)
+            .returns(ItemType.COMMODITY, LastUpdate::getType)
             .returns(LAST_UPDATE, LastUpdate::getLastUpdate);
     }
 }

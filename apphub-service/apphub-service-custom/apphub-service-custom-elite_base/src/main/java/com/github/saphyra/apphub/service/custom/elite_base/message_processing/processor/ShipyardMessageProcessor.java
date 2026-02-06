@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.LoadoutSaver;
@@ -63,8 +63,8 @@ class ShipyardMessageProcessor implements MessageProcessor {
         performanceReporter.wrap(
             () -> loadoutSaver.save(
                 shipyardMessage.getTimestamp(),
-                LoadoutType.SHIPYARD,
-                saveResult.getCommodityLocation(),
+                ItemType.SPACESHIP,
+                saveResult.getLocationType(),
                 saveResult.getExternalReference(),
                 shipyardMessage.getMarketId(),
                 CollectionUtils.toList(shipyardMessage.getShips())

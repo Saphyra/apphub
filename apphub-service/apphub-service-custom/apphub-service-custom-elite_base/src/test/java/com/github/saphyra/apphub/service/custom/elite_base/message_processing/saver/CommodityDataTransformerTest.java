@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.TradingDaoSupport;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,67 +20,88 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class CommodityDataTransformerTest {
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final Long MARKET_ID = 343L;
-    private static final String COMMODITY_NAME = "commodity-name";
-    private static final Integer BUY_PRICE = 243;
-    private static final Integer SELL_PRICE = 457;
-    private static final Integer DEMAND = 6576;
-    private static final Integer STOCK = 758;
-    private static final Integer AVERAGE_PRICE = 67;
+    private static final Long MARKET_ID = 12345L;
+    private static final String NAME = "name";
+    private static final Integer BUY_PRICE = 100;
+    private static final Integer SELL_PRICE = 150;
+    private static final Integer DEMAND = 200;
+    private static final Integer STOCK = 300;
+    private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
 
     @Mock
-    private CommodityFactory commodityFactory;
+    private TradingDaoSupport tradingDaoSupport;
 
     @InjectMocks
     private CommodityDataTransformer underTest;
 
     @Mock
+    private Tradeable existing;
+
+    @Mock
+    private Tradeable created;
+
+    @Mock
     private CommoditySaver.CommodityData commodityData;
 
     @Mock
-    private Commodity existingCommodity;
-
-    @Mock
-    private Commodity transformedCommodity;
+    private LastUpdate originalLastUpdate;
 
     @BeforeEach
     void setUp() {
-        given(commodityData.getName()).willReturn(COMMODITY_NAME);
+        given(commodityData.getName()).willReturn(NAME);
         given(commodityData.getBuyPrice()).willReturn(BUY_PRICE);
         given(commodityData.getSellPrice()).willReturn(SELL_PRICE);
         given(commodityData.getDemand()).willReturn(DEMAND);
         given(commodityData.getStock()).willReturn(STOCK);
-        given(commodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
-        given(commodityFactory.create(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, COMMODITY_NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, AVERAGE_PRICE)).willReturn(transformedCommodity);
+
+        given(tradingDaoSupport.create(
+            ItemType.COMMODITY,
+            ItemLocationType.STATION,
+            EXTERNAL_REFERENCE,
+            MARKET_ID,
+            NAME,
+            BUY_PRICE,
+            SELL_PRICE,
+            DEMAND,
+            STOCK
+        )).willReturn(created);
     }
 
     @Test
-    void nullStored() {
-        assertThat(underTest.transform(null, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData)).contains(transformedCommodity);
+    void noStored() {
+        assertThat(underTest.transform(null, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).contains(created);
     }
 
     @Test
-    void oldMessage() {
-        given(existingCommodity.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
+    void outdatedData() {
+        given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.plusMinutes(1));
 
-        assertThat(underTest.transform(existingCommodity, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData)).isEmpty();
+        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).isEmpty();
     }
 
     @Test
-    void sameRecords() {
-        given(commodityFactory.create(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, COMMODITY_NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, AVERAGE_PRICE)).willReturn(existingCommodity);
-        given(existingCommodity.getLastUpdate()).willReturn(LAST_UPDATE);
+    void dataNotModified() {
+        given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.minusMinutes(1));
+        given(tradingDaoSupport.create(
+            ItemType.COMMODITY,
+            ItemLocationType.STATION,
+            EXTERNAL_REFERENCE,
+            MARKET_ID,
+            NAME,
+            BUY_PRICE,
+            SELL_PRICE,
+            DEMAND,
+            STOCK
+        )).willReturn(existing);
 
-        assertThat(underTest.transform(existingCommodity, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData)).isEmpty();
+        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).isEmpty();
     }
 
     @Test
-    void recordModified() {
-        given(commodityFactory.create(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, COMMODITY_NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, AVERAGE_PRICE)).willReturn(transformedCommodity);
-        given(existingCommodity.getLastUpdate()).willReturn(LAST_UPDATE);
+    void newData() {
+        given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.minusMinutes(1));
 
-        assertThat(underTest.transform(existingCommodity, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData)).contains(transformedCommodity);
+        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).contains(created);
     }
 }

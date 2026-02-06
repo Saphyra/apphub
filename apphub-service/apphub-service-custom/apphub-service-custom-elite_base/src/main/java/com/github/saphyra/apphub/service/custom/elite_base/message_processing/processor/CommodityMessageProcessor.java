@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporti
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
@@ -73,8 +73,8 @@ class CommodityMessageProcessor implements MessageProcessor {
         performanceReporter.wrap(
             () -> commoditySaver.saveAll(
                 commodityMessage.getTimestamp(),
-                CommodityType.COMMODITY,
-                saveResult.getCommodityLocation(),
+                ItemType.COMMODITY,
+                saveResult.getLocationType(),
                 saveResult.getExternalReference(),
                 commodityMessage.getMarketId(),
                 commodityMessage.getCommodities()

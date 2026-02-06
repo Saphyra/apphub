@@ -1,17 +1,17 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.station.Station;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StationSaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,7 +36,7 @@ class StationSaverUtilTest {
     private static final String CONTROLLING_FACTION_NAME = "controlling-faction-name";
 
     @Mock
-    private CommodityLocationFetcher commodityLocationFetcher;
+    private LocationTypeFetcher locationTypeFetcher;
 
     @Mock
     private FleetCarrierSaver fleetCarrierSaver;
@@ -78,7 +78,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.FLEET_CARRIER, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.FLEET_CARRIER, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
@@ -119,7 +119,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.STATION, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.STATION, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
@@ -142,7 +142,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.FLEET_CARRIER, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.FLEET_CARRIER, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
@@ -183,7 +183,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.STATION, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.STATION, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
@@ -207,7 +207,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.FLEET_CARRIER, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.FLEET_CARRIER, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
@@ -249,7 +249,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.STATION, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.STATION, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
@@ -274,7 +274,7 @@ class StationSaverUtilTest {
         ))
             .willReturn(station);
         given(station.getId()).willReturn(EXTERNAL_REFERENCE);
-        given(commodityLocationFetcher.fetchCommodityLocationByMarketId(MARKET_ID)).willReturn(CommodityLocation.STATION);
+        given(locationTypeFetcher.fetchCommodityLocationByMarketId(MARKET_ID)).willReturn(ItemLocationType.STATION);
 
         assertThat(underTest.saveStationOrFleetCarrier(
             LAST_UPDATE,
@@ -290,14 +290,14 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.STATION, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.STATION, StationSaveResult::getLocationType)
             .returns(EXTERNAL_REFERENCE, StationSaveResult::getExternalReference);
     }
 
     @Test
     void unknown() {
         String[] services = {STATION_SERVICE};
-        given(commodityLocationFetcher.fetchCommodityLocationByMarketId(MARKET_ID)).willReturn(CommodityLocation.UNKNOWN);
+        given(locationTypeFetcher.fetchCommodityLocationByMarketId(MARKET_ID)).willReturn(ItemLocationType.UNKNOWN);
 
         assertThat(underTest.saveStationOrFleetCarrier(
             LAST_UPDATE,
@@ -313,7 +313,7 @@ class StationSaverUtilTest {
             "all",
             controllingFaction
         ))
-            .returns(CommodityLocation.UNKNOWN, StationSaveResult::getCommodityLocation)
+            .returns(ItemLocationType.UNKNOWN, StationSaveResult::getLocationType)
             .returns(null, StationSaveResult::getExternalReference);
     }
 }

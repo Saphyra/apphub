@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.config;
 
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityCacheKey;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.Loadout;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutCacheKey;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.loadout.spaceship.Spaceship;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.commodity.Commodity;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.loadout.equipment.Equipment;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.fc_material.FcMaterial;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -28,14 +28,28 @@ public class EliteBaseCacheConfig {
     }
 
     @Bean
-    Cache<CommodityCacheKey, List<Commodity>> commodityReadCache() {
+    Cache<Long, List<Commodity>> commodityReadCache() {
         return CacheBuilder.newBuilder()
             .expireAfterAccess(eliteBaseProperties.getCache().getExpireAfterAccess())
             .build();
     }
 
     @Bean
-    Cache<LoadoutCacheKey, List<Loadout>> loadoutReadCache() {
+    Cache<Long, List<FcMaterial>> fcMaterialReadCache() {
+        return CacheBuilder.newBuilder()
+            .expireAfterAccess(eliteBaseProperties.getCache().getExpireAfterAccess())
+            .build();
+    }
+
+    @Bean
+    Cache<Long, List<Equipment>> equipmentReadCache() {
+        return CacheBuilder.newBuilder()
+            .expireAfterAccess(eliteBaseProperties.getCache().getExpireAfterAccess())
+            .build();
+    }
+
+    @Bean
+    Cache<Long, List<Spaceship>> spaceshipReadCache() {
         return CacheBuilder.newBuilder()
             .expireAfterAccess(eliteBaseProperties.getCache().getExpireAfterAccess())
             .build();
