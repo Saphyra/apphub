@@ -5,7 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-//TODO unit test
 interface SpaceshipRepository extends CrudRepository<SpaceshipEntity, ItemEntityId> {
     List<SpaceshipEntity> getByMarketId(Long marketId);
 }

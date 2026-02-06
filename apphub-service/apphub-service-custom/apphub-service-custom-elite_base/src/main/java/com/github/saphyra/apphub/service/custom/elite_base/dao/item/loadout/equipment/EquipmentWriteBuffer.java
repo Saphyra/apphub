@@ -7,15 +7,15 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemDomainId
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 @Component
-//TODO unit test
 class EquipmentWriteBuffer extends WriteBuffer<ItemDomainId, Equipment> {
     private final EquipmentRepository equipmentRepository;
     private final EquipmentConverter equipmentConverter;
     private final ErrorReporterService errorReporterService;
 
-    protected EquipmentWriteBuffer(DateTimeUtil dateTimeUtil, EquipmentRepository equipmentRepository, EquipmentConverter equipmentConverter, ErrorReporterService errorReporterService) {
+    EquipmentWriteBuffer(DateTimeUtil dateTimeUtil, EquipmentRepository equipmentRepository, EquipmentConverter equipmentConverter, ErrorReporterService errorReporterService) {
         super(dateTimeUtil);
         this.equipmentRepository = equipmentRepository;
         this.equipmentConverter = equipmentConverter;
@@ -32,12 +32,19 @@ class EquipmentWriteBuffer extends WriteBuffer<ItemDomainId, Equipment> {
 
     @Override
     protected void doSynchronize(Collection<Equipment> bufferCopy) {
-        bufferCopy.forEach(commodity -> {
-            try {
-                equipmentRepository.save(equipmentConverter.convertDomain(commodity));
-            } catch (Exception e) {
-                errorReporterService.report("Failed saving Equipment", e);
-            }
-        });
+        List<EquipmentEntity> entities = equipmentConverter.convertDomain(bufferCopy);
+
+        try {
+            equipmentRepository.saveAll(entities);
+        } catch (Exception e) {
+            errorReporterService.report("Failed saving Equipment batch. Trying one by one", e);
+            entities.forEach(entity -> {
+                try {
+                    equipmentRepository.save(entity);
+                } catch (Exception e2) {
+                    errorReporterService.report("Failed saving Equipment", e2);
+                }
+            });
+        }
     }
 }

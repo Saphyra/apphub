@@ -26,12 +26,11 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 
 @Component
 @Slf4j
-//TODO unit test
 class EquipmentOrphanedRecordCleaner extends BatchOrphanedRecordCleaner {
     private final JdbcTemplate jdbcTemplate;
     private final EliteBaseProperties eliteBaseProperties;
 
-    public EquipmentOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate, EliteBaseProperties eliteBaseProperties) {
+    EquipmentOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate, EliteBaseProperties eliteBaseProperties) {
         super(errorReporterService, eliteBaseProperties);
         this.jdbcTemplate = jdbcTemplate;
         this.eliteBaseProperties = eliteBaseProperties;

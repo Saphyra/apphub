@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-//TODO unit test
 public class EquipmentDao extends ListCachedBufferedDao<EquipmentEntity, Equipment, ItemEntityId, Long, ItemDomainId, EquipmentRepository> implements LoadoutDao {
     private final UuidConverter uuidConverter;
 

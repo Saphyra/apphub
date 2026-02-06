@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-//TODO unit test
 public class SpaceshipDao extends ListCachedBufferedDao<SpaceshipEntity, Spaceship, ItemEntityId, Long, ItemDomainId, SpaceshipRepository> implements LoadoutDao {
     private final UuidConverter uuidConverter;
 

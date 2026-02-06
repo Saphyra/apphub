@@ -7,9 +7,9 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemDomainId
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 @Component
-//TODO unit test
 class SpaceshipWriteBuffer extends WriteBuffer<ItemDomainId, Spaceship> {
     private final SpaceshipRepository spaceshipRepository;
     private final SpaceshipConverter spaceshipConverter;
@@ -32,12 +32,19 @@ class SpaceshipWriteBuffer extends WriteBuffer<ItemDomainId, Spaceship> {
 
     @Override
     protected void doSynchronize(Collection<Spaceship> bufferCopy) {
-        bufferCopy.forEach(commodity -> {
-            try {
-                spaceshipRepository.save(spaceshipConverter.convertDomain(commodity));
-            } catch (Exception e) {
-                errorReporterService.report("Failed saving Spaceship", e);
-            }
-        });
+        List<SpaceshipEntity> entities = spaceshipConverter.convertDomain(bufferCopy);
+
+        try {
+            spaceshipRepository.saveAll(entities);
+        } catch (Exception e) {
+            errorReporterService.report("Failed saving Spaceship batch. Trying one by one", e);
+            entities.forEach(entity -> {
+                try {
+                    spaceshipRepository.save(entity);
+                } catch (Exception e2) {
+                    errorReporterService.report("Failed saving Spaceship", e2);
+                }
+            });
+        }
     }
 }

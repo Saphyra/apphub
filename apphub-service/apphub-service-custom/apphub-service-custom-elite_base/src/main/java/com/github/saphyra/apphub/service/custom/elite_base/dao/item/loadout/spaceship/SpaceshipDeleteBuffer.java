@@ -23,7 +23,6 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 
 @Component
 @Slf4j
-//TODO unit test
 class SpaceshipDeleteBuffer extends DeleteBuffer<ItemDomainId> {
     private final JdbcTemplate jdbcTemplate;
 
