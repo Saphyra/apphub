@@ -26,7 +26,7 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 
 @Component
 @Slf4j
-class EquipmentOrphanedRecordCleaner extends BatchOrphanedRecordCleaner {
+public class EquipmentOrphanedRecordCleaner extends BatchOrphanedRecordCleaner {
     private final JdbcTemplate jdbcTemplate;
     private final EliteBaseProperties eliteBaseProperties;
 

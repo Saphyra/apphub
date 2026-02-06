@@ -14,7 +14,6 @@ import java.util.List;
 
 @Component
 @Slf4j
-//TODO unit test
 public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodity, ItemEntityId, Long, ItemDomainId, CommodityRepository> implements TradeableDao {
     private final UuidConverter uuidConverter;
 
@@ -76,23 +75,5 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
             .map(tradeable -> (Commodity) tradeable)
             .toList();
         saveAll(commodities);
-    }
-
-    @Override
-    public List<Commodity> getSuppliers(String itemName, Integer minTradeAmount, Integer minPrice, Integer maxPrice) {
-        List<CommodityEntity> entities = repository.getSellOffers(itemName, minTradeAmount, minPrice, maxPrice);
-        log.info("Found {} Commodity SellOffers", entities.size());
-        List<Commodity> domains = converter.convertEntity(entities);
-        log.info("Commodities converted");
-        return syncWithCaches(domains);
-    }
-
-    @Override
-    public List<Commodity> getConsumers(String itemName, Integer minTradeAmount, Integer minPrice, Integer maxPrice) {
-        List<CommodityEntity> entities = repository.getBuyOffers(itemName, minTradeAmount, minPrice, maxPrice);
-        log.info("Found {} Commodity SellOffers", entities.size());
-        List<Commodity> domains = converter.convertEntity(entities);
-        log.info("Commodities converted");
-        return syncWithCaches(domains);
     }
 }

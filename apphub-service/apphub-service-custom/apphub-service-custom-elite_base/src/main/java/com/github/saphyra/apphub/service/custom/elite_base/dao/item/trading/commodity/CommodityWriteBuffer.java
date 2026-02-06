@@ -7,9 +7,9 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemDomainId
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 @Component
-//TODO unit test
 class CommodityWriteBuffer extends WriteBuffer<ItemDomainId, Commodity> {
     private final CommodityRepository commodityRepository;
     private final CommodityConverter commodityConverter;
@@ -32,12 +32,19 @@ class CommodityWriteBuffer extends WriteBuffer<ItemDomainId, Commodity> {
 
     @Override
     protected void doSynchronize(Collection<Commodity> bufferCopy) {
-        bufferCopy.forEach(commodity -> {
-            try {
-                commodityRepository.save(commodityConverter.convertDomain(commodity));
-            } catch (Exception e) {
-                errorReporterService.report("Failed saving commodity", e);
-            }
-        });
+        List<CommodityEntity> entities = commodityConverter.convertDomain(bufferCopy);
+
+        try {
+            commodityRepository.saveAll(entities);
+        } catch (Exception e) {
+            errorReporterService.report("Failed saving Commodity batch. Trying one by one", e);
+            entities.forEach(entity -> {
+                try {
+                    commodityRepository.save(entity);
+                } catch (Exception e2) {
+                    errorReporterService.report("Failed saving Commodity", e2);
+                }
+            });
+        }
     }
 }

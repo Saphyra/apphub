@@ -7,9 +7,9 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemDomainId
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 
 @Component
-//TODO unit test
 class FcMaterialWriteBuffer extends WriteBuffer<ItemDomainId, FcMaterial> {
     private final FcMaterialRepository fcMaterialRepository;
     private final FcMaterialConverter fcMaterialConverter;
@@ -32,12 +32,19 @@ class FcMaterialWriteBuffer extends WriteBuffer<ItemDomainId, FcMaterial> {
 
     @Override
     protected void doSynchronize(Collection<FcMaterial> bufferCopy) {
-        bufferCopy.forEach(commodity -> {
-            try {
-                fcMaterialRepository.save(fcMaterialConverter.convertDomain(commodity));
-            } catch (Exception e) {
-                errorReporterService.report("Failed saving FcMaterial", e);
-            }
-        });
+        List<FcMaterialEntity> entities = fcMaterialConverter.convertDomain(bufferCopy);
+
+        try {
+            fcMaterialRepository.saveAll(entities);
+        } catch (Exception e) {
+            errorReporterService.report("Failed saving FcMaterial batch. Trying one by one", e);
+            entities.forEach(entity -> {
+                try {
+                    fcMaterialRepository.save(entity);
+                } catch (Exception e2) {
+                    errorReporterService.report("Failed saving FcMaterial", e2);
+                }
+            });
+        }
     }
 }
