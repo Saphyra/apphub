@@ -3,6 +3,8 @@
 ===BUGFIXES===
     Calendar
         Right panel disappears on mobile
+    Notebook
+        Infinitely loading image
 
 ===PLATFORM CHANGES===
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
 import OpenedPageType from "../../../../common/OpenedPageType";
 import "./image.css";
@@ -11,7 +11,7 @@ const Image = ({ localizationHandler, openedListItem, setOpenedListItem, setDisp
     const [parent, setParent] = useState(null);
     const [storedFileId, setStoredFileId] = useState(null);
 
-    useEffect(() => loadListItem(), null);
+    useEffect(() => loadListItem(), [openedListItem]);
 
     const loadListItem = () => {
         const fetch = async () => {
