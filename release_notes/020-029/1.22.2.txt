@@ -1,0 +1,14 @@
+===FEATURES===
+
+===BUGFIXES===
+    EliteBase
+        Speed up StarName query
+        Make Commodity trading work
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    Preprod server also uses host's database
+    Rework startup/readiness/liveness probes
