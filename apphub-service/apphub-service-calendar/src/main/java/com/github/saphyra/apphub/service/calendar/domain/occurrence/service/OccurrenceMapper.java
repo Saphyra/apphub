@@ -38,7 +38,7 @@ class OccurrenceMapper {
             .status(occurrence.getStatus())
             .title(eventProvider.apply(occurrence.getEventId()).getTitle())
             .content(eventProvider.apply(occurrence.getEventId()).getContent())
-            .note(occurrence.getNote())
+            .note(Optional.ofNullable(occurrence.getNote()).orElse(""))
             .remindMeBeforeDays(getFromEventIfNull(eventProvider, occurrence.getEventId(), occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
             .reminded(occurrence.getReminded())
             .build();

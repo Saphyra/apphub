@@ -3,6 +3,7 @@
 ===BUGFIXES===
     Calendar
         Right panel disappears on mobile
+        Old occurrences' null note caused problems
     Notebook
         Infinitely loading image
 
