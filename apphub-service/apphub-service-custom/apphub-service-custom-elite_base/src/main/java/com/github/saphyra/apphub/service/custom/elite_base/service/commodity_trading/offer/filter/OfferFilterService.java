@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetail;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,14 +17,12 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.EliteBa
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class OfferFilterService {
     private final List<OfferFilter> filters;
     private final ExecutorServiceBean executorServiceBean;
 
     public List<OfferDetail> filterOffers(List<OfferDetail> offers, CommodityTradingRequest request) {
         log.debug("Offers found: {}", offers.size());
-
 
         List<OfferDetail> result = offers;
         for (OfferFilter filter : filters) {

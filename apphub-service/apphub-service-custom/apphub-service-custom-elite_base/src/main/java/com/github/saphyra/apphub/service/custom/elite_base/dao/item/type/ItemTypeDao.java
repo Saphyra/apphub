@@ -14,11 +14,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -27,7 +23,6 @@ import java.util.stream.StreamSupport;
 
 @Component
 @Slf4j
-//TODO unit test
 public class ItemTypeDao extends AbstractDao<ItemTypeEntity, ItemTypeDto, String, ItemTypeRepository> {
     private final CountDownLatch latch = new CountDownLatch(1);
     private final Set<ItemTypeDto> cache = new CopyOnWriteArraySet<>();
@@ -89,7 +84,7 @@ public class ItemTypeDao extends AbstractDao<ItemTypeEntity, ItemTypeDto, String
         waitForCacheLoaded();
 
         return cache.stream()
-            .filter(itemTypeDto -> itemTypeDto.getItemName().equals(itemName))
+            .filter(itemTypeDto -> Objects.equals(itemName, itemTypeDto.getItemName()))
             .findFirst();
     }
 
@@ -128,7 +123,10 @@ public class ItemTypeDao extends AbstractDao<ItemTypeEntity, ItemTypeDto, String
         StopWatch stopWatch = StopWatch.createStarted();
         log.info("ItemType loading started...");
 
-        cache.addAll(converter.convertEntity(StreamSupport.stream(repository.findAll().spliterator(), false).toList()));
+        Iterable<ItemTypeEntity> iterable = repository.findAll();
+        List<ItemTypeEntity> all = StreamSupport.stream(iterable.spliterator(), false).toList();
+        List<ItemTypeDto> domains = converter.convertEntity(all);
+        cache.addAll(domains);
         latch.countDown();
 
         stopWatch.stop();

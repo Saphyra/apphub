@@ -133,4 +133,16 @@ class LastUpdateDaoTest {
 
         assertThat(underTest.findByIdValidated(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).isEqualTo(domain);
     }
+
+    @Test
+    void findById() {
+        LastUpdateId id = LastUpdateId.builder()
+            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .type(ItemType.EQUIPMENT)
+            .build();
+        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
+        given(cache.getIfPresent(id)).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).contains(domain);
+    }
 }

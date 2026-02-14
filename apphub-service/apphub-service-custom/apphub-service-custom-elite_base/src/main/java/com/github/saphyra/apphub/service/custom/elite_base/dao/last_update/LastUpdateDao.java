@@ -8,8 +8,6 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,24 +44,11 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
             ));
     }
 
-    //TODO unit test
     public Optional<LastUpdate> findById(UUID externalReference, ItemType type) {
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(uuidConverter.convertDomain(externalReference))
             .type(type)
             .build();
         return findById(id);
-    }
-
-    //TODO unit test
-    public List<LastUpdate> findAllById(Map<UUID, ItemType> lastUpdateIdMap) {
-        List<LastUpdateId> ids = lastUpdateIdMap.entrySet().stream()
-            .map(entry -> LastUpdateId.builder()
-                .externalReference(uuidConverter.convertDomain(entry.getKey()))
-                .type(entry.getValue())
-                .build())
-            .toList();
-
-        return findAllById(ids);
     }
 }

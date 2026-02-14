@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.custom.elite_base.model.Order;
 import com.github.saphyra.apphub.lib.sql_builder.OrderType;
 
 public class ConversionUtils {
-    //TODO unit test
     public static OrderType toOrderType(Order order) {
         return switch (order) {
             case ASCENDING -> OrderType.ASC;

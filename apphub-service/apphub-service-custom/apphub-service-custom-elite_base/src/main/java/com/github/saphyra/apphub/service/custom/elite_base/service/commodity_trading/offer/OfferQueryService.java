@@ -8,9 +8,12 @@ import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBasePrope
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.dao.OfferDao;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetailFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.filter.OfferFilter;
 import com.github.saphyra.apphub.service.custom.elite_base.util.Utils;
 import jakarta.annotation.PostConstruct;
+import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +24,6 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-//TODO unit test
 public class OfferQueryService {
     private final Map<OrderCommoditiesBy, OfferDao> offerDaos;
     private final List<OfferFilter> offerFilters;
@@ -29,6 +31,7 @@ public class OfferQueryService {
     private final OfferDetailFactory offerDetailFactory;
     private final EliteBaseProperties eliteBaseProperties;
 
+    @Builder
     OfferQueryService(List<OfferDao> offerDaos, List<OfferFilter> offerFilters, StarSystemDao starSystemDao, OfferDetailFactory offerDetailFactory, EliteBaseProperties eliteBaseProperties) {
         this.offerDaos = offerDaos.stream()
             .collect(Collectors.toMap(OfferDao::getOrderBy, offerDao -> offerDao));

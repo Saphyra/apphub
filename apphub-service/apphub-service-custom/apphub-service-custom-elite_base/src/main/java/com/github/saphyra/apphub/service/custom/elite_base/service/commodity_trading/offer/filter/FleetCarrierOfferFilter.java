@@ -2,13 +2,12 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetail;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-//TODO unit test
 class FleetCarrierOfferFilter implements OfferFilter {
     @Override
     public List<OfferDetail> filter(List<OfferDetail> offers, CommodityTradingRequest request) {

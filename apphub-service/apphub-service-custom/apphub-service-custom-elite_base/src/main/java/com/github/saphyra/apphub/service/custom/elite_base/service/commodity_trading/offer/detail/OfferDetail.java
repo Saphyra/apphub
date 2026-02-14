@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer;
+package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail;
 
 import com.github.saphyra.apphub.service.custom.elite_base.dao.ItemLocationData;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocation
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.StarSystemData;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.Offer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

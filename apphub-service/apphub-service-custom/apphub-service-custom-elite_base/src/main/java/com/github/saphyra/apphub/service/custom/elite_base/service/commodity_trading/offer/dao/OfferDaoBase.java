@@ -60,7 +60,6 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 import static com.github.saphyra.apphub.service.custom.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 
 @Slf4j
-//TODO unit test
 abstract class OfferDaoBase implements OfferDao {
     private final JdbcTemplate jdbcTemplate;
     private final DateTimeUtil dateTimeUtil;

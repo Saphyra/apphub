@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponseItem;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OfferConverter {
     List<CommodityTradingResponseItem> convert(List<OfferDetail> offers) {
         return offers.stream()

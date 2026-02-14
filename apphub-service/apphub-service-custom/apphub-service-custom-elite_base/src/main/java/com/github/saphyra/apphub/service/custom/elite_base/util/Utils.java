@@ -8,7 +8,6 @@ import java.util.function.Supplier;
 
 @Slf4j
 public class Utils {
-    //TODO unit test
     public static Double nullIfZero(double aDouble) {
         if (aDouble == 0) {
             return null;

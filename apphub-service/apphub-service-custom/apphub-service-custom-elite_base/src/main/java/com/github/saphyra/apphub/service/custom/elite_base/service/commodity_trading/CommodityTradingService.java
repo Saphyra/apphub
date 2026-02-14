@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetail;
 import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferQueryService;
 import com.github.saphyra.apphub.service.custom.elite_base.util.Utils;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CommodityTradingService {
     private final CommodityTradingRequestValidator commodityTradingRequestValidator;
     private final OfferQueryService offerQueryService;

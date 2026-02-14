@@ -11,7 +11,6 @@ import static com.github.saphyra.apphub.service.custom.elite_base.common.Databas
 
 @Component
 @Slf4j
-//TODO unit test
 class SystemDistanceOfferDao extends OfferDaoBase {
     SystemDistanceOfferDao(OfferDaoContext context) {
         super(context);

@@ -1,17 +1,14 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
-import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.loadout.Loadout;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.loadout.LoadoutDaoSupport;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.type.ItemTypeDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.item.loadout.Loadout;
 import com.google.common.util.concurrent.Striped;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +30,11 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LoadoutSaver {
     private static final Striped<Lock> LOCKS = Striped.lock(8);
 
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
-    private final PerformanceReporter performanceReporter;
     private final LoadoutDaoSupport loadoutDaoSupport;
     private final ItemTypeDao itemTypeDao;
 
@@ -73,7 +68,7 @@ public class LoadoutSaver {
 
             lastUpdateDao.save(lastUpdateFactory.create(externalReference, type, timestamp));
 
-            Map<String, Loadout> existingLoadouts = getExistingLoadouts(type, marketId)
+            Map<String, Loadout> existingLoadouts = loadoutDaoSupport.getByMarketId(type, marketId)
                 .stream()
                 .collect(Collectors.toMap(Loadout::getItemName, Function.identity()));
 
@@ -89,30 +84,13 @@ public class LoadoutSaver {
 
             itemTypeDao.saveAll(type, lowercaseItems);
 
-            performanceReporter.wrap(
-                () -> loadoutDaoSupport.deleteAll(type, deletedItems),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-                PerformanceReportingKey.SAVE_LOADOUT_DELETE_ALL.name()
-            );
-
-            performanceReporter.wrap(
-                () -> loadoutDaoSupport.saveAll(type, newItems),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-                PerformanceReportingKey.SAVE_LOADOUT_SAVE_ALL.name()
-            );
+            loadoutDaoSupport.deleteAll(type, deletedItems);
+            loadoutDaoSupport.saveAll(type, newItems);
 
             log.debug("Saved Loadout for externalReference {} and type {}", externalReference, type);
         } finally {
             lock.unlock();
         }
-    }
-
-    private List<Loadout> getExistingLoadouts(ItemType type, Long marketId) {
-        return performanceReporter.wrap(
-            () -> loadoutDaoSupport.getByMarketId(type, marketId),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-            PerformanceReportingKey.SAVE_LOADOUT_QUERY_EXISTING.name()
-        );
     }
 
     @Data

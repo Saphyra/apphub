@@ -21,7 +21,6 @@ import java.util.UUID;
 @Data
 @Builder
 @ToString(exclude = {"services", "economies"})
-//TODO unit test
 public class Station implements ItemLocationData {
     private final UUID id;
     private LocalDateTime lastUpdate;

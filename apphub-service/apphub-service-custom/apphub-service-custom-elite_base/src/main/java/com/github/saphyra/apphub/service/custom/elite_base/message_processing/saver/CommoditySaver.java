@@ -1,9 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
-import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
@@ -14,21 +11,12 @@ import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastU
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.commodity.EdCommodity;
 import com.google.common.util.concurrent.Striped;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.function.Function;
@@ -40,7 +28,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CommoditySaver {
     private static final Striped<Lock> LOCKS = Striped.lock(8);
 
@@ -48,7 +35,6 @@ public class CommoditySaver {
     private final CommodityDataTransformer commodityDataTransformer;
     private final LastUpdateDao lastUpdateDao;
     private final LastUpdateFactory lastUpdateFactory;
-    private final PerformanceReporter performanceReporter;
     private final CommodityAveragePriceSaver commodityAveragePriceSaver;
     private final ItemTypeDao itemTypeDao;
 
@@ -82,52 +68,57 @@ public class CommoditySaver {
         }
 
         try {
-            commodities = filterEmptyCommodities(commodities);
             LastUpdate originalLastUpdate = lastUpdateDao.findById(externalReference, type)
                 .orElse(null);
-
             LastUpdate lastUpdate = saveLastUpdate(timestamp, type, externalReference);
+
+            commodities = filterEmptyCommodities(commodities);
 
             Map<String, Tradeable> existingCommodities = getExistingCommodities(externalReference, type, marketId)
                 .stream()
                 .collect(Collectors.toMap(Tradeable::getItemName, Function.identity()));
 
-            List<Tradeable> modifiedCommodities = commodities.stream()
-                .map(commodity -> commodityDataTransformer.transform(existingCommodities.get(commodity.getName()), timestamp, type, locationType, externalReference, marketId, commodity, originalLastUpdate))
-                .flatMap(Optional::stream)
-                .toList();
+            List<Tradeable> modifiedCommodities = new ArrayList<>();
+            List<Tradeable> deletedCommodities = new ArrayList<>();
+            if (!commodities.isEmpty()) {
+                modifiedCommodities = commodities.stream()
+                    .map(commodity -> commodityDataTransformer.transform(
+                        existingCommodities.get(commodity.getName()),
+                        timestamp,
+                        type,
+                        locationType,
+                        externalReference,
+                        marketId,
+                        commodity,
+                        originalLastUpdate
+                    ))
+                    .flatMap(Optional::stream)
+                    .toList();
 
-            List<String> newCommodityNames = commodities.stream()
-                .map(CommodityData::getName)
-                .toList();
-            List<Tradeable> deletedCommodities = existingCommodities.values()
-                .stream()
-                .filter(c -> !newCommodityNames.contains(c.getItemName()))
-                .toList();
+                List<String> newCommodityNames = commodities.stream()
+                    .map(CommodityData::getName)
+                    .toList();
+                deletedCommodities = existingCommodities.values()
+                    .stream()
+                    .filter(c -> !newCommodityNames.contains(c.getItemName()))
+                    .toList();
 
-            Map<String, Integer> commodityPrices = commodities.stream()
-                .filter(commodityData -> nonNull(commodityData.getAveragePrice()))
-                .filter(commodityData -> commodityData.getAveragePrice() > 0)
-                .collect(Collectors.toMap(CommodityData::getName, CommodityData::getAveragePrice));
-            commodityAveragePriceSaver.saveAveragePrices(lastUpdate.getLastUpdate(), commodityPrices);
+                Map<String, Integer> commodityPrices = commodities.stream()
+                    .filter(commodityData -> nonNull(commodityData.getAveragePrice()))
+                    .filter(commodityData -> commodityData.getAveragePrice() > 0)
+                    .collect(Collectors.toMap(CommodityData::getName, CommodityData::getAveragePrice));
+                commodityAveragePriceSaver.saveAveragePrices(timestamp, commodityPrices);
 
-            List<String> commodityNames = commodities.stream()
-                .map(CommodityData::getName)
-                .toList();
-            itemTypeDao.saveAll(type, commodityNames);
+                List<String> commodityNames = commodities.stream()
+                    .map(CommodityData::getName)
+                    .toList();
+                itemTypeDao.saveAll(type, commodityNames);
+            }
 
-            performanceReporter.wrap(
-                () -> tradingDaoSupport.deleteAll(type, deletedCommodities),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-                PerformanceReportingKey.SAVE_COMMODITIES_DELETE_ALL.name()
-            );
+            tradingDaoSupport.deleteAll(type, deletedCommodities);
             log.debug("Deleted {} commodities", deletedCommodities.size());
 
-            performanceReporter.wrap(
-                () -> tradingDaoSupport.saveAll(type, modifiedCommodities),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-                PerformanceReportingKey.SAVE_COMMODITIES_SAVE_ALL.name()
-            );
+            tradingDaoSupport.saveAll(type, modifiedCommodities);
             log.debug("Saved {} commodities", modifiedCommodities.size());
 
             log.debug("Saved commodities for location {} and type {}", locationType, type);
@@ -151,11 +142,7 @@ public class CommoditySaver {
     }
 
     private List<Tradeable> getExistingCommodities(UUID externalReference, ItemType type, Long marketId) {
-        List<Tradeable> commodities = performanceReporter.wrap(
-            () -> tradingDaoSupport.getByMarketId(type, marketId),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
-            PerformanceReportingKey.SAVE_COMMODITIES_QUERY.name()
-        );
+        List<Tradeable> commodities = tradingDaoSupport.getByMarketId(type, marketId);
 
         List<Tradeable> incorrectCommodities = commodities.stream()
             .filter(commodity -> !commodity.getExternalReference().equals(externalReference))

@@ -18,7 +18,7 @@ class CommodityTradingRequestValidator {
     private final ItemTypeDao itemTypeDao;
 
     void validate(CommodityTradingRequest request) {
-        ValidationUtil.notNull(request.getTradeMode(), "tradeMode"); //TODO unit test
+        ValidationUtil.notNull(request.getTradeMode(), "tradeMode");
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
         ValidationUtil.contains(request.getItemName(), itemTypeDao.getItemNames(ItemType.TRADING_TYPES), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
@@ -30,9 +30,9 @@ class CommodityTradingRequestValidator {
         ValidationUtil.notNull(request.getIncludeFleetCarriers(), "includeFleetCarriers");
         ValidationUtil.atLeast(request.getMinPrice(), 1, "minPrice");
         ValidationUtil.atLeast(request.getMaxPrice(), request.getMinPrice(), "maxPrice");
-        ValidationUtil.notNull(request.getOrderBy(), "orderBy"); //TODO unit test
-        ValidationUtil.notNull(request.getOrder(), "order"); //TODO unit test
-        ValidationUtil.atLeast(request.getOffset(), 0, "offset"); //TODO unit test
+        ValidationUtil.notNull(request.getOrderBy(), "orderBy");
+        ValidationUtil.notNull(request.getOrder(), "order");
+        ValidationUtil.atLeast(request.getOffset(), 0, "offset");
 
         ValidationUtil.notNull(request.getControllingPowers(), "controllingPowers");
         if (!request.getControllingPowers().isEmpty()) {

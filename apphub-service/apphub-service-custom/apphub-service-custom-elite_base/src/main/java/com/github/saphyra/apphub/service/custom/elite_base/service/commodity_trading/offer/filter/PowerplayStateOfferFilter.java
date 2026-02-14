@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
-import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.OfferDetail;
+import com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.detail.OfferDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
