@@ -23,6 +23,10 @@ public class MinikubeBuildTask {
             return true;
         }
 
+        return installServices(deployMode);
+    }
+
+    public boolean installServices(DeployMode deployMode) {
         String threadCount = String.valueOf(propertyDao.getThreadCount(deployMode));
 
         try {

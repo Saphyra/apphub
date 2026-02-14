@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
 import com.github.saphyra.apphub.ci.utils.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.Constants;
+import com.github.saphyra.apphub.ci.value.DeployMode;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -32,7 +33,7 @@ public class PreprodReleaseProcess {
     public void release() {
         localStopProcess.stopAllServices();
 
-        if (!minikubeBuildTask.installServices()) {
+        if (!minikubeBuildTask.installServices(DeployMode.DEFAULT)) {
             log.error("Build failed. Startup sequence stopped.");
             return;
         }

@@ -4,6 +4,8 @@
     EliteBase
         Speed up StarName query
         Make Commodity trading work
+    ApphubCI
+        Preprod release always uses default deploy mode
 
 ===PLATFORM CHANGES===
 
