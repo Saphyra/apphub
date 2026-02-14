@@ -1,33 +1,22 @@
-import React, { useState } from "react";
 import Button from "../../../../../../common/component/input/Button";
-import { PAGE_SIZE } from "./TradeCommoditiesPage";
 import Stream from "../../../../../../common/js/collection/Stream";
 import Order from "./Order";
-import PreLabeledInputField from "../../../../../../common/component/input/PreLabeledInputField";
-import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import OrderBy from "./OrderBy";
-import MapStream from "../../../../../../common/js/collection/MapStream";
-import { cacheAndUpdate, cachedOrDefault, formatNumber } from "../../../../../../common/js/Utils";
+import { formatNumber, hasValue } from "../../../../../../common/js/Utils";
 import PowerNames from "../../../common/localization/PowerNames";
 import LocalDateTime from "../../../../../../common/js/date/LocalDateTime";
 import Entry from "../../../../../../common/js/collection/Entry";
 import TradeCommoditiesResultOrder from "./TradeCommoditiesResultOrder";
 
-const TradeCommoditiesResult = ({ localizationHandler, searchResult, displayed, setDisplayed }) => {
-    const CACHE_KEY_ORDER = "eliteBaseCommodityTradingResultOrder";
-    const CACHE_KEY_ORDER_BY = "eliteBaseCommodityTradingResultOrderBy";
-
-    const [orderBy, setOrderBy] = useState(cachedOrDefault(CACHE_KEY_ORDER_BY, OrderBy.SYSTEM_DISTANCE.key));
-    const [order, setOrder] = useState(cachedOrDefault(CACHE_KEY_ORDER, Order.ASCENDING.key));
-
+const TradeCommoditiesResult = ({ localizationHandler, searchResult, order, setOrder, orderBy, setOrderBy, moreCanLoaded, loadMoreCallback }) => {
     return (
         <div>
             <TradeCommoditiesResultOrder
                 localizationHandler={localizationHandler}
                 order={order}
                 orderBy={orderBy}
-                setOrder={v => cacheAndUpdate(CACHE_KEY_ORDER, v, setOrder)}
-                setOrderBy={v => cacheAndUpdate(CACHE_KEY_ORDER_BY, v, setOrderBy)}
+                setOrder={setOrder}
+                setOrderBy={setOrderBy}
             />
 
             <table id="elite-base-ct-trade-commodities-search-result-table" className="formatted-table selectable">
@@ -57,13 +46,13 @@ const TradeCommoditiesResult = ({ localizationHandler, searchResult, displayed, 
                 </thead>
                 <tbody>{getSearchResult()}</tbody>
                 {
-                    searchResult.length > displayed &&
+                    moreCanLoaded &&
                     <tfoot>
                         <tr>
                             <td colSpan={12}>
                                 <Button
                                     label={localizationHandler.get("load-more")}
-                                    onclick={() => setDisplayed(displayed + PAGE_SIZE)}
+                                    onclick={loadMoreCallback}
                                 />
                             </td>
                         </tr>
@@ -76,14 +65,13 @@ const TradeCommoditiesResult = ({ localizationHandler, searchResult, displayed, 
     function getSearchResult() {
         return new Stream(searchResult)
             .sorted((a, b) => Order[order].sorter(OrderBy[orderBy].compare(a, b)))
-            .limit(displayed)
             .map((offer, index) => {
                 return (
                     <tr key={index}>
                         <td className="right">{formatNumber(offer.starSystemDistance, 2)} ly</td>
                         <td>{offer.starName}</td>
                         <td>{offer.locationName}</td>
-                        <td className="right">{formatNumber(offer.stationDistance, 2)} ls</td>
+                        <td className="right">{formatNumber(offer.stationDistance, 2)} {hasValue(offer.stationDistance) && " ls"}</td>
                         <td>{offer.locationType}</td>
                         <td>{offer.landingPad}</td>
                         <td className="right">{formatNumber(offer.tradeAmount)} T</td>

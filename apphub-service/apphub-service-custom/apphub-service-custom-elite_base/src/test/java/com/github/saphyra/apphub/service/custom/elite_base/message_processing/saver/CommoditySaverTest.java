@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityDao;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.TradingDaoSupport;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.type.ItemTypeDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateFactory;
@@ -16,29 +17,28 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doAnswer;
 
 @ExtendWith(MockitoExtension.class)
 class CommoditySaverTest {
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
+    private static final LocalDateTime TIMESTAMP = LocalDateTime.now();
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final Long MARKET_ID = 23423L;
-    private static final String EXISTING_COMMODITY = "existing-commodity";
-    private static final String MODIFIED_COMMODITY = "modified-commodity";
-    private static final String DEPRECATED_COMMODITY = "deprecated-commodity";
-    private static final String NEW_COMMODITY = "new-commodity";
+    private static final Long MARKET_ID = 243L;
+    private static final String EXISTING_COMMODITY_NAME = "existing-commodity-name";
+    private static final String NEW_COMMODITY_NAME = "new-commodity-name";
+    private static final String MODIFIED_COMMODITY_NAME = "modified-commodity-name";
+    private static final Integer AVERAGE_PRICE = 24;
+    private static final String DELETED_COMMODITY_NAME = "deleted-commodity-name";
 
     @Mock
-    private CommodityDao commodityDao;
+    private TradingDaoSupport tradingDaoSupport;
 
     @Mock
     private CommodityDataTransformer commodityDataTransformer;
@@ -52,81 +52,104 @@ class CommoditySaverTest {
     @Mock
     private PerformanceReporter performanceReporter;
 
-    @InjectMocks
-    private CommoditySaver underTest;
+    @Mock
+    private CommodityAveragePriceSaver commodityAveragePriceSaver;
 
     @Mock
-    private CommoditySaver.CommodityData modifiedCommodityData;
+    private ItemTypeDao itemTypeDao;
+
+    @InjectMocks
+    private CommoditySaver underTest;
 
     @Mock
     private CommoditySaver.CommodityData existingCommodityData;
 
     @Mock
+    private CommoditySaver.CommodityData modifiedCommodityData;
+
+    @Mock
     private CommoditySaver.CommodityData newCommodityData;
 
     @Mock
-    private Commodity existingCommodity;
+    private CommoditySaver.CommodityData emptyCommodityData;
 
     @Mock
-    private Commodity deprecatedCommodity;
+    private LastUpdate originalLastUpdate;
 
     @Mock
-    private Commodity newCommodity;
+    private LastUpdate newLastUpdate;
 
     @Mock
-    private Commodity modifiedCommodity;
+    private Tradeable existingCommodity;
 
     @Mock
-    private Commodity incorrectCommodity;
+    private Tradeable corruptedCommodity;
 
     @Mock
-    private LastUpdate lastUpdate;
+    private Tradeable modifiedCommodity;
+
+    @Mock
+    private Tradeable newCommodity;
+
+    @Mock
+    private Tradeable deletedCommodity;
 
     @Test
-    void nullMarketIdAndCommodityLocation() {
-        assertThat(catchThrowable(() -> underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, null, EXTERNAL_REFERENCE, null, List.of()))).isInstanceOf(IllegalArgumentException.class);
+    void nullMarketId() {
+        assertThat(catchThrowable(() -> underTest.saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(existingCommodityData))))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void nullMarketIdAndExternalReference() {
-        assertThat(catchThrowable(() -> underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, null, null, List.of()))).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void saveAll() {
-        given(commodityDao.getByMarketIdAndType(MARKET_ID, CommodityType.COMMODITY)).willReturn(List.of(incorrectCommodity, existingCommodity, deprecatedCommodity, modifiedCommodity));
-        given(incorrectCommodity.getExternalReference()).willReturn(UUID.randomUUID());
-
-        given(existingCommodity.getCommodityName()).willReturn(EXISTING_COMMODITY);
-        given(deprecatedCommodity.getCommodityName()).willReturn(DEPRECATED_COMMODITY);
-        given(modifiedCommodity.getCommodityName()).willReturn(MODIFIED_COMMODITY);
+    void emptyCommodity() {
+        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.COMMODITY)).willReturn(Optional.of(originalLastUpdate));
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ItemType.COMMODITY, TIMESTAMP)).willReturn(newLastUpdate);
+        given(tradingDaoSupport.getByMarketId(ItemType.COMMODITY, MARKET_ID)).willReturn(List.of(existingCommodity, modifiedCommodity, corruptedCommodity, deletedCommodity));
 
         given(existingCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(deprecatedCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(modifiedCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(deletedCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
+        given(corruptedCommodity.getExternalReference()).willReturn(UUID.randomUUID());
 
-        given(commodityDataTransformer.transform(null, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData)).willReturn(Optional.of(newCommodity));
-        given(commodityDataTransformer.transform(existingCommodity, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData)).willReturn(Optional.empty());
-        given(commodityDataTransformer.transform(modifiedCommodity, LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, modifiedCommodityData)).willReturn(Optional.of(modifiedCommodity));
+        given(existingCommodity.getItemName()).willReturn(EXISTING_COMMODITY_NAME);
+        given(modifiedCommodity.getItemName()).willReturn(MODIFIED_COMMODITY_NAME);
+        given(deletedCommodity.getItemName()).willReturn(DELETED_COMMODITY_NAME);
 
-        given(existingCommodityData.getName()).willReturn(EXISTING_COMMODITY);
-        given(modifiedCommodityData.getName()).willReturn(MODIFIED_COMMODITY);
-        given(newCommodityData.getName()).willReturn(NEW_COMMODITY);
-        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, CommodityType.COMMODITY, LAST_UPDATE)).willReturn(lastUpdate);
-        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
-        doAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
-        given(existingCommodityData.getDemand()).willReturn(1);
-        given(newCommodityData.getDemand()).willReturn(1);
-        given(modifiedCommodityData.getDemand()).willReturn(1);
+        given(emptyCommodityData.getStock()).willReturn(0);
+        given(emptyCommodityData.getDemand()).willReturn(0);
+        given(newCommodityData.getStock()).willReturn(1);
+        given(existingCommodityData.getStock()).willReturn(1);
+        given(modifiedCommodityData.getStock()).willReturn(1);
 
-        underTest.saveAll(LAST_UPDATE, CommodityType.COMMODITY, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(existingCommodityData, newCommodityData, modifiedCommodityData));
+        given(existingCommodityData.getName()).willReturn(EXISTING_COMMODITY_NAME);
+        given(newCommodityData.getName()).willReturn(NEW_COMMODITY_NAME);
+        given(modifiedCommodityData.getName()).willReturn(MODIFIED_COMMODITY_NAME);
 
-        then(lastUpdateDao).should().save(lastUpdate);
-        then(commodityDao).should().deleteAll(List.of(incorrectCommodity));
-        then(commodityDao).should().deleteAll(List.of(deprecatedCommodity));
-        then(commodityDao).should().saveAll(List.of(newCommodity, modifiedCommodity));
+        given(existingCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
+        given(newCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
+        given(modifiedCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
+
+        given(commodityDataTransformer.transform(null, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData, originalLastUpdate))
+            .willReturn(Optional.of(newCommodity));
+        given(commodityDataTransformer.transform(existingCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData, originalLastUpdate))
+            .willReturn(Optional.empty());
+        given(commodityDataTransformer.transform(modifiedCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, modifiedCommodityData, originalLastUpdate))
+            .willReturn(Optional.of(modifiedCommodity));
+
+        underTest.saveAll(
+            TIMESTAMP,
+            ItemType.COMMODITY,
+            ItemLocationType.STATION,
+            EXTERNAL_REFERENCE,
+            MARKET_ID,
+            List.of(existingCommodityData, newCommodityData, emptyCommodityData, modifiedCommodityData)
+        );
+
+        then(lastUpdateDao).should().save(newLastUpdate);
+        then(tradingDaoSupport).should().deleteAll(ItemType.COMMODITY, List.of(corruptedCommodity));
+        then(commodityAveragePriceSaver).should().saveAveragePrices(TIMESTAMP, Map.of(EXISTING_COMMODITY_NAME, AVERAGE_PRICE, NEW_COMMODITY_NAME, AVERAGE_PRICE, MODIFIED_COMMODITY_NAME, AVERAGE_PRICE));
+        then(itemTypeDao).should().saveAll(ItemType.COMMODITY, List.of(EXISTING_COMMODITY_NAME, NEW_COMMODITY_NAME, MODIFIED_COMMODITY_NAME));
+        then(tradingDaoSupport).should().deleteAll(ItemType.COMMODITY, List.of(deletedCommodity));
+        then(tradingDaoSupport).should().saveAll(ItemType.COMMODITY, List.of(newCommodity, modifiedCommodity));
     }
 }

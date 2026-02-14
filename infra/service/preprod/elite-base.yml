@@ -20,27 +20,32 @@ spec:
       - name: elite-base
         image: saphyra/apphub-service-custom-elite_base:latest
         env:
-          - name: SPRING_ACTIVE_PROFILE
-            value: server,preprod
+        - name: SPRING_ACTIVE_PROFILE
+          value: server,preprod
         ports:
         - containerPort: 8080
         imagePullPolicy: Never
+        startupProbe:
+          httpGet:
+            path: /platform/health
+            port: 8080
+          periodSeconds: 5
+          failureThreshold: 3600
         livenessProbe:
           httpGet:
             path: /platform/health
             port: 8080
-          initialDelaySeconds: 60
-          periodSeconds: 10
+          periodSeconds: 5
+          failureThreshold: 1
         readinessProbe:
           httpGet:
             path: /platform/health
             port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          failureThreshold: 3
+          periodSeconds: 5
+          failureThreshold: 1
         resources:
           limits:
-            memory: 1024Mi
+            memory: 2048Mi
 ---
 apiVersion: v1
 kind: Service

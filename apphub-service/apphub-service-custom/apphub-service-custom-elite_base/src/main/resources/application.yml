@@ -3,7 +3,7 @@ spring:
     name: elite-base
   datasource:
     hikari:
-      maximumPoolSize: 20
+      maximumPoolSize: 50
 
 liquibase:
   schema: elite_base

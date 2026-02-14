@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -34,16 +35,20 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
         return maybeLastUpdate.isEmpty() || !maybeLastUpdate.get().getLastUpdate().equals(lastUpdate.getLastUpdate());
     }
 
-    public LastUpdate findByIdValidated(UUID externalReference, EntityType entityType) {
-        LastUpdateId id = LastUpdateId.builder()
-            .externalReference(uuidConverter.convertDomain(externalReference))
-            .type(entityType)
-            .build();
-        return findById(id)
+    public LastUpdate findByIdValidated(UUID externalReference, ItemType itemType) {
+        return findById(externalReference, itemType)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(
                 HttpStatus.NOT_FOUND,
                 ErrorCode.DATA_NOT_FOUND,
-                "LastUpdate not found by externalReference %s and type %s".formatted(externalReference, entityType)
+                "LastUpdate not found by externalReference %s and type %s".formatted(externalReference, itemType)
             ));
+    }
+
+    public Optional<LastUpdate> findById(UUID externalReference, ItemType type) {
+        LastUpdateId id = LastUpdateId.builder()
+            .externalReference(uuidConverter.convertDomain(externalReference))
+            .type(type)
+            .build();
+        return findById(id);
     }
 }

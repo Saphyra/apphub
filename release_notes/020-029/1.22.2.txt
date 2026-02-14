@@ -1,0 +1,16 @@
+===FEATURES===
+
+===BUGFIXES===
+    EliteBase
+        Speed up StarName query
+        Make Commodity trading work
+    ApphubCI
+        Preprod release always uses default deploy mode
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+    Preprod server also uses host's database
+    Rework startup/readiness/liveness probes

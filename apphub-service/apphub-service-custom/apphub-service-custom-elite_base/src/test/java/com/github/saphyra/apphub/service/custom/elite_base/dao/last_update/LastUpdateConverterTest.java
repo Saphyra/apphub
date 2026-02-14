@@ -2,11 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.EntityType;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateConverter;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdateId;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -39,7 +35,7 @@ class LastUpdateConverterTest {
     void convertDomain() {
         LastUpdate domain = LastUpdate.builder()
             .externalReference(EXTERNAL_REFERENCE)
-            .type(EntityType.COMMODITY)
+            .type(ItemType.COMMODITY)
             .lastUpdate(LAST_UPDATE)
             .build();
 
@@ -48,7 +44,7 @@ class LastUpdateConverterTest {
 
         assertThat(underTest.convertDomain(domain))
             .returns(EXTERNAL_REFERENCE_STRING, lastUpdateEntity -> lastUpdateEntity.getId().getExternalReference())
-            .returns(EntityType.COMMODITY, lastUpdateEntity -> lastUpdateEntity.getId().getType())
+            .returns(ItemType.COMMODITY, lastUpdateEntity -> lastUpdateEntity.getId().getType())
             .returns(LAST_UPDATE_STRING, LastUpdateEntity::getLastUpdate);
     }
 
@@ -57,7 +53,7 @@ class LastUpdateConverterTest {
         LastUpdateEntity domain = LastUpdateEntity.builder()
             .id(LastUpdateId.builder()
                 .externalReference(EXTERNAL_REFERENCE_STRING)
-                .type(EntityType.COMMODITY)
+                .type(ItemType.COMMODITY)
                 .build())
 
             .lastUpdate(LAST_UPDATE_STRING)
@@ -68,7 +64,7 @@ class LastUpdateConverterTest {
 
         assertThat(underTest.convertEntity(domain))
             .returns(EXTERNAL_REFERENCE, LastUpdate::getExternalReference)
-            .returns(EntityType.COMMODITY, LastUpdate::getType)
+            .returns(ItemType.COMMODITY, LastUpdate::getType)
             .returns(LAST_UPDATE, LastUpdate::getLastUpdate);
     }
 }

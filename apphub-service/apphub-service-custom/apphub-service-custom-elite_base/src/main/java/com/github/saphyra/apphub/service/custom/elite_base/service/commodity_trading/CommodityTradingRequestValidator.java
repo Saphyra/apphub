@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityNameCache;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.type.ItemTypeDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,11 +15,12 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 class CommodityTradingRequestValidator {
-    private final CommodityNameCache commodityNameCache;
+    private final ItemTypeDao itemTypeDao;
 
     void validate(CommodityTradingRequest request) {
+        ValidationUtil.notNull(request.getTradeMode(), "tradeMode");
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
-        ValidationUtil.contains(request.getCommodity(), commodityNameCache.getCommodityNames(), "commodity");
+        ValidationUtil.contains(request.getItemName(), itemTypeDao.getItemNames(ItemType.TRADING_TYPES), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
         ValidationUtil.notNull(request.getMaxStationDistance(), "maxStationDistance");
         ValidationUtil.notNull(request.getIncludeUnknownStationDistance(), "includeUnknownStationDistance");
@@ -28,6 +30,9 @@ class CommodityTradingRequestValidator {
         ValidationUtil.notNull(request.getIncludeFleetCarriers(), "includeFleetCarriers");
         ValidationUtil.atLeast(request.getMinPrice(), 1, "minPrice");
         ValidationUtil.atLeast(request.getMaxPrice(), request.getMinPrice(), "maxPrice");
+        ValidationUtil.notNull(request.getOrderBy(), "orderBy");
+        ValidationUtil.notNull(request.getOrder(), "order");
+        ValidationUtil.atLeast(request.getOffset(), 0, "offset");
 
         ValidationUtil.notNull(request.getControllingPowers(), "controllingPowers");
         if (!request.getControllingPowers().isEmpty()) {

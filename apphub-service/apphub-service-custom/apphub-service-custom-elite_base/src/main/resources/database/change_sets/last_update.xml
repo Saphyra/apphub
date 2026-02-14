@@ -18,4 +18,18 @@
 
         <addPrimaryKey schemaName="elite_base" tableName="last_update" columnNames="external_reference,type" constraintName="last_update-pk"/>
     </changeSet>
+
+    <changeSet id="create-index-on-external_reference-type-last_update-to-last_update" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="last_update" indexName="index-last_update-external_reference-type-last_update"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="last_update" indexName="index-last_update-external_reference-type-last_update">
+            <column name="external_reference"/>
+            <column name="type"/>
+            <column name="last_update"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

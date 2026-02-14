@@ -1,15 +1,15 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.util;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StationSaver;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
-import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.FactionStateEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrierDockingAccess;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.StationSaver;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.Economy;
+import com.github.saphyra.apphub.service.custom.elite_base.message_processing.structure.journal.ControllingFaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 public class StationSaverUtil {
-    private final CommodityLocationFetcher commodityLocationFetcher;
+    private final LocationTypeFetcher locationTypeFetcher;
     private final FleetCarrierSaver fleetCarrierSaver;
     private final StationSaver stationSaver;
 
@@ -79,30 +79,30 @@ public class StationSaverUtil {
     ) {
         StationType stationType = StationType.parse(stationTypeStr);
 
-        CommodityLocation commodityLocation;
+        ItemLocationType locationType;
         if (nonNull(stationType)) {
             if (StationType.FLEET_CARRIER == stationType) {
-                commodityLocation = CommodityLocation.FLEET_CARRIER;
+                locationType = ItemLocationType.FLEET_CARRIER;
             } else {
-                commodityLocation = CommodityLocation.STATION;
+                locationType = ItemLocationType.STATION;
             }
         } else if (nonNull(economy)) {
             if (EconomyEnum.CARRIER == economy) {
-                commodityLocation = CommodityLocation.FLEET_CARRIER;
+                locationType = ItemLocationType.FLEET_CARRIER;
             } else {
-                commodityLocation = CommodityLocation.STATION;
+                locationType = ItemLocationType.STATION;
             }
         } else if (nonNull(economies)) {
             if (Arrays.stream(economies).map(e -> EconomyEnum.parse(e.getName())).anyMatch(r -> r == EconomyEnum.CARRIER)) {
-                commodityLocation = CommodityLocation.FLEET_CARRIER;
+                locationType = ItemLocationType.FLEET_CARRIER;
             } else {
-                commodityLocation = CommodityLocation.STATION;
+                locationType = ItemLocationType.STATION;
             }
         } else {
-            commodityLocation = commodityLocationFetcher.fetchCommodityLocationByMarketId(marketId);
+            locationType = locationTypeFetcher.fetchCommodityLocationByMarketId(marketId);
         }
 
-        UUID externalReference = switch (commodityLocation) {
+        UUID externalReference = switch (locationType) {
             case FLEET_CARRIER -> fleetCarrierSaver.save(
                 timestamp,
                 starSystemId,
@@ -126,12 +126,12 @@ public class StationSaverUtil {
                 Optional.ofNullable(controllingFaction).map(ControllingFaction::getState).map(FactionStateEnum::parse).orElse(null)
             ).getId();
             case UNKNOWN -> null;
-            default -> throw new IllegalStateException("Unhandled " + CommodityLocation.class.getSimpleName() + ": " + commodityLocation);
+            default -> throw new IllegalStateException("Unhandled " + ItemLocationType.class.getSimpleName() + ": " + locationType);
         };
 
         return StationSaveResult.builder()
             .externalReference(externalReference)
-            .commodityLocation(commodityLocation)
+            .locationType(locationType)
             .build();
     }
 }

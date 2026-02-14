@@ -29,12 +29,46 @@
             <column name="star_name"/>
         </createIndex>
     </changeSet>
-    
+
     <changeSet id="add-unique-constraint-to-star_system-star_id" author="Saphyra">
         <addUniqueConstraint schemaName="elite_base" tableName="star_system" columnNames="star_id"/>
     </changeSet>
 
     <changeSet id="add-unique-constraint-to-star_system-star_name" author="Saphyra">
         <addUniqueConstraint schemaName="elite_base" tableName="star_system" columnNames="star_name"/>
+    </changeSet>
+
+    <changeSet id="drop-old-star_name-index-from-star_system" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <indexExists schemaName="elite_base" tableName="star_system" indexName="index-star_system-star_name"/>
+        </preConditions>
+
+        <dropIndex schemaName="elite_base" tableName="star_system" indexName="index-star_system-star_name"/>
+    </changeSet>
+
+    <changeSet id="create-trigram-index-on-star_name-to-star_system" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="index-star_system-star_name"/>
+            </not>
+        </preConditions>
+
+        <sql>
+            CREATE INDEX "index-star_system-star_name" ON elite_base.star_system USING gin (star_name gin_trgm_ops);
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-index-on-x_pos-y_pos-z_pos-to-start_system" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="star_system" columnNames="x_pos,y_pos,z_pos"/>
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="star_system" indexName="index-star_system_positions">
+            <column name="x_pos"/>
+            <column name="y_pos"/>
+            <column name="z_pos"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
