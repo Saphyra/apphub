@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.power;
 
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,5 +18,9 @@ public class StarSystemPowerMappingDao extends AbstractDao<StarSystemPowerMappin
 
     public List<StarSystemPowerMapping> getByStarSystemId(UUID starSystemId) {
         return converter.convertEntity(repository.getByStarSystemId(uuidConverter.convertDomain(starSystemId)));
+    }
+
+    public List<StarSystemPowerMapping> getByStarSystemIds(List<UUID> starSystemIds) {
+        return converter.convertEntity(repository.getByStarSystemIds(uuidConverter.convertDomain(starSystemIds)));
     }
 }

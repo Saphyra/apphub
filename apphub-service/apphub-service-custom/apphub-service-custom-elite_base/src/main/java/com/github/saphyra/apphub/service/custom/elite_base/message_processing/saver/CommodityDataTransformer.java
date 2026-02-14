@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.Commodity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityFactory;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.Tradeable;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.TradingDaoSupport;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.last_update.LastUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,21 +19,28 @@ import static java.util.Objects.isNull;
 @Component
 @Slf4j
 public class CommodityDataTransformer {
-    private final CommodityFactory commodityFactory;
+    private final TradingDaoSupport tradingDaoSupport;
 
-    public Optional<Commodity> transform(Commodity maybeStoredCommodity, LocalDateTime timestamp, CommodityType type, CommodityLocation commodityLocation, UUID externalReference, Long marketId, CommoditySaver.CommodityData commodityData) {
-        Commodity created = commodityFactory.create(
-            timestamp,
+    public Optional<Tradeable> transform(
+        Tradeable maybeStoredCommodity,
+        LocalDateTime timestamp,
+        ItemType type,
+        ItemLocationType locationType,
+        UUID externalReference,
+        Long marketId,
+        CommoditySaver.CommodityData commodityData,
+        LastUpdate originalLastUpdate
+    ) {
+        Tradeable created = tradingDaoSupport.create(
             type,
-            commodityLocation,
+            locationType,
             externalReference,
             marketId,
             commodityData.getName(),
             commodityData.getBuyPrice(),
             commodityData.getSellPrice(),
             commodityData.getDemand(),
-            commodityData.getStock(),
-            commodityData.getAveragePrice()
+            commodityData.getStock()
         );
 
         if (isNull(maybeStoredCommodity)) {
@@ -40,9 +48,7 @@ public class CommodityDataTransformer {
             return Optional.of(created);
         }
 
-        LocalDateTime lastUpdate = Optional.ofNullable(maybeStoredCommodity.getLastUpdate())
-            .orElse(LocalDateTime.MIN);
-        if (lastUpdate.isAfter(timestamp)) {
+        if (originalLastUpdate.getLastUpdate().isAfter(timestamp)) {
             //Existing commodity is newer version than the updated one
             return Optional.empty();
         }

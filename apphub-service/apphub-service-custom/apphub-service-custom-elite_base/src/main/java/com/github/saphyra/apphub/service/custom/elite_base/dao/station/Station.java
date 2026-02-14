@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.dao.station;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.EconomyEnum;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.ItemLocationData;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_economy.StationEconomy;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.station.station_service.StationServiceEnum;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
@@ -20,7 +21,7 @@ import java.util.UUID;
 @Data
 @Builder
 @ToString(exclude = {"services", "economies"})
-public class Station {
+public class Station implements ItemLocationData {
     private final UUID id;
     private LocalDateTime lastUpdate;
     private UUID starSystemId;
@@ -42,5 +43,10 @@ public class Station {
 
     public List<StationEconomy> getEconomies() {
         return economies.get();
+    }
+
+    @Override
+    public String getName() {
+        return stationName;
     }
 }

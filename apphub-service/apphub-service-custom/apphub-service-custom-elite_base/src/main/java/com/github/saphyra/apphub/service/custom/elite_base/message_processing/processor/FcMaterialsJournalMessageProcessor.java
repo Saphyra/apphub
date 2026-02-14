@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.fleet_carrier.FleetCarrier;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.CommoditySaver;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.FleetCarrierSaver;
@@ -42,8 +42,8 @@ class FcMaterialsJournalMessageProcessor implements MessageProcessor {
 
         commoditySaver.saveAll(
             fcMaterialsJournalMessage.getTimestamp(),
-            CommodityType.FC_MATERIAL,
-            CommodityLocation.FLEET_CARRIER,
+            ItemType.FC_MATERIAL,
+            ItemLocationType.FLEET_CARRIER,
             fleetCarrier.getId(),
             fcMaterialsJournalMessage.getMarketId(),
             getMaterials(fcMaterialsJournalMessage.getItems())

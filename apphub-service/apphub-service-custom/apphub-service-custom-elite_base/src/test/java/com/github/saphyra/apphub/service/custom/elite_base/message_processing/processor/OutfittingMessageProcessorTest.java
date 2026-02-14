@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.custom.elite_base.message_processing.p
 
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.MessageProcessingDelayedException;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityLocation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.loadout.LoadoutType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.custom.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.custom.elite_base.message_processing.saver.LoadoutSaver;
@@ -116,7 +116,7 @@ class OutfittingMessageProcessorTest {
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
         given(stationSaverUtil.saveStationOrFleetCarrier(TIMESTAMP, STAR_SYSTEM_ID, MARKET_ID, STATION_NAME)).willReturn(saveResult);
         given(saveResult.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
-        given(saveResult.getCommodityLocation()).willReturn(CommodityLocation.STATION);
+        given(saveResult.getLocationType()).willReturn(ItemLocationType.STATION);
         given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
@@ -125,6 +125,6 @@ class OutfittingMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(loadoutSaver).should().save(TIMESTAMP, LoadoutType.OUTFITTING, CommodityLocation.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(MODULE));
+        then(loadoutSaver).should().save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(MODULE));
     }
 }

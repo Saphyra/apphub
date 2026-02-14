@@ -1,8 +1,12 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.Order;
 import com.github.saphyra.apphub.api.custom.elite_base.model.Relation;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.commodity.CommodityNameCache;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.OrderCommoditiesBy;
+import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.TradeMode;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.custom.elite_base.dao.item.type.ItemTypeDao;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.PowerplayState;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -31,14 +35,24 @@ class CommodityTradingRequestValidatorTest {
     private static final Integer MIN_TRADE_AMOUNT = 5;
 
     @Mock
-    private CommodityNameCache commodityNameCache;
+    private ItemTypeDao itemTypeDao;
 
     @InjectMocks
     private CommodityTradingRequestValidator underTest;
 
     @Test
+    void nullTradeMode() {
+        CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(null)
+            .build();
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "tradeMode", "must not be null");
+    }
+
+    @Test
     void nullReferenceStarId() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(null)
             .build();
 
@@ -48,11 +62,12 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void invalidCommodity() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity("invalid-commodity-name")
+            .itemName("invalid-commodity-name")
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "commodity", "must be one of [%s]".formatted(COMMODITY_NAME));
     }
@@ -60,12 +75,13 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullMaxStarSystemDistance() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxStarSystemDistance", "must not be null");
     }
@@ -73,13 +89,14 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullMaxStationDistance() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxStationDistance", "must not be null");
     }
@@ -87,14 +104,15 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullIncludeUnknownStationDistance() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeUnknownStationDistance", "must not be null");
     }
@@ -102,15 +120,16 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullIncludeUnknownLandingPad() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
             .includeUnknownLandingPad(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeUnknownLandingPad", "must not be null");
     }
@@ -118,8 +137,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullMaxTimeSinceLastUpdated() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -127,7 +147,7 @@ class CommodityTradingRequestValidatorTest {
             .maxTimeSinceLastUpdated(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxTimeSinceLastUpdated", "must not be null");
     }
@@ -135,8 +155,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullIncludeSurfaceStations() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -145,7 +166,7 @@ class CommodityTradingRequestValidatorTest {
             .includeSurfaceStations(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeSurfaceStations", "must not be null");
     }
@@ -153,8 +174,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullIncludeFleetCarriers() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -164,7 +186,7 @@ class CommodityTradingRequestValidatorTest {
             .includeFleetCarriers(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "includeFleetCarriers", "must not be null");
     }
@@ -172,8 +194,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void minPriceTooLow() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -184,7 +207,7 @@ class CommodityTradingRequestValidatorTest {
             .minPrice(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "minPrice", "too low");
     }
@@ -192,8 +215,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void maxPriceTooLow() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -205,16 +229,17 @@ class CommodityTradingRequestValidatorTest {
             .maxPrice(MIN_PRICE - 1)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "maxPrice", "too low");
     }
 
     @Test
-    void nullControllingPowers() {
+    void nullOrderBy() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -225,9 +250,87 @@ class CommodityTradingRequestValidatorTest {
             .minPrice(MIN_PRICE)
             .maxPrice(MAX_PRICE)
             .controllingPowers(null)
+            .orderBy(null)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "orderBy", "must not be null");
+    }
+
+    @Test
+    void nullOrder() {
+        CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
+            .referenceStarId(REFERENCE_STAR_ID)
+            .itemName(COMMODITY_NAME)
+            .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
+            .maxStationDistance(MAX_STATION_DISTANCE)
+            .includeUnknownStationDistance(true)
+            .includeUnknownLandingPad(false)
+            .maxTimeSinceLastUpdated(MAX_TIME_SINCE_LAST_UPDATED)
+            .includeSurfaceStations(false)
+            .includeFleetCarriers(false)
+            .minPrice(MIN_PRICE)
+            .maxPrice(MAX_PRICE)
+            .controllingPowers(null)
+            .orderBy(OrderCommoditiesBy.PRICE)
+            .order(null)
+            .build();
+
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "order", "must not be null");
+    }
+
+    @Test
+    void offsetTooLow() {
+        CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
+            .referenceStarId(REFERENCE_STAR_ID)
+            .itemName(COMMODITY_NAME)
+            .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
+            .maxStationDistance(MAX_STATION_DISTANCE)
+            .includeUnknownStationDistance(true)
+            .includeUnknownLandingPad(false)
+            .maxTimeSinceLastUpdated(MAX_TIME_SINCE_LAST_UPDATED)
+            .includeSurfaceStations(false)
+            .includeFleetCarriers(false)
+            .minPrice(MIN_PRICE)
+            .maxPrice(MAX_PRICE)
+            .controllingPowers(null)
+            .orderBy(OrderCommoditiesBy.PRICE)
+            .order(Order.ASCENDING)
+            .offset(-1)
+            .build();
+
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "offset", "too low");
+    }
+
+    @Test
+    void nullControllingPowers() {
+        CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
+            .referenceStarId(REFERENCE_STAR_ID)
+            .itemName(COMMODITY_NAME)
+            .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
+            .maxStationDistance(MAX_STATION_DISTANCE)
+            .includeUnknownStationDistance(true)
+            .includeUnknownLandingPad(false)
+            .maxTimeSinceLastUpdated(MAX_TIME_SINCE_LAST_UPDATED)
+            .includeSurfaceStations(false)
+            .includeFleetCarriers(false)
+            .minPrice(MIN_PRICE)
+            .maxPrice(MAX_PRICE)
+            .controllingPowers(null)
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
+            .offset(0)
+            .build();
+
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "controllingPowers", "must not be null");
     }
@@ -235,8 +338,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullControllingPowerRelationWithControllingPowerSpecified() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -248,9 +352,12 @@ class CommodityTradingRequestValidatorTest {
             .maxPrice(MAX_PRICE)
             .controllingPowers(List.of(Power.NAKATO_KAINE.name()))
             .controllingPowerRelation(null)
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
+            .offset(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "controllingPowerRelation", "must not be null");
     }
@@ -258,8 +365,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullPowers() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -271,10 +379,13 @@ class CommodityTradingRequestValidatorTest {
             .maxPrice(MAX_PRICE)
             .controllingPowers(List.of(Power.NAKATO_KAINE.name()))
             .controllingPowerRelation(Relation.ALL_MATCH)
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
             .powers(null)
+            .offset(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "powers", "must not be null");
     }
@@ -282,8 +393,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullPowersRelationWithPowerSpecified() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -297,9 +409,12 @@ class CommodityTradingRequestValidatorTest {
             .controllingPowerRelation(null)
             .powers(List.of(Power.NAKATO_KAINE.name()))
             .powersRelation(null)
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
+            .offset(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "powersRelation", "must not be null");
     }
@@ -307,8 +422,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void invalidPowerplayState() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -323,9 +439,12 @@ class CommodityTradingRequestValidatorTest {
             .powers(List.of(Power.NAKATO_KAINE.name()))
             .powersRelation(Relation.NONE_MATCH)
             .powerplayState("asd")
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
+            .offset(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "powerplayState", "invalid value");
     }
@@ -333,8 +452,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void nullMinTradeAmount() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -350,9 +470,12 @@ class CommodityTradingRequestValidatorTest {
             .powersRelation(null)
             .powerplayState(PowerplayState.CONTESTED.name())
             .minTradeAmount(null)
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
+            .offset(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "minTradeAmount", "must not be null");
     }
@@ -360,8 +483,9 @@ class CommodityTradingRequestValidatorTest {
     @Test
     void valid() {
         CommodityTradingRequest request = CommodityTradingRequest.builder()
+            .tradeMode(TradeMode.BUY)
             .referenceStarId(REFERENCE_STAR_ID)
-            .commodity(COMMODITY_NAME)
+            .itemName(COMMODITY_NAME)
             .maxStarSystemDistance(MAX_STAR_SYSTEM_DISTANCE)
             .maxStationDistance(MAX_STATION_DISTANCE)
             .includeUnknownStationDistance(true)
@@ -377,9 +501,12 @@ class CommodityTradingRequestValidatorTest {
             .powersRelation(null)
             .powerplayState(PowerplayState.CONTESTED.name())
             .minTradeAmount(MIN_TRADE_AMOUNT)
+            .orderBy(OrderCommoditiesBy.TRADE_AMOUNT)
+            .order(Order.ASCENDING)
+            .offset(0)
             .build();
 
-        given(commodityNameCache.getCommodityNames()).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         underTest.validate(request);
     }

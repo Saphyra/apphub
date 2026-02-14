@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import localizationData from "./trade_commodities_page_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import StarSelector from "../../../common/component/star_selector/StarSelector";
@@ -25,8 +25,11 @@ import ErrorHandler from "../../../../../../common/js/dao/ErrorHandler";
 import TradeCommoditiesResult from "./TradeCommoditiesResult";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
 import TradeCommoditiesGalacticAverage from "./TradeCommoditiesGalacticAverage";
+import OrderBy from "./OrderBy";
+import Order from "./Order";
 
-export const PAGE_SIZE = 20;
+export const CACHE_KEY_ORDER = "eliteBaseCommodityTradingResultOrder";
+export const CACHE_KEY_ORDER_BY = "eliteBaseCommodityTradingResultOrderBy";
 
 const TradeCommoditiesPage = ({ tradeMode }) => {
     const CACHE_KEY_MIN_PRICE = "eliteBaseCommodityTradingMinPrice";
@@ -73,12 +76,28 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
     const [powerplayState, setPowerplayState] = useState(cachedOrDefault(CACHE_KEY_POWERPLAY_STATE, ""));
 
     //Search result
-    const [searchResult, setSearchResult] = useState(null);
-    const [displayed, setDisplayed] = useState(PAGE_SIZE);
+    const [searchResult, setSearchResult] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const [orderBy, setOrderBy] = useState(cachedOrDefault(CACHE_KEY_ORDER_BY, OrderBy.SYSTEM_DISTANCE.key));
+    const [order, setOrder] = useState(cachedOrDefault(CACHE_KEY_ORDER, Order.ASCENDING.key));
+    const [moreCanLoaded, setMoreCanLoaded] = useState(false);
+
+    useEffect(
+        () => {
+            setSearchResult([]);
+            setOffset(0);
+            setMoreCanLoaded(false);
+        },
+        [
+            tradeMode,
+            starId, commodity, minPrice, maxPrice, maxStarSystemDistance, maxStationDistance, includeUnknownStationDistance, minLandingPad,
+            includeUnknownLandingPad, maxTimeSinceLastUpdated, includeSurfaceStations, includeFleetCarriers, minTradeAmount,
+            controllingPowers, controllingPowerRelation, powers, powersRelation, powerplayState,
+            orderBy, order
+        ]
+    );
 
     useCache("elite-base-powerplay-states", ELITE_BASE_GET_POWERPLAY_STATES.createRequest(), setPowerplayStates);
-
-    useEffect(() => setDisplayed(PAGE_SIZE), [searchResult]);
 
     return (
         <div className="elite-base-page">
@@ -276,8 +295,12 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
                 <TradeCommoditiesResult
                     localizationHandler={localizationHandler}
                     searchResult={searchResult}
-                    displayed={displayed}
-                    setDisplayed={setDisplayed}
+                    order={order}
+                    setOrder={v => cacheAndUpdate(CACHE_KEY_ORDER, v, setOrder)}
+                    orderBy={orderBy}
+                    setOrderBy={v => cacheAndUpdate(CACHE_KEY_ORDER_BY, v, setOrderBy)}
+                    moreCanLoaded={moreCanLoaded}
+                    loadMoreCallback={search}
                 />
             }
 
@@ -294,58 +317,53 @@ const TradeCommoditiesPage = ({ tradeMode }) => {
             .toList();
     }
 
-    function search() {
-        setDisplayed(PAGE_SIZE);
-        setDisplaySpinner(true);
-        doSearch();
-    }
+    async function search() {
+        const validationResult = validateAll(
+            [
+                () => validate(() => hasValue(starId), localizationHandler.get("star-not-selected")),
+                () => validate(() => hasValue(commodity), localizationHandler.get("commodity-not-selected")),
+                () => validate(() => minPrice >= MIN_PRICE, localizationHandler.get("min-price-too-low")),
+                () => validate(() => maxPrice >= minPrice, localizationHandler.get("max-price-too-low")),
+            ]
+        );
 
-    async function doSearch() {
-        try {
-            const validationResult = validateAll(
-                [
-                    () => validate(() => hasValue(starId), localizationHandler.get("star-not-selected")),
-                    () => validate(() => hasValue(commodity), localizationHandler.get("commodity-not-selected")),
-                    () => validate(() => minPrice >= MIN_PRICE, localizationHandler.get("min-price-too-low")),
-                    () => validate(() => maxPrice >= minPrice, localizationHandler.get("max-price-too-low")),
-                ]
-            );
-
-            if (hasValue(validationResult)) {
-                NotificationService.showError(validationResult);
-                return;
-            }
-
-            const request = {
-                tradeMode: tradeMode,
-                referenceStarId: starId,
-                commodity: commodity,
-                minPrice: minPrice,
-                maxPrice: maxPrice,
-                maxStarSystemDistance: maxStarSystemDistance,
-                maxStationDistance: maxStationDistance,
-                includeUnknownStationDistance: includeUnknownStationDistance,
-                minLandingPad: minLandingPad,
-                includeUnknownLandingPad: includeUnknownLandingPad,
-                maxTimeSinceLastUpdated: maxTimeSinceLastUpdated,
-                includeSurfaceStations: includeSurfaceStations,
-                includeFleetCarriers: includeFleetCarriers,
-                controllingPowers: controllingPowers,
-                controllingPowerRelation: controllingPowerRelation,
-                powers: powers,
-                powersRelation: powersRelation,
-                powerplayState: powerplayState == "" ? null : powerplayState,
-                minTradeAmount: minTradeAmount,
-            }
-
-            const response = await ELITE_BASE_COMMODITY_TRADING_TRADE.createRequest(request)
-                .addErrorHandler(new ErrorHandler(() => true, () => setDisplaySpinner(false)))
-                .send();
-
-            setSearchResult(response);
-        } finally {
-            setDisplaySpinner(false);
+        if (hasValue(validationResult)) {
+            NotificationService.showError(validationResult);
+            return;
         }
+
+        const request = {
+            tradeMode: tradeMode,
+            referenceStarId: starId,
+            itemName: commodity,
+            minPrice: minPrice,
+            maxPrice: maxPrice,
+            maxStarSystemDistance: maxStarSystemDistance,
+            maxStationDistance: maxStationDistance,
+            includeUnknownStationDistance: includeUnknownStationDistance,
+            minLandingPad: minLandingPad,
+            includeUnknownLandingPad: includeUnknownLandingPad,
+            maxTimeSinceLastUpdated: maxTimeSinceLastUpdated,
+            includeSurfaceStations: includeSurfaceStations,
+            includeFleetCarriers: includeFleetCarriers,
+            controllingPowers: controllingPowers,
+            controllingPowerRelation: controllingPowerRelation,
+            powers: powers,
+            powersRelation: powersRelation,
+            powerplayState: powerplayState == "" ? null : powerplayState,
+            minTradeAmount: minTradeAmount,
+            orderBy: orderBy,
+            order: order,
+            offset: offset,
+        }
+
+        const response = await ELITE_BASE_COMMODITY_TRADING_TRADE.createRequest(request)
+            .addErrorHandler(new ErrorHandler(() => true, () => setDisplaySpinner(false)))
+            .send(setDisplaySpinner);
+
+        setOffset(response.offset);
+        setSearchResult(searchResult.concat(response.items));
+        setMoreCanLoaded(response.items.length > 0);
     }
 }
 

@@ -21,7 +21,7 @@ class RelationTest {
         List<String> current = List.of(VALUE_1, VALUE_2);
         List<String> required = List.of(VALUE_2, VALUE_3);
 
-        assertThat(Relation.ANY_MATCH.apply(required, current)).isTrue();
+        assertThat(Relation.ANY_MATCH.apply(required, () -> current)).isTrue();
     }
 
     @Test
@@ -29,7 +29,7 @@ class RelationTest {
         List<String> current = List.of(VALUE_1);
         List<String> required = List.of(VALUE_2, VALUE_3);
 
-        assertThat(Relation.ANY_MATCH.apply(required, current)).isFalse();
+        assertThat(Relation.ANY_MATCH.apply(required, () -> current)).isFalse();
     }
 
     @Test
@@ -37,7 +37,7 @@ class RelationTest {
         List<String> current = List.of(VALUE_1, VALUE_2, VALUE_3);
         List<String> required = List.of(VALUE_2, VALUE_3);
 
-        assertThat(Relation.ALL_MATCH.apply(required, current)).isTrue();
+        assertThat(Relation.ALL_MATCH.apply(required, () -> current)).isTrue();
     }
 
     @Test
@@ -45,7 +45,7 @@ class RelationTest {
         List<String> current = List.of(VALUE_1, VALUE_3);
         List<String> required = List.of(VALUE_2, VALUE_3);
 
-        assertThat(Relation.ALL_MATCH.apply(required, current)).isFalse();
+        assertThat(Relation.ALL_MATCH.apply(required, () -> current)).isFalse();
     }
 
     @Test
@@ -53,7 +53,7 @@ class RelationTest {
         List<String> current = List.of(VALUE_1, VALUE_4);
         List<String> required = List.of(VALUE_2, VALUE_3);
 
-        assertThat(Relation.NONE_MATCH.apply(required, current)).isTrue();
+        assertThat(Relation.NONE_MATCH.apply(required, () -> current)).isTrue();
     }
 
     @Test
@@ -61,25 +61,25 @@ class RelationTest {
         List<String> current = List.of(VALUE_1, VALUE_3);
         List<String> required = List.of(VALUE_2, VALUE_3);
 
-        assertThat(Relation.NONE_MATCH.apply(required, current)).isFalse();
+        assertThat(Relation.NONE_MATCH.apply(required, () -> current)).isFalse();
     }
 
     @Test
     void empty_match() {
         List<String> current = List.of();
 
-        assertThat(Relation.EMPTY.apply(Collections.emptyList(), current)).isTrue();
+        assertThat(Relation.EMPTY.apply(Collections.emptyList(), () -> current)).isTrue();
     }
 
     @Test
     void empty_mismatch() {
         List<String> current = List.of(VALUE_2);
 
-        assertThat(Relation.EMPTY.apply(Collections.emptyList(), current)).isFalse();
+        assertThat(Relation.EMPTY.apply(Collections.emptyList(), () -> current)).isFalse();
     }
 
     @Test
     void any() {
-        assertThat(Relation.ANY.apply(Collections.emptyList(), List.of(VALUE_2))).isTrue();
+        assertThat(Relation.ANY.apply(Collections.emptyList(), () -> List.of(VALUE_2))).isTrue();
     }
 }
