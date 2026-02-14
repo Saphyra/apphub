@@ -12,7 +12,7 @@ const LastUpdateOptions = {
     PT4H: "4-hours-ago",
     PT12H: "12-hours-ago",
     P1D: "1-day-ago",
-    P1W: "1-week-ago",
+    P7D: "1-week-ago",
     P30D: "1-month-ago",
     P180D: "6-months-ago",
     P365D: "1-year-ago",
