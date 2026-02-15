@@ -1,14 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.api.modules;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.TrainingEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.*;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +13,6 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
-    VILLANY_ATESZ("custom", "villanyatesz", VillanyAteszEndpoints.VILLANY_ATESZ_PAGE, "VillanyAtesz"),
     COMMUNITY("community", "community", CommunityEndpoints.COMMUNITY_PAGE, "Közösség"),
     CALENDAR("office", "calendar", CalendarEndpoints.CALENDAR_PAGE, "Határidőnapló"),
     BAN("admin-panel", "ban", AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),

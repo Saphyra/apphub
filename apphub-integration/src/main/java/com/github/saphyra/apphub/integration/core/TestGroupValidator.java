@@ -23,7 +23,6 @@ public class TestGroupValidator {
         "utils",
         "misc",
         "training",
-        "villany-atesz",
         "elite-base"
     );
 

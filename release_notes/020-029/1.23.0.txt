@@ -5,5 +5,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    VillanyAtesz
+        Delete feature
 
 ===ETC===
