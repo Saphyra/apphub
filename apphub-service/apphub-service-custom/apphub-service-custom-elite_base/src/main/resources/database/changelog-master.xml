@@ -44,5 +44,4 @@
     <include file="database/change_sets/item_fc_material.xml"/>
     <include file="database/change_sets/item_equipment.xml"/>
     <include file="database/change_sets/item_spaceship.xml"/>
-    <include file="database/change_sets/migration_commodities.xml"/>
 </databaseChangeLog>

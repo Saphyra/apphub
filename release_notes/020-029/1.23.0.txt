@@ -1,0 +1,14 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    VillanyAtesz
+        Delete feature
+    EliteBase
+        Drop old commodity and loadout tables
+        Delete migration changeSets
+
+===ETC===

@@ -25,7 +25,6 @@ public class Constants {
     public final String ROLE_COMMUNITY = "COMMUNITY";
     public final String ROLE_CALENDAR = "CALENDAR";
     public final String ROLE_ELITE_BASE = "ELITE_BASE";
-    public static final String ROLE_VILLANY_ATESZ = "VILLANY_ATESZ";
     public static final String ROLE_ELITE_BASE_ADMIN = "ELITE_BASE_ADMIN";
 
     //Alliances
@@ -62,21 +61,9 @@ public class Constants {
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
     public static final String DEFAULT_PIN_GROUP_NAME = "All";
-    public static final String SELECT_OPTION_CHOOSE = "Choose";
-
-    //VillanyAtesz
-    public static final String FT_SUFFIX = " Ft";
-    public static final Double CART_DEFAULT_MARGIN = 1.2;
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
-
-    //Calendar
-    public final String CALENDAR_OCCURRENCE_STATUS_PENDING = "PENDING";
-    public final String CALENDAR_OCCURRENCE_STATUS_EXPIRED = "EXPIRED";
-    public final String CALENDAR_OCCURRENCE_STATUS_VIRTUAL = "VIRTUAL";
-    public final String CALENDAR_OCCURRENCE_STATUS_DONE = "DONE";
-    public final String CALENDAR_OCCURRENCE_STATUS_SNOOZED = "SNOOZED";
 
     //User settings
     public final String USER_SETTING_CATEGORY_NOTEBOOK = "notebook";
@@ -101,7 +88,6 @@ public class Constants {
         "calendar",
         "encryption",
         "storage",
-        "villany-atesz",
         "elite-base"
     );
 

@@ -33,7 +33,6 @@ rolesCanBeDisabled:
 - UTILS
 - COMMUNITY
 - CALENDAR
-- VILLANY_ATESZ
 - ELITE_BASE
 - ELITE_BASE_ADMIN
 
@@ -41,17 +40,12 @@ add-role-to-all:
   restrictedRoles:
   - ACCESS
   - ADMIN
-  - VILLANY_ATESZ
   - ELITE_BASE_ADMIN
 
 settings:
   notebook:
     show-archived: true
     default-list-item-id: ~
-  villany-atesz:
-    stock-last-inventoried-car: ""
-    stock-last-inventoried-storage: ""
-    toolbox-last-inventoried: ""
   collapsed-modules:
     community: false
     admin-panel: false

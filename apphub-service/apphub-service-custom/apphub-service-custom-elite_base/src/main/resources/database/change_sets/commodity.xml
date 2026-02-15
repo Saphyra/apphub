@@ -49,4 +49,12 @@
 
         <rollback/>
     </changeSet>
+
+    <changeSet id="drop-table-commodity" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="elite_base" tableName="commodity"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="commodity"/>
+    </changeSet>
 </databaseChangeLog>
