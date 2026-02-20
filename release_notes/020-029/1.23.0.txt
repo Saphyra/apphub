@@ -12,3 +12,5 @@
         Delete migration changeSets
 
 ===ETC===
+    ApphubCI
+        Stopping VM stops proxies too
