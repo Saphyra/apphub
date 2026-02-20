@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -27,12 +26,6 @@ class IndexPage {
         ).orElseThrow(() -> new RuntimeException("Email input not present on url " + driver.getCurrentUrl()));
     }
 
-    static Optional<WebElement> emailValid(WebDriver driver) {
-        return driver.findElements(By.id("registration-email-validation"))
-            .stream()
-            .findFirst();
-    }
-
     static WebElement usernameInput(WebDriver driver) {
         return new WebDriverWait(driver, Duration.ofSeconds(10))
             .until(ExpectedConditions.presenceOfElementLocated(By.id("registration-username")));
@@ -44,24 +37,6 @@ class IndexPage {
 
     static WebElement confirmPasswordInput(WebDriver driver) {
         return driver.findElement(By.id("registration-confirm-password"));
-    }
-
-    static Optional<WebElement> usernameValid(WebDriver driver) {
-        return driver.findElements(By.id("registration-username-validation"))
-            .stream()
-            .findFirst();
-    }
-
-    static Optional<WebElement> passwordValid(WebDriver driver) {
-        return driver.findElements(By.id("registration-password-validation"))
-            .stream()
-            .findFirst();
-    }
-
-    static Optional<WebElement> confirmPasswordValid(WebDriver driver) {
-        return driver.findElements(By.id("registration-confirm-password-validation"))
-            .stream()
-            .findFirst();
     }
 
     static WebElement registrationSubmitButton(WebDriver driver) {
