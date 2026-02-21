@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict.minor_faction;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.lib.sql_builder.Equation;
-import com.github.saphyra.apphub.lib.sql_builder.NotExistsCondition;
-import com.github.saphyra.apphub.lib.sql_builder.QualifiedColumn;
-import com.github.saphyra.apphub.lib.sql_builder.QualifiedTable;
+import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
+import com.github.saphyra.apphub.lib.sql_builder.condition.NotExistsCondition;
+import com.github.saphyra.apphub.lib.sql_builder.column.QualifiedColumn;
+import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
 import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Orphanage;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleaner;

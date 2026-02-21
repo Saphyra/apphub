@@ -3,6 +3,7 @@
 ===BUGFIXES===
 
 ===PLATFORM CHANGES===
+    Separate packages for SqlBuilder classes
 
 ===TECHNICAL DEBTS===
     VillanyAtesz
