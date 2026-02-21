@@ -36,7 +36,7 @@ public class BanExpirationTest extends SeleniumTest {
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);

@@ -52,7 +52,7 @@ public class RemoveRoleTest extends BackEndTest {
     private void nullPassword(UUID accessTokenId, UUID userId) {
         RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(userId)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_NOTEBOOK)
             .password(null)
             .build();
         Response response = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, nullUserIdRequest);
@@ -62,7 +62,7 @@ public class RemoveRoleTest extends BackEndTest {
     private static void nullUserId(UUID accessTokenId) {
         RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(null)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_NOTEBOOK)
             .build();
         Response nullUserIdResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, nullUserIdRequest);
         verifyInvalidParam(nullUserIdResponse, "userId", "must not be null");
@@ -80,7 +80,7 @@ public class RemoveRoleTest extends BackEndTest {
     private static void userNotFound(UUID accessTokenId, RegistrationParameters userData) {
         RoleRequest userNotFoundRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_NOTEBOOK)
             .password(userData.getPassword())
             .build();
         Response userNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, userNotFoundRequest);
@@ -90,7 +90,7 @@ public class RemoveRoleTest extends BackEndTest {
     private static void roleNotFound(UUID accessTokenId, RegistrationParameters userData, UUID userId) {
         RoleRequest roleNotFoundRequest = RoleRequest.builder()
             .userId(userId)
-            .role(Constants.ROLE_ADMIN)
+            .role("non-existing-role")
             .password(userData.getPassword())
             .build();
         Response roleNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, roleNotFoundRequest);

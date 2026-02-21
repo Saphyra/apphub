@@ -30,7 +30,7 @@ public class RoleToAllService {
     private final CheckPasswordService checkPasswordService;
 
     @Builder
-    public RoleToAllService(
+    RoleToAllService(
         RoleDao roleDao,
         UserDao userDao,
         RoleFactory roleFactory,

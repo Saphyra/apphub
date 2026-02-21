@@ -56,10 +56,23 @@ public class RoleManagementActions {
             .delete(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_REMOVE_ROLE));
     }
 
+    public static void addToAll(int serverPort, UUID accessTokenId, String password, String roleTest) {
+        Response response = getAddToAllResponse(serverPort, accessTokenId, password, roleTest);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+
     public static Response getAddToAllResponse(int serverPort, UUID accessTokenId, String password, String role) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(new OneParamRequest<>(password))
             .post(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_ADD_ROLE_TO_ALL, "role", role));
+    }
+
+    public static void removeFromAll(int serverPort, UUID accessTokenId, String password, String roleTest) {
+        Response response = getRemoveFromAllResponse(serverPort, accessTokenId, password, roleTest);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     public static Response getRemoveFromAllResponse(int serverPort, UUID accessTokenId, String password, String role) {

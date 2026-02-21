@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.core;
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverProvider;
 import com.github.saphyra.apphub.integration.core.exception.ExceptionConverter;
+import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLockListener;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
 import com.github.saphyra.apphub.integration.core.testng.MethodCollectorSuiteListener;
 import com.github.saphyra.apphub.integration.core.testng.RetryAnalyzerAnnotatorSuiteListener;
@@ -16,11 +17,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.Listeners;
+import org.testng.annotations.*;
 import tools.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
@@ -40,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 import static java.util.Objects.isNull;
 
 @Slf4j
-@Listeners({SkipDisabledTestsInterceptor.class, MethodCollectorSuiteListener.class, RetryAnalyzerAnnotatorSuiteListener.class})
+@Listeners({SkipDisabledTestsInterceptor.class, MethodCollectorSuiteListener.class, RetryAnalyzerAnnotatorSuiteListener.class, FeatureLockListener.class})
 public abstract class TestBase {
     public static final ExecutorServiceBean EXECUTOR_SERVICE = new ExecutorServiceBean(Executors.newCachedThreadPool());
     public static final ObjectMapper OBJECT_MAPPER_WRAPPER = new ObjectMapper();

@@ -19,6 +19,7 @@ public enum ModuleLocation {
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
     ROLES_FOR_ALL("admin-panel", "roles-for-all", AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE, "Jogosultság mindenkinek"),
     ROLE_MANAGEMENT("admin-panel", "role-management", AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),
+    TEST("custom", "test", "/web/test", "Test"),
     MEMORY_MONITORING("admin-panel", "memory-monitoring", AdminPanelEndpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE, "Memória felügyelet"),
     MIGRATION_TASKS("admin-panel", "migration-tasks", AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE, "Migrációs feladatok"),
     MANAGE_ACCOUNT("accounts", "account", UserEndpoints.ACCOUNT_PAGE, "Fiók kezelése"),

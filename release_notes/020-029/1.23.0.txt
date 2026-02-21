@@ -17,3 +17,6 @@
 ===ETC===
     ApphubCI
         Stopping VM stops proxies too
+    Integration
+        Admin role is not used in tests (unless necessary)
+        Only 1 test is allowed that uses Test role to avoid concurrency issues

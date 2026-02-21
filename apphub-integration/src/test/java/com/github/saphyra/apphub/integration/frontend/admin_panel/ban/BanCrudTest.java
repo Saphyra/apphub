@@ -5,6 +5,8 @@ import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.Ban
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
+import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -34,6 +36,7 @@ public class BanCrudTest extends SeleniumTest {
     private static final String REASON = "reason";
 
     @Test(groups = {"fe", "admin-panel"})
+    @FeatureLocked(Feature.ROLE_TEST)
     public void banCrud() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver testDriver = drivers.get(0);
