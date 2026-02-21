@@ -1,4 +1,6 @@
 ===FEATURES===
+    SkyXplore
+        Tick counting in game
 
 ===BUGFIXES===
 

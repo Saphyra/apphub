@@ -24,6 +24,7 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
         model.setMarkedForDeletion(entity.getMarkedForDeletion());
         model.setMarkedForDeletionAt(entity.getMarkedForDeletionAt());
         model.setUniverseSize(entity.getUniverseSize());
+        model.setTick(entity.getTick());
         return model;
     }
 
@@ -37,6 +38,7 @@ class GameConverter extends ConverterBase<GameEntity, GameModel> {
             .markedForDeletion(domain.getMarkedForDeletion())
             .markedForDeletionAt(domain.getMarkedForDeletionAt())
             .universeSize(domain.getUniverseSize())
+            .tick(domain.getTick())
             .build();
     }
 }

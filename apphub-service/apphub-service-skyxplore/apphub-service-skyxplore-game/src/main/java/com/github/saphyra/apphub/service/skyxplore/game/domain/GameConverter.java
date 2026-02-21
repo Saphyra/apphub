@@ -62,6 +62,7 @@ public class GameConverter {
         gameModel.setMarkedForDeletion(game.getMarkedForDeletion());
         gameModel.setMarkedForDeletionAt(game.getMarkedForDeletionAt());
         gameModel.setUniverseSize(game.getData().getUniverseSize());
+        gameModel.setTick(game.getTick().get());
         return gameModel;
     }
 }

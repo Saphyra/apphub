@@ -19,4 +19,5 @@ public class GameModel extends GameItem {
     private Boolean markedForDeletion;
     private LocalDateTime markedForDeletionAt;
     private Integer universeSize;
+    private Long tick;
 }

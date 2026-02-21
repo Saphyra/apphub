@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameConverter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,4 +20,5 @@ class TickSchedulerContext {
     private final DateTimeUtil dateTimeUtil;
     private final GameProperties gameProperties;
     private final ErrorReporterService errorReporterService;
+    private final GameConverter gameConverter;
 }

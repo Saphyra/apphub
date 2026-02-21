@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 @RequiredArgsConstructor
@@ -51,6 +52,7 @@ public class GameLoader {
             .eventLoop(eventLoopFactory.create())
             .markedForDeletion(gameModel.getMarkedForDeletion())
             .markedForDeletionAt(gameModel.getMarkedForDeletionAt())
+            .tick(new AtomicLong(gameModel.getTick()))
             .build();
 
         processLoader.loadProcesses(game);

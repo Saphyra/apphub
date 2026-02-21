@@ -64,4 +64,16 @@
             <column name="universe_size" type="integer"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-tick-to-game" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="skyxplore_game" tableName="game" columnName="tick"/>
+            </not>
+        </preConditions>
+
+        <addColumn schemaName="skyxplore_game" tableName="game">
+            <column name="tick" type="bigint"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -16,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Data
@@ -45,6 +46,8 @@ public class Game {
     @Builder.Default
     private volatile boolean terminated = false;
 
+    private AtomicLong tick;
+
     public List<UUID> getConnectedPlayers() {
         return players.values()
             .stream()
@@ -63,5 +66,9 @@ public class Game {
 
     public boolean shouldRun() {
         return !gamePaused;
+    }
+
+    public void tick() {
+        tick.incrementAndGet();
     }
 }

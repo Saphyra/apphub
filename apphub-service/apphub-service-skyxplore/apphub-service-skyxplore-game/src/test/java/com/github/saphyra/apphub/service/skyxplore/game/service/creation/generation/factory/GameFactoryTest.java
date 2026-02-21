@@ -122,5 +122,6 @@ public class GameFactoryTest {
         assertThat(result.getLastPlayed()).isEqualTo(CURRENT_DATE);
         assertThat(result.getEventLoop()).isEqualTo(eventLoop);
         assertThat(result.getMarkedForDeletion()).isFalse();
+        assertThat(result.getTick()).isNotNull();
     }
 }

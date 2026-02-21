@@ -58,10 +58,17 @@ class TickScheduler implements Runnable {
     public FutureWrapper<Long> processTick(long startTime) {
         game.getEventLoop()
             .process(
-                () -> context.getTickTasks()
-                    .stream()
-                    .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
-                    .forEach(this::processTickTask));
+                () -> {
+                    game.tick();
+                    game.getProgressDiff()
+                            .save(context.getGameConverter().convert(game));
+
+                    context.getTickTasks()
+                        .stream()
+                        .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
+                        .forEach(this::processTickTask);
+                }
+            );
 
         return game.getEventLoop()
             .processWithResponse(() -> {
