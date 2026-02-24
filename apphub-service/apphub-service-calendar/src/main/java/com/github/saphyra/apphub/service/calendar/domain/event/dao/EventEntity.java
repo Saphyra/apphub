@@ -27,4 +27,5 @@ class EventEntity {
     private String title;
     private String content;
     private String remindMeBeforeDays;
+    private String expirationNotified;
 }

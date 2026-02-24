@@ -4,10 +4,7 @@ import com.github.saphyra.apphub.api.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.encryption.impl.IntegerEncryptor;
-import com.github.saphyra.apphub.lib.encryption.impl.LocalDateEncryptor;
-import com.github.saphyra.apphub.lib.encryption.impl.LocalTimeEncryptor;
-import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
+import com.github.saphyra.apphub.lib.encryption.impl.*;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +25,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
     static final String COLUMN_REPEAT_FOR_DAYS = "repeat_for_days";
     static final String COLUMN_CONTENT = "content";
     static final String REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
+    static final String EXPIRATION_NOTIFIED = "expiration_notified";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;
@@ -35,6 +33,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
     private final AccessTokenProvider accessTokenProvider;
     private final LocalDateEncryptor localDateEncryptor;
     private final LocalTimeEncryptor localTimeEncryptor;
+    private final BooleanEncryptor booleanEncryptor;
 
     @Override
     protected EventEntity processDomainConversion(Event domain) {
@@ -53,6 +52,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .title(stringEncryptor.encrypt(domain.getTitle(), userIdFromAccessToken, eventId, COLUMN_TITLE))
             .content(stringEncryptor.encrypt(domain.getContent(), userIdFromAccessToken, eventId, COLUMN_CONTENT))
             .remindMeBeforeDays(integerEncryptor.encrypt(domain.getRemindMeBeforeDays(), userIdFromAccessToken, eventId, REMIND_ME_BEFORE_DAYS))
+            .expirationNotified(booleanEncryptor.encrypt(domain.isExpirationNotified(), userIdFromAccessToken, eventId, EXPIRATION_NOTIFIED))
             .build();
     }
 
@@ -72,6 +72,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .title(stringEncryptor.decrypt(entity.getTitle(), userIdFromAccessToken, entity.getEventId(), COLUMN_TITLE))
             .content(Optional.ofNullable(stringEncryptor.decrypt(entity.getContent(), userIdFromAccessToken, entity.getEventId(), COLUMN_CONTENT)).orElse(Constants.EMPTY_STRING))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getEventId(), REMIND_ME_BEFORE_DAYS))
+            .expirationNotified(Optional.ofNullable(booleanEncryptor.decrypt(entity.getExpirationNotified(), userIdFromAccessToken, entity.getEventId(), EXPIRATION_NOTIFIED)).orElse(false))
             .build();
     }
 }

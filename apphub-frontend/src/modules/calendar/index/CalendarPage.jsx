@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../../common/component/Footer";
 import { ToastContainer } from "react-toastify";
 import localizationData from "./localization/calendar_page_localization.json";
@@ -21,6 +21,7 @@ import useHasFocus from "../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import RightPanel from "./component/right_panel/RightPanel";
 import Labels from "./component/navigation/Labels";
+import ExpiredEventNotification from "./component/ExpiredEventNotification";
 
 const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
@@ -114,14 +115,23 @@ const CalendarPage = () => {
                 />
             </main>
 
-            <Footer rightButtons={[
-                <Button
-                    id="calendar-home-button"
-                    key="home"
-                    onclick={() => window.location.href = Constants.MODULES_PAGE}
-                    label={localizationHandler.get("home")}
-                />
-            ]} />
+            <Footer
+                leftButtons={[
+                    <ExpiredEventNotification
+                        key="expired-event-notification"
+                        setDisplaySpinner={updateDisplaySpinner}
+                        localizationHandler={localizationHandler}
+                        refreshCounter={refreshCounter}
+                    />
+                ]}
+                rightButtons={[
+                    <Button
+                        id="calendar-home-button"
+                        key="home"
+                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        label={localizationHandler.get("home")}
+                    />
+                ]} />
 
             <ToastContainer />
 

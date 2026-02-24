@@ -25,4 +25,5 @@ public class Event {
     private String title;
     private String content;
     private Integer remindMeBeforeDays;
+    private boolean expirationNotified;
 }

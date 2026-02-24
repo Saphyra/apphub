@@ -1,0 +1,23 @@
+#calendar-labels-opened-occurrence {
+    border-right: 3px ridge white;
+}
+
+#calendar-opened-occurrence-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}
+
+#calendar-opened-occurrence-content {
+    padding: 0 3px;
+    line-height: 2;
+    width: calc(100% - 6px);
+}
+
+#calendar-opened-occurrence {
+    border-right: 3px ridge white;
+}

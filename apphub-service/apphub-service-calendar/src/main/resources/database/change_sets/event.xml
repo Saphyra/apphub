@@ -29,4 +29,16 @@
 
         <addPrimaryKey schemaName="calendar" tableName="event" columnNames="event_id" constraintName="event_v2-pk"/>
     </changeSet>
+
+    <changeSet id="add-column-expiration_notified-to-event" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="calendar" tableName="event" columnName="expiration_notified"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="event" schemaName="calendar">
+            <column name="expiration_notified" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

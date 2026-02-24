@@ -140,14 +140,18 @@
     overflow: auto;
 }
 
-#calendar-selected-occurrence-choices{
+#calendar-selected-occurrence-choices {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
 }
 
-#calendar-selected-occurrence-close-button{
+#calendar-selected-occurrence-close-button {
     position: absolute;
     top: 0;
     right: 0;
+}
+
+#calendar-expired-events-button {
+    border-color: red;
 }

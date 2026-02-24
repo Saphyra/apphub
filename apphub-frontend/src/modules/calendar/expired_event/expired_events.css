@@ -1,0 +1,38 @@
+#calendar-expired-events main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0;
+}
+
+#calendar-expired-event-list {
+    border-left: 3px ridge white;
+    border-right: 3px ridge white;
+}
+
+.calendar-expired-event.active{
+    border-color: lime;
+}
+
+#calendar-expired-event {
+    border-right: 3px ridge white;
+    overflow: auto;
+}
+
+#calendar-expired-event-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}
+
+#calendar-expired-event-content {
+    width: calc(100% - 6px);
+}
+
+#calendar-expired-event-operations {
+    text-align: center;
+}
