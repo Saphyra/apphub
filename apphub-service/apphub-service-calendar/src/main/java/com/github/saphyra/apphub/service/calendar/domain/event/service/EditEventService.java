@@ -29,6 +29,7 @@ public class EditEventService {
         eventRequestValidator.validate(request);
 
         Event event = eventDao.findByIdValidated(eventId);
+        event.setExpirationNotified(false);
         UpdateEventContext context = updateEventContextFactory.create(event);
 
         log.info("Updating fields of Event {}", eventId);

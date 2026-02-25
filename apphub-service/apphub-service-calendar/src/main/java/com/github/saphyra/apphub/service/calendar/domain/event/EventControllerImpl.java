@@ -86,10 +86,10 @@ class EventControllerImpl implements EventController {
     }
 
     @Override
-    public void snoozeExpiredEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
+    public void hideExpiredEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to snooze expired event {}", accessTokenHeader.getUserId(), eventId);
 
-        expiredEventService.snooze(eventId);
+        expiredEventService.hide(eventId);
     }
 
     @Override

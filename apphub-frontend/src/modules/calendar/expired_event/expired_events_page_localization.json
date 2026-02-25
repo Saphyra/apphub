@@ -50,5 +50,33 @@
     "occurrences": {
         "en": "Occurrences",
         "hu": "Alkalmak"
+    },
+    "hide": {
+        "en": "Hide",
+        "hu": "Elrejt"
+    },
+    "hide-event-confirmation-title": {
+        "en": "Hide expired event",
+        "hu": "Lejárt esemény elrejtése"
+    },
+    "hide-event-confirmation-content": {
+        "en": "Are you sure you want to hide the expired event \"{title}\"?",
+        "hu": "Biztosan el akarod rejteni a \"{title}\" lejárt eseményt?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "extend-until": {
+        "en": "Extend until",
+        "hu": "Hosszabbítás eddig"
+    },
+    "empty-extended-end-date": {
+        "en": "Pick an end date!",
+        "hu": "Válassz egy befejezési dátumot!"
+    },
+    "past-extended-end-date": {
+        "en": "End date cannot be in the past!",
+        "hu": "A befejezési dátum nem lehet a múltban!"
     }
 }

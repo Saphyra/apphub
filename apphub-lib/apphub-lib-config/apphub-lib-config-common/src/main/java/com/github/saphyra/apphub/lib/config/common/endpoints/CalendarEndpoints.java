@@ -24,6 +24,6 @@ public class CalendarEndpoints {
     public static final String CALENDAR_OCCURRENCE_REMINDED = "/api/calendar/occurrences/{occurrenceId}/reminded";
     public static final String CALENDAR_GET_LABELS_OF_EVENT = "/api/calendar/events/{eventId}/labels";
     public static final String CALENDAR_GET_EXPIRED_EVENTS = "/api/calendar/events/expired";
-    public static final String CALENDAR_SNOOZE_EXPIRED_EVENT = "/api/calendar/events/{eventId}/snooze";
+    public static final String CALENDAR_HIDE_EXPIRED_EVENT = "/api/calendar/events/{eventId}/hide";
     public static final String CALENDAR_EXTEND_EXPIRED_EVENT = "/api/calendar/events/{eventId}/extend";
 }

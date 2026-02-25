@@ -112,9 +112,9 @@ class EventControllerImplTest {
     void snoozeEvent() {
         given(accessTokenHeader.getUserId()).willReturn(USER_ID);
 
-        underTest.snoozeExpiredEvent(EVENT_ID, accessTokenHeader);
+        underTest.hideExpiredEvent(EVENT_ID, accessTokenHeader);
 
-        then(expiredEventService).should().snooze(EVENT_ID);
+        then(expiredEventService).should().hide(EVENT_ID);
     }
 
     @Test

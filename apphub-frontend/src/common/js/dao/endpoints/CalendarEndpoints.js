@@ -28,3 +28,5 @@ export const CALENDAR_EDIT_OCCURRENCE = new Endpoint(RequestMethod.POST, "/api/c
 export const CALENDAR_GET_LABELS_OF_EVENT = new Endpoint(RequestMethod.GET, "/api/calendar/events/{eventId}/labels");
 export const CALENDAR_CREATE_OCCURRENCE = new Endpoint(RequestMethod.PUT, "/api/calendar/occurrences/{eventId}");
 export const CALENDAR_GET_EXPIRED_EVENTS = new Endpoint(RequestMethod.GET, "/api/calendar/events/expired");
+export const CALENDAR_HIDE_EXPIRED_EVENT = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/hide");
+export const CALENDAR_EXTEND_EXPIRED_EVENT = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/extend");

@@ -49,8 +49,8 @@ public interface EventController {
 
     //TODO API test
     //TODO role protection test
-    @PostMapping(CalendarEndpoints.CALENDAR_SNOOZE_EXPIRED_EVENT)
-    void snoozeExpiredEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    @PostMapping(CalendarEndpoints.CALENDAR_HIDE_EXPIRED_EVENT)
+    void hideExpiredEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
     //TODO API test
     //TODO role protection test

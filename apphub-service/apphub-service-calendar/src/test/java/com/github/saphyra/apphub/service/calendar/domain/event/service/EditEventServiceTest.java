@@ -63,6 +63,7 @@ class EditEventServiceTest {
 
         underTest.edit(EVENT_ID, request);
 
+        then(event).should().setExpirationNotified(false);
         then(eventRequestValidator).should().validate(request);
         then(eventFieldUpdater).should().update(context, request, event);
         then(context).should().processChanges();

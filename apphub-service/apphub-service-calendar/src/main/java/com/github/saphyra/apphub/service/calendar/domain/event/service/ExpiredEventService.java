@@ -64,7 +64,7 @@ public class ExpiredEventService {
         return !currentDate.isBefore(lastOccurrenceDate);
     }
 
-    public void snooze(UUID eventId) {
+    public void hide(UUID eventId) {
         Event event = eventDao.findByIdValidated(eventId);
 
         event.setExpirationNotified(true);
@@ -85,7 +85,7 @@ public class ExpiredEventService {
         UpdateEventContext context = updateEventContextFactory.create(event);
 
         event.setStartDate(startDate);
-        event.setStartDate(extendUntil);
+        event.setEndDate(extendUntil);
 
         context.occurrenceRecreationNeeded();
 
