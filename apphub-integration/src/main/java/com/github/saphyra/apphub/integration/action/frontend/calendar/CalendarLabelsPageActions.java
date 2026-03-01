@@ -47,7 +47,7 @@ public class CalendarLabelsPageActions {
     }
 
     public static LocalDate getOpenedOccurrenceDate(WebDriver driver) {
-        return LocalDate.parse(driver.findElement(By.id("calendar-labels-opened-occurrence-title")).getText());
+        return LocalDate.parse(driver.findElement(By.id("calendar-opened-occurrence-title")).getText());
     }
 
     public static void selectNoLabelFilter(WebDriver driver) {

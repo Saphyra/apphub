@@ -3,16 +3,15 @@ package com.github.saphyra.apphub.service.calendar.domain.event;
 import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.CreateEventService;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.DeleteEventService;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.EditEventService;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.EventQueryService;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.calendar.domain.event.service.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +24,7 @@ class EventControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LABEL = UUID.randomUUID();
     private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final LocalDate EXTEND_UNTIL = LocalDate.now();
 
     @Mock
     private CreateEventService createEventService;
@@ -37,6 +37,9 @@ class EventControllerImplTest {
 
     @Mock
     private EditEventService editEventService;
+
+    @Mock
+    private ExpiredEventService expiredEventService;
 
     @InjectMocks
     private EventControllerImpl underTest;
@@ -95,5 +98,31 @@ class EventControllerImplTest {
         underTest.editEvent(request, EVENT_ID, accessTokenHeader);
 
         then(editEventService).should().edit(EVENT_ID, request);
+    }
+
+    @Test
+    void getExpiredEvents() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(expiredEventService.getExpiredEvents(USER_ID)).willReturn(List.of(eventResponse));
+
+        assertThat(underTest.getExpiredEvents(accessTokenHeader)).containsExactly(eventResponse);
+    }
+
+    @Test
+    void snoozeEvent() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.hideExpiredEvent(EVENT_ID, accessTokenHeader);
+
+        then(expiredEventService).should().hide(EVENT_ID);
+    }
+
+    @Test
+    void extendExpiredEvent() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.extendExpiredEvent(new OneParamRequest<>(EXTEND_UNTIL), EVENT_ID, accessTokenHeader);
+
+        then(expiredEventService).should().extend(EVENT_ID, EXTEND_UNTIL);
     }
 }

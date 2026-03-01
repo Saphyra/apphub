@@ -5,7 +5,7 @@ import Stream from "../../../../common/js/collection/Stream";
 import { hasValue } from "../../../../common/js/Utils";
 import LocalTime from "../../../../common/js/date/LocalTime";
 import LocalDate from "../../../../common/js/date/LocalDate";
-import sortOccurrences from "../../common/OccurrenceSorter";
+import sortOccurrences from "../../common/occurrence/OccurrenceSorter";
 
 const OpenedEventOccurrences = ({ eventId, setDisplaySpinner, selectedOccurrence, setSelectedOccurrence, refreshCounter }) => {
     const [occurrences, setOccurrences] = useState([]);

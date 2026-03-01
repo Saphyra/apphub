@@ -1,6 +1,8 @@
 ===FEATURES===
     SkyXplore
         Tick counting in game
+    Calendar
+        Warn the user when event is about to expire
 
 ===BUGFIXES===
 

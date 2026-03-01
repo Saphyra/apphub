@@ -55,7 +55,6 @@ const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selecte
             .map(event => <Event
                 key={event.eventId}
                 event={event}
-                setDisplaySpinner={setDisplaySpinner}
                 active={selectedEvent === event.eventId}
                 setSelectedEvent={setSelectedEvent}
             />)

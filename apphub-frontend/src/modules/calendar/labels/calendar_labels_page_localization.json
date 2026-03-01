@@ -103,14 +103,6 @@
         "en": "Occurrences",
         "hu": "Alkalmak"
     },
-    "at": {
-        "en": "At",
-        "hu": "Időpont"
-    },
-    "note": {
-        "en": "Note",
-        "hu": "Megjegyzés"
-    },
     "reminder": {
         "en": "Reminder: {days} day(s) before",
         "hu": "Emlékeztető: {days} nappal előtte"
@@ -130,22 +122,6 @@
     "edit": {
         "en": "Edit",
         "hu": "Szerkesztés"
-    },
-    "done": {
-        "en": "Done",
-        "hu": "Kész"
-    },
-    "snooze": {
-        "en": "Snooze",
-        "hu": "Halasztás"
-    },
-    "edit-occurrence": {
-        "en": "Edit",
-        "hu": "Szerkesztés"
-    },
-    "delete-occurrence": {
-        "en": "Delete",
-        "hu": "Törlés"
     },
     "reset": {
         "en": "Reset",

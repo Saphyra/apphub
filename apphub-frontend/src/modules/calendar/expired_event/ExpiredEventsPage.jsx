@@ -1,46 +1,49 @@
 import { useEffect, useState } from "react";
+import { CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_GET_EXPIRED_EVENTS, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import sessionChecker from "../../../common/js/SessionChecker";
-import localizationData from "./calendar_labels_page_localization.json";
+import localizationData from "./expired_events_page_localization.json";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import Header from "../../../common/component/Header";
 import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
-import { CALENDAR_LABELS_PAGE, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
-import "./calendar_labels.css";
-import LabelList from "./component/LabelList";
-import Events from "./component/Events";
+import useLoader from "../../../common/hook/Loader";
+import "./expired_events.css";
+import ExpiredEventList from "./component/ExpiredEventList";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
-import OpenedEvent from "./component/OpenedEvent";
+import OpenedExpiredEvent from "./component/OpenedExpiredEvent";
 import useRefresh from "../../../common/hook/Refresh";
 import OpenedOccurrence from "../common/occurrence/OpenedOccurrence";
 
-const CACHE_KEY_SELECTED_LABEL = "calendar.labels.selectedLabel";
-const CACHE_KEY_SELECTED_EVENT = "calendar.labels.selectedEvent";
-const CACHE_KEY_SELECTED_OCCURRENCE = "calendar.labels.selectedOccurrence";
+const CACHE_KEY_SELECTED_EVENT = "calendar.expiredEvent.selected";
+const CACHE_KEY_SELECTED_OCCURRENCE = "calendar.expiredEvent.selectedOccurrence";
 
-const CalendarLabelsPage = () => {
+const ExpiredEventsPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
-
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(0);
-    const [refreshCount, refresh] = useRefresh();
+    const [refreshCounter, refresh] = useRefresh();
 
-    const [selectedLabel, setSelectedLabel] = useState(cachedOrDefault(CACHE_KEY_SELECTED_LABEL, null));
+    const [expiredEvents, setExpiredEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(cachedOrDefault(CACHE_KEY_SELECTED_EVENT, null));
     const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
 
-    const changeSelectedLabel = (labelId) => {
-        cacheAndUpdate(CACHE_KEY_SELECTED_LABEL, labelId, setSelectedLabel);
-        changeSelectedEvent(null);
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
     }
+
+    useLoader({
+        request: CALENDAR_GET_EXPIRED_EVENTS.createRequest(),
+        mapper: setExpiredEvents,
+        setDisplaySpinner: updateDisplaySpinner,
+        listener: [refreshCounter]
+    });
 
     const changeSelectedEvent = (eventId) => {
         cacheAndUpdate(CACHE_KEY_SELECTED_EVENT, eventId, setSelectedEvent);
@@ -51,68 +54,53 @@ const CalendarLabelsPage = () => {
         cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, occurrenceId, setSelectedOccurrence)
     }
 
-    const updateDisplaySpinner = (display) => {
-        setDisplaySpinner(prev => prev + (display ? 1 : -1));
-    }
-
     return (
-        <div id="calendar-labels" className="main-page">
-            <Header label={localizationHandler.get("page-title")} />
-
-            <main>
-                <LabelList
+        <div id="calendar-expired-events" className="main-page">
+            <main className="headless">
+                <ExpiredEventList
+                    events={expiredEvents}
                     localizationHandler={localizationHandler}
-                    setDisplaySpinner={updateDisplaySpinner}
-                    selectedLabel={selectedLabel}
-                    setSelectedLabel={changeSelectedLabel}
-                    setConfirmationDialogData={setConfirmationDialogData}
-                />
-
-                <Events
-                    localizationHandler={localizationHandler}
-                    selectedLabel={selectedLabel}
-                    setDisplaySpinner={updateDisplaySpinner}
+                    setDisplaySpinner={setDisplaySpinner}
                     selectedEvent={selectedEvent}
                     setSelectedEvent={changeSelectedEvent}
-                    refreshCounter={refreshCount}
                 />
 
                 {hasValue(selectedEvent) &&
-                    <OpenedEvent
-                        localizationHandler={localizationHandler}
-                        setDisplaySpinner={updateDisplaySpinner}
+                    <OpenedExpiredEvent
                         eventId={selectedEvent}
+                        setSelectedEvent={changeSelectedEvent}
+                        setDisplaySpinner={setDisplaySpinner}
+                        localizationHandler={localizationHandler}
+                        setConfirmationDialogData={setConfirmationDialogData}
+                        refresh={refresh}
+                        refreshCounter={refreshCounter}
                         selectedOccurrence={selectedOccurrence}
                         setSelectedOccurrence={changeSelectedOccurrence}
-                        refreshCounter={refreshCount}
-                        setConfirmationDialogData={setConfirmationDialogData}
-                        setSelectedEvent={changeSelectedEvent}
-                        refresh={refresh}
                     />
                 }
 
                 {hasValue(selectedOccurrence) &&
                     <OpenedOccurrence
                         occurrenceId={selectedOccurrence}
-                        localizationHandler={localizationHandler}
                         setConfirmationDialogData={setConfirmationDialogData}
                         setDisplaySpinner={updateDisplaySpinner}
                         setSelectedOccurrence={changeSelectedOccurrence}
-                        refreshCounter={refreshCount}
+                        refreshCounter={refreshCounter}
                         refresh={refresh}
-                        backUrl={CALENDAR_LABELS_PAGE}
+                        backUrl={CALENDAR_EXPIRED_EVENTS_PAGE}
                     />
                 }
             </main>
 
-            <Footer rightButtons={[
-                <Button
-                    id="calendar-labels-back-button"
-                    key="back"
-                    onclick={() => window.location.href = CALENDAR_PAGE}
-                    label={localizationHandler.get("back")}
-                />
-            ]} />
+            <Footer
+                rightButtons={[
+                    <Button
+                        id="back-button"
+                        key="back"
+                        onclick={() => window.location.href = CALENDAR_PAGE}
+                        label={localizationHandler.get("back")}
+                    />
+                ]} />
 
             <ToastContainer />
 
@@ -130,4 +118,4 @@ const CalendarLabelsPage = () => {
     );
 }
 
-export default CalendarLabelsPage;
+export default ExpiredEventsPage;

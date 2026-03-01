@@ -24,7 +24,7 @@ import LabelWrappedInputField from "../../../common/component/input/LabelWrapped
 import NumberInput from "../../../common/component/input/NumberInput";
 import PostLabeledInputField from "../../../common/component/input/PostLabeledInputField";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
-import { DONE, EXPIRED, PENDING, SNOOZED } from "../common/OccurrenceStatus";
+import { DONE, EXPIRED, PENDING, SNOOZED } from "../common/occurrence/OccurrenceStatus";
 import confirmOccurrenceDeletion from "../common/delete_occurrence/DeleteOccurrence";
 import save from "./EditOccurrence";
 import LocalDate from "../../../common/js/date/LocalDate";

@@ -49,6 +49,7 @@ import CalendarCreateEventPage from './modules/calendar/create_event/CalendarCre
 import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
 import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/CalendarEditOccurrencePage';
 import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
+import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPage';
 
 const router = createBrowserRouter([
   {
@@ -312,6 +313,10 @@ const router = createBrowserRouter([
         eventId: params.eventId
       }
     }
+  },
+  {
+    path: "/web/calendar/expired-events",
+    element: <ExpiredEventsPage />
   },
 ]);
 

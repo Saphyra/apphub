@@ -163,4 +163,10 @@ public class CalendarIndexPageActions {
     public static List<WebElement> getLabels(WebDriver driver) {
         return driver.findElements(By.className("calendar-label"));
     }
+
+    public static void toExpiredEventsPage(WebDriver driver) {
+        WebElementUtils.getIfPresent(driver, By.id("calendar-expired-events-button"))
+            .orElseThrow(() -> new IllegalStateException("No expired event found"))
+            .click();
+    }
 }

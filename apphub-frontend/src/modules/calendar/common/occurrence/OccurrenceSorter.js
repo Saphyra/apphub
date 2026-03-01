@@ -1,4 +1,4 @@
-import { hasValue } from "../../../common/js/Utils";
+import { hasValue } from "../../../../common/js/Utils";
 import { OccurrenceStatusOrder } from "./OccurrenceStatus";
 
 function sortOccurrences(a, b) {
