@@ -43,6 +43,8 @@ add-role-to-all:
   - ELITE_BASE_ADMIN
 
 settings:
+  calendar:
+    index-view-layout: ~
   notebook:
     show-archived: true
     default-list-item-id: ~
