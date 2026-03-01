@@ -103,10 +103,6 @@
         "en": "Occurrences",
         "hu": "Alkalmak"
     },
-    "at": {
-        "en": "At",
-        "hu": "Időpont"
-    },
     "reminder": {
         "en": "Reminder: {days} day(s) before",
         "hu": "Emlékeztető: {days} nappal előtte"

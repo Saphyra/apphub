@@ -18,5 +18,9 @@
     "delete-occurrence": {
         "en": "Delete",
         "hu": "Törlés"
+    },
+    "at": {
+        "en": "At",
+        "hu": "Időpont"
     }
 }

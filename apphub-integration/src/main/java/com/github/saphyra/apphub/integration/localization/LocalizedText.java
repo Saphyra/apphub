@@ -83,6 +83,7 @@ public enum LocalizedText {
     CALENDAR_EMPTY_DATE("Date is empty."),
     CALENDAR_OCCURRENCE_SAVED("Occurrence saved."),
     CALENDAR_OCCURRENCE_CREATED("Occurrence created."),
+    CALENDAR_EMPTY_EXTEND_UNTIL_DATE("Pick an end date!"),
     ;
 
     private final String text;

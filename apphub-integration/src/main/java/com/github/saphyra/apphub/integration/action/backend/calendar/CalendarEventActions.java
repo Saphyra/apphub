@@ -3,10 +3,12 @@ package com.github.saphyra.apphub.integration.action.backend.calendar;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
+import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
 import io.restassured.response.Response;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -104,5 +106,41 @@ public class CalendarEventActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
+    }
+
+    public static List<EventResponse> getExpiredEvents(int serverPort, UUID accessTokenId) {
+        Response response  = getExpiredEventsResponse(serverPort, accessTokenId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(EventResponse[].class));
+    }
+
+    public static Response getExpiredEventsResponse(int serverPort, UUID accessTokenId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EXPIRED_EVENTS));
+    }
+
+    public static void hideExpiredEvent(int serverPort, UUID accessTokenId, UUID eventId) {
+        Response response = getHideExpiredEventResponse(serverPort, accessTokenId, eventId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getHideExpiredEventResponse(int serverPort, UUID accessTokenId, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_HIDE_EXPIRED_EVENT, "eventId", eventId));
+    }
+
+    public static void extendExpiredEvent(int serverPort, UUID accessTokenId, UUID eventId, LocalDate localDate) {
+        Response response = getExtendExpiredEventResponse(serverPort, accessTokenId, eventId, localDate);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static Response getExtendExpiredEventResponse(int serverPort, UUID accessTokenId, UUID eventId, LocalDate extendUntil) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(extendUntil))
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EXTEND_EXPIRED_EVENT, "eventId", eventId));
     }
 }

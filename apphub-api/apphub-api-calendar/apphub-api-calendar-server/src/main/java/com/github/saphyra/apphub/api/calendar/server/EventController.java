@@ -42,18 +42,12 @@ public interface EventController {
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_EVENT)
     void editEvent(@RequestBody EventRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
-    //TODO role protection test
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EXPIRED_EVENTS)
     List<EventResponse> getExpiredEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
-    //TODO role protection test
     @PostMapping(CalendarEndpoints.CALENDAR_HIDE_EXPIRED_EVENT)
     void hideExpiredEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 
-    //TODO API test
-    //TODO role protection test
     @PostMapping(CalendarEndpoints.CALENDAR_EXTEND_EXPIRED_EVENT)
     void extendExpiredEvent(@RequestBody OneParamRequest<LocalDate> extendUntil, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

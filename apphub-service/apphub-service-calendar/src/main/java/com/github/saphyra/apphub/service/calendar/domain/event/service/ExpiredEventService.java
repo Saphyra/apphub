@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.OccurrenceDao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +22,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ExpiredEventService {
     private final EventDao eventDao;
     private final EventMapper eventMapper;
@@ -72,6 +72,7 @@ public class ExpiredEventService {
         eventDao.save(event);
     }
 
+    @Transactional
     public void extend(UUID eventId, LocalDate extendUntil) {
         LocalDate startDate = dateTimeUtil.getCurrentDate();
 

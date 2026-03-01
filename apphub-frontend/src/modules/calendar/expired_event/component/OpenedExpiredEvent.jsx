@@ -184,11 +184,13 @@ const OpenedExpiredEvent = ({
             [
                 <Button
                     key="hide"
+                    id="calendar-expired-event-hide-button"
                     label={localizationHandler.get("hide")}
                     onclick={() => hideEvent()}
                 />,
                 <Button
                     key="cancel"
+                    id="calendar-expired-event-cancel-button"
                     label={localizationHandler.get("cancel")}
                     onclick={() => setConfirmationDialogData(null)}
                 />
