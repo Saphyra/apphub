@@ -86,6 +86,7 @@ const CalendarPage = () => {
                                 referenceDate={referenceDate}
                                 setReferenceDate={v => cacheAndUpdate(CACHE_KEY_REFERENCE_DATE, v, setReferenceDate, v => LocalDate.parse(v))}
                                 view={View[viewName]}
+                                localizationHandler={localizationHandler}
                             />
 
                             <div id="calendar-navigation-selected-date" className="nowrap">

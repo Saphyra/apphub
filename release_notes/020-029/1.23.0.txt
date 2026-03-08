@@ -3,6 +3,7 @@
         Tick counting in game
     Calendar
         Warn the user when event is about to expire
+        "Today" button
 
 ===BUGFIXES===
     Calendar

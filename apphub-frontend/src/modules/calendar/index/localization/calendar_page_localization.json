@@ -62,5 +62,9 @@
     "expired-events": {
         "en": "{amount} event(s) expired.",
         "hu": "{amount} esemény lejárt."
+    },
+    "today": {
+        "en": "Today",
+        "hu": "Ma"
     }
 }

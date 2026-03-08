@@ -1,7 +1,8 @@
 import Button from "../../../../../common/component/input/Button";
+import LocalDate from "../../../../../common/js/date/LocalDate";
 import TestableDateInput from "../../../common/input/TestableDateInput";
 
-const ReferenceDateSelector = ({ referenceDate, setReferenceDate, view }) => {
+const ReferenceDateSelector = ({ referenceDate, setReferenceDate, view, localizationHandler }) => {
     return (
         <div id="calendar-reference-date-seletor" className="nowrap">
             <Button
@@ -20,6 +21,12 @@ const ReferenceDateSelector = ({ referenceDate, setReferenceDate, view }) => {
                 id="calendar-reference-date-forward"
                 label=">"
                 onclick={() => view.forward(referenceDate, setReferenceDate)}
+            />
+
+            <Button
+                id="calendar-reference-date-today"
+                label={localizationHandler.get("today")}
+                onclick={() => setReferenceDate(LocalDate.now())}
             />
         </div>
     );
