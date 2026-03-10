@@ -143,4 +143,15 @@ public class CalendarEventActions {
             .body(new OneParamRequest<>(extendUntil))
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EXTEND_EXPIRED_EVENT, "eventId", eventId));
     }
+
+    public static Response getMergeEventsResponse(int serverPort, UUID accessTokenId, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_MERGE_EVENTS, "eventId", eventId));
+    }
+
+    public static void mergeEvents(int serverPort, UUID accessTokenId, UUID eventId) {
+        Response response = getMergeEventsResponse(serverPort, accessTokenId, eventId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }

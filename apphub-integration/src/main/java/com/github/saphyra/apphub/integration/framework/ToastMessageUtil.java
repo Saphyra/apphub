@@ -62,7 +62,7 @@ public class ToastMessageUtil {
             .toList();
     }
 
-    private static List<WebElement> getAllToasts(WebDriver driver) {
+    public static List<WebElement> getAllToasts(WebDriver driver) {
         return driver.findElements(By.className("Toastify__toast"));
     }
 

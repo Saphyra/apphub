@@ -41,6 +41,9 @@ class EventControllerImplTest {
     @Mock
     private ExpiredEventService expiredEventService;
 
+    @Mock
+    private MergeEventService mergeEventService;
+
     @InjectMocks
     private EventControllerImpl underTest;
 
@@ -124,5 +127,14 @@ class EventControllerImplTest {
         underTest.extendExpiredEvent(new OneParamRequest<>(EXTEND_UNTIL), EVENT_ID, accessTokenHeader);
 
         then(expiredEventService).should().extend(EVENT_ID, EXTEND_UNTIL);
+    }
+
+    @Test
+    void mergeEvent() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+
+        underTest.mergeEvents(EVENT_ID, accessTokenHeader);
+
+        then(mergeEventService).should().merge(EVENT_ID);
     }
 }

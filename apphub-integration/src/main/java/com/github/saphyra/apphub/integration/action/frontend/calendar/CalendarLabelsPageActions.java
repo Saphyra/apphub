@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.calendar;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarLabel;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -52,6 +53,15 @@ public class CalendarLabelsPageActions {
 
     public static void selectNoLabelFilter(WebDriver driver) {
         driver.findElement(By.id("calendar-labels-label-no-label"))
+            .click();
+    }
+
+    public static void mergeEvents(WebDriver driver) {
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-labels-merge-button")))
+            .orElseThrow(() -> new IllegalStateException("Event not found"))
+            .click();
+
+        driver.findElement(By.id("calendar-labels-merge-confirmation-dialog-confirm"))
             .click();
     }
 }

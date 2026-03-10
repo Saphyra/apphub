@@ -4,6 +4,7 @@
     Calendar
         Warn the user when event is about to expire
         "Today" button
+        Merge similar one-time events
 
 ===BUGFIXES===
     Calendar

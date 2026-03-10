@@ -24,6 +24,7 @@ class EventControllerImpl implements EventController {
     private final DeleteEventService deleteEventService;
     private final EditEventService editEventService;
     private final ExpiredEventService expiredEventService;
+    private final MergeEventService mergeEventService;
 
     @Override
     public OneParamResponse<UUID> createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
@@ -97,5 +98,12 @@ class EventControllerImpl implements EventController {
         log.info("{} wants to extend expired event {}", accessTokenHeader.getUserId(), eventId);
 
         expiredEventService.extend(eventId, extendUntil.getValue());
+    }
+
+    @Override
+    public void mergeEvents(UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to merge event {}", accessTokenHeader.getUserId(), eventId);
+
+        mergeEventService.merge(eventId);
     }
 }

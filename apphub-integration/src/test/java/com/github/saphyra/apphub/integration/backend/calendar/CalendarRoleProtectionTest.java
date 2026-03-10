@@ -47,6 +47,7 @@ public class CalendarRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> CalendarEventActions.getExpiredEventsResponse(getServerPort(), accessTokenId));
         CommonUtils.verifyMissingRole(() -> CalendarEventActions.getHideExpiredEventResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessTokenId, UUID.randomUUID(), LocalDate.now()));
+        CommonUtils.verifyMissingRole(() -> CalendarEventActions.getMergeEventsResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
 
         //Occurrences
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessTokenId, UUID.randomUUID(), OccurrenceRequest.builder().build()));

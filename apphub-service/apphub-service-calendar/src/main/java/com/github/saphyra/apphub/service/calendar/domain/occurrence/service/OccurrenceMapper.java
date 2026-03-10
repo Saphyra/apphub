@@ -26,7 +26,7 @@ class OccurrenceMapper {
     OccurrenceResponse toResponse(Occurrence occurrence) {
         LazyLoadedField<Event> event = new LazyLoadedField<>(() -> eventDao.findByIdValidated(occurrence.getEventId()));
 
-        return toResponse(eventId -> event.get(), occurrence);
+        return toResponse(_ -> event.get(), occurrence);
     }
 
     private OccurrenceResponse toResponse(Function<UUID, Event> eventProvider, Occurrence occurrence) {

@@ -50,4 +50,7 @@ public interface EventController {
 
     @PostMapping(CalendarEndpoints.CALENDAR_EXTEND_EXPIRED_EVENT)
     void extendExpiredEvent(@RequestBody OneParamRequest<LocalDate> extendUntil, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(CalendarEndpoints.CALENDAR_MERGE_EVENTS)
+    void mergeEvents(@PathVariable UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

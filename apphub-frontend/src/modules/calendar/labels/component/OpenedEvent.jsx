@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
-import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_LABELS_PAGE } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_LABELS_PAGE, CALENDAR_MERGE_EVENTS } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, mapOrDefault } from "../../../../common/js/Utils";
 import Textarea from "../../../../common/component/input/Textarea";
 import repetitionTypeLocalizationData from "../../common/repetition_type/repetition_type_localization.json";
@@ -9,6 +9,7 @@ import Button from "../../../../common/component/input/Button";
 import OpenedEventOccurrences from "./OpenedEventOccurrences";
 import { RepetitionType } from "../../common/repetition_type/RepetitionType";
 import confirmEventDeletion from "../../common/delete_event/DeleteEvent";
+import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 
 const OpenedEvent = ({
     eventId,
@@ -108,6 +109,12 @@ const OpenedEvent = ({
                             refresh
                         )}
                     />
+
+                    <Button
+                        id="calendar-labels-merge-button"
+                        label={localizationHandler.get("merge")}
+                        onclick={confirmMerge}
+                    />
                 </div>
 
                 <fieldset>
@@ -128,6 +135,36 @@ const OpenedEvent = ({
 
     function getRepetitionData() {
         return RepetitionType[event.repetitionType].display(event.repetitionData);
+    }
+
+    function confirmMerge() {
+        setConfirmationDialogData(new ConfirmationDialogData(
+            "calendar-labels-merge-confirmation-dialog",
+            localizationHandler.get("confirm-merge-title"),
+            localizationHandler.get("confirm-merge-content"),
+            [
+                <Button
+                    key="confirm"
+                    id="calendar-labels-merge-confirmation-dialog-confirm"
+                    label={localizationHandler.get("merge")}
+                    onclick={merge}
+                />,
+                <Button
+                    key="cancel"
+                    id="calendar-labels-merge-confirmation-dialog-cancel"
+                    label={localizationHandler.get("cancel")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        ));
+    }
+
+    async function merge() {
+        await CALENDAR_MERGE_EVENTS.createRequest(null, { eventId: eventId })
+        .send(setDisplaySpinner);
+
+        setConfirmationDialogData(null);
+        refresh();
     }
 }
 
