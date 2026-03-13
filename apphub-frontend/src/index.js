@@ -50,6 +50,7 @@ import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
 import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/CalendarEditOccurrencePage';
 import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
 import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPage';
+import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
 
 const router = createBrowserRouter([
   {
@@ -295,6 +296,10 @@ const router = createBrowserRouter([
   {
     path: "/web/calendar/labels",
     element: <CalendarLabelsPage />
+  },
+    {
+    path: "/web/calendar/search",
+    element: <CalendarSearchPage />
   },
   {
     path: "/web/calendar/edit-occurrence/:occurrenceId",

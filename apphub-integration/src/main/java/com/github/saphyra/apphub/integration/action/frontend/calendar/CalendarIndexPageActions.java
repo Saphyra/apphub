@@ -170,4 +170,17 @@ public class CalendarIndexPageActions {
             .orElseThrow(() -> new IllegalStateException("No expired event found"))
             .click();
     }
+
+    public static CalendarDate getDay(WebDriver driver, LocalDate date) {
+        return getDays(driver)
+            .stream()
+            .filter(calendarDate -> calendarDate.getDate().equals(date))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Day not found: " + date));
+    }
+
+    public static void openSearchPage(WebDriver driver) {
+        driver.findElement(By.id("calendar-search-button"))
+            .click();
+    }
 }

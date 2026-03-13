@@ -25,6 +25,7 @@ class EventControllerImpl implements EventController {
     private final EditEventService editEventService;
     private final ExpiredEventService expiredEventService;
     private final MergeEventService mergeEventService;
+    private final SearchEventService searchEventService;
 
     @Override
     public OneParamResponse<UUID> createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
@@ -105,5 +106,12 @@ class EventControllerImpl implements EventController {
         log.info("{} wants to merge event {}", accessTokenHeader.getUserId(), eventId);
 
         mergeEventService.merge(eventId);
+    }
+
+    @Override
+    public List<EventResponse> searchEvents(OneParamRequest<String> search, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to search for events", accessTokenHeader.getUserId());
+
+        return searchEventService.search(accessTokenHeader.getUserId(), search.getValue());
     }
 }

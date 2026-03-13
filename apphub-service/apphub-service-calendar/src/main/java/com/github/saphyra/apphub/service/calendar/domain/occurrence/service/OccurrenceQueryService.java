@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao
 import com.github.saphyra.apphub.service.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.calendar.common.EventCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

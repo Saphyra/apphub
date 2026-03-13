@@ -27,4 +27,5 @@ public class CalendarEndpoints {
     public static final String CALENDAR_HIDE_EXPIRED_EVENT = "/api/calendar/events/{eventId}/hide";
     public static final String CALENDAR_EXTEND_EXPIRED_EVENT = "/api/calendar/events/{eventId}/extend";
     public static final String CALENDAR_MERGE_EVENTS = "/api/calendar/events/{eventId}/merge";
+    public static final String CALENDAR_SEARCH_EVENTS = "/api/calendar/events/search";
 }

@@ -1,25 +1,37 @@
-#calendar-expired-events main {
+#calendar-search main {
     display: flex;
     flex-direction: row;
     justify-content: center;
     padding: 0;
 }
 
-#calendar-expired-event-list {
+#calendar-search-content {
     border-left: 3px ridge white;
     border-right: 3px ridge white;
+    min-width: 30%;
 }
 
-.calendar-expired-event.active {
+#calendar-search-input {
+    width: 90%;
+    display: block;
+    margin: 10px auto;
+}
+
+.calendar-search-error {
+    text-align: center;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.calendar-search-event.active {
     border-color: lime;
 }
 
-#calendar-expired-event {
+#calendar-search-event {
     border-right: 3px ridge white;
-    overflow: auto;
 }
 
-#calendar-expired-event-title {
+#calendar-search-event-title {
     text-align: center;
     border-bottom: 3px ridge white;
     font-size: 24px;
@@ -27,12 +39,4 @@
     position: sticky;
     top: 0;
     background-color: var(--background-color);
-}
-
-#calendar-expired-event-content {
-    width: calc(100% - 6px);
-}
-
-#calendar-expired-event-operations {
-    text-align: center;
 }

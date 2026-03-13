@@ -53,4 +53,7 @@ public interface EventController {
 
     @PostMapping(CalendarEndpoints.CALENDAR_MERGE_EVENTS)
     void mergeEvents(@PathVariable UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+
+    @PostMapping(CalendarEndpoints.CALENDAR_SEARCH_EVENTS)
+    List<EventResponse> searchEvents(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
 }

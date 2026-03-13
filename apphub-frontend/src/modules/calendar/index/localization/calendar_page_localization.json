@@ -66,5 +66,9 @@
     "today": {
         "en": "Today",
         "hu": "Ma"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
     }
 }

@@ -154,4 +154,18 @@ public class CalendarEventActions {
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
+
+    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String searchText) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(searchText))
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_SEARCH_EVENTS));
+    }
+
+    public static List<EventResponse> search(int serverPort, UUID accessTokenId, String searchText) {
+        Response response = getSearchResponse(serverPort, accessTokenId, searchText);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(EventResponse[].class));
+    }
 }

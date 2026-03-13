@@ -11,7 +11,7 @@ public class CalendarOccurrencePageActions {
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-occurrence-date")), Optional.ofNullable(occurrence.getDate()).map(Object::toString).orElse(" "));
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-occurrence-time")), occurrence.getTime());
         WebElementUtils.selectOptionByValue(driver.findElement(By.id("calendar-edit-occurrence-status")), occurrence.getStatus().name());
-        WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-occurrence-note")), occurrence.getNote());
+        setNote(driver, occurrence.getNote());
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-occurrence-remind-me-before-days")), occurrence.getRemindMeBeforeDays());
         WebElementUtils.setCheckboxState(driver.findElement(By.id("calendar-edit-occurrence-reminded")), occurrence.isReminded());
     }
@@ -24,5 +24,9 @@ public class CalendarOccurrencePageActions {
     public static boolean isReminded(WebDriver driver) {
         return driver.findElement(By.id("calendar-edit-occurrence-reminded"))
             .isSelected();
+    }
+
+    public static void setNote(WebDriver driver, String note) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-occurrence-note")), note);
     }
 }

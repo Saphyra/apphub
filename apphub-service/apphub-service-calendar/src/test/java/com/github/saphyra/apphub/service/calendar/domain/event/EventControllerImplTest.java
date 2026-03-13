@@ -25,6 +25,7 @@ class EventControllerImplTest {
     private static final UUID LABEL = UUID.randomUUID();
     private static final UUID EVENT_ID = UUID.randomUUID();
     private static final LocalDate EXTEND_UNTIL = LocalDate.now();
+    private static final String SEARCH_TEXT = "search-text";
 
     @Mock
     private CreateEventService createEventService;
@@ -43,6 +44,9 @@ class EventControllerImplTest {
 
     @Mock
     private MergeEventService mergeEventService;
+
+    @Mock
+    private SearchEventService searchEventService;
 
     @InjectMocks
     private EventControllerImpl underTest;
@@ -136,5 +140,13 @@ class EventControllerImplTest {
         underTest.mergeEvents(EVENT_ID, accessTokenHeader);
 
         then(mergeEventService).should().merge(EVENT_ID);
+    }
+
+    @Test
+    void search() {
+        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(searchEventService.search(USER_ID, SEARCH_TEXT)).willReturn(List.of(eventResponse));
+
+        assertThat(underTest.searchEvents(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader)).containsExactly(eventResponse);
     }
 }

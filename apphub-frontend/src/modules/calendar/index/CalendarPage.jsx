@@ -25,6 +25,7 @@ import ExpiredEventNotification from "./component/ExpiredEventNotification";
 import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "../../../common/js/dao/endpoints/UserEndpoints";
 import { USER_SETTING_CATEGORY_CALENDAR, UserSettings } from "../common/UserSettings";
 import Optional from "../../../common/js/collection/Optional";
+import { CALENDAR_SEARCH_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
 const CACHE_KEY_ACTIVE_LABEL = "calendar.activeLabel";
@@ -134,6 +135,14 @@ const CalendarPage = () => {
                         refreshCounter={refreshCounter}
                     />
                 ]}
+                centerButtons={[
+                    <Button
+                        key="search"
+                        id="calendar-search-button"
+                        label={localizationHandler.get("search")}
+                        onclick={() => window.location.href = CALENDAR_SEARCH_PAGE}
+                    />
+                ]}      
                 rightButtons={[
                     <Button
                         id="calendar-home-button"
