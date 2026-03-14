@@ -7,19 +7,19 @@ import localizationData from "./event_localization.json";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 
-function validateEventRequest(payload) {
+function validateEventRequest(payload, allowEmptyEndDate = false) {
     if (isBlank(payload.startDate)) {
         NotificationService.showError(localizationHandler.get("empty-start-date"));
         return false;
     }
 
     if (payload.repetitionType !== REPETITION_TYPE_ONE_TIME) {
-        if (isBlank(payload.endDate)) {
+        if (!allowEmptyEndDate && isBlank(payload.endDate)) {
             NotificationService.showError(localizationHandler.get("empty-end-date"));
             return false;
         }
 
-        if (LocalDate.parse(payload.endDate).isBefore(LocalDate.parse(payload.startDate))) {
+        if (!isBlank(payload.endDate) && LocalDate.parse(payload.endDate).isBefore(LocalDate.parse(payload.startDate))) {
             NotificationService.showError(localizationHandler.get("end-date-before-start-date"));
             return false;
         }

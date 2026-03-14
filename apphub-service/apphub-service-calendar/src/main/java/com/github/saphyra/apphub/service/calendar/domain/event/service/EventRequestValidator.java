@@ -19,6 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.util.Objects.isNull;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -35,6 +37,9 @@ class EventRequestValidator {
         ValidationUtil.notNull(request.getStartDate(), "startDate");
 
         if (request.getRepetitionType() != RepetitionType.ONE_TIME) {
+            if (isNull(request.getEndDate())) {
+                request.setEndDate(request.getStartDate().plusDays(calendarParams.getMaxEventDurationDays()));
+            }
             validateDates(request.getStartDate(), request.getEndDate());
         }
 

@@ -29,3 +29,5 @@
     Integration
         Admin role is not used in tests (unless necessary)
         Only 1 test is allowed that uses Test role to avoid concurrency issues
+    Calendar
+        Auto-fill event endDate if not set

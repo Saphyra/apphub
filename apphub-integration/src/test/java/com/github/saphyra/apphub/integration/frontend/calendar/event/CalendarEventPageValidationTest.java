@@ -33,7 +33,6 @@ public class CalendarEventPageValidationTest extends SeleniumTest {
         CalendarIndexPageActions.openCreateEventPage(driver);
 
         emptyStartDate(driver);
-        emptyEndDate(driver);
         endDateBeforeStartDate(driver);
         blankTitle(driver);
         daysOfWeek_noDaySelected(driver);
@@ -125,18 +124,6 @@ public class CalendarEventPageValidationTest extends SeleniumTest {
         CalendarEventPageActions.fillForm(driver, parameters);
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_END_DATE_BEFORE_START_DATE);
-        ToastMessageUtil.clearToasts(driver);
-    }
-
-    private void emptyEndDate(WebDriver driver) {
-        CreateEventParameters parameters = CreateEventParameters.valid(RepetitionType.EVERY_X_DAYS)
-            .toBuilder()
-            .endDate(null)
-            .build();
-
-        CalendarEventPageActions.fillForm(driver, parameters);
-        CalendarEventPageActions.create(driver);
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_EMPTY_END_DATE);
         ToastMessageUtil.clearToasts(driver);
     }
 

@@ -94,7 +94,6 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(null, EventResponse::getRepetitionData)
             .returns(1, EventResponse::getRepeatForDays)
             .returns(EventRequestFactory.DEFAULT_START_DATE, EventResponse::getStartDate)
-            .returns(null, EventResponse::getEndDate)
             .returns(EventRequestFactory.DEFAULT_TIME, EventResponse::getTime)
             .returns(EventRequestFactory.DEFAULT_TITLE, EventResponse::getTitle)
             .returns(EventRequestFactory.DEFAULT_CONTENT, EventResponse::getContent)

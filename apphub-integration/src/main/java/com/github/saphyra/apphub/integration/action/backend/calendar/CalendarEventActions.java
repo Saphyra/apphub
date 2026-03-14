@@ -17,7 +17,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarEventActions {
-    public static Response getCreateEvemtResponse(int serverPort, UUID accessTokenId, EventRequest request) {
+    public static Response getCreateEventResponse(int serverPort, UUID accessTokenId, EventRequest request) {
         return RequestFactory.createAuthorizedRequest(accessTokenId)
             .body(request)
             .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_CREATE_EVENT));
@@ -45,7 +45,7 @@ public class CalendarEventActions {
     }
 
     public static UUID createEvent(int serverPort, UUID accessTokenId, EventRequest request) {
-        Response response = getCreateEvemtResponse(serverPort, accessTokenId, request);
+        Response response = getCreateEventResponse(serverPort, accessTokenId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
