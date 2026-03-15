@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../../common/component/Footer";
 import { ToastContainer } from "react-toastify";
 import localizationData from "./localization/calendar_page_localization.json";
@@ -15,14 +15,18 @@ import "./calendar.css";
 import CalendarContent from "./component/content/CalendarContent";
 import sessionChecker from "../../../common/js/SessionChecker";
 import NotificationService from "../../../common/js/notification/NotificationService";
-import { cacheAndUpdate, cachedOrDefault } from "../../../common/js/Utils";
+import { cacheAndUpdate, cachedOrDefault, hasValue, isBlank } from "../../../common/js/Utils";
 import useRefresh from "../../../common/hook/Refresh";
 import useHasFocus from "../../../common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import RightPanel from "./component/right_panel/RightPanel";
 import Labels from "./component/navigation/Labels";
+import ExpiredEventNotification from "./component/ExpiredEventNotification";
+import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "../../../common/js/dao/endpoints/UserEndpoints";
+import { USER_SETTING_CATEGORY_CALENDAR, UserSettings } from "../common/UserSettings";
+import Optional from "../../../common/js/collection/Optional";
+import { CALENDAR_SEARCH_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 
-const CACHE_KEY_VIEW = "calendar.view";
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
 const CACHE_KEY_ACTIVE_LABEL = "calendar.activeLabel";
 const CACHE_KEY_SELECTED_DATE = "calendar.selectedDate";
@@ -37,7 +41,7 @@ const CalendarPage = () => {
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(0);
-    const [viewName, setViewName] = useState(cachedOrDefault(CACHE_KEY_VIEW, MONTH));
+    const [viewName, setViewName] = useState(null);
     const [referenceDate, setReferenceDate] = useState(cachedOrDefault(CACHE_KEY_REFERENCE_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
     const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
@@ -46,18 +50,22 @@ const CalendarPage = () => {
     const [currentDate, setCurrentDate] = useState(LocalDate.now());
     const [refreshCounter, refresh] = useRefresh();
     const isInFocus = useHasFocus();
-    useUpdateEffect(() => {
-        if (isInFocus) {
-            refresh();
+    useUpdateEffect(
+        () => {
+            if (isInFocus) {
+                refresh();
 
-            const now = LocalDate.now();
-            if (!currentDate.equals(now)) {
-                setCurrentDate(now);
-                setReferenceDate(now);
-                setSelectedDate(now);
+                const now = LocalDate.now();
+                if (!currentDate.equals(now)) {
+                    setCurrentDate(now);
+                    setReferenceDate(now);
+                    setSelectedDate(now);
+                }
             }
-        }
-    }, [isInFocus]);
+        },
+        [isInFocus]
+    );
+    useEffect(loadUserSettings, []);
 
     const updateDisplaySpinner = (display) => {
         setDisplaySpinner(prev => prev + (display ? 1 : -1));
@@ -66,40 +74,44 @@ const CalendarPage = () => {
     return (
         <div id="calendar" className="main-page">
             <main className="headless">
-                <div id="calendar-content-wrapper">
-                    <div id="calendar-navigation">
-                        <ViewSelector
-                            view={viewName}
-                            setView={v => cacheAndUpdate(CACHE_KEY_VIEW, v, setViewName)}
-                        />
+                {hasValue(viewName) &&
+                    <div id="calendar-content-wrapper">
 
-                        <ReferenceDateSelector
-                            referenceDate={referenceDate}
-                            setReferenceDate={v => cacheAndUpdate(CACHE_KEY_REFERENCE_DATE, v, setReferenceDate, v => LocalDate.parse(v))}
-                            view={View[viewName]}
-                        />
+                        <div id="calendar-navigation">
+                            <ViewSelector
+                                view={viewName}
+                                setView={updateView}
+                            />
 
-                        <div id="calendar-navigation-selected-date" className="nowrap">
-                            {View[viewName].format(referenceDate)}
+                            <ReferenceDateSelector
+                                referenceDate={referenceDate}
+                                setReferenceDate={v => cacheAndUpdate(CACHE_KEY_REFERENCE_DATE, v, setReferenceDate, v => LocalDate.parse(v))}
+                                view={View[viewName]}
+                                localizationHandler={localizationHandler}
+                            />
+
+                            <div id="calendar-navigation-selected-date" className="nowrap">
+                                {View[viewName].format(referenceDate)}
+                            </div>
                         </div>
+
+                        <Labels
+                            activeLabel={activeLabel}
+                            setActiveLabel={v => cacheAndUpdate(CACHE_KEY_ACTIVE_LABEL, v, setActiveLabel)}
+                        />
+
+                        <CalendarContent
+                            view={View[viewName]}
+                            activeLabel={activeLabel}
+                            setDisplaySpinner={updateDisplaySpinner}
+                            referenceDate={referenceDate}
+                            selectedDate={selectedDate}
+                            setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
+                            setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                            refreshCounter={refreshCounter}
+                        />
                     </div>
-
-                    <Labels
-                        activeLabel={activeLabel}
-                        setActiveLabel={v => cacheAndUpdate(CACHE_KEY_ACTIVE_LABEL, v, setActiveLabel)}
-                    />
-
-                    <CalendarContent
-                        view={View[viewName]}
-                        activeLabel={activeLabel}
-                        setDisplaySpinner={updateDisplaySpinner}
-                        referenceDate={referenceDate}
-                        selectedDate={selectedDate}
-                        setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
-                        setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
-                        refreshCounter={refreshCounter}
-                    />
-                </div>
+                }
 
                 <RightPanel
                     selectedDate={selectedDate}
@@ -114,14 +126,31 @@ const CalendarPage = () => {
                 />
             </main>
 
-            <Footer rightButtons={[
-                <Button
-                    id="calendar-home-button"
-                    key="home"
-                    onclick={() => window.location.href = Constants.MODULES_PAGE}
-                    label={localizationHandler.get("home")}
-                />
-            ]} />
+            <Footer
+                leftButtons={[
+                    <ExpiredEventNotification
+                        key="expired-event-notification"
+                        setDisplaySpinner={updateDisplaySpinner}
+                        localizationHandler={localizationHandler}
+                        refreshCounter={refreshCounter}
+                    />
+                ]}
+                centerButtons={[
+                    <Button
+                        key="search"
+                        id="calendar-search-button"
+                        label={localizationHandler.get("search")}
+                        onclick={() => window.location.href = CALENDAR_SEARCH_PAGE}
+                    />
+                ]}      
+                rightButtons={[
+                    <Button
+                        id="calendar-home-button"
+                        key="home"
+                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        label={localizationHandler.get("home")}
+                    />
+                ]} />
 
             <ToastContainer />
 
@@ -137,6 +166,32 @@ const CalendarPage = () => {
             {displaySpinner > 0 && <Spinner />}
         </div>
     );
+
+    function loadUserSettings() {
+        const fetch = async () => {
+            const response = await GET_USER_SETTINGS.createRequest(null, { category: USER_SETTING_CATEGORY_CALENDAR })
+                .send(updateDisplaySpinner);
+
+            new Optional(response[UserSettings.INDEX_VIEW_LAYOUT])
+                .filter(v => !isBlank(v))
+                .or(() => MONTH)
+                .ifPresent(setViewName);
+        }
+        fetch();
+    }
+
+    async function updateView(newView) {
+        setViewName(newView);
+
+        const payload = {
+            category: USER_SETTING_CATEGORY_CALENDAR,
+            key: UserSettings.INDEX_VIEW_LAYOUT,
+            value: newView
+        }
+
+        await SET_USER_SETTINGS.createRequest(payload)
+            .send(updateDisplaySpinner);
+    }
 }
 
 export default CalendarPage;

@@ -21,6 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -33,6 +34,7 @@ public class GameConverterTest {
     private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
     private static final LocalDateTime MARKED_FOR_DELETION_AT = LocalDateTime.now();
     private static final Integer UNIVERSE_SIZE = 2345;
+    private static final long TICK = 32L;
 
     @Mock
     private AllianceConverter allianceConverter;
@@ -76,6 +78,7 @@ public class GameConverterTest {
             .lastPlayed(LAST_PLAYED)
             .markedForDeletion(true)
             .markedForDeletionAt(MARKED_FOR_DELETION_AT)
+            .tick(new AtomicLong(TICK))
             .build();
 
         given(allianceConverter.toModel(alliance, game)).willReturn(allianceModel);
@@ -95,6 +98,7 @@ public class GameConverterTest {
         expected.setMarkedForDeletion(true);
         expected.setMarkedForDeletionAt(MARKED_FOR_DELETION_AT);
         expected.setUniverseSize(UNIVERSE_SIZE);
+        expected.setTick(TICK);
 
         assertThat(result).containsExactlyInAnyOrder(expected, playerModel, allianceModel, gameDataModel);
     }

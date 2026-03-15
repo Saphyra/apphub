@@ -19,7 +19,7 @@ import java.util.UUID;
 public class Occurrence {
     private final UUID occurrenceId;
     private final UUID userId;
-    private final UUID eventId;
+    private UUID eventId;
     private LocalDate date;
     @Nullable
     private LocalTime time;

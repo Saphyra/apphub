@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -34,13 +35,13 @@ public class SkyXploreCharacterActions {
 
     public static void verifyInvalidCharacterName(WebDriver driver, String errorMessage) {
         AwaitilityWrapper.awaitAssert(() -> {
-            WebElementUtils.verifyInvalidFieldState(CharacterPage.invalidCharacterName(driver), true, errorMessage);
+            WebElementUtils.verifyInvalidFieldState(driver, By.id("skyxplore-character-name-validation"), true, errorMessage);
             assertThat(CharacterPage.submitButton(driver).isEnabled()).isFalse();
         });
     }
 
     public static void verifyValidCharacterName(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldState(CharacterPage.invalidCharacterName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldState(driver, By.id("skyxplore-character-name-validation"), false, null);
         assertThat(CharacterPage.submitButton(driver).isEnabled()).isTrue();
     }
 

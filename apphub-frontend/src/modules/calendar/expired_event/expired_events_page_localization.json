@@ -1,0 +1,82 @@
+{
+    "title": {
+        "en": "Expired events - Calendar - Apphub",
+        "hu": "Lejárt események - Naptár - Apphub"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "content": {
+        "en": "Description",
+        "hu": "Leírás"
+    },
+    "settings": {
+        "en": "Settings",
+        "hu": "Beállítások"
+    },
+    "start-date": {
+        "en": "Start date: {date}",
+        "hu": "Kezdés: {date}"
+    },
+    "not-set": {
+        "en": "N/A",
+        "hu": "N/A"
+    },
+    "end-date": {
+        "en": "End date: {date}",
+        "hu": "Befejezés: {date}"
+    },
+    "time": {
+        "en": "Time: {time}",
+        "hu": "Időpont: {time}"
+    },
+    "repetition-type": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "occurrences": {
+        "en": "Occurrences",
+        "hu": "Alkalmak"
+    },
+    "hide": {
+        "en": "Hide",
+        "hu": "Elrejt"
+    },
+    "hide-event-confirmation-title": {
+        "en": "Hide expired event",
+        "hu": "Lejárt esemény elrejtése"
+    },
+    "hide-event-confirmation-content": {
+        "en": "Are you sure you want to hide the expired event \"{title}\"?",
+        "hu": "Biztosan el akarod rejteni a \"{title}\" lejárt eseményt?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "extend-until": {
+        "en": "Extend until",
+        "hu": "Hosszabbítás eddig"
+    },
+    "empty-extended-end-date": {
+        "en": "Pick an end date!",
+        "hu": "Válassz egy befejezési dátumot!"
+    },
+    "past-extended-end-date": {
+        "en": "End date cannot be in the past!",
+        "hu": "A befejezési dátum nem lehet a múltban!"
+    }
+}

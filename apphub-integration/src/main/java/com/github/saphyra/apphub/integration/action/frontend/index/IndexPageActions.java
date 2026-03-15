@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.structure.api.user.registration.Pas
 import com.github.saphyra.apphub.integration.structure.api.user.registration.RegistrationValidationResult;
 import com.github.saphyra.apphub.integration.structure.api.user.registration.UsernameValidationResult;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -37,25 +38,29 @@ public class IndexPageActions {
         assertThat(driver.getCurrentUrl()).endsWith(GenericEndpoints.INDEX_PAGE);
 
         verifyInvalidFieldState(
-            IndexPage.emailValid(driver),
+            driver,
+            By.id("registration-email-validation"),
             validationResult.getEmail() != EmailValidationResult.VALID,
             validationResult.getEmail().getErrorMessage()
         );
 
         verifyInvalidFieldState(
-            IndexPage.usernameValid(driver),
+            driver,
+            By.id("registration-username-validation"),
             validationResult.getUsername() != UsernameValidationResult.VALID,
             validationResult.getUsername().getErrorMessage()
         );
 
         verifyInvalidFieldState(
-            IndexPage.passwordValid(driver),
+            driver,
+            By.id("registration-password-validation"),
             validationResult.getPassword() != PasswordValidationResult.VALID,
             validationResult.getPassword().getErrorMessage()
         );
 
         verifyInvalidFieldState(
-            IndexPage.confirmPasswordValid(driver),
+            driver,
+            By.id("registration-confirm-password-validation"),
             validationResult.getConfirmPassword() != PasswordValidationResult.VALID,
             validationResult.getConfirmPassword().getErrorMessage()
         );

@@ -1,4 +1,4 @@
-const Event = ({ event, setDisplaySpinner, active, setSelectedEvent }) => {
+const Event = ({ event, active, setSelectedEvent }) => {
     return (
         <div
             className={"calendar-labels-event button" + (active ? " active" : "")}

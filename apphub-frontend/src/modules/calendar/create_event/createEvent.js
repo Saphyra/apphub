@@ -8,7 +8,7 @@ import localizationData from "./create_event_page_localization.json";
 const localizationHandler = new LocalizationHandler(localizationData);
 
 async function createEvent(payload, existingLabels, setDisplaySpinner, newLabels) {
-    if (!validateEventRequest(payload)) {
+    if (!validateEventRequest(payload, true)) {
         return;
     }
 

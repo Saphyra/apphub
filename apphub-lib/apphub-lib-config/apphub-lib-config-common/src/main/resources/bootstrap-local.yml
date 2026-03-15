@@ -16,7 +16,6 @@ serviceUrls:
   user: localhost:8085
   web-content: localhost:8083
   web-content-localization: localhost:8083
-  villany-atesz: localhost:8084
 
 spring:
   cloud:
@@ -71,8 +70,6 @@ spring:
               uri: http://user:8085
             utils[0]:
               uri: http://utils:8100
-            villany-atesz[0]:
-              uri: http://villany-atesz:8084
 
 eureka:
   client:

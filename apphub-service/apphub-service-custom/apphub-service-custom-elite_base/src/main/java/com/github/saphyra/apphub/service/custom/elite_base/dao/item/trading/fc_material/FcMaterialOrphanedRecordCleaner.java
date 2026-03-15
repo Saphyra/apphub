@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.item.trading.fc_material;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.lib.sql_builder.DefaultColumn;
-import com.github.saphyra.apphub.lib.sql_builder.DistinctColumn;
-import com.github.saphyra.apphub.lib.sql_builder.InCondition;
-import com.github.saphyra.apphub.lib.sql_builder.ListValue;
-import com.github.saphyra.apphub.lib.sql_builder.QualifiedTable;
+import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
+import com.github.saphyra.apphub.lib.sql_builder.column.DistinctColumn;
+import com.github.saphyra.apphub.lib.sql_builder.condition.InCondition;
+import com.github.saphyra.apphub.lib.sql_builder.value.ListValue;
+import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
 import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.BatchOrphanedRecordCleaner;

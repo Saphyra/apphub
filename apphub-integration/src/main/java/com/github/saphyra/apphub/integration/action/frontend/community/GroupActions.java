@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupMember;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -57,11 +58,11 @@ public class GroupActions {
     }
 
     public static void verifyCreateGroupNameError(WebDriver driver, String errorMessage) {
-        WebElementUtils.verifyInvalidFieldState(CommunityPage.createGroupInvalidName(driver), true, errorMessage);
+        WebElementUtils.verifyInvalidFieldState(driver, By.id("create-group-invalid-name"), true, errorMessage);
     }
 
     public static void verifyCreateGroupNameCorrect(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldStateLegacy(CommunityPage.createGroupInvalidName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldState(driver, By.id("create-group-invalid-name"), false, null);
     }
 
     public static void submitCreateGroupForm(WebDriver driver) {

@@ -75,10 +75,6 @@
         "en": "Migration Tasks",
         "hu": "Migrációs feladatok"
     },
-    "villanyatesz": {
-        "en": "VillanyAtesz",
-        "hu": "VillanyAtesz"
-    },
     "performance-reporting": {
         "en": "Performance reporting",
         "hu": "Teljesítmény"
@@ -90,5 +86,9 @@
     "random-direction": {
         "en": "Random direction",
         "hu": "Véletlenszerű irány"
+    },
+    "test": {
+        "en": "Test",
+        "hu": "Test"
     }
 }

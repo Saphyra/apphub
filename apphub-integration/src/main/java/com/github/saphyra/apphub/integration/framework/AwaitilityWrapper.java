@@ -172,6 +172,16 @@ public class AwaitilityWrapper {
             .assertTrue("Assertions failed.");
     }
 
+    public static void retry(Runnable task) {
+        AwaitilityWrapper.createDefault()
+            .until(() -> {
+                task.run();
+
+                return true;
+            })
+            .assertTrue("Task failed.");
+    }
+
     /**
      * Waints until the provided condition returns true, or timeout happens
      *

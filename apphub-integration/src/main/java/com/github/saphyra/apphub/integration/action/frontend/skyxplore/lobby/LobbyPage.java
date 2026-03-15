@@ -80,12 +80,6 @@ class LobbyPage {
         return driver.findElement(By.id("skyxplore-lobby-create-ai-button"));
     }
 
-    public static Optional<WebElement> invalidNewAiName(WebDriver driver) {
-        return driver.findElements(By.id("skyxplore-lobby-create-ai-name-validation"))
-            .stream()
-            .findFirst();
-    }
-
     public static List<WebElement> getAis(WebDriver driver) {
         return driver.findElements(By.className("skyxplore-lobby-ai"));
     }

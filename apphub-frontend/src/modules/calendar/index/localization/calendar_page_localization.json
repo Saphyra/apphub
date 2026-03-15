@@ -58,5 +58,17 @@
     "create-new": {
         "en": "New event",
         "hu": "Új esemény"
+    },
+    "expired-events": {
+        "en": "{amount} event(s) expired.",
+        "hu": "{amount} esemény lejárt."
+    },
+    "today": {
+        "en": "Today",
+        "hu": "Ma"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
     }
 }

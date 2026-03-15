@@ -15,7 +15,8 @@ import java.util.stream.Collectors;
 
 public class CalendarIndexPageActions {
     public static void openCreateEventPage(WebDriver driver) {
-        driver.findElement(By.id("calendar-selected-date-create-new"))
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-date-create-new")))
+            .orElseThrow(() -> new IllegalStateException("Open create event page button not found"))
             .click();
 
         WebElementUtils.waitForSpinnerToDisappear(driver);
@@ -162,5 +163,24 @@ public class CalendarIndexPageActions {
 
     public static List<WebElement> getLabels(WebDriver driver) {
         return driver.findElements(By.className("calendar-label"));
+    }
+
+    public static void toExpiredEventsPage(WebDriver driver) {
+        WebElementUtils.getIfPresent(driver, By.id("calendar-expired-events-button"))
+            .orElseThrow(() -> new IllegalStateException("No expired event found"))
+            .click();
+    }
+
+    public static CalendarDate getDay(WebDriver driver, LocalDate date) {
+        return getDays(driver)
+            .stream()
+            .filter(calendarDate -> calendarDate.getDate().equals(date))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Day not found: " + date));
+    }
+
+    public static void openSearchPage(WebDriver driver) {
+        driver.findElement(By.id("calendar-search-button"))
+            .click();
     }
 }

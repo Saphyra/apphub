@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_tr
 
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.OrderCommoditiesBy;
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.TradeMode;
-import com.github.saphyra.apphub.lib.sql_builder.QualifiedColumn;
+import com.github.saphyra.apphub.lib.sql_builder.column.QualifiedColumn;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

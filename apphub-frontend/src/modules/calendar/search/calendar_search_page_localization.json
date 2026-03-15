@@ -1,0 +1,66 @@
+{
+    "title": {
+        "en": "Search - Calendar - Apphub",
+        "hu": "Keresés - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "search-text-too-short": {
+        "en": "Search text must be at least 3 characters long.",
+        "hu": "A keresési szövegnek legalább 3 karakter hosszúnak kell lennie."
+    },
+    "search-placeholder": {
+        "en": "Enter at least 3 characters to search for events",
+        "hu": "Írjon be legalább 3 karaktert az események kereséséhez"
+    },
+    "no-results": {
+        "en": "No events found.",
+        "hu": "Nincs találat."
+    },
+    "content": {
+        "en": "Description",
+        "hu": "Leírás"
+    },
+    "settings": {
+        "en": "Settings",
+        "hu": "Beállítások"
+    },
+    "start-date": {
+        "en": "Start date: {date}",
+        "hu": "Kezdés: {date}"
+    },
+    "end-date": {
+        "en": "End date: {date}",
+        "hu": "Befejezés: {date}"
+    },
+    "not-set": {
+        "en": "N/A",
+        "hu": "N/A"
+    },
+    "time": {
+        "en": "Time: {time}",
+        "hu": "Időpont: {time}"
+    },
+    "repetition-type": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "occurrences": {
+        "en": "Occurrences",
+        "hu": "Alkalmak"
+    }
+}

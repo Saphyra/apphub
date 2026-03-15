@@ -1,0 +1,16 @@
+package com.github.saphyra.apphub.lib.sql_builder.condition;
+
+import com.github.saphyra.apphub.lib.sql_builder.core.SegmentProvider;
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public class BetweenCondition implements Condition {
+    private final SegmentProvider value;
+    private final SegmentProvider limit1;
+    private final SegmentProvider limit2;
+
+    @Override
+    public String get() {
+        return String.format("%s BETWEEN %s AND %s", value.get(), limit1.get(), limit2.get());
+    }
+}

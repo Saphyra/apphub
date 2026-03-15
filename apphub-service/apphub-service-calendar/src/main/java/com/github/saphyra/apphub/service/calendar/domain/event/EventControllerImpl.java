@@ -4,15 +4,14 @@ import com.github.saphyra.apphub.api.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.api.calendar.server.EventController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.CreateEventService;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.DeleteEventService;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.EditEventService;
-import com.github.saphyra.apphub.service.calendar.domain.event.service.EventQueryService;
+import com.github.saphyra.apphub.service.calendar.domain.event.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +23,9 @@ class EventControllerImpl implements EventController {
     private final EventQueryService eventQueryService;
     private final DeleteEventService deleteEventService;
     private final EditEventService editEventService;
+    private final ExpiredEventService expiredEventService;
+    private final MergeEventService mergeEventService;
+    private final SearchEventService searchEventService;
 
     @Override
     public OneParamResponse<UUID> createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
@@ -76,5 +78,40 @@ class EventControllerImpl implements EventController {
         log.info("{} wants to edit event {}", accessTokenHeader.getUserId(), eventId);
 
         editEventService.edit(eventId, request);
+    }
+
+    @Override
+    public List<EventResponse> getExpiredEvents(AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to know their expired events", accessTokenHeader.getUserId());
+
+        return expiredEventService.getExpiredEvents(accessTokenHeader.getUserId());
+    }
+
+    @Override
+    public void hideExpiredEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to snooze expired event {}", accessTokenHeader.getUserId(), eventId);
+
+        expiredEventService.hide(eventId);
+    }
+
+    @Override
+    public void extendExpiredEvent(OneParamRequest<LocalDate> extendUntil, UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to extend expired event {}", accessTokenHeader.getUserId(), eventId);
+
+        expiredEventService.extend(eventId, extendUntil.getValue());
+    }
+
+    @Override
+    public void mergeEvents(UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to merge event {}", accessTokenHeader.getUserId(), eventId);
+
+        mergeEventService.merge(eventId);
+    }
+
+    @Override
+    public List<EventResponse> searchEvents(OneParamRequest<String> search, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to search for events", accessTokenHeader.getUserId());
+
+        return searchEventService.search(accessTokenHeader.getUserId(), search.getValue());
     }
 }

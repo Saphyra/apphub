@@ -4,7 +4,7 @@ import NotificationService from "../../../../../common/js/notification/Notificat
 import { hasValue } from "../../../../../common/js/Utils";
 import confirmEventDeletion from "../../../common/delete_event/DeleteEvent";
 import confirmOccurrenceDeletion from "../../../common/delete_occurrence/DeleteOccurrence";
-import { DONE, PENDING, SNOOZED } from "../../../common/OccurrenceStatus";
+import { DONE, PENDING, SNOOZED } from "../../../common/occurrence/OccurrenceStatus";
 
 function getChoices(args) {
     const {

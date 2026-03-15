@@ -46,8 +46,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * CSS
     * Basics of Programming
     * JavaScript
-* VillanyAtesz
-  * Inventory management designed for a specific customer
 
 ## Modules Overview
 
@@ -111,8 +109,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
   * User role configuration
 * ### utils
   * Small tools
-* ### villany-atesz
-  * Inventory management system
 
 ## How to use
 
@@ -126,7 +122,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * npm installed
 * PostgreSQL installed and running
 * PgAdmin (or any PostgreSQL-compatible database manager) installed
-* git installed
 
 # Usage
 

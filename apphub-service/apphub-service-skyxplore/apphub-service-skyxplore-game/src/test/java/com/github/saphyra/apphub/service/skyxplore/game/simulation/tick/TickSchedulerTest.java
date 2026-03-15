@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick;
 
+import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameConverter;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,8 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TickSchedulerTest {
@@ -48,6 +51,9 @@ class TickSchedulerTest {
     @Mock
     private ErrorReporterService errorReporterService;
 
+    @Mock
+    private GameConverter gameConverter;
+
     @InjectMocks
     private TickScheduler underTest;
 
@@ -55,6 +61,12 @@ class TickSchedulerTest {
 
     @Mock
     private TickTask tickTask;
+
+    @Mock
+    private GameProgressDiff progressDiff;
+
+    @Mock
+    private GameModel gameModel;
 
     @BeforeEach
     void setUp() {
@@ -73,7 +85,7 @@ class TickSchedulerTest {
 
         underTest.run();
 
-        verify(sleepServiceMock, times(2)).sleep(100);
+        then(sleepServiceMock).should(times(2)).sleep(100);
     }
 
     @Test
@@ -82,7 +94,10 @@ class TickSchedulerTest {
         given(context.getDateTimeUtil()).willReturn(dateTimeUtil);
         given(context.getTickTasks()).willReturn(List.of(tickTask));
         given(context.getGameProperties()).willReturn(gameProperties);
+        given(context.getGameConverter()).willReturn(gameConverter);
         given(gameProperties.getTickTimeMillis()).willReturn(TICK_TIME_MILLIS);
+        given(game.getProgressDiff()).willReturn(progressDiff);
+        given(gameConverter.convert(game)).willReturn(gameModel);
 
         given(game.isGamePaused()).willReturn(false);
         given(game.isTerminated())
@@ -103,6 +118,8 @@ class TickSchedulerTest {
 
         sleepService.sleep(1000);
 
-        verify(tickTask, times(2)).process(game);
+        then(game).should(times(2)).tick();
+        then(progressDiff).should(times(2)).save(gameModel);
+        then(tickTask).should(times(2)).process(game);
     }
 }

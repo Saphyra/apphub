@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.integration.action.frontend.admin_panel.disable
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
+import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
@@ -25,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleManagementCrudTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
+    @FeatureLocked(Feature.ROLE_TEST)
     public void disableAndEnableRole() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);

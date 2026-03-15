@@ -9,14 +9,14 @@ import Button from "../../../common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
-import { CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_LABELS_PAGE, CALENDAR_PAGE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 import "./calendar_labels.css";
 import LabelList from "./component/LabelList";
 import Events from "./component/Events";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
 import OpenedEvent from "./component/OpenedEvent";
-import OpenedOccurrence from "./component/OpenedOccurrence";
 import useRefresh from "../../../common/hook/Refresh";
+import OpenedOccurrence from "../common/occurrence/OpenedOccurrence";
 
 const CACHE_KEY_SELECTED_LABEL = "calendar.labels.selectedLabel";
 const CACHE_KEY_SELECTED_EVENT = "calendar.labels.selectedEvent";
@@ -100,6 +100,7 @@ const CalendarLabelsPage = () => {
                         setSelectedOccurrence={changeSelectedOccurrence}
                         refreshCounter={refreshCount}
                         refresh={refresh}
+                        backUrl={CALENDAR_LABELS_PAGE}
                     />
                 }
             </main>

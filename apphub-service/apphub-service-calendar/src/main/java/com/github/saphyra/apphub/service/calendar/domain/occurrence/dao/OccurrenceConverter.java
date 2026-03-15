@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.calendar.domain.occurrence.dao;
 
 import com.github.saphyra.apphub.api.calendar.model.OccurrenceStatus;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -67,7 +69,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .date(occurrenceDate)
             .time(localTimeEncryptor.decrypt(entity.getTime(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_TIME))
             .status(syncStatus(entity, userIdFromAccessToken, occurrenceDate))
-            .note(stringEncryptor.decrypt(entity.getNote(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_NOTE))
+            .note(Optional.ofNullable(stringEncryptor.decrypt(entity.getNote(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_NOTE)).orElse(Constants.EMPTY_STRING))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.decrypt(entity.getReminded(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMINDED))
             .build();

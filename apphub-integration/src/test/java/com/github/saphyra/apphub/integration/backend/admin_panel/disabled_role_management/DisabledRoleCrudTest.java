@@ -3,6 +3,8 @@ package com.github.saphyra.apphub.integration.backend.admin_panel.disabled_role_
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.DisabledRoleActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
+import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
@@ -21,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleCrudTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
+    @FeatureLocked(Feature.ROLE_TEST)
     public void disabledRoleCrud() {
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());

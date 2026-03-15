@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 @RequiredArgsConstructor
@@ -45,6 +46,7 @@ public class GameFactory {
             .lastPlayed(dateTimeUtil.getCurrentDateTime())
             .eventLoop(eventLoopFactory.create())
             .markedForDeletion(false)
+            .tick(new AtomicLong())
             .build();
 
         log.info("Game generated.");

@@ -102,29 +102,7 @@ public class WebElementUtils {
             WebElement webElement = driver.findElement(validationSelector);
             assertThat(webElement.getAttribute("title")).isEqualTo(errorMessage);
         } else {
-            assertThat(WebElementUtils.isPresent(driver, validationSelector)).isFalse();
-        }
-    }
-
-    @Deprecated(forRemoval = true)
-    public static void verifyInvalidFieldState(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
-        if (shouldBeVisible) {
-            assertThat(inputValid).isNotEmpty();
-            assertThat(inputValid.get().getAttribute("title")).isEqualTo(errorMessage);
-        } else {
-            assertThat(inputValid).isEmpty();
-        }
-    }
-
-    @Deprecated(forRemoval = true)
-    public static void verifyInvalidFieldStateLegacy(Optional<WebElement> inputValid, boolean shouldBeVisible, String errorMessage) {
-        assertThat(inputValid).isNotNull();
-
-        if (shouldBeVisible) {
-            assertThat(inputValid.get().isDisplayed()).isTrue();
-            assertThat(inputValid.get().getAttribute("title")).isEqualTo(errorMessage);
-        } else {
-            assertThat(inputValid.get().isDisplayed()).isFalse();
+            assertThat(WebElementUtils.getIfPresent(driver, validationSelector).filter(WebElement::isDisplayed)).isEmpty();
         }
     }
 
@@ -139,6 +117,17 @@ public class WebElementUtils {
     public static boolean isPresent(WebDriver driver, By selector) {
         return isPresent(() -> driver.findElement(selector));
     }
+
+    public static Optional<WebElement> getIfPresent(WebDriver driver, By selector) {
+        try {
+            return Optional.of(driver.findElement(selector));
+        } catch (Exception e) {
+            log.debug("Error querying webElement", e);
+
+            return Optional.empty();
+        }
+    }
+
 
     public static Optional<WebElement> getIfPresent(Supplier<WebElement> search) {
         try {
@@ -185,12 +174,8 @@ public class WebElementUtils {
     }
 
     public static void clearAndFillDateTime(WebElement webElement, LocalDate date, Integer hours, Integer minutes) {
-        webElement.sendKeys(String.valueOf(date.getYear()));
-        webElement.sendKeys(Keys.TAB);
-        webElement.sendKeys(CommonUtils.withLeadingZeros(date.getMonthValue(), 2));
-        webElement.sendKeys(CommonUtils.withLeadingZeros(date.getDayOfMonth(), 2));
-        webElement.sendKeys(CommonUtils.withLeadingZeros(hours, 2));
-        webElement.sendKeys(CommonUtils.withLeadingZeros(minutes, 2));
+        clearAndFillDate(webElement, date);
+        clearAndFillTime(webElement, hours, minutes);
     }
 
     public static String getSelectedOptionLabel(WebElement element) {

@@ -95,11 +95,6 @@ modules:
       roles:
       - TRAINING
     custom:
-    - name: villanyatesz
-      url: /web/villany-atesz
-      mobileAllowed: false
-      roles:
-      - VILLANY_ATESZ
     - name: elite-base
       url: /web/elite-base
       mobileAllowed: false
@@ -107,3 +102,7 @@ modules:
       - ELITE_BASE
     - name: random-direction
       url: /web/random-direction
+    - name: test
+      url: /web/test
+      roles:
+        - TEST

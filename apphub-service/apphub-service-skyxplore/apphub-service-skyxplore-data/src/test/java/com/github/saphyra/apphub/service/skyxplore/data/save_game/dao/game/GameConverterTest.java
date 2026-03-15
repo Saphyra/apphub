@@ -25,6 +25,7 @@ public class GameConverterTest {
     private static final LocalDateTime LAST_PLAYED = LocalDateTime.now();
     private static final LocalDateTime MARKED_FOR_DELETION_AT = LocalDateTime.now();
     private static final Integer UNIVERSE_SIZE = 324;
+    private static final Long TICK = 32L;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -42,6 +43,7 @@ public class GameConverterTest {
         model.setMarkedForDeletion(true);
         model.setMarkedForDeletionAt(MARKED_FOR_DELETION_AT);
         model.setUniverseSize(UNIVERSE_SIZE);
+        model.setTick(TICK);
 
         given(uuidConverter.convertDomain(GAME_ID)).willReturn(GAME_ID_STRING);
         given(uuidConverter.convertDomain(HOST)).willReturn(HOST_STRING);
@@ -55,6 +57,7 @@ public class GameConverterTest {
         assertThat(result.getMarkedForDeletion()).isTrue();
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(MARKED_FOR_DELETION_AT);
         assertThat(result.getUniverseSize()).isEqualTo(UNIVERSE_SIZE);
+        assertThat(result.getTick()).isEqualTo(TICK);
     }
 
     @Test
@@ -67,6 +70,7 @@ public class GameConverterTest {
             .markedForDeletion(true)
             .markedForDeletionAt(MARKED_FOR_DELETION_AT)
             .universeSize(UNIVERSE_SIZE)
+            .tick(TICK)
             .build();
 
         given(uuidConverter.convertEntity(GAME_ID_STRING)).willReturn(GAME_ID);
@@ -82,5 +86,6 @@ public class GameConverterTest {
         assertThat(result.getMarkedForDeletion()).isTrue();
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(MARKED_FOR_DELETION_AT);
         assertThat(result.getUniverseSize()).isEqualTo(UNIVERSE_SIZE);
+        assertThat(result.getTick()).isEqualTo(TICK);
     }
 }

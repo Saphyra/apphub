@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXp
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.Invitation;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.SavedGame;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -56,12 +57,12 @@ public class SkyXploreMainMenuActions {
     }
 
     public static void verifyInvalidGameName(WebDriver driver, String errorMessage) {
-        WebElementUtils.verifyInvalidFieldState(MainMenuPage.invalidGameName(driver), true, errorMessage);
+        WebElementUtils.verifyInvalidFieldState(driver, By.id("skyxplore-game-name-validation"), true, errorMessage);
         assertThat(MainMenuPage.submitGameCreationFormButton(driver).isEnabled()).isFalse();
     }
 
     public static void verifyValidGameName(WebDriver driver) {
-        WebElementUtils.verifyInvalidFieldState(MainMenuPage.invalidGameName(driver), false, null);
+        WebElementUtils.verifyInvalidFieldState(driver, By.id("skyxplore-game-name-validation"), false, null);
         assertThat(MainMenuPage.submitGameCreationFormButton(driver).isEnabled()).isTrue();
     }
 

@@ -32,12 +32,6 @@ class MainMenuPage {
         return driver.findElement(By.id("skyxplore-game-name"));
     }
 
-    static Optional<WebElement> invalidGameName(WebDriver driver) {
-        return driver.findElements(By.id("skyxplore-game-name-validation"))
-            .stream()
-            .findFirst();
-    }
-
     static WebElement submitGameCreationFormButton(WebDriver driver) {
         return driver.findElement(By.id("skyxplore-create-new-game-button"));
     }

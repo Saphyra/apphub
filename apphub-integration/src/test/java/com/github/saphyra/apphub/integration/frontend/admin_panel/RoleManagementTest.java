@@ -4,6 +4,8 @@ import com.github.saphyra.apphub.integration.action.frontend.admin_panel.RoleMan
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
+import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
@@ -29,6 +31,7 @@ import java.util.stream.Stream;
 
 public class RoleManagementTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
+    @FeatureLocked(Feature.ROLE_TEST)
     public void addAndRemoveRole() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver adminDriver = drivers.get(0);
@@ -73,7 +76,7 @@ public class RoleManagementTest extends SeleniumTest {
 
         testUser.getGrantedRoles()
             .stream()
-            .filter(role -> role.getRole().equals(Constants.ROLE_ADMIN))
+            .filter(role -> role.getRole().equals(Constants.ROLE_TEST))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Admin role is not available."))
             .revoke(adminDriver);
@@ -144,7 +147,7 @@ public class RoleManagementTest extends SeleniumTest {
 
         testUser.getAvailableRoles()
             .stream()
-            .filter(role -> role.getRole().equals(Constants.ROLE_ADMIN))
+            .filter(role -> role.getRole().equals(Constants.ROLE_TEST))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Admin role is not available."))
             .grant(adminDriver);
@@ -157,7 +160,7 @@ public class RoleManagementTest extends SeleniumTest {
         SleepUtil.sleep(3000);
         testUserDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
-            .until(() -> ModulesPageActions.getCategories(testUserDriver).stream().anyMatch(category -> category.getCategoryId().equals(ModuleLocation.ROLE_MANAGEMENT.getCategoryId())))
+            .until(() -> ModulesPageActions.getCategories(testUserDriver).stream().anyMatch(category -> category.getCategoryId().equals(ModuleLocation.TEST.getCategoryId())))
             .assertTrue("Admin role is not granted.");
     }
 

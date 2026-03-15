@@ -103,14 +103,6 @@
         "en": "Occurrences",
         "hu": "Alkalmak"
     },
-    "at": {
-        "en": "At",
-        "hu": "Időpont"
-    },
-    "note": {
-        "en": "Note",
-        "hu": "Megjegyzés"
-    },
     "reminder": {
         "en": "Reminder: {days} day(s) before",
         "hu": "Emlékeztető: {days} nappal előtte"
@@ -131,22 +123,6 @@
         "en": "Edit",
         "hu": "Szerkesztés"
     },
-    "done": {
-        "en": "Done",
-        "hu": "Kész"
-    },
-    "snooze": {
-        "en": "Snooze",
-        "hu": "Halasztás"
-    },
-    "edit-occurrence": {
-        "en": "Edit",
-        "hu": "Szerkesztés"
-    },
-    "delete-occurrence": {
-        "en": "Delete",
-        "hu": "Törlés"
-    },
     "reset": {
         "en": "Reset",
         "hu": "Visszaállítás"
@@ -158,5 +134,17 @@
     "events-without-label": {
         "en": "Events without label",
         "hu": "Címke nélküli események"
+    },
+    "merge": {
+        "en": "Merge with similar events",
+        "hu": "Összevonás hasonló eseményekkel"
+    },
+    "confirm-merge-title": {
+        "en": "Merge events?",
+        "hu": "Események összevonása?"
+    },
+    "confirm-merge-content": {
+        "en": "Are you sure you want to merge events with the same name? All the other events inherit this one's labels.",
+        "hu": "Biztosan össze szeretnéd vonni a neve és ideje alapján megegyező eseményeket? Minden más esemény örökli ennek az eseménynek a címkéit."
     }
 }

@@ -1,14 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.api.modules;
 
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
-import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.TrainingEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
-import com.github.saphyra.apphub.integration.framework.endpoints.VillanyAteszEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.*;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +13,13 @@ import java.util.function.Predicate;
 @Getter
 @RequiredArgsConstructor
 public enum ModuleLocation {
-    VILLANY_ATESZ("custom", "villanyatesz", VillanyAteszEndpoints.VILLANY_ATESZ_PAGE, "VillanyAtesz"),
     COMMUNITY("community", "community", CommunityEndpoints.COMMUNITY_PAGE, "Közösség"),
     CALENDAR("office", "calendar", CalendarEndpoints.CALENDAR_PAGE, "Határidőnapló"),
     BAN("admin-panel", "ban", AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),
     ROLES_FOR_ALL("admin-panel", "roles-for-all", AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE, "Jogosultság mindenkinek"),
     ROLE_MANAGEMENT("admin-panel", "role-management", AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, "Jogosultságok kezelése"),
+    TEST("custom", "test", "/web/test", "Test"),
     MEMORY_MONITORING("admin-panel", "memory-monitoring", AdminPanelEndpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE, "Memória felügyelet"),
     MIGRATION_TASKS("admin-panel", "migration-tasks", AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE, "Migrációs feladatok"),
     MANAGE_ACCOUNT("accounts", "account", UserEndpoints.ACCOUNT_PAGE, "Fiók kezelése"),

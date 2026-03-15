@@ -34,11 +34,6 @@ const Constants = {
     NOTEBOOK_PAGE: "/web/notebook",
     NOTEBOOK_NEW_PAGE: "/web/notebook/new",
     NOTEBOOK_EDIT_PAGE: "/web/notebook/edit",
-    VILLANY_ATESZ_INDEX_PAGE: "/web/villany-atesz",
-    VILLANY_ATESZ_CONTACTS_PAGE: "/web/villany-atesz/contacts",
-    VILLANY_ATESZ_STOCK_PAGE: "/web/villany-atesz/stock",
-    VILLANY_ATESZ_TOOLBOX_PAGE: "/web/villany-atesz/toolbox",
-    VILLANY_ATESZ_COMMISSIONS_PAGE: "/web/villany-atesz/commissions",
 
     //SkyXplore Lobby Settings limits
     MIN_PLAYERS_PER_SOLAR_SYSTEM: 1,
@@ -64,8 +59,6 @@ const Constants = {
     GRAPH_HEIGHT: 200,
 
     //Settings
-    SETTINGS_CATEGORY_VILLANY_ATESZ: "villany-atesz",
-
     SETTINGS_KEY_STOCK_LAST_INVENTORIED_CAR: "stock-last-inventoried-car",
     SETTINGS_KEY_STOCK_LAST_INVENTORIED_STORAGE: "stock-last-inventoried-storage",
     SETTINGS_KEY_TOOLBOX_LAST_INVENTORIED: "toolbox-last-inventoried",

@@ -16,17 +16,8 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
-import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszCartActions;
-import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszContactActions;
-import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockCategoryActions;
-import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszStockItemActions;
-import com.github.saphyra.apphub.integration.action.backend.villany_atesz.VillanyAteszToolboxActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.BiWrapper;
-import com.github.saphyra.apphub.integration.framework.CollectionUtils;
-import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.*;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -41,17 +32,8 @@ import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCh
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToCartRequest;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.AddToStockRequest;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ContactModel;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateStockItemRequest;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.CreateToolRequest;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StockCategoryModel;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.StorageBoxModel;
-import com.github.saphyra.apphub.integration.structure.api.villany_atesz.ToolTypeModel;
 import org.testng.annotations.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -79,16 +61,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("notebook", "pin_group"),
         new BiWrapper<>("notebook", "pin_mapping"),
         new BiWrapper<>("notebook", "table_head"),
-        new BiWrapper<>("villany_atesz", "acquisition"),
-        new BiWrapper<>("villany_atesz", "cart"),
-        new BiWrapper<>("villany_atesz", "cart_item"),
-        new BiWrapper<>("villany_atesz", "contact"),
-        new BiWrapper<>("villany_atesz", "stock_category"),
-        new BiWrapper<>("villany_atesz", "stock_item"),
-        new BiWrapper<>("villany_atesz", "stock_item_price"),
-        new BiWrapper<>("villany_atesz", "storage_box"),
-        new BiWrapper<>("villany_atesz", "tool"),
-        new BiWrapper<>("villany_atesz", "tool_type"),
         new BiWrapper<>("calendar", "event"),
         new BiWrapper<>("calendar", "label"),
         new BiWrapper<>("calendar", "occurrence"),
@@ -116,7 +88,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_VILLANY_ATESZ);
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         UUID adminAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), adminUserData);
@@ -201,83 +172,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         calendarTables(accessTokenId);
         modulesTables(accessTokenId);
         notebookTables(accessTokenId);
-        villanyAteszTables(accessTokenId);
-    }
-
-    private void villanyAteszTables(UUID accessTokenId) {
-        //villany_atesz.contact
-        ContactModel contactModel = ContactModel.builder()
-            .name(TITLE)
-            .code("")
-            .phone("")
-            .address("")
-            .note("")
-            .build();
-        UUID contactId = VillanyAteszContactActions.createContact(getServerPort(), accessTokenId, contactModel)
-            .get(0)
-            .getContactId();
-
-        //villany_atesz.stock_category
-        StockCategoryModel stockCategoryModel = StockCategoryModel.builder()
-            .name(TITLE)
-            .measurement("")
-            .build();
-        UUID stockCategoryId = VillanyAteszStockCategoryActions.createStockCategory(getServerPort(), accessTokenId, stockCategoryModel)
-            .get(0)
-            .getStockCategoryId();
-
-        //villany_atesz.stock_item
-        //villany_atesz.stock_item_price
-        CreateStockItemRequest createStockItemRequest = CreateStockItemRequest.builder()
-            .stockCategoryId(stockCategoryId)
-            .name(TITLE)
-            .price(20)
-            .serialNumber("")
-            .barCode("")
-            .inCar(2)
-            .inStorage(2)
-            .build();
-
-        VillanyAteszStockItemActions.createStockItem(getServerPort(), accessTokenId, createStockItemRequest);
-        UUID stockItemId = VillanyAteszStockItemActions.getStockItems(getServerPort(), accessTokenId).get(0).getStockItemId();
-
-        //villany_atesz.acquisition
-        AddToStockRequest addToStockRequest = AddToStockRequest.builder()
-            .stockItemId(stockItemId)
-            .inCar(10)
-            .inStorage(2)
-            .price(2)
-            .barCode("")
-            .forceUpdatePrice(false)
-            .build();
-
-        VillanyAteszStockItemActions.acquire(getServerPort(), accessTokenId, LocalDate.now(), addToStockRequest);
-
-        //villany_atesz.cart
-        UUID cartId = VillanyAteszCartActions.createCart(getServerPort(), accessTokenId, contactId);
-
-        //villany_atesz.cart_item
-        AddToCartRequest addToCartRequest = AddToCartRequest.builder()
-            .cartId(cartId)
-            .stockItemId(stockItemId)
-            .amount(1)
-            .build();
-
-        VillanyAteszCartActions.addToCart(getServerPort(), accessTokenId, addToCartRequest);
-
-        //villany_atesz.storage_box
-        //villany_atesz.tool_type
-        //villany_atesz.tool
-        CreateToolRequest createToolRequest = CreateToolRequest.builder()
-            .storageBox(StorageBoxModel.builder().name(TITLE).build())
-            .toolType(ToolTypeModel.builder().name(TITLE).build())
-            .name(TITLE)
-            .brand("")
-            .cost(32)
-            .acquiredAt(LocalDate.now())
-            .build();
-
-        VillanyAteszToolboxActions.createTool(getServerPort(), accessTokenId, createToolRequest);
     }
 
     private static void skyXploreTables(UUID accessTokenId, UUID userId2, UUID accessTokenId3, UUID userId3) {

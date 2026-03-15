@@ -19,7 +19,6 @@
     </properties>
 
     <modules>
-        <module>apphub-service-custom-villany_atesz</module>
         <module>apphub-service-custom-elite_base</module>
     </modules>
 </project>

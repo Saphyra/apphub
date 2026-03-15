@@ -13,10 +13,13 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -34,13 +37,10 @@ class EventRequestValidator {
         ValidationUtil.notNull(request.getStartDate(), "startDate");
 
         if (request.getRepetitionType() != RepetitionType.ONE_TIME) {
-            ValidationUtil.notNull(request.getEndDate(), "endDate");
-            if (request.getStartDate().isAfter(request.getEndDate())) {
-                throw ExceptionFactory.invalidParam("startDate", "startDate cannot be after endDate");
+            if (isNull(request.getEndDate())) {
+                request.setEndDate(request.getStartDate().plusDays(calendarParams.getMaxEventDurationDays()));
             }
-            if (ChronoUnit.DAYS.between(request.getStartDate(), request.getEndDate()) > calendarParams.getMaxEventDurationDays()) {
-                throw ExceptionFactory.invalidParam("eventDuration", "too long");
-            }
+            validateDates(request.getStartDate(), request.getEndDate());
         }
 
         ValidationUtil.notBlank(request.getTitle(), "title");
@@ -54,6 +54,16 @@ class EventRequestValidator {
                     throw ExceptionFactory.invalidParam("labelId", "does not exist");
                 }
             });
+    }
+
+    public void validateDates(LocalDate startDate, LocalDate endDate) {
+        ValidationUtil.notNull(endDate, "endDate");
+        if (startDate.isAfter(endDate)) {
+            throw ExceptionFactory.invalidParam("startDate", "startDate cannot be after endDate");
+        }
+        if (ChronoUnit.DAYS.between(startDate, endDate) > calendarParams.getMaxEventDurationDays()) {
+            throw ExceptionFactory.invalidParam("eventDuration", "too long");
+        }
     }
 
     private void validateRepetitionData(RepetitionType repetitionType, Object repetitionData) {

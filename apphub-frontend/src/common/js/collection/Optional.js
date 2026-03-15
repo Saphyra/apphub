@@ -5,8 +5,8 @@ const Optional = class {
         this.value = value;
     }
 
-    filter(predicate)  {
-        if(this.isPresent()){
+    filter(predicate) {
+        if (this.isPresent()) {
             return predicate(this.value) ? this : new Optional();
         }
 
@@ -33,6 +33,13 @@ const Optional = class {
         }
 
         return new Optional(mapper(this.value));
+    }
+
+    or(supplier) {
+        if (this.isPresent()) {
+            return this;
+        }
+        return new Optional(supplier());
     }
 
     orElse(another) {

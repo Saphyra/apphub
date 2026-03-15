@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.calendar.common.EventCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ class OccurrenceMapper {
     OccurrenceResponse toResponse(Occurrence occurrence) {
         LazyLoadedField<Event> event = new LazyLoadedField<>(() -> eventDao.findByIdValidated(occurrence.getEventId()));
 
-        return toResponse(eventId -> event.get(), occurrence);
+        return toResponse(_ -> event.get(), occurrence);
     }
 
     private OccurrenceResponse toResponse(Function<UUID, Event> eventProvider, Occurrence occurrence) {

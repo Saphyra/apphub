@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlaye
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.OnlineFriend;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreGameSettings;
 import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -150,7 +151,7 @@ public class SkyXploreLobbyActions {
     }
 
     public static void verifyInvalidAiName(WebDriver driver, String errorMessage) {
-        WebElementUtils.verifyInvalidFieldState(LobbyPage.invalidNewAiName(driver), true, errorMessage);
+        WebElementUtils.verifyInvalidFieldState(driver, By.id("skyxplore-lobby-create-ai-name-validation"), true, errorMessage);
         assertThat(LobbyPage.createAiButton(driver).isEnabled()).isFalse();
     }
 

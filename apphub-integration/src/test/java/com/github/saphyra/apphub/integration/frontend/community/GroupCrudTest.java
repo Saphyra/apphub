@@ -71,12 +71,12 @@ public class GroupCrudTest extends SeleniumTest {
 
         List<WebElement> groups = GroupActions.getGroups(driver);
         assertThat(groups).hasSize(1);
-        assertThat(groups.get(0).getText()).isEqualTo(GROUP_NAME);
+        assertThat(groups.getFirst().getText()).isEqualTo(GROUP_NAME);
         return groups;
     }
 
     private static void renameGroup_nameTooShort(WebDriver driver, List<WebElement> groups) {
-        GroupActions.openGroup(driver, groups.get(0));
+        GroupActions.openGroup(driver, groups.getFirst());
 
         GroupActions.setGroupName(driver, "as");
 
@@ -108,7 +108,7 @@ public class GroupCrudTest extends SeleniumTest {
     }
 
     private static void changeInvitationType(WebDriver driver, List<WebElement> groups) {
-        GroupActions.openGroup(driver, groups.get(0));
+        GroupActions.openGroup(driver, groups.getFirst());
 
         GroupActions.changeInvitationType(driver, GroupInvitationType.FRIENDS_OF_FRIENDS);
 

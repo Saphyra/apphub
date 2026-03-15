@@ -34,26 +34,23 @@ import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview
 import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
 import BanPage from './modules/admin_panel/ban//index/BanPage';
 import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
-import VillanyAteszIndexPage from './modules/custom/villany_atesz/VillanyAteszIndexPage';
-import VillanyAteszContactsPage from './modules/custom/villany_atesz/contacts/VillanyAteszContactsPage';
-import VillanyAteszStockPage from './modules/custom/villany_atesz/stock/VillanyAteszStockPage';
 import Base64Page from './modules/utils/base64/Base64Page';
 import JsonFormatterPage from './modules/utils/json_formatter/JsonFormatterPage';
 import NewFilesPage from './modules/notebook/new/new_file/NewFilesPage';
 import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
-import VillanyAteszToolboxPage from './modules/custom/villany_atesz/toolbox/VillanyAteszToolboxPage';
 import Constants from './common/js/Constants';
 import Redirection from './Redirection';
 import ErrorPage from './modules/error/ErorPage';
 import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
 import EliteBase from './modules/custom/elite_base/EliteBase';
-import VillanyAteszCommissionsPage from './modules/custom/villany_atesz/commissions/VillanyAteszCommissionsPage';
 import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPage';
 import CalendarPage from './modules/calendar/index/CalendarPage';
 import CalendarCreateEventPage from './modules/calendar/create_event/CalendarCreateEventPage';
 import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
 import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/CalendarEditOccurrencePage';
 import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
+import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPage';
+import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
 
 const router = createBrowserRouter([
   {
@@ -269,26 +266,6 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/villany-atesz",
-    element: <VillanyAteszIndexPage />
-  },
-  {
-    path: "/web/villany-atesz/contacts",
-    element: <VillanyAteszContactsPage />
-  },
-  {
-    path: "/web/villany-atesz/stock",
-    element: <VillanyAteszStockPage />
-  },
-  {
-    path: "/web/villany-atesz/toolbox",
-    element: <VillanyAteszToolboxPage />
-  },
-  {
-    path: "/web/villany-atesz/commissions",
-    element: <VillanyAteszCommissionsPage />
-  },
-  {
     path: "/web/utils/base64",
     element: <Base64Page />
   },
@@ -320,6 +297,10 @@ const router = createBrowserRouter([
     path: "/web/calendar/labels",
     element: <CalendarLabelsPage />
   },
+    {
+    path: "/web/calendar/search",
+    element: <CalendarSearchPage />
+  },
   {
     path: "/web/calendar/edit-occurrence/:occurrenceId",
     element: <CalendarEditOccurrencePage />,
@@ -337,6 +318,10 @@ const router = createBrowserRouter([
         eventId: params.eventId
       }
     }
+  },
+  {
+    path: "/web/calendar/expired-events",
+    element: <ExpiredEventsPage />
   },
 ]);
 

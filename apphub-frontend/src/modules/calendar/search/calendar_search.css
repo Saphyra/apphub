@@ -1,0 +1,42 @@
+#calendar-search main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 0;
+}
+
+#calendar-search-content {
+    border-left: 3px ridge white;
+    border-right: 3px ridge white;
+    min-width: 30%;
+}
+
+#calendar-search-input {
+    width: 90%;
+    display: block;
+    margin: 10px auto;
+}
+
+.calendar-search-error {
+    text-align: center;
+    margin: 10px;
+    font-size: 20px;
+}
+
+.calendar-search-event.active {
+    border-color: lime;
+}
+
+#calendar-search-event {
+    border-right: 3px ridge white;
+}
+
+#calendar-search-event-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}

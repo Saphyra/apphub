@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Stream from "../../../../../common/js/collection/Stream";
-import sortOccurrences from "../../../common/OccurrenceSorter";
+import sortOccurrences from "../../../common/occurrence/OccurrenceSorter";
 import useLoader from "../../../../../common/hook/Loader";
 import { CALENDAR_GET_OCCURRENCES } from "../../../../../common/js/dao/endpoints/CalendarEndpoints";
 import Occurrence from "../../common/occurrence/Occurrence";

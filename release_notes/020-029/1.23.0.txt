@@ -1,0 +1,33 @@
+===FEATURES===
+    SkyXplore
+        Tick counting in game
+    Calendar
+        Warn the user when event is about to expire
+        "Today" button
+        Merge similar one-time events
+        Search
+
+===BUGFIXES===
+    Calendar
+        Store view as user setting so it does not defaults to "month" view every time
+
+===PLATFORM CHANGES===
+    Separate packages for SqlBuilder classes
+
+===TECHNICAL DEBTS===
+    VillanyAtesz
+        Delete feature
+    EliteBase
+        Drop old commodity and loadout tables
+        Delete migration changeSets
+    Integration
+        Remove deprecated verifyInvalidFieldState methods
+
+===ETC===
+    ApphubCI
+        Stopping VM stops proxies too
+    Integration
+        Admin role is not used in tests (unless necessary)
+        Only 1 test is allowed that uses Test role to avoid concurrency issues
+    Calendar
+        Auto-fill event endDate if not set

@@ -1,5 +1,8 @@
 package com.github.saphyra.apphub.lib.common_util;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 public class CommonUtils {
     public static String withLeadingZeros(int in, int expectedLength) {
         return withLeadingZeros(String.valueOf(in), expectedLength);
@@ -13,5 +16,13 @@ public class CommonUtils {
         }
 
         return result.toString();
+    }
+
+    @SafeVarargs
+    public static <T> T firstNotNull(T... objects) {
+        return Arrays.stream(objects)
+            .filter(Objects::nonNull)
+            .findFirst()
+            .orElse(null);
     }
 }

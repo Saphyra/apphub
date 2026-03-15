@@ -19,4 +19,9 @@ class CommonUtilsTest {
     void withLeadingZeros_moreDigits() {
         assertThat(CommonUtils.withLeadingZeros(2025, 2)).isEqualTo("2025");
     }
+
+    @Test
+    void firstNotNull() {
+        assertThat(CommonUtils.firstNotNull(null, null, "first", null, "second")).isEqualTo("first");
+    }
 }

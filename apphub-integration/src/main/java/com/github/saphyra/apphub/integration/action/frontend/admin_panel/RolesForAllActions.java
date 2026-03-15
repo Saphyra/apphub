@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.admin_panel;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
@@ -25,7 +26,8 @@ public class RolesForAllActions {
     }
 
     private static WebElement roleByIdSelector(WebDriver driver, String role) {
-        return driver.findElement(By.id("roles-for-all-role-%s".formatted(role.toLowerCase())));
+        return AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("roles-for-all-role-%s".formatted(role.toLowerCase()))))
+            .orElseThrow(() -> new IllegalStateException("Role not found: %s".formatted(role)));
     }
 
     public static Optional<RoleForAllRow> findRole(WebDriver driver, String role) {

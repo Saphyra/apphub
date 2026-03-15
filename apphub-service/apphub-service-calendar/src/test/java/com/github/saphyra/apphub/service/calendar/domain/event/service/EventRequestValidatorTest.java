@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class EventRequestValidatorTest {
@@ -196,17 +197,6 @@ class EventRequestValidatorTest {
     }
 
     @Test
-    void everyXDaysEvent_nullEndDate() {
-        given(request.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
-        given(request.getRepetitionData()).willReturn(1);
-        given(request.getRepeatForDays()).willReturn(1);
-        given(request.getStartDate()).willReturn(LocalDate.now());
-        given(request.getEndDate()).willReturn(null);
-
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "endDate", "must not be null");
-    }
-
-    @Test
     void everyXDaysEvent_endDateBeforeStartDate() {
         given(request.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(request.getRepetitionData()).willReturn(1);
@@ -276,6 +266,27 @@ class EventRequestValidatorTest {
         given(labelDao.existsById(LABEL_ID)).willReturn(true);
 
         underTest.validate(request);
+    }
+
+    @Test
+    void daysOfWeekEvent_validWithNullEndDate() {
+        given(request.getRepetitionType()).willReturn(RepetitionType.DAYS_OF_WEEK);
+        given(request.getRepetitionData()).willReturn(CollectionUtils.toSet(DayOfWeek.MONDAY));
+        given(request.getRepeatForDays()).willReturn(1);
+        given(request.getStartDate()).willReturn(LocalDate.now());
+        given(calendarParams.getMaxEventDurationDays()).willReturn(30);
+        given(request.getEndDate())
+            .willReturn(null)
+            .willReturn(LocalDate.now());
+        given(request.getTitle()).willReturn("title");
+        given(request.getContent()).willReturn("content");
+        given(request.getRemindMeBeforeDays()).willReturn(0);
+        given(request.getLabels()).willReturn(CollectionUtils.toList(LABEL_ID));
+        given(labelDao.existsById(LABEL_ID)).willReturn(true);
+
+        underTest.validate(request);
+
+        then(request).should().setEndDate(LocalDate.now().plusDays(30));
     }
 
     @Test

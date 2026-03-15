@@ -1,7 +1,7 @@
 import { CALENDAR_CREATE_OCCURRENCE } from "../../../common/js/dao/endpoints/CalendarEndpoints";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import { isBlank } from "../../../common/js/Utils";
-import { OccurrenceStatus } from "../common/OccurrenceStatus";
+import { OccurrenceStatus } from "../common/occurrence/OccurrenceStatus";
 
 async function createOccurrence(eventId, date, setDate, setDisplaySpinner, localizationHandler) {
     if (isBlank(date)) {

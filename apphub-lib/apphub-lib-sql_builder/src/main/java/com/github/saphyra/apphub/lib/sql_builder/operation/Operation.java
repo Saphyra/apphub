@@ -1,0 +1,13 @@
+package com.github.saphyra.apphub.lib.sql_builder.operation;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
+public enum Operation {
+    GREATER_OR_EQUAL(">="),
+    LOWER_OR_EQUAL("<="),
+    ;
+    @Getter
+    private final String operation;
+}
