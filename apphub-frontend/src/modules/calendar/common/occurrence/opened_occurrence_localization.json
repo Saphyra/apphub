@@ -22,5 +22,9 @@
     "at": {
         "en": "At",
         "hu": "Időpont"
+    },
+    "reset": {
+        "en": "Reset",
+        "hu": "Visszaállítás"
     }
 }

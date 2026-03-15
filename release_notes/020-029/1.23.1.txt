@@ -1,0 +1,12 @@
+===FEATURES===
+
+===BUGFIXES===
+    Calendar
+        Handle null note of occurrence
+        Missing localization
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
