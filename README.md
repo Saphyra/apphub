@@ -130,8 +130,9 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 It is recommended/required to create them before first start of the application
 
 * apphub: Used by the services run on the host machine (Local Run)
-* apphub-ci: Used by the CI app
-* integration: Used by integration tests
+* apphub_ci: Used by the CI app
+* apphub_integration: Used by integration tests
+* apphub_preprod: Used by the preproduction server
 * apphub_production: Used by the production server
 
 ## Start the CI app
@@ -148,9 +149,9 @@ It is recommended/required to create them before first start of the application
     * Need to do only during the first startup
   * run command "npm start" from directory "apphub-frontend"
   * Close the opened tab (or change the port to 8080)
-* Select option "[1] - Local Run" in the CI app
-* Create database (if does not exist) apphub
-* Select option "[1] - Start" in the CI app
+* Select option "Local Run" in the CI app
+* Create database (if it does not exist) apphub
+* Select option "Start" in the CI app
 
 CI tool will stop all the running services, rebuild them, and if build is successful, start them.
 Lots of command lines will open. (One for each service.)
@@ -159,50 +160,53 @@ In local environment, React based pages reload automatically after a change is m
 
 ### Start specific services
 
-If you don't want to (re)start the whole application, you can use "[2] - Start services" option to start only the desired ones.
+If you don't want to (re)start the whole application, you can use "Start services" option to start only the desired ones.
 
 After selecting this option, CI tool will ask you to enter the name of the services you would like to (re)start.
-You can enter names of multiple services, spearated by commas ','
+You can enter names of multiple services, separated by commas ','
 
 ### Running tests
 
-You can run the integration tests by selecting "[3] - Run Tests" option.
+You can run the integration tests by selecting "Run Tests" option.
 
 This will start the integration server, and run all the integration tests.
 
-If you want to run only specific types of tests, you can use "[4] - Run test groups" option.
+If you want to run only specific types of tests, you can use "Run test groups" option.
 You need to enter the test groups you want to run as a comma ',' separated list.
 
 ### Stopping the application
 
-You can stop the BackEnd services by selecting "[5] - Stop" option.
+You can stop the BackEnd services by selecting "Stop" option.
 
 ### Configurations
 
-You can modify the settings of Local Run by selecting "[6] - Edit configuration" option.
+You can modify the settings of Local Run by selecting "Edit configuration" option.
 
 Configurations you can edit:
-* [1] - Deploy mode: How the application should start
+* Deploy mode: How the application should start
   * Default: All the services will be rebuilt, unit tested, and started.
   * Skip Tests: All the services will be rebuilt, unit tests will be skipped, then services will start.
   * Skip Build: Services will not be rebuilt, only (re)started.
-* [2] - Build Thread Count: How many services to build in parallel in specific Deploy Modes
-* [3] - Integration Test Thread Count: How many integration tests are allowed to run parallel.
-* [4] - Service startup count limit: How many services to start parallel
-* [5] - Enable / Disable services: You can turn off starting up some optional services if you want to save up resources
+* Build Thread Count: How many services to build in parallel in specific Deploy Modes
+* Integration Test Thread Count: How many integration tests are allowed to run parallel.
+* Pre-create WebDrivers before running integration tests: defines how many WebDrivers should be created before starting the tests, so WebDriver creation does not affect the execution. 
+  * Works only when running all the tests
+  * Additional WebDrivers might be created if the default mode (headed or headless) is not compatible, or no available driver in the cache
+* Service startup count limit: How many services to start parallel
+* Enable / Disable services: You can turn off starting up some optional services if you want to save up resources
+* Integration test retry count: How many times a failed test should be retried before marking it as failed
 
 ## Run application on Minikube
 
 You can run the application on minikube. To do this, you need to install minikube.
 
-Before you deploy the application, make sure the VM has enough CPU cores (Preferably threads of your CPU - 1),
-and RAM (Minimum: 8 GB / Recommended: 12 GB for every namespace you plan to use)!
+Before you deploy the application, make sure the VM has enough CPU cores (Preferably threads of your CPU - 1), and RAM (Minimum: 14 GB)!
 
-You can start the Virtual Machine by selecting "[1] - Start VM" option. It also starts the dashboard, it should open in your default browser.
+You can start the Virtual Machine by selecting "Start VM" option. It also starts the dashboard, it should open in your default browser.
 
 ### Deploy application to Minikube
 
-"[2] - Deploy to VM" option deploys the application to the Virtual Machine. It works very similar to the Local Run script, with a few differences:
+"Deploy to VM" option deploys the application to the Virtual Machine. It works very similar to the Local Run script, with a few differences:
 * During the Maven build, it creates Docker images from the services. Running Minikube is required for this step.
 * It also creates Docker image from the WebUI
 * Instead of starting the services on the host machine, it deploys the Docker images to Minikube
@@ -210,41 +214,35 @@ You can start the Virtual Machine by selecting "[1] - Start VM" option. It also 
 * Forwards the port of the main-gateway running in Minikube to the host machine's 9001 port
 * Forwards the port of the PostgreSQL database running in Minikube to the host machine's 9002 port
 
-You can use "[3] - Deploy services to VM" option to deploy only specific services, it works the same as "[2] - Start services" option in the "Local Run" menu.
-
-### Running tests against applciation deployed to Minikube
-
-"[4] - Run Tests", and "[5] - Run Test Groups" works as the same as the test options against Local environment.
-
 ### Cleaning up
 
-You can use "[6] - Delete namespace" option to undeploy the application from Minikube. It is highly recommended to do after finishing work on the current branch, because unused namespaces still uses the resources of the VM.
+You can use "Delete namespace" option to undeploy the application from Minikube. It is highly recommended to do after finishing work on the current branch, because unused namespaces still use the resources of the VM.
 
-If you want to keep the namespace for further use, but still shut down the VM, you can use "[7] - Stop VM" option.
-This option scales down the current namespace before shutting down the Virtual Machine.
-Later you can start the VM again by selecting option "[1] - Start VM", then "[2] - Deploy to VM" options. The database will store all the data until the namespace is deleted.
+If you want to keep the namespace for further use, you can use "Scale down" option to free up resources.
 
 ### Configurations
 
-You can edit configurations related to Minikube deployment by selecting "[8] - Edit configurations" option.
+You can edit configurations related to Minikube deployment by selecting "Edit configurations" option.
 Here you can edit the "Build Thread Count", "Deploy Mode", and "Integration Test Thread Count", like for Local Run.
 
-Keep in mind, these values are different than the ones corresponding to Local Run.
+Keep in mind, these values are different from the ones corresponding to Local Run.
 
-## Production server
+There might be cases when the CI application does not find the bash.exe file by default. This case you can specify the absolute path of the executable in the "Set bash.exe location" option.
 
-Production server also runs on Minikube, but it has differences compared to dev deployments:
+## (Pre)Production server
+
+Production and Preproduction server also run on Minikube, but it has differences compared to dev deployments:
 * Pods have more memory available
 * Uses the host's database server instead of a database server deployed to the namespace
 * Menu offers additional options making the application live
-  * "[1] - Start VM" option does everything the one in the "Minikube" menu does, but it also scales up the production namespace, and starts the "production_proxy" application.
-  * "[2] - Production release" deploys the built images to DockerHUB (after providing correct credentials)
-  * "[3] - Run Tests" runs a filtered set of tests, it skips the features not enabled on production
-  * "[4] - Start Production Proxy" makes the production server available on port 9000
+  * "Start VM" option does everything the one in the "Minikube" menu does, but it also scales up the production namespace, and starts the "production_proxy" application.
+  * "Production release" deploys the built images to DockerHUB (after providing correct credentials)
+  * "Run Tests" runs a filtered set of tests, it skips the features not enabled on production
+  * "Start Production Proxy" makes the production server available on port 9000
   
 ## Testing
 
-* Since apphub-integration is not a child of the apphub project, IntelliJ will not recognize it as a module automatically. If you dont want to see compile errors, add it manually at File -> Project
+* Since apphub-integration is not a child of the apphub project, IntelliJ will not recognize it as a module automatically. If you don't want to see compile errors, add it manually at File -> Project
   Structure -> Modules -> + -> Import module -> Select apphub-integration directory -> Import module from external model -> Maven -> Finish
 * Automated tests require access to the application's endpoints and database. So tests can only be run after port_forward.sh exposed the application.
 * Test framework must know the ports to use, so you have to add "-DserverPort=9001 -DdatabasePort=9002" as VM option to the TestNG template at Run -> Edit configurations -> Templates -> TestNG -> VM
