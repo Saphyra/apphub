@@ -17,6 +17,7 @@ public enum MenuOrderEnum implements MenuOrder {
 
     //Platform menu
     START_VM(1),
+    BUILD(5),
     DEPLOY(10),
     DEPLOY_SERVICES(20),
     DEPLOY_LATEST_SERVICES(30),
