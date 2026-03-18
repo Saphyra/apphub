@@ -11,46 +11,6 @@
         "en": "Search",
         "hu": "Keresés"
     },
-    "content": {
-        "en": "Description",
-        "hu": "Leírás"
-    },
-    "settings": {
-        "en": "Settings",
-        "hu": "Beállítások"
-    },
-    "start-date": {
-        "en": "Start date: {date}",
-        "hu": "Kezdés: {date}"
-    },
-    "not-set": {
-        "en": "N/A",
-        "hu": "N/A"
-    },
-    "end-date": {
-        "en": "End date: {date}",
-        "hu": "Befejezés: {date}"
-    },
-    "time": {
-        "en": "Time: {time}",
-        "hu": "Időpont: {time}"
-    },
-    "repetition-type": {
-        "en": "Repetition",
-        "hu": "Ismétlés"
-    },
-    "edit": {
-        "en": "Edit",
-        "hu": "Szerkesztés"
-    },
-    "delete": {
-        "en": "Delete",
-        "hu": "Törlés"
-    },
-    "occurrences": {
-        "en": "Occurrences",
-        "hu": "Alkalmak"
-    },
     "hide": {
         "en": "Hide",
         "hu": "Elrejt"

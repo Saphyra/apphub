@@ -1,0 +1,86 @@
+{
+    "content": {
+        "en": "Description",
+        "hu": "Leírás"
+    },
+    "settings": {
+        "en": "Settings",
+        "hu": "Beállítások"
+    },
+    "start-date": {
+        "en": "Start date: {date}",
+        "hu": "Kezdés: {date}"
+    },
+    "end-date": {
+        "en": "End date: {date}",
+        "hu": "Befejezés: {date}"
+    },
+    "not-set": {
+        "en": "N/A",
+        "hu": "N/A"
+    },
+    "time": {
+        "en": "Time: {time}",
+        "hu": "Időpont: {time}"
+    },
+    "repetition-type": {
+        "en": "Repetition",
+        "hu": "Ismétlés"
+    },
+    "archived": {
+        "en": "Archived",
+        "hu": "Archivált"
+    },
+    "true": {
+        "en": "Yes",
+        "hu": "Igen"
+    },
+    "false": {
+        "en": "No",
+        "hu": "Nem"
+    },
+    "repeat-for-days": {
+        "en": "Repeating every occurrence {days} times",
+        "hu": "Minden alkalom megismételve {days} alkalommal"
+    },
+    "remind-me-before-days": {
+        "en": "Reminder set up {days} before every occurrence",
+        "hu": "Emlékeztető beállítva {days} nappal minden alkalom előtt"
+    },
+    "edit": {
+        "en": "Edit",
+        "hu": "Szerkesztés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    },
+    "merge": {
+        "en": "Merge with similar events",
+        "hu": "Összevonás hasonló eseményekkel"
+    },
+    "archive": {
+        "en": "Archive",
+        "hu": "Archivál"
+    },
+    "unarchive": {
+        "en": "Unarchive",
+        "hu": "Archiválás visszavonása"
+    },
+    "confirm-merge-title": {
+        "en": "Merge events?",
+        "hu": "Események összevonása?"
+    },
+    "confirm-merge-content": {
+        "en": "Are you sure you want to merge events with the same name? All the other events inherit this one's labels.",
+        "hu": "Biztosan össze szeretnéd vonni a neve és ideje alapján megegyező eseményeket? Minden más esemény örökli ennek az eseménynek a címkéit."
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "occurrences": {
+        "en": "Occurrences",
+        "hu": "Alkalmak"
+    }
+}

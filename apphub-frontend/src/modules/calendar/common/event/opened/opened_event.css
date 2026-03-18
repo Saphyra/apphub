@@ -1,0 +1,74 @@
+#calendar-opened-event {
+    border-right: 3px ridge white;
+    overflow: auto;
+}
+
+#calendar-opened-event-title {
+    text-align: center;
+    border-bottom: 3px ridge white;
+    font-size: 24px;
+    padding: 3px;
+    position: sticky;
+    top: 0;
+    background-color: var(--background-color);
+}
+
+#calendar-opened-event-content {
+    width: calc(100% - 6px);
+}
+
+#calendar-opened-event-operations {
+    text-align: center;
+}
+
+.calendar-opened-event-occurrence-time-hidden {
+    visibility: hidden;
+}
+
+.calendar-opened-event-occurrence {
+    border: 2px outset white;
+    margin: 5px 0;
+    padding: 3px;
+}
+
+.calendar-opened-event-occurrence.active {
+    border-style: dashed;
+}
+
+.calendar-opened-event-occurrence:hover {
+    border-color: orange;
+}
+
+.calendar-opened-event-occurrence:active {
+    border-color: red;
+    border-style: inset;
+}
+
+.calendar-opened-event-occurrence-time,
+.calendar-opened-event-occurrence-date {
+    border: none;
+    cursor: default !important;
+}
+
+.calendar-opened-event-occurrence-expired {
+    border-color: red;
+}
+
+.calendar-opened-event-occurrence-done {
+    border-color: green;
+    text-decoration: line-through;
+}
+
+.calendar-opened-event-occurrence-snoozed {
+    border-color: grey;
+    opacity: 0.5;
+    text-decoration: line-through;
+}
+
+.calendar-opened-event-occurrence-reminder {
+    border-color: orange;
+}
+
+.calendar-opened-event-occurrence-archived {
+    border-style: dashed;
+}
