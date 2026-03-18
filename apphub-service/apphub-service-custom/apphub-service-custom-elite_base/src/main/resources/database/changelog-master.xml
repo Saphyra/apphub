@@ -24,7 +24,6 @@
     <include file="database/change_sets/station_service.xml"/>
     <include file="database/change_sets/settlement.xml"/>
     <include file="database/change_sets/fleet_carrier.xml"/>
-    <include file="database/change_sets/commodity.xml"/>
     <include file="database/change_sets/commodity_average_price.xml"/>
     <include file="database/change_sets/last_update.xml"/>
     <include file="database/change_sets/body_data.xml"/>
@@ -36,7 +35,6 @@
     <include file="database/change_sets/minor_faction_conflict.xml"/>
     <include file="database/change_sets/conflicting_minor_faction.xml"/>
     <include file="database/change_sets/star_system_data.xml"/>
-    <include file="database/change_sets/loadout.xml"/>
     <include file="database/change_sets/material_trader_override.xml"/>
     <include file="database/change_sets/powerplay_conflict.xml"/>
     <include file="database/change_sets/item_type.xml"/>
