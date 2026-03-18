@@ -70,5 +70,9 @@
     "search": {
         "en": "Search",
         "hu": "Keresés"
+    },
+    "show-archived": {
+        "en": "Show archived",
+        "hu": "Archiváltak mutatása"
     }
 }

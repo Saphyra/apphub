@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
 import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_LABELS_PAGE, CALENDAR_MERGE_EVENTS } from "../../../../common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue, mapOrDefault } from "../../../../common/js/Utils";
@@ -161,7 +161,7 @@ const OpenedEvent = ({
 
     async function merge() {
         await CALENDAR_MERGE_EVENTS.createRequest(null, { eventId: eventId })
-        .send(setDisplaySpinner);
+            .send(setDisplaySpinner);
 
         setConfirmationDialogData(null);
         refresh();

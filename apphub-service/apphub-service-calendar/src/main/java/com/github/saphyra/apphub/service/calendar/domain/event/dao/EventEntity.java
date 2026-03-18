@@ -28,4 +28,5 @@ class EventEntity {
     private String content;
     private String remindMeBeforeDays;
     private String expirationNotified;
+    private String archived;
 }

@@ -2,3 +2,7 @@
     white-space: nowrap;
     overflow: auto;
 }
+
+.calendar-occurrence-archived {
+    border-style: dashed !important;
+}

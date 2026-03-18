@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify";
 import localizationData from "./localization/calendar_page_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import Button from "../../../common/component/input/Button";
+import PostLabeledInputField from "../../../common/component/input/PostLabeledInputField";
+import InputField from "../../../common/component/input/InputField";
 import Constants from "../../../common/js/Constants";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
@@ -48,6 +50,7 @@ const CalendarPage = () => {
     const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
 
     const [currentDate, setCurrentDate] = useState(LocalDate.now());
+    const [showArchived, setShowArchived] = useState(true);
     const [refreshCounter, refresh] = useRefresh();
     const isInFocus = useHasFocus();
     useUpdateEffect(
@@ -103,6 +106,7 @@ const CalendarPage = () => {
                         <CalendarContent
                             view={View[viewName]}
                             activeLabel={activeLabel}
+                            showArchived={showArchived}
                             setDisplaySpinner={updateDisplaySpinner}
                             referenceDate={referenceDate}
                             selectedDate={selectedDate}
@@ -116,6 +120,7 @@ const CalendarPage = () => {
                 <RightPanel
                     selectedDate={selectedDate}
                     activeLabel={activeLabel}
+                    showArchived={showArchived}
                     setDisplaySpinner={updateDisplaySpinner}
                     selectedOccurrence={selectedOccurrence}
                     setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
@@ -128,6 +133,17 @@ const CalendarPage = () => {
 
             <Footer
                 leftButtons={[
+                    <PostLabeledInputField
+                        key="show-archived"
+                        id="calendar-show-archived"
+                        label={localizationHandler.get("show-archived")}
+                        input={<InputField
+                            id="calendar-show-archived-checkbox"
+                            type="checkbox"
+                            checked={showArchived}
+                            onchangeCallback={updateShowArchived}
+                        />}
+                    />,
                     <ExpiredEventNotification
                         key="expired-event-notification"
                         setDisplaySpinner={updateDisplaySpinner}
@@ -142,7 +158,7 @@ const CalendarPage = () => {
                         label={localizationHandler.get("search")}
                         onclick={() => window.location.href = CALENDAR_SEARCH_PAGE}
                     />
-                ]}      
+                ]}
                 rightButtons={[
                     <Button
                         id="calendar-home-button"
@@ -172,6 +188,8 @@ const CalendarPage = () => {
             const response = await GET_USER_SETTINGS.createRequest(null, { category: USER_SETTING_CATEGORY_CALENDAR })
                 .send(updateDisplaySpinner);
 
+            setShowArchived(response[UserSettings.SHOW_ARCHIVED] === "true");
+
             new Optional(response[UserSettings.INDEX_VIEW_LAYOUT])
                 .filter(v => !isBlank(v))
                 .or(() => MONTH)
@@ -191,6 +209,21 @@ const CalendarPage = () => {
 
         await SET_USER_SETTINGS.createRequest(payload)
             .send(updateDisplaySpinner);
+    }
+
+    async function updateShowArchived(checked) {
+        setShowArchived(checked);
+
+        const payload = {
+            category: USER_SETTING_CATEGORY_CALENDAR,
+            key: UserSettings.SHOW_ARCHIVED,
+            value: checked
+        }
+
+        await SET_USER_SETTINGS.createRequest(payload)
+            .send(updateDisplaySpinner);
+
+        refresh();
     }
 }
 

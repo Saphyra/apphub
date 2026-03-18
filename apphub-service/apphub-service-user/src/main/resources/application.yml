@@ -45,6 +45,7 @@ add-role-to-all:
 settings:
   calendar:
     index-view-layout: ~
+    show-archived: true
   notebook:
     show-archived: true
     default-list-item-id: ~

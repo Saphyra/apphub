@@ -26,6 +26,7 @@ class EventControllerImpl implements EventController {
     private final ExpiredEventService expiredEventService;
     private final MergeEventService mergeEventService;
     private final SearchEventService searchEventService;
+    private final ArchiveEventService archiveEventService;
 
     @Override
     public OneParamResponse<UUID> createEvent(EventRequest request, AccessTokenHeader accessTokenHeader) {
@@ -113,5 +114,12 @@ class EventControllerImpl implements EventController {
         log.info("{} wants to search for events", accessTokenHeader.getUserId());
 
         return searchEventService.search(accessTokenHeader.getUserId(), search.getValue());
+    }
+
+    @Override
+    public void archiveEvent(OneParamRequest<Boolean> archive, UUID eventId, AccessTokenHeader accessTokenHeader) {
+        log.info("{} wants to archive event {}", accessTokenHeader.getUserId(), eventId);
+
+        archiveEventService.archive(eventId, archive.getValue());
     }
 }

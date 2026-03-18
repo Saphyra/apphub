@@ -43,6 +43,7 @@ class EventConverterTest {
     private static final String ENCRYPTED_CONTENT = "encrypted-content";
     private static final String ENCRYPTED_REMIND_ME_BEFORE_DAYS = "encrypted-remind-me-before-days";
     private static final String ENCRYPTED_EXPIRATION_NOTIFIED = "encrypted-expiration-notified";
+    private static final String ENCRYPTED_ARCHIVED = "encrypted-archived";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -83,6 +84,7 @@ class EventConverterTest {
             .content(CONTENT)
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .expirationNotified(true)
+            .archived(true)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
@@ -98,7 +100,7 @@ class EventConverterTest {
         given(stringEncryptor.encrypt(CONTENT, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_CONTENT)).willReturn(ENCRYPTED_CONTENT);
         given(integerEncryptor.encrypt(REMIND_ME_BEFORE_DAYS, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.REMIND_ME_BEFORE_DAYS)).willReturn(ENCRYPTED_REMIND_ME_BEFORE_DAYS);
         given(booleanEncryptor.encrypt(true, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.EXPIRATION_NOTIFIED)).willReturn(ENCRYPTED_EXPIRATION_NOTIFIED);
-
+        given(booleanEncryptor.encrypt(true, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.ARCHIVED)).willReturn(ENCRYPTED_ARCHIVED);
 
         assertThat(underTest.convertDomain(event))
             .returns(EVENT_ID_STRING, EventEntity::getEventId)
@@ -112,7 +114,8 @@ class EventConverterTest {
             .returns(ENCRYPTED_TITLE, EventEntity::getTitle)
             .returns(ENCRYPTED_CONTENT, EventEntity::getContent)
             .returns(ENCRYPTED_REMIND_ME_BEFORE_DAYS, EventEntity::getRemindMeBeforeDays)
-            .returns(ENCRYPTED_EXPIRATION_NOTIFIED, EventEntity::getExpirationNotified);
+            .returns(ENCRYPTED_EXPIRATION_NOTIFIED, EventEntity::getExpirationNotified)
+            .returns(ENCRYPTED_ARCHIVED, EventEntity::getArchived);
     }
 
     @Test
@@ -130,6 +133,7 @@ class EventConverterTest {
             .content(ENCRYPTED_CONTENT)
             .remindMeBeforeDays(ENCRYPTED_REMIND_ME_BEFORE_DAYS)
             .expirationNotified(ENCRYPTED_EXPIRATION_NOTIFIED)
+            .archived(ENCRYPTED_ARCHIVED)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
@@ -145,6 +149,7 @@ class EventConverterTest {
         given(stringEncryptor.decrypt(ENCRYPTED_CONTENT, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_CONTENT)).willReturn(CONTENT);
         given(integerEncryptor.decrypt(ENCRYPTED_REMIND_ME_BEFORE_DAYS, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.REMIND_ME_BEFORE_DAYS)).willReturn(REMIND_ME_BEFORE_DAYS);
         given(booleanEncryptor.decrypt(ENCRYPTED_EXPIRATION_NOTIFIED, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.EXPIRATION_NOTIFIED)).willReturn(true);
+        given(booleanEncryptor.decrypt(ENCRYPTED_ARCHIVED, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.ARCHIVED)).willReturn(true);
 
         assertThat(underTest.convertEntity(entity))
             .returns(EVENT_ID, Event::getEventId)
@@ -158,7 +163,8 @@ class EventConverterTest {
             .returns(TITLE, Event::getTitle)
             .returns(CONTENT, Event::getContent)
             .returns(REMIND_ME_BEFORE_DAYS, Event::getRemindMeBeforeDays)
-            .returns(true, Event::isExpirationNotified);
+            .returns(true, Event::isExpirationNotified)
+            .returns(true, Event::isArchived);
     }
 
     @Test
@@ -176,6 +182,7 @@ class EventConverterTest {
             .content(ENCRYPTED_CONTENT)
             .remindMeBeforeDays(ENCRYPTED_REMIND_ME_BEFORE_DAYS)
             .expirationNotified(ENCRYPTED_EXPIRATION_NOTIFIED)
+            .archived(ENCRYPTED_ARCHIVED)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID_FROM_ACCESS_TOKEN);
@@ -191,6 +198,7 @@ class EventConverterTest {
         given(stringEncryptor.decrypt(ENCRYPTED_CONTENT, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.COLUMN_CONTENT)).willReturn(null);
         given(integerEncryptor.decrypt(ENCRYPTED_REMIND_ME_BEFORE_DAYS, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.REMIND_ME_BEFORE_DAYS)).willReturn(REMIND_ME_BEFORE_DAYS);
         given(booleanEncryptor.decrypt(ENCRYPTED_EXPIRATION_NOTIFIED, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.EXPIRATION_NOTIFIED)).willReturn(null);
+        given(booleanEncryptor.decrypt(ENCRYPTED_ARCHIVED, USER_ID_FROM_ACCESS_TOKEN, EVENT_ID_STRING, EventConverter.ARCHIVED)).willReturn(null);
 
         assertThat(underTest.convertEntity(entity))
             .returns(EVENT_ID, Event::getEventId)
@@ -204,6 +212,7 @@ class EventConverterTest {
             .returns(TITLE, Event::getTitle)
             .returns(Constants.EMPTY_STRING, Event::getContent)
             .returns(REMIND_ME_BEFORE_DAYS, Event::getRemindMeBeforeDays)
-            .returns(false, Event::isExpirationNotified);
+            .returns(false, Event::isExpirationNotified)
+            .returns(false, Event::isArchived);
     }
 }

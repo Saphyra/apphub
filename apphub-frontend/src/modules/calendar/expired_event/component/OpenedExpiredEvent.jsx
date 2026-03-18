@@ -15,6 +15,7 @@ import LocalDate from "../../../../common/js/date/LocalDate";
 import ConfirmationDialogData from "../../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import TestableDateInput from "../../common/input/TestableDateInput";
 import NotificationService from "../../../../common/js/notification/NotificationService";
+import ErrorHandler from "../../../../common/js/dao/ErrorHandler";
 
 const OpenedExpiredEvent = ({
     eventId,
@@ -38,7 +39,11 @@ const OpenedExpiredEvent = ({
         mapper: setEvent,
         setDisplaySpinner: setDisplaySpinner,
         condition: () => hasValue(eventId),
-        listener: [eventId]
+        listener: [eventId],
+        errorHandler: new ErrorHandler(
+            response => response.status === 404,
+            () => setSelectedEvent(null)
+        )
     });
 
     useLoader({

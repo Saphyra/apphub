@@ -33,6 +33,7 @@ class EventMapper {
             .content(event.getContent())
             .remindMeBeforeDays(event.getRemindMeBeforeDays())
             .labels(getLabels(event.getEventId()))
+            .archived(event.isArchived())
             .build();
     }
 
