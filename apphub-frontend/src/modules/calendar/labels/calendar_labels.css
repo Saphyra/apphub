@@ -76,3 +76,7 @@
 .calendar-labels-event.active {
     border-color: lime;
 }
+
+.calendar-labels-event.archived {
+    border-style: dashed;
+}

@@ -37,4 +37,9 @@ public class CalendarOccurrence {
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("Status cannot be determined."));
     }
+
+    public boolean isArchived() {
+        return WebElementUtils.getClasses(webElement)
+            .contains("calendar-occurrence-archived");
+    }
 }

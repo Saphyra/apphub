@@ -64,4 +64,9 @@ public class CalendarLabelsPageActions {
         driver.findElement(By.id("calendar-opened-event-merge-confirmation-dialog-confirm"))
             .click();
     }
+
+    public static void toggleArchiveOpenedEvent(WebDriver driver) {
+        driver.findElement(By.id("calendar-opened-event-archive-button"))
+            .click();
+    }
 }

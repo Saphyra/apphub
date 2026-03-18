@@ -26,3 +26,7 @@
 .calendar-search-event.active {
     border-color: lime;
 }
+
+.calendar-search-event.archived {
+    border-style: dashed;
+}

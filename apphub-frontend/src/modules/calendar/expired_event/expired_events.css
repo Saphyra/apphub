@@ -13,3 +13,7 @@
 .calendar-expired-event.active {
     border-color: lime;
 }
+
+.calendar-expired-event.archived {
+    border-style: dashed;
+}
