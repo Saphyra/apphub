@@ -26,6 +26,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
     static final String COLUMN_CONTENT = "content";
     static final String REMIND_ME_BEFORE_DAYS = "remind_me_before_days";
     static final String EXPIRATION_NOTIFIED = "expiration_notified";
+    static final String ARCHIVED = "archived";
 
     private final UuidConverter uuidConverter;
     private final IntegerEncryptor integerEncryptor;
@@ -53,6 +54,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .content(stringEncryptor.encrypt(domain.getContent(), userIdFromAccessToken, eventId, COLUMN_CONTENT))
             .remindMeBeforeDays(integerEncryptor.encrypt(domain.getRemindMeBeforeDays(), userIdFromAccessToken, eventId, REMIND_ME_BEFORE_DAYS))
             .expirationNotified(booleanEncryptor.encrypt(domain.isExpirationNotified(), userIdFromAccessToken, eventId, EXPIRATION_NOTIFIED))
+            .archived(booleanEncryptor.encrypt(domain.isArchived(), userIdFromAccessToken, eventId, ARCHIVED))
             .build();
     }
 
@@ -73,6 +75,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .content(Optional.ofNullable(stringEncryptor.decrypt(entity.getContent(), userIdFromAccessToken, entity.getEventId(), COLUMN_CONTENT)).orElse(Constants.EMPTY_STRING))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getEventId(), REMIND_ME_BEFORE_DAYS))
             .expirationNotified(Optional.ofNullable(booleanEncryptor.decrypt(entity.getExpirationNotified(), userIdFromAccessToken, entity.getEventId(), EXPIRATION_NOTIFIED)).orElse(false))
+            .archived(Optional.ofNullable(booleanEncryptor.decrypt(entity.getArchived(), userIdFromAccessToken, entity.getEventId(), ARCHIVED)).orElse(false))
             .build();
     }
 }

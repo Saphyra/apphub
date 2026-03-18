@@ -1,6 +1,8 @@
 ===FEATURES===
     ApphubCI
         Local build option
+    Calendar
+        Archive events
 
 ===BUGFIXES===
     Calendar

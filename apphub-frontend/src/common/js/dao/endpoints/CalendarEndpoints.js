@@ -32,4 +32,5 @@ export const CALENDAR_GET_EXPIRED_EVENTS = new Endpoint(RequestMethod.GET, "/api
 export const CALENDAR_HIDE_EXPIRED_EVENT = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/hide");
 export const CALENDAR_EXTEND_EXPIRED_EVENT = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/extend");
 export const CALENDAR_MERGE_EVENTS = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/merge");
+export const CALENDAR_ARCHIVE_EVENT = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/archive");
 export const CALENDAR_SEARCH_EVENTS = new Endpoint(RequestMethod.POST, "/api/calendar/events/search");

@@ -26,7 +26,7 @@ public class EditEventService {
 
     @Transactional
     public void edit(UUID eventId, EventRequest request) {
-        eventRequestValidator.validate(request);
+        eventRequestValidator.validateEdit(request);
 
         Event event = eventDao.findByIdValidated(eventId);
         event.setExpirationNotified(false);

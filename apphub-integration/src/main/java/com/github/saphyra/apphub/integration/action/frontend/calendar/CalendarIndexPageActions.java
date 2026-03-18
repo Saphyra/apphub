@@ -61,7 +61,10 @@ public class CalendarIndexPageActions {
 
     public static CalendarOccurrence findOccurrenceByTitleOnDateValidated(WebDriver driver, LocalDate date, String title) {
         return getOccurrencesOnDate(driver, date).stream()
-            .filter(occurrence -> occurrence.getTitle().equals(title))
+            .filter(occurrence -> {
+                String occurrenceTitle = occurrence.getTitle();
+                return occurrenceTitle.equals(title);
+            })
             .findAny()
             .orElseThrow(() -> new IllegalStateException("Occurrence not found: " + title));
     }
@@ -182,5 +185,9 @@ public class CalendarIndexPageActions {
     public static void openSearchPage(WebDriver driver) {
         driver.findElement(By.id("calendar-search-button"))
             .click();
+    }
+
+    public static void setArchived(WebDriver driver, boolean archived) {
+        WebElementUtils.setCheckboxState(driver.findElement(By.id("calendar-edit-event-archived-checkbox")), archived);
     }
 }

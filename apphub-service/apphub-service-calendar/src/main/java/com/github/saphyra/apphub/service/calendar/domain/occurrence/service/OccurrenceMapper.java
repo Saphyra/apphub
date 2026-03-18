@@ -42,6 +42,7 @@ class OccurrenceMapper {
             .note(Optional.ofNullable(occurrence.getNote()).orElse(""))
             .remindMeBeforeDays(getFromEventIfNull(eventProvider, occurrence.getEventId(), occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
             .reminded(occurrence.getReminded())
+            .eventArchived(eventProvider.apply(occurrence.getEventId()).isArchived())
             .build();
     }
 

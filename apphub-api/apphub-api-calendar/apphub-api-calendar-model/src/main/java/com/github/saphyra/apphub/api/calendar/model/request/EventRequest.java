@@ -26,4 +26,5 @@ public class EventRequest {
     private String content;
     private Integer remindMeBeforeDays;
     private List<UUID> labels;
+    private Boolean archived;
 }

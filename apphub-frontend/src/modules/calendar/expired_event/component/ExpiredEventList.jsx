@@ -2,6 +2,7 @@ import { useState } from "react";
 import InputField from "../../../../common/component/input/InputField";
 import ExpiredEvent from "./ExpiredEvent";
 import Stream from "../../../../common/js/collection/Stream";
+import sortEvents from "../../common/event/sortEvents";
 
 const ExpiredEventList = ({ events, localizationHandler, selectedEvent, setSelectedEvent }) => {
     const [search, setSearch] = useState("");
@@ -21,8 +22,8 @@ const ExpiredEventList = ({ events, localizationHandler, selectedEvent, setSelec
 
     function getContent() {
         return new Stream(events)
-            .sorted((a, b) => a.title.localeCompare(b.title))
             .filter(event => event.title.toLowerCase().includes(search.toLowerCase()))
+            .sorted(sortEvents)
             .map(event => <ExpiredEvent
                 key={event.eventId}
                 event={event}

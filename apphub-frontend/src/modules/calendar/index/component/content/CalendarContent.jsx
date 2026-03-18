@@ -11,6 +11,7 @@ import CalendarContentDay from "./CalendarContentDay";
 const CalendarContent = ({
     view,
     activeLabel,
+    showArchived,
     setDisplaySpinner,
     referenceDate,
     selectedDate,
@@ -70,6 +71,7 @@ const CalendarContent = ({
         function getOccurrences(day) {
             return new Stream(occurrences)
                 .filter(occurrence => occurrence.date === day.toString())
+                .filter(occurrence => showArchived || !occurrence.eventArchived)
                 .toList();
         }
     }

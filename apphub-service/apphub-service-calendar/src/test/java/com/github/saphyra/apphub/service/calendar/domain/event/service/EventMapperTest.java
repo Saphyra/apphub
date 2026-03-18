@@ -59,6 +59,7 @@ class EventMapperTest {
             .time(TIME)
             .content(CONTENT)
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
+            .archived(true)
             .build();
 
         given(objectMapper.readValue(REPETITION_DATA, Object.class)).willReturn(PARSED_REPETITION_DATA);
@@ -76,6 +77,7 @@ class EventMapperTest {
             .returns(TIME, EventResponse::getTime)
             .returns(CONTENT, EventResponse::getContent)
             .returns(REMIND_ME_BEFORE_DAYS, EventResponse::getRemindMeBeforeDays)
-            .returns(List.of(LABEL_ID), EventResponse::getLabels);
+            .returns(List.of(LABEL_ID), EventResponse::getLabels)
+            .returns(true, EventResponse::getArchived);
     }
 }

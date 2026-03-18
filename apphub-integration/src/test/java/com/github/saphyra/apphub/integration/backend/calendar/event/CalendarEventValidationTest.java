@@ -339,6 +339,7 @@ public class CalendarEventValidationTest extends BackEndTest {
         edit_nullLabels(accessTokenId, eventId, repetitionType);
         edit_labelsContainNull(accessTokenId, eventId, repetitionType);
         edit_labelDoesNotExist(accessTokenId, eventId, repetitionType);
+        edit_nullArchived(accessTokenId, eventId, repetitionType);
     }
 
     private void edit_labelDoesNotExist(UUID accessTokenId, UUID eventId, RepetitionType repetitionType) {
@@ -536,5 +537,14 @@ public class CalendarEventValidationTest extends BackEndTest {
             .build();
 
         ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessTokenId, request), "repetitionType", "must not be null");
+    }
+
+    private void edit_nullArchived(UUID accessTokenId, UUID eventId, RepetitionType repetitionType) {
+        EventRequest request = EventRequestFactory.validRequest(repetitionType)
+            .toBuilder()
+            .archived(null)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessTokenId, eventId, request), "archived", "must not be null");
     }
 }

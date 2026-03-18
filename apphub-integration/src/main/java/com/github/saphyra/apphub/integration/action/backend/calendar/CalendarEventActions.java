@@ -168,4 +168,16 @@ public class CalendarEventActions {
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
+
+    public static Response getArchiveEventResponse(int serverPort, UUID accessTokenId, UUID eventId, Boolean archived) {
+        return RequestFactory.createAuthorizedRequest(accessTokenId)
+            .body(new OneParamRequest<>(archived))
+            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_ARCHIVE_EVENT, "eventId", eventId));
+    }
+
+    public static void archiveEvent(int serverPort, UUID accessTokenId, UUID eventId, Boolean archived) {
+        Response response = getArchiveEventResponse(serverPort, accessTokenId, eventId, archived);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }

@@ -42,7 +42,7 @@ class OccurrenceMapperTest {
     private Event event;
 
     @Test
-    void getValuesFromOccurrence(){
+    void getValuesFromOccurrence() {
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
         given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(occurrence.getDate()).willReturn(DATE);
@@ -54,6 +54,7 @@ class OccurrenceMapperTest {
         given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
         given(event.getTitle()).willReturn(TITLE);
         given(event.getContent()).willReturn(CONTENT);
+        given(event.isArchived()).willReturn(true);
 
         assertThat(underTest.toResponse(occurrence))
             .returns(OCCURRENCE_ID, OccurrenceResponse::getOccurrenceId)
@@ -65,11 +66,12 @@ class OccurrenceMapperTest {
             .returns(CONTENT, OccurrenceResponse::getContent)
             .returns(NOTE, OccurrenceResponse::getNote)
             .returns(REMIND_ME_BEFORE_DAYS, OccurrenceResponse::getRemindMeBeforeDays)
-            .returns(true, OccurrenceResponse::getReminded);
+            .returns(true, OccurrenceResponse::getReminded)
+            .returns(true, OccurrenceResponse::getEventArchived);
     }
 
     @Test
-    void getValuesFromEvent(){
+    void getValuesFromEvent() {
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
         given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(occurrence.getDate()).willReturn(DATE);
@@ -83,6 +85,7 @@ class OccurrenceMapperTest {
         given(event.getContent()).willReturn(CONTENT);
         given(event.getTime()).willReturn(TIME);
         given(event.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
+        given(event.isArchived()).willReturn(true);
 
         assertThat(underTest.toResponse(occurrence))
             .returns(OCCURRENCE_ID, OccurrenceResponse::getOccurrenceId)
@@ -94,6 +97,7 @@ class OccurrenceMapperTest {
             .returns(CONTENT, OccurrenceResponse::getContent)
             .returns(NOTE, OccurrenceResponse::getNote)
             .returns(REMIND_ME_BEFORE_DAYS, OccurrenceResponse::getRemindMeBeforeDays)
-            .returns(true, OccurrenceResponse::getReminded);
+            .returns(true, OccurrenceResponse::getReminded)
+            .returns(true, OccurrenceResponse::getEventArchived);
     }
 }

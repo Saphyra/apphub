@@ -26,4 +26,5 @@ public class EventResponse {
     private String content;
     private Integer remindMeBeforeDays;
     private List<UUID> labels;
+    private Boolean archived;
 }

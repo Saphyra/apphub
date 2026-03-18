@@ -39,12 +39,12 @@ public class CalendarLabelsPageActions {
     }
 
     public static String getOpenedEventTitle(WebDriver driver) {
-        return driver.findElement(By.id("calendar-labels-event-title"))
+        return driver.findElement(By.id("calendar-opened-event-title"))
             .getText();
     }
 
     public static List<WebElement> getOpenedEventOccurrences(WebDriver driver) {
-        return driver.findElements(By.className("calendar-labels-event-occurrence-date"));
+        return driver.findElements(By.className("calendar-opened-event-occurrence-date"));
     }
 
     public static LocalDate getOpenedOccurrenceDate(WebDriver driver) {
@@ -57,11 +57,16 @@ public class CalendarLabelsPageActions {
     }
 
     public static void mergeEvents(WebDriver driver) {
-        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-labels-merge-button")))
+        AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-opened-event-merge-button")))
             .orElseThrow(() -> new IllegalStateException("Event not found"))
             .click();
 
-        driver.findElement(By.id("calendar-labels-merge-confirmation-dialog-confirm"))
+        driver.findElement(By.id("calendar-opened-event-merge-confirmation-dialog-confirm"))
+            .click();
+    }
+
+    public static void toggleArchiveOpenedEvent(WebDriver driver) {
+        driver.findElement(By.id("calendar-opened-event-archive-button"))
             .click();
     }
 }

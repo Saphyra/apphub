@@ -41,4 +41,16 @@
             <column name="expiration_notified" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="add-column-archived-to-event" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists schemaName="calendar" tableName="event" columnName="archived"/>
+            </not>
+        </preConditions>
+
+        <addColumn tableName="event" schemaName="calendar">
+            <column name="archived" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
