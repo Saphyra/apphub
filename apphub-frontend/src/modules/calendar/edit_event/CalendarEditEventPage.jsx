@@ -72,7 +72,7 @@ const CalendarEditEventPage = () => {
     const [repetitionData, setRepetitionData] = useExtractAsync(o => o.repetitionData, event);
     const [repeatForDays, setRepeatForDays] = useExtractAsync(o => o.repeatForDays, event, 1);
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, event, 0);
-    const [archived, setArchived] = useExtractAsync(o => o.archived === "true", event, false);
+    const [archived, setArchived] = useExtractAsync(o => o.archived, event, false);
     const [existingLabels, setExistingLabels] = useExtractAsync(o => o.labels, event, []);
 
     useLoader(

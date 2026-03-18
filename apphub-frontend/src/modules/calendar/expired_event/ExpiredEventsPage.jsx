@@ -84,19 +84,19 @@ const ExpiredEventsPage = () => {
                         renderAdditionalOperations={(event) => [
                             <span className="nowrap" key="extend-until">
                                 <Button
-                                    id="calendar-opened-event-extend-end-date-button"
+                                    id="calendar-expired-event-extend-end-date-button"
                                     label={localizationHandler.get("extend-until")}
                                     onclick={() => extendEndDate(event.eventId)}
                                 />
 
                                 <TestableDateInput
-                                    id="calendar-opened-event-extend-end-date-input"
+                                    id="calendar-expired-event-extend-end-date-input"
                                     value={extendedEndDate}
                                     setDate={setExtendedEndDate}
                                 />
                             </span>,
                             <Button
-                                id="calendar-opened-event-hide"
+                                id="calendar-expired-event-hide"
                                 key="hide"
                                 label={localizationHandler.get("hide")}
                                 onclick={() => confirmHide(event)}
@@ -164,19 +164,19 @@ const ExpiredEventsPage = () => {
 
     function confirmHide(event) {
         setConfirmationDialogData(new ConfirmationDialogData(
-            "calendar-opened-event-hide-confirmation",
+            "calendar-expired-event-hide-confirmation",
             localizationHandler.get("hide-event-confirmation-title"),
             localizationHandler.get("hide-event-confirmation-content", { title: event.title }),
             [
                 <Button
                     key="hide"
-                    id="calendar-opened-event-hide-button"
+                    id="calendar-expired-event-hide-button"
                     label={localizationHandler.get("hide")}
                     onclick={() => hideEvent(event.eventId)}
                 />,
                 <Button
                     key="cancel"
-                    id="calendar-opened-event-hide-cancel-button"
+                    id="calendar-expired-event-hide-cancel-button"
                     label={localizationHandler.get("cancel")}
                     onclick={() => setConfirmationDialogData(null)}
                 />

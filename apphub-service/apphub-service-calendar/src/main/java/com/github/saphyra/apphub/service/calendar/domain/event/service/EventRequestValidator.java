@@ -29,6 +29,12 @@ class EventRequestValidator {
     private final CalendarParams calendarParams;
     private final LabelDao labelDao;
 
+    public void validateEdit(EventRequest request) {
+        validate(request);
+
+        ValidationUtil.notNull(request.getArchived(), "archived");
+    }
+
     void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
         validateRepetitionData(request.getRepetitionType(), request.getRepetitionData());

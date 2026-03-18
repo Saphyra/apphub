@@ -353,4 +353,19 @@ class EventRequestValidatorTest {
 
         underTest.validate(request);
     }
+
+    @Test
+    void validateEdit_nullArchived() {
+        given(request.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
+        given(request.getRepeatForDays()).willReturn(1);
+        given(request.getStartDate()).willReturn(LocalDate.now());
+        given(request.getTitle()).willReturn("title");
+        given(request.getContent()).willReturn("content");
+        given(request.getRemindMeBeforeDays()).willReturn(0);
+        given(request.getLabels()).willReturn(CollectionUtils.toList(LABEL_ID));
+        given(labelDao.existsById(LABEL_ID)).willReturn(true);
+        given(request.getArchived()).willReturn(null);
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validateEdit(request), "archived", "must not be null");
+    }
 }
