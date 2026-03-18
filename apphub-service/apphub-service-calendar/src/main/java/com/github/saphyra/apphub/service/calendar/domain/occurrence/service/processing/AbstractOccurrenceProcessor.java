@@ -68,9 +68,6 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
             .stream()
             .toList();
         log.debug("New occurrence dates: {}", datesOfOccurrences);
-        if (datesOfOccurrences.isEmpty()) {
-            throw new IllegalStateException("Cannot recreate occurrences for event " + event.getEventId() + " because no occurrence dates were generated.");
-        }
 
         // Delete occurrences that are not in the new range
         context.deleteOccurrences(occurrence -> shouldDelete(currentDate, occurrence, datesOfOccurrences));

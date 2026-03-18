@@ -142,22 +142,6 @@ class AbstractOccurrenceProcessorTest {
     }
 
     @Test
-    void recreateOccurrences_emptyDateList() {
-        given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(updateEventContext.getOccurrences()).willReturn(List.of());
-        given(updateEventContext.getEvent()).willReturn(event);
-        given(event.getRepetitionData()).willReturn(REPETITION_DATA);
-        given(repetitionTypeConditionSelector.get(RepetitionType.EVERY_X_DAYS, REPETITION_DATA)).willReturn(repetitionTypeCondition);
-        given(event.getStartDate()).willReturn(START_DATE);
-        given(eventToEndDateMapper.apply(event)).willReturn(END_DATE);
-        given(event.getRepeatForDays()).willReturn(REPEAT_FOR_DAYS);
-        given(repetitionTypeCondition.getOccurrences(START_DATE, END_DATE, REPEAT_FOR_DAYS, CURRENT_DATE)).willReturn(List.of());
-
-        assertThat(catchThrowable(() -> underTest.recreateOccurrences(updateEventContext)))
-            .isInstanceOf(IllegalStateException.class);
-    }
-
-    @Test
     void recreateOccurrences() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         List<Occurrence> existingOccurrences = List.of(existingDoneOccurrence, existingExpiredOccurrence, existingFutureOccurrence, existingOccurrenceNotOnDate, existingExpiredOccurrenceNotOnDate);
