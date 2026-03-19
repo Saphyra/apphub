@@ -9,7 +9,6 @@
     </parent>
 
     <artifactId>apphub-service</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <name>apphub-service</name>
     <packaging>pom</packaging>
 
@@ -76,12 +75,6 @@
         </dependency>
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-test-config</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-config-health</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -92,7 +85,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-test-rest_assured</artifactId>
+            <artifactId>apphub-lib-test-service</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>

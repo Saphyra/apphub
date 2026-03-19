@@ -12,9 +12,8 @@ import com.github.saphyra.apphub.service.skyxplore.data.friend.friendship.dao.Fr
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.skyxplore.data.friend.request.dao.FriendRequestDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
-import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
-import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
+import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +25,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Arrays;
@@ -41,7 +39,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = ApiTestConfiguration.class)
 public class SkyXploreDataEventControllerImplIt_deleteAccountEventTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String LOCALIZED_MESSAGE = "localized-message";

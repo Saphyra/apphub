@@ -9,6 +9,7 @@
         Do not throw error if no occurrences to create
 
 ===PLATFORM CHANGES===
+    Repackage apphub-test to apphub-lib-test
 
 ===TECHNICAL DEBTS===
     EliteBase

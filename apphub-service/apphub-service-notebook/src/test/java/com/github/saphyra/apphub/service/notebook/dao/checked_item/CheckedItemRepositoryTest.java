@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.checked_item;
 
-import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

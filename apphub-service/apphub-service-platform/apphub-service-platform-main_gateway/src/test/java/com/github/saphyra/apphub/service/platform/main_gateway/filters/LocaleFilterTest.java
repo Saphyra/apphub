@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.ApphubLocaleResolver;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

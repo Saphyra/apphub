@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrde
 import com.github.saphyra.apphub.service.platform.main_gateway.config.WhiteListedEndpointProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.AuthenticationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.UriUtils;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

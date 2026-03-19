@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFactionEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.minor_faction.MinorFactionRepository;
-import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

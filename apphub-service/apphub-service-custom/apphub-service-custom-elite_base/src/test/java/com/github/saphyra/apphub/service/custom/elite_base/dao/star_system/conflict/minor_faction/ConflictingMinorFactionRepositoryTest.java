@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict.minor_faction;
 
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict.minor_faction.ConflictingMinorFactionEntity;
-import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.conflict.minor_faction.ConflictingMinorFactionRepository;
-import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;

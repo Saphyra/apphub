@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConv
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authentication.authorization.AuthorizationService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.translation.ErrorResponseFactory;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
