@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.lib.performance_reporting;
 
-import com.github.saphyra.apphub.api.admin_panel.client.PerformanceReportingClient;
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportRequest;
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopicStatus;
+import com.github.saphyra.apphub.api.etc.admin_panel.client.PerformanceReportingClient;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportRequest;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopicStatus;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import org.junit.jupiter.api.BeforeEach;

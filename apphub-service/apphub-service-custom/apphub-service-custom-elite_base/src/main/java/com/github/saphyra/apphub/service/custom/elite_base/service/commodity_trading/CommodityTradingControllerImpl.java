@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.api.elite_base.server.CommodityTradingController;

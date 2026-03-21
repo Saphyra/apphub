@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.scheduler.schedulers;
 
-import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
+import com.github.saphyra.apphub.api.etc.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

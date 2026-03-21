@@ -10,6 +10,7 @@
 
 ===PLATFORM CHANGES===
     Repackage apphub-test to apphub-lib-test
+    Group services to etc/feature/platform groups
 
 ===TECHNICAL DEBTS===
     EliteBase

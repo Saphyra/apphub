@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
 import com.github.saphyra.apphub.service.custom.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.Allegiance;

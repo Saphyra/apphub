@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-admin_panel-client</artifactId>
+            <artifactId>apphub-api-etc-admin_panel-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

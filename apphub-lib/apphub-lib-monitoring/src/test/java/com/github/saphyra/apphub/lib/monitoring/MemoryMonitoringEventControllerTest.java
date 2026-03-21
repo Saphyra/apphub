@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
-import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
-import com.github.saphyra.apphub.api.admin_panel.model.model.MemoryStatusModel;
+import com.github.saphyra.apphub.api.etc.admin_panel.client.MonitoringClient;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.MemoryStatusModel;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

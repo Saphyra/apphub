@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.performance_reporting;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

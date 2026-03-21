@@ -107,8 +107,8 @@ services:
   group: 2
 - name: admin-panel
   port: 8089
-  location: "./apphub-service/apphub-service-admin_panel/target/application.jar"
-  moduleName: apphub-service-admin_panel
+  location: "./apphub-service/apphub-service-etc/apphub-service-etc-admin_panel/target/application.jar"
+  moduleName: apphub-service-etc-admin_panel
   group: 1
 - name: user
   port: 8085
@@ -177,8 +177,8 @@ services:
   optional: true
 - name: calendar
   port: 8097
-  location: "./apphub-service/apphub-service-calendar/target/application.jar"
-  moduleName: apphub-service-calendar
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-calendar/target/application.jar"
+  moduleName: apphub-service-feature-calendar
   group: 1
   optional: true
 - name: elite-base

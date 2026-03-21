@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.event_gateway;
 
-import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
+import com.github.saphyra.apphub.api.etc.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;

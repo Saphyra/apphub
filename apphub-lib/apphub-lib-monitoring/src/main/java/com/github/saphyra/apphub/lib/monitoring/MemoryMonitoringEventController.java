@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
-import com.github.saphyra.apphub.api.admin_panel.client.MonitoringClient;
+import com.github.saphyra.apphub.api.etc.admin_panel.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
 import lombok.Builder;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.MemoryStatusModel;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.MemoryStatusModel;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

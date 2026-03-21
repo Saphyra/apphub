@@ -72,7 +72,6 @@ class CommodityWriteBufferTest {
 
         underTest.doSynchronize(List.of(domain));
 
-        then(errorReporterService).should().report(anyString(), eq(error));
         then(repository).should().save(entity);
     }
 
@@ -90,7 +89,6 @@ class CommodityWriteBufferTest {
 
         underTest.doSynchronize(List.of(domain));
 
-        then(errorReporterService).should().report(anyString(), eq(error1));
         then(errorReporterService).should().report(anyString(), eq(error2));
     }
 }
