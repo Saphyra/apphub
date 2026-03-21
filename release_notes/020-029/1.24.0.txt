@@ -14,6 +14,7 @@
 ===TECHNICAL DEBTS===
     EliteBase
         Delete old commodity and loadoutChangeSets
+        Do not report "Failed saving Commodity batch", too much noise
     SkyXplore
         Do not delete GameItems not in the database
 

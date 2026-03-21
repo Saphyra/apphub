@@ -37,7 +37,6 @@ class CommodityWriteBuffer extends WriteBuffer<ItemDomainId, Commodity> {
         try {
             commodityRepository.saveAll(entities);
         } catch (Exception e) {
-            errorReporterService.report("Failed saving Commodity batch. Trying one by one", e);
             entities.forEach(entity -> {
                 try {
                     commodityRepository.save(entity);
