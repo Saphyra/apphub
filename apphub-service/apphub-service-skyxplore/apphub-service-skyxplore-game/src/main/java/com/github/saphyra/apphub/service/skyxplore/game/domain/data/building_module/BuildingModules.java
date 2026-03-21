@@ -49,4 +49,8 @@ public class BuildingModules extends Vector<BuildingModule> {
             .filter(buildingModule -> buildingModule.getBuildingModuleId().equals(buildingModuleId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(buildingModule -> buildingModule.setExisting(true));
+    }
 }

@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class StoredResourcesTest {
@@ -108,5 +109,14 @@ class StoredResourcesTest {
     @Test
     void findByContainerIdValidated_notFound() {
         ExceptionValidator.validateNotLoggedException(() -> underTest.findByContainerIdValidated(CONTAINER_ID_1), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    void setExisting(){
+        underTest.add(storedResource1);
+
+        underTest.setExisting();
+
+        then(storedResource1).should().setExisting(true);
     }
 }

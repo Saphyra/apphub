@@ -33,6 +33,7 @@ class ConstructionAreaFactoryTest {
             .returns(CONSTRUCTION_AREA_ID, ConstructionArea::getConstructionAreaId)
             .returns(LOCATION, ConstructionArea::getLocation)
             .returns(SURFACE_ID, ConstructionArea::getSurfaceId)
-            .returns(DATA_ID, ConstructionArea::getDataId);
+            .returns(DATA_ID, ConstructionArea::getDataId)
+            .returns(false, ConstructionArea::isExisting);
     }
 }

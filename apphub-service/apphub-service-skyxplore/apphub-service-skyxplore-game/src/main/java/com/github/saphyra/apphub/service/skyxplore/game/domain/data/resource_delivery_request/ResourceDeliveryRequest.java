@@ -13,4 +13,6 @@ import java.util.UUID;
 public class ResourceDeliveryRequest {
     private final UUID resourceDeliveryRequestId;
     private final UUID reservedStorageId;
+    @Builder.Default
+    private boolean existing = false;
 }

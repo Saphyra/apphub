@@ -22,4 +22,6 @@ public class Durability {
 
     @NonNull
     private Integer currentHitPoints;
+    @Builder.Default
+    private boolean existing = false;
 }

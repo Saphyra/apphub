@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ConstructionAreasTest {
@@ -49,5 +50,12 @@ class ConstructionAreasTest {
         given(constructionArea1.getConstructionAreaId()).willReturn(CONSTRUCTION_AREA_ID_2);
 
         ExceptionValidator.validateNotLoggedException(() -> new ConstructionAreas(constructionArea1).findByIdValidated(CONSTRUCTION_AREA_ID_1), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    void setExisting() {
+        new ConstructionAreas(constructionArea1).setExisting();
+
+        then(constructionArea1).should().setExisting(true);
     }
 }

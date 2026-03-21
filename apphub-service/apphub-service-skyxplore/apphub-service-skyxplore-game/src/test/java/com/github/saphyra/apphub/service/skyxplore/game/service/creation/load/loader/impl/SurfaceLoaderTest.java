@@ -73,5 +73,6 @@ class SurfaceLoaderTest {
         assertThat(result.getSurfaceId()).isEqualTo(SURFACE_ID);
         assertThat(result.getPlanetId()).isEqualTo(PLANET_ID);
         assertThat(result.getSurfaceType()).isEqualTo(SurfaceType.CONCRETE);
+        assertThat(result.isExisting()).isTrue();
     }
 }

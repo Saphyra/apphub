@@ -80,7 +80,7 @@ public class CancelDeconstructionFacade {
             .remove(deconstruction);
 
         game.getProgressDiff()
-            .delete(deconstructionId, GameItemType.DECONSTRUCTION);
+            .delete(deconstructionId, GameItemType.DECONSTRUCTION, deconstruction.isExisting());
         cancelDeconstructionOfConstructionAreaBuildingModules(game, deconstruction.getExternalReference());
     }
 
@@ -107,6 +107,6 @@ public class CancelDeconstructionFacade {
             .remove(deconstruction);
 
         game.getProgressDiff()
-            .delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION);
+            .delete(deconstruction.getDeconstructionId(), GameItemType.DECONSTRUCTION, deconstruction.isExisting());
     }
 }

@@ -67,6 +67,7 @@ class RestProcessFactoryTest {
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(CITIZEN_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
+        assertThat(result.isExisting()).isFalse();
     }
 
     @Test
@@ -86,5 +87,6 @@ class RestProcessFactoryTest {
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(CITIZEN_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.DONE);
+        assertThat(result.isExisting()).isTrue();
     }
 }

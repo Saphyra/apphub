@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ReservedStoragesTest {
@@ -68,5 +69,14 @@ class ReservedStoragesTest {
         underTest.addAll(List.of(reservedStorage1, reservedStorage2));
 
         assertThat(underTest.getByContainerId(CONTAINER_ID_1)).containsExactly(reservedStorage1);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(reservedStorage1);
+
+        underTest.setExisting();
+
+        then(reservedStorage1).should().setExisting(true);
     }
 }

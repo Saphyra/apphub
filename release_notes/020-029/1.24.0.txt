@@ -14,5 +14,7 @@
 ===TECHNICAL DEBTS===
     EliteBase
         Delete old commodity and loadoutChangeSets
+    SkyXplore
+        Do not delete GameItems not in the database
 
 ===ETC===

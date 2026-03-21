@@ -64,7 +64,7 @@ public class StoredResourceService {
 
         gameData.getStoredResources()
             .remove(base);
-        progressDiff.delete(base.getStoredResourceId(), GameItemType.STORED_RESOURCE);
+        progressDiff.delete(base.getStoredResourceId(), GameItemType.STORED_RESOURCE, base.isExisting());
 
         return storedResourceFactory.save(progressDiff, gameData, base.getLocation(), base.getDataId(), missingResourceAmount, base.getContainerId(), base.getContainerType());
     }
@@ -85,7 +85,7 @@ public class StoredResourceService {
             .forEach(storedResource -> {
                 gameData.getStoredResources()
                     .remove(storedResource);
-                progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE);
+                progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE, storedResource.isExisting());
             });
     }
 }

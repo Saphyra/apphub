@@ -41,6 +41,7 @@ public class SkillLoader extends AutoLoader<SkillModel, Skill> {
             .level(model.getLevel())
             .experience(model.getExperience())
             .nextLevel(model.getNextLevel())
+            .existing(true)
             .build();
     }
 }

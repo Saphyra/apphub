@@ -38,6 +38,7 @@ class ResourceDeliveryRequestLoader extends AutoLoader<ResourceDeliveryRequestMo
         return ResourceDeliveryRequest.builder()
             .resourceDeliveryRequestId(model.getId())
             .reservedStorageId(model.getReservedStorageId())
+            .existing(true)
             .build();
     }
 }

@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -80,6 +81,7 @@ class ProductionDispatcherProcessTest {
             .location(LOCATION)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
+            .existing(true)
             .build();
     }
 
@@ -155,14 +157,16 @@ class ProductionDispatcherProcessTest {
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(gameData.getProductionRequests()).willReturn(productionRequests);
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(productionRequests.findById(PRODUCTION_REQUEST_ID)).willReturn(Optional.of(productionRequest));
+        given(productionRequest.isExisting()).willReturn(true);
 
         underTest.cleanup();
 
         assertThat(underTest.getStatus()).isEqualTo(ProcessStatus.READY_TO_DELETE);
 
         then(process).should().cleanup();
-        then(productionRequests).should().remove(PRODUCTION_REQUEST_ID);
-        then(progressDiff).should().delete(PRODUCTION_REQUEST_ID, GameItemType.PRODUCTION_REQUEST);
+        then(productionRequests).should().remove(productionRequest);
+        then(progressDiff).should().delete(PRODUCTION_REQUEST_ID, GameItemType.PRODUCTION_REQUEST, true);
         then(progressDiff).should().save(underTest.toModel());
     }
 
@@ -173,7 +177,6 @@ class ProductionDispatcherProcessTest {
 
         given(uuidConverter.convertDomain(PRODUCTION_REQUEST_ID)).willReturn(PRODUCTION_REQUEST_ID_STRING);
 
-
         assertThat(underTest.toModel())
             .returns(PROCESS_ID, GameItem::getId)
             .returns(GAME_ID, GameItem::getGameId)
@@ -183,6 +186,5 @@ class ProductionDispatcherProcessTest {
             .returns(LOCATION, ProcessModel::getLocation)
             .returns(EXTERNAL_REFERENCE, ProcessModel::getExternalReference)
             .returns(PRODUCTION_REQUEST_ID_STRING, processModel -> processModel.getData().get(ProcessParamKeys.PRODUCTION_REQUEST_ID));
-
     }
 }

@@ -47,4 +47,17 @@ class ResourceDeliveryRequestsTest {
 
         assertThat(underTest.getByReservedStorageId(RESERVED_STORAGE_ID_1)).containsExactly(request1);
     }
+
+    @Test
+    void setExisting(){
+        ResourceDeliveryRequest request = ResourceDeliveryRequest.builder()
+            .resourceDeliveryRequestId(RESOURCE_DELIVERY_REQUEST_ID)
+            .existing(false)
+            .build();
+        underTest.add(request);
+
+        underTest.setExisting();
+
+        assertThat(request.isExisting()).isTrue();
+    }
 }

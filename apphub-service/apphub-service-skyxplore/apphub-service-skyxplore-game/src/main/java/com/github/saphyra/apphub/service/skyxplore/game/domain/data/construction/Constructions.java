@@ -26,4 +26,8 @@ public class Constructions extends Vector<Construction> {
             .findAny()
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Construction not found by constructionId " + constructionId));
     }
+
+    public void setExisting() {
+        forEach(construction -> construction.setExisting(true));
+    }
 }

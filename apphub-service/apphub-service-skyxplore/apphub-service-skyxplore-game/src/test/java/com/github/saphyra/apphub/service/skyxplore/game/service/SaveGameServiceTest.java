@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
+import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.event_loop.EventLoop;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -60,6 +61,9 @@ class SaveGameServiceTest {
     @Mock
     private ExecutionResult<Void> executionResult;
 
+    @Mock
+    private GameData gameData;
+
     @Test
     void notHost() {
         given(gameDao.findByUserIdValidated(USER_ID)).willReturn(game);
@@ -79,6 +83,7 @@ class SaveGameServiceTest {
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(game.getEventLoop()).willReturn(eventLoop);
         given(eventLoop.processWithWait(any())).willReturn(executionResult);
+        given(game.getData()).willReturn(gameData);
 
         underTest.saveGame(USER_ID);
 
@@ -91,5 +96,6 @@ class SaveGameServiceTest {
         then(progressDiff).should().save(gameModel);
         then(progressDiff).should().process(gameDataProxy);
         then(executionResult).should().getOrThrow();
+        then(gameData).should().setExisting();
     }
 }

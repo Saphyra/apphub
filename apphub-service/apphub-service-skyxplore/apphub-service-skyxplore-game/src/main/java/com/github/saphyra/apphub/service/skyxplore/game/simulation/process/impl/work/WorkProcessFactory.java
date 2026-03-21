@@ -39,7 +39,8 @@ public class WorkProcessFactory implements ProcessFactory {
             model.getStatus(),
             SkillType.valueOf(model.getData().get(ProcessParamKeys.SKILL_TYPE)),
             Integer.parseInt(model.getData().get(ProcessParamKeys.REQUIRED_WORK_POINTS)),
-            Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS))
+            Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS)),
+            true
         );
     }
 
@@ -58,7 +59,8 @@ public class WorkProcessFactory implements ProcessFactory {
                 ProcessStatus.CREATED,
                 skillType,
                 workPoints,
-                0
+                0,
+                false
             );
 
             game.getData()
@@ -79,7 +81,8 @@ public class WorkProcessFactory implements ProcessFactory {
         ProcessStatus status,
         SkillType skillType,
         int requiredWorkPoints,
-        int completedWorkPoints
+        int completedWorkPoints,
+        boolean existing
     ) {
         return WorkProcess.builder()
             .processId(processId)
@@ -91,6 +94,7 @@ public class WorkProcessFactory implements ProcessFactory {
             .applicationContextProxy(applicationContextProxy)
             .completedWorkPoints(completedWorkPoints)
             .game(game)
+            .existing(existing)
             .build();
     }
 }

@@ -52,6 +52,6 @@ class ConstructBuildingModuleProcessHelper {
         gameData.getConstructions()
             .remove(construction);
 
-        progressDiff.delete(constructionId, GameItemType.CONSTRUCTION);
+        progressDiff.delete(constructionId, GameItemType.CONSTRUCTION, construction.isExisting());
     }
 }

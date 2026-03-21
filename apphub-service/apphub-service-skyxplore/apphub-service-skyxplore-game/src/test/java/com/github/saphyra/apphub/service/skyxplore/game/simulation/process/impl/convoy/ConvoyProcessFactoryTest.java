@@ -78,7 +78,8 @@ class ConvoyProcessFactoryTest {
             .returns(PROCESS_ID, ConvoyProcess::getProcessId)
             .returns(ProcessStatus.IN_PROGRESS, ConvoyProcess::getStatus)
             .returns(EXTERNAL_REFERENCE, ConvoyProcess::getExternalReference)
-            .returns(ProcessType.CONVOY, ConvoyProcess::getType);
+            .returns(ProcessType.CONVOY, ConvoyProcess::getType)
+            .returns(true, ConvoyProcess::isExisting);
     }
 
     @Test
@@ -95,7 +96,8 @@ class ConvoyProcessFactoryTest {
             .returns(PROCESS_ID, ConvoyProcess::getProcessId)
             .returns(ProcessStatus.CREATED, ConvoyProcess::getStatus)
             .returns(EXTERNAL_REFERENCE, ConvoyProcess::getExternalReference)
-            .returns(ProcessType.CONVOY, ConvoyProcess::getType);
+            .returns(ProcessType.CONVOY, ConvoyProcess::getType)
+            .returns(false, ConvoyProcess::isExisting);
 
         then(processes).should().add(result);
         then(progressDiff).should().save(result.toModel());

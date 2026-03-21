@@ -100,11 +100,12 @@ class ConstructConstructionAreaProcessHelperTest {
     void finishConstruction() {
         given(gameData.getConstructions()).willReturn(constructions);
         given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(construction);
+        given(construction.isExisting()).willReturn(true);
 
         underTest.finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
 
         then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
         then(constructions).should().remove(construction);
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
     }
 }

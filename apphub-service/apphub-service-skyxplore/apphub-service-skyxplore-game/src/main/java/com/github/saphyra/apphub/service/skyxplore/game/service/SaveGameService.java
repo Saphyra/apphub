@@ -42,5 +42,8 @@ public class SaveGameService {
                 progressDiff.process(gameDataProxy);
             })
             .getOrThrow();
+
+        game.getData()
+            .setExisting();
     }
 }

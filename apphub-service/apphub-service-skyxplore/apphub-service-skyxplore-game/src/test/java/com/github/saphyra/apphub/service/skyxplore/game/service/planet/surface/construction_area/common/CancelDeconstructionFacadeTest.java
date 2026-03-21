@@ -129,15 +129,17 @@ class CancelDeconstructionFacadeTest {
         given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.of(buildingModuleDeconstruction));
         given(buildingModuleDeconstruction.getDeconstructionId()).willReturn(BUILDING_MODULE_DECONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(BUILDING_MODULE_DECONSTRUCTION_ID, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(buildingModuleProcess);
+        given(buildingModuleDeconstruction.isExisting()).willReturn(true);
+        given(constructionAreaDeconstruction.isExisting()).willReturn(true);
 
         underTest.cancelDeconstructionOfConstructionArea(USER_ID, CONSTRUCTION_AREA_DECONSTRUCTION_ID);
 
         then(constructionAreaProcess).should().cleanup();
         then(deconstructions).should().remove(constructionAreaDeconstruction);
-        then(progressDiff).should().delete(CONSTRUCTION_AREA_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_AREA_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
         then(buildingModuleProcess).should().cleanup();
         then(deconstructions).should().remove(buildingModuleDeconstruction);
-        then(progressDiff).should().delete(BUILDING_MODULE_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should().delete(BUILDING_MODULE_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
     }
 
     @Test
@@ -178,12 +180,13 @@ class CancelDeconstructionFacadeTest {
         given(processes.findByExternalReferenceAndTypeValidated(BUILDING_MODULE_DECONSTRUCTION_ID, ProcessType.DECONSTRUCT_BUILDING_MODULE)).willReturn(buildingModuleProcess);
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(deconstructions.findByExternalReference(CONSTRUCTION_AREA_ID)).willReturn(Optional.empty());
+        given(buildingModuleDeconstruction.isExisting()).willReturn(true);
 
         underTest.cancelDeconstructionOfBuildingModule(USER_ID, BUILDING_MODULE_DECONSTRUCTION_ID);
 
         then(buildingModuleProcess).should().cleanup();
         then(deconstructions).should().remove(buildingModuleDeconstruction);
-        then(progressDiff).should().delete(BUILDING_MODULE_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should().delete(BUILDING_MODULE_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
     }
 
     @Test
@@ -216,14 +219,16 @@ class CancelDeconstructionFacadeTest {
         given(buildingModules.getByConstructionAreaId(CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModule));
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
         given(deconstructions.findByExternalReference(BUILDING_MODULE_ID)).willReturn(Optional.of(buildingModuleDeconstruction));
+        given(buildingModuleDeconstruction.isExisting()).willReturn(true);
+        given(constructionAreaDeconstruction.isExisting()).willReturn(true);
 
         underTest.cancelDeconstructionOfBuildingModule(USER_ID, BUILDING_MODULE_DECONSTRUCTION_ID);
 
         then(buildingModuleProcess).should(times(2)).cleanup();
         then(deconstructions).should(times(2)).remove(buildingModuleDeconstruction);
-        then(progressDiff).should(times(2)).delete(BUILDING_MODULE_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should(times(2)).delete(BUILDING_MODULE_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
         then(constructionAreaProcess).should().cleanup();
         then(deconstructions).should().remove(constructionAreaDeconstruction);
-        then(progressDiff).should().delete(CONSTRUCTION_AREA_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_AREA_DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
     }
 }

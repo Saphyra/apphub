@@ -30,4 +30,8 @@ public class Convoys extends Vector<Convoy> {
     public void remove(UUID convoyId) {
         removeIf(convoy -> convoy.getConvoyId().equals(convoyId));
     }
+
+    public void setExisting() {
+        forEach(convoy ->  convoy.setExisting(true));
+    }
 }

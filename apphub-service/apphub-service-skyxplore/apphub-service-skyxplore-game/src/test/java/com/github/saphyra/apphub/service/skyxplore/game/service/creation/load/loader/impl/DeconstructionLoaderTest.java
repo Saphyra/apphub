@@ -76,5 +76,6 @@ class DeconstructionLoaderTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
+        assertThat(result.isExisting()).isTrue();
     }
 }

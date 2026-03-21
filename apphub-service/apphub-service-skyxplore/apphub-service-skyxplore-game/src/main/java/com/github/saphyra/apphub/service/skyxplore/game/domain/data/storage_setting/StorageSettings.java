@@ -34,4 +34,8 @@ public class StorageSettings extends Vector<StorageSetting> {
             .filter(storageSetting -> storageSetting.getDataId().equals(dataId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(storageSetting -> storageSetting.setExisting(true));
+    }
 }

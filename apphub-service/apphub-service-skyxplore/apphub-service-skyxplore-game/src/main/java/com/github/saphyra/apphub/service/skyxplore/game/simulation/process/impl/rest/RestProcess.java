@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
 import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
@@ -14,11 +14,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
@@ -33,6 +29,11 @@ public class RestProcess implements Process {
     @Getter
     @NonNull
     private final UUID processId;
+
+    @Getter
+    @Setter
+    @Builder.Default
+    private boolean existing = false;
 
     @Getter
     @NonNull

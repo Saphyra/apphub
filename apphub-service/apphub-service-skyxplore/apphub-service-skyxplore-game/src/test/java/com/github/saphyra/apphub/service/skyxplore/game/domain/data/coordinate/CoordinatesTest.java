@@ -15,6 +15,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class CoordinatesTest {
@@ -62,5 +63,14 @@ class CoordinatesTest {
 
         assertThat(underTest.getByReferenceId(REFERENCE_ID_1)).containsExactly(referredCoordinate1);
 
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(referredCoordinate1);
+
+        underTest.setExisting();
+
+        then(referredCoordinate1).should().setExisting(true);
     }
 }

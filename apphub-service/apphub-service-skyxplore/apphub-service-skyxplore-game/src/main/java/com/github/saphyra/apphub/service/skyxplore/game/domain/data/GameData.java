@@ -90,4 +90,27 @@ public class GameData {
     private final BuildingModuleAllocations buildingModuleAllocations = new BuildingModuleAllocations();
     @Builder.Default
     private final CitizenAllocations citizenAllocations = new CitizenAllocations();
+
+    public void setExisting() {
+        coordinates.setExisting();
+        surfaces.setExisting();
+        constructionAreas.setExisting();
+        buildingModules.setExisting();
+        constructions.setExisting();
+        priorities.setExisting();
+        deconstructions.setExisting();
+        reservedStorages.setExisting();
+        storageSettings.setExisting();
+        storedResources.setExisting();
+        productionRequests.setExisting();
+        productionOrders.setExisting();
+        resourceDeliveryRequests.setExisting();
+        convoys.setExisting();
+        citizens.setExisting();
+        skills.setExisting();
+        durabilities.setExisting();
+        processes.setExisting();
+        buildingModuleAllocations.setExisting();
+        citizenAllocations.setExisting();
+    }
 }

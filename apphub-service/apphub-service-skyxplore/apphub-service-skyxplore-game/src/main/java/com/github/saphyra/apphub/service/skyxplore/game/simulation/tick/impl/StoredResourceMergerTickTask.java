@@ -51,7 +51,7 @@ class StoredResourceMergerTickTask implements TickTask {
             game.getData()
                 .getStoredResources()
                 .remove(toBeMerged);
-            progressDiff.delete(toBeMerged.getStoredResourceId(), GameItemType.STORED_RESOURCE);
+            progressDiff.delete(toBeMerged.getStoredResourceId(), GameItemType.STORED_RESOURCE, toBeMerged.isExisting());
             log.debug("{} merged into {}", toBeMerged, main);
         }
 

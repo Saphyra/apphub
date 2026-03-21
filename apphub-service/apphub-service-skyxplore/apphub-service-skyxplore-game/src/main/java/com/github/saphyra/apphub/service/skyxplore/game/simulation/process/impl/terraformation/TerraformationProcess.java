@@ -12,11 +12,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.priority.PriorityType;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
@@ -31,6 +27,11 @@ public class TerraformationProcess implements Process {
     @Getter
     @NonNull
     private final UUID processId;
+
+    @Getter
+    @Setter
+    @Builder.Default
+    private boolean existing = false;
 
     @Getter
     @NonNull

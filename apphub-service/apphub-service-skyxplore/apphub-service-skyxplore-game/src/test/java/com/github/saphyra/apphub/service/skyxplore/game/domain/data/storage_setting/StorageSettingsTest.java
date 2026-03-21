@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class StorageSettingsTest {
@@ -79,5 +80,14 @@ class StorageSettingsTest {
         underTest.addAll(List.of(storageSetting1, storageSetting2));
 
         assertThat(underTest.findByLocationAndDataId(LOCATION, DATA_ID)).isEmpty();
+    }
+
+    @Test
+    void setExisting(){
+        underTest.add(storageSetting1);
+
+        underTest.setExisting();
+
+        then(storageSetting1).should().setExisting(true);
     }
 }

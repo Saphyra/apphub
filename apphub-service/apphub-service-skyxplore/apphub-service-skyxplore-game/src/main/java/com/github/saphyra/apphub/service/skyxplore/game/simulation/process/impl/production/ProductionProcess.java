@@ -13,11 +13,7 @@ import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.Process;
 import com.github.saphyra.apphub.service.skyxplore.game.simulation.process.ProcessParamKeys;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.UUID;
@@ -32,6 +28,11 @@ public class ProductionProcess implements Process {
     @Getter
     @NonNull
     private final UUID processId;
+
+    @Getter
+    @Setter
+    @Builder.Default
+    private boolean existing = false;
 
     @Getter
     @NonNull
@@ -122,7 +123,7 @@ public class ProductionProcess implements Process {
             .ifPresent(buildingModuleAllocation -> {
                 gameData.getBuildingModuleAllocations()
                     .remove(buildingModuleAllocation);
-                progressDiff.delete(buildingModuleAllocation.getBuildingModuleAllocationId(), GameItemType.BUILDING_MODULE_ALLOCATION);
+                progressDiff.delete(buildingModuleAllocation.getBuildingModuleAllocationId(), GameItemType.BUILDING_MODULE_ALLOCATION, buildingModuleAllocation.isExisting());
                 log.info("Allocation for buildingModule {} is deleted.", buildingModuleAllocation.getBuildingModuleId());
             });
     }

@@ -39,6 +39,7 @@ class ConvoyLoader extends AutoLoader<ConvoyModel, Convoy> {
             .convoyId(model.getId())
             .resourceDeliveryRequestId(model.getResourceDeliveryRequestId())
             .capacity(model.getCapacity())
+            .existing(true)
             .build();
     }
 }

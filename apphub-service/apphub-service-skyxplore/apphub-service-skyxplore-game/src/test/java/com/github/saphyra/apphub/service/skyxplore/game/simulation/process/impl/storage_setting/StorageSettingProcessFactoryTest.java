@@ -98,6 +98,7 @@ class StorageSettingProcessFactoryTest {
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.DONE);
         assertThat(result.getExternalReference()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getType()).isEqualTo(ProcessType.STORAGE_SETTING);
+        assertThat(result.isExisting()).isTrue();
     }
 
     @Test
@@ -119,6 +120,7 @@ class StorageSettingProcessFactoryTest {
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
         assertThat(result.getExternalReference()).isEqualTo(STORAGE_SETTING_ID);
         assertThat(result.getType()).isEqualTo(ProcessType.STORAGE_SETTING);
+        assertThat(result.isExisting()).isFalse();
 
         then(processes).should().add(result);
         then(progressDiff).should().save(result.toModel());

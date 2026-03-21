@@ -23,6 +23,8 @@ public class Citizen {
 
     private Integer morale;
     private Integer satiety;
+    @Builder.Default
+    private boolean existing = false;
 
     public void reduceMorale(int morale) {
         this.morale -= morale;

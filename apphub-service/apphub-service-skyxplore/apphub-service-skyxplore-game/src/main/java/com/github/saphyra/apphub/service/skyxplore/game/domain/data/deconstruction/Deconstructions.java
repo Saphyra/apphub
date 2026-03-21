@@ -38,4 +38,8 @@ public class Deconstructions extends Vector<Deconstruction> {
             .filter(deconstruction -> deconstruction.getLocation().equals(location))
             .collect(Collectors.toList());
     }
+
+    public void setExisting() {
+        forEach(deconstruction -> deconstruction.setExisting(true));
+    }
 }

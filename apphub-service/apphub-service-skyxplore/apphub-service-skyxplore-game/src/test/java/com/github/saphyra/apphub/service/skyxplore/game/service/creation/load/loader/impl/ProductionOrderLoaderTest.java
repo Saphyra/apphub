@@ -71,6 +71,7 @@ class ProductionOrderLoaderTest {
             .returns(CONSTRUCTION_AREA_ID, ProductionOrder::getConstructionAreaId)
             .returns(RESOURCE_DATA_ID, ProductionOrder::getResourceDataId)
             .returns(REQUESTED_AMOUNT, ProductionOrder::getRequestedAmount)
-            .returns(STARTED_AMOUNT, ProductionOrder::getStartedAmount);
+            .returns(STARTED_AMOUNT, ProductionOrder::getStartedAmount)
+            .returns(true, ProductionOrder::isExisting);
     }
 }

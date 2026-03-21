@@ -64,4 +64,8 @@ public class Processes extends Vector<Process> {
             }
         }
     }
+
+    public void setExisting() {
+        forEach(process -> process.setExisting(true));
+    }
 }

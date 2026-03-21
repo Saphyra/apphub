@@ -85,5 +85,6 @@ class StoredResourceLoaderTest {
         assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
         assertThat(result.getContainerType()).isEqualTo(ContainerType.SURFACE);
         assertThat(result.getAllocatedBy()).isEqualTo(ALLOCATED_BY);
+        assertThat(result.isExisting()).isTrue();
     }
 }

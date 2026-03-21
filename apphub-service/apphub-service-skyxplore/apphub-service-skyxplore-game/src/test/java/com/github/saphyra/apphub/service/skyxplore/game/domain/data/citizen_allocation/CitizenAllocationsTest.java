@@ -13,6 +13,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class CitizenAllocationsTest {
@@ -65,5 +66,14 @@ class CitizenAllocationsTest {
         Throwable ex = catchThrowable(() -> underTest.findByCitizenIdValidated(CITIZEN_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(citizenAllocation1);
+
+        underTest.setExisting();
+
+        then(citizenAllocation1).should().setExisting(true);
     }
 }

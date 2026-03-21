@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class CitizensTest {
@@ -56,5 +57,14 @@ class CitizensTest {
         underTest.addAll(List.of(citizen1, citizen2));
 
         assertThat(underTest.getByLocation(LOCATION)).containsExactly(citizen1);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(citizen1);
+
+        underTest.setExisting();
+
+        then(citizen1).should().setExisting(true);
     }
 }

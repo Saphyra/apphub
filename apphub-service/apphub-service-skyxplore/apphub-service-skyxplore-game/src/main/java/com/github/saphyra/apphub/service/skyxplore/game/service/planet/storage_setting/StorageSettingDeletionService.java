@@ -48,7 +48,7 @@ public class StorageSettingDeletionService {
                         .getStorageSettings()
                         .remove(storageSetting);
                     game.getProgressDiff()
-                        .delete(storageSettingId, GameItemType.STORAGE_SETTING);
+                        .delete(storageSettingId, GameItemType.STORAGE_SETTING, storageSetting.isExisting());
 
                     return storageSettingsResponseQueryService.getStorageSettings(userId, storageSetting.getLocation());
                 })

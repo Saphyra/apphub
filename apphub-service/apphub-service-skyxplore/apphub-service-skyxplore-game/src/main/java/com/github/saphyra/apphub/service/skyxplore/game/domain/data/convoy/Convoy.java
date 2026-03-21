@@ -14,4 +14,6 @@ public class Convoy {
     private final UUID convoyId;
     private final UUID resourceDeliveryRequestId;
     private int capacity;
+    @Builder.Default
+    private boolean existing = false;
 }

@@ -79,7 +79,8 @@ class ProductionDispatcherProcessFactoryTest {
             .returns(PROCESS_ID, ProductionDispatcherProcess::getProcessId)
             .returns(ProcessType.PRODUCTION_DISPATCHER, ProductionDispatcherProcess::getType)
             .returns(ProcessStatus.IN_PROGRESS, ProductionDispatcherProcess::getStatus)
-            .returns(EXTERNAL_REFERENCE, ProductionDispatcherProcess::getExternalReference);
+            .returns(EXTERNAL_REFERENCE, ProductionDispatcherProcess::getExternalReference)
+            .returns(true, ProductionDispatcherProcess::isExisting);
     }
 
     @Test
@@ -99,6 +100,7 @@ class ProductionDispatcherProcessFactoryTest {
             .returns(PROCESS_ID, ProductionDispatcherProcess::getProcessId)
             .returns(ProcessType.PRODUCTION_DISPATCHER, ProductionDispatcherProcess::getType)
             .returns(ProcessStatus.CREATED, ProductionDispatcherProcess::getStatus)
-            .returns(EXTERNAL_REFERENCE, ProductionDispatcherProcess::getExternalReference);
+            .returns(EXTERNAL_REFERENCE, ProductionDispatcherProcess::getExternalReference)
+            .returns(false, ProductionDispatcherProcess::isExisting);
     }
 }

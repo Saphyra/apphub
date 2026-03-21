@@ -65,6 +65,7 @@ class ProductionOrderFactoryTest {
             .returns(PRODUCTION_REQUEST_ID, ProductionOrder::getProductionRequestId)
             .returns(CONSTRUCTION_AREA_ID, ProductionOrder::getConstructionAreaId)
             .returns(RESOURCE_DATA_ID, ProductionOrder::getResourceDataId)
-            .returns(REQUESTED_AMOUNT, ProductionOrder::getRequestedAmount);
+            .returns(REQUESTED_AMOUNT, ProductionOrder::getRequestedAmount)
+            .returns(false, ProductionOrder::isExisting);
     }
 }

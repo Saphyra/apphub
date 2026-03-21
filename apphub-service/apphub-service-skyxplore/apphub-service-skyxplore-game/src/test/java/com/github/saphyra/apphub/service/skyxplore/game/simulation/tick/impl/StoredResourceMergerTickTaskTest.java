@@ -93,11 +93,12 @@ class StoredResourceMergerTickTaskTest {
         given(storedResource2.getStoredResourceId()).willReturn(STORED_RESOURCE_ID);
 
         given(storedResourceConverter.toModel(GAME_ID, storedResource1)).willReturn(storedResourceModel);
+        given(storedResource2.isExisting()).willReturn(true);
 
         underTest.process(game);
 
         then(storedResource1).should().increaseAmount(AMOUNT_2);
-        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE, true);
         then(progressDiff).should().save(storedResourceModel);
 
         assertThat(storedResources)

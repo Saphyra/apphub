@@ -76,5 +76,6 @@ class PriorityLoaderTest {
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getType()).isEqualTo(PriorityType.CONSTRUCTION);
         assertThat(result.getValue()).isEqualTo(VALUE);
+        assertThat(result.isExisting()).isTrue();
     }
 }

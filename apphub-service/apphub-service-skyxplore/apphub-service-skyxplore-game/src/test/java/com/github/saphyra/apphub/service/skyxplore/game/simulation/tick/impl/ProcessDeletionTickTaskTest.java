@@ -55,11 +55,12 @@ class ProcessDeletionTickTaskTest {
         given(readyToDeleteProcess.getStatus()).willReturn(ProcessStatus.READY_TO_DELETE);
         given(readyToDeleteProcess.getProcessId()).willReturn(PROCESS_ID);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(readyToDeleteProcess.isExisting()).willReturn(true);
 
         underTest.process(game);
 
         verify(readyToDeleteProcess).cleanup();
-        verify(progressDiff).delete(PROCESS_ID, GameItemType.PROCESS);
+        verify(progressDiff).delete(PROCESS_ID, GameItemType.PROCESS, true);
         assertThat(processes).containsExactly(otherProcess);
     }
 }

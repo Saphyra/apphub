@@ -67,4 +67,17 @@ class ProductionOrdersTest {
     void findByIdValidated_notFound() {
         ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(PRODUCTION_ORDER_ID), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
+
+    @Test
+    void setExisting() {
+        ProductionOrder productionOrder = ProductionOrder.builder()
+            .productionOrderId(PRODUCTION_ORDER_ID)
+            .existing(false)
+            .build();
+        underTest.add(productionOrder);
+
+        underTest.setExisting();
+
+        assertThat(productionOrder.isExisting()).isTrue();
+    }
 }

@@ -1,13 +1,9 @@
-package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module_allocation;
+package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation;
 
 import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocation;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationConverter;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocationFactory;
-import com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation.CitizenAllocations;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -59,6 +55,7 @@ class CitizenAllocationFactoryTest {
         assertThat(result.getCitizenAllocationId()).isEqualTo(CITIZEN_ALLOCATION_ID);
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
+        assertThat(result.isExisting()).isFalse();
     }
 
     @Test
@@ -76,5 +73,6 @@ class CitizenAllocationFactoryTest {
         assertThat(result.getCitizenAllocationId()).isEqualTo(CITIZEN_ALLOCATION_ID);
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
+        assertThat(result.isExisting()).isFalse();
     }
 }

@@ -13,4 +13,6 @@ public class CitizenAllocation {
     private final UUID citizenAllocationId;
     private final UUID citizenId;
     private final UUID processId;
+    @Builder.Default
+    private boolean existing = false;
 }

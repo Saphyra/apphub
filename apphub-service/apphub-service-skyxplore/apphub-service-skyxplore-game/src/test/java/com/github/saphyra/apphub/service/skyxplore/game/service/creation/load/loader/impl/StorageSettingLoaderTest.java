@@ -79,5 +79,6 @@ class StorageSettingLoaderTest {
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
+        assertThat(result.isExisting()).isTrue();
     }
 }

@@ -82,5 +82,6 @@ class SkillLoaderTest {
         assertThat(result.getLevel()).isEqualTo(LEVEL);
         assertThat(result.getExperience()).isEqualTo(EXPERIENCE);
         assertThat(result.getNextLevel()).isEqualTo(NEXT_LEVEL);
+        assertThat(result.isExisting()).isTrue();
     }
 }

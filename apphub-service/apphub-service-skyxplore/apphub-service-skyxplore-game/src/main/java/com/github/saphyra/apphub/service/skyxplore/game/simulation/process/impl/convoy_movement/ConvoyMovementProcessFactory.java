@@ -38,6 +38,7 @@ public class ConvoyMovementProcessFactory implements ProcessFactory {
             .completedWorkPoints(Integer.parseInt(model.getData().get(ProcessParamKeys.COMPLETED_WORK_POINTS)))
             .externalReference(model.getExternalReference())
             .location(model.getLocation())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();
@@ -52,6 +53,7 @@ public class ConvoyMovementProcessFactory implements ProcessFactory {
             .completedWorkPoints(0)
             .externalReference(externalReference)
             .location(location)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

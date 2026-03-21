@@ -59,6 +59,7 @@ class ReferredCoordinateFactoryTest {
         assertThat(result.getReferredCoordinateId()).isEqualTo(REFERRED_COORDINATE_ID);
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getCoordinate()).isEqualTo(coordinate);
+        assertThat(result.isExisting()).isFalse();
     }
 
     @Test
@@ -74,6 +75,7 @@ class ReferredCoordinateFactoryTest {
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getCoordinate()).isEqualTo(coordinate);
         assertThat(result.getOrder()).isEqualTo(ORDER);
+        assertThat(result.isExisting()).isFalse();
 
         then(coordinates).should().add(result);
         then(progressDiff).should().save(model);

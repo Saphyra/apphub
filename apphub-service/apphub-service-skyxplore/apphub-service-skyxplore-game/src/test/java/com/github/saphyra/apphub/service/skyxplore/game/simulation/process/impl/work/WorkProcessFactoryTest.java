@@ -87,7 +87,8 @@ class WorkProcessFactoryTest {
             .returns(PROCESS_ID, WorkProcess::getProcessId)
             .returns(EXTERNAL_REFERENCE, WorkProcess::getExternalReference)
             .returns(ProcessStatus.IN_PROGRESS, WorkProcess::getStatus)
-            .returns(ProcessType.WORK, WorkProcess::getType);
+            .returns(ProcessType.WORK, WorkProcess::getType)
+            .returns(true,  WorkProcess::isExisting);
     }
 
     @Test
@@ -108,7 +109,8 @@ class WorkProcessFactoryTest {
             .returns(PROCESS_ID, WorkProcess::getProcessId)
             .returns(EXTERNAL_REFERENCE, WorkProcess::getExternalReference)
             .returns(ProcessStatus.CREATED, WorkProcess::getStatus)
-            .returns(ProcessType.WORK, WorkProcess::getType);
+            .returns(ProcessType.WORK, WorkProcess::getType)
+            .returns(false,  WorkProcess::isExisting);
 
         then(progressDiff).should().save(processCaptor.getValue().toModel());
     }

@@ -1,13 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
 public class BuildingModule {
@@ -15,4 +12,6 @@ public class BuildingModule {
     private final UUID location;
     private final UUID constructionAreaId;
     private final String dataId;
+    @Builder.Default
+    private boolean existing = false;
 }

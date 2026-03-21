@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class DeconstructionsTest {
@@ -77,5 +78,14 @@ class DeconstructionsTest {
         underTest.addAll(List.of(deconstruction1, deconstruction2));
 
         assertThat(underTest.getByLocation(LOCATION)).containsExactly(deconstruction1);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(deconstruction1);
+
+        underTest.setExisting();
+
+        then(deconstruction1).should().setExisting(true);
     }
 }

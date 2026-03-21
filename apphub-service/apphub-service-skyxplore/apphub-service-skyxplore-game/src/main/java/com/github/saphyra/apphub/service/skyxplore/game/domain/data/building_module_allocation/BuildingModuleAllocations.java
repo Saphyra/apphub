@@ -24,4 +24,8 @@ public class BuildingModuleAllocations extends Vector<BuildingModuleAllocation> 
             .filter(buildingModuleAllocation -> buildingModuleAllocation.getBuildingModuleId().equals(buildingModuleId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(buildingModuleAllocation -> buildingModuleAllocation.setExisting(true));
+    }
 }

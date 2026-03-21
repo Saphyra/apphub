@@ -61,7 +61,8 @@ class ConstructConstructionAreaProcessFactoryTest {
         assertThat(underTest.createFromModel(game, model))
             .returns(PROCESS_ID, ConstructConstructionAreaProcess::getProcessId)
             .returns(CONSTRUCTION_ID, ConstructConstructionAreaProcess::getExternalReference)
-            .returns(ProcessStatus.DONE, ConstructConstructionAreaProcess::getStatus);
+            .returns(ProcessStatus.DONE, ConstructConstructionAreaProcess::getStatus)
+            .returns(true, ConstructConstructionAreaProcess::isExisting);
     }
 
     @Test
@@ -73,6 +74,7 @@ class ConstructConstructionAreaProcessFactoryTest {
         assertThat(underTest.create(game, construction))
             .returns(PROCESS_ID, ConstructConstructionAreaProcess::getProcessId)
             .returns(CONSTRUCTION_ID, ConstructConstructionAreaProcess::getExternalReference)
-            .returns(ProcessStatus.CREATED, ConstructConstructionAreaProcess::getStatus);
+            .returns(ProcessStatus.CREATED, ConstructConstructionAreaProcess::getStatus)
+            .returns(false, ConstructConstructionAreaProcess::isExisting);
     }
 }

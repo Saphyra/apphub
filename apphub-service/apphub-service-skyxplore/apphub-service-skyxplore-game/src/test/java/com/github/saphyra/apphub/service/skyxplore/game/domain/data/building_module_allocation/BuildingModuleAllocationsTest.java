@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class BuildingModuleAllocationsTest {
@@ -50,5 +51,14 @@ class BuildingModuleAllocationsTest {
         underTest.addAll(List.of(buildingModuleAllocation1, buildingModuleAllocation2));
 
         assertThat(underTest.getByBuildingModuleId(BUILDING_ID)).containsExactly(buildingModuleAllocation1);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(buildingModuleAllocation1);
+
+        underTest.setExisting();
+
+        then(buildingModuleAllocation1).should().setExisting(true);
     }
 }

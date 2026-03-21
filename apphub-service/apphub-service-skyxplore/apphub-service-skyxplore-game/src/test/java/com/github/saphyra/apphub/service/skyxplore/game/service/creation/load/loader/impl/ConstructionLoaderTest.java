@@ -82,5 +82,6 @@ class ConstructionLoaderTest {
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getData()).isEqualTo(DATA);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
+        assertThat(result.isExisting()).isTrue();
     }
 }

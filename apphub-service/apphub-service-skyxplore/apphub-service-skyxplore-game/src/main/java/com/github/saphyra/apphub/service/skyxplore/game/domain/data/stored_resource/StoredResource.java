@@ -32,6 +32,9 @@ public class StoredResource {
     @NonNull
     private Integer amount;
 
+    @Builder.Default
+    private boolean existing = false;
+
     public void decreaseAmount(int amount) {
         this.amount -= amount;
     }

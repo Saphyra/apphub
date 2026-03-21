@@ -1,13 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
 public class ConstructionArea {
@@ -15,4 +12,6 @@ public class ConstructionArea {
     private final UUID location;
     private final UUID surfaceId;
     private final String dataId;
+    @Builder.Default
+    private boolean existing = false;
 }

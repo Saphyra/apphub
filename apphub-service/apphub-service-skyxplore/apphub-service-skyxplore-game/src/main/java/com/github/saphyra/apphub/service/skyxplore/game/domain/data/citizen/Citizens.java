@@ -22,4 +22,8 @@ public class Citizens extends Vector<Citizen> {
             .filter(citizen -> citizen.getLocation().equals(location))
             .collect(Collectors.toList());
     }
+
+    public void setExisting() {
+        forEach(citizen -> citizen.setExisting(true));
+    }
 }

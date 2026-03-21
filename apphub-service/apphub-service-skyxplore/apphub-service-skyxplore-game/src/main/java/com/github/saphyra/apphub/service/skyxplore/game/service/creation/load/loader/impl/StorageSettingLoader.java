@@ -39,6 +39,7 @@ public class StorageSettingLoader extends AutoLoader<StorageSettingModel, Storag
             .dataId(model.getDataId())
             .targetAmount(model.getTargetAmount())
             .priority(model.getPriority())
+            .existing(true)
             .build();
     }
 }

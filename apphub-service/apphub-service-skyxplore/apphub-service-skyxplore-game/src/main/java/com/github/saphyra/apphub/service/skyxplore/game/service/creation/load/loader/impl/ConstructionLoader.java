@@ -40,6 +40,7 @@ public class ConstructionLoader extends AutoLoader<ConstructionModel, Constructi
             .requiredWorkPoints(model.getRequiredWorkPoints())
             .data(model.getData())
             .priority(model.getPriority())
+            .existing(true)
             .build();
     }
 }

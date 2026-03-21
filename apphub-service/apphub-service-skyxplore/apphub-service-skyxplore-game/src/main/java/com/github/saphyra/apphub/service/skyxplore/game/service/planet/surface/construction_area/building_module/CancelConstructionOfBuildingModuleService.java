@@ -70,11 +70,11 @@ public class CancelConstructionOfBuildingModuleService {
         allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), gameData, construction.getConstructionId());
 
         game.getProgressDiff()
-            .delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+            .delete(construction.getConstructionId(), GameItemType.CONSTRUCTION, construction.isExisting());
 
         gameData.getBuildingModules()
             .remove(buildingModule);
         game.getProgressDiff()
-            .delete(buildingModule.getBuildingModuleId(), GameItemType.BUILDING_MODULE);
+            .delete(buildingModule.getBuildingModuleId(), GameItemType.BUILDING_MODULE, buildingModule.isExisting());
     }
 }

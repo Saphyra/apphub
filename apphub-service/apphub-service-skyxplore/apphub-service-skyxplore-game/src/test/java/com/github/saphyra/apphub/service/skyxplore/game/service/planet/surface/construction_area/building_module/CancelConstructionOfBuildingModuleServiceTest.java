@@ -128,15 +128,17 @@ class CancelConstructionOfBuildingModuleServiceTest {
         given(game.getProgressDiff()).willReturn(progressDiff);
         given(buildingModule.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID);
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
+        given(buildingModule.isExisting()).willReturn(true);
+        given(construction.isExisting()).willReturn(true);
 
         assertThat(underTest.cancelConstruction(USER_ID, CONSTRUCTION_ID)).isEqualTo(CONSTRUCTION_AREA_ID);
 
         then(process).should().cleanup();
         then(constructions).should().remove(construction);
         then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
         then(buildingModules).should().remove(buildingModule);
-        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE);
+        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE, true);
     }
 
     @Test
@@ -153,14 +155,16 @@ class CancelConstructionOfBuildingModuleServiceTest {
         given(construction.getConstructionId()).willReturn(CONSTRUCTION_ID);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCT_BUILDING_MODULE)).willReturn(process);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(buildingModule.isExisting()).willReturn(true);
+        given(construction.isExisting()).willReturn(true);
 
         underTest.cancelConstructionOfConstructionAreaBuildingModules(game, CONSTRUCTION_AREA_ID);
 
         then(process).should().cleanup();
         then(constructions).should().remove(construction);
         then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
         then(buildingModules).should().remove(buildingModule);
-        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE);
+        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE, true);
     }
 }

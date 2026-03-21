@@ -56,7 +56,8 @@ class ResourceDeliveryRequestFactoryTest {
 
         assertThat(result)
             .returns(RESOURCE_DELIVERY_REQUEST_ID, ResourceDeliveryRequest::getResourceDeliveryRequestId)
-            .returns(RESERVED_STORAGE_ID, ResourceDeliveryRequest::getReservedStorageId);
+            .returns(RESERVED_STORAGE_ID, ResourceDeliveryRequest::getReservedStorageId)
+            .returns(false, ResourceDeliveryRequest::isExisting);
 
         then(resourceDeliveryRequests).should().add(result);
         then(progressDiff).should().save(model);

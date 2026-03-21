@@ -38,6 +38,7 @@ public class DurabilityLoader  extends AutoLoader<DurabilityModel, Durability> {
             .externalReference(model.getExternalReference())
             .maxHitPoints(model.getMaxHitPoints())
             .currentHitPoints(model.getCurrentHitPoints())
+            .existing(true)
             .build();
     }
 }

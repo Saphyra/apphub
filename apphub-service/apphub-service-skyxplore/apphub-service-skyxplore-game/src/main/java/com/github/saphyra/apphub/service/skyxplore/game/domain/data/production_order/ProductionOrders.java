@@ -29,4 +29,8 @@ public class ProductionOrders extends Vector<ProductionOrder> {
             .filter(productionOrder -> productionOrder.getProductionOrderId().equals(productionOrderId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(productionOrder -> productionOrder.setExisting(true));
+    }
 }

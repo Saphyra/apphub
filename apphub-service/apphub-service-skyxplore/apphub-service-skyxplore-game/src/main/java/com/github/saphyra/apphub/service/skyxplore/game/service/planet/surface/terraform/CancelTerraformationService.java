@@ -62,7 +62,7 @@ public class CancelTerraformationService {
                 allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), game.getData(), terraformation.getConstructionId());
 
                 game.getProgressDiff()
-                    .delete(terraformation.getConstructionId(), GameItemType.CONSTRUCTION);
+                    .delete(terraformation.getConstructionId(), GameItemType.CONSTRUCTION, terraformation.isExisting());
             })
             .getOrThrow();
     }

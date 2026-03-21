@@ -34,4 +34,8 @@ public class ConstructionAreas extends Vector<ConstructionArea> {
             .filter(constructionArea -> constructionArea.getConstructionAreaId().equals(constructionAreaId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(constructionArea -> constructionArea.setExisting(true));
+    }
 }

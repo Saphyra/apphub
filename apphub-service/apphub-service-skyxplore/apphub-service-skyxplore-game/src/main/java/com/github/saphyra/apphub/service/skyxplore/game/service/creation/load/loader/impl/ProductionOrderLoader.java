@@ -42,6 +42,7 @@ class ProductionOrderLoader extends AutoLoader<ProductionOrderModel, ProductionO
             .resourceDataId(model.getResourceDataId())
             .requestedAmount(model.getRequestedAmount())
             .startedAmount(model.getStartedAmount())
+            .existing(true)
             .build();
     }
 }

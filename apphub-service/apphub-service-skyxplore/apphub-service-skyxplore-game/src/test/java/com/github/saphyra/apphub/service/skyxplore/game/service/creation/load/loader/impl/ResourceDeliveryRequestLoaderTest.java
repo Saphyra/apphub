@@ -59,6 +59,7 @@ class ResourceDeliveryRequestLoaderTest {
 
         assertThat(underTest.convert(model))
             .returns(RESOURCE_DELIVERY_REQUEST_ID, ResourceDeliveryRequest::getResourceDeliveryRequestId)
-            .returns(RESERVED_STORAGE_ID, ResourceDeliveryRequest::getReservedStorageId);
+            .returns(RESERVED_STORAGE_ID, ResourceDeliveryRequest::getReservedStorageId)
+            .returns(true, ResourceDeliveryRequest::isExisting);
     }
 }

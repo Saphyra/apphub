@@ -38,6 +38,7 @@ public class ProductionProcessFactory implements ProcessFactory {
             .productionOrderId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.PRODUCTION_ORDER_ID)))
             .buildingModuleId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.BUILDING_MODULE_ID)))
             .amount(Integer.parseInt(model.getData().get(ProcessParamKeys.AMOUNT)))
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();
@@ -52,6 +53,7 @@ public class ProductionProcessFactory implements ProcessFactory {
             .productionOrderId(productionOrderId)
             .buildingModuleId(buildingModuleId)
             .amount(amount)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

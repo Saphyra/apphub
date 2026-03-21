@@ -32,9 +32,12 @@ public class GameProgressDiff {
         items.put(gameItem.getId(), gameItem);
     }
 
-    public void delete(UUID id, GameItemType type) {
+    public void delete(UUID id, GameItemType type, boolean shouldDelete) {
         items.remove(id);
-        deletedItems.add(new BiWrapper<>(id, type));
+
+        if (shouldDelete) {
+            deletedItems.add(new BiWrapper<>(id, type));
+        }
     }
 
     public void process(GameDataProxy gameDataProxy) {

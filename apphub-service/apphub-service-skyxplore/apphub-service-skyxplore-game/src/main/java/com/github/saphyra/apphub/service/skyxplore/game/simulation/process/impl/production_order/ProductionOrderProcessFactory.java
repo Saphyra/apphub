@@ -36,6 +36,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
             .productionOrderId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.PRODUCTION_ORDER_ID)))
             .externalReference(model.getExternalReference())
             .location(model.getLocation())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();
@@ -48,6 +49,7 @@ public class ProductionOrderProcessFactory implements ProcessFactory {
             .productionOrderId(productionOrderId)
             .externalReference(externalReference)
             .location(location)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

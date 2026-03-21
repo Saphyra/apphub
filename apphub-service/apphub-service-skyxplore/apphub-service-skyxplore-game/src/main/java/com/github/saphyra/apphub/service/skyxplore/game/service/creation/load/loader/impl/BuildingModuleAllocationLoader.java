@@ -37,6 +37,7 @@ public class BuildingModuleAllocationLoader extends AutoLoader<BuildingModuleAll
             .buildingModuleAllocationId(model.getId())
             .buildingModuleId(model.getBuildingModuleId())
             .processId(model.getProcessId())
+            .existing(true)
             .build();
     }
 }

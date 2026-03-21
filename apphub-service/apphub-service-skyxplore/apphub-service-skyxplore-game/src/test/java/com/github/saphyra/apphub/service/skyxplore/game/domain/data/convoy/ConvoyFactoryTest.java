@@ -69,7 +69,8 @@ class ConvoyFactoryTest {
         assertThat(result)
             .returns(CONVOY_ID, Convoy::getConvoyId)
             .returns(RESOURCE_DELIVERY_REQUEST_ID, Convoy::getResourceDeliveryRequestId)
-            .returns(CAPACITY, Convoy::getCapacity);
+            .returns(CAPACITY, Convoy::getCapacity)
+            .returns(false, Convoy::isExisting);
 
         then(routeCalculator).should().calculateAndSaveForResourceDeliveryRequestId(progressDiff, gameData, LOCATION, CONVOY_ID, RESOURCE_DELIVERY_REQUEST_ID);
         then(progressDiff).should().save(model);

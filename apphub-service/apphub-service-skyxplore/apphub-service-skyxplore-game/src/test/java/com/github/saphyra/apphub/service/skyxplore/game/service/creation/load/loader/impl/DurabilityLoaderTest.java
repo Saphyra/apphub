@@ -76,5 +76,6 @@ class DurabilityLoaderTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getMaxHitPoints()).isEqualTo(MAX_HIT_POINTS);
         assertThat(result.getCurrentHitPoints()).isEqualTo(CURRENT_HIT_POINTS);
+        assertThat(result.isExisting()).isTrue();
     }
 }

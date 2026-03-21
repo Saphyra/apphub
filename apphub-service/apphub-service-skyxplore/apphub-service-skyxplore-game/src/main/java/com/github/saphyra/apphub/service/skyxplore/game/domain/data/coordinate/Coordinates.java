@@ -28,4 +28,8 @@ public class Coordinates extends Vector<ReferredCoordinate> {
             .filter(referredCoordinate -> referredCoordinate.getReferenceId().equals(referenceId))
             .toList();
     }
+
+    public void setExisting() {
+        forEach(referredCoordinate -> referredCoordinate.setExisting(true));
+    }
 }

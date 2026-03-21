@@ -64,6 +64,7 @@ public class StoredResourceFactoryTest {
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
         assertThat(result.getContainerId()).isEqualTo(CONTAINER_ID);
         assertThat(result.getContainerType()).isEqualTo(ContainerType.SURFACE);
+        assertThat(result.isExisting()).isFalse();
 
         verify(storedResources).add(result);
         verify(progressDiff).save(storedResourceModel);

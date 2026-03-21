@@ -36,6 +36,7 @@ public class ResourceDeliveryProcessFactory implements ProcessFactory {
             .resourceDeliveryRequestId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.RESOURCE_DELIVERY_REQUEST_ID)))
             .externalReference(model.getExternalReference())
             .location(model.getLocation())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();
@@ -48,6 +49,7 @@ public class ResourceDeliveryProcessFactory implements ProcessFactory {
             .resourceDeliveryRequestId(resourceDeliveryRequestId)
             .externalReference(externalReference)
             .location(location)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

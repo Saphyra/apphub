@@ -37,5 +37,6 @@ public class ConstructionFactoryTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getRequiredWorkPoints()).isEqualTo(REQUIRED_WORK_POINTS);
         assertThat(result.getPriority()).isEqualTo(GameConstants.DEFAULT_PRIORITY);
+        assertThat(result.isExisting()).isFalse();
     }
 }

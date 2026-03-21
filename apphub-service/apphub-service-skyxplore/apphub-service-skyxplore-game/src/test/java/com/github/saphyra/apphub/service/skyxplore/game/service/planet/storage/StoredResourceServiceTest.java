@@ -101,6 +101,7 @@ class StoredResourceServiceTest {
         given(storedResource2.getContainerId()).willReturn(BUILDING_MODULE_ID);
         given(storedResource2.getContainerType()).willReturn(ContainerType.STORAGE);
         given(storedResource2.getStoredResourceId()).willReturn(STORED_RESOURCE_ID);
+        given(storedResource2.isExisting()).willReturn(true);
         given(storedResourceFactory.save(progressDiff, gameData, LOCATION, RESOURCE_DATA_ID, AMOUNT, BUILDING_MODULE_ID, ContainerType.STORAGE)).willReturn(storedResource4);
         given(storedResourceFactory.save(progressDiff, gameData, LOCATION, RESOURCE_DATA_ID, 2, BUILDING_MODULE_ID, ContainerType.STORAGE)).willReturn(mock(StoredResource.class));
 
@@ -108,7 +109,7 @@ class StoredResourceServiceTest {
 
         then(storedResourceFactory).should().save(progressDiff, gameData, LOCATION, RESOURCE_DATA_ID, 2, BUILDING_MODULE_ID, ContainerType.STORAGE);
         then(storedResources).should().remove(storedResource2);
-        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE, true);
     }
 
     @Test
@@ -126,10 +127,11 @@ class StoredResourceServiceTest {
         given(gameData.getStoredResources()).willReturn(storedResources);
         given(storedResources.getByAllocatedBy(ALLOCATED_BY)).willReturn(List.of(storedResource1));
         given(storedResource1.getStoredResourceId()).willReturn(STORED_RESOURCE_ID);
+        given(storedResource1.isExisting()).willReturn(true);
 
         underTest.useResources(progressDiff, gameData, ALLOCATED_BY);
 
         then(storedResources).should().remove(storedResource1);
-        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE, true);
     }
 }

@@ -46,7 +46,7 @@ class ConvoyProcessHelper {
             .ifPresent(citizenAllocation -> {
                 gameData.getCitizenAllocations()
                     .remove(citizenAllocation);
-                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
+                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION, citizenAllocation.isExisting());
             });
     }
 
@@ -103,7 +103,7 @@ class ConvoyProcessHelper {
         gameData.getCoordinates()
             .remove(waypoint);
         game.getProgressDiff()
-            .delete(waypoint.getReferredCoordinateId(), GameItemType.COORDINATE);
+            .delete(waypoint.getReferredCoordinateId(), GameItemType.COORDINATE, waypoint.isExisting());
 
         return false;
     }
@@ -166,13 +166,17 @@ class ConvoyProcessHelper {
         gameData.getStoredResources()
             .getByContainerId(convoyId)
             .forEach(storedResource -> {
-                progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE);
+                progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE, storedResource.isExisting());
                 gameData.getStoredResources()
                     .remove(storedResource);
             });
 
         gameData.getConvoys()
-            .remove(convoyId);
-        progressDiff.delete(convoyId, GameItemType.CONVOY);
+            .findById(convoyId)
+            .ifPresent(convoy -> {
+                gameData.getConvoys()
+                    .remove(convoy);
+                progressDiff.delete(convoyId, GameItemType.CONVOY, convoy.isExisting());
+            });
     }
 }

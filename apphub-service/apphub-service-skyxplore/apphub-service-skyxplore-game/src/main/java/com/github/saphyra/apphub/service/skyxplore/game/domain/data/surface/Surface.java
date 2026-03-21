@@ -15,4 +15,6 @@ public class Surface {
     private final UUID surfaceId;
     private final UUID planetId;
     private SurfaceType surfaceType;
+    @Builder.Default
+    private boolean existing = false;
 }

@@ -21,4 +21,8 @@ public class Surfaces extends Vector<Surface> {
             .findFirst()
             .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Surface not found by surfaceId " + surfaceId));
     }
+
+    public void setExisting() {
+        forEach(surface -> surface.setExisting(true));
+    }
 }

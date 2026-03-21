@@ -72,11 +72,13 @@ class StoredResourceAggregatorTest {
         given(storedResource1.getContainerId()).willReturn(CONTAINER_ID);
         given(storedResource1.getContainerType()).willReturn(ContainerType.STORAGE);
         given(storedResourceFactory.save(progressDiff, gameData, LOCATION, DATA_ID, AMOUNT_1 + AMOUNT_2, CONTAINER_ID, ContainerType.STORAGE)).willReturn(storedResource3);
+        given(storedResource1.isExisting()).willReturn(true);
+        given(storedResource2.isExisting()).willReturn(true);
 
         assertThat(underTest.aggregate(progressDiff, gameData, Map.of(UUID.randomUUID(), List.of(storedResource1, storedResource2)))).containsExactly(storedResource3);
 
         then(storedResources).should().removeAll(List.of(storedResource1, storedResource2));
-        then(progressDiff).should().delete(STORED_RESOURCE_ID_1, GameItemType.STORED_RESOURCE);
-        then(progressDiff).should().delete(STORED_RESOURCE_ID_2, GameItemType.STORED_RESOURCE);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID_1, GameItemType.STORED_RESOURCE, true);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID_2, GameItemType.STORED_RESOURCE, true);
     }
 }

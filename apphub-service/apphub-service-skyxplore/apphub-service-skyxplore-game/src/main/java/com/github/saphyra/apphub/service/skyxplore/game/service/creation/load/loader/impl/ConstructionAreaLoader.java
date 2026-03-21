@@ -38,6 +38,7 @@ class ConstructionAreaLoader extends AutoLoader<ConstructionAreaModel, Construct
             .location(model.getLocation())
             .surfaceId(model.getSurfaceId())
             .dataId(model.getDataId())
+            .existing(true)
             .build();
     }
 }

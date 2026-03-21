@@ -40,6 +40,7 @@ class ProductionRequestLoader extends AutoLoader<ProductionRequestModel, Product
             .reservedStorageId(model.getReservedStorageId())
             .requestedAmount(model.getRequestedAmount())
             .dispatchedAmount(model.getDispatchedAmount())
+            .existing(true)
             .build();
     }
 }

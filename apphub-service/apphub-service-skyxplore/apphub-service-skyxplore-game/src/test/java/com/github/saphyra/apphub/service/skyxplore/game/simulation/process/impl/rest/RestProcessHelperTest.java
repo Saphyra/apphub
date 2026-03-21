@@ -115,11 +115,12 @@ class RestProcessHelperTest {
         given(gameData.getCitizenAllocations()).willReturn(citizenAllocations);
         given(citizenAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(citizenAllocation));
         given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
+        given(citizenAllocation.isExisting()).willReturn(true);
 
         underTest.releaseCitizen(progressDiff, gameData, PROCESS_ID);
 
         verify(citizenAllocations).remove(citizenAllocation);
-        verify(progressDiff).delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
+        verify(progressDiff).delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION, true);
     }
 
     @Test

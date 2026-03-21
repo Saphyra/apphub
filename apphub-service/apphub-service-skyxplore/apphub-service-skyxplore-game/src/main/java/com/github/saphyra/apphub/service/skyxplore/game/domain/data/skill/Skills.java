@@ -24,4 +24,8 @@ public class Skills extends Vector<Skill> {
             .filter(skill -> skill.getCitizenId().equals(citizenId))
             .collect(Collectors.toList());
     }
+
+    public void setExisting() {
+        forEach(skill -> skill.setExisting(true));
+    }
 }

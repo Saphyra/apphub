@@ -36,6 +36,7 @@ public class RestProcessFactory implements ProcessFactory {
             .location(citizen.getLocation())
             .restForTicks(restForTicks)
             .restedForTicks(0)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -50,6 +51,7 @@ public class RestProcessFactory implements ProcessFactory {
             .location(model.getLocation())
             .restForTicks(Integer.parseInt(model.getData().get(ProcessParamKeys.REST_FOR_TICKS)))
             .restedForTicks(Integer.parseInt(model.getData().get(ProcessParamKeys.RESTED_FOR_TICKS)))
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

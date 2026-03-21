@@ -55,6 +55,7 @@ class BuildingModuleAllocationFactoryTest {
         assertThat(result.getBuildingModuleAllocationId()).isEqualTo(BUILDING_ALLOCATION_ID);
         assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
+        assertThat(result.isExisting()).isFalse();
     }
 
     @Test
@@ -72,5 +73,6 @@ class BuildingModuleAllocationFactoryTest {
         assertThat(result.getBuildingModuleAllocationId()).isEqualTo(BUILDING_ALLOCATION_ID);
         assertThat(result.getBuildingModuleId()).isEqualTo(BUILDING_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
+        assertThat(result.isExisting()).isFalse();
     }
 }

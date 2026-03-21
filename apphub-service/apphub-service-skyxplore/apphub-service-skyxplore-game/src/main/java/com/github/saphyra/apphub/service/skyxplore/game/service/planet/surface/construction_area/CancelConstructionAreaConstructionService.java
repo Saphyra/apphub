@@ -49,12 +49,12 @@ public class CancelConstructionAreaConstructionService {
                 allocationRemovalService.removeAllocationsAndReservations(game.getProgressDiff(), gameData, constructionId);
 
                 game.getProgressDiff()
-                    .delete(constructionId, GameItemType.CONSTRUCTION);
+                    .delete(constructionId, GameItemType.CONSTRUCTION, construction.isExisting());
 
                 gameData.getConstructionAreas()
                     .remove(constructionArea);
                 game.getProgressDiff()
-                    .delete(constructionAreaId, GameItemType.CONSTRUCTION_AREA);
+                    .delete(constructionAreaId, GameItemType.CONSTRUCTION_AREA, constructionArea.isExisting());
             })
             .getOrThrow();
     }

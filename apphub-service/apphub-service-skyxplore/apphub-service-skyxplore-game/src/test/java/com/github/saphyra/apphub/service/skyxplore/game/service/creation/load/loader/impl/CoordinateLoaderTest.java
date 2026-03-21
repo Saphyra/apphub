@@ -79,5 +79,6 @@ class CoordinateLoaderTest {
         assertThat(result.getReferenceId()).isEqualTo(REFERENCE_ID);
         assertThat(result.getCoordinate()).isEqualTo(coordinate);
         assertThat(result.getOrder()).isEqualTo(ORDER);
+        assertThat(result.isExisting()).isTrue();
     }
 }

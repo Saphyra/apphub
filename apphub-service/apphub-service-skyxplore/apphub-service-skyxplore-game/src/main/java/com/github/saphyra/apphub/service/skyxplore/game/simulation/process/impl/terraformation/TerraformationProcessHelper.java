@@ -53,8 +53,6 @@ class TerraformationProcessHelper {
 
         allocationRemovalService.removeAllocationsAndReservations(progressDiff, gameData, constructionId);
 
-        progressDiff.delete(constructionId, GameItemType.CONSTRUCTION);
-
         Surface surface = gameData.getSurfaces()
             .findByIdValidated(construction.getExternalReference());
 
@@ -63,6 +61,6 @@ class TerraformationProcessHelper {
 
         gameData.getConstructions()
             .remove(construction);
-        progressDiff.delete(construction.getConstructionId(), GameItemType.CONSTRUCTION);
+        progressDiff.delete(constructionId, GameItemType.CONSTRUCTION, construction.isExisting());
     }
 }

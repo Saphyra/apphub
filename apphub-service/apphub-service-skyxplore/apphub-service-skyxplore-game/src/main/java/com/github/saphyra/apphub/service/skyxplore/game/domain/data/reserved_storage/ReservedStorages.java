@@ -33,4 +33,8 @@ public class ReservedStorages extends Vector<ReservedStorage> {
             .filter(reservedStorage -> reservedStorage.getContainerId().equals(containerId))
             .toList();
     }
+
+    public void setExisting() {
+        forEach(reservedStorage -> reservedStorage.setExisting(true));
+    }
 }

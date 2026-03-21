@@ -14,6 +14,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class SurfacesTest {
@@ -56,5 +57,14 @@ class SurfacesTest {
         Throwable ex = catchThrowable(() -> underTest.findByIdValidated(SURFACE_ID));
 
         ExceptionValidator.validateLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(surface1);
+
+        underTest.setExisting();
+
+        then(surface1).should().setExisting(true);
     }
 }

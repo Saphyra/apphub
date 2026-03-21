@@ -36,6 +36,7 @@ public class ConvoyProcessFactory implements ProcessFactory {
             .convoyId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.CONVOY_ID)))
             .externalReference(model.getExternalReference())
             .location(model.getLocation())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();
@@ -48,6 +49,7 @@ public class ConvoyProcessFactory implements ProcessFactory {
             .convoyId(convoyId)
             .externalReference(externalReference)
             .location(location)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

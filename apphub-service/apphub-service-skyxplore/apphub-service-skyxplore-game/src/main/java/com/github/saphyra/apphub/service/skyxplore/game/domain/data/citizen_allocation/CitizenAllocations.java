@@ -30,4 +30,8 @@ public class CitizenAllocations extends Vector<CitizenAllocation> {
             .filter(citizenAllocation -> citizenAllocation.getCitizenId().equals(citizenId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(citizenAllocation -> citizenAllocation.setExisting(true));
+    }
 }

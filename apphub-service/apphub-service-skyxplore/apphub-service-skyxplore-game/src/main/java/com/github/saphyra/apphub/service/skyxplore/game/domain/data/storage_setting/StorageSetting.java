@@ -15,4 +15,6 @@ public class StorageSetting {
     private final String dataId;
     private Integer targetAmount;
     private Integer priority;
+    @Builder.Default
+    private boolean existing = false;
 }

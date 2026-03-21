@@ -109,6 +109,7 @@ class CitizenFactoryTest {
         assertThat(citizen.getLocation()).isEqualTo(LOCATION);
         assertThat(citizen.getMorale()).isEqualTo(MORALE);
         assertThat(citizen.getSatiety()).isEqualTo(SATIETY);
+        assertThat(citizen.isExisting()).isFalse();
 
         Arrays.stream(SkillType.values())
             .forEach(skillType -> verify(skillFactory).create(skillType, CITIZEN_ID));

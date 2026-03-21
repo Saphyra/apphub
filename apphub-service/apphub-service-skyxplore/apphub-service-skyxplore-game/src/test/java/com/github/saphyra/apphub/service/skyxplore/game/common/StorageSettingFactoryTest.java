@@ -45,5 +45,6 @@ public class StorageSettingFactoryTest {
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getTargetAmount()).isEqualTo(TARGET_AMOUNT);
         assertThat(result.getPriority()).isEqualTo(PRIORITY);
+        assertThat(result.isExisting()).isFalse();
     }
 }

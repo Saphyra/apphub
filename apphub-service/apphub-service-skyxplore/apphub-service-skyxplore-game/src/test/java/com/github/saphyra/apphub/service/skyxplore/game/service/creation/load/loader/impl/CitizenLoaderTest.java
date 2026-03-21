@@ -79,5 +79,6 @@ class CitizenLoaderTest {
         assertThat(result.getName()).isEqualTo(NAME);
         assertThat(result.getMorale()).isEqualTo(MORALE);
         assertThat(result.getSatiety()).isEqualTo(SATIETY);
+        assertThat(result.isExisting()).isTrue();
     }
 }

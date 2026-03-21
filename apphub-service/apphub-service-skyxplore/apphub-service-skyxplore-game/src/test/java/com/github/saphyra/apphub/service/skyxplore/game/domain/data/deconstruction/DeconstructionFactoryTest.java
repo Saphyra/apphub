@@ -35,5 +35,6 @@ class DeconstructionFactoryTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getLocation()).isEqualTo(LOCATION);
         assertThat(result.getPriority()).isEqualTo(GameConstants.DEFAULT_PRIORITY);
+        assertThat(result.isExisting()).isFalse();
     }
 }

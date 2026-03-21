@@ -73,5 +73,6 @@ class CitizenAllocationLoaderTest {
         assertThat(result.getCitizenAllocationId()).isEqualTo(CITIZEN_ALLOCATION_ID);
         assertThat(result.getCitizenId()).isEqualTo(CITIZEN_ID);
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
+        assertThat(result.isExisting()).isTrue();
     }
 }

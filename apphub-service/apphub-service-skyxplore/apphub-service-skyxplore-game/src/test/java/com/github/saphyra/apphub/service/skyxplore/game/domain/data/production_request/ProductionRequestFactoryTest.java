@@ -62,6 +62,7 @@ class ProductionRequestFactoryTest {
             .returns(PRODUCTION_REQUEST_ID, ProductionRequest::getProductionRequestId)
             .returns(RESERVED_STORAGE_ID, ProductionRequest::getReservedStorageId)
             .returns(REQUESTED_AMOUNT, ProductionRequest::getRequestedAmount)
-            .returns(0, ProductionRequest::getDispatchedAmount);
+            .returns(0, ProductionRequest::getDispatchedAmount)
+            .returns(false, ProductionRequest::isExisting);
     }
 }

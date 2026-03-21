@@ -82,5 +82,6 @@ class ReservedStorageLoaderTest {
         assertThat(result.getExternalReference()).isEqualTo(EXTERNAL_REFERENCE);
         assertThat(result.getDataId()).isEqualTo(DATA_ID);
         assertThat(result.getAmount()).isEqualTo(AMOUNT);
+        assertThat(result.isExisting()).isTrue();
     }
 }

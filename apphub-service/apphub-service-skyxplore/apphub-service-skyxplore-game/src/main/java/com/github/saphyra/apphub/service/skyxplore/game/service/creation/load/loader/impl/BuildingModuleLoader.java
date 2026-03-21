@@ -38,6 +38,7 @@ class BuildingModuleLoader extends AutoLoader<BuildingModuleModel, BuildingModul
             .location(model.getLocation())
             .constructionAreaId(model.getConstructionAreaId())
             .dataId(model.getDataId())
+            .existing(true)
             .build();
     }
 }

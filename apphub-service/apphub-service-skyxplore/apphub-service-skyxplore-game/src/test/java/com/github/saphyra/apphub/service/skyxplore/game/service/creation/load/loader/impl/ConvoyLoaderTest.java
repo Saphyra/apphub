@@ -62,6 +62,7 @@ class ConvoyLoaderTest {
         assertThat(underTest.convert(convoyModel))
             .returns(CONVOY_ID, Convoy::getConvoyId)
             .returns(RESOURCE_DELIVERY_REQUEST_ID, Convoy::getResourceDeliveryRequestId)
-            .returns(CAPACITY, Convoy::getCapacity);
+            .returns(CAPACITY, Convoy::getCapacity)
+            .returns(true, Convoy::isExisting);
     }
 }

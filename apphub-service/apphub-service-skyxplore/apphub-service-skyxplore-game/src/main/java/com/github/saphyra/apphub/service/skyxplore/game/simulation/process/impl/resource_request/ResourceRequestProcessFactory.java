@@ -36,6 +36,7 @@ public class ResourceRequestProcessFactory implements ProcessFactory {
             .location(model.getLocation())
             .externalReference(model.getExternalReference())
             .reservedStorageId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.RESERVED_STORAGE_ID)))
+            .existing(true)
             .game(game)
             .applicationContextProxy(applicationContextProxy)
             .build();
@@ -48,6 +49,7 @@ public class ResourceRequestProcessFactory implements ProcessFactory {
             .location(location)
             .externalReference(externalReference)
             .reservedStorageId(reservedStorageId)
+            .existing(false)
             .game(game)
             .applicationContextProxy(applicationContextProxy)
             .build();

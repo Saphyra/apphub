@@ -43,10 +43,10 @@ class DeconstructBuildingModuleProcessHelper {
 
         gameData.getBuildingModules()
             .remove(buildingModule);
-        progressDiff.delete(buildingModuleId, GameItemType.BUILDING_MODULE);
+        progressDiff.delete(buildingModuleId, GameItemType.BUILDING_MODULE, buildingModule.isExisting());
 
         gameData.getDeconstructions()
             .remove(deconstruction);
-        progressDiff.delete(deconstructionId, GameItemType.DECONSTRUCTION);
+        progressDiff.delete(deconstructionId, GameItemType.DECONSTRUCTION, deconstruction.isExisting());
     }
 }

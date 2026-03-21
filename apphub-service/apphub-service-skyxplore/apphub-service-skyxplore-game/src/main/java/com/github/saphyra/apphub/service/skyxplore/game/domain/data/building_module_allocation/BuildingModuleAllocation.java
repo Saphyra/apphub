@@ -13,4 +13,6 @@ public class BuildingModuleAllocation {
     private final UUID buildingModuleAllocationId;
     private final UUID buildingModuleId;
     private final UUID processId;
+    @Builder.Default
+    private boolean existing = false;
 }

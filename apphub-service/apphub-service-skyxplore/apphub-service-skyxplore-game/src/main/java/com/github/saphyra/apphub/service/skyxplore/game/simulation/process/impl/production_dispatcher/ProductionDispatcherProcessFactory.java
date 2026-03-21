@@ -37,6 +37,7 @@ public class ProductionDispatcherProcessFactory implements ProcessFactory {
             .externalReference(model.getExternalReference())
             .game(game)
             .location(model.getLocation())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -49,6 +50,7 @@ public class ProductionDispatcherProcessFactory implements ProcessFactory {
             .externalReference(externalReference)
             .game(game)
             .location(location)
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .build();
 

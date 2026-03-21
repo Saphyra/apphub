@@ -66,4 +66,8 @@ public class StoredResources extends Vector<StoredResource> {
             .filter(storedResource -> storedResource.getContainerId().equals(containerId))
             .findAny();
     }
+
+    public void setExisting() {
+        forEach(storedResource -> storedResource.setExisting(true));
+    }
 }

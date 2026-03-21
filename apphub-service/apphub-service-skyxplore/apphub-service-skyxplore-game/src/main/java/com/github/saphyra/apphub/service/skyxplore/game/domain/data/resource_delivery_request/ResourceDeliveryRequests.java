@@ -26,4 +26,8 @@ public class ResourceDeliveryRequests extends Vector<ResourceDeliveryRequest> {
             .filter(resourceDeliveryRequest -> resourceDeliveryRequest.getReservedStorageId().equals(reservedStorageId))
             .toList();
     }
+
+    public void setExisting() {
+        forEach(resourceDeliveryRequest -> resourceDeliveryRequest.setExisting(true));
+    }
 }

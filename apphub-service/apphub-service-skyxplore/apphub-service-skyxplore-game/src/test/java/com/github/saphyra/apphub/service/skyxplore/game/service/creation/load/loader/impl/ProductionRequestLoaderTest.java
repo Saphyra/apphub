@@ -65,6 +65,7 @@ class ProductionRequestLoaderTest {
             .returns(PRODUCTION_REQUEST_ID, ProductionRequest::getProductionRequestId)
             .returns(RESERVED_STORAGE_ID, ProductionRequest::getReservedStorageId)
             .returns(REQUESTED_AMOUNT, ProductionRequest::getRequestedAmount)
-            .returns(DISPATCHED_AMOUNT, ProductionRequest::getDispatchedAmount);
+            .returns(DISPATCHED_AMOUNT, ProductionRequest::getDispatchedAmount)
+                .returns(true, ProductionRequest::isExisting);
     }
 }

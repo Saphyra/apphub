@@ -40,6 +40,7 @@ public class ReservedStorageLoader extends AutoLoader<ReservedStorageModel, Rese
             .externalReference(model.getExternalReference())
             .dataId(model.getDataId())
             .amount(model.getAmount())
+            .existing(true)
             .build();
     }
 }

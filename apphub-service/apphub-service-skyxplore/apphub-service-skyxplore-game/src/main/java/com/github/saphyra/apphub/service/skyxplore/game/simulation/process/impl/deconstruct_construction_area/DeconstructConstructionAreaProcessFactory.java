@@ -31,6 +31,7 @@ public class DeconstructConstructionAreaProcessFactory implements ProcessFactory
             .deconstructionId(model.getExternalReference())
             .status(model.getStatus())
             .location(model.getLocation())
+            .existing(true)
             .game(game)
             .applicationContextProxy(applicationContextProxy)
             .build();
@@ -42,6 +43,7 @@ public class DeconstructConstructionAreaProcessFactory implements ProcessFactory
             .deconstructionId(deconstruction.getDeconstructionId())
             .status(ProcessStatus.CREATED)
             .location(deconstruction.getLocation())
+            .existing(false)
             .game(game)
             .applicationContextProxy(applicationContextProxy)
             .build();

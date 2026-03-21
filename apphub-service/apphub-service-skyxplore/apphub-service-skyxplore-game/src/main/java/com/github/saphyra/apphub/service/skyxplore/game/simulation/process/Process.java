@@ -47,6 +47,10 @@ public interface Process extends Comparable<Process> {
         return Integer.compare(o.getPriority(), getPriority());
     }
 
+    boolean isExisting();
+
+    void setExisting(boolean existing);
+
     @Slf4j
     final class LogHolder {
     }

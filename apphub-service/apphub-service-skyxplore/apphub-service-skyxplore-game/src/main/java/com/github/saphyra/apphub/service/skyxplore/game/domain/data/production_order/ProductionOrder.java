@@ -20,6 +20,9 @@ public class ProductionOrder {
     private final int requestedAmount;
     private int startedAmount;
 
+    @Builder.Default
+    private boolean existing = false;
+
     public boolean allStarted() {
         return startedAmount >= requestedAmount;
     }

@@ -113,6 +113,7 @@ public class CancelTerraformationServiceTest {
         given(constructions.findByIdValidated(CONSTRUCTION_ID)).willReturn(terraformation);
         given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(terraformation.isExisting()).willReturn(true);
 
         underTest.cancelTerraformationQueueItem(USER_ID, CONSTRUCTION_ID);
 
@@ -126,7 +127,7 @@ public class CancelTerraformationServiceTest {
         verify(constructions).remove(terraformation);
         verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
         verify(executionResult).getOrThrow();
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
     }
 
     @Test
@@ -142,6 +143,7 @@ public class CancelTerraformationServiceTest {
         given(constructions.findByExternalReferenceValidated(SURFACE_ID)).willReturn(terraformation);
         given(eventLoop.processWithWait(any(Runnable.class))).willReturn(executionResult);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(terraformation.isExisting()).willReturn(true);
 
         underTest.cancelTerraformationOfSurface(USER_ID, SURFACE_ID);
 
@@ -154,6 +156,6 @@ public class CancelTerraformationServiceTest {
         verify(constructions).remove(terraformation);
         verify(allocationRemovalService).removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
         verify(executionResult).getOrThrow();
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
     }
 }

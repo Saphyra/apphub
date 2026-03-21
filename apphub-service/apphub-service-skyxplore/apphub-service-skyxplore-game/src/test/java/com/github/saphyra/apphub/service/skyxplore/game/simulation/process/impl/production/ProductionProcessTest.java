@@ -148,6 +148,7 @@ class ProductionProcessTest {
         given(buildingModuleAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(buildingModuleAllocation));
         given(buildingModuleAllocation.getBuildingModuleAllocationId()).willReturn(BUILDING_MODULE_ALLOCATION_ID);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(buildingModuleAllocation.isExisting()).willReturn(true);
 
         underTest.work();
 
@@ -155,7 +156,7 @@ class ProductionProcessTest {
 
         then(helper).should().createWorkProcess(game, LOCATION, PROCESS_ID, PRODUCTION_ORDER_ID, AMOUNT);
         then(buildingModuleAllocations).should().remove(buildingModuleAllocation);
-        then(progressDiff).should().delete(BUILDING_MODULE_ALLOCATION_ID, GameItemType.BUILDING_MODULE_ALLOCATION);
+        then(progressDiff).should().delete(BUILDING_MODULE_ALLOCATION_ID, GameItemType.BUILDING_MODULE_ALLOCATION, true);
     }
 
     @Test
@@ -170,11 +171,12 @@ class ProductionProcessTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.getByExternalReference(PROCESS_ID)).willReturn(List.of(process));
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
+        given(buildingModuleAllocation.isExisting()).willReturn(true);
 
         underTest.cleanup();
 
         then(buildingModuleAllocations).should().remove(buildingModuleAllocation);
-        then(progressDiff).should().delete(BUILDING_MODULE_ALLOCATION_ID, GameItemType.BUILDING_MODULE_ALLOCATION);
+        then(progressDiff).should().delete(BUILDING_MODULE_ALLOCATION_ID, GameItemType.BUILDING_MODULE_ALLOCATION, true);
         then(process).should().cleanup();
         then(progressDiff).should().save(underTest.toModel());
 

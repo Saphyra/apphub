@@ -44,7 +44,7 @@ public class StoredResourceAggregator {
 
         gameData.getStoredResources()
             .removeAll(storedResources);
-        storedResources.forEach(storedResource -> progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE));
+        storedResources.forEach(storedResource -> progressDiff.delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE, storedResource.isExisting()));
 
         StoredResource base = storedResources.get(0);
 

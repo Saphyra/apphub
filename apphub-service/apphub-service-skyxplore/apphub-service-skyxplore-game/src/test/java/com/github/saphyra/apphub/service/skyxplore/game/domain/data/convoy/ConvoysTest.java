@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ConvoysTest {
@@ -60,5 +61,14 @@ class ConvoysTest {
         underTest.remove(CONVOY_ID_1);
 
         assertThat(underTest).containsExactly(convoy2);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(convoy1);
+
+        underTest.setExisting();
+
+        then(convoy1).should().setExisting(true);
     }
 }

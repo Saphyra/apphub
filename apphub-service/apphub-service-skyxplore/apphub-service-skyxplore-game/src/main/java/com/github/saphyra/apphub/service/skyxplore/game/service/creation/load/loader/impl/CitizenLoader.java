@@ -39,6 +39,7 @@ public class CitizenLoader extends AutoLoader<CitizenModel, Citizen> {
             .name(model.getName())
             .morale(model.getMorale())
             .satiety(model.getSatiety())
+            .existing(true)
             .build();
     }
 }

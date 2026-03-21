@@ -26,6 +26,9 @@ public class ReservedStorage {
     @NonNull
     private Integer amount;
 
+    @Builder.Default
+    private boolean existing = false;
+
     @Override
     public String toString() {
         return String.format("ReservedStorage(%s)", new Gson().toJson(this));

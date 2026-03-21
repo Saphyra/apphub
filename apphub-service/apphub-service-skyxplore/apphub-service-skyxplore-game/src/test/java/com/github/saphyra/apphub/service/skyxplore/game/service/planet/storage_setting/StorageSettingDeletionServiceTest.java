@@ -126,6 +126,7 @@ public class StorageSettingDeletionServiceTest {
         given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(apiModel));
         given(executionResult.getOrThrow()).willReturn(List.of(apiModel));
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(storageSetting.isExisting()).willReturn(true);
 
         List<StorageSettingApiModel> result = underTest.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID);
 
@@ -136,7 +137,7 @@ public class StorageSettingDeletionServiceTest {
         verify(process).cleanup();
         verify(executionResult).getOrThrow();
         verify(storageSettings).remove(storageSetting);
-        verify(progressDiff).delete(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING);
+        verify(progressDiff).delete(STORAGE_SETTING_ID, GameItemType.STORAGE_SETTING, true);
 
         assertThat(result).containsExactly(apiModel);
     }

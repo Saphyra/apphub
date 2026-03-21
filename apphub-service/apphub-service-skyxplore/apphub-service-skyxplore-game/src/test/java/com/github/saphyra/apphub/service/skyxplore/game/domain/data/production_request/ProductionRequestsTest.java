@@ -47,4 +47,17 @@ class ProductionRequestsTest {
     void findByIdValidated_notFound() {
         ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(PRODUCTION_REQUEST_ID), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
+
+    @Test
+    void setExisting() {
+        ProductionRequest productionRequest = ProductionRequest.builder()
+            .productionRequestId(PRODUCTION_REQUEST_ID)
+            .existing(false)
+            .build();
+        underTest.add(productionRequest);
+
+        underTest.setExisting();
+
+        assertThat(productionRequest.isExisting()).isTrue();
+    }
 }

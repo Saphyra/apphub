@@ -22,4 +22,6 @@ public class Deconstruction {
     private final UUID location;
 
     private int priority;
+    @Builder.Default
+    private boolean existing = false;
 }

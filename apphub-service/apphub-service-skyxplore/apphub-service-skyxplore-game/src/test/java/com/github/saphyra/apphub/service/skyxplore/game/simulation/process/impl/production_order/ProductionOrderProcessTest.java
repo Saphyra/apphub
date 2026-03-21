@@ -143,6 +143,7 @@ class ProductionOrderProcessTest {
         given(productionOrders.findById(PRODUCTION_ORDER_ID)).willReturn(Optional.of(productionOrder));
         given(applicationContextProxy.getBean(UuidConverter.class)).willReturn(uuidConverter);
         given(game.getData()).willReturn(gameData);
+        given(productionOrder.isExisting()).willReturn(true);
 
         underTest.cleanup();
 
@@ -151,7 +152,7 @@ class ProductionOrderProcessTest {
         then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, PROCESS_ID);
         then(process).should().cleanup();
         then(productionOrders).should().remove(productionOrder);
-        then(progressDiff).should().delete(PRODUCTION_ORDER_ID, GameItemType.PRODUCTION_ORDER);
+        then(progressDiff).should().delete(PRODUCTION_ORDER_ID, GameItemType.PRODUCTION_ORDER, true);
         then(progressDiff).should().save(underTest.toModel());
     }
 }

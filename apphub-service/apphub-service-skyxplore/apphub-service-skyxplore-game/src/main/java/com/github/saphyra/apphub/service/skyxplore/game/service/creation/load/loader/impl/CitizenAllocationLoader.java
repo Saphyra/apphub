@@ -37,6 +37,7 @@ public class CitizenAllocationLoader extends AutoLoader<CitizenAllocationModel, 
             .citizenAllocationId(model.getId())
             .citizenId(model.getCitizenId())
             .processId(model.getProcessId())
+            .existing(true)
             .build();
     }
 }

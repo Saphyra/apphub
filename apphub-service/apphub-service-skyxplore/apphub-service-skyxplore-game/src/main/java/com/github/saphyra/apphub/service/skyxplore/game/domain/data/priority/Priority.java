@@ -14,4 +14,6 @@ public class Priority {
     private final UUID location;
     private final PriorityType type;
     private int value;
+    @Builder.Default
+    private boolean existing = false;
 }

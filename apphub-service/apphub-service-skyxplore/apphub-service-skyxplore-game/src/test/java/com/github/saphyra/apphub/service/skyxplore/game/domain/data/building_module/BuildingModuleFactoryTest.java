@@ -33,6 +33,7 @@ class BuildingModuleFactoryTest {
             .returns(BUILDING_MODULE_ID, BuildingModule::getBuildingModuleId)
             .returns(LOCATION, BuildingModule::getLocation)
             .returns(CONSTRUCTION_AREA_ID, BuildingModule::getConstructionAreaId)
-            .returns(DATA_ID, BuildingModule::getDataId);
+            .returns(DATA_ID, BuildingModule::getDataId)
+            .returns(false, BuildingModule::isExisting);
     }
 }

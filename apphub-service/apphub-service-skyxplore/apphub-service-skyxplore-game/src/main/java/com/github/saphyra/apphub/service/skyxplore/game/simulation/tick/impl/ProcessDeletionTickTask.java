@@ -35,7 +35,7 @@ public class ProcessDeletionTickTask implements TickTask {
         processesToRemove.stream()
             .peek(Process::cleanup)
             .forEach(process -> game.getProgressDiff()
-                .delete(process.getProcessId(), GameItemType.PROCESS));
+                .delete(process.getProcessId(), GameItemType.PROCESS, process.isExisting()));
         processes.removeAll(processesToRemove);
     }
 }

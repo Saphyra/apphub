@@ -15,4 +15,6 @@ public class ReferredCoordinate {
     private final UUID referenceId;
     private Coordinate coordinate;
     private Integer order;
+    @Builder.Default
+    private boolean existing = false;
 }

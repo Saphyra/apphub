@@ -69,10 +69,10 @@ class DeconstructConstructionAreaProcessHelper {
 
         gameData.getConstructionAreas()
             .remove(constructionArea);
-        progressDiff.delete(constructionAreaId, GameItemType.CONSTRUCTION_AREA);
+        progressDiff.delete(constructionAreaId, GameItemType.CONSTRUCTION_AREA, constructionArea.isExisting());
 
         gameData.getDeconstructions()
             .remove(deconstruction);
-        progressDiff.delete(deconstructionId, GameItemType.DECONSTRUCTION);
+        progressDiff.delete(deconstructionId, GameItemType.DECONSTRUCTION, deconstruction.isExisting());
     }
 }

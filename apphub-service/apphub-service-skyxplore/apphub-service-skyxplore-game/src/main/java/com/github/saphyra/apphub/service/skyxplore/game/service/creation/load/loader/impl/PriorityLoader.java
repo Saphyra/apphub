@@ -39,6 +39,7 @@ public class PriorityLoader extends AutoLoader<PriorityModel, Priority> {
             .location(model.getLocation())
             .type(PriorityType.valueOf(model.getPriorityType()))
             .value(model.getValue())
+            .existing(true)
             .build();
     }
 }

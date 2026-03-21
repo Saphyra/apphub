@@ -131,13 +131,15 @@ class DeconstructConstructionAreaProcessHelperTest {
         given(gameData.getConstructionAreas()).willReturn(constructionAreas);
         given(deconstruction.getExternalReference()).willReturn(CONSTRUCTION_AREA_ID);
         given(constructionAreas.findByIdValidated(CONSTRUCTION_AREA_ID)).willReturn(constructionArea);
+        given(constructionArea.isExisting()).willReturn(true);
+        given(deconstruction.isExisting()).willReturn(true);
 
         underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 
         then(constructionAreas).should().remove(constructionArea);
         then(deconstructions).should().remove(deconstruction);
-        then(progressDiff).should().delete(CONSTRUCTION_AREA_ID, GameItemType.CONSTRUCTION_AREA);
-        then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_AREA_ID, GameItemType.CONSTRUCTION_AREA, true);
+        then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
     }
 
     @Test

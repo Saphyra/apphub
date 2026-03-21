@@ -38,6 +38,7 @@ public class SurfaceLoader extends AutoLoader<SurfaceModel, Surface> {
             .surfaceId(model.getId())
             .planetId(model.getPlanetId())
             .surfaceType(SurfaceType.valueOf(model.getSurfaceType()))
+            .existing(true)
             .build();
     }
 }

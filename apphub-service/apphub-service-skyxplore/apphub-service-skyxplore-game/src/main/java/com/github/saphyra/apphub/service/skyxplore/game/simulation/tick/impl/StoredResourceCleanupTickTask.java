@@ -43,7 +43,7 @@ class StoredResourceCleanupTickTask implements TickTask {
 
         toDelete.forEach(storedResource -> {
             game.getData().getStoredResources().remove(storedResource);
-            game.getProgressDiff().delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE);
+            game.getProgressDiff().delete(storedResource.getStoredResourceId(), GameItemType.STORED_RESOURCE, storedResource.isExisting());
         });
 
         log.info("Cleaned up {} stored resources in game {}", toDelete.size(), game.getGameId());

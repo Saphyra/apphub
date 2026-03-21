@@ -74,10 +74,11 @@ class StoredResourceCleanupTickTaskTest {
         given(convoyStoredResource.getContainerId()).willReturn(CONVOY_ID);
         given(allocatedStoredResource.getAllocatedBy()).willReturn(UUID.randomUUID());
         given(toDeleteStoredResource.getStoredResourceId()).willReturn(STORED_RESOURCE_ID);
+        given(toDeleteStoredResource.isExisting()).willReturn(true);
 
         underTest.process(game);
 
-        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE, true);
         assertThat(storedResources)
             .hasSize(2)
             .doesNotContain(toDeleteStoredResource);

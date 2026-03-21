@@ -56,6 +56,7 @@ class TerraformationProcessFactoryTest {
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(TERRAFORMATION_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.CREATED);
+        assertThat(result.isExisting()).isFalse();
     }
 
     @Test
@@ -75,5 +76,6 @@ class TerraformationProcessFactoryTest {
         assertThat(result.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(result.getExternalReference()).isEqualTo(TERRAFORMATION_ID);
         assertThat(result.getStatus()).isEqualTo(ProcessStatus.DONE);
+        assertThat(result.isExisting()).isTrue();
     }
 }

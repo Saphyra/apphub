@@ -30,7 +30,7 @@ public class AllocationRemovalService {
         reservedStorages.getByExternalReference(externalReference)
             .stream()
             .peek(reservedStorage -> log.info("Deleting {}", reservedStorage))
-            .peek(rs -> gameProgressDiff.delete(rs.getReservedStorageId(), GameItemType.RESERVED_STORAGE))
+            .peek(rs -> gameProgressDiff.delete(rs.getReservedStorageId(), GameItemType.RESERVED_STORAGE, rs.isExisting()))
             .forEach(reservedStorages::remove);
     }
 }

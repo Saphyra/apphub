@@ -18,4 +18,8 @@ public class Priorities extends Vector<Priority> {
             .filter(priority -> priority.getLocation().equals(location))
             .toList();
     }
+
+    public void setExisting() {
+        forEach(priority -> priority.setExisting(true));
+    }
 }

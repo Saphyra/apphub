@@ -15,6 +15,9 @@ public class ProductionRequest {
     private final int requestedAmount;
     private int dispatchedAmount;
 
+    @Builder.Default
+    private boolean existing = false;
+
     public void increaseDispatchedAmount(int dispatched) {
         dispatchedAmount += dispatched;
     }

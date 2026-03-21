@@ -53,7 +53,7 @@ class RestProcessHelper {
             .ifPresent(citizenAllocation -> {
                 gameData.getCitizenAllocations()
                     .remove(citizenAllocation);
-                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION);
+                progressDiff.delete(citizenAllocation.getCitizenAllocationId(), GameItemType.CITIZEN_ALLOCATION, citizenAllocation.isExisting());
             });
     }
 

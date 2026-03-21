@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class BuildingModulesTest {
@@ -74,5 +75,12 @@ class BuildingModulesTest {
         given(buildingModule1.getBuildingModuleId()).willReturn(BUILDING_MODULE_ID_1);
 
         assertThat(new BuildingModules(buildingModule1).findByIdValidated(BUILDING_MODULE_ID_1)).isEqualTo(buildingModule1);
+    }
+
+    @Test
+    void setExisting() {
+        new BuildingModules(buildingModule1).setExisting();
+
+        then(buildingModule1).should().setExisting(true);
     }
 }

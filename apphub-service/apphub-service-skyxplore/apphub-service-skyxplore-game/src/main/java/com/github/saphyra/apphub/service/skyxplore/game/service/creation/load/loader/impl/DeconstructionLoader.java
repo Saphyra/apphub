@@ -38,6 +38,7 @@ public class DeconstructionLoader extends AutoLoader<DeconstructionModel, Decons
             .externalReference(model.getExternalReference())
             .location(model.getLocation())
             .priority(model.getPriority())
+            .existing(true)
             .build();
     }
 }

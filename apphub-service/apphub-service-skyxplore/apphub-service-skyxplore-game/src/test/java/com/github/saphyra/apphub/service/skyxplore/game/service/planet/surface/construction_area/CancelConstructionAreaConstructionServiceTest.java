@@ -118,14 +118,16 @@ class CancelConstructionAreaConstructionServiceTest {
         given(gameData.getProcesses()).willReturn(processes);
         given(processes.findByExternalReferenceAndTypeValidated(CONSTRUCTION_ID, ProcessType.CONSTRUCT_CONSTRUCTION_AREA)).willReturn(process);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(constructionArea.isExisting()).willReturn(true);
+        given(construction.isExisting()).willReturn(true);
 
         underTest.cancelConstruction(USER_ID, CONSTRUCTION_ID);
 
         then(process).should().cleanup();
         then(constructions).should().remove(construction);
         then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
         then(constructionAreas).should().remove(constructionArea);
-        then(progressDiff).should().delete(CONSTRUCTION_AREA_ID, GameItemType.CONSTRUCTION_AREA);
+        then(progressDiff).should().delete(CONSTRUCTION_AREA_ID, GameItemType.CONSTRUCTION_AREA, true);
     }
 }

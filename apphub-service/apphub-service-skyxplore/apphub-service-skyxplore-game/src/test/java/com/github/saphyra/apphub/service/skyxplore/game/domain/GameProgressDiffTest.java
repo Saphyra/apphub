@@ -50,14 +50,25 @@ class GameProgressDiffTest {
     }
 
     @Test
-    void delete() throws IllegalAccessException {
+    void delete_shouldDelete() throws IllegalAccessException {
         given(gameItem1.getId()).willReturn(ITEM_ID_1);
 
         underTest.save(gameItem1);
-        underTest.delete(ITEM_ID_1, GameItemType.CONSTRUCTION);
+        underTest.delete(ITEM_ID_1, GameItemType.CONSTRUCTION, true);
 
         assertThat((Map<UUID, GameItem>) FieldUtils.readDeclaredField(underTest, "items", true)).isEmpty();
         assertThat((List<BiWrapper<UUID, GameItemType>>) FieldUtils.readDeclaredField(underTest, "deletedItems", true)).containsExactly(new BiWrapper<>(ITEM_ID_1, GameItemType.CONSTRUCTION));
+    }
+
+    @Test
+    void delete_shouldNotDelete() throws IllegalAccessException {
+        given(gameItem1.getId()).willReturn(ITEM_ID_1);
+
+        underTest.save(gameItem1);
+        underTest.delete(ITEM_ID_1, GameItemType.CONSTRUCTION, false);
+
+        assertThat((Map<UUID, GameItem>) FieldUtils.readDeclaredField(underTest, "items", true)).isEmpty();
+        assertThat((List<BiWrapper<UUID, GameItemType>>) FieldUtils.readDeclaredField(underTest, "deletedItems", true)).isEmpty();
     }
 
     @Test
@@ -67,7 +78,7 @@ class GameProgressDiffTest {
 
         underTest.save(gameItem1);
         underTest.save(gameItem2);
-        underTest.delete(ITEM_ID_1, GameItemType.CONSTRUCTION);
+        underTest.delete(ITEM_ID_1, GameItemType.CONSTRUCTION, true);
 
         underTest.process(gameDataProxy);
 

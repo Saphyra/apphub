@@ -28,6 +28,7 @@ public class TerraformationProcessFactory implements ProcessFactory {
             .game(game)
             .location(location)
             .terraformationId(terraformation.getConstructionId())
+            .existing(false)
             .applicationContextProxy(applicationContextProxy)
             .build();
     }
@@ -44,6 +45,7 @@ public class TerraformationProcessFactory implements ProcessFactory {
             .status(model.getStatus())
             .location(model.getLocation())
             .terraformationId(model.getExternalReference())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .game(game)
             .build();

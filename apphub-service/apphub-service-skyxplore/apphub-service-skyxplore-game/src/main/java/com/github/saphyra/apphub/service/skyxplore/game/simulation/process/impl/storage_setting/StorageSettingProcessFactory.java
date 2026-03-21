@@ -40,6 +40,7 @@ public class StorageSettingProcessFactory implements ProcessFactory {
             .status(model.getStatus())
             .storageSettingId(model.getExternalReference())
             .location(model.getLocation())
+            .existing(true)
             .applicationContextProxy(applicationContextProxy)
             .amount(Integer.parseInt(model.getData().get(ProcessParamKeys.AMOUNT)))
             .reservedStorageId(uuidConverter.convertEntity(model.getData().get(ProcessParamKeys.RESERVED_STORAGE_ID)))
@@ -69,6 +70,7 @@ public class StorageSettingProcessFactory implements ProcessFactory {
             .amount(amount)
             .reservedStorageId(reservedStorage.getReservedStorageId())
             .game(game)
+            .existing(false)
             .build();
 
         game.getData()

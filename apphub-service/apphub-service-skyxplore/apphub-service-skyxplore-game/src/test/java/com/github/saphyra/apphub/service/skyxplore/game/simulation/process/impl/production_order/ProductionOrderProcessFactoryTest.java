@@ -80,7 +80,8 @@ class ProductionOrderProcessFactoryTest {
             .returns(PROCESS_ID, ProductionOrderProcess::getProcessId)
             .returns(ProcessStatus.IN_PROGRESS, ProductionOrderProcess::getStatus)
             .returns(EXTERNAL_REFERENCE, ProductionOrderProcess::getExternalReference)
-            .returns(ProcessType.PRODUCTION_ORDER, ProductionOrderProcess::getType);
+            .returns(ProcessType.PRODUCTION_ORDER, ProductionOrderProcess::getType)
+            .returns(true, ProductionOrderProcess::isExisting);
     }
 
     @Test
@@ -98,7 +99,8 @@ class ProductionOrderProcessFactoryTest {
             .returns(PROCESS_ID, ProductionOrderProcess::getProcessId)
             .returns(ProcessStatus.CREATED, ProductionOrderProcess::getStatus)
             .returns(EXTERNAL_REFERENCE, ProductionOrderProcess::getExternalReference)
-            .returns(ProcessType.PRODUCTION_ORDER, ProductionOrderProcess::getType);
+            .returns(ProcessType.PRODUCTION_ORDER, ProductionOrderProcess::getType)
+            .returns(false, ProductionOrderProcess::isExisting);
 
         then(processes).should().add(result);
         then(progressDiff).should().save(result.toModel());

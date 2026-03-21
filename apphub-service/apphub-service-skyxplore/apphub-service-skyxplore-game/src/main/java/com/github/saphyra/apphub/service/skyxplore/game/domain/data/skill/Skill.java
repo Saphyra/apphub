@@ -19,6 +19,9 @@ public class Skill {
     private Integer experience;
     private Integer nextLevel;
 
+    @Builder.Default
+    private boolean existing = false;
+
     public void increaseExperience(int experience) {
         this.experience += experience;
     }

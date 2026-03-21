@@ -124,12 +124,13 @@ class TerraformationProcessHelperTest {
         given(construction.getData()).willReturn(SurfaceType.LAKE.name());
         given(gameData.getGameId()).willReturn(GAME_ID);
         given(surfaceConverter.toModel(GAME_ID, surface)).willReturn(surfaceModel);
+        given(construction.isExisting()).willReturn(true);
 
         underTest.finishConstruction(progressDiff, gameData, CONSTRUCTION_ID);
 
         then(allocationRemovalService).should().removeAllocationsAndReservations(progressDiff, gameData, CONSTRUCTION_ID);
         then(gameData.getConstructions()).should().remove(construction);
-        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION);
+        then(progressDiff).should().delete(CONSTRUCTION_ID, GameItemType.CONSTRUCTION, true);
         then(surface).should().setSurfaceType(SurfaceType.LAKE);
         then(progressDiff).should().save(surfaceModel);
     }

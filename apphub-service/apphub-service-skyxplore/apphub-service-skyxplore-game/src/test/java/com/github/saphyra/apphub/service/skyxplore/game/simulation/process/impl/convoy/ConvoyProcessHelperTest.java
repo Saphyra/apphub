@@ -1,10 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ReservedStorageModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
+import com.github.saphyra.apphub.api.skyxplore.model.game.*;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
@@ -39,11 +35,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -165,11 +157,12 @@ class ConvoyProcessHelperTest {
         given(gameData.getCitizenAllocations()).willReturn(citizenAllocations);
         given(citizenAllocations.findByProcessId(PROCESS_ID)).willReturn(Optional.of(citizenAllocation));
         given(citizenAllocation.getCitizenAllocationId()).willReturn(CITIZEN_ALLOCATION_ID);
+        given(citizenAllocation.isExisting()).willReturn(true);
 
         underTest.releaseCitizen(progressDiff, gameData, PROCESS_ID);
 
         then(citizenAllocations).should().remove(citizenAllocation);
-        then(progressDiff).should().delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION);
+        then(progressDiff).should().delete(CITIZEN_ALLOCATION_ID, GameItemType.CITIZEN_ALLOCATION, true);
     }
 
     @Test
@@ -238,12 +231,13 @@ class ConvoyProcessHelperTest {
         given(referredCoordinate.getReferredCoordinateId()).willReturn(REFERRED_COORDINATE_ID);
         given(surface.getSurfaceId()).willReturn(SURFACE_ID);
         given(game.getProgressDiff()).willReturn(progressDiff);
+        given(referredCoordinate.isExisting()).willReturn(true);
 
         assertThat(underTest.move(game, LOCATION, PROCESS_ID, CONVOY_ID)).isFalse();
 
         then(convoyMovementProcessFactory).should().save(game, LOCATION, PROCESS_ID, CITIZEN_ID, LOGISTICS_WEIGHT * LOGISTICS_WEIGHT_MULTIPLIER);
         then(coordinates).should().remove(referredCoordinate);
-        then(game.getProgressDiff()).should().delete(REFERRED_COORDINATE_ID, GameItemType.COORDINATE);
+        then(game.getProgressDiff()).should().delete(REFERRED_COORDINATE_ID, GameItemType.COORDINATE, true);
     }
 
     @Test
@@ -308,12 +302,15 @@ class ConvoyProcessHelperTest {
         given(storedResources.getByContainerId(CONVOY_ID)).willReturn(List.of(storedResource));
         given(storedResource.getStoredResourceId()).willReturn(STORED_RESOURCE_ID);
         given(gameData.getConvoys()).willReturn(convoys);
+        given(storedResource.isExisting()).willReturn(true);
+        given(convoys.findById(CONVOY_ID)).willReturn(Optional.of(convoy));
+        given(convoy.isExisting()).willReturn(true);
 
         underTest.cleanup(progressDiff, gameData, CONVOY_ID);
 
-        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE);
+        then(progressDiff).should().delete(STORED_RESOURCE_ID, GameItemType.STORED_RESOURCE, true);
         then(storedResources).should().remove(storedResource);
-        then(convoys).should().remove(CONVOY_ID);
-        then(progressDiff).should().delete(CONVOY_ID, GameItemType.CONVOY);
+        then(convoys).should().remove(convoy);
+        then(progressDiff).should().delete(CONVOY_ID, GameItemType.CONVOY, true);
     }
 }

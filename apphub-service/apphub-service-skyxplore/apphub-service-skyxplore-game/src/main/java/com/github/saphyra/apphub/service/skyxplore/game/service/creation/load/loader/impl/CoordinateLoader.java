@@ -38,6 +38,7 @@ public class CoordinateLoader extends AutoLoader<CoordinateModel, ReferredCoordi
             .referenceId(coordinateModel.getReferenceId())
             .coordinate(coordinateModel.getCoordinate())
             .order(coordinateModel.getOrder())
+            .existing(true)
             .build();
     }
 }

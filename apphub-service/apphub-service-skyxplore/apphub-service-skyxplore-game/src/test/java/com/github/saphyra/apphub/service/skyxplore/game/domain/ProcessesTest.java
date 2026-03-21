@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 public class ProcessesTest {
@@ -91,7 +92,7 @@ public class ProcessesTest {
     }
 
     @Test
-    void getRootOf(){
+    void getRootOf() {
         underTest.add(process);
         underTest.add(root);
 
@@ -101,5 +102,14 @@ public class ProcessesTest {
         given(root.getExternalReference()).willReturn(PROCESS_ID);
 
         assertThat(underTest.getRootOf(process)).isEqualTo(root);
+    }
+
+    @Test
+    void setExisting() {
+        underTest.add(process);
+
+        underTest.setExisting();
+
+        then(process).should().setExisting(true);
     }
 }

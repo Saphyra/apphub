@@ -17,4 +17,6 @@ public class Construction {
     private final Integer requiredWorkPoints;
     private final String data;
     private Integer priority;
+    @Builder.Default
+    private boolean existing = false;
 }

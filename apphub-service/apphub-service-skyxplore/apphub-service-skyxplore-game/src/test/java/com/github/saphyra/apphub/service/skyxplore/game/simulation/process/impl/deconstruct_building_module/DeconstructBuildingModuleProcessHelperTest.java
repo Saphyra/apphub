@@ -85,12 +85,14 @@ class DeconstructBuildingModuleProcessHelperTest {
         given(gameData.getBuildingModules()).willReturn(buildingModules);
         given(deconstruction.getExternalReference()).willReturn(BUILDING_MODULE_ID);
         given(buildingModules.findByIdValidated(BUILDING_MODULE_ID)).willReturn(buildingModule);
+        given(buildingModule.isExisting()).willReturn(true);
+        given(deconstruction.isExisting()).willReturn(true);
 
         underTest.finishDeconstruction(progressDiff, gameData, DECONSTRUCTION_ID);
 
         then(deconstructions).should().remove(deconstruction);
         then(buildingModules).should().remove(buildingModule);
-        then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION);
-        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE);
+        then(progressDiff).should().delete(DECONSTRUCTION_ID, GameItemType.DECONSTRUCTION, true);
+        then(progressDiff).should().delete(BUILDING_MODULE_ID, GameItemType.BUILDING_MODULE, true);
     }
 }

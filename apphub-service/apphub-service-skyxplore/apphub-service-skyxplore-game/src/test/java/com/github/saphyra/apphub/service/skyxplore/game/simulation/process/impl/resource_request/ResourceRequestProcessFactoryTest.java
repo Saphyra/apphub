@@ -79,7 +79,8 @@ class ResourceRequestProcessFactoryTest {
             .returns(PROCESS_ID, ResourceRequestProcess::getProcessId)
             .returns(ProcessType.RESOURCE_REQUEST, ResourceRequestProcess::getType)
             .returns(ProcessStatus.IN_PROGRESS, ResourceRequestProcess::getStatus)
-            .returns(EXTERNAL_REFERENCE, ResourceRequestProcess::getExternalReference);
+            .returns(EXTERNAL_REFERENCE, ResourceRequestProcess::getExternalReference)
+            .returns(true, ResourceRequestProcess::isExisting);
     }
 
     @Test
@@ -96,7 +97,8 @@ class ResourceRequestProcessFactoryTest {
             .returns(PROCESS_ID, ResourceRequestProcess::getProcessId)
             .returns(ProcessType.RESOURCE_REQUEST, ResourceRequestProcess::getType)
             .returns(ProcessStatus.CREATED, ResourceRequestProcess::getStatus)
-            .returns(EXTERNAL_REFERENCE, ResourceRequestProcess::getExternalReference);
+            .returns(EXTERNAL_REFERENCE, ResourceRequestProcess::getExternalReference)
+            .returns(false, ResourceRequestProcess::isExisting);
 
         then(progressDiff).should().save(result.toModel());
         then(processes).should().add(result);
