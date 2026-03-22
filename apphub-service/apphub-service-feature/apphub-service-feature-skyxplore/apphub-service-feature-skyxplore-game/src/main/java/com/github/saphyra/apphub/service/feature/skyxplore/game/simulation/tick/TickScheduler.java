@@ -1,0 +1,91 @@
+package com.github.saphyra.apphub.service.feature.skyxplore.game.simulation.tick;
+
+import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Comparator;
+
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
+@Builder
+class TickScheduler implements Runnable {
+    private final Game game;
+    private final TickSchedulerContext context;
+
+    @SneakyThrows
+    @Override
+    public void run() {
+        long sleepTime = 0;
+
+        while (!game.isTerminated()) {
+            while (game.isGamePaused()) {
+                context.getSleepService()
+                    .sleep(100);
+
+                if (game.isTerminated()) {
+                    break;
+                }
+            }
+
+            if (game.isTerminated()) {
+                break;
+            }
+
+            log.info("TickScheduler started for game {}", game.getGameId());
+            context.getSleepService()
+                .sleep(sleepTime);
+
+            long startTime = context.getDateTimeUtil()
+                .getCurrentTimeEpochMillis();
+
+            FutureWrapper<Long> future = processTick(startTime);
+
+            long processingTime = future.get()
+                .getOrThrow();
+
+            sleepTime = Math.max(0, context.getGameProperties().getTickTimeMillis() - (processingTime));
+            log.info("Next tick for game {} is will be started in {}ms.", game.getGameId(), sleepTime);
+        }
+
+        log.info("TickScheduler finished for game {}", game.getGameId());
+    }
+
+    public FutureWrapper<Long> processTick(long startTime) {
+        game.getEventLoop()
+            .process(
+                () -> {
+                    game.tick();
+                    game.getProgressDiff()
+                            .save(context.getGameConverter().convert(game));
+
+                    context.getTickTasks()
+                        .stream()
+                        .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
+                        .forEach(this::processTickTask);
+                }
+            );
+
+        return game.getEventLoop()
+            .processWithResponse(() -> {
+                long endTime = context.getDateTimeUtil()
+                    .getCurrentTimeEpochMillis();
+                long processingTime = endTime - startTime;
+                log.info("Tick finished for game {} in {} ms", game.getGameId(), processingTime);
+                return processingTime;
+            });
+    }
+
+    private void processTickTask(TickTask tickTask) {
+        try {
+            tickTask.process(game);
+        } catch (Exception e) {
+            context.getErrorReporterService()
+                .report("Failed processing tick task " + tickTask.getClass().getSimpleName() + " for game " + game.getGameId(), e);
+        }
+    }
+}

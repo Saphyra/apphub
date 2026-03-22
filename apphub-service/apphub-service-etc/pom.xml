@@ -13,5 +13,7 @@
 
     <modules>
         <module>apphub-service-etc-admin_panel</module>
+        <module>apphub-service-etc-modules</module>
+        <module>apphub-service-etc-user</module>
     </modules>
 </project>

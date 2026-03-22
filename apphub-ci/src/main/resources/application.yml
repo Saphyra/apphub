@@ -112,8 +112,8 @@ services:
   group: 1
 - name: user
   port: 8085
-  location: "./apphub-service/apphub-service-user/target/application.jar"
-  moduleName: apphub-service-user
+  location: "./apphub-service/apphub-service-etc/apphub-service-etc-user/target/application.jar"
+  moduleName: apphub-service-etc-user
   group: 1
 
 #Optional platform
@@ -131,48 +131,48 @@ services:
   optional: true
 - name: modules
   port: 8088
-  location: "./apphub-service/apphub-service-modules/target/application.jar"
-  moduleName: apphub-service-modules
+  location: "./apphub-service/apphub-service-etc/apphub-service-etc-modules/target/application.jar"
+  moduleName: apphub-service-etc-modules
   group: 1
   optional: true
 
 #SkyXplore
 - name: skyxplore-data
   port: 8091
-  location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-data/target/application.jar"
-  moduleName: apphub-service-skyxplore-data
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-data/target/application.jar"
+  moduleName: apphub-service-feature-skyxplore-data
   group: 1
   optional: true
 - name: skyxplore-game
   port: 8095
-  location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-game/target/application.jar"
-  moduleName: apphub-service-skyxplore-game
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-game/target/application.jar"
+  moduleName: apphub-service-feature-skyxplore-game
   group: 1
   optional: true
 - name: skyxplore-lobby
   port: 8093
-  location: "./apphub-service/apphub-service-skyxplore/apphub-service-skyxplore-lobby/target/application.jar"
-  moduleName: apphub-service-skyxplore-lobby
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-lobby/target/application.jar"
+  moduleName: apphub-service-feature-skyxplore-lobby
   group: 1
   optional: true
 
 #Feature
 - name: training
   port: 8086
-  location: "./apphub-service/apphub-service-training/target/application.jar"
-  moduleName: apphub-service-training
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-training/target/application.jar"
+  moduleName: apphub-service-feature-training
   group: 1
   optional: true
 - name: notebook
   port: 8090
-  location: "./apphub-service/apphub-service-notebook/target/application.jar"
-  moduleName: apphub-service-notebook
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-notebook/target/application.jar"
+  moduleName: apphub-service-feature-notebook
   group: 1
   optional: true
 - name: community
   port: 8096
-  location: "./apphub-service/apphub-service-community/target/application.jar"
-  moduleName: apphub-service-community
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-community/target/application.jar"
+  moduleName: apphub-service-feature-community
   group: 1
   optional: true
 - name: calendar
@@ -183,7 +183,7 @@ services:
   optional: true
 - name: elite-base
   port: 8087
-  location: "./apphub-service/apphub-service-custom/apphub-service-custom-elite_base/target/application.jar"
-  moduleName: apphub-service-custom-elite_base
+  location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/target/application.jar"
+  moduleName: apphub-service-feature-elite_base
   group: 1
   optional: true

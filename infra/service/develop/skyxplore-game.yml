@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: skyxplore-game
-        image: saphyra/apphub-service-skyxplore-game:latest
+        image: saphyra/apphub-service-feature-skyxplore-game:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server

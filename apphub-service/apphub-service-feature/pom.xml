@@ -14,5 +14,10 @@
 
     <modules>
         <module>apphub-service-feature-calendar</module>
+        <module>apphub-service-feature-community</module>
+        <module>apphub-service-feature-elite_base</module>
+        <module>apphub-service-feature-notebook</module>
+        <module>apphub-service-feature-skyxplore</module>
+        <module>apphub-service-feature-training</module>
     </modules>
 </project>

@@ -1,0 +1,162 @@
+package com.github.saphyra.apphub.service.feature.skyxplore.game.simulation.process.impl.production_order;
+
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.GameProgressDiff;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.GameData;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.storage.AllocationRemovalService;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.simulation.process.Process;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.simulation.process.ProcessParamKeys;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.UUID;
+
+/**
+ * Responsible for producing the resources of the given ProductionOrder
+ */
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Builder(access = AccessLevel.PACKAGE)
+@Slf4j
+public class ProductionOrderProcess implements Process {
+    @Getter
+    @NonNull
+    private final UUID processId;
+
+    @Getter
+    @Setter
+    @Builder.Default
+    private boolean existing = false;
+
+    @Getter
+    @NonNull
+    private volatile ProcessStatus status;
+
+    @NonNull
+    private UUID productionOrderId;
+
+    @Getter
+    @NonNull
+    private final UUID externalReference;
+    @NonNull
+    private final UUID location;
+    @NonNull
+    private final ApplicationContextProxy applicationContextProxy;
+    @NonNull
+    private final Game game;
+
+    @Override
+    public ProcessType getType() {
+        return ProcessType.PRODUCTION_ORDER;
+    }
+
+    @Override
+    public int getPriority() {
+        return game.getData()
+            .getProcesses()
+            .findByIdValidated(externalReference)
+            .getPriority() + 1;
+    }
+
+    /**
+     * <ol>
+     *     <li>Orders the resources required for the production</li>
+     *     <li>Selects an available BuildingModule able to produce the requested resource</li>
+     *     <li>Calculates how many resources can be produced from the available resources</li>
+     *     <li>Uses the resources</li>
+     *     <li>Allocates a factory BuildingModule to the production</li>
+     *     <li>Initiates the production</li>
+     *     <li>Waits until all the resources are produced</li>
+     * </ol>
+     */
+    @Override
+    public void work() {
+        ProductionOrderProcessHelper helper = applicationContextProxy.getBean(ProductionOrderProcessHelper.class);
+
+        if (status == ProcessStatus.CREATED) {
+            log.info("Ordering resources...");
+            helper.orderResources(game, location, processId, productionOrderId);
+            status = ProcessStatus.IN_PROGRESS;
+        }
+
+        ProductionOrderProcessConditions conditions = applicationContextProxy.getBean(ProductionOrderProcessConditions.class);
+
+        GameData gameData = game.getData();
+        if (conditions.productionNeeded(gameData, productionOrderId)) {
+            helper.tryProduce(game, location, processId, productionOrderId);
+        } else {
+            log.info("All productions are already started");
+        }
+
+        if (conditions.isFinished(gameData, processId, productionOrderId)) {
+            log.info("ProductionOrder finished.");
+            status = ProcessStatus.DONE;
+        }
+    }
+
+    @Override
+    public void cleanup() {
+        log.info("Cleaning up {}", this);
+
+        GameProgressDiff progressDiff = game.getProgressDiff();
+
+        GameData gameData = game.getData();
+        applicationContextProxy.getBean(AllocationRemovalService.class)
+            .removeAllocationsAndReservations(progressDiff, gameData, processId);
+
+        gameData.getProcesses()
+            .getByExternalReference(processId)
+            .forEach(Process::cleanup);
+
+        gameData.getProductionOrders()
+            .findById(productionOrderId)
+            .ifPresent(productionOrder -> {
+                gameData.getProductionOrders()
+                    .remove(productionOrder);
+                progressDiff.delete(productionOrderId, GameItemType.PRODUCTION_ORDER, productionOrder.isExisting());
+            });
+
+        status = ProcessStatus.READY_TO_DELETE;
+
+        progressDiff.save(toModel());
+    }
+
+    @Override
+    public ProcessModel toModel() {
+        UuidConverter uuidConverter = applicationContextProxy.getBean(UuidConverter.class);
+
+        ProcessModel model = new ProcessModel();
+        model.setId(processId);
+        model.setGameId(game.getGameId());
+        model.setType(GameItemType.PROCESS);
+        model.setProcessType(getType());
+        model.setStatus(status);
+        model.setLocation(location);
+        model.setExternalReference(getExternalReference());
+        model.setData(new StringStringMap(
+            CollectionUtils.toMap(
+                new BiWrapper<>(ProcessParamKeys.PRODUCTION_ORDER_ID, uuidConverter.convertDomain(productionOrderId))
+            ))
+        );
+        return model;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+            "%s(processId=%s, status=%s, productionOrderId=%s)",
+            getClass().getSimpleName(),
+            processId,
+            status,
+            productionOrderId
+        );
+    }
+}
