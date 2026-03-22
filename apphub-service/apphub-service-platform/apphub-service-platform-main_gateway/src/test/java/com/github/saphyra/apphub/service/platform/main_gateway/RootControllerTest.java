@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway;
 
-import com.github.saphyra.apphub.api.user.client.UserAuthenticationClient;
-import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.etc.user.client.UserAuthenticationClient;
+import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;

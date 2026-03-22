@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: skyxplore-lobby
-        image: saphyra/apphub-service-skyxplore-lobby:latest
+        image: saphyra/apphub-service-feature-skyxplore-lobby:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server,preprod

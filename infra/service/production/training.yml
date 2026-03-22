@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: training
-        image: saphyra/apphub-service-training:release
+        image: saphyra/apphub-service-feature-training:release
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server,production

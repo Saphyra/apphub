@@ -1,0 +1,11 @@
+package com.github.saphyra.apphub.service.feature.skyxplore.game.simulation.process;
+
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
+
+public interface ProcessFactory {
+    ProcessType getType();
+
+    Process createFromModel(Game game, ProcessModel model);
+}

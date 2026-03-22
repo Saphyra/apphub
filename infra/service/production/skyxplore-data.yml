@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: skyxplore-data
-        image: saphyra/apphub-service-skyxplore-data:release
+        image: saphyra/apphub-service-feature-skyxplore-data:release
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server,production

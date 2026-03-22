@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: notebook
-        image: saphyra/apphub-service-notebook:latest
+        image: saphyra/apphub-service-feature-notebook:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server

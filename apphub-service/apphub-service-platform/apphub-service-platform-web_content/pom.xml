@@ -8,7 +8,6 @@
     </parent>
 
     <artifactId>apphub-service-platform-web_content</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <name>apphub-service-platform-web_content</name>
 
@@ -50,7 +49,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-user-client</artifactId>
+            <artifactId>apphub-api-etc-user-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.performance_reporting;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.api.admin_panel.model.model.performance_reporting.PerformanceReportingTopicStatus;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopicStatus;
 import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.google.common.cache.CacheBuilder;
 import org.springframework.stereotype.Component;
