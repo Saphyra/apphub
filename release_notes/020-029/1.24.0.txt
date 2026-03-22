@@ -18,5 +18,6 @@
         Do not report "Failed saving Commodity batch", too much noise
     SkyXplore
         Do not delete GameItems not in the database
+        TickTasks run only each pre-defined tick
 
 ===ETC===

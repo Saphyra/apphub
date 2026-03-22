@@ -65,6 +65,7 @@ class TickScheduler implements Runnable {
 
                     context.getTickTasks()
                         .stream()
+                        .filter(tickTask -> tickTask.shouldProcess(game))
                         .sorted(Comparator.comparingInt(value -> value.getOrder().getOrder()))
                         .forEach(this::processTickTask);
                 }

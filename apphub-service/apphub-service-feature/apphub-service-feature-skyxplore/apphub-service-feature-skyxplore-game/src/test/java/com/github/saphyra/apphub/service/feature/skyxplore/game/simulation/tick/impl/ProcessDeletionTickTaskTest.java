@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -44,6 +45,20 @@ class ProcessDeletionTickTaskTest {
     @Test
     void getOrder() {
         assertThat(underTest.getOrder()).isEqualTo(TickTaskOrder.PROCESS_DELETION);
+    }
+
+    @Test
+    void shouldProcess() {
+        given(game.getTick()).willReturn(new AtomicLong(100));
+
+        assertThat(underTest.shouldProcess(game)).isTrue();
+    }
+
+    @Test
+    void shouldNotProcess() {
+        given(game.getTick()).willReturn(new AtomicLong(99));
+
+        assertThat(underTest.shouldProcess(game)).isFalse();
     }
 
     @Test

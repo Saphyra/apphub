@@ -113,6 +113,9 @@ class TickSchedulerTest {
             .willReturn(END_TIME_1)
             .willReturn(START_TIME_2)
             .willReturn(END_TIME_2);
+        given(tickTask.shouldProcess(game))
+            .willReturn(true)
+            .willReturn(false);
 
         underTest.run();
 
@@ -120,6 +123,6 @@ class TickSchedulerTest {
 
         then(game).should(times(2)).tick();
         then(progressDiff).should(times(2)).save(gameModel);
-        then(tickTask).should(times(2)).process(game);
+        then(tickTask).should().process(game);
     }
 }

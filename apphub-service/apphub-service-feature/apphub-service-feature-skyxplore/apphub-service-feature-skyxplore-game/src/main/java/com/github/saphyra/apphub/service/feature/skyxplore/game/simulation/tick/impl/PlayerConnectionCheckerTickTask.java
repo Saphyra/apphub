@@ -34,6 +34,11 @@ public class PlayerConnectionCheckerTickTask implements TickTask {
     }
 
     @Override
+    public boolean shouldProcess(Game game) {
+        return game.getTick().get() % 10 == 0;
+    }
+
+    @Override
     public void process(Game game) {
         Optional<Player> maybeDisconnectedPlayer = getDisconnectedPlayer(game.getPlayers().values());
         if (maybeDisconnectedPlayer.isPresent()) {

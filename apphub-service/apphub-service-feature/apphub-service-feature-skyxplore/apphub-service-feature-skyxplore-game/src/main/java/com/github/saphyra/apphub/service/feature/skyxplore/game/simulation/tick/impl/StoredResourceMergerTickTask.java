@@ -27,6 +27,11 @@ class StoredResourceMergerTickTask implements TickTask {
     }
 
     @Override
+    public boolean shouldProcess(Game game) {
+        return game.getTick().get() % 1000 == 0;
+    }
+
+    @Override
     public void process(Game game) {
         List<List<StoredResource>> toMerge = game.getData()
             .getStoredResources()

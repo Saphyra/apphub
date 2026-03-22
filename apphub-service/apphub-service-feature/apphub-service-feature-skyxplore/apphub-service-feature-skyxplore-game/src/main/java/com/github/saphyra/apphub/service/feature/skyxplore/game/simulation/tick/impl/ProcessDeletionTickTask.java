@@ -23,6 +23,11 @@ public class ProcessDeletionTickTask implements TickTask {
     }
 
     @Override
+    public boolean shouldProcess(Game game) {
+        return game.getTick().get() % 100 == 0;
+    }
+
+    @Override
     public void process(Game game) {
         log.info("Deleting cleaned up processes of game {}", game.getGameId());
 

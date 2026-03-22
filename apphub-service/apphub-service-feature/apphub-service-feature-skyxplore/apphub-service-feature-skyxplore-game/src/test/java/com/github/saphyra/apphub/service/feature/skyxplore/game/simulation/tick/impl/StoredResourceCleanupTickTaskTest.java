@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -53,6 +54,20 @@ class StoredResourceCleanupTickTaskTest {
     @Test
     void getOrder() {
         assertThat(underTest.getOrder()).isEqualTo(TickTaskOrder.STORED_RESOURCE_CLEANUP);
+    }
+
+    @Test
+    void shouldProcess() {
+        given(game.getTick()).willReturn(new AtomicLong(1000L));
+
+        assertThat(underTest.shouldProcess(game)).isTrue();
+    }
+
+    @Test
+    void shouldNotProcess() {
+        given(game.getTick()).willReturn(new AtomicLong(999L));
+
+        assertThat(underTest.shouldProcess(game)).isFalse();
     }
 
     @Test

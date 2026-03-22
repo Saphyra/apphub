@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -54,6 +55,20 @@ class PlayerConnectionCheckerTickTaskTest {
     @Test
     void getOrder() {
         assertThat(underTest.getOrder()).isEqualTo(TickTaskOrder.PLAYER_CONNECTION_CHECKER);
+    }
+
+    @Test
+    void shouldProcess(){
+        given(game.getTick()).willReturn(new AtomicLong(10));
+
+        assertThat(underTest.shouldProcess(game)).isTrue();
+    }
+
+    @Test
+    void shouldNotProcess(){
+        given(game.getTick()).willReturn(new AtomicLong(9));
+
+        assertThat(underTest.shouldProcess(game)).isFalse();
     }
 
     @Test
