@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlanetModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlanetModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import org.junit.jupiter.api.Test;

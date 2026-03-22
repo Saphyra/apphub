@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.config.properties;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStat;
 import lombok.Data;
 
 import java.util.Map;

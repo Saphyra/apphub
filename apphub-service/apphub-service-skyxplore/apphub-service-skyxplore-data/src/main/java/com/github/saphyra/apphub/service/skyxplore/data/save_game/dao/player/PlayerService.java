@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.GameItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

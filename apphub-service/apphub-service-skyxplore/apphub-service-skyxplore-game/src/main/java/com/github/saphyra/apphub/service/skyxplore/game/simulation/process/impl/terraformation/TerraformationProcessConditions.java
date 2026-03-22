@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.terraformation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.terraforming.TerraformingPossibilitiesService;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

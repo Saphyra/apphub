@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.production_request;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionRequestModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProductionRequestModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

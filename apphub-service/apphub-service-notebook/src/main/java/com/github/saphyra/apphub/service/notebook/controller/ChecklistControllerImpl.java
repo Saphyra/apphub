@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.checklist.AddChecklistItemRequest;
-import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistResponse;
-import com.github.saphyra.apphub.api.notebook.model.checklist.CreateChecklistRequest;
-import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistRequest;
-import com.github.saphyra.apphub.api.notebook.server.ChecklistController;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.AddChecklistItemRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
+import com.github.saphyra.apphub.api.feature.notebook.server.ChecklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;

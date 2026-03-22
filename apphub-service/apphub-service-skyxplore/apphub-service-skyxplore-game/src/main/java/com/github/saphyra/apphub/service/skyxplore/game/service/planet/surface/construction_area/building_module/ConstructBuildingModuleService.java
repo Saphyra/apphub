@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;

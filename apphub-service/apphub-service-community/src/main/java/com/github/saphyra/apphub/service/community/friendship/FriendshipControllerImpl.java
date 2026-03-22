@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.friendship;
 
-import com.github.saphyra.apphub.api.community.model.response.friendship.FriendshipResponse;
-import com.github.saphyra.apphub.api.community.server.FriendshipController;
+import com.github.saphyra.apphub.api.feature.community.model.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.feature.community.server.FriendshipController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendshipQueryService;

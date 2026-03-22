@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.deconstruct_building_module;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

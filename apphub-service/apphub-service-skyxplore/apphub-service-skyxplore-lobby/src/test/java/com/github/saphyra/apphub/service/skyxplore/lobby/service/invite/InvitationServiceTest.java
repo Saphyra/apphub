@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.invite;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;

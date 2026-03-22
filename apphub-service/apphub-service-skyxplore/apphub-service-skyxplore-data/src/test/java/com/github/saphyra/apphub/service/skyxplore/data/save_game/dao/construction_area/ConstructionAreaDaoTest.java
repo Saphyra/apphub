@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.construction_area;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionAreaModel;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

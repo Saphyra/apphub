@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.service.notebook.service.table.validator.TableColumnDataValidator;
-import com.github.saphyra.apphub.service.notebook.service.table.validator.TableCreationColumnValidator;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

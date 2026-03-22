@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;

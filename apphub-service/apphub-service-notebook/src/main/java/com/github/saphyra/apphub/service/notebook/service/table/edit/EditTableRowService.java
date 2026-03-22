@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
-import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

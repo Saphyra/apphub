@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.load;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.proxy.GameDataProxy;

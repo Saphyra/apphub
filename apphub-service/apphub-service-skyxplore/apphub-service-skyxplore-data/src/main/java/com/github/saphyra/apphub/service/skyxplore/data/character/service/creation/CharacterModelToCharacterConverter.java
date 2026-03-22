@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.character.service.creation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.service.skyxplore.data.character.dao.SkyXploreCharacter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.table.CreateTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.table.EditTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.table.EditTableResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
-import com.github.saphyra.apphub.api.notebook.server.TableController;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
+import com.github.saphyra.apphub.api.feature.notebook.server.TableController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;

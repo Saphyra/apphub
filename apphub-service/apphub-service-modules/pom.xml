@@ -31,7 +31,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-modules-server</artifactId>
+            <artifactId>apphub-api-etc-modules-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.modules.service;
 
-import com.github.saphyra.apphub.api.modules.model.response.ModuleResponse;
+import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.modules.ModulesProperties;

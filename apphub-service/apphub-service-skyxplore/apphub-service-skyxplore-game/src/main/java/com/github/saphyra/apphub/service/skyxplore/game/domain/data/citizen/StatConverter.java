@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.StatResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.StatResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

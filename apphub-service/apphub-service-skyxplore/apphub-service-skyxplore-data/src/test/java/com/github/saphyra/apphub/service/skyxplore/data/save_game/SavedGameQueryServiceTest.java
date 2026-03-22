@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
-import com.github.saphyra.apphub.api.skyxplore.response.SavedGameResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.player.PlayerDao;

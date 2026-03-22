@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill.SkillConverter;

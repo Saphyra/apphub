@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.common;
 
-import com.github.saphyra.apphub.api.community.server.CommunityEventController;
+import com.github.saphyra.apphub.api.feature.community.server.CommunityEventController;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;

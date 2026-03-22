@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingResponseItem;
+import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponseItem;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.item.ItemLocationType;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.star_system.star_system_data.Power;

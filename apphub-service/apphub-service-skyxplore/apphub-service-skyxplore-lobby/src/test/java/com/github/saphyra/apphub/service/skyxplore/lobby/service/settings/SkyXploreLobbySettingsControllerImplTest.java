@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.AllianceResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;

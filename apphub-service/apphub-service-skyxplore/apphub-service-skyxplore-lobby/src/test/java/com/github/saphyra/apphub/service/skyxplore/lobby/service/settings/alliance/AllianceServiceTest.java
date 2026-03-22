@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.settings.alliance;
 
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceCreatedResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.AllianceResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.AllianceCreatedResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.AllianceResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;

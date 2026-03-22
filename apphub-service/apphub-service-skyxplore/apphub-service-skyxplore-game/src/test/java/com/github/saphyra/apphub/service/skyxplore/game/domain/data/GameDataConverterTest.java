@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

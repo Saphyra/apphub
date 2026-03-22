@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.work;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.SkillModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSkillProperties;

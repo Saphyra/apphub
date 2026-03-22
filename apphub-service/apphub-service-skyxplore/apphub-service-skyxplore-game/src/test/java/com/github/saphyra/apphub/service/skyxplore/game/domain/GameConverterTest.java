@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.AllianceModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataConverter;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.alliance.Alliance;

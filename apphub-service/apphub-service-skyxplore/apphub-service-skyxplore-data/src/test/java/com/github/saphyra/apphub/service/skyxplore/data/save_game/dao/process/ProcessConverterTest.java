@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.process;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;

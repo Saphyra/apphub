@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.proxy;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreSavedGameClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;

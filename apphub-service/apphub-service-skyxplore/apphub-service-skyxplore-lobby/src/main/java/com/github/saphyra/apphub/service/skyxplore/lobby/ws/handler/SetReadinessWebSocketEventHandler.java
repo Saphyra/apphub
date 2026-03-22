@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.ws.handler;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;

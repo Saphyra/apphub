@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.star_system;
 
-import com.github.saphyra.apphub.api.elite_base.server.StarSystemController;
+import com.github.saphyra.apphub.api.feature.elite_base.server.StarSystemController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;

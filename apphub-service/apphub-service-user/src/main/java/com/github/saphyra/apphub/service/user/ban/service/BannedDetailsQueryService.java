@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
-import com.github.saphyra.apphub.api.user.model.ban.BannedDetailsResponse;
+import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsResponse;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;

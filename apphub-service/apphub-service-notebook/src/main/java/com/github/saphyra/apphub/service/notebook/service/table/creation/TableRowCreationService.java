@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
-import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemFactory;

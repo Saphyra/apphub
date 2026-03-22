@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders.construction_area;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;

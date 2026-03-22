@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation.factory.data.filler.DefaultFoodFiller;

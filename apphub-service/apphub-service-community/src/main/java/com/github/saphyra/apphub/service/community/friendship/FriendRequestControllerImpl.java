@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.community.friendship;
 
-import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
-import com.github.saphyra.apphub.api.community.model.response.friend_request.FriendRequestResponse;
-import com.github.saphyra.apphub.api.community.model.response.friendship.FriendshipResponse;
-import com.github.saphyra.apphub.api.community.server.FriendRequestController;
+import com.github.saphyra.apphub.api.feature.community.model.response.SearchResultItem;
+import com.github.saphyra.apphub.api.feature.community.model.response.friend_request.FriendRequestResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.feature.community.server.FriendRequestController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.friendship.service.AcceptFriendRequestService;

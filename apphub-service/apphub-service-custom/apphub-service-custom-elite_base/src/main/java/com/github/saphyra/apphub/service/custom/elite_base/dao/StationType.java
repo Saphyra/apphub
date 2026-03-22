@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.LandingPad;
+import com.github.saphyra.apphub.api.feature.elite_base.model.LandingPad;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

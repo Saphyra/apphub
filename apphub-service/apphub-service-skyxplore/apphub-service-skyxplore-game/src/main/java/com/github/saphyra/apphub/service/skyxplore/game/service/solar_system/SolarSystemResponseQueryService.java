@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.SolarSystemResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.solar_system.PlanetLocationResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.solar_system.SolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;

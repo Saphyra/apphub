@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.column_type;
 
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;

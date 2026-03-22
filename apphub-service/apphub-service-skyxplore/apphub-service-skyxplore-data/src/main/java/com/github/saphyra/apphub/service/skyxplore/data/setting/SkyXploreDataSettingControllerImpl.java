@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting;
 
-import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreSettingsController;
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingIdentifier;
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.data.server.SkyXploreSettingsController;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingIdentifier;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.service.CreateOrUpdateSettingService;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

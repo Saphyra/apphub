@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.deconstruction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.DeconstructionModel;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.rest;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenAllocationModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenMoraleProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;

@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.community.group;
 
-import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
-import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
-import com.github.saphyra.apphub.api.community.model.response.group.GroupListResponse;
-import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberResponse;
-import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberRoleRequest;
-import com.github.saphyra.apphub.api.community.server.GroupController;
+import com.github.saphyra.apphub.api.feature.community.model.response.SearchResultItem;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupInvitationType;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupListResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberRoleRequest;
+import com.github.saphyra.apphub.api.feature.community.server.GroupController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupCreationService;

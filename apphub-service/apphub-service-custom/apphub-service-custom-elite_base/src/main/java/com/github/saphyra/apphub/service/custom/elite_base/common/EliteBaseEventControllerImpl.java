@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.common;
 
-import com.github.saphyra.apphub.api.elite_base.server.EliteBaseEventController;
+import com.github.saphyra.apphub.api.feature.elite_base.server.EliteBaseEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.custom.elite_base.dao.OrphanedRecordCleanerScheduler;

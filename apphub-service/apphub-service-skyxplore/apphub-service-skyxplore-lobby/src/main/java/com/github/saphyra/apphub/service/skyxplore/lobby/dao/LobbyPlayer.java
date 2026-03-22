@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

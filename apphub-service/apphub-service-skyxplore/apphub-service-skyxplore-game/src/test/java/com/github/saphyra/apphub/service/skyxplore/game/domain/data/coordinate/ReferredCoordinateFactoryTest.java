@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.coordinate;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CoordinateModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;

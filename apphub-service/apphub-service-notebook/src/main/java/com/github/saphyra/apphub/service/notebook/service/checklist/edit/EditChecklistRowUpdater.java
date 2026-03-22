@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
-import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistItemModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;

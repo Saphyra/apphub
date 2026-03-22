@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.data;
 
-import com.github.saphyra.apphub.api.user.model.role.RoleRequest;
-import com.github.saphyra.apphub.api.user.model.role.UserRoleResponse;
-import com.github.saphyra.apphub.api.user.server.RoleController;
+import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
+import com.github.saphyra.apphub.api.etc.user.model.role.UserRoleResponse;
+import com.github.saphyra.apphub.api.etc.user.server.RoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;

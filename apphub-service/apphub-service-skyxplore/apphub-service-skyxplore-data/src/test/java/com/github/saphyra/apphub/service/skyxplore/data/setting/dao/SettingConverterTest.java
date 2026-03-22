@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting.dao;
 
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

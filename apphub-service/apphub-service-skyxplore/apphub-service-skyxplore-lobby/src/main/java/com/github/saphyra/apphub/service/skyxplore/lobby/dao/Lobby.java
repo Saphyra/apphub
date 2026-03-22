@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.dao;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

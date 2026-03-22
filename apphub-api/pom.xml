@@ -33,13 +33,7 @@
         </dependency>
     </dependencies>
     <modules>
-        <module>apphub-api-user</module>
         <module>apphub-api-platform</module>
-        <module>apphub-api-modules</module>
-        <module>apphub-api-notebook</module>
-        <module>apphub-api-skyxplore</module>
-        <module>apphub-api-community</module>
-        <module>apphub-api-custom</module>
         <module>apphub-api-etc</module>
         <module>apphub-api-feature</module>
     </modules>

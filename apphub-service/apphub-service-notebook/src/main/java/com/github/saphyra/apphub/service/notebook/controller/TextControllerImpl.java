@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.EditTextRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.TextResponse;
-import com.github.saphyra.apphub.api.notebook.server.TextController;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateTextRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.response.TextResponse;
+import com.github.saphyra.apphub.api.feature.notebook.server.TextController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.text.EditTextService;

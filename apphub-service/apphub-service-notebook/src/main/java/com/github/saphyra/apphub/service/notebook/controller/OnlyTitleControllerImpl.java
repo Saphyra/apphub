@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateOnlyTitleRequest;
-import com.github.saphyra.apphub.api.notebook.server.OnlyTitleController;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateOnlyTitleRequest;
+import com.github.saphyra.apphub.api.feature.notebook.server.OnlyTitleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.only_title.OnlyTitleCreationService;

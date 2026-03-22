@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.query;
 
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
-import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;

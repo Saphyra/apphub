@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.create;
 
-import com.github.saphyra.apphub.api.notebook.model.checklist.CreateChecklistRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemModelValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import lombok.RequiredArgsConstructor;

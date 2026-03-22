@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_dispatcher;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessStatus;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;

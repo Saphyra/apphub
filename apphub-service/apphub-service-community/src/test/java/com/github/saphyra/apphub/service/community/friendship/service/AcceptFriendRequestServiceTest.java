@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.friendship.service;
 
-import com.github.saphyra.apphub.api.community.model.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.Friendship;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.FriendshipDao;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_dispatcher;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionRequestModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProductionRequestModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;

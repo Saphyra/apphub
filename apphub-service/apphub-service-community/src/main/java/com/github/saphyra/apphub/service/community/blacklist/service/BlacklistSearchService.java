@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.blacklist.service;
 
-import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
+import com.github.saphyra.apphub.api.feature.community.model.response.SearchResultItem;
 import com.github.saphyra.apphub.service.community.common.AccountClientProxy;
 import com.github.saphyra.apphub.service.community.common.AccountResponseToSearchResultItemConverter;
 import lombok.RequiredArgsConstructor;

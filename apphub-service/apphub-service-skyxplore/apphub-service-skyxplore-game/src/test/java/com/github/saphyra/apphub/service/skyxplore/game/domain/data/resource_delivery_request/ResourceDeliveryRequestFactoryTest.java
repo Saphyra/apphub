@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.resource_delivery_request;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ResourceDeliveryRequestModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ResourceDeliveryRequestModel;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

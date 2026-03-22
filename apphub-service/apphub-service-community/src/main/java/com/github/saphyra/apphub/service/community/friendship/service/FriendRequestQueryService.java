@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.friendship.service;
 
-import com.github.saphyra.apphub.api.community.model.response.friend_request.FriendRequestResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.friend_request.FriendRequestResponse;
 import com.github.saphyra.apphub.service.community.friendship.dao.request.FriendRequestDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

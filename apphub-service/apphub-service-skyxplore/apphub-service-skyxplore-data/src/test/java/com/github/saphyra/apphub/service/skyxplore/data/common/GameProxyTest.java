@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.common;
 
-import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameApiClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;

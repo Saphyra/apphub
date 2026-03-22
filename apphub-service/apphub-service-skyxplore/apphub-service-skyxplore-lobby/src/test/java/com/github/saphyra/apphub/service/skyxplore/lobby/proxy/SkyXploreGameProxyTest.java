@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.proxy;
 
-import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.game.client.SkyXploreGameCreationApiClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreLoadGameRequest;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

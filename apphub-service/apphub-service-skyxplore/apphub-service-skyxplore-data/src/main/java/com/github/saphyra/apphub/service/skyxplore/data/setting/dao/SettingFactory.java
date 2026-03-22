@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting.dao;
 
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

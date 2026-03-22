@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.group.service.group_member;
 
-import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberResponse;
-import com.github.saphyra.apphub.api.community.model.response.group.GroupMemberRoleRequest;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberRoleRequest;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.community.group.dao.group.Group;
 import com.github.saphyra.apphub.service.community.group.dao.group.GroupDao;

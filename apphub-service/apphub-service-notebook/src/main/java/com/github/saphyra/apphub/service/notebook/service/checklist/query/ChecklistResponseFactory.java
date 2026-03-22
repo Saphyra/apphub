@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.query;
 
-import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

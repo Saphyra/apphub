@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting.service;
 
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.SettingProperties;
 import lombok.RequiredArgsConstructor;

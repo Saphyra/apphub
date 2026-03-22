@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;

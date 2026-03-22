@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
-import com.github.saphyra.apphub.api.notebook.model.table.EditTableRequest;
-import com.github.saphyra.apphub.api.notebook.model.table.EditTableResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.api.notebook.model.table.TableResponse;
-import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;

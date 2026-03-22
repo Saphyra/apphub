@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area.building_module;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.BuildingModuleModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.BuildingModuleModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessModel;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingModuleCategory;

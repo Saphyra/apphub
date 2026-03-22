@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.validator;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateFileRequest;
-import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

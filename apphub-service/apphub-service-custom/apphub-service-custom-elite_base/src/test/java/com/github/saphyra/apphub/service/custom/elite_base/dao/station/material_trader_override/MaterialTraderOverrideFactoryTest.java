@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.station.material_trader_override;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.MaterialType;
+import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
+import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

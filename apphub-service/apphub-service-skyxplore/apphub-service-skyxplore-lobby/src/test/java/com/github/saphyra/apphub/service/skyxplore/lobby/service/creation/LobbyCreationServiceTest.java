@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.skyxplore.lobby.proxy.SkyXploreDataProxy;

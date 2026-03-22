@@ -33,7 +33,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-custom-elite_base-server</artifactId>
+            <artifactId>apphub-api-feature-elite_base-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 

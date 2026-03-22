@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.dao.station.material_trader_override;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.MaterialType;
+import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

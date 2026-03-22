@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer.dao;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.TradeMode;
+import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.TradeMode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;

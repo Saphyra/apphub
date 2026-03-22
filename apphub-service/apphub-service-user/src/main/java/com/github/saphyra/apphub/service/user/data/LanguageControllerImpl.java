@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data;
 
-import com.github.saphyra.apphub.api.user.server.LanguageController;
+import com.github.saphyra.apphub.api.etc.user.server.LanguageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;

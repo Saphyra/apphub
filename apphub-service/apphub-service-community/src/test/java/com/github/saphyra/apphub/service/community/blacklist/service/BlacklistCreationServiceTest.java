@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.blacklist.service;
 
-import com.github.saphyra.apphub.api.community.model.response.blacklist.BlacklistResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.blacklist.BlacklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.community.blacklist.dao.Blacklist;
 import com.github.saphyra.apphub.service.community.blacklist.dao.BlacklistDao;

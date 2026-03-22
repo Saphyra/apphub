@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat.create;
 
-import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.SolarSystemModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.SolarSystemModel;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalHashMap;
 import com.github.saphyra.apphub.lib.common_util.collection.OptionalMap;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.settings;
 
-import com.github.saphyra.apphub.api.user.model.SetUserSettingsRequest;
-import com.github.saphyra.apphub.api.user.server.UserSettingsController;
+import com.github.saphyra.apphub.api.etc.user.model.SetUserSettingsRequest;
+import com.github.saphyra.apphub.api.etc.user.server.UserSettingsController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;

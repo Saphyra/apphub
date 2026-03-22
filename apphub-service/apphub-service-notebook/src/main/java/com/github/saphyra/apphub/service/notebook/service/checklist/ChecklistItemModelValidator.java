@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
-import com.github.saphyra.apphub.api.notebook.model.ItemType;
-import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistItemModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
 import lombok.RequiredArgsConstructor;

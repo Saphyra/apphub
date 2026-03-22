@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.user.data;
 
-import com.github.saphyra.apphub.api.user.model.account.ChangeEmailRequest;
-import com.github.saphyra.apphub.api.user.model.account.ChangePasswordRequest;
-import com.github.saphyra.apphub.api.user.model.account.ChangeUsernameRequest;
-import com.github.saphyra.apphub.api.user.model.login.RegistrationRequest;
-import com.github.saphyra.apphub.api.user.model.account.AccountResponse;
-import com.github.saphyra.apphub.api.user.server.AccountController;
+import com.github.saphyra.apphub.api.etc.user.model.account.ChangeEmailRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.ChangeUsernameRequest;
+import com.github.saphyra.apphub.api.etc.user.model.login.RegistrationRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
+import com.github.saphyra.apphub.api.etc.user.server.AccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;

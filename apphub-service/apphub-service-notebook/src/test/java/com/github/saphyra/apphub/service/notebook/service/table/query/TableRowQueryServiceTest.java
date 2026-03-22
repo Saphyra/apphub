@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table.query;
 
-import com.github.saphyra.apphub.api.notebook.model.ItemType;
-import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.api.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
 import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;

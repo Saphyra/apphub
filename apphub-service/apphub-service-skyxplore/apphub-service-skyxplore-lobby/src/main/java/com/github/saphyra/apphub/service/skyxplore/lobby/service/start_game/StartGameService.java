@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.logistics;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.building_module.BuildingModule;

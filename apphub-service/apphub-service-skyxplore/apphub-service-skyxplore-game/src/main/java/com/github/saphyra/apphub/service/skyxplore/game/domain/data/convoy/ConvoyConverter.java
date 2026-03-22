@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.convoy;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConvoyModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConvoyModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

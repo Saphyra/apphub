@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-skyxplore-lobby-client</artifactId>
+            <artifactId>apphub-api-feature-skyxplore-lobby-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -49,7 +49,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-skyxplore-game-server</artifactId>
+            <artifactId>apphub-api-feature-skyxplore-game-server</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -67,7 +67,7 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-skyxplore-data-client</artifactId>
+            <artifactId>apphub-api-feature-skyxplore-data-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 

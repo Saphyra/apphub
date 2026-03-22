@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.start_game;
 
-import com.github.saphyra.apphub.api.skyxplore.game.client.SkyXploreGameCreationApiClient;
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.game.client.SkyXploreGameCreationApiClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;

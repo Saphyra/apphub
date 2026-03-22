@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.line;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.LineModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.LineModel;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.extern.slf4j.Slf4j;

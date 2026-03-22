@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting.dao;
 
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

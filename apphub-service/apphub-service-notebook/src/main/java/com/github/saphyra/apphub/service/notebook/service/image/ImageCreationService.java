@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.notebook.service.image;
 
-import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
-import com.github.saphyra.apphub.api.notebook.model.request.CreateFileRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.service.notebook.dao.file.File;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.validator.CreateFileRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting.service;
 
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingIdentifier;
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingIdentifier;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
 import com.github.saphyra.apphub.service.skyxplore.data.common.GameProxy;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.Setting;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.dao.SettingDao;

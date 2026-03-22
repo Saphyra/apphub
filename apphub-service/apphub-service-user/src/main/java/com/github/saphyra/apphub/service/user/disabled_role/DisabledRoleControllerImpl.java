@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
-import com.github.saphyra.apphub.api.user.model.role.DisabledRoleResponse;
-import com.github.saphyra.apphub.api.user.server.DisabledRoleController;
+import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
+import com.github.saphyra.apphub.api.etc.user.server.DisabledRoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;

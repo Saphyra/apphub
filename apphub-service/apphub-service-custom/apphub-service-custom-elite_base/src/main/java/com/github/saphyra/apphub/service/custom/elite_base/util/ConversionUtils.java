@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.util;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.Order;
+import com.github.saphyra.apphub.api.feature.elite_base.model.Order;
 import com.github.saphyra.apphub.lib.sql_builder.keyword.OrderType;
 
 public class ConversionUtils {

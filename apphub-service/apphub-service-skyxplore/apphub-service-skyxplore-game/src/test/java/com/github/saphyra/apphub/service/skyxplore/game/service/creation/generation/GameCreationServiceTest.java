@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation.generation;
 
-import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;

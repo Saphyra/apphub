@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.user.ban;
 
-import com.github.saphyra.apphub.api.user.model.ban.BanRequest;
-import com.github.saphyra.apphub.api.user.model.ban.BannedDetailsRequest;
-import com.github.saphyra.apphub.api.user.model.ban.BannedDetailsResponse;
-import com.github.saphyra.apphub.api.user.model.ban.MarkUserForDeletionRequest;
-import com.github.saphyra.apphub.api.user.model.ban.BanResponse;
-import com.github.saphyra.apphub.api.user.model.ban.BanSearchResponse;
-import com.github.saphyra.apphub.api.user.server.BanController;
+import com.github.saphyra.apphub.api.etc.user.model.ban.BanRequest;
+import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsRequest;
+import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsResponse;
+import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
+import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.api.etc.user.model.ban.BanSearchResponse;
+import com.github.saphyra.apphub.api.etc.user.server.BanController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.ban.service.BanResponseQueryService;

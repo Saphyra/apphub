@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.setting.service;
 
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingModel;
-import com.github.saphyra.apphub.api.skyxplore.model.data.setting.SettingType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
 import com.github.saphyra.apphub.service.skyxplore.data.setting.SettingProperties;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;

@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.creation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
-import com.github.saphyra.apphub.api.skyxplore.model.game.AllianceModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.PlayerModel;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
-import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.AllianceModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlayerModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Lobby;

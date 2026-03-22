@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.surface.construction_area;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.ConstructionAreaOverviewResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.ConstructionAreaOverviewResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area.ConstructionArea;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.surface.Surface;

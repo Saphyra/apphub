@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.message_sender.senders;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenResponse;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;

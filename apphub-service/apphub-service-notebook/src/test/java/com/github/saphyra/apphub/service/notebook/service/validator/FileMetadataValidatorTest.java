@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.validator;
 
-import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;

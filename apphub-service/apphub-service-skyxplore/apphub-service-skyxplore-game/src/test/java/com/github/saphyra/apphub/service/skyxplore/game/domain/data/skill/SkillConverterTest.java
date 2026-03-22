@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.skill;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.SkillModel;
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.SkillResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.SkillModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.SkillResponse;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SkillType;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import org.junit.jupiter.api.Test;

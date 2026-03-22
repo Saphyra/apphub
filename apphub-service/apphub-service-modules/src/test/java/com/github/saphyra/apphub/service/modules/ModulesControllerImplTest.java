@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.modules;
 
-import com.github.saphyra.apphub.api.modules.model.response.ModuleResponse;
+import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;

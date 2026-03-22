@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.chat.create;
 
-import com.github.saphyra.apphub.api.skyxplore.request.CreateChatRoomRequest;
-import com.github.saphyra.apphub.api.skyxplore.response.game.ChatRoomResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.CreateChatRoomRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.ChatRoomResponse;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;

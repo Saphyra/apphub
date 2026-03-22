@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.proxy;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreDataFriendApiClient;
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
-import com.github.saphyra.apphub.api.skyxplore.response.friendship.FriendshipResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.GameViewForLobbyCreation;
+import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreDataFriendApiClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreSavedGameClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;

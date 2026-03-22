@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
-import com.github.saphyra.apphub.api.notebook.model.ItemType;
-import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistItemModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.service.notebook.service.checklist.create.ChecklistItemCreationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

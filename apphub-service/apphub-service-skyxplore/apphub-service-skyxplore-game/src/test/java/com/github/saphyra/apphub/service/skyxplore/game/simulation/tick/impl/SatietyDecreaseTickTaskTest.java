@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.tick.impl;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenModel;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.CitizenSatietyProperties;

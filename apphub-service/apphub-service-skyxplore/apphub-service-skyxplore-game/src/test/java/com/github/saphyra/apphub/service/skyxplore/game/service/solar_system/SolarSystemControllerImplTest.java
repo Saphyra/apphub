@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.SolarSystemResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.solar_system.SolarSystemResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;

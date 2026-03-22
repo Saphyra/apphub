@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.group.service.group_member;
 
-import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.Friendship;
 import com.github.saphyra.apphub.service.community.friendship.dao.friend.FriendshipDao;
 import com.github.saphyra.apphub.service.community.group.dao.group.Group;

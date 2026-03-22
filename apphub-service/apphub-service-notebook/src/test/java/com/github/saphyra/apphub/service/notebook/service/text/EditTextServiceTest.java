@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
-import com.github.saphyra.apphub.api.notebook.model.request.EditTextRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
 import com.github.saphyra.apphub.service.notebook.dao.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;

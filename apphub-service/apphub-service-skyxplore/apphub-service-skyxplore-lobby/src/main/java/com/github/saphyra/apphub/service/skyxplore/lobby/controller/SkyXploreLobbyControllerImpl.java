@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
-import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyController;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyViewForPage;
+import com.github.saphyra.apphub.api.feature.skyxplore.lobby.server.SkyXploreLobbyController;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyViewForPage;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;

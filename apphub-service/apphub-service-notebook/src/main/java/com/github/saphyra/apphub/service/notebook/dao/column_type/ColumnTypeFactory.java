@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.column_type;
 
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

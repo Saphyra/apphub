@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.data.save_game.dao.deconstruction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.DeconstructionModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

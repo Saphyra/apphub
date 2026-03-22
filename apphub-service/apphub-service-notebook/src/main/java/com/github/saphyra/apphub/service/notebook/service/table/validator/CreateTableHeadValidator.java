@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
-import com.github.saphyra.apphub.api.notebook.model.table.TableHeadModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

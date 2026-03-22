@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
-import com.github.saphyra.apphub.api.notebook.model.ListItemType;
-import com.github.saphyra.apphub.api.notebook.model.table.CreateTableRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import lombok.RequiredArgsConstructor;

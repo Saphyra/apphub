@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.creation;
 
-import com.github.saphyra.apphub.api.skyxplore.data.client.SkyXploreSavedGameClient;
-import com.github.saphyra.apphub.api.skyxplore.lobby.client.SkyXploreLobbyApiClient;
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.api.skyxplore.model.SkyXploreGameSettings;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.AiPlayer;
-import com.github.saphyra.apphub.api.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
+import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreSavedGameClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;

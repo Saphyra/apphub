@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.population.assignment;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenAssignmentResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenAssignmentResponse;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.skyxplore.game.common.GameConstants;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

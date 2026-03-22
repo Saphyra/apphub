@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
-import com.github.saphyra.apphub.api.user.client.AccountClient;
-import com.github.saphyra.apphub.api.user.model.login.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
+import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;

@@ -8,13 +8,5 @@
     </parent>
 
     <artifactId>apphub-api-feature-calendar-model</artifactId>
-
     <name>apphub-api-feature-calendar-model</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
-    <dependencies>
-    </dependencies>
 </project>

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.group.dao.group;
 
-import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupInvitationType;
 import lombok.Builder;
 import lombok.Data;
 

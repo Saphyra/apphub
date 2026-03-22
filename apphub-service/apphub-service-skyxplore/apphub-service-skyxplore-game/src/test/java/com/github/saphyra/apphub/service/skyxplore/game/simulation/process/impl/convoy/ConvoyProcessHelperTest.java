@@ -1,6 +1,10 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.convoy;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.*;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ReservedStorageModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.SurfaceType;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;

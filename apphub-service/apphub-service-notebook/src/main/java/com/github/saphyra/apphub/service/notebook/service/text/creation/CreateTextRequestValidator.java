@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.text.creation;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateTextRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateTextRequest;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import lombok.RequiredArgsConstructor;

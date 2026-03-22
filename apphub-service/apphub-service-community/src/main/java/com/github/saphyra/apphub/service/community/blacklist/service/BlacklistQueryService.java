@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.blacklist.service;
 
-import com.github.saphyra.apphub.api.community.model.response.blacklist.BlacklistResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.blacklist.BlacklistResponse;
 import com.github.saphyra.apphub.service.community.blacklist.dao.BlacklistDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

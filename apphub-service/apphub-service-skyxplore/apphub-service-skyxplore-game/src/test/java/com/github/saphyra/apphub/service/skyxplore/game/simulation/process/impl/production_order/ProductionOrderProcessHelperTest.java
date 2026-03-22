@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.game.simulation.process.impl.production_order;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ContainerType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProductionOrderModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ContainerType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProductionOrderModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.ConstructionRequirements;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.StorageType;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.resource.ResourceData;

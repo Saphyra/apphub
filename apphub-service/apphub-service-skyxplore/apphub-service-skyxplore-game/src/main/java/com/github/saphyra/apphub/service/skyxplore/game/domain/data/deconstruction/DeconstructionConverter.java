@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.deconstruction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.DeconstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.DeconstructionModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.config.properties.GameProperties;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameDataToModelConverter;

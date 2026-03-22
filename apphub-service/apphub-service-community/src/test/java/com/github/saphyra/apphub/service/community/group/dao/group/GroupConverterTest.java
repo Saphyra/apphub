@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.group.dao.group;
 
-import com.github.saphyra.apphub.api.community.model.response.group.GroupInvitationType;
+import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupInvitationType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

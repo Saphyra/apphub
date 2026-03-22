@@ -14,5 +14,9 @@
 
     <modules>
         <module>apphub-api-feature-calendar</module>
+        <module>apphub-api-feature-community</module>
+        <module>apphub-api-feature-elite_base</module>
+        <module>apphub-api-feature-notebook</module>
+        <module>apphub-api-feature-skyxplore</module>
     </modules>
 </project>

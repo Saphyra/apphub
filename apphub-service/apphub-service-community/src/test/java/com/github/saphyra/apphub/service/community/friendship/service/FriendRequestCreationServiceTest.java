@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.community.friendship.service;
 
-import com.github.saphyra.apphub.api.community.model.response.friend_request.FriendRequestResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.friend_request.FriendRequestResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.community.blacklist.dao.Blacklist;
 import com.github.saphyra.apphub.service.community.blacklist.dao.BlacklistDao;

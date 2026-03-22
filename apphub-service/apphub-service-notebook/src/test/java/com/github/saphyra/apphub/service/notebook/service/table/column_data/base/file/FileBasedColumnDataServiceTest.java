@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data.base.file;
 
-import com.github.saphyra.apphub.api.notebook.model.request.FileMetadata;
-import com.github.saphyra.apphub.api.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.api.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.api.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.file.File;
 import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;

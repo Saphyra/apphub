@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.planet.logistics;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.StoredResourceModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.StoredResourceModel;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.GameProgressDiff;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 
-import com.github.saphyra.apphub.api.notebook.model.checklist.ChecklistItemModel;
-import com.github.saphyra.apphub.api.notebook.model.checklist.EditChecklistRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemModelValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;

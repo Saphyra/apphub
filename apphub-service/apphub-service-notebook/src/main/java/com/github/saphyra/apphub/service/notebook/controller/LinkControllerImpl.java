@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.LinkRequest;
-import com.github.saphyra.apphub.api.notebook.server.LinkController;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.LinkRequest;
+import com.github.saphyra.apphub.api.feature.notebook.server.LinkController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.link.LinkCreationService;

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.user.common;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.user.server.UserEventController;
+import com.github.saphyra.apphub.api.etc.user.server.UserEventController;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;

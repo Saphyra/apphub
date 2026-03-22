@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.citizen_allocation;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CitizenAllocationModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CitizenAllocationModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;

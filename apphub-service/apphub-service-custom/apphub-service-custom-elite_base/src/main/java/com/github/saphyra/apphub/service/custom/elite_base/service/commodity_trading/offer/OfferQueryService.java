@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.commodity_trading.offer;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.CommodityTradingRequest;
-import com.github.saphyra.apphub.api.custom.elite_base.model.commodity_trading.OrderCommoditiesBy;
+import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingRequest;
+import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.OrderCommoditiesBy;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.custom.elite_base.common.EliteBaseProperties;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.game.service.solar_system;
 
-import com.github.saphyra.apphub.api.skyxplore.response.game.solar_system.PlanetLocationResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.solar_system.PlanetLocationResponse;
 import com.github.saphyra.apphub.lib.geometry.Coordinate;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.planet.Planet;

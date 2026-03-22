@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.service.player;
 
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.lobby.LobbyPlayerStatus;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerStatus;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.Invitation;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyPlayer;

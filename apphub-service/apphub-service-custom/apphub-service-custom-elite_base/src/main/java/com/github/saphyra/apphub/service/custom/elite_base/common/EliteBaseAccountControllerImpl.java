@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.custom.elite_base.common;
 
-import com.github.saphyra.apphub.api.elite_base.server.EliteBaseAccountController;
+import com.github.saphyra.apphub.api.feature.elite_base.server.EliteBaseAccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

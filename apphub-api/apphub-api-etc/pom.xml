@@ -13,6 +13,8 @@
     <name>apphub-api-etc</name>
 
     <modules>
-        <module>apphub-api-admin_panel</module>
+        <module>apphub-api-etc-admin_panel</module>
+        <module>apphub-api-etc-modules</module>
+        <module>apphub-api-etc-user</module>
     </modules>
 </project>

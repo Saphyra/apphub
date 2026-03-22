@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.community.blacklist;
 
-import com.github.saphyra.apphub.api.community.model.response.blacklist.BlacklistResponse;
-import com.github.saphyra.apphub.api.community.model.response.SearchResultItem;
-import com.github.saphyra.apphub.api.community.server.BlacklistController;
+import com.github.saphyra.apphub.api.feature.community.model.response.blacklist.BlacklistResponse;
+import com.github.saphyra.apphub.api.feature.community.model.response.SearchResultItem;
+import com.github.saphyra.apphub.api.feature.community.server.BlacklistController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.blacklist.service.BlacklistCreationService;

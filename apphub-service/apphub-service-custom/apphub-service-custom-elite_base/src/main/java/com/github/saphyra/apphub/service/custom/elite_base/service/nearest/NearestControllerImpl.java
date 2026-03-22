@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.custom.elite_base.service.nearest;
 
-import com.github.saphyra.apphub.api.custom.elite_base.model.MaterialType;
-import com.github.saphyra.apphub.api.custom.elite_base.model.material_trader.NearestMaterialTraderResponse;
-import com.github.saphyra.apphub.api.elite_base.server.NearestController;
+import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
+import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.NearestMaterialTraderResponse;
+import com.github.saphyra.apphub.api.feature.elite_base.server.NearestController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.service.custom.elite_base.service.nearest.material_trader.NearestMaterialTraderService;
 import lombok.RequiredArgsConstructor;

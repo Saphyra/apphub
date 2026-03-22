@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.CreateFileRequest;
-import com.github.saphyra.apphub.api.notebook.server.FileController;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
+import com.github.saphyra.apphub.api.feature.notebook.server.FileController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.file.FileCreationService;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.skyxplore.lobby.controller;
 
-import com.github.saphyra.apphub.api.skyxplore.lobby.server.SkyXploreLobbyEventController;
+import com.github.saphyra.apphub.api.feature.skyxplore.lobby.server.SkyXploreLobbyEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.skyxplore.lobby.dao.LobbyDao;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
-import com.github.saphyra.apphub.api.notebook.model.request.EditListItemRequest;
-import com.github.saphyra.apphub.api.notebook.model.response.NotebookView;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.EditListItemRequest;
+import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ArchiveService;

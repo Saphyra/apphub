@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.util.WorkPointsUtil;
 import org.junit.jupiter.api.Test;

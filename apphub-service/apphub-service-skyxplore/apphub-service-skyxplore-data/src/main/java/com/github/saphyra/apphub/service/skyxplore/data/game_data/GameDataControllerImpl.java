@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.skyxplore.data.game_data;
 
-import com.github.saphyra.apphub.api.skyxplore.data.server.SkyXploreGameDataController;
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStat;
-import com.github.saphyra.apphub.api.skyxplore.response.game.citizen.CitizenStatsAndSkills;
+import com.github.saphyra.apphub.api.feature.skyxplore.data.server.SkyXploreGameDataController;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStat;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStatsAndSkills;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.data.AbstractDataService;

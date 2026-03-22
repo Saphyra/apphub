@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.skyxplore.game.common;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.CoordinateModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.LineModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.CoordinateModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.LineModel;
 import com.github.saphyra.apphub.lib.geometry.Line;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

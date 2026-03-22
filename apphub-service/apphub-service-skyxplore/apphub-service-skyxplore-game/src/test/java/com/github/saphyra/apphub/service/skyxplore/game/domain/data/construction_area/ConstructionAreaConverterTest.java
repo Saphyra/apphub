@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction_area;
 
-import com.github.saphyra.apphub.api.skyxplore.model.game.ConstructionAreaModel;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItem;
-import com.github.saphyra.apphub.api.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.api.skyxplore.model.game.ProcessType;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
-import com.github.saphyra.apphub.api.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ConstructionAreaModel;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
+import com.github.saphyra.apphub.api.feature.skyxplore.model.game.ProcessType;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.ConstructionResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.DeconstructionResponse;
+import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.SurfaceConstructionAreaResponse;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.GameData;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.Construction;
 import com.github.saphyra.apphub.service.skyxplore.game.domain.data.construction.ConstructionConverter;
