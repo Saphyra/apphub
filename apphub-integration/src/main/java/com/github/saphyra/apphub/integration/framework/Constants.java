@@ -88,7 +88,8 @@ public class Constants {
         "calendar",
         "encryption",
         "storage",
-        "elite-base"
+        "elite-base",
+        "monitoring"
     );
 
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";

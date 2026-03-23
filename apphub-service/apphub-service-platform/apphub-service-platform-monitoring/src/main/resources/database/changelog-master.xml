@@ -1,14 +1,13 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-
-    <changeSet id="create_schema_storage" author="saphyra">
+    <changeSet id="create_schema_monitoring" author="saphyra">
         <sql endDelimiter=";">
-            CREATE SCHEMA IF NOT EXISTS storage
+            CREATE SCHEMA IF NOT EXISTS monitoring
         </sql>
 
         <rollback>
-            DROP SCHEMA IF EXIST storage
+            DROP SCHEMA IF EXIST monitoring
         </rollback>
     </changeSet>
 
-    <include file="database/change_sets/stored_file.xml"/>
+    <!-- include file="database/change_sets/stored_file.xml"/-->
 </databaseChangeLog>
