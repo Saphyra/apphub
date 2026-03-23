@@ -15,7 +15,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class CommunityRoleProtectionTest extends SeleniumTest {
-    @Test(dataProvider = "roleDataProvider", groups = {"fe", "community"})
+    @Test(dataProvider = "roleDataProvider", groups = {"fe", "community", "role-protection"})
     public void communityRoleProtection(String role) {
         WebDriver driver = extractDriver();
 

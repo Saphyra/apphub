@@ -17,6 +17,16 @@ const MapStream = class {
         return this;
     }
 
+    anyMatch(predicate) {
+        for (const key in this.items) {
+            if (predicate(key, this.items[key])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     clone() {
         const result = {};
 

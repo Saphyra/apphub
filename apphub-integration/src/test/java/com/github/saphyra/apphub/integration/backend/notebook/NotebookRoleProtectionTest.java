@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.UUID;
 
 public class NotebookRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "notebook"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "notebook", "role-protection"})
     public void notebookRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

@@ -28,7 +28,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreGameRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void gameRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
@@ -97,7 +97,7 @@ public class SkyXploreGameRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
     }
 
-    @Test(dataProvider = "adminRoleProvider", groups = {"be", "skyxplore"})
+    @Test(dataProvider = "adminRoleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void gameAdminRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

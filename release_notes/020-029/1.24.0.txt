@@ -3,6 +3,8 @@
         Local build option
     Calendar
         Archive events
+    SkyXplore
+        Admin tool to look into gameData
 
 ===BUGFIXES===
     Calendar

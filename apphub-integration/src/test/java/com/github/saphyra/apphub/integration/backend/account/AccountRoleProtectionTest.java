@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class AccountRoleProtectionTest extends BackEndTest {
-    @Test(groups = {"be", "account"})
+    @Test(groups = {"be", "account", "role-protection"})
     public void accountRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

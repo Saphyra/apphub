@@ -14,7 +14,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class AdminPanelRoleProtectionTest extends SeleniumTest {
-    @Test(dataProvider = "roleDataProvider", groups = {"fe", "admin-panel"})
+    @Test(dataProvider = "roleDataProvider", groups = {"fe", "admin-panel", "role-protection"})
     public void adminPanelRoleProtection(String role) {
         WebDriver driver = extractDriver();
 

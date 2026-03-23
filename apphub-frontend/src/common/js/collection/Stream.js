@@ -33,6 +33,10 @@ const Stream = class {
         return this.items.length;
     }
 
+    distinct() {
+        return new Stream([...new Set(this.items)]);
+    }
+
     filter(predicate) {
         const result = [];
 

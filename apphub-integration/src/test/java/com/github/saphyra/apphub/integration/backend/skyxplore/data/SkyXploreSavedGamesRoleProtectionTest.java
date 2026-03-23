@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class SkyXploreSavedGamesRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void savedGamesRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

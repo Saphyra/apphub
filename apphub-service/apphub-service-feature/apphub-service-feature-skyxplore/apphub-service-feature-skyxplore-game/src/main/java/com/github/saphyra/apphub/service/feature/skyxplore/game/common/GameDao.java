@@ -103,7 +103,7 @@ public class GameDao {
         return new ArrayList<>(repository.values());
     }
 
-    public Game findById(UUID gameId) {
-        return repository.get(gameId);
+    public Optional<Game> findById(UUID gameId) {
+        return Optional.ofNullable(repository.get(gameId));
     }
 }

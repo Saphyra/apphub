@@ -114,5 +114,9 @@
     "searching": {
         "en": "Searching...",
         "hu": "Keresés..."
+    },
+    "admin-page": {
+        "en": "Admin page",
+        "hu": "Admin oldal"
     }
 }

@@ -2,6 +2,7 @@ import { Endpoint, RequestMethod } from "../../dao";
 
 export const SKYXPLORE_GAME_GET_GAME_ID = new Endpoint(RequestMethod.GET, "/api/skyxplore/game");
 
+export const SKYXPLORE_GET_GAME_ID_OF_USER = new Endpoint(RequestMethod.GET, "/api/skyxplore/game");
 export const SKYXPLORE_GAME_SAVE = new Endpoint(RequestMethod.POST, "/api/skyxplore/game");
 export const SKYXPLORE_GAME_PAUSE = new Endpoint(RequestMethod.POST, "/api/skyxplore/game/pause");
 export const SKYXPLORE_EXIT_GAME = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game");

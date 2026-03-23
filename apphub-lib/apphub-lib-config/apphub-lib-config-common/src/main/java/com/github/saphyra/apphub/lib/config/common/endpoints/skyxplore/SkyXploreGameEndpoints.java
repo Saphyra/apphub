@@ -39,18 +39,6 @@ public class SkyXploreGameEndpoints {
     //Citizen
     public static final String SKYXPLORE_PLANET_RENAME_CITIZEN = "/api/skyxplore/game/citizen/{citizenId}/rename";
 
-    //Building
-    @Deprecated(forRemoval = true)
-    public static final String SKYXPLORE_BUILDING_CONSTRUCT_NEW = "/api/skyxplore/game/building/{planetId}/{surfaceId}";
-    @Deprecated(forRemoval = true)
-    public static final String SKYXPLORE_BUILDING_UPGRADE = "/api/skyxplore/game/building/{planetId}/{buildingId}";
-    @Deprecated(forRemoval = true)
-    public static final String SKYXPLORE_BUILDING_CANCEL_CONSTRUCTION = "/api/skyxplore/game/building/{planetId}/{buildingId}";
-    @Deprecated(forRemoval = true)
-    public static final String SKYXPLORE_BUILDING_DECONSTRUCT = "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct";
-    @Deprecated(forRemoval = true)
-    public static final String SKYXPLORE_BUILDING_CANCEL_DECONSTRUCTION = "/api/skyxplore/game/building/{planetId}/{buildingId}/deconstruct";
-
     //Terraformation
     public static final String SKYXPLORE_GAME_TERRAFORM_SURFACE = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
     public static final String SKYXPLORE_GAME_CANCEL_TERRAFORMATION = "/api/skyxplore/game/surface/{planetId}/{surfaceId}/terraform";
@@ -72,4 +60,8 @@ public class SkyXploreGameEndpoints {
     //Queue
     public static final String SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY = "/api/skyxplore/game/{planetId}/{type}/{itemId}/priority";
     public static final String SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM = "/api/skyxplore/game/{planetId}/{type}/{itemId}";
+
+    //Admin
+    public static final String SKYXPLORE_GAME_ADMIN_GET_BY_TYPE = "/api/skyxplore/game/admin/{type}";
+    public static final String SKYXPLORE_GAME_ADMIN_GET_ITEM = "/api/skyxplore/game/admin/{gameId}/{type}/{itemId}";
 }

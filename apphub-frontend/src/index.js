@@ -51,6 +51,8 @@ import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/Calen
 import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
 import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPage';
 import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
+import SkyXploreAdminListPage from './modules/skyxplore/admin/list/SkyXploreAdminListPage';
+import SkyXploreAdminDetailsPage from './modules/skyxplore/admin/details/SkyXploreAdminPanelDeatilsPage';
 
 const router = createBrowserRouter([
   {
@@ -84,6 +86,37 @@ const router = createBrowserRouter([
   {
     path: "/web/skyxplore/game",
     element: <SkyXploreGamePage />
+  },
+  {
+    path: "/web/skyxplore/game/admin",
+    element: <SkyXploreAdminListPage />,
+    loader: () => {
+      return {
+        gameId: null,
+        type: "GAME"
+      }
+    }
+  },
+  {
+    path: "/web/skyxplore/game/admin/:type/:gameId",
+    element: <SkyXploreAdminListPage />,
+    loader: ({ params }) => {
+      return {
+        gameId: params.gameId,
+        type: params.type
+      }
+    }
+  },
+  {
+    path: "/web/skyxplore/game/admin/:gameId/:type/:id",
+    element: <SkyXploreAdminDetailsPage />,
+    loader: ({ params }) => {
+      return {
+        gameId: params.gameId,
+        type: params.type,
+        id: params.id
+      }
+    }
   },
   {
     path: "/web/notebook",
@@ -297,7 +330,7 @@ const router = createBrowserRouter([
     path: "/web/calendar/labels",
     element: <CalendarLabelsPage />
   },
-    {
+  {
     path: "/web/calendar/search",
     element: <CalendarSearchPage />
   },

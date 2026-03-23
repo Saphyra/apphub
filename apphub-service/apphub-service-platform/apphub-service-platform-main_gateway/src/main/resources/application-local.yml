@@ -20,6 +20,8 @@ spring:
                 /web/skyxplore/character,\
                 /web/skyxplore/lobby,\
                 /web/skyxplore/game,\
+                /web/skyxplore/game/admin,\
+                /web/skyxplore/game/admin/**,\
                 /web/notebook,\
                 /web/notebook/**,\
                 /web/admin-panel/memory-monitoring,\

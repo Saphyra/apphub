@@ -14,7 +14,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class NotebookRoleProtectionTest extends SeleniumTest {
-    @Test(dataProvider = "roleDataProvider", groups = {"fe", "notebook"})
+    @Test(dataProvider = "roleDataProvider", groups = {"fe", "notebook", "role-protection"})
     public void notebookRoleProtection(String role) {
         WebDriver driver = extractDriver();
 

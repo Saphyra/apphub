@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class CalendarRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "calendar"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "calendar", "role-protection"})
     public void calendarRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

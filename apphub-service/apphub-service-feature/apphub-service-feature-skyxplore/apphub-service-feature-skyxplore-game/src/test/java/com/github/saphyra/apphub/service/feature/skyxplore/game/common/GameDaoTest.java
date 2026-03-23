@@ -149,6 +149,6 @@ public class GameDaoTest {
 
         underTest.save(game);
 
-        assertThat(underTest.findById(GAME_ID)).isEqualTo(game);
+        assertThat(underTest.findById(GAME_ID)).contains(game);
     }
 }

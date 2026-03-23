@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class EliteBaseRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "elite-base"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "elite-base", "role-protection"})
     public void eliteBaseRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
@@ -40,7 +40,7 @@ public class EliteBaseRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> EliteBaseMaterialTraderOverrideActions.getCreateMaterialTraderOverrideResponse(getServerPort(), accessTokenId, new CreateMaterialTraderOverrideRequest()));
     }
 
-    @Test(dataProvider = "adminRoleProvider", groups = {"be", "elite-base"})
+    @Test(dataProvider = "adminRoleProvider", groups = {"be", "elite-base", "role-protection"})
     public void eliteBaseAdminRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

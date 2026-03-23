@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class FriendRequestRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "community"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "community", "role-protection"})
     public void friendRequestRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

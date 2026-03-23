@@ -14,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class AccountPageRoleProtectionTest extends SeleniumTest {
-    @Test(groups = {"fe", "account"})
+    @Test(groups = {"fe", "account", "role-protection"})
     public void accountRoleProtection() {
         WebDriver driver = extractDriver();
 

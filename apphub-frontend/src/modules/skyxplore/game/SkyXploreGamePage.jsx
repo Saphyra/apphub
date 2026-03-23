@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import localizationData from "./skyxplore_game_page_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import Redirection from "../Redirection";
@@ -17,7 +17,7 @@ import useConnectToWebSocket from "../../../common/hook/ws/WebSocketFacade";
 import Button from "../../../common/component/input/Button";
 import Spinner from "../../../common/component/Spinner";
 import { GET_OWN_USER_ID } from "../../../common/js/dao/endpoints/GenericEndpoints";
-import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE, SKYXPLORE_PROCESS_TICK } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE, SKYXPLORE_GET_GAME_ID_OF_USER, SKYXPLORE_PROCESS_TICK } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import WebSocketEventName from "../../../common/hook/ws/WebSocketEventName";
 import { addAndSet, hasValue, isTrue } from "../../../common/js/Utils";
 import MapStream from "../../../common/js/collection/MapStream";
@@ -25,6 +25,7 @@ import ChatConstants from "./chat/ChatConstants";
 import ConfirmationDialogData from "../../../common/component/confirmation_dialog/ConfirmationDialogData";
 import useLoader from "../../../common/hook/Loader";
 import { IS_ADMIN } from "../../../common/js/dao/endpoints/UserEndpoints";
+import { SKYXPLORE_ADMIN_DETAILS_PAGE, SKYXPLORE_ADMIN_GAME_PAGE } from "../../../common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 
 const SkyXploreGamePage = () => {
     //===Platform
@@ -36,6 +37,7 @@ const SkyXploreGamePage = () => {
     const [userId, setUserId] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
     const [isHost, setIsHost] = useState(false);
+    const [gameId, setGameId] = useState(null);
 
     const [paused, setPaused] = useState(true);
 
@@ -52,6 +54,7 @@ const SkyXploreGamePage = () => {
     useEffect(() => fetchIsHost(), []);
 
     useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value) });
+    useLoader({ request: SKYXPLORE_GET_GAME_ID_OF_USER.createRequest(), mapper: (r) => setGameId(r.value) });
 
     const { sendMessage } = useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_MAIN,
@@ -220,17 +223,7 @@ const SkyXploreGamePage = () => {
                     paused={paused}
                 />
             ]}
-            centerButtons={[
-                (isAdmin ?
-                    <Button
-                        key="tick"
-                        id="skyxplore-game-process-tick-button"
-                        label={localizationHandler.get("process-tick")}
-                        onclick={processTick}
-                    />
-                    : []
-                )
-            ]}
+            centerButtons={centerButtons()}
             rightButtons={[
                 <ToggleChatButton
                     key="toggle-chat"
@@ -239,6 +232,34 @@ const SkyXploreGamePage = () => {
                 />
             ]}
         />
+
+        function centerButtons() {
+            const result = [];
+
+            if (isAdmin) {
+                result.push(
+                    <Button
+                        key="tick"
+                        id="skyxplore-game-process-tick-button"
+                        label={localizationHandler.get("process-tick")}
+                        onclick={processTick}
+                    />
+                );
+
+                if (hasValue(gameId)) {
+                    result.push(
+                        <Button
+                            key="view-data"
+                            id="skyxplore-game-view-data-button"
+                            label={localizationHandler.get("view-data")}
+                            onclick={() => window.open(SKYXPLORE_ADMIN_DETAILS_PAGE.assembleUrl({ gameId: gameId, type: "GAME", id: gameId }))}
+                        />
+                    );
+                }
+            }
+
+            return result;
+        }
     }
 
     const save = async () => {
