@@ -12,9 +12,9 @@ import java.util.Map;
 @AllArgsConstructor
 @Data
 @Builder
-public class PutMonitoringEntry {
+public class PutMetricsRequest {
     private String service;
     private Feature feature;
-    private Functionality getName;
-    private Map<String, Double> properties = new HashMap<>();
+    private Functionality functionality;
+    private Map<String, MetricPropertyModel> metrics = new HashMap<>();
 }

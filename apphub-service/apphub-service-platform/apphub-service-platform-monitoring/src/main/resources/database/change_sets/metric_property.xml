@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-metric_property" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="monitoring" tableName="metric_property"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="monitoring" tableName="metric_property">
+            <column name="metric_id" type="varchar(37)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="property" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="aggregation_strategy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

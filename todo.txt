@@ -1,0 +1,12 @@
+TODO delete old memory monitoring
+
+Every time a new metric is reported, the system can verify if it matches the schema registered, or creates a new schema.
+Then the verified metric is stored in the SECOND partition.
+A scheduled job running every minute collects records from the SECOND partition older than 5 minutes (so created 5-6 minutes ago), and aggregates them to a MINUTE record.
+A scheduled job running every hour collects MINUTE records 5-6 hours old and aggregates then to a HOUR record.
+In progress aggregation should not affect saving new records and displaying the metrics, because boards load only the last 5 minute (SECOND board), or 5 hours (HOUR board)
+A scheduled job running every week deletes records older than a year (limit & loop), and then verifies if every metric has at least 1 record still stored (so if a metric is not produced anymore, it is automatically removed from the list if there are no records anymore) - same with the metric<->service mapping
+
+For displaying data, the user can select the time frame (5 minutes - reads from SECOND partition, 5 hours  - reads from MINUTE partition, 1 year - reads from HOUR partition). Can select the feature from the available features (read from in-memory table), and then select one (or more) from the functionalities of the selected feature (read from in-memory). Then the user can select one (or more) services that provide the selected functionalities (also read from in-memory)
+
+Based on the picked time frame, feature, functionalities and services an SQL can be assembled that queries from the core table based on type, list of metric_ids and list of services, and created_at <= max_age. It is a big query, but uses only 4 columns, so it can be indexed and happens only when the user hits the "load" button.
