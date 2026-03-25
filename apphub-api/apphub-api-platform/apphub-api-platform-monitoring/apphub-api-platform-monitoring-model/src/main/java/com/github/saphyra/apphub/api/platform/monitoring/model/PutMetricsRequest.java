@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,5 +17,6 @@ public class PutMetricsRequest {
     private String service;
     private Feature feature;
     private Functionality functionality;
-    private Map<String, MetricPropertyModel> metrics = new HashMap<>();
+    private LocalDateTime timestamp;
+    private Map<String, MetricPropertyModel> properties = new HashMap<>();
 }

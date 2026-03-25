@@ -25,7 +25,7 @@ class MetricDataConverter extends ConverterBase<MetricDataEntity, MetricData> {
             .metricId(uuidConverter.convertDomain(domain.getMetricId()))
             .service(domain.getService())
             .type(domain.getType())
-            .createdAt(domain.getCreatedAt())
+            .timestamp(domain.getTimestamp())
             .properties(objectMapper.writeValueAsString(domain.getProperties()))
             .build();
     }
@@ -39,7 +39,7 @@ class MetricDataConverter extends ConverterBase<MetricDataEntity, MetricData> {
             .metricId(uuidConverter.convertEntity(entity.getMetricId()))
             .service(entity.getService())
             .type(entity.getType())
-            .createdAt(entity.getCreatedAt())
+            .timestamp(entity.getTimestamp())
             .properties(objectMapper.readValue(entity.getProperties(), typeRef))
             .build();
     }

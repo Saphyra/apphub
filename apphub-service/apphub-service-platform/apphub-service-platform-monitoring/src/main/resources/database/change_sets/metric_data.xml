@@ -12,7 +12,7 @@
             metric_id varchar(255) NOT NULL,
             service varchar(255) NOT NULL,
             type varchar(255) NOT NULL,
-            created_at timestamp NOT NULL,
+            timestamp timestamp NOT NULL,
             properties text NOT NULL,
             CONSTRAINT metric_data_pkey PRIMARY KEY (metric_data_id, type)
             ) PARTITION BY LIST (type);
@@ -43,7 +43,7 @@
             <column name="type" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="timestamp">
+            <column name="timestamp" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="properties" type="text">

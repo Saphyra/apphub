@@ -17,6 +17,6 @@ public class MetricData {
     private final UUID metricId;
     private final String service;
     private final MetricDataType type;
-    private final LocalDateTime createdAt;
+    private final LocalDateTime timestamp;
     private final Map<String, Double> properties;
 }

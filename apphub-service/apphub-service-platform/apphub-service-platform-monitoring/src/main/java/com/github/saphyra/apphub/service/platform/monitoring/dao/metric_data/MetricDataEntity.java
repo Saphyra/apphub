@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +29,6 @@ class MetricDataEntity {
     private String service;
     @Enumerated(EnumType.STRING)
     private MetricDataType type;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime timestamp;
     private String properties;
 }

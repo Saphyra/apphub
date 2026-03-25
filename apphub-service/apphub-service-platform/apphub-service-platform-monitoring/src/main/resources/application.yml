@@ -4,3 +4,13 @@ spring:
 
 liquibase:
   schema: monitoring
+
+monitoring:
+  metricExpirationDuration: P365D
+  migration:
+    SECOND:
+      expirationDuration: PT5M
+      stepDuration: PT1M
+    MINUTE:
+      expirationDuration: PT5H
+      stepDuration: PT1H

@@ -16,6 +16,6 @@ class PutMetricsRequestValidator {
         ValidationUtil.notNull(request.getFeature(), "feature");
         ValidationUtil.notNull(request.getFunctionality(), "functionality");
         ValidationUtil.notBlank(request.getFunctionality().getName(), "functionality.name");
-        ValidationUtil.notEmpty(request.getMetrics(), "metrics");
+        ValidationUtil.notEmpty(request.getProperties(), "metrics");
     }
 }

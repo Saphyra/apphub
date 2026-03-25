@@ -4,7 +4,11 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.InMemoryDao;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.UUID;
+
 @Component
+//TOOD unit test
 public class MetricPropertyDao extends InMemoryDao<MetricPropertyEntity, MetricProperty, MetricPropertyId, MetricPropertyRepository> {
     private final UuidConverter uuidConverter;
 
@@ -19,5 +23,12 @@ public class MetricPropertyDao extends InMemoryDao<MetricPropertyEntity, MetricP
             .metricId(uuidConverter.convertDomain(metricProperty.getMetricId()))
             .property(metricProperty.getProperty())
             .build();
+    }
+
+    public List<MetricProperty> getByMetricId(UUID metricId) {
+        return cache.values()
+            .stream()
+            .filter(metricProperty -> metricProperty.getMetricId().equals(metricId))
+            .toList();
     }
 }

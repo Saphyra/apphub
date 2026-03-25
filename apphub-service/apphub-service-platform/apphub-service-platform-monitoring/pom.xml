@@ -58,6 +58,12 @@
             <artifactId>apphub-lib-security</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-concurrency</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
