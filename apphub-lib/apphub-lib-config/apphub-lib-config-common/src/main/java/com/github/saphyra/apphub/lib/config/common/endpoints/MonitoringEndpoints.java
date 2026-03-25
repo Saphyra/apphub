@@ -1,8 +1,17 @@
 package com.github.saphyra.apphub.lib.config.common.endpoints;
 
 public class MonitoringEndpoints {
+    //Internal
     public static final String MONITORING_REPORT_METRICS = "/allowed-internal/monitoring/metrics";
+
+    //Event
     public static final String MONITORING_EVENT_AGGREGATE_SECOND_METRICS = "/event/monitoring/aggregation/second";
     public static final String MONITORING_AGGREGATE_MIGRATE_MINUTE_METRICS = "/event/monitoring/aggregation/minute";
     public static final String MONITORING_EVENT_DELETE_EXPIRED_METRICS = "/event/monitoring/migration/delete-expired";
+
+    //Public
+    public static final String MONITORING_GET_FEATURES = "/api/monitoring/features";
+    public static final String MONITORING_GET_FUNCTIONALITIES = "/api/monitoring/features/{feature}/functionalities";
+    public static final String MONITORING_GET_SERVICES = "/api/monitoring/{feature}/services";
+    public static final String MONITORING_GET_METRICS = "/api/monitoring/metrics/{type}";
 }

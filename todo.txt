@@ -1,5 +1,3 @@
 TODO Migrate old memory monitoring
 
-For displaying data, the user can select the time frame (5 minutes - reads from SECOND partition, 5 hours  - reads from MINUTE partition, 1 year - reads from HOUR partition). Can select the feature from the available features (read from in-memory table), and then select one (or more) from the functionalities of the selected feature (read from in-memory). Then the user can select one (or more) services that provide the selected functionalities (also read from in-memory)
-
 Based on the picked time frame, feature, functionalities and services an SQL can be assembled that queries from the core table based on type, list of metric_ids and list of services, and created_at <= max_age. It is a big query, but uses only 4 columns, so it can be indexed and happens only when the user hits the "load" button.

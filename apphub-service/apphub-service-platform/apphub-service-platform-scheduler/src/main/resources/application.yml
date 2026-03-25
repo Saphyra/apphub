@@ -23,6 +23,10 @@ interval:
     messageSender:
       pingRequest: 30000
       connectionCleanup: 600000
+  monitoring:
+    aggregateSecondMetrics: 0 * * * * ? #Every minute
+    aggregateMinuteMetrics: 0 0 * * * ? #Every hour
+    deleteExpiredMetrics: 0 0 0 * * ? #Every day at midnight
   storage:
     storedFileCleanup: 300000 #5 minutes
     fileCleanupCron: "0 0 11 1 * ?" #Every first day of month at 11AM
@@ -30,4 +34,4 @@ interval:
     processMessages: PT5S
     resetUnhandledMessages: P7D
     deleteExpiredMessages: PT1H
-    orphanedRecordCleanup: 0 0 3 * * *
+    orphanedRecordCleanup: 0 0 3 * * * #Every day at 3AM

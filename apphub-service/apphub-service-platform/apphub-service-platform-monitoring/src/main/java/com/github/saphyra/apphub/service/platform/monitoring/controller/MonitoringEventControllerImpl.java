@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.monitoring.controller;
 
 import com.github.saphyra.apphub.api.platform.monitoring.server.MonitoringEventController;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataType;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.service.platform.monitoring.service.migration.ExpiredMetricCleanupService;
 import com.github.saphyra.apphub.service.platform.monitoring.service.migration.MetricAggregationService;
 import lombok.RequiredArgsConstructor;

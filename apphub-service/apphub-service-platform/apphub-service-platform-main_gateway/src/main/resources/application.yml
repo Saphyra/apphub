@@ -130,6 +130,10 @@ spring:
               uri: http://elite-base:8080
               predicates:
                 - Path=/api/elite-base/**
+            - id: monitoring
+              uri: http://monitoring:8080
+              predicates:
+                - Path=/api/monitoring/**
 
             #WS
             - id: web-socket-admin-panel
@@ -270,6 +274,15 @@ role:
       requiredRoles:
         - ADMIN
     - pattern: /api/admin-panel/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    #Monitoring
+    - pattern: /api/monitoring/**
       methods:
         - GET
         - POST

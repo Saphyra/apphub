@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.monitoring.service.migration;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataType;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -28,7 +28,7 @@ class MetricDataEntity {
     private String metricId;
     private String service;
     @Enumerated(EnumType.STRING)
-    private MetricDataType type;
+    private com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType type;
     private LocalDateTime timestamp;
     private String properties;
 }

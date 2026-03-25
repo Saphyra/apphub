@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data;
 
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -7,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 //TODO unit test
 interface MetricDataRepository extends CrudRepository<MetricDataEntity, String> {
@@ -16,4 +18,7 @@ interface MetricDataRepository extends CrudRepository<MetricDataEntity, String> 
 
     @Query("SELECT e FROM MetricDataEntity e WHERE type = :type AND timestamp BETWEEN :expirationStart AND :expirationEnd")
     List<MetricDataEntity> getByTypeBetween(@Param("type") MetricDataType type, @Param("expirationStart") LocalDateTime expirationStart, @Param("expirationEnd") LocalDateTime expirationEnd);
+
+    @Query("SELECT e FROM MetricDataEntity e WHERE e.type = :type AND e.metricId IN (:metricIds) AND (:service IS NULL OR e.service = :service)")
+    List<MetricDataEntity> getByTypeAndMetricIdInAndService(@Param("type") MetricDataType type, @Param("metricIds") List<UUID> metricIds, @Param("service") String service);
 }

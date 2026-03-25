@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataType;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricProperty;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
@@ -57,6 +57,7 @@ public class PutMetricsService {
             .metricId(metricId)
             .service(request.getService())
             .type(MetricDataType.SECOND)
+            .timestamp(request.getTimestamp().withNano(0))
             .properties(properties)
             .build();
         metricDataDao.save(metricData);

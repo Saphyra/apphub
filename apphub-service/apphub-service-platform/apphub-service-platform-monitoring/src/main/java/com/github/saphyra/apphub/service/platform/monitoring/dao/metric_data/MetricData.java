@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data;
 
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

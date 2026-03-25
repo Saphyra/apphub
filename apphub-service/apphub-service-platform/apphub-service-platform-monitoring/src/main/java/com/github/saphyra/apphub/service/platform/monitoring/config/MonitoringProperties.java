@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.config;
 
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataType;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

@@ -1,0 +1,64 @@
+package com.github.saphyra.apphub.service.platform.monitoring.service;
+
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
+import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsResponse;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
+import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+//TODO unit test
+public class MetricDataQueryService {
+    private static final String INVALID_COMBINATION = "invalid_combination";
+
+    private final MetricDao metricDao;
+    private final MetricDataDao metricDataDao;
+
+    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service) {
+        List<UUID> metricIds = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
+            .stream()
+            .map(Metric::getMetricId)
+            .toList();
+
+        if (metricIds.isEmpty()) {
+            throw ExceptionFactory.notLoggedException(
+                HttpStatus.BAD_REQUEST,
+                ErrorCode.INVALID_PARAM,
+                Map.of(
+                    feature.name(), INVALID_COMBINATION,
+                    functionality, INVALID_COMBINATION
+                ),
+                "Invalid combination of feature " + feature + " and functionality " + functionality
+            );
+        }
+
+        return metricDataDao.getByTypeAndMetricIdInAndService(type, metricIds, service)
+            .stream()
+            .map(metricData -> {
+                Metric metric = metricDao.findByIdValidated(metricData.getMetricId());
+                return GetMetricsResponse.builder()
+                    .metricDataId(metricData.getMetricDataId())
+                    .feature(metric.getFeature())
+                    .functionality(metric.getFunctionality())
+                    .service(metricData.getService())
+                    .timestamp(metricData.getTimestamp())
+                    .properties(metricData.getProperties())
+                    .build();
+            })
+            .toList();
+    }
+}

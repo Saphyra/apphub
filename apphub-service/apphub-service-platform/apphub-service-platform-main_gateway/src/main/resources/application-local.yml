@@ -119,6 +119,10 @@ spring:
             uri: http://localhost:8087
             predicates:
             - Path=/api/elite-base/**
+          - id: monitoring
+            uri: http://localhost:8084
+            predicates:
+            - Path=/api/monitoring/**
 
           #WS
           - id: web-socket-admin-panel

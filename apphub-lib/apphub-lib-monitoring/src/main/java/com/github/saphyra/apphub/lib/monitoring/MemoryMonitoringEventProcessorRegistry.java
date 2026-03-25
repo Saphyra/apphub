@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class MonitoringEventProcessorRegistry implements EventProcessorRegistry {
+public class MemoryMonitoringEventProcessorRegistry implements EventProcessorRegistry {
     private final String host;
 
-    public MonitoringEventProcessorRegistry(
+    public MemoryMonitoringEventProcessorRegistry(
         @Value("${event.serviceHost}") String host
     ) {
         this.host = host;

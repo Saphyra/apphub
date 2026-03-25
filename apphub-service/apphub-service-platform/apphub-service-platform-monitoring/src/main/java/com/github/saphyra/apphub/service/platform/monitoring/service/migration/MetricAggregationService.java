@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
-import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataType;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricProperty;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
 import jakarta.transaction.Transactional;
