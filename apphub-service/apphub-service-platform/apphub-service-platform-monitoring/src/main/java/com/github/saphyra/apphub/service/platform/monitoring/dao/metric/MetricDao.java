@@ -18,9 +18,11 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
     private final IdGenerator idGenerator;
 
     MetricDao(MetricConverter converter, MetricRepository repository, UuidConverter uuidConverter, IdGenerator idGenerator) {
-        super(converter, repository, true);
+        super(converter, repository);
         this.uuidConverter = uuidConverter;
         this.idGenerator = idGenerator;
+
+        load();
     }
 
     @Override

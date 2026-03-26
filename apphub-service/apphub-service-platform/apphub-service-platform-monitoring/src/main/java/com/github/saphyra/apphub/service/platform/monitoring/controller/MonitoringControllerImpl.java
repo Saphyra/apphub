@@ -41,7 +41,7 @@ public class MonitoringControllerImpl implements MonitoringController {
 
         entries.stream()
             //Group received metrics by Feature and Functionality
-            .collect(Collectors.groupingBy(request -> new BiWrapper<>(request.getFeature(), request.getFunctionality().getName())))
+            .collect(Collectors.groupingBy(request -> new BiWrapper<>(request.getFeature(), request.getFunctionality())))
             .forEach((key, requests) -> {
                 try {
                     log.debug("Arrived: {}", requests);

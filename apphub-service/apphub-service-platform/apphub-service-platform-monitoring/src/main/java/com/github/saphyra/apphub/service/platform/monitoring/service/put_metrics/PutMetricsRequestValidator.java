@@ -18,10 +18,8 @@ public class PutMetricsRequestValidator {
     }
 
     public void validate(PutMetricsRequest request) {
-        ValidationUtil.notBlank(request.getService(), "service");
         ValidationUtil.notNull(request.getFeature(), "feature");
-        ValidationUtil.notNull(request.getFunctionality(), "functionality");
-        ValidationUtil.notBlank(request.getFunctionality().getName(), "functionality.name");
+        ValidationUtil.notBlank(request.getFunctionality(), "functionality");
         ValidationUtil.notEmpty(request.getProperties(), "metrics");
     }
 }

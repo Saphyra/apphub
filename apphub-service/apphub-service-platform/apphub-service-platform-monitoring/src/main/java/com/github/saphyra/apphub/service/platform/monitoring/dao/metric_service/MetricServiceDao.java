@@ -9,7 +9,9 @@ import java.util.UUID;
 @Component
 public class MetricServiceDao extends InMemoryDao<MetricServiceEntity, MetricService, MetricServiceEntity, MetricServiceRepository> {
     MetricServiceDao(MetricServiceConverter converter, MetricServiceRepository repository) {
-        super(converter, repository, true);
+        super(converter, repository);
+
+        load();
     }
 
     @SuppressWarnings("ClassEscapesDefinedScope")

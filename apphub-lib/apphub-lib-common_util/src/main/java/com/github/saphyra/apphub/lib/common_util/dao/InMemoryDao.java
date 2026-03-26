@@ -18,15 +18,13 @@ public abstract class InMemoryDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
     protected final ConcurrentHashMap<ID, DOMAIN> cache = new ConcurrentHashMap<>();
 
     protected InMemoryDao(Converter<ENTITY, DOMAIN> converter, REPOSITORY repository) {
-        this(converter, repository, false);
+        super(converter, repository);
     }
 
-    protected InMemoryDao(Converter<ENTITY, DOMAIN> converter, REPOSITORY repository, boolean preLoad) {
-        super(converter, repository);
+    protected void load() {
+        cache.clear();
 
-        if (preLoad) {
-            findAll();
-        }
+        findAll();
     }
 
     @Override

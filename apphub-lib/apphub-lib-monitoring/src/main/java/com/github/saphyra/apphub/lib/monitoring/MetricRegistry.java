@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
-import com.github.saphyra.apphub.api.platform.monitoring.model.Functionality;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricPropertyModel;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -25,7 +24,7 @@ public class MetricRegistry {
     private final Map<LocalDateTime, List<PutMetricsRequest>> registry = new ConcurrentHashMap<>();
     private final DateTimeUtil dateTimeUtil;
 
-    public void reportMetric(Feature feature, Functionality functionality, List<MetricPropertyModel> properties) {
+    public void reportMetric(Feature feature, String functionality, List<MetricPropertyModel> properties) {
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
             .withNano(0);
 

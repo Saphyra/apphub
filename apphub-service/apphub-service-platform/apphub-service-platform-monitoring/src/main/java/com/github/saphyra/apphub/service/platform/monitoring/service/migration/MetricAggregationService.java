@@ -68,11 +68,11 @@ public class MetricAggregationService {
         LocalDateTime expirationStart = dataProvider.step(expirationEnd);
         Map<BiWrapper<UUID, String>, List<MetricData>> metrics; //Map<<MetricId, Service>, List<MetricDataToAggregate>>
         do {
-            log.info("Aggregating {] records between {} and {}", expirationStart, expirationEnd);
-
             metrics = metricDataDao.getByTypeBetween(metricDataType, expirationStart, expirationEnd)
                 .stream()
                 .collect(Collectors.groupingBy(metricData -> new BiWrapper<>(metricData.getMetricId(), metricData.getService())));
+
+            log.info("Aggregating {} records between {} and {}", metrics.size(), expirationStart, expirationEnd);
 
             LocalDateTime timestamp = expirationEnd;
             executorServiceBean.processCollectionWithWait(metrics.entrySet(), entry -> aggregate(dataProvider, timestamp, entry.getKey().getEntity1(), entry.getKey().getEntity2(), entry.getValue()));

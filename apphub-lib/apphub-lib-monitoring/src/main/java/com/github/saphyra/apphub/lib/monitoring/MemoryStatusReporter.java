@@ -29,7 +29,7 @@ public class MemoryStatusReporter {
 
         metricRegistry.reportMetric(
             Feature.MEMORY_MONITORING,
-            () -> FUNCTIONALITY_MEMORY_STATUS,
+            FUNCTIONALITY_MEMORY_STATUS,
             List.of(
                 MetricPropertyModel.builder()
                     .key(KEY_AVAILABLE_MEMORY)

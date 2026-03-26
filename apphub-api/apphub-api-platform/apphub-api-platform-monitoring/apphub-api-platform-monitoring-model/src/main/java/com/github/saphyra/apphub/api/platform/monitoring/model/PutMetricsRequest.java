@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class PutMetricsRequest {
     private Feature feature;
-    private Functionality functionality;
+    private String functionality;
     private LocalDateTime timestamp;
     private List<MetricPropertyModel> properties = new ArrayList<>();
 }

@@ -13,8 +13,10 @@ public class MetricPropertyDao extends InMemoryDao<MetricPropertyEntity, MetricP
     private final UuidConverter uuidConverter;
 
     MetricPropertyDao(MetricPropertyConverter converter, MetricPropertyRepository repository, UuidConverter uuidConverter) {
-        super(converter, repository, true);
+        super(converter, repository);
         this.uuidConverter = uuidConverter;
+
+        load();
     }
 
     @Override
