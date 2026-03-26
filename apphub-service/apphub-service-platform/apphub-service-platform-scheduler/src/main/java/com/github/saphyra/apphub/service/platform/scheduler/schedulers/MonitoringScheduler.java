@@ -17,21 +17,33 @@ public class MonitoringScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(initialDelayString = "${initialDelay}", cron = "${interval.monitoring.aggregateSecondMetrics}")
+    @Scheduled(cron = "${interval.monitoring.aggregateSecondMetrics}")
     void aggregateSecondMetrics() {
         String eventName = MonitoringEvent.AGGREGATE_SECOND_METRICS;
         sendEvent(eventName);
     }
 
-    @Scheduled(initialDelayString = "${initialDelay}", cron = "${interval.monitoring.aggregateMinuteMetrics}")
+    @Scheduled(cron = "${interval.monitoring.aggregateMinuteMetrics}")
     void aggregateMinuteMetrics() {
         String eventName = MonitoringEvent.AGGREGATE_MINUTE_METRICS;
         sendEvent(eventName);
     }
 
-    @Scheduled(initialDelayString = "${initialDelay}", cron = "${interval.monitoring.deleteExpiredMetrics}")
+    @Scheduled(cron = "${interval.monitoring.deleteExpiredMetrics}")
     void deleteExpiredMetrics() {
         String eventName = MonitoringEvent.DELETE_EXPIRED_METRICS;
+        sendEvent(eventName);
+    }
+
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.monitoring.reportMemoryStatus}")
+    void reportMemoryStatus() {
+        String eventName = MonitoringEvent.REPORT_MEMORY_STATUS;
+        sendEvent(eventName);
+    }
+
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.monitoring.sendCollectedMetrics}")
+    void sendCollectedMetrics() {
+        String eventName = MonitoringEvent.SEND_COLLECTED_METRICS;
         sendEvent(eventName);
     }
 

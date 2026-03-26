@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class MetricPropertyModel {
+    private String key;
     private Double value;
     private AggregationStrategy aggregationStrategy;
 }

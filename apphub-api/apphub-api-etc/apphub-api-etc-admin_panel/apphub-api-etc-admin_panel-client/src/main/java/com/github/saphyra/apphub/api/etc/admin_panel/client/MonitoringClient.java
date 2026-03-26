@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "admin-panel-monitoring", url = "${serviceUrls.adminPanel}")
+@Deprecated(forRemoval = true)
 public interface MonitoringClient {
     @PutMapping(AdminPanelEndpoints.ADMIN_PANEL_INTERNAL_REPORT_MEMORY_STATUS)
     void reportMemoryStatus(@RequestBody MemoryStatusModel memoryStatus, @RequestHeader(Constants.LOCALE_HEADER) String locale);

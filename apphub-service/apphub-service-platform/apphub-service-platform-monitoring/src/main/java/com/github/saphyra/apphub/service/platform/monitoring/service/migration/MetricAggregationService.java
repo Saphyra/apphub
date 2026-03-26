@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.Met
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricProperty;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
+import com.github.saphyra.apphub.service.platform.monitoring.service.migration.agggregator.MetricPropertyAggregator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -82,6 +83,15 @@ public class MetricAggregationService {
     }
 
     private Void aggregate(MetricMigrationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
+        MetricData aggregated = getMetricData(dataProvider, timestamp, metricId, service, metrics);
+
+        metricDataDao.save(aggregated);
+        metricDataDao.deleteAll(metrics);
+
+        return null;
+    }
+
+    private MetricData getMetricData(MetricMigrationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
         MetricData aggregated = MetricData.builder()
             .metricDataId(idGenerator.randomUuid())
             .metricId(metricId)
@@ -90,11 +100,7 @@ public class MetricAggregationService {
             .timestamp(timestamp)
             .properties(aggregateProperties(metricId, metrics))
             .build();
-
-        metricDataDao.save(aggregated);
-        metricDataDao.deleteAll(metrics);
-
-        return null;
+        return aggregated;
     }
 
     private Map<String, Double> aggregateProperties(UUID metricId, List<MetricData> metrics) {

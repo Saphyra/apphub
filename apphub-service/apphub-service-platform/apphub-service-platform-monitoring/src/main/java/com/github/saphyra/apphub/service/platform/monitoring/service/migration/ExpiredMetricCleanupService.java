@@ -23,5 +23,7 @@ public class ExpiredMetricCleanupService {
             .minus(monitoringProperties.getMetricExpirationDuration());
 
         metricDataDao.deleteByTimestampBefore(expiration); //TODO monitor
+
+        //TODO check if metric, service and properties still have records (maybe the metric is no longer provided, do not let the user query metrics that has no more entries left)
     }
 }

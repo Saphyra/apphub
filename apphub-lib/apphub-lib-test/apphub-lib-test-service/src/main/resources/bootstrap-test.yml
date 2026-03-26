@@ -33,3 +33,4 @@ serviceUrls:
   user: n-a:8085
   web-content: n-a:8083
   web-content-localization: n-a:8083
+  monitoring: n-a:8084

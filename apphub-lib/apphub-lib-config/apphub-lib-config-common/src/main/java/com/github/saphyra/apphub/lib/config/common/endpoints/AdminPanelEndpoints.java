@@ -2,9 +2,13 @@ package com.github.saphyra.apphub.lib.config.common.endpoints;
 
 public class AdminPanelEndpoints {
     //Memory monitoring
+    @Deprecated(forRemoval = true)
     public static final String EVENT_TRIGGER_MEMORY_STATUS_UPDATE = "/event/trigger-memory-monitoring";
+    @Deprecated(forRemoval = true)
     public static final String EVENT_MEMORY_MONITORING = "/event/memory-monitoring";
+    @Deprecated(forRemoval = true)
     public static final String WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING = "/api/ws/admin-panel/monitoring/memory";
+    @Deprecated(forRemoval = true)
     public static final String ADMIN_PANEL_INTERNAL_REPORT_MEMORY_STATUS = "/internal/api/admin-panel/monitoring/memory";
 
     //MIGRATION

@@ -14,7 +14,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class MessageSenderConnectionCleanupSchedulerTest {
+public class WebSocketCleanupSchedulerTest {
     private static final String LOCALE = "locale";
 
     @Mock
@@ -24,14 +24,23 @@ public class MessageSenderConnectionCleanupSchedulerTest {
     private EventGatewayApiClient eventGatewayApi;
 
     @InjectMocks
-    private MessageSenderConnectionCleanupScheduler underTest;
+    private WebSocketCleanupScheduler underTest;
 
     @Test
-    public void pingRequest() {
+    public void webSocketCleanup() {
         given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
-        underTest.pingRequest();
+        underTest.webSocketCleanup();
 
         verify(eventGatewayApi).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.WEB_SOCKET_CONNECTION_CLEANUP_EVENT).build(), LOCALE);
+    }
+
+    @Test
+    public void webSocketPing() {
+        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
+
+        underTest.webSocketPing();
+
+        verify(eventGatewayApi).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.WEB_SOCKET_SEND_PING_EVENT).build(), LOCALE);
     }
 }

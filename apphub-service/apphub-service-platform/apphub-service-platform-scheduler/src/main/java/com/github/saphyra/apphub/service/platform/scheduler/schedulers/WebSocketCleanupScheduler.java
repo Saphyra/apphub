@@ -12,13 +12,25 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class MessageSenderConnectionCleanupScheduler {
+class WebSocketCleanupScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
-    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.messageSender.connectionCleanup}")
-    void pingRequest() {
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.webSocket.connectionCleanup}")
+    void webSocketCleanup() {
         String eventName = EmptyEvent.WEB_SOCKET_CONNECTION_CLEANUP_EVENT;
+        log.info("Sending event with name {}", eventName);
+        eventGatewayApi.sendEvent(
+            SendEventRequest.builder()
+                .eventName(eventName)
+                .build(),
+            commonConfigProperties.getDefaultLocale()
+        );
+    }
+
+    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.platform.webSocket.pingRequest}")
+    void webSocketPing() {
+        String eventName = EmptyEvent.WEB_SOCKET_SEND_PING_EVENT;
         log.info("Sending event with name {}", eventName);
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()

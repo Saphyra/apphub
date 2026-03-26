@@ -1,6 +1,8 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
+import com.github.saphyra.apphub.api.platform.monitoring.client.MonitoringClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -13,5 +15,11 @@ public class MonitoringAutoConfiguration {
     @ConditionalOnMissingBean(DateTimeUtil.class)
     DateTimeUtil dateTimeUtil() {
         return new DateTimeUtil();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CollectedMetricClient.class)
+    CollectedMetricClient defaultCollectedMetricClient(@Value("${spring.application.name}") String serviceName, MonitoringClient monitoringClient) {
+        return new DefaultCollectedMetricClient(monitoringClient, serviceName);
     }
 }

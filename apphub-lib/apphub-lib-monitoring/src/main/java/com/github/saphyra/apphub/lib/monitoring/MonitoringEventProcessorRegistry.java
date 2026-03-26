@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.lib.monitoring;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
-import com.github.saphyra.apphub.lib.event.EmptyEvent;
+import com.github.saphyra.apphub.lib.config.common.endpoints.MonitoringEndpoints;
+import com.github.saphyra.apphub.lib.event.MonitoringEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class MemoryMonitoringEventProcessorRegistry implements EventProcessorRegistry {
+public class MonitoringEventProcessorRegistry implements EventProcessorRegistry {
     private final String host;
 
-    public MemoryMonitoringEventProcessorRegistry(
+    public MonitoringEventProcessorRegistry(
         @Value("${event.serviceHost}") String host
     ) {
         this.host = host;
@@ -24,8 +24,13 @@ public class MemoryMonitoringEventProcessorRegistry implements EventProcessorReg
         return List.of(
             RegisterProcessorRequest.builder()
                 .host(host)
-                .eventName(EmptyEvent.ADMIN_PANEL_TRIGGER_MEMORY_STATUS_UPDATE)
-                .url(AdminPanelEndpoints.EVENT_MEMORY_MONITORING)
+                .eventName(MonitoringEvent.REPORT_MEMORY_STATUS)
+                .url(MonitoringEndpoints.EVENT_REPORT_MEMORY_STATUS)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .host(host)
+                .eventName(MonitoringEvent.SEND_COLLECTED_METRICS)
+                .url(MonitoringEndpoints.EVENT_SEND_COLLECTED_METRICS)
                 .build()
         );
     }

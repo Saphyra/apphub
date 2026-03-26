@@ -6,11 +6,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class PutMetricsRequestValidator {
+public class PutMetricsRequestValidator {
+    public void validate(List<PutMetricsRequest> request) {
+        request.forEach(this::validate);
+    }
+
     public void validate(PutMetricsRequest request) {
         ValidationUtil.notBlank(request.getService(), "service");
         ValidationUtil.notNull(request.getFeature(), "feature");

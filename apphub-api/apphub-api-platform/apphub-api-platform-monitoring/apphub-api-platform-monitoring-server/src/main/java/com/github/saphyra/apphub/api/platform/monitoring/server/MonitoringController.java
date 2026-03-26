@@ -21,7 +21,7 @@ import java.util.List;
 //TODO role protection test
 public interface MonitoringController {
     @PutMapping(MonitoringEndpoints.MONITORING_REPORT_METRICS)
-    void internalReportMetrics(@RequestBody List<PutMetricsRequest> entries);
+    void internalReportMetrics(@PathVariable("service") String service, @RequestBody List<PutMetricsRequest> entries);
 
     @GetMapping(MonitoringEndpoints.MONITORING_GET_FEATURES)
     List<Feature> getFeatures(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
