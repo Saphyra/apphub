@@ -9,7 +9,7 @@ import { throwException } from "../../../../common/js/Utils";
 const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) => {
     console.log(queryData);
 
-    const [metricsData, setMetricsData] = useState({queryData: null, metrics: []});
+    const [metricsData, setMetricsData] = useState({ queryData: null, metrics: [] });
 
     useLoader({
         request: MONITORING_GET_METRICS.createRequest(
@@ -42,7 +42,7 @@ const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) 
 
         return new Stream(metricsData.metrics)
             .groupBy(metric => JSON.stringify({ feature: metric.feature, functionality: metric.functionality, service: metric.service }))
-            .sorted((a, b) => {a.key.localeCompare(b.key)})
+            .sorted((a, b) => a.key.localeCompare(b.key))
             .toList((groupId, metrics) => {
                 const group = JSON.parse(groupId);
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.scheduler.schedulers;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.event.MonitoringEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
 public class MonitoringScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
+    private final SleepService sleepService;
 
     @Scheduled(cron = "${interval.monitoring.aggregateSecondMetrics}")
     void aggregateSecondMetrics() {
@@ -41,8 +43,9 @@ public class MonitoringScheduler {
         sendEvent(eventName);
     }
 
-    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.monitoring.sendCollectedMetrics}")
+    @Scheduled(cron = "${interval.monitoring.sendCollectedMetrics}")
     void sendCollectedMetrics() {
+        sleepService.sleep(500);
         String eventName = MonitoringEvent.SEND_COLLECTED_METRICS;
         sendEvent(eventName);
     }

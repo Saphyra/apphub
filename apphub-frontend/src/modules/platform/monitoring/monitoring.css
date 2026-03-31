@@ -10,7 +10,6 @@
 }
 
 .monitoring-diagram {
-    display: inline-block;
     border: 3px ridge white;
     margin: 10px;
     text-align: left;
@@ -30,4 +29,23 @@
 .monitoring-svg-diagram-item {
     fill: none;
     stroke-width: 1px;
+}
+
+.monitoring-svg-diagram-item-line {
+    stroke: transparent;
+    stroke-width: 3px;
+}
+
+.monitoring-svg-diagram-item-line.active {
+    stroke: red;
+}
+
+.monitoring-diagram-labels {
+    position: sticky;
+    left: 0;
+    display: inline-block;
+}
+
+.monitoring-diagram-labels>span {
+    margin: 0 10px;
 }

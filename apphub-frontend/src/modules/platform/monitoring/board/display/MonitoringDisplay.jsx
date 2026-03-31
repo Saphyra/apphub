@@ -1,9 +1,10 @@
+import { useState } from "react";
 import Polyline from "../../../../../common/component/svg/Polyline";
 import MapStream from "../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../common/js/collection/Stream";
 import Constants from "../../../../../common/js/Constants";
 import LocalDateTime from "../../../../../common/js/date/LocalDateTime";
-import { generateRandomId, getColors, hasValue } from "../../../../../common/js/Utils";
+import { formatNumber, generateRandomId, getColors, hasValue } from "../../../../../common/js/Utils";
 
 const VIEWBOX_HEIGHT = Constants.GRAPH_HEIGHT + Constants.GRAPH_PADDING * 2;
 
@@ -21,16 +22,18 @@ const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, funct
             step: step
         });
 
-    //<Timestamp - Metric>
+    const [displayedTimestamp, setDisplayedTimestamp] = useState(lastTimestamp);
+
+    //<Timestamp - Metric> used for data retrieval
     const entryMap = new Stream(metrics)
         .toMap(metric => metric.timestamp);
-    const entries = getEntries();
-    const viewboxWidth = Constants.PIXEL_PER_REPORT * entries.length + Constants.GRAPH_PADDING * 2;
-    const properties = new Stream(entries)
+    //List of all properties
+    const properties = new Stream(metrics)
         .flatMap(entry => new Stream(Object.keys(entry.properties)))
         .distinct()
         .toList();
-
+    const entries = getEntries();
+    const viewboxWidth = Constants.PIXEL_PER_REPORT * entries.length + Constants.GRAPH_PADDING * 2;
     const colors = getColors(properties);
 
     return (
@@ -42,19 +45,56 @@ const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, funct
                 className="monitoring-svg-diagram"
                 viewBox={"0, 0 " + viewboxWidth + " " + VIEWBOX_HEIGHT}
             >
-                {getContent()}
+                {getPropertyLines()}
+                {getVerticals()}
             </svg>
 
-            <div>{getColorLabels()}</div>
+            <div>{getLabels()}</div>
         </fieldset>
     );
 
-    function getColorLabels() {
-        return new MapStream(colors)
-            .toList((property, color) => <span style={{ color: color.assemble() }}> {property} </span>);
+    function getVerticals() {
+        return new Stream(entries)
+            .map(entry => entry.timestamp)
+            .sorted((a, b) => b - a)
+            .map((timestamp, index) => {
+                const width = Constants.GRAPH_PADDING + (index * Constants.PIXEL_PER_REPORT);
+                return (
+                    <line
+                        key={timestamp}
+                        className={"monitoring-svg-diagram-item-line" + (timestamp == displayedTimestamp ? " active" : "")}
+                        x1={width}
+                        y1={0}
+                        x2={width}
+                        y2={VIEWBOX_HEIGHT}
+                        onMouseEnter={() => setDisplayedTimestamp(timestamp)}
+                    />
+                );
+            })
+            .toList();
     }
 
-    function getContent() {
+    function getLabels() {
+        return (
+            <div className="monitoring-diagram-labels">
+                <span>{LocalDateTime.fromEpochSeconds(displayedTimestamp).format()}</span>
+                {getProperties()}
+            </div>
+        );
+
+        function getProperties() {
+            return new MapStream(colors)
+                .toList((property, color) =>
+                    <span
+                        key={property}
+                        style={{ color: color.assemble() }}>
+                        {property}: {formatNumber(entryMap[displayedTimestamp].properties[property], 3)}
+                    </span>
+                );
+        }
+    }
+
+    function getPropertyLines() {
         const maxValue = new Stream(entries)
             .flatMap(entry => new Stream(Object.values(entry.properties)))
             .max()
@@ -118,14 +158,18 @@ const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, funct
             const difference = Math.abs(timestamp - closest);
             const allowedDifference = step / 2;
             if (difference > allowedDifference) {
-                return {
+                const result = {
                     metricDataId: generateRandomId(),
                     feature: feature,
                     functionality: functionality,
                     service: service,
                     timestamp: timestamp,
-                    properties: {}
+                    properties: new Stream(properties)
+                        .toMap(property => property, () => 0)
                 }
+                entryMap[timestamp] = result;
+
+                return result;
             }
 
             return entryMap[closest];
