@@ -8,9 +8,16 @@ liquibase:
 monitoring:
   metricExpirationDuration: P365D
   migration:
+    #Reported metrics are aggregated to second precision
     SECOND:
-      expirationDuration: PT5M
+      #Second precision metrics are aggregated to minute precision after 10 minutes
+      expirationDuration: PT10M
       stepDuration: PT1M
     MINUTE:
+      #Minute precision metrics are aggregate to hour precision after 5 hours
       expirationDuration: PT5H
       stepDuration: PT1H
+      #Hour precision metrics are deleted after 365 days
+    HOUR:
+      expirationDuration: P365D
+      stepDuration: P1D

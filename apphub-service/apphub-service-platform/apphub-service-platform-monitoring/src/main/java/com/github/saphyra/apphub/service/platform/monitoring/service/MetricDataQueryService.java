@@ -4,7 +4,9 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsResponse;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,6 +30,8 @@ public class MetricDataQueryService {
 
     private final MetricDao metricDao;
     private final MetricDataDao metricDataDao;
+    private final MonitoringProperties monitoringProperties;
+    private final DateTimeUtil dateTimeUtil;
 
     public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service) {
         List<UUID> metricIds = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
@@ -46,7 +51,10 @@ public class MetricDataQueryService {
             );
         }
 
-        return metricDataDao.getByTypeAndMetricIdInAndService(type, metricIds, service)
+        LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
+            .minus(monitoringProperties.getMigration().get(type).getExpirationDuration());
+
+        return metricDataDao.getByTypeAndMetricIdInAndServiceAfter(type, metricIds, service, timestamp)
             .stream()
             .map(metricData -> {
                 Metric metric = metricDao.findByIdValidated(metricData.getMetricId());
@@ -55,7 +63,7 @@ public class MetricDataQueryService {
                     .feature(metric.getFeature())
                     .functionality(metric.getFunctionality())
                     .service(metricData.getService())
-                    .timestamp(metricData.getTimestamp())
+                    .timestamp(dateTimeUtil.toEpochSecond(metricData.getTimestamp()))
                     .properties(metricData.getProperties())
                     .build();
             })

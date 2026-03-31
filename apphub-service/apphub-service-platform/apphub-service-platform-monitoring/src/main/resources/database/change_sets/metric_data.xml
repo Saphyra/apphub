@@ -34,21 +34,11 @@
             <column name="metric_data_id" type="varchar(37)">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="metric_id" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="service" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="type" type="varchar(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="timestamp" type="timestamp">
-                <constraints nullable="false"/>
-            </column>
-            <column name="properties" type="text">
-                <constraints nullable="false"/>
-            </column>
+            <column name="metric_id" type="varchar(255)"/>
+            <column name="service" type="varchar(255)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="timestamp" type="timestamp"/>
+            <column name="properties" type="text"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

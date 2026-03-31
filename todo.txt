@@ -2,4 +2,9 @@ TODO Migrate old memory monitoring
 TODO remove old performance reporting
 TODO remove @Depracated
 
-Based on the picked time frame, feature, functionalities and services an SQL can be assembled that queries from the core table based on type, list of metric_ids and list of services, and created_at <= max_age. It is a big query, but uses only 4 columns, so it can be indexed and happens only when the user hits the "load" button.
+Based on the picked time frame,
+ feature,
+  functionalities
+  and services that are selected,
+  an SQL can be assembled that queries from the core table based on type, list of metric_ids and list of services, and created_at <= max_age.
+  It is a big query, but uses only 4 columns, so it can be indexed and happens only when the user hits the "load" button.

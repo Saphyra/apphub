@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,6 +17,6 @@ public class GetMetricsResponse {
     private Feature feature;
     private String functionality;
     private String service;
-    private LocalDateTime timestamp;
+    private Long timestamp;
     private Map<String, Double> properties;
 }

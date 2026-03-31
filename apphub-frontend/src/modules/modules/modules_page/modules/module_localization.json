@@ -90,5 +90,9 @@
     "test": {
         "en": "Test",
         "hu": "Test"
+    },
+    "monitoring": {
+        "en": "Monitoring",
+        "hu": "Monitoring"
     }
 }

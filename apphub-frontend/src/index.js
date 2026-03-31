@@ -53,6 +53,7 @@ import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPag
 import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
 import SkyXploreAdminListPage from './modules/skyxplore/admin/list/SkyXploreAdminListPage';
 import SkyXploreAdminDetailsPage from './modules/skyxplore/admin/details/SkyXploreAdminPanelDeatilsPage';
+import MonitoringPage from './modules/platform/monitoring/MonitoringPage';
 
 const router = createBrowserRouter([
   {
@@ -355,6 +356,10 @@ const router = createBrowserRouter([
   {
     path: "/web/calendar/expired-events",
     element: <ExpiredEventsPage />
+  },
+    {
+    path: "/web/monitoring",
+    element: <MonitoringPage />
   },
 ]);
 

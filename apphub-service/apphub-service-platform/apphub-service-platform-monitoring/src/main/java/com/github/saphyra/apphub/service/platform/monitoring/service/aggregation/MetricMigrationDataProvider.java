@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.migration;
+package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 //TODO unit test
@@ -32,9 +33,11 @@ interface MetricMigrationDataProvider {
 
         @Override
         public LocalDateTime getExpirationTime() {
+            Duration expirationDuration = monitoringProperties.getMigration().get(getType()).getExpirationDuration();
             return dateTimeUtil.getCurrentDateTime()
                 .withNano(0)
-                .minus(monitoringProperties.getMigration().get(getType()).getExpirationDuration());
+                .withSecond(0)
+                .minus(expirationDuration);
         }
 
         @Override
@@ -64,6 +67,7 @@ interface MetricMigrationDataProvider {
             return dateTimeUtil.getCurrentDateTime()
                 .withNano(0)
                 .withSecond(0)
+                .withMinute(0)
                 .minus(monitoringProperties.getMigration().get(getType()).getExpirationDuration());
         }
 

@@ -53,6 +53,7 @@ export const Endpoint = class {
             }
 
             const queryString = new MapStream(queryParams)
+                .filter((key, value) => hasValue(value))
                 .toList((key, value) => key + "=" + value)
                 .join("&");
 

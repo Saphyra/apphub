@@ -15,7 +15,7 @@ import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
-import com.github.saphyra.apphub.service.platform.monitoring.service.migration.agggregator.MetricPropertyAggregator;
+import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator.MetricPropertyAggregator;
 import com.google.common.util.concurrent.Striped;
 import jakarta.transaction.Transactional;
 import lombok.SneakyThrows;

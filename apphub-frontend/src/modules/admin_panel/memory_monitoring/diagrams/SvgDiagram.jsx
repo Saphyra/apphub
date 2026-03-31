@@ -4,8 +4,8 @@ import Stream from "../../../../common/js/collection/Stream";
 import Polyline from "../../../../common/component/svg/Polyline";
 
 const SvgDiagram = ({ service, availableBytes, duration, reports }) => {
-    const viewboxWidth = Constants.PIXEL_PER_REPORT * duration + Constants.GRAPH_BORDER * 2;
-    const viewboxHeight = Constants.GRAPH_HEIGHT + Constants.GRAPH_BORDER * 2;
+    const viewboxWidth = Constants.PIXEL_PER_REPORT * duration + Constants.GRAPH_PADDING * 2;
+    const viewboxHeight = Constants.GRAPH_HEIGHT + Constants.GRAPH_PADDING * 2;
 
     const drawAllocated = () => {
         const points = new Stream(reports)
@@ -34,11 +34,11 @@ const SvgDiagram = ({ service, availableBytes, duration, reports }) => {
     }
 
     const calculateWidth = (index) => {
-        return Constants.GRAPH_BORDER + (index * Constants.PIXEL_PER_REPORT);
+        return Constants.GRAPH_PADDING + (index * Constants.PIXEL_PER_REPORT);
     }
 
     const calculateHeight = (bytes) => {
-        const result = Constants.GRAPH_HEIGHT - Math.round(bytes * Constants.GRAPH_HEIGHT / availableBytes) + Constants.GRAPH_BORDER;
+        const result = Constants.GRAPH_HEIGHT - Math.round(bytes * Constants.GRAPH_HEIGHT / availableBytes) + Constants.GRAPH_PADDING;
         return result;
     }
 

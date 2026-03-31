@@ -35,7 +35,7 @@ public class MonitoringScheduler {
         sendEvent(eventName);
     }
 
-    @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.monitoring.reportMemoryStatus}")
+    @Scheduled(cron = "${interval.monitoring.reportMemoryStatus}")
     void reportMemoryStatus() {
         String eventName = MonitoringEvent.REPORT_MEMORY_STATUS;
         sendEvent(eventName);

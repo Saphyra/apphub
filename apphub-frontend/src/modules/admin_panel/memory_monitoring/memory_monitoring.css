@@ -89,7 +89,6 @@
 .memory-monitoring-svg-diagram-item {
     fill: none;
     stroke-width: 1px;
-    ;
 }
 
 .memory-monitoring-svg-diagram-item.allocated {

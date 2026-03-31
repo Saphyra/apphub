@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.platform.monitoring.controller;
 
 import com.github.saphyra.apphub.api.platform.monitoring.server.MonitoringEventController;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
-import com.github.saphyra.apphub.service.platform.monitoring.service.migration.ExpiredMetricCleanupService;
-import com.github.saphyra.apphub.service.platform.monitoring.service.migration.MetricAggregationService;
+import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.ExpiredMetricCleanupService;
+import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.MetricAggregationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +25,7 @@ class MonitoringEventControllerImpl implements MonitoringEventController {
 
     @Override
     public void aggregateMinuteMetrics() {
-        log.info("{} metrics aggregation started", MetricDataType.SECOND);
+        log.info("{} metrics aggregation started", MetricDataType.MINUTE);
 
         metricAggregationService.aggregate(MetricDataType.MINUTE);
     }

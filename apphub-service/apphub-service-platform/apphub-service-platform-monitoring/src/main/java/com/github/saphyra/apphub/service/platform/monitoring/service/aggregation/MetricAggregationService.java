@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.migration;
+package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrategy;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.Met
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricProperty;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
-import com.github.saphyra.apphub.service.platform.monitoring.service.migration.agggregator.MetricPropertyAggregator;
+import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator.MetricPropertyAggregator;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -64,25 +64,35 @@ public class MetricAggregationService {
     public void aggregate(MetricDataType metricDataType) {
         MetricMigrationDataProvider dataProvider = migrationDataMap.get(metricDataType);
 
+        LocalDateTime oldestRecordTimestamp = metricDataDao.findOldest(metricDataType)
+            .map(metricData -> {
+                log.info("Oldest record: {}", metricData);
+                return metricData;
+            })
+            .map(MetricData::getTimestamp)
+            .orElse(LocalDateTime.MAX);
         LocalDateTime expirationEnd = dataProvider.getExpirationTime();
         LocalDateTime expirationStart = dataProvider.step(expirationEnd);
-        Map<BiWrapper<UUID, String>, List<MetricData>> metrics; //Map<<MetricId, Service>, List<MetricDataToAggregate>>
-        do {
-            metrics = metricDataDao.getByTypeBetween(metricDataType, expirationStart, expirationEnd)
+        while (expirationEnd.isAfter(oldestRecordTimestamp)) {
+            //Map<<MetricId, Service>, List<MetricDataToAggregate>>
+            Map<BiWrapper<UUID, String>, List<MetricData>> metrics = metricDataDao.getByTypeBetween(metricDataType, expirationStart, expirationEnd)
                 .stream()
                 .collect(Collectors.groupingBy(metricData -> new BiWrapper<>(metricData.getMetricId(), metricData.getService())));
 
-            log.info("Aggregating {} records between {} and {}", metrics.size(), expirationStart, expirationEnd);
+            log.info("Aggregating {} types of records between {} and {}", metrics.size(), expirationStart, expirationEnd);
 
             LocalDateTime timestamp = expirationEnd;
             executorServiceBean.processCollectionWithWait(metrics.entrySet(), entry -> aggregate(dataProvider, timestamp, entry.getKey().getEntity1(), entry.getKey().getEntity2(), entry.getValue()));
 
             expirationEnd = expirationStart;
             expirationStart = dataProvider.step(expirationStart);
-        } while (!metrics.isEmpty());
+        }
+
+        log.info("{} migration finished. Oldest record timestamp: {}, expirationStart: {}, expirationEnd: {}", metricDataType, oldestRecordTimestamp, expirationStart, expirationEnd);
     }
 
     private Void aggregate(MetricMigrationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
+        log.info("Aggregating {} metrics for metricId {} and service {} to timestamp: {}", metrics.size(), metricId, service, timestamp);
         MetricData aggregated = getMetricData(dataProvider, timestamp, metricId, service, metrics);
 
         metricDataDao.save(aggregated);
@@ -92,7 +102,7 @@ public class MetricAggregationService {
     }
 
     private MetricData getMetricData(MetricMigrationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
-        MetricData aggregated = MetricData.builder()
+        return MetricData.builder()
             .metricDataId(idGenerator.randomUuid())
             .metricId(metricId)
             .service(service)
@@ -100,7 +110,6 @@ public class MetricAggregationService {
             .timestamp(timestamp)
             .properties(aggregateProperties(metricId, metrics))
             .build();
-        return aggregated;
     }
 
     private Map<String, Double> aggregateProperties(UUID metricId, List<MetricData> metrics) {

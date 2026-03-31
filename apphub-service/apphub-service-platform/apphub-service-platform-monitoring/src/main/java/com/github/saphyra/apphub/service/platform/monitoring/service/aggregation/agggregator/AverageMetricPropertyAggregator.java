@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.migration.agggregator;
+package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrategy;
 import lombok.RequiredArgsConstructor;
@@ -11,16 +11,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class SumMetricPropertyAggregator implements MetricPropertyAggregator {
+class AverageMetricPropertyAggregator implements MetricPropertyAggregator {
+    private final SumMetricPropertyAggregator sumMetricPropertyAggregator;
+
     @Override
     public AggregationStrategy getAggregationStrategy() {
-        return AggregationStrategy.SUM;
+        return AggregationStrategy.AVERAGE;
     }
 
     @Override
     public Double apply(List<Double> doubles) {
-        return doubles.stream()
-            .mapToDouble(Double::doubleValue)
-            .sum();
+        return sumMetricPropertyAggregator.apply(doubles) / doubles.size();
     }
 }

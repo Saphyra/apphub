@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data;
 
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,7 +29,7 @@ class MetricDataEntity {
     private String metricId;
     private String service;
     @Enumerated(EnumType.STRING)
-    private com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType type;
+    private MetricDataType type;
     private LocalDateTime timestamp;
     private String properties;
 }
