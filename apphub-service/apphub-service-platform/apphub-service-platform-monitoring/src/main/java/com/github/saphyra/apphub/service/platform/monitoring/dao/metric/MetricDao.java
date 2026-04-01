@@ -85,4 +85,8 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
             .findFirst()
             .orElseThrow(() -> ExceptionFactory.notFound("Metric not found by id " + metricId));
     }
+
+    public void deleteByMetricIdNotIn(List<UUID> metricIds) {
+        repository.deleteByMetricIdNotIn(uuidConverter.convertDomain(metricIds));
+    }
 }

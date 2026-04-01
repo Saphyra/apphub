@@ -7,7 +7,7 @@ liquibase:
 
 monitoring:
   metricExpirationDuration: P365D
-  migration:
+  aggregation:
     #Reported metrics are aggregated to second precision
     SECOND:
       #Second precision metrics are aggregated to minute precision after 10 minutes

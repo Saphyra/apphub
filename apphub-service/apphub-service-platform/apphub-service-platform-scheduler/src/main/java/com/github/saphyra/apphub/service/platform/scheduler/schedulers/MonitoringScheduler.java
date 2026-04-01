@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MonitoringScheduler {
     private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;

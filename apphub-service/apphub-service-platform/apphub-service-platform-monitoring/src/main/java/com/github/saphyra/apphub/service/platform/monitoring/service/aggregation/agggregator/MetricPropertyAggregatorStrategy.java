@@ -5,6 +5,6 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrate
 import java.util.List;
 import java.util.function.Function;
 
-public interface MetricPropertyAggregator extends Function<List<Double>, Double> {
+public interface MetricPropertyAggregatorStrategy extends Function<List<Double>, Double> {
     AggregationStrategy getAggregationStrategy();
 }

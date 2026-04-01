@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TOOD unit test
+//TODO unit test
 public class MetricPropertyDao extends InMemoryDao<MetricPropertyEntity, MetricProperty, MetricPropertyId, MetricPropertyRepository> {
     private final UuidConverter uuidConverter;
 
@@ -32,5 +32,9 @@ public class MetricPropertyDao extends InMemoryDao<MetricPropertyEntity, MetricP
             .stream()
             .filter(metricProperty -> metricProperty.getMetricId().equals(metricId))
             .toList();
+    }
+
+    public void deleteByMetricIdsNotIn(List<UUID> metricIds) {
+        repository.deleteByMetricIdsNotIn(uuidConverter.convertDomain(metricIds));
     }
 }

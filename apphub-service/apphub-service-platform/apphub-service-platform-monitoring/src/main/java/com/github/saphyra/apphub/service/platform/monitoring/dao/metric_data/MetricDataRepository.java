@@ -24,8 +24,14 @@ interface MetricDataRepository extends CrudRepository<MetricDataEntity, String> 
         @Param("type") MetricDataType type,
         @Param("metricIds") List<String> metricIds,
         @Param("service") String service,
-        @Param("timestamp" ) LocalDateTime timestamp
+        @Param("timestamp") LocalDateTime timestamp
     );
 
     Optional<MetricDataEntity> findFirstByTypeOrderByTimestampAsc(MetricDataType type);
+
+    @Query("SELECT e.service FROM MetricDataEntity e GROUP BY e.service")
+    List<String> getServices();
+
+    @Query("SELECT e.metricId from MetricDataEntity e GROUP BY e.metricId")
+    List<String> getMetricIds();
 }

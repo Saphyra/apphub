@@ -16,15 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MetricDataQueryService {
     private static final String INVALID_COMBINATION = "invalid_combination";
 
@@ -34,12 +35,11 @@ public class MetricDataQueryService {
     private final DateTimeUtil dateTimeUtil;
 
     public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service) {
-        List<UUID> metricIds = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
+        Map<UUID, Metric> metrics = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
             .stream()
-            .map(Metric::getMetricId)
-            .toList();
+            .collect(Collectors.toMap(Metric::getMetricId, metric -> metric));
 
-        if (metricIds.isEmpty()) {
+        if (metrics.isEmpty()) {
             throw ExceptionFactory.notLoggedException(
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.INVALID_PARAM,
@@ -51,13 +51,16 @@ public class MetricDataQueryService {
             );
         }
 
+        Duration expirationDuration = monitoringProperties.getAggregation()
+            .get(type)
+            .getExpirationDuration();
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
-            .minus(monitoringProperties.getMigration().get(type).getExpirationDuration());
+            .minus(expirationDuration);
 
-        return metricDataDao.getByTypeAndMetricIdInAndServiceAfter(type, metricIds, service, timestamp)
+        return metricDataDao.getByTypeAndMetricIdInAndServiceAfter(type, metrics.keySet(), service, timestamp)
             .stream()
             .map(metricData -> {
-                Metric metric = metricDao.findByIdValidated(metricData.getMetricId());
+                Metric metric = metrics.get(metricData.getMetricId());
                 return GetMetricsResponse.builder()
                     .metricDataId(metricData.getMetricDataId())
                     .feature(metric.getFeature())

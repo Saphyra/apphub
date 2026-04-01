@@ -11,7 +11,6 @@ import java.util.List;
 
 @Component
 @Slf4j
-//TODO unit test
 public class CollectedMetricClientImpl implements CollectedMetricClient {
     private final MonitoringControllerImpl monitoringController;
     private final String service;

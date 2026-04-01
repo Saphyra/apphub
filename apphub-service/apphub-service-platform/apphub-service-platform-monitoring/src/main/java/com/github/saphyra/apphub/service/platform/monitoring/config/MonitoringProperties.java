@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class MonitoringProperties {
     private Duration metricExpirationDuration;
-    private Map<MetricDataType, Migration> migration;
+    private Map<MetricDataType, Aggregation> aggregation;
 
     @PostConstruct
     void logProperties() {
@@ -24,7 +24,7 @@ public class MonitoringProperties {
     }
 
     @Data
-    public static class Migration {
+    public static class Aggregation {
         private Duration expirationDuration;
         private Duration stepDuration;
     }

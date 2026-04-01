@@ -10,17 +10,22 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class SumMetricPropertyAggregator implements MetricPropertyAggregator {
+class MinMetricPropertyAggregatorStrategy implements MetricPropertyAggregatorStrategy {
     @Override
     public AggregationStrategy getAggregationStrategy() {
-        return AggregationStrategy.SUM;
+        return AggregationStrategy.MIN;
     }
 
     @Override
     public Double apply(List<Double> doubles) {
-        return doubles.stream()
-            .mapToDouble(Double::doubleValue)
-            .sum();
+        double min = Double.POSITIVE_INFINITY;
+
+        for (Double d : doubles) {
+            if (d < min) {
+                min = d;
+            }
+        }
+
+        return min;
     }
 }

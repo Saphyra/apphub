@@ -10,17 +10,16 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class AverageMetricPropertyAggregator implements MetricPropertyAggregator {
-    private final SumMetricPropertyAggregator sumMetricPropertyAggregator;
-
+class SumMetricPropertyAggregatorStrategy implements MetricPropertyAggregatorStrategy {
     @Override
     public AggregationStrategy getAggregationStrategy() {
-        return AggregationStrategy.AVERAGE;
+        return AggregationStrategy.SUM;
     }
 
     @Override
     public Double apply(List<Double> doubles) {
-        return sumMetricPropertyAggregator.apply(doubles) / doubles.size();
+        return doubles.stream()
+            .mapToDouble(Double::doubleValue)
+            .sum();
     }
 }

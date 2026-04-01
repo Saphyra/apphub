@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@Builder
+@Builder(toBuilder = true)
 public class MetricPropertyModel {
     private String key;
     private Double value;

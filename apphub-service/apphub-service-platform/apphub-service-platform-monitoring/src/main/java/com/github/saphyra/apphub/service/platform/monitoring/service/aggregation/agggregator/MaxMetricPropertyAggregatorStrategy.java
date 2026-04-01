@@ -10,8 +10,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-class MaxMetricPropertyAggregator implements MetricPropertyAggregator {
+class MaxMetricPropertyAggregatorStrategy implements MetricPropertyAggregatorStrategy {
     @Override
     public AggregationStrategy getAggregationStrategy() {
         return AggregationStrategy.MAX;

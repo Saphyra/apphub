@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -29,11 +30,19 @@ public class MetricDataDao extends AbstractDao<MetricDataEntity, MetricData, Str
         return converter.convertEntity(repository.getByTypeBetween(type, expirationStart, expirationEnd));
     }
 
-    public List<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, List<UUID> metricIds, @Nullable String service, LocalDateTime timestamp) {
+    public List<MetricData> getByTypeAndMetricIdInAndServiceAfter(MetricDataType type, Collection<UUID> metricIds, @Nullable String service, LocalDateTime timestamp) {
         return converter.convertEntity(repository.getByTypeAndMetricIdInAndServiceAfter(type, uuidConverter.convertDomain(metricIds), service, timestamp));
     }
 
     public Optional<MetricData> findOldest(MetricDataType metricDataType) {
         return converter.convertEntity(repository.findFirstByTypeOrderByTimestampAsc(metricDataType));
+    }
+
+    public List<String> getServices() {
+        return repository.getServices();
+    }
+
+    public List<UUID> getMetricIds() {
+        return uuidConverter.convertEntity(repository.getMetricIds());
     }
 }
