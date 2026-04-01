@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated(forRemoval = true)
 public class MemoryMonitoringActions {
     public static List<String> getDisplayedServices(WebDriver driver) {
         return getReportContainers(driver)

@@ -28,6 +28,7 @@ const ServiceSelector = ({ localizationHandler, setDisplaySpinner, service, setS
 
     function getOptions() {
         return new Stream(services)
+            .sorted((a, b) => a.localeCompare(b))
             .map(service => new SelectOption(service, service))
             .add(new SelectOption("", ""))
             .toList();

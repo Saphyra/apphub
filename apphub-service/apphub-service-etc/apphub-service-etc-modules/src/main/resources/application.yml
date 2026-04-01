@@ -33,16 +33,8 @@ modules:
       url: /web/admin-panel/roles-for-all
       roles:
       - ADMIN
-    - name: memory-monitoring
-      url: /web/admin-panel/memory-monitoring
-      roles:
-      - ADMIN
     - name: migration-tasks
       url: /web/admin-panel/migration-tasks
-      roles:
-      - ADMIN
-    - name: performance-reporting
-      url: /web/admin-panel/performance-reporting
       roles:
       - ADMIN
     - name: monitoring

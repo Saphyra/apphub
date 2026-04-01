@@ -59,10 +59,6 @@
         "en": "Roles for all",
         "hu": "Jogosultságok mindenkinek"
     },
-    "memory-monitoring": {
-        "en": "Memory monitoring",
-        "hu": "Memória felhasználás"
-    },
     "community": {
         "en": "Community",
         "hu": "Közösség"
@@ -74,10 +70,6 @@
     "migration-tasks": {
         "en": "Migration Tasks",
         "hu": "Migrációs feladatok"
-    },
-    "performance-reporting": {
-        "en": "Performance reporting",
-        "hu": "Teljesítmény"
     },
     "elite-base": {
         "en": "EliteBase",

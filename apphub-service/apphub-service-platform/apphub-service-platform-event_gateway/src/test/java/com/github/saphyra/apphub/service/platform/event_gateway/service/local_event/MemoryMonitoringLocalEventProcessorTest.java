@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.local_event;
 
 import com.github.saphyra.apphub.lib.event.MonitoringEvent;
-import com.github.saphyra.apphub.lib.monitoring.MemoryStatusReporter;
+import com.github.saphyra.apphub.lib.monitoring.memory.MemoryStatusReporter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

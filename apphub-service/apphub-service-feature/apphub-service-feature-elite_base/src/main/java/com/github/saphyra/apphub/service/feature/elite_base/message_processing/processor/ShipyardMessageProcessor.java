@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
@@ -28,7 +28,7 @@ class ShipyardMessageProcessor implements MessageProcessor {
     private final StarSystemSaver starSystemSaver;
     private final StationSaverUtil stationSaverUtil;
     private final LoadoutSaver loadoutSaver;
-    private final PerformanceReporter performanceReporter;
+    private final MonitoringInstruments monitoringInstruments;
 
     @Override
     public boolean canProcess(EdMessage message) {
@@ -39,20 +39,20 @@ class ShipyardMessageProcessor implements MessageProcessor {
     public void processMessage(EdMessage message) {
         ShipyardMessage shipyardMessage = objectMapper.readValue(message.getMessage(), ShipyardMessage.class);
 
-        StarSystem starSystem = performanceReporter.wrap(
+        StarSystem starSystem = monitoringInstruments.wrap(
             () -> starSystemSaver.save(shipyardMessage.getTimestamp(), shipyardMessage.getSystemName()),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_SHIPYARD_MESSAGE_SAVE_SYSTEM.name()
         );
 
-        StationSaveResult saveResult = performanceReporter.wrap(
+        StationSaveResult saveResult = monitoringInstruments.wrap(
             () -> stationSaverUtil.saveStationOrFleetCarrier(
                 shipyardMessage.getTimestamp(),
                 starSystem.getId(),
                 shipyardMessage.getMarketId(),
                 shipyardMessage.getStationName()
             ),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_SHIPYARD_MESSAGE_SAVE_STATION.name()
         );
 
@@ -60,7 +60,7 @@ class ShipyardMessageProcessor implements MessageProcessor {
             throw new MessageProcessingDelayedException("ExternalReference is null.");
         }
 
-        performanceReporter.wrap(
+        monitoringInstruments.wrap(
             () -> loadoutSaver.save(
                 shipyardMessage.getTimestamp(),
                 ItemType.SPACESHIP,
@@ -69,7 +69,7 @@ class ShipyardMessageProcessor implements MessageProcessor {
                 shipyardMessage.getMarketId(),
                 CollectionUtils.toList(shipyardMessage.getShips())
             ),
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_SHIPYARD_MESSAGE_SAVE_LOADOUT.name()
         );
     }

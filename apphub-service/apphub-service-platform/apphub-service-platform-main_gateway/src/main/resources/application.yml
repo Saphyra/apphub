@@ -31,7 +31,6 @@ spring:
                 /web/skyxplore/game/admin/**,\
                 /web/notebook,\
                 /web/notebook/**,\
-                /web/admin-panel/memory-monitoring,\
                 /web/admin-panel/migration-tasks,\
                 /web/admin-panel/roles-for-all,\
                 /web/admin-panel/role-management,\
@@ -156,8 +155,6 @@ spring:
 
 nonSessionExtendingUris:
   - pattern: /api/user/authentication/session
-    method: GET
-  - pattern: /api/admin-panel/performance-reporting/topics/*/reports
     method: GET
   - pattern: /api/admin-panel/error-report
     method: GET

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.monitoring.etc;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
-import com.github.saphyra.apphub.lib.monitoring.CollectedMetricClient;
+import com.github.saphyra.apphub.lib.monitoring.core.CollectedMetricClient;
 import com.github.saphyra.apphub.service.platform.monitoring.controller.MonitoringControllerImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

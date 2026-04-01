@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingLock;
@@ -40,12 +40,12 @@ public class EdMessageProcessor {
     private final ErrorReporterService errorReporterService;
     private final List<MessageProcessor> messageProcessors;
     private final DateTimeUtil dateTimeUtil;
-    private final PerformanceReporter performanceReporter;
+    private final MonitoringInstruments monitoringInstruments;
     private final MessageProcessingLock messageProcessingLock;
 
     @SneakyThrows
     public synchronized void processMessages() {
-        performanceReporter.wrap(
+        monitoringInstruments.wrap(
             () -> {
                 StopWatch stopWatch = StopWatch.createStarted();
                 List<EdMessage> messages = doProcessMessages();
@@ -55,7 +55,7 @@ public class EdMessageProcessor {
                     log.info("{} messages processed in {}ms", messages.size(), stopWatch.getTime(TimeUnit.MILLISECONDS));
                 }
             },
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_BATCH.name()
         );
     }
@@ -65,9 +65,9 @@ public class EdMessageProcessor {
         Lock readLock = messageProcessingLock.readLock();
         if (readLock.tryLock()) {
             try {
-                List<EdMessage> messages = performanceReporter.wrap(
+                List<EdMessage> messages = monitoringInstruments.wrap(
                     () -> messageDao.getMessages(dateTimeUtil.getCurrentDateTime(), properties.getMessageProcessorBatchSize()),
-                    PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                    Feature.ELITE_BASE_MESSAGE_PROCESSING,
                     PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()
                 );
                 if (messages.isEmpty()) {
@@ -96,9 +96,9 @@ public class EdMessageProcessor {
         try {
             log.debug("Processing message {}: {}", edMessage.getMessageId(), edMessage.getSchemaRef());
 
-            performanceReporter.wrap(
+            monitoringInstruments.wrap(
                 () -> doProcessMessage(edMessage),
-                PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+                Feature.ELITE_BASE_MESSAGE_PROCESSING,
                 PerformanceReportingKey.PROCESS_MESSAGE.formatted(edMessage.getSchemaRef())
             );
         } catch (MessageProcessingDelayedException e) {

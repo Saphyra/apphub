@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.event_gateway.service.local_e
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.event.MonitoringEvent;
-import com.github.saphyra.apphub.lib.monitoring.MemoryStatusReporter;
+import com.github.saphyra.apphub.lib.monitoring.memory.MemoryStatusReporter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

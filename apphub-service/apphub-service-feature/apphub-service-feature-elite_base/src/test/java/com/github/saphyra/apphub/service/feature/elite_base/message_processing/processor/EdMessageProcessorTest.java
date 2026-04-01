@@ -1,16 +1,16 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.core.MetricRegistry;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MetricMapper;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingLock;
-import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.feature.elite_base.common.executor.MessageProcessorExecutor;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.MessageDao;
@@ -18,7 +18,6 @@ import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -29,17 +28,14 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -75,8 +71,7 @@ class EdMessageProcessorTest {
     @Mock
     private DateTimeUtil dateTimeUtil;
 
-    @Mock
-    private PerformanceReporter performanceReporter;
+    private final MonitoringInstruments monitoringInstruments = new MonitoringInstruments(mock(MetricMapper.class), mock(MetricRegistry.class));
 
     private final MessageProcessingLock messageProcessingLock = new MessageProcessingLock();
 
@@ -101,7 +96,7 @@ class EdMessageProcessorTest {
             .errorReporterService(errorReporterService)
             .messageProcessors(List.of(messageProcessor))
             .dateTimeUtil(dateTimeUtil)
-            .performanceReporter(performanceReporter)
+            .monitoringInstruments(monitoringInstruments)
             .messageProcessingLock(messageProcessingLock)
             .build();
 
@@ -111,12 +106,6 @@ class EdMessageProcessorTest {
             invocation.getArgument(0, Runnable.class).run();
             return future;
         });
-        doAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(PerformanceReportingTopic.class), anyString());
-        //noinspection unchecked
-        given(performanceReporter.wrap(any(Callable.class), any(PerformanceReportingTopic.class), anyString())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
     }
 
 
@@ -133,8 +122,6 @@ class EdMessageProcessorTest {
         then(messageDao).should().save(edMessage);
         then(errorReporterService).should().report(any(), any());
         then(future).should(atLeast(1)).get();
-        //noinspection unchecked
-        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test
@@ -152,8 +139,6 @@ class EdMessageProcessorTest {
         then(messageDao).should().save(edMessage);
         then(errorReporterService).shouldHaveNoInteractions();
         then(future).should(atLeast(1)).get();
-        //noinspection unchecked
-        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test
@@ -173,10 +158,7 @@ class EdMessageProcessorTest {
         then(edMessage).should().setCreatedAt(CURRENT_TIME.plus(RETRY_DELAY));
         then(messageDao).should().save(edMessage);
         then(errorReporterService).shouldHaveNoInteractions();
-        then(performanceReporter).should().wrap(any(Runnable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), eq(PerformanceReportingKey.PROCESS_MESSAGE.formatted(SCHEMA_REF)));
         then(future).should(atLeast(1)).get();
-        //noinspection unchecked
-        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test
@@ -195,10 +177,7 @@ class EdMessageProcessorTest {
         then(edMessage).should(times(2)).setStatus(MessageStatus.PROCESSED);
         then(messageDao).should(times(2)).save(edMessage);
         then(messageProcessor).should(times(2)).processMessage(edMessage);
-        then(performanceReporter).should(times(2)).wrap(any(Runnable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), eq(PerformanceReportingKey.PROCESS_MESSAGE.formatted(SCHEMA_REF)));
         then(future).should(atLeast(1)).get();
-        //noinspection unchecked
-        then(performanceReporter).should().wrap(any(Callable.class), eq(PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING), ArgumentMatchers.eq(PerformanceReportingKey.QUERY_ARRIVED_MESSAGES.name()));
     }
 
     @Test

@@ -27,12 +27,10 @@ public class AdminPanelRoleProtectionTest extends SeleniumTest {
         SleepUtil.sleep(3000);
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_MEMORY_MONITORING_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TASKS_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE);
-        CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_PERFORMANCE_REPORTING_PAGE);
     }
 
     @DataProvider(parallel = true)

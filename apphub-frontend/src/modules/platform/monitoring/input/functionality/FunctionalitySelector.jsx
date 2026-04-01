@@ -26,6 +26,7 @@ const FunctionalitySelector = ({ localizationHandler, setDisplaySpinner, functio
 
     function getOptions() {
         return new Stream(functionalities)
+            .sorted((a, b) => a.localeCompare(b))
             .map(func => new SelectOption(func, func))
             .add(new SelectOption("", ""))
             .toList();

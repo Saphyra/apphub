@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.commodity_t
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePriceDao;
@@ -15,7 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.concurrent.Callable;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,7 +33,7 @@ class CommodityTradingControllerImplTest {
     private ItemTypeDao itemTypeDao;
 
     @Mock
-    private PerformanceReporter performanceReporter;
+    private MonitoringInstruments monitoringInstruments;
 
     @Mock
     private CommodityAveragePriceDao commodityAveragePriceDao;
@@ -56,7 +56,7 @@ class CommodityTradingControllerImplTest {
     @Test
     void bestTradeLocations() {
         given(commodityTradingService.getTradeOffers(request)).willReturn(response);
-        given(performanceReporter.wrap(any(Callable.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Callable.class).call());
+        given(monitoringInstruments.wrap(any(Supplier.class), any(), any())).willAnswer(invocation -> invocation.getArgument(0, Supplier.class).get());
 
         assertThat(underTest.bestTradeLocations(request, accessTokenHeader)).isEqualTo(response);
     }

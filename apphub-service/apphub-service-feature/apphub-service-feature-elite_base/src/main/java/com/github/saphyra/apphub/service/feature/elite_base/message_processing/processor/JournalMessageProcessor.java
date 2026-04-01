@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.EconomyEnum;
@@ -55,7 +55,7 @@ class JournalMessageProcessor implements MessageProcessor {
     private final MinorFactionSaver minorFactionSaver;
     private final StationSaverUtil stationSaverUtil;
     private final ControllingFactionParser controllingFactionParser;
-    private final PerformanceReporter performanceReporter;
+    private final MonitoringInstruments monitoringInstruments;
     private final PowerplayConflictFactory powerplayConflictFactory;
 
     @Override
@@ -69,7 +69,7 @@ class JournalMessageProcessor implements MessageProcessor {
             .get("event")
             .asString();
 
-        performanceReporter.wrap(
+        monitoringInstruments.wrap(
             () -> {
                 switch (event) {
                     case "Scan" -> {
@@ -103,7 +103,7 @@ class JournalMessageProcessor implements MessageProcessor {
                     default -> throw new IllegalArgumentException("Unhandled event: " + event);
                 }
             },
-            PerformanceReportingTopic.ELITE_BASE_MESSAGE_PROCESSING,
+            Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_JOURNAL_MESSAGE.formatted(event)
         );
     }

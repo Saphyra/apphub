@@ -42,7 +42,7 @@ public class StarSystemSaver {
             throw new IllegalArgumentException("starName must not be null.");
         }
 
-        Optional<Lock> starNameLock = Optional.ofNullable(starName)
+        Optional<Lock> starNameLock = Optional.of(starName)
             .map(STAR_NAME_LOCK::get);
 
         starNameLock.ifPresent(this::lock);

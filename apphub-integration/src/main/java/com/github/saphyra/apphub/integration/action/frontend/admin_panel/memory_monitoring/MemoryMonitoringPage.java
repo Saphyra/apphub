@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+@Deprecated(forRemoval = true)
 class MemoryMonitoringPage {
     public static List<WebElement> reportContainers(WebDriver driver) {
         return driver.findElements(By.className("memory-monitoring-svg-container"));

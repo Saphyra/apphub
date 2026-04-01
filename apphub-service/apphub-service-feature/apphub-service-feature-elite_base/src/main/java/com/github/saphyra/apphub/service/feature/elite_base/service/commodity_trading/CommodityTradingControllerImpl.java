@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.feature.elite_base.service.commodity_trading;
 
-import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.server.CommodityTradingController;
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePriceDao;
@@ -22,16 +22,16 @@ import java.util.Collection;
 class CommodityTradingControllerImpl implements CommodityTradingController {
     private final CommodityTradingService commodityTradingService;
     private final ItemTypeDao itemTypeDao;
-    private final PerformanceReporter performanceReporter;
+    private final MonitoringInstruments monitoringInstruments;
     private final CommodityAveragePriceDao commodityAveragePriceDao;
 
     @Override
     public CommodityTradingResponse bestTradeLocations(CommodityTradingRequest request, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to find best trade locations based on {}", accessTokenHeader.getUserId(), request);
 
-        return performanceReporter.wrap(
+        return monitoringInstruments.wrap(
             () -> commodityTradingService.getTradeOffers(request),
-            PerformanceReportingTopic.ELITE_BASE_QUERY,
+            Feature.ELITE_BASE_QUERY,
             PerformanceReportingKey.API_BEST_TRADE_LOCATIONS.name()
         );
     }

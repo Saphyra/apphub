@@ -27,6 +27,7 @@ const FeatureSelector = ({ localizationHandler, setDisplaySpinner, feature, setF
 
     function getOptions() {
         return new Stream(features)
+            .sorted((a, b) => a.localeCompare(b))
             .map(feature => new SelectOption(feature, feature))
             .add(new SelectOption("", ""))
             .toList();
