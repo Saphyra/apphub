@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver;
 
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.Tradeable;
@@ -50,7 +50,7 @@ class CommoditySaverTest {
     private LastUpdateFactory lastUpdateFactory;
 
     @Mock
-    private PerformanceReporter performanceReporter;
+    private MonitoringInstruments monitoringInstruments;
 
     @Mock
     private CommodityAveragePriceSaver commodityAveragePriceSaver;

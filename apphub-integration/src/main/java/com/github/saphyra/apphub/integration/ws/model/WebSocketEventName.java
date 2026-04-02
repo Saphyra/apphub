@@ -11,7 +11,6 @@ public enum WebSocketEventName {
     REDIRECT("redirect"),
 
     //AdminPanel
-    ADMIN_PANEL_MONITORING_MEMORY_STATUS("admin-panel-monitoring-memory-status"),
     ADMIN_PANEL_ERROR_REPORT("admin-panel-error-report"),
 
     //SkyXplore MainMenu

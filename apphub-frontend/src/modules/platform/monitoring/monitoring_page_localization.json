@@ -1,0 +1,34 @@
+{
+    "title": {
+        "en": "Monitoring - Apphub",
+        "hu": "Monitoring - Apphub"
+    },
+    "page-title": {
+        "en": "Monitoring",
+        "hu": "Monitoring"
+    },
+    "home": {
+        "en": "Home",
+        "hu": "Kezdőlap"
+    },
+    "time-frame": {
+        "en": "Time frame",
+        "hu": "Időkeret"
+    },
+    "feature": {
+        "en": "Feature",
+        "hu": "Funkció"
+    },
+    "load": {
+        "en": "Load",
+        "hu": "Betöltés"
+    },
+    "functionality": {
+        "en": "Functionality",
+        "hu": "Funkcionalitás"
+    },
+    "service": {
+        "en": "Service",
+        "hu": "Szolgáltatás"
+    }
+}

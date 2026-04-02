@@ -110,6 +110,11 @@ services:
   location: "./apphub-service/apphub-service-etc/apphub-service-etc-admin_panel/target/application.jar"
   moduleName: apphub-service-etc-admin_panel
   group: 1
+- name: monitoring
+  port: 8084
+  location: "./apphub-service/apphub-service-platform/apphub-service-platform-monitoring/target/application.jar"
+  moduleName: apphub-service-platform-monitoring
+  group: 1
 - name: user
   port: 8085
   location: "./apphub-service/apphub-service-etc/apphub-service-etc-user/target/application.jar"

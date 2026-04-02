@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.integration.localization.Language;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
@@ -60,14 +59,6 @@ public class ApphubWsClient extends WebSocketClient {
         WS_CONNECTIONS.get().add(this);
         opened = true;
         this.name = name;
-    }
-
-    public static ApphubWsClient createAdminPanelMonitoring(int serverPort, Language language, UUID accessTokenId, Object name) {
-        try {
-            return new ApphubWsClient(serverPort, language, AdminPanelEndpoints.WS_CONNECTION_ADMIN_PANEL_MEMORY_MONITORING, accessTokenId, name);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public static ApphubWsClient createSkyXploreMainMenu(int serverPort, UUID accessTokenId, Object name) {

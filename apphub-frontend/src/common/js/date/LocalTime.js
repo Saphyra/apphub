@@ -40,7 +40,7 @@ const LocalTimeObj = class {
 const LocalTime = {
     parse: parse,
     of: of,
-    now: now,
+    now: now
 }
 
 export default LocalTime;

@@ -16,6 +16,7 @@ serviceUrls:
   user: localhost:8085
   web-content: localhost:8083
   web-content-localization: localhost:8083
+  monitoring: localhost:8084
 
 spring:
   cloud:

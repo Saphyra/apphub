@@ -22,7 +22,6 @@ import NewChecklistPage from './modules/notebook/new/new_checklist/NewChecklistP
 import NewTablePage from './modules/notebook/new/new_table/NewTablePage';
 import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
 import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
-import MemoryMonitoring from './modules/admin_panel/memory_monitoring/MemoryMonitoring';
 import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
 import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -41,7 +40,6 @@ import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
 import Constants from './common/js/Constants';
 import Redirection from './Redirection';
 import ErrorPage from './modules/error/ErorPage';
-import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
 import EliteBase from './modules/custom/elite_base/EliteBase';
 import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPage';
 import CalendarPage from './modules/calendar/index/CalendarPage';
@@ -53,6 +51,7 @@ import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPag
 import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
 import SkyXploreAdminListPage from './modules/skyxplore/admin/list/SkyXploreAdminListPage';
 import SkyXploreAdminDetailsPage from './modules/skyxplore/admin/details/SkyXploreAdminPanelDeatilsPage';
+import MonitoringPage from './modules/platform/monitoring/MonitoringPage';
 
 const router = createBrowserRouter([
   {
@@ -249,10 +248,6 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/admin-panel/memory-monitoring",
-    element: <MemoryMonitoring />
-  },
-  {
     path: "/web/admin-panel/migration-tasks",
     element: <MigrationTasksPage />
   },
@@ -307,10 +302,6 @@ const router = createBrowserRouter([
     element: <JsonFormatterPage />
   },
   {
-    path: "/web/admin-panel/performance-reporting",
-    element: <PerformanceReporting />
-  },
-  {
     path: "/web/elite-base",
     element: <EliteBase />
   },
@@ -355,6 +346,10 @@ const router = createBrowserRouter([
   {
     path: "/web/calendar/expired-events",
     element: <ExpiredEventsPage />
+  },
+    {
+    path: "/web/monitoring",
+    element: <MonitoringPage />
   },
 ]);
 

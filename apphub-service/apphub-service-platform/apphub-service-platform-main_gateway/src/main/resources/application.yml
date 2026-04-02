@@ -31,7 +31,6 @@ spring:
                 /web/skyxplore/game/admin/**,\
                 /web/notebook,\
                 /web/notebook/**,\
-                /web/admin-panel/memory-monitoring,\
                 /web/admin-panel/migration-tasks,\
                 /web/admin-panel/roles-for-all,\
                 /web/admin-panel/role-management,\
@@ -41,6 +40,7 @@ spring:
                 /web/admin-panel/ban,\
                 /web/admin-panel/ban/*,\
                 /web/admin-panel/performance-reporting,\
+                /web/monitoring,\
                 /web/utils/base64,\
                 /web/utils/json-formatter,\
                 /web/elite-base,\
@@ -130,6 +130,10 @@ spring:
               uri: http://elite-base:8080
               predicates:
                 - Path=/api/elite-base/**
+            - id: monitoring
+              uri: http://monitoring:8080
+              predicates:
+                - Path=/api/monitoring/**
 
             #WS
             - id: web-socket-admin-panel
@@ -151,8 +155,6 @@ spring:
 
 nonSessionExtendingUris:
   - pattern: /api/user/authentication/session
-    method: GET
-  - pattern: /api/admin-panel/performance-reporting/topics/*/reports
     method: GET
   - pattern: /api/admin-panel/error-report
     method: GET
@@ -275,6 +277,20 @@ role:
         - POST
         - DELETE
         - PUT
+      requiredRoles:
+        - ADMIN
+    #Monitoring
+    - pattern: /api/monitoring/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    - pattern: /web/monitoring
+      methods:
+        - GET
       requiredRoles:
         - ADMIN
     #SkyXplore

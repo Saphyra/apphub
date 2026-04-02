@@ -5,6 +5,8 @@
         Archive events
     SkyXplore
         Admin tool to look into gameData
+    Monitoring
+        Multifunctional monitoring service with boards
 
 ===BUGFIXES===
     Calendar

@@ -55,7 +55,7 @@ const Constants = {
 
     //Memory monitoring
     PIXEL_PER_REPORT: 3,
-    GRAPH_BORDER: 5,
+    GRAPH_PADDING: 5,
     GRAPH_HEIGHT: 200,
 
     //Settings

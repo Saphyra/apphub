@@ -139,7 +139,7 @@ const MigrationTasksPage = () => {
             <Footer
                 leftButtons={
                     <Button
-                        id="memory-monitoring-home-button"
+                        id="home-button"
                         onclick={() => window.location.href = Constants.MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />

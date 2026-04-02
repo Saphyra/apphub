@@ -19,10 +19,15 @@ interval:
       gameCleanup: 300000 #5 minutes
       deletion: 60000 #1 minute
   platform:
-    memoryStatusUpdateTrigger: 1000
-    messageSender:
+    webSocket:
       pingRequest: 30000
       connectionCleanup: 600000
+  monitoring:
+    aggregateSecondMetrics: 0 * * * * ? #Every minute
+    aggregateMinuteMetrics: 0 0 * * * ? #Every hour
+    deleteExpiredMetrics: 0 0 0 * * ? #Every day at midnight
+    reportMemoryStatus: "* * * * * ?" #Every second
+    sendCollectedMetrics: "*/5 * * * * ?" #Every 5 seconds
   storage:
     storedFileCleanup: 300000 #5 minutes
     fileCleanupCron: "0 0 11 1 * ?" #Every first day of month at 11AM
@@ -30,4 +35,4 @@ interval:
     processMessages: PT5S
     resetUnhandledMessages: P7D
     deleteExpiredMessages: PT1H
-    orphanedRecordCleanup: 0 0 3 * * *
+    orphanedRecordCleanup: 0 0 3 * * * #Every day at 3AM

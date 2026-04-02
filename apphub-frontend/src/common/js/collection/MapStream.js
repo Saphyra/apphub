@@ -62,6 +62,15 @@ const MapStream = class {
             .forEach((key) => consumer(key, this.items[key]));
     }
 
+    limit(count) {
+        const result = {};
+        Object.keys(this.items)
+            .slice(0, count)
+            .forEach((key) => result[key] = this.items[key]);
+
+        return new MapStream(result);
+    }
+
     map(mapper) {
         const result = {};
 

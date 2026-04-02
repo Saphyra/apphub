@@ -228,3 +228,39 @@ export const mapOrDefault = (value, defaultValue, mapper = v => v) => {
 export const isTestMode = () => {
     return isTrue(sessionStorage[Constants.STORAGE_KEY_TEST_MODE]);
 }
+
+export const getColors = (colorNames = []) => {
+    return new Stream(colorNames)
+        .map((name, index) => ({ name: name, color: getColor(index) }))
+        .toMap(item => item.name, item => item.color);
+
+    function getColor(index) {
+        const GOLDEN_ANGLE = 137.508;
+        const hue = (index * GOLDEN_ANGLE) % 360;
+        const saturation = 65;
+        const lightness = 55;
+
+        return hslToRgb(hue, saturation, lightness);
+    }
+
+    function hslToRgb(h, s, l) {
+        s /= 100;
+        l /= 100;
+
+        const k = n => (n + h / 30) % 12;
+        const a = s * Math.min(l, 1 - l);
+
+        const f = n =>
+            l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+
+        return {
+            r: Math.round(255 * f(0)),
+            g: Math.round(255 * f(8)),
+            b: Math.round(255 * f(4)),
+            assemble: function () {
+                return "rgb(" + this.r + ", " + this.g + ", " + this.b + ")";
+            }
+        };
+    }
+}
+

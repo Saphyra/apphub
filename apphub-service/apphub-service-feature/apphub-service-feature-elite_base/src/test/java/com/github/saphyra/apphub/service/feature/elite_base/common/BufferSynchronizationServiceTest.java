@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,7 +48,7 @@ class BufferSynchronizationServiceTest {
     private DateTimeUtil dateTimeUtil;
 
     @Mock
-    private PerformanceReporter performanceReporter;
+    private MonitoringInstruments monitoringInstruments;
 
     private BufferSynchronizationService underTest;
 
@@ -66,7 +66,7 @@ class BufferSynchronizationServiceTest {
             .properties(properties)
             .buffers(List.of(buffer))
             .dateTimeUtil(dateTimeUtil)
-            .performanceReporter(performanceReporter)
+            .monitoringInstruments(monitoringInstruments)
             .build();
     }
 
@@ -76,7 +76,7 @@ class BufferSynchronizationServiceTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
@@ -98,7 +98,7 @@ class BufferSynchronizationServiceTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
@@ -118,7 +118,7 @@ class BufferSynchronizationServiceTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
@@ -139,7 +139,7 @@ class BufferSynchronizationServiceTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
         given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));

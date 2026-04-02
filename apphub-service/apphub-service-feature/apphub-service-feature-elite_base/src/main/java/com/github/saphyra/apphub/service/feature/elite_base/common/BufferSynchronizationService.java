@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.feature.elite_base.common;
 
-import com.github.saphyra.apphub.api.etc.admin_panel.model.model.performance_reporting.PerformanceReportingTopic;
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
 import com.github.saphyra.apphub.lib.common_util.dao.Buffer;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Builder;
@@ -30,14 +30,14 @@ public class BufferSynchronizationService {
     private final EliteBaseProperties properties;
     private final List<AbstractBuffer<?>> buffers;
     private final DateTimeUtil dateTimeUtil;
-    private final PerformanceReporter performanceReporter;
+    private final MonitoringInstruments monitoringInstruments;
 
     public void synchronize() {
         log.debug("Checking if buffers need synchronization");
 
-        performanceReporter.wrap(
+        monitoringInstruments.wrap(
             () -> doSynchronize(),
-            PerformanceReportingTopic.ELITE_BASE_BUFFER_SYNCHRONIZATION,
+            Feature.ELITE_BASE_BUFFER_SYNCHRONIZATION,
             PerformanceReportingKey.BUFFER_SYNCHRONIZATION_BATCH.name()
         );
     }
@@ -46,7 +46,7 @@ public class BufferSynchronizationService {
     @SneakyThrows
     public void synchronizeAll() {
         log.info("Force-synchronizing all buffers");
-        List<FutureWrapper<Void>> futures =  buffers.stream()
+        List<FutureWrapper<Void>> futures = buffers.stream()
             .sorted(Comparator.comparingInt(Buffer::getOrder))
             .map(abstractBuffer -> executorServiceBean.execute(() -> doSynchronize(abstractBuffer)))
             .toList();
@@ -83,9 +83,9 @@ public class BufferSynchronizationService {
     }
 
     private void doSynchronize(AbstractBuffer<?> buffer) {
-        performanceReporter.wrap(
+        monitoringInstruments.wrap(
             buffer::synchronize,
-            PerformanceReportingTopic.ELITE_BASE_BUFFER_SYNCHRONIZATION,
+            Feature.ELITE_BASE_BUFFER_SYNCHRONIZATION,
             PerformanceReportingKey.BUFFER_SYNCHRONIZATION.formatted(buffer.getClass().getSimpleName())
         );
     }

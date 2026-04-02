@@ -91,7 +91,7 @@ class LocalDateTimeObj {
 const LocalDateTime = {
     fromEpochSeconds: fromEpochSeconds,
     now: now,
-    fromLocalDateTime: fromLocalDateTime,
+    fromLocalDateTime: fromLocalDateTime
 }
 
 export default LocalDateTime;

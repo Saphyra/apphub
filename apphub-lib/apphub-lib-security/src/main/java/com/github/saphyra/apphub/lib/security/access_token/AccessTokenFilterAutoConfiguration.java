@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.security.access_token;
 
 import com.github.saphyra.apphub.lib.common_util.Base64Encoder;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.config.common.FilterOrder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -39,5 +40,11 @@ public class AccessTokenFilterAutoConfiguration {
     @ConditionalOnMissingBean(AccessTokenHeaderConverter.class)
     AccessTokenHeaderConverter accessTokenHeaderConverter(Base64Encoder base64Encoder, ObjectMapper objectMapper) {
         return new AccessTokenHeaderConverter(base64Encoder, objectMapper);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    UuidConverter uuidConverter() {
+        return new UuidConverter();
     }
 }

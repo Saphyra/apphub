@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor;
 
-import com.github.saphyra.apphub.lib.performance_reporting.PerformanceReporter;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.Allegiance;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.EconomyEnum;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.SecurityLevel;
@@ -108,7 +108,7 @@ class JournalMessageProcessorTest {
     private ControllingFactionParser controllingFactionParser;
 
     @Mock
-    private PerformanceReporter performanceReporter;
+    private MonitoringInstruments monitoringInstruments;
 
     @InjectMocks
     private JournalMessageProcessor underTest;
@@ -165,7 +165,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         assertThat(catchThrowable(() -> underTest.processMessage(edMessage))).isInstanceOf(IllegalArgumentException.class);
     }
@@ -203,7 +203,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -246,7 +246,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         given(objectMapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
@@ -315,7 +315,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         given(objectMapper.readValue(MESSAGE, FsdJumpJournalMessage.class)).willReturn(fsdJumpJournalMessage);
         given(starSystemSaver.save(TIMESTAMP, STAR_ID, STAR_NAME, STAR_POSITION)).willReturn(starSystem);
@@ -384,7 +384,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -446,7 +446,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
         given(powerplayConflictFactory.create(STAR_SYSTEM_ID, List.of(powerplayConflictProgress))).willReturn(List.of(powerplayConflict));
 
         underTest.processMessage(edMessage);
@@ -517,7 +517,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
         given(powerplayConflictFactory.create(STAR_SYSTEM_ID, List.of(powerplayConflictProgress))).willReturn(List.of(powerplayConflict));
 
         underTest.processMessage(edMessage);
@@ -561,7 +561,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
@@ -585,7 +585,7 @@ class JournalMessageProcessorTest {
         doAnswer(invocation -> {
             invocation.getArgument(0, Runnable.class).run();
             return null;
-        }).when(performanceReporter).wrap(any(Runnable.class), any(), any());
+        }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
 
         underTest.processMessage(edMessage);
 
