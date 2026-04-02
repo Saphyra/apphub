@@ -13,7 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A DAO implementation that uses an in-memory cache that never expires.
  */
-//TODO unit test
 public abstract class InMemoryDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> extends AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY> {
     protected final ConcurrentHashMap<ID, DOMAIN> cache = new ConcurrentHashMap<>();
 
@@ -21,7 +20,7 @@ public abstract class InMemoryDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
         super(converter, repository);
     }
 
-    protected void load() {
+    public void load() {
         cache.clear();
 
         findAll();

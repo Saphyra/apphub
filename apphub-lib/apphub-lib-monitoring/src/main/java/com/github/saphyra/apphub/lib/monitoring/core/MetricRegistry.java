@@ -19,21 +19,17 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MetricRegistry {
     private final Map<LocalDateTime, List<PutMetricsRequest>> registry = new ConcurrentHashMap<>();
+
     private final DateTimeUtil dateTimeUtil;
+    private final PutMetricRequestFactory putMetricRequestFactory;
 
     public void reportMetric(Feature feature, String functionality, List<MetricPropertyModel> properties) {
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
             .withNano(0);
 
-        PutMetricsRequest request = PutMetricsRequest.builder()
-            .feature(feature)
-            .functionality(functionality)
-            .timestamp(timestamp)
-            .properties(properties)
-            .build();
+        PutMetricsRequest request = putMetricRequestFactory.create(feature, functionality, timestamp, properties);
 
         List<PutMetricsRequest> bucket = registry.computeIfAbsent(timestamp, _ -> new Vector<>());
         bucket.add(request);

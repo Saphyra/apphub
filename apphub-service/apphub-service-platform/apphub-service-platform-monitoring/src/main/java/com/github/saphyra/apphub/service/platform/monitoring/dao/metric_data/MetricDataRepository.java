@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-//TODO unit test
 interface MetricDataRepository extends CrudRepository<MetricDataEntity, String> {
-    @Query("DELETE FROM MetricDataEntity e WHERE e.type='HOUR' AND e.timestamp < :expiration")
     @Modifying
+    //Hour filter is needed for partition pruning
+    @Query("DELETE FROM MetricDataEntity e WHERE e.type='HOUR' AND e.timestamp < :expiration")
     void deleteByExpirationBefore(@Param("expiration") LocalDateTime expiration);
 
     @Query("SELECT e FROM MetricDataEntity e WHERE type = :type AND timestamp BETWEEN :expirationStart AND :expirationEnd")

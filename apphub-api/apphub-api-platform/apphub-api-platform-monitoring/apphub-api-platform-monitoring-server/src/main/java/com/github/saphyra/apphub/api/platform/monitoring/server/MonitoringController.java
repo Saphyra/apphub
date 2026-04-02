@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-//TODO unit test
-//TODO API test
-//TODO role protection test
 public interface MonitoringController {
     @PutMapping(MonitoringEndpoints.MONITORING_REPORT_METRICS)
     void internalReportMetrics(@PathVariable("service") String service, @RequestBody List<PutMetricsRequest> entries);

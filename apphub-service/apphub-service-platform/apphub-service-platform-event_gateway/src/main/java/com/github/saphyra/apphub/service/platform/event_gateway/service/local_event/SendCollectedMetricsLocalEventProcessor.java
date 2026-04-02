@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class SendCollectedMetricsLocalEventProcessor implements LocalEventProcessor {
     private final CollectedMetricSender collectedMetricSender;
 

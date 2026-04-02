@@ -41,7 +41,10 @@ public class CalendarSearchEventTest extends SeleniumTest {
     private void createUnmatchingEvent(WebDriver driver) {
         CalendarIndexPageActions.openCreateEventPage(driver);
 
-        CreateEventParameters createEventParameters = CreateEventParameters.valid(RepetitionType.ONE_TIME);
+        CreateEventParameters createEventParameters = CreateEventParameters.valid(RepetitionType.ONE_TIME)
+            .toBuilder()
+            .title("Unmatching event")
+            .build();
         CalendarEventPageActions.fillForm(driver, createEventParameters);
         CalendarEventPageActions.create(driver);
     }
@@ -49,7 +52,10 @@ public class CalendarSearchEventTest extends SeleniumTest {
     private void createEventWithMatchingOccurrence(WebDriver driver) {
         CalendarIndexPageActions.openCreateEventPage(driver);
 
-        CreateEventParameters createEventParameters = CreateEventParameters.valid(RepetitionType.ONE_TIME);
+        CreateEventParameters createEventParameters = CreateEventParameters.valid(RepetitionType.ONE_TIME)
+            .toBuilder()
+            .title("Event with matching occurrence")
+            .build();
         CalendarEventPageActions.fillForm(driver, createEventParameters);
         CalendarEventPageActions.create(driver);
 
@@ -68,6 +74,7 @@ public class CalendarSearchEventTest extends SeleniumTest {
 
         CreateEventParameters createEventParameters = CreateEventParameters.valid(RepetitionType.ONE_TIME)
             .toBuilder()
+            .title("Event with matching content")
             .content(SEARCH_TEXT)
             .build();
         CalendarEventPageActions.fillForm(driver, createEventParameters);

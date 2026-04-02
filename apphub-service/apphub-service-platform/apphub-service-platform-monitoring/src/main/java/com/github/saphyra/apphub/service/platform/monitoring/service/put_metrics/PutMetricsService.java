@@ -83,7 +83,7 @@ public class PutMetricsService {
     }
 
     private void saveMetricData(UUID metricId, String service, LocalDateTime timestamp, Map<String, Double> properties) {
-        MetricData metricData = metricDataFactory.create(metricId, service, timestamp, properties);
+        MetricData metricData = metricDataFactory.createSecond(metricId, service, timestamp, properties);
         metricDataDao.save(metricData);
     }
 

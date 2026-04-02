@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.server.MonitoringContro
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
@@ -26,7 +27,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MonitoringControllerImpl implements MonitoringController {
     private final PutMetricsService putMetricsService;
     private final ErrorReporterService errorReporterService;
@@ -70,17 +70,19 @@ public class MonitoringControllerImpl implements MonitoringController {
     public List<String> getServices(Feature feature, @Nullable String functionality, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query the available services for feature {} and functionality {}", accessTokenHeader.getUserId(), feature, functionality);
 
-        UUID metricId = metricDao.findByIdValidated(feature, functionality)
-            .getMetricId();
+        List<UUID> metricIds = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
+            .stream()
+            .map(Metric::getMetricId)
+            .toList();
 
-        return metricServiceDao.getByMetricId(metricId)
+        return metricServiceDao.getByMetricIds(metricIds)
             .stream()
             .map(MetricService::getService)
             .toList();
     }
 
     @Override
-    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, String functionality, String service, AccessTokenHeader accessTokenHeader) {
+    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query the metrics for type {}, feature {}, functionality {} and service {}", accessTokenHeader.getUserId(), type, feature, functionality, service);
 
         return metricDataQueryService.getMetrics(type, feature, functionality, service);

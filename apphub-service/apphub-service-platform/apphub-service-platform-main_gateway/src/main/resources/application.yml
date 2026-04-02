@@ -288,6 +288,11 @@ role:
         - PUT
       requiredRoles:
         - ADMIN
+    - pattern: /web/monitoring
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN
     #SkyXplore
     - pattern: /web/skyxplore/** #Generic SkyXplore pages
       methods:

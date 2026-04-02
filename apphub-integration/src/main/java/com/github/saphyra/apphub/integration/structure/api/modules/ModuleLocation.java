@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpo
 import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.MonitoringEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.TrainingEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
@@ -41,6 +42,7 @@ public enum ModuleLocation {
     BASICS_OF_PROGRAMMING("training", "basics-of-programming", TrainingEndpoints.TRAINING_BASICS_OF_PROGRAMMING_PAGE, "A programozás alapja"),
     JAVASCRIPT("training", "javascript", TrainingEndpoints.TRAINING_JAVASCRIPT_PAGE, "JavaScript"),
     UTILS_BASE_64("development-utils", "base64", GenericEndpoints.UTILS_BASE64_PAGE, "Base64 Encoder"),
+    MONITORING("admin-panel", "monitoring", MonitoringEndpoints.MONITORING_PAGE, "Monitoring"),
     ;
 
     private final String categoryId;

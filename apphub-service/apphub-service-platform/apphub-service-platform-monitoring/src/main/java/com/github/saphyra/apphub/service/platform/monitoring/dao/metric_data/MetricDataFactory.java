@@ -13,11 +13,10 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MetricDataFactory {
     private final IdGenerator idGenerator;
 
-    public MetricData create(UUID metricId, String service, LocalDateTime timestamp, Map<String, Double> properties) {
+    public MetricData createSecond(UUID metricId, String service, LocalDateTime timestamp, Map<String, Double> properties) {
         return create(metricId, service, timestamp, MetricDataType.SECOND, properties);
     }
 

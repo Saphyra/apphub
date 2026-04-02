@@ -9,9 +9,8 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MetricServiceFactory {
-    public MetricService create(UUID metricId, String service){
+    public MetricService create(UUID metricId, String service) {
         return MetricService.builder()
             .metricId(metricId)
             .service(service)

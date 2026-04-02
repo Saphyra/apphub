@@ -13,7 +13,6 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MetricDataConverter extends ConverterBase<MetricDataEntity, MetricData> {
     private final UuidConverter uuidConverter;
     private final ObjectMapper objectMapper;

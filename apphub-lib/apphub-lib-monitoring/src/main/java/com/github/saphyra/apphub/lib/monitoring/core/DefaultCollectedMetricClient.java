@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 @Slf4j
-//TODO unit test
 public class DefaultCollectedMetricClient implements CollectedMetricClient {
     private final MonitoringClient monitoringClient;
     private final String service;

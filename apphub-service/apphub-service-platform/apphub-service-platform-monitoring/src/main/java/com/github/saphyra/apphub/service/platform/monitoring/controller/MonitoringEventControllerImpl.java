@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MonitoringEventControllerImpl implements MonitoringEventController {
     private final MetricAggregationService metricAggregationService;
     private final ExpiredMetricCleanupService expiredMetricCleanupService;

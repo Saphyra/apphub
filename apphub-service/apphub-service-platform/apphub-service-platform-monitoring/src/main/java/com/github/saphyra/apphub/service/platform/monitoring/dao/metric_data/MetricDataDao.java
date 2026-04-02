@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class MetricDataDao extends AbstractDao<MetricDataEntity, MetricData, String, MetricDataRepository> {
     private final UuidConverter uuidConverter;
 
@@ -26,7 +25,7 @@ public class MetricDataDao extends AbstractDao<MetricDataEntity, MetricData, Str
         repository.deleteByExpirationBefore(expiration);
     }
 
-    public List<MetricData> getByTypeBetween(com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType type, LocalDateTime expirationStart, LocalDateTime expirationEnd) {
+    public List<MetricData> getByTypeBetween(MetricDataType type, LocalDateTime expirationStart, LocalDateTime expirationEnd) {
         return converter.convertEntity(repository.getByTypeBetween(type, expirationStart, expirationEnd));
     }
 

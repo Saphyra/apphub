@@ -12,7 +12,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CollectedMetricSender {
     private final CollectedMetricClient collectedMetricClient;
     private final MetricRegistry metricRegistry;

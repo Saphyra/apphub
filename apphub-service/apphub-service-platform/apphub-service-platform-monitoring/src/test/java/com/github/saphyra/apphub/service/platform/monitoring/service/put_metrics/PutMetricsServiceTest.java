@@ -80,7 +80,7 @@ class PutMetricsServiceTest {
         given(request.getProperties()).willReturn(List.of(propertyModel));
         Map<String, Double> properties = Map.of("asd", 3.2);
         given(putMetricsAggregator.aggregate(List.of(List.of(propertyModel)))).willReturn(properties);
-        given(metricDataFactory.create(METRIC_ID, SERVICE, TIMESTAMP.withNano(0), properties)).willReturn(metricData);
+        given(metricDataFactory.createSecond(METRIC_ID, SERVICE, TIMESTAMP.withNano(0), properties)).willReturn(metricData);
 
         underTest.putMetrics(SERVICE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, List.of(request));
 

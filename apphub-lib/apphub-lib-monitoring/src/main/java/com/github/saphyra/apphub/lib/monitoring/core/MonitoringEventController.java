@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @Builder
-//TODO unit test
 public class MonitoringEventController {
     private final MemoryStatusReporter memoryStatusReporter;
     private final CollectedMetricSender collectedMetricSender;

@@ -7,7 +7,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-//TODO unit test
 interface MetricServiceRepository extends CrudRepository<MetricServiceEntity, MetricServiceEntity> {
     @Modifying
     @Query("DELETE FROM MetricServiceEntity e WHERE e.service NOT IN :services")

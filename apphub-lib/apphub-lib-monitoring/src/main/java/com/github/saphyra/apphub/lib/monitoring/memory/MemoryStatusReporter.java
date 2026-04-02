@@ -17,7 +17,6 @@ import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MemoryStatusReporter {
     private static final String FUNCTIONALITY_MEMORY_STATUS = "MEMORY_STATUS";
     private static final double BYTES_IN_MEGABYTE = 1024d * 1024d;

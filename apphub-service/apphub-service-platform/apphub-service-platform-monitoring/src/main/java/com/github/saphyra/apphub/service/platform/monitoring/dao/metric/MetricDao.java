@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
-import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.InMemoryDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -12,15 +11,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-//TODO unit test
 public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricRepository> {
     private final UuidConverter uuidConverter;
-    private final IdGenerator idGenerator;
+    private final MetricFactory metricFactory;
 
-    MetricDao(MetricConverter converter, MetricRepository repository, UuidConverter uuidConverter, IdGenerator idGenerator) {
+    MetricDao(MetricConverter converter, MetricRepository repository, UuidConverter uuidConverter, MetricFactory metricFactory) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
-        this.idGenerator = idGenerator;
+        this.metricFactory = metricFactory;
 
         load();
     }
@@ -36,12 +34,9 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
             .filter(metric -> metric.getFeature() == feature && metric.getFunctionality().equals(functionality))
             .findFirst()
             .orElseGet(() -> {
-                Metric metric = Metric.builder()
-                    .metricId(idGenerator.randomUuid())
-                    .feature(feature)
-                    .functionality(functionality)
-                    .build();
+                Metric metric = metricFactory.create(feature, functionality);
                 save(metric);
+
                 return metric;
             });
     }
@@ -57,13 +52,13 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
     public List<String> getFunctionalitiesOfFeature(Feature feature) {
         return cache.values()
             .stream()
-            .filter(metric -> metric.getFeature() ==feature)
+            .filter(metric -> metric.getFeature() == feature)
             .map(Metric::getFunctionality)
             .distinct()
             .toList();
     }
 
-    public Metric findByIdValidated(Feature feature, @Nullable String functionality) {
+    public Metric findByFeatureAndFunctionalityValidated(Feature feature, @Nullable String functionality) {
         return cache.values()
             .stream()
             .filter(metric -> metric.getFeature() == feature && (functionality == null || metric.getFunctionality().equals(functionality)))
@@ -78,15 +73,10 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
             .toList();
     }
 
-    public Metric findByIdValidated(UUID metricId) {
-        return cache.values()
-            .stream()
-            .filter(metric -> metric.getMetricId().equals(metricId))
-            .findFirst()
-            .orElseThrow(() -> ExceptionFactory.notFound("Metric not found by id " + metricId));
-    }
-
     public void deleteByMetricIdNotIn(List<UUID> metricIds) {
+        uuidConverter.convertDomain(metricIds)
+            .forEach(cache::remove);
+
         repository.deleteByMetricIdNotIn(uuidConverter.convertDomain(metricIds));
     }
 }

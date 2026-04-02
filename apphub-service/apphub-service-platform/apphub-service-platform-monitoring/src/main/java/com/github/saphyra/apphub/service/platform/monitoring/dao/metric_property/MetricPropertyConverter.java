@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MetricPropertyConverter extends ConverterBase<MetricPropertyEntity, MetricProperty> {
     private final UuidConverter uuidConverter;
 
