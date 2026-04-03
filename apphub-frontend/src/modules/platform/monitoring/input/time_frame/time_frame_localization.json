@@ -1,0 +1,14 @@
+{
+    "SECOND": {
+        "en": "10 minutes",
+        "hu": "10 perc"
+    },
+    "MINUTE": {
+        "en": "5 hours",
+        "hu": "5 óra"
+    },
+    "HOUR": {
+        "en": "1 year",
+        "hu": "1 év"
+    }
+}

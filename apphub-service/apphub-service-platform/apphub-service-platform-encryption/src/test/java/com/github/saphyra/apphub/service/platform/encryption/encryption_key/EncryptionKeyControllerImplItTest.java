@@ -13,10 +13,9 @@ import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConv
 import com.github.saphyra.apphub.lib.config.common.endpoints.EncryptionEndpoints;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
-import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
-import com.github.saphyra.apphub.test.common.rest_assured.ErrorResponseValidator;
-import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.rest_assured.ErrorResponseValidator;
+import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
+import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +29,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
@@ -44,7 +42,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = ApiTestConfiguration.class)
 @Slf4j
 public class EncryptionKeyControllerImplItTest {
     private static final UUID USER_ID = UUID.randomUUID();

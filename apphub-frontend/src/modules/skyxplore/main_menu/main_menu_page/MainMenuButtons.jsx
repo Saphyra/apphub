@@ -6,11 +6,17 @@ import SavedGame from "./saved_game/SavedGame";
 import ConfirmationDialog from "../../../../common/component/confirmation_dialog/ConfirmationDialog";
 import { SKYXPLORE_GET_GAMES } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
 import { SKYXPLORE_DELETE_GAME } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { IS_ADMIN } from "../../../../common/js/dao/endpoints/UserEndpoints";
+import useLoader from "../../../../common/hook/Loader";
+import { SKYXPLORE_ADMIN_MAIN_PAGE } from "../../../../common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 
 const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
     const [displaySavedGames, setDisplaySavedGames] = useState(false);
     const [savedGames, setSavedGames] = useState([]);
     const [gameToDelete, setGameToDelete] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value) });
 
     useEffect(() => loadSavedGames(), [displaySavedGames]);
 
@@ -92,6 +98,15 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
                 onclick={() => window.location.href = Constants.SKYXPLORE_CHARACTER_PAGE}
                 label={localizationHandler.get("edit-character")}
             />
+
+            {isAdmin &&
+                <Button
+                    id="skyxplore-admin-button"
+                    className="skyxplore-main-menu-button"
+                    onclick={() => window.open(SKYXPLORE_ADMIN_MAIN_PAGE)}
+                    label={localizationHandler.get("admin-page")}
+                />
+            }
 
             <Button
                 id="skyxplore-home-button"

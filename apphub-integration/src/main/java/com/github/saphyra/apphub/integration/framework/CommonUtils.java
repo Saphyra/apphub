@@ -26,6 +26,18 @@ public class CommonUtils {
         ResponseValidator.verifyErrorResponse(apiCall.get(), 403, ErrorCode.MISSING_ROLE);
     }
 
+    /**
+     * Verifies missing role of an already assembled URL
+     */
+    public static void verifyMissingRole(WebDriver driver, String uri, int serverPort) {
+        driver.navigate().to(uri);
+
+        verifyMissingRole(serverPort, driver.getCurrentUrl());
+    }
+
+    /**
+     * Verifies missing role of a page
+     */
     public static void verifyMissingRole(int serverPort, WebDriver driver, String page) {
         driver.navigate().to(UrlFactory.create(serverPort, page));
 

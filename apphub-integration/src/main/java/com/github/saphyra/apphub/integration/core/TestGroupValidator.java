@@ -23,7 +23,8 @@ public class TestGroupValidator {
         "utils",
         "misc",
         "training",
-        "elite-base"
+        "elite-base",
+        "monitoring"
     );
 
     public static void validateTestGroups(Method method) {

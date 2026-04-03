@@ -133,6 +133,5 @@
         <module>apphub-service</module>
         <module>apphub-api</module>
         <module>apphub-lib</module>
-        <module>apphub-test</module>
     </modules>
 </project>

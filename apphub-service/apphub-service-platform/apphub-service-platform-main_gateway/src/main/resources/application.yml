@@ -3,7 +3,7 @@ spring:
     name: main-gateway
   autoconfigure:
     exclude:
-    - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   cloud:
     gateway:
       server:
@@ -14,11 +14,11 @@ spring:
           globalcors:
             enabled: false
           routes:
-          #FRONTEND
-          - id: frontend
-            uri: http://frontend:3000
-            predicates:
-            - "Path=\
+            #FRONTEND
+            - id: frontend
+              uri: http://frontend:3000
+              predicates:
+                - "Path=\
                 /,\
                 /web,\
                 /web/error,\
@@ -27,9 +27,10 @@ spring:
                 /web/skyxplore/character,\
                 /web/skyxplore/lobby,\
                 /web/skyxplore/game,\
+                /web/skyxplore/game/admin,\
+                /web/skyxplore/game/admin/**,\
                 /web/notebook,\
                 /web/notebook/**,\
-                /web/admin-panel/memory-monitoring,\
                 /web/admin-panel/migration-tasks,\
                 /web/admin-panel/roles-for-all,\
                 /web/admin-panel/role-management,\
@@ -39,6 +40,7 @@ spring:
                 /web/admin-panel/ban,\
                 /web/admin-panel/ban/*,\
                 /web/admin-panel/performance-reporting,\
+                /web/monitoring,\
                 /web/utils/base64,\
                 /web/utils/json-formatter,\
                 /web/elite-base,\
@@ -47,113 +49,115 @@ spring:
                 /web/calendar,\
                 /web/calendar/**,\
                 /web/user/account"
-            filters:
-            - StripPrefix=10
-          - id: frontend-resources
-            uri: http://frontend:3000
-            predicates:
-            - Path=/web/static/**
-            filters:
-            - StripPrefix=1
-          #RESOURCES
-          - id: common-resources
-            uri: http://web-content:8080
-            predicates:
-            - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/utils/**, /res/user/**
-          - id: training-resources
-            uri: http://training:8080
-            predicates:
-            - Path=/res/training/**
+              filters:
+                - StripPrefix=10
+            - id: frontend-resources
+              uri: http://frontend:3000
+              predicates:
+                - Path=/web/static/**
+              filters:
+                - StripPrefix=1
+            #RESOURCES
+            - id: common-resources
+              uri: http://web-content:8080
+              predicates:
+                - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/utils/**, /res/user/**
+            - id: training-resources
+              uri: http://training:8080
+              predicates:
+                - Path=/res/training/**
 
-          #PAGES
-          - id: common-pages
-            uri: http://web-content:8080
-            predicates:
-            - Path=/web/community
-          - id: training-pages
-            uri: http://training:8080
-            predicates:
-            - Path=/web/training/**
+            #PAGES
+            - id: common-pages
+              uri: http://web-content:8080
+              predicates:
+                - Path=/web/community
+            - id: training-pages
+              uri: http://training:8080
+              predicates:
+                - Path=/web/training/**
 
-          #MODULES
-          - id: user
-            uri: http://user:8080
-            predicates:
-            - Path=/api/user/**
-          - id: notebook
-            uri: http://notebook:8080
-            predicates:
-            - Path=/api/notebook/**
-          - id: admin-panel
-            uri: http://admin-panel:8080
-            predicates:
-            - Path=/api/admin-panel/**
-          - id: modules
-            uri: http://modules:8080
-            predicates:
-            - Path=/api/modules/**
-          - id: utils
-            uri: http://utils:8080
-            predicates:
-            - Path=/api/utils/**
-          - id: skyxplore-data
-            uri: http://skyxplore-data:8080
-            predicates:
-            - Path=/api/skyxplore/data/**
-          - id: skyxplore-lobby
-            uri: http://skyxplore-lobby:8080
-            predicates:
-            - Path=/api/skyxplore/lobby/**
-          - id: skyxplore-game
-            uri: http://skyxplore-game:8080
-            predicates:
-            - Path=/api/skyxplore/game/**
-          - id: training
-            uri: http://training:8080
-            predicates:
-            - Path=/api/training/**
-          - id: community
-            uri: http://community:8080
-            predicates:
-            - Path=/api/community/**
-          - id: calendar
-            uri: http://calendar:8080
-            predicates:
-            - Path=/api/calendar/**
-          - id: storage
-            uri: http://storage:8080
-            predicates:
-            - Path=/api/storage/**
-          - id: elite-base
-            uri: http://elite-base:8080
-            predicates:
-            - Path=/api/elite-base/**
+            #MODULES
+            - id: user
+              uri: http://user:8080
+              predicates:
+                - Path=/api/user/**
+            - id: notebook
+              uri: http://notebook:8080
+              predicates:
+                - Path=/api/notebook/**
+            - id: admin-panel
+              uri: http://admin-panel:8080
+              predicates:
+                - Path=/api/admin-panel/**
+            - id: modules
+              uri: http://modules:8080
+              predicates:
+                - Path=/api/modules/**
+            - id: utils
+              uri: http://utils:8080
+              predicates:
+                - Path=/api/utils/**
+            - id: skyxplore-data
+              uri: http://skyxplore-data:8080
+              predicates:
+                - Path=/api/skyxplore/data/**
+            - id: skyxplore-lobby
+              uri: http://skyxplore-lobby:8080
+              predicates:
+                - Path=/api/skyxplore/lobby/**
+            - id: skyxplore-game
+              uri: http://skyxplore-game:8080
+              predicates:
+                - Path=/api/skyxplore/game/**
+            - id: training
+              uri: http://training:8080
+              predicates:
+                - Path=/api/training/**
+            - id: community
+              uri: http://community:8080
+              predicates:
+                - Path=/api/community/**
+            - id: calendar
+              uri: http://calendar:8080
+              predicates:
+                - Path=/api/calendar/**
+            - id: storage
+              uri: http://storage:8080
+              predicates:
+                - Path=/api/storage/**
+            - id: elite-base
+              uri: http://elite-base:8080
+              predicates:
+                - Path=/api/elite-base/**
+            - id: monitoring
+              uri: http://monitoring:8080
+              predicates:
+                - Path=/api/monitoring/**
 
-          #WS
-          - id: web-socket-admin-panel
-            uri: ws://admin-panel:8080
-            predicates:
-            - Path=/api/ws/admin-panel/**
-          - id: web-socket-skyxplore-lobby
-            uri: ws://skyxplore-lobby:8080
-            predicates:
-            - Path=/api/ws/skyxplore-lobby/**
-          - id: web-socket-skyxplore-data
-            uri: ws://skyxplore-data:8080
-            predicates:
-            - Path=/api/ws/skyxplore-data/**
-          - id: web-socket-skyxplore-game
-            uri: ws://skyxplore-game:8080
-            predicates:
-            - Path=/api/ws/skyxplore-game/**
+            #WS
+            - id: web-socket-admin-panel
+              uri: ws://admin-panel:8080
+              predicates:
+                - Path=/api/ws/admin-panel/**
+            - id: web-socket-skyxplore-lobby
+              uri: ws://skyxplore-lobby:8080
+              predicates:
+                - Path=/api/ws/skyxplore-lobby/**
+            - id: web-socket-skyxplore-data
+              uri: ws://skyxplore-data:8080
+              predicates:
+                - Path=/api/ws/skyxplore-data/**
+            - id: web-socket-skyxplore-game
+              uri: ws://skyxplore-game:8080
+              predicates:
+                - Path=/api/ws/skyxplore-game/**
 
 nonSessionExtendingUris:
-- pattern: /api/user/authentication/session
-  method: GET
-- pattern: /api/admin-panel/performance-reporting/topics/*/reports
-  method: GET
-- pattern: /api/admin-panel/error-report
-  method: GET
+  - pattern: /api/user/authentication/session
+    method: GET
+  - pattern: /api/admin-panel/error-report
+    method: GET
 
 delay:
   filter:
@@ -161,198 +165,230 @@ delay:
 
 role:
   settings:
-  #Global
-  - pattern: /web/**
-    methods:
-    - GET
-    requiredRoles:
-    - ACCESS
-    whitelistedEndpoints:
-    - pattern: /web/error
-      method: GET
-    - pattern: /web
-      method: GET
-  - pattern: /api/**
-    methods:
-    - GET
-    - POST
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ACCESS
-    whitelistedEndpoints:
-    - pattern: /api/user/authentication/login
-      method: POST
-    - pattern: /api/user/authentication/logout
-      method: POST
-    - pattern: /api/user/authentication/session
-      method: GET
-    - pattern: /api/user
-      method: POST
-    - pattern: /api/user/ban/details
-      method: POST
-  #Training
-  - pattern: /web/training/**
-    methods:
-    - GET
-    requiredRoles:
-    - TRAINING
-  #Notebook
-  - pattern: /web/notebook
-    methods:
-    - GET
-    requiredRoles:
-    - NOTEBOOK
-  - pattern: /web/notebook/**
-    methods:
-    - GET
-    requiredRoles:
-    - NOTEBOOK
-  - pattern: /api/notebook/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - NOTEBOOK
-  #User
-  - pattern: /api/user/data/roles
-    methods:
-    - POST
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/roles/**
-    methods:
-    - PUT
-    - DELETE
-    - POST
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/roles/disabled
-    methods:
-    - GET
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/data/roles/all
-    methods:
-    - POST
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/ban
-    methods:
-    - POST
-    - GET
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/user/ban/**
-    methods:
-    - POST
-    - GET
-    - PUT
-    - DELETE
-    requiredRoles:
-    - ADMIN
-  #Admin-panel
-  - pattern: /web/admin-panel/**
-    methods:
-    - GET
-    - POST
-    - DELETE
-    - PUT
-    requiredRoles:
-    - ADMIN
-  - pattern: /api/admin-panel/**
-    methods:
-    - GET
-    - POST
-    - DELETE
-    - PUT
-    requiredRoles:
-    - ADMIN
-  #SkyXplore
-  - pattern: /web/skyxplore/**
-    methods:
-    - GET
-    requiredRoles:
-    - SKYXPLORE
-  - pattern: /api/skyxplore/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - SKYXPLORE
-  - pattern: /api/skyxplore/game/tick
-    methods:
-    - POST
-    requiredRoles:
-    - ADMIN
-  #Utils
-  - pattern: /web/utils/**
-    methods:
-    - GET
-    requiredRoles:
-    - UTILS
-  - pattern: /api/utils/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - UTILS
-  #Community
-  - pattern: /web/community
-    methods:
-    - GET
-    requiredRoles:
-    - COMMUNITY
-  - pattern: /api/community/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - COMMUNITY
-  #Calendar
-  - pattern: /web/calendar
-    methods:
-    - GET
-    requiredRoles:
-    - CALENDAR
-  - pattern: /api/calendar/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - CALENDAR
-  #EliteBase
-  - pattern: /web/elite-base/**
-    methods:
-    - GET
-    requiredRoles:
-    - ELITE_BASE
-  - pattern: /api/elite-base/**
-    methods:
-    - GET
-    - DELETE
-    - POST
-    - PUT
-    requiredRoles:
-    - ELITE_BASE
-  - pattern: /api/elite-base/material-trader-override/*
-    methods:
-    - POST
-    - DELETE
-    requiredRoles:
-    - ELITE_BASE_ADMIN
+    #Global
+    - pattern: /web/**
+      methods:
+        - GET
+      requiredRoles:
+        - ACCESS
+      whitelistedEndpoints:
+        - pattern: /web/error
+          method: GET
+        - pattern: /web
+          method: GET
+    - pattern: /api/**
+      methods:
+        - GET
+        - POST
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ACCESS
+      whitelistedEndpoints:
+        - pattern: /api/user/authentication/login
+          method: POST
+        - pattern: /api/user/authentication/logout
+          method: POST
+        - pattern: /api/user/authentication/session
+          method: GET
+        - pattern: /api/user
+          method: POST
+        - pattern: /api/user/ban/details
+          method: POST
+    #Training
+    - pattern: /web/training/**
+      methods:
+        - GET
+      requiredRoles:
+        - TRAINING
+    #Notebook
+    - pattern: /web/notebook
+      methods:
+        - GET
+      requiredRoles:
+        - NOTEBOOK
+    - pattern: /web/notebook/**
+      methods:
+        - GET
+      requiredRoles:
+        - NOTEBOOK
+    - pattern: /api/notebook/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - NOTEBOOK
+    #User
+    - pattern: /api/user/data/roles
+      methods:
+        - POST
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/**
+      methods:
+        - PUT
+        - DELETE
+        - POST
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/disabled
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/data/roles/all
+      methods:
+        - POST
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/ban
+      methods:
+        - POST
+        - GET
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/user/ban/**
+      methods:
+        - POST
+        - GET
+        - PUT
+        - DELETE
+      requiredRoles:
+        - ADMIN
+    #Admin-panel
+    - pattern: /web/admin-panel/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/admin-panel/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    #Monitoring
+    - pattern: /api/monitoring/**
+      methods:
+        - GET
+        - POST
+        - DELETE
+        - PUT
+      requiredRoles:
+        - ADMIN
+    - pattern: /web/monitoring
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN
+    #SkyXplore
+    - pattern: /web/skyxplore/** #Generic SkyXplore pages
+      methods:
+        - GET
+      requiredRoles:
+        - SKYXPLORE
+    - pattern: /web/skyxplore/game/admin #Landing page of SkyXplore admin pages
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN
+    - pattern: /web/skyxplore/game/admin/** #SkyXplore admin pages
+      methods:
+        - GET
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/skyxplore/** #Generic SkyXplore endpoints
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - SKYXPLORE
+    - pattern: /api/skyxplore/game/tick #Admin endpoint for manually processing a tick
+      methods:
+        - POST
+      requiredRoles:
+        - ADMIN
+    - pattern: /api/skyxplore/game/admin/** #SkyXplore admin endpoints
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - ADMIN
+    #Utils
+    - pattern: /web/utils/**
+      methods:
+        - GET
+      requiredRoles:
+        - UTILS
+    - pattern: /api/utils/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - UTILS
+    #Community
+    - pattern: /web/community
+      methods:
+        - GET
+      requiredRoles:
+        - COMMUNITY
+    - pattern: /api/community/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - COMMUNITY
+    #Calendar
+    - pattern: /web/calendar
+      methods:
+        - GET
+      requiredRoles:
+        - CALENDAR
+    - pattern: /api/calendar/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - CALENDAR
+    #EliteBase
+    - pattern: /web/elite-base/**
+      methods:
+        - GET
+      requiredRoles:
+        - ELITE_BASE
+    - pattern: /api/elite-base/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - ELITE_BASE
+    - pattern: /api/elite-base/material-trader-override/*
+      methods:
+        - POST
+        - DELETE
+      requiredRoles:
+        - ELITE_BASE_ADMIN

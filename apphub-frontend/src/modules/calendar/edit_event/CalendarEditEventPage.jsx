@@ -32,6 +32,8 @@ import useQueryParams from "../../../common/hook/UseQueryParams";
 import PreLabeledInputField from "../../../common/component/input/PreLabeledInputField";
 import TestableDateInput from "../common/input/TestableDateInput";
 import createOccurrence from "./createOccurrence";
+import PostLabeledInputField from "../../../common/component/input/PostLabeledInputField";
+import InputField from "../../../common/component/input/InputField";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -70,6 +72,7 @@ const CalendarEditEventPage = () => {
     const [repetitionData, setRepetitionData] = useExtractAsync(o => o.repetitionData, event);
     const [repeatForDays, setRepeatForDays] = useExtractAsync(o => o.repeatForDays, event, 1);
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, event, 0);
+    const [archived, setArchived] = useExtractAsync(o => o.archived, event, false);
     const [existingLabels, setExistingLabels] = useExtractAsync(o => o.labels, event, []);
 
     useLoader(
@@ -113,6 +116,17 @@ const CalendarEditEventPage = () => {
                         setTitle={setTitle}
                         content={content}
                         setContent={setContent}
+                    />
+
+                    <PostLabeledInputField
+                        id="calendar-edit-event-archived"
+                        label={localizationHandler.get("archived")}
+                        input={<InputField
+                            id="calendar-edit-event-archived-checkbox"
+                            type="checkbox"
+                            checked={archived}
+                            onchangeCallback={setArchived}
+                        />}
                     />
                 </fieldset>
 
@@ -252,7 +266,8 @@ const CalendarEditEventPage = () => {
                             time: new Optional(time).map(d => d.formatWithoutSeconds()).orElse(null),
                             title: title,
                             content: content,
-                            remindMeBeforeDays: remindMeBeforeDays
+                            remindMeBeforeDays: remindMeBeforeDays,
+                            archived: archived
                         },
                         existingLabels,
                         setDisplaySpinner,

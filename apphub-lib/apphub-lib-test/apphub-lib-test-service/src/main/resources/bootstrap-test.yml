@@ -1,0 +1,36 @@
+event:
+  serviceHost: placeholder
+  processor:
+    enabled: false
+    registration:
+      failure:
+        delay:
+          milliseconds: 1
+
+spring:
+  cloud:
+    kubernetes:
+      enabled: false
+  datasource:
+    username: root
+    url: jdbc:h2:mem:test
+    driverClassName: org.h2.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+encryptionStrategy: revealing
+
+serviceUrls:
+  adminPanel: n-a:8089
+  eventGateway: n-a:8081
+  messageSender: n-a:8094
+  skyxploreData: n-a:8091
+  skyxploreGame: n-a:8095
+  skyxploreLobby: n-a:8093
+  storage: n-a:8099
+  user: n-a:8085
+  web-content: n-a:8083
+  web-content-localization: n-a:8083
+  monitoring: n-a:8084

@@ -20,9 +20,10 @@ spring:
                 /web/skyxplore/character,\
                 /web/skyxplore/lobby,\
                 /web/skyxplore/game,\
+                /web/skyxplore/game/admin,\
+                /web/skyxplore/game/admin/**,\
                 /web/notebook,\
                 /web/notebook/**,\
-                /web/admin-panel/memory-monitoring,\
                 /web/admin-panel/migration-tasks,\
                 /web/admin-panel/roles-for-all,\
                 /web/admin-panel/role-management,\
@@ -31,7 +32,7 @@ spring:
                 /web/admin-panel/error-report/*,\
                 /web/admin-panel/ban,\
                 /web/admin-panel/ban/*,\
-                /web/admin-panel/performance-reporting,\
+                /web/monitoring,\
                 /web/utils/base64,\
                 /web/utils/json-formatter,\
                 /web/elite-base,\
@@ -117,6 +118,10 @@ spring:
             uri: http://localhost:8087
             predicates:
             - Path=/api/elite-base/**
+          - id: monitoring
+            uri: http://localhost:8084
+            predicates:
+            - Path=/api/monitoring/**
 
           #WS
           - id: web-socket-admin-panel

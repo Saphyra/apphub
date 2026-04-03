@@ -1,0 +1,44 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-metric_data" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="monitoring" tableName="metric_data"/>
+            </not>
+        </preConditions>
+
+        <sql>
+            CREATE TABLE IF NOT EXISTS monitoring.metric_data (
+            metric_data_id varchar(37) NOT NULL,
+            metric_id varchar(255) NOT NULL,
+            service varchar(255) NOT NULL,
+            type varchar(255) NOT NULL,
+            timestamp timestamp NOT NULL,
+            properties text NOT NULL,
+            CONSTRAINT metric_data_pkey PRIMARY KEY (metric_data_id, type)
+            ) PARTITION BY LIST (type);
+
+            CREATE TABLE IF NOT EXISTS monitoring.metric_data_second PARTITION OF monitoring.metric_data FOR VALUES IN ('SECOND');
+            CREATE TABLE IF NOT EXISTS monitoring.metric_data_minute PARTITION OF monitoring.metric_data FOR VALUES IN ('MINUTE');
+            CREATE TABLE IF NOT EXISTS monitoring.metric_data_hour PARTITION OF monitoring.metric_data FOR VALUES IN ('HOUR');
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-table-metric_data-h2" author="Saphyra" dbms="h2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="monitoring" tableName="metric_data"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="monitoring" tableName="metric_data">
+            <column name="metric_data_id" type="varchar(37)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="metric_id" type="varchar(255)"/>
+            <column name="service" type="varchar(255)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="timestamp" type="timestamp"/>
+            <column name="properties" type="text"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

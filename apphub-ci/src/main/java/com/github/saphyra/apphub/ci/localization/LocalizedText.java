@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum LocalizedText implements LocalizationProvider {
     DEFAULT("Alapertelmezett", "Default"),
+    BUILD("Build", "Build"),
     DEPLOY_MODE_UPDATED("Futtatas modja frissitve.", "Deploy Mode updated."),
     EXIT("Kilepes", "Exit"),
     BUILD_THREAD_COUNT("Szalak szama build soran", "Build Thread Count"),

@@ -1,0 +1,27 @@
+===FEATURES===
+    ApphubCI
+        Local build option
+    Calendar
+        Archive events
+    SkyXplore
+        Admin tool to look into gameData
+    Monitoring
+        Multifunctional monitoring service with boards
+
+===BUGFIXES===
+    Calendar
+        Do not throw error if no occurrences to create
+
+===PLATFORM CHANGES===
+    Repackage apphub-test to apphub-lib-test
+    Group services to etc/feature/platform groups
+
+===TECHNICAL DEBTS===
+    EliteBase
+        Delete old commodity and loadoutChangeSets
+        Do not report "Failed saving Commodity batch", too much noise
+    SkyXplore
+        Do not delete GameItems not in the database
+        TickTasks run only each pre-defined tick
+
+===ETC===

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.dao;
 
-import com.github.saphyra.apphub.test.common.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

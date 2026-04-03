@@ -22,7 +22,6 @@ import NewChecklistPage from './modules/notebook/new/new_checklist/NewChecklistP
 import NewTablePage from './modules/notebook/new/new_table/NewTablePage';
 import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
 import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
-import MemoryMonitoring from './modules/admin_panel/memory_monitoring/MemoryMonitoring';
 import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
 import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -41,7 +40,6 @@ import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
 import Constants from './common/js/Constants';
 import Redirection from './Redirection';
 import ErrorPage from './modules/error/ErorPage';
-import PerformanceReporting from './modules/admin_panel/performance_reporting/PerformanceReporting';
 import EliteBase from './modules/custom/elite_base/EliteBase';
 import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPage';
 import CalendarPage from './modules/calendar/index/CalendarPage';
@@ -51,6 +49,9 @@ import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/Calen
 import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
 import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPage';
 import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
+import SkyXploreAdminListPage from './modules/skyxplore/admin/list/SkyXploreAdminListPage';
+import SkyXploreAdminDetailsPage from './modules/skyxplore/admin/details/SkyXploreAdminPanelDeatilsPage';
+import MonitoringPage from './modules/platform/monitoring/MonitoringPage';
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,37 @@ const router = createBrowserRouter([
   {
     path: "/web/skyxplore/game",
     element: <SkyXploreGamePage />
+  },
+  {
+    path: "/web/skyxplore/game/admin",
+    element: <SkyXploreAdminListPage />,
+    loader: () => {
+      return {
+        gameId: null,
+        type: "GAME"
+      }
+    }
+  },
+  {
+    path: "/web/skyxplore/game/admin/:type/:gameId",
+    element: <SkyXploreAdminListPage />,
+    loader: ({ params }) => {
+      return {
+        gameId: params.gameId,
+        type: params.type
+      }
+    }
+  },
+  {
+    path: "/web/skyxplore/game/admin/:gameId/:type/:id",
+    element: <SkyXploreAdminDetailsPage />,
+    loader: ({ params }) => {
+      return {
+        gameId: params.gameId,
+        type: params.type,
+        id: params.id
+      }
+    }
   },
   {
     path: "/web/notebook",
@@ -216,10 +248,6 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/admin-panel/memory-monitoring",
-    element: <MemoryMonitoring />
-  },
-  {
     path: "/web/admin-panel/migration-tasks",
     element: <MigrationTasksPage />
   },
@@ -274,10 +302,6 @@ const router = createBrowserRouter([
     element: <JsonFormatterPage />
   },
   {
-    path: "/web/admin-panel/performance-reporting",
-    element: <PerformanceReporting />
-  },
-  {
     path: "/web/elite-base",
     element: <EliteBase />
   },
@@ -297,7 +321,7 @@ const router = createBrowserRouter([
     path: "/web/calendar/labels",
     element: <CalendarLabelsPage />
   },
-    {
+  {
     path: "/web/calendar/search",
     element: <CalendarSearchPage />
   },
@@ -322,6 +346,10 @@ const router = createBrowserRouter([
   {
     path: "/web/calendar/expired-events",
     element: <ExpiredEventsPage />
+  },
+    {
+    path: "/web/monitoring",
+    element: <MonitoringPage />
   },
 ]);
 

@@ -59,49 +59,9 @@
         "en": "Events of label {label}",
         "hu": "{label} címke eseményei"
     },
-    "settings": {
-        "en": "Settings",
-        "hu": "Beállítások"
-    },
-    "start-date": {
-        "en": "Start date: {date}",
-        "hu": "Kezdés: {date}"
-    },
-    "end-date": {
-        "en": "End date: {date}",
-        "hu": "Befejezés: {date}"
-    },
-    "time": {
-        "en": "Time: {time}",
-        "hu": "Időpont: {time}"
-    },
-    "not-set": {
-        "en": "N/A",
-        "hu": "N/A"
-    },
-    "repetition-type": {
-        "en": "Repetition",
-        "hu": "Ismétlés"
-    },
-    "repeat-for-days": {
-        "en": "Repeating every occurrence {days} times",
-        "hu": "Minden alkalom megismételve {days} alkalommal"
-    },
-    "remind-me-before-days": {
-        "en": "Reminder set up {days} before every occurrence",
-        "hu": "Emlékeztető beállítva {days} nappal minden alkalom előtt"
-    },
-    "content": {
-        "en": "Description",
-        "hu": "Leírás"
-    },
     "display-occurrences": {
         "en": "Display occurrences",
         "hu": "Alkalmak megjelenítése"
-    },
-    "occurrences": {
-        "en": "Occurrences",
-        "hu": "Alkalmak"
     },
     "reminder": {
         "en": "Reminder: {days} day(s) before",
@@ -134,17 +94,5 @@
     "events-without-label": {
         "en": "Events without label",
         "hu": "Címke nélküli események"
-    },
-    "merge": {
-        "en": "Merge with similar events",
-        "hu": "Összevonás hasonló eseményekkel"
-    },
-    "confirm-merge-title": {
-        "en": "Merge events?",
-        "hu": "Események összevonása?"
-    },
-    "confirm-merge-content": {
-        "en": "Are you sure you want to merge events with the same name? All the other events inherit this one's labels.",
-        "hu": "Biztosan össze szeretnéd vonni a neve és ideje alapján megegyező eseményeket? Minden más esemény örökli ennek az eseménynek a címkéit."
     }
 }

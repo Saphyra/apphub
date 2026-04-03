@@ -4,6 +4,7 @@ import { CALENDAR_GET_EVENTS, CALENDAR_GET_LABEL, CALENDAR_GET_LABELLESS_EVENTS 
 import { hasValue } from "../../../../common/js/Utils";
 import Stream from "../../../../common/js/collection/Stream";
 import Event from "./Event";
+import sortEvents from "../../common/event/sortEvents";
 
 const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selectedEvent, setSelectedEvent, refreshCounter }) => {
     const [events, setEvents] = useState([]);
@@ -51,7 +52,7 @@ const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selecte
 
     function getContent() {
         return new Stream(events)
-            .sorted((a, b) => a.title.localeCompare(b.title))
+            .sorted(sortEvents)
             .map(event => <Event
                 key={event.eventId}
                 event={event}

@@ -6,7 +6,7 @@ import { CALENDAR_GET_OCCURRENCES } from "../../../../../common/js/dao/endpoints
 import Occurrence from "../../common/occurrence/Occurrence";
 import { hasValue } from "../../../../../common/js/Utils";
 
-const SelectedDateContent = ({ selectedDate, activeLabel, refreshCounter, setDisplaySpinner, setSelectedOccurrence }) => {
+const SelectedDateContent = ({ selectedDate, activeLabel, showArchived, refreshCounter, setDisplaySpinner, setSelectedOccurrence }) => {
     const [occurrences, setOccurrences] = useState([]);
 
     useLoader(
@@ -26,6 +26,7 @@ const SelectedDateContent = ({ selectedDate, activeLabel, refreshCounter, setDis
 
     function getContent() {
         return new Stream(occurrences)
+            .filter(occurrence => showArchived || !occurrence.eventArchived)
             .sorted((a, b) => sortOccurrences(a, b))
             .map(occurrence => <Occurrence
                 key={occurrence.occurrenceId}

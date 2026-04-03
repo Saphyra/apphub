@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.model.model.ExceptionModel;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ExceptionModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

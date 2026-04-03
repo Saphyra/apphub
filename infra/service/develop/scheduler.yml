@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: scheduler
-        image: saphyra/apphub-service-platform-scheduler:latest
+        image: saphyra/apphub-service-feature-platform-scheduler:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server

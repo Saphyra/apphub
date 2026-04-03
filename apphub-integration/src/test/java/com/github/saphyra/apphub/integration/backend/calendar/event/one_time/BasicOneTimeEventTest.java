@@ -38,7 +38,7 @@ public class BasicOneTimeEventTest extends BackEndTest {
     }
 
     private void edit(UUID accessTokenId, UUID eventId) {
-        EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
+        EventRequest request = EventRequestFactory.editRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .title(NEW_TITLE)
             .content(NEW_CONTENT)

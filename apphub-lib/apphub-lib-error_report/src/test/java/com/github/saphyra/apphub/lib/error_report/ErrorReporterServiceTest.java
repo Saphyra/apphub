@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.error_report;
 
-import com.github.saphyra.apphub.api.admin_panel.client.ErrorReporterClient;
-import com.github.saphyra.apphub.api.admin_panel.model.model.ErrorReport;
+import com.github.saphyra.apphub.api.etc.admin_panel.client.ErrorReporterClient;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ErrorReport;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import org.junit.jupiter.api.Test;

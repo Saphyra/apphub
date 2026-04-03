@@ -1,0 +1,17 @@
+package com.github.saphyra.apphub.api.feature.skyxplore.response.lobby;
+
+import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Data
+public class AllianceCreatedResponse {
+    private AllianceResponse alliance;
+    private LobbyPlayerResponse player;
+    private AiPlayer ai;
+}

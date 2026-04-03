@@ -12,7 +12,7 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
 public class ModulesRoleProtectionTest extends SeleniumTest {
-    @Test(groups = {"fe", "modules"})
+    @Test(groups = {"fe", "modules", "role-protection"})
     public void modulesRoleProtection() {
         WebDriver driver = extractDriver();
 

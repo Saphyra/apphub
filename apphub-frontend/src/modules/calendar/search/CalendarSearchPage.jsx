@@ -15,7 +15,7 @@ import InputField from "../../../common/component/input/InputField";
 import useLoader from "../../../common/hook/Loader";
 import EventList from "./component/EventList";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
-import OpenedEvent from "./component/OpenedEvent";
+import OpenedEvent from "../common/event/opened/OpenedEvent";
 import useRefresh from "../../../common/hook/Refresh";
 import OpenedOccurrence from "../common/occurrence/OpenedOccurrence";
 
@@ -78,9 +78,9 @@ const CalendarSearchPage = () => {
                 {hasValue(selectedEvent) &&
                     <OpenedEvent
                         eventId={selectedEvent}
-                        setSelectedEvent={setSelectedEvent}
+                        backUrl={CALENDAR_SEARCH_PAGE}
+                        setSelectedEvent={changeSelectedEvent}
                         setDisplaySpinner={updateDisplaySpinner}
-                        localizationHandler={localizationHandler}
                         setConfirmationDialogData={setConfirmationDialogData}
                         refresh={refresh}
                         refreshCounter={refreshCount}

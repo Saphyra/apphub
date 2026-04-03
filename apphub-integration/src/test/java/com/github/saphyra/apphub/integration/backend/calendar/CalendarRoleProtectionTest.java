@@ -20,7 +20,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public class CalendarRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "calendar"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "calendar", "role-protection"})
     public void calendarRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
@@ -49,6 +49,7 @@ public class CalendarRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessTokenId, UUID.randomUUID(), LocalDate.now()));
         CommonUtils.verifyMissingRole(() -> CalendarEventActions.getMergeEventsResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> CalendarEventActions.getSearchResponse(getServerPort(), accessTokenId, ""));
+        CommonUtils.verifyMissingRole(() -> CalendarEventActions.getArchiveEventResponse(getServerPort(), accessTokenId, UUID.randomUUID(), false));
 
         //Occurrences
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessTokenId, UUID.randomUUID(), OccurrenceRequest.builder().build()));

@@ -6,6 +6,7 @@ import CelectedOccurrenceContent from "./SelectedOccurrenceContent";
 const RightPanel = ({
     selectedDate,
     activeLabel,
+    showArchived,
     setDisplaySpinner,
     selectedOccurrence,
     setSelectedOccurrence,
@@ -21,6 +22,7 @@ const RightPanel = ({
             <SelectedDateContent
                 selectedDate={selectedDate}
                 activeLabel={activeLabel}
+                showArchived={showArchived}
                 refreshCounter={refreshCounter}
                 setDisplaySpinner={setDisplaySpinner}
                 setSelectedOccurrence={setSelectedOccurrence}

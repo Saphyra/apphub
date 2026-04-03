@@ -24,4 +24,5 @@ public class OccurrenceResponse {
     private String note;
     private Integer remindMeBeforeDays;
     private Boolean reminded;
+    private Boolean eventArchived;
 }

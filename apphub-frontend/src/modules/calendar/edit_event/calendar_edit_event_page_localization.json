@@ -39,6 +39,10 @@
         "en": "Reminder",
         "hu": "Emlékeztető"
     },
+    "archived": {
+        "en": "Archived",
+        "hu": "Archivált"
+    },
     "labels": {
         "en": "Labels",
         "hu": "Címkék"

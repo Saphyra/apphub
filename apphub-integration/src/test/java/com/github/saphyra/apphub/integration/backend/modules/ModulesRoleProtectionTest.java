@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class ModulesRoleProtectionTest extends BackEndTest {
-    @Test(groups = {"be", "modules"})
+    @Test(groups = {"be", "modules", "role-protection"})
     public void modulesRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

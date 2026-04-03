@@ -17,6 +17,16 @@ const MapStream = class {
         return this;
     }
 
+    anyMatch(predicate) {
+        for (const key in this.items) {
+            if (predicate(key, this.items[key])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     clone() {
         const result = {};
 
@@ -50,6 +60,15 @@ const MapStream = class {
     forEach(consumer) {
         Object.keys(this.items)
             .forEach((key) => consumer(key, this.items[key]));
+    }
+
+    limit(count) {
+        const result = {};
+        Object.keys(this.items)
+            .slice(0, count)
+            .forEach((key) => result[key] = this.items[key]);
+
+        return new MapStream(result);
     }
 
     map(mapper) {

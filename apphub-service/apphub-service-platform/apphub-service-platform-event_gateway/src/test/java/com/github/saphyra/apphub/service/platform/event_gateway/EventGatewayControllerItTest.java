@@ -12,9 +12,8 @@ import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
-import com.github.saphyra.apphub.test.common.api.ApiTestConfiguration;
-import com.github.saphyra.apphub.test.common.rest_assured.RequestFactory;
-import com.github.saphyra.apphub.test.common.rest_assured.UrlFactory;
+import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
+import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +31,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.client.RestTemplate;
 
@@ -49,7 +47,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-@ContextConfiguration(classes = ApiTestConfiguration.class)
 public class EventGatewayControllerItTest {
     private static final String SERVICE_NAME = "test-service";
     private static final String TEST_EVENT_URL_1 = "/event/test/1";

@@ -5,7 +5,11 @@ import "./occurrence.css"
 const Occurrence = ({ occurrence, setSelectedOccurrence }) => {
     return (
         <div
-            className={"calendar-occurrence calendar-occurrence-" + occurrence.status.toLowerCase()}
+            className={
+                "calendar-occurrence"
+                + " calendar-occurrence-" + occurrence.status.toLowerCase()
+                + (occurrence.eventArchived ? " calendar-occurrence-archived" : "")
+            }
             onClick={(e) => {
                 e.stopPropagation();
                 setSelectedOccurrence(occurrence.occurrenceId)

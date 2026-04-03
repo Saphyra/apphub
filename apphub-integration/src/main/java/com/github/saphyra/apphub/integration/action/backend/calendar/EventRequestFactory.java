@@ -43,6 +43,7 @@ public class EventRequestFactory {
             .content(DEFAULT_CONTENT)
             .remindMeBeforeDays(0)
             .labels(List.of())
+            .archived(false)
             .build();
     }
 
@@ -57,6 +58,7 @@ public class EventRequestFactory {
             .content(NEW_CONTENT)
             .remindMeBeforeDays(0)
             .repetitionData(getRepetitionData(repetitionType).getEntity2())
+            .archived(false)
             .build();
     }
 

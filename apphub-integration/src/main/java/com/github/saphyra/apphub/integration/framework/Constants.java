@@ -88,7 +88,8 @@ public class Constants {
         "calendar",
         "encryption",
         "storage",
-        "elite-base"
+        "elite-base",
+        "monitoring"
     );
 
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";
@@ -108,4 +109,8 @@ public class Constants {
     public static final String BUILDING_MODULE_HAMSTER_WHEEL = "hamster_wheel";
     public static final String BUILDING_MODULE_CATEGORY_BASIC_POWER_SUPPLY = "BASIC_POWER_SUPPLY";
     public static final String BUILDING_MODULE_CATEGORY_SMALL_STORAGE = "SMALL_STORAGE";
+
+    //Monitoring
+    public static final String MONITORING_FUNCTIONALITY_MEMORY_STATUS = "MEMORY_STATUS";
+    public static final String MONITORING_METRIC_TYPE_SECOND = "SECOND";
 }

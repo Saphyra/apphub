@@ -14,7 +14,7 @@ import org.testng.annotations.Test;
 import java.util.UUID;
 
 public class DisabledRoleManagementRoleProtectionTest extends BackEndTest {
-    @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel"})
+    @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void disabledRoleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);

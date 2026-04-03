@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: modules
-        image: saphyra/apphub-service-modules:latest
+        image: saphyra/apphub-service-etc-modules:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
             value: server

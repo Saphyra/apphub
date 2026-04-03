@@ -1,0 +1,31 @@
+#skyxplore-admin-list main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0;
+}
+
+#skyxplore-admin-list-search-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-bottom: 3px ridge white;
+}
+
+#skyxplore-admin-list-content {
+    flex-grow: 2;
+    overflow: auto;
+}
+
+.skyxplore-admin-item-data {
+    margin: 10px;
+}
+
+#skyxplore-admin-details h1 {
+    font-size: 26px;
+}
+
+.skyxplore-admin-reference {
+    text-align: left;
+}

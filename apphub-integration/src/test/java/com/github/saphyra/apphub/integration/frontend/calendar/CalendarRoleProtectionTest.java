@@ -15,7 +15,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class CalendarRoleProtectionTest extends SeleniumTest {
-    @Test(dataProvider = "roleDataProvider", groups = {"fe", "calendar"})
+    @Test(dataProvider = "roleDataProvider", groups = {"fe", "calendar", "role-protection"})
     public void calendarRoleProtection(String role) {
         WebDriver driver = extractDriver();
 

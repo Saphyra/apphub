@@ -14,7 +14,7 @@ import "./calendar_labels.css";
 import LabelList from "./component/LabelList";
 import Events from "./component/Events";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "../../../common/js/Utils";
-import OpenedEvent from "./component/OpenedEvent";
+import OpenedEvent from "../common/event/opened/OpenedEvent";
 import useRefresh from "../../../common/hook/Refresh";
 import OpenedOccurrence from "../common/occurrence/OpenedOccurrence";
 
@@ -79,7 +79,7 @@ const CalendarLabelsPage = () => {
 
                 {hasValue(selectedEvent) &&
                     <OpenedEvent
-                        localizationHandler={localizationHandler}
+                        backUrl={CALENDAR_LABELS_PAGE}
                         setDisplaySpinner={updateDisplaySpinner}
                         eventId={selectedEvent}
                         selectedOccurrence={selectedOccurrence}

@@ -42,5 +42,9 @@
     "process-tick": {
         "en": "Process tick",
         "hu": "Tick lejátszása"
+    },
+    "view-data": {
+        "en": "View data",
+        "hu": "Adatok megtekintése"
     }
 }

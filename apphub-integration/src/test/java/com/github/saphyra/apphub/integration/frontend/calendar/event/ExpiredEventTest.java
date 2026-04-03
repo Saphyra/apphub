@@ -42,7 +42,7 @@ public class ExpiredEventTest extends SeleniumTest {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.getIfPresent(driver, By.id("calendar-expired-event")).isPresent())
+            .until(() -> WebElementUtils.getIfPresent(driver, By.id("calendar-opened-event")).isPresent())
             .assertTrue("Expired event is not opened.");
 
         CalendarExpiredEventsPageActions.hideExpiredEvent(driver);
@@ -70,7 +70,7 @@ public class ExpiredEventTest extends SeleniumTest {
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.getIfPresent(driver, By.id("calendar-expired-event")).isPresent())
+            .until(() -> WebElementUtils.getIfPresent(driver, By.id("calendar-opened-event")).isPresent())
             .assertTrue("Expired event is not opened.");
 
         emptyExtendUntil(driver);

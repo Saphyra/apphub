@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.local_event;
 
-import com.github.saphyra.apphub.lib.event.EmptyEvent;
-import com.github.saphyra.apphub.lib.monitoring.MemoryMonitoringEventController;
+import com.github.saphyra.apphub.lib.event.MonitoringEvent;
+import com.github.saphyra.apphub.lib.monitoring.memory.MemoryStatusReporter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,14 +14,14 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class MemoryMonitoringLocalEventProcessorTest {
     @Mock
-    private MemoryMonitoringEventController memoryMonitoringEventController;
+    private MemoryStatusReporter memoryStatusReporter;
 
     @InjectMocks
     private MemoryMonitoringLocalEventProcessor underTest;
 
     @Test
     public void shouldProcess() {
-        assertThat(underTest.shouldProcess(EmptyEvent.ADMIN_PANEL_TRIGGER_MEMORY_STATUS_UPDATE)).isTrue();
+        assertThat(underTest.shouldProcess(MonitoringEvent.REPORT_MEMORY_STATUS)).isTrue();
         assertThat(underTest.shouldProcess("asd")).isFalse();
     }
 
@@ -29,6 +29,6 @@ public class MemoryMonitoringLocalEventProcessorTest {
     public void process() {
         underTest.process(null);
 
-        verify(memoryMonitoringEventController).sendMemoryStatus();
+        verify(memoryStatusReporter).reportMemoryStatus();
     }
 }
