@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation;
 
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
@@ -29,7 +30,8 @@ public class ExpiredMetricCleanupService {
     @Transactional
     public void cleanup() {
         LocalDateTime expiration = dateTimeUtil.getCurrentDateTime()
-            .minus(monitoringProperties.getMetricExpirationDuration());
+            .minus(monitoringProperties.getAggregation().get(MetricDataType.HOUR).getExpirationDuration());
+        log.info("Deleting metrics before {}", expiration);
 
         metricDataDao.deleteByTimestampBefore(expiration);
 

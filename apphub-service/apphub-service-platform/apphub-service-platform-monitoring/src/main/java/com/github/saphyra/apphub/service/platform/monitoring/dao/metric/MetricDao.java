@@ -5,12 +5,14 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.InMemoryDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import jakarta.annotation.Nullable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
 @Component
+@Slf4j
 public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricRepository> {
     private final UuidConverter uuidConverter;
     private final MetricFactory metricFactory;
@@ -34,6 +36,8 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
             .filter(metric -> metric.getFeature() == feature && metric.getFunctionality().equals(functionality))
             .findFirst()
             .orElseGet(() -> {
+                log.info("Creating new metric for feature {} and functionality {} as it does not exist yet. Existing entries: {}", feature, functionality, cache);
+
                 Metric metric = metricFactory.create(feature, functionality);
                 save(metric);
 
@@ -74,8 +78,14 @@ public class MetricDao extends InMemoryDao<MetricEntity, Metric, String, MetricR
     }
 
     public void deleteByMetricIdNotIn(List<UUID> metricIds) {
-        uuidConverter.convertDomain(metricIds)
-            .forEach(cache::remove);
+        List<String> toRemove = cache.keySet()
+            .stream()
+            .filter(id -> !metricIds.contains(uuidConverter.convertEntity(id)))
+            .toList();
+
+        toRemove.forEach(id -> log.info("{} has no more records. Deleting it.", cache.get(id)));
+
+        toRemove.forEach(cache::remove);
 
         repository.deleteByMetricIdNotIn(uuidConverter.convertDomain(metricIds));
     }

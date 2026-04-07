@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+    Monitoring
+        Incorrect cleanup logic in MetricDao
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===

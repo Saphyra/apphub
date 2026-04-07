@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.platform.monitoring.service;
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsResponse;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
@@ -43,9 +45,9 @@ public class MetricDataQueryService {
             throw ExceptionFactory.notLoggedException(
                 HttpStatus.BAD_REQUEST,
                 ErrorCode.INVALID_PARAM,
-                Map.of(
-                    feature.name(), INVALID_COMBINATION,
-                    functionality, INVALID_COMBINATION
+                CollectionUtils.toMap(
+                    new BiWrapper<>(feature.name(), INVALID_COMBINATION),
+                    new BiWrapper<>(functionality, INVALID_COMBINATION)
                 ),
                 "Invalid combination of feature " + feature + " and functionality " + functionality
             );

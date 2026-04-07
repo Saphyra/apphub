@@ -156,10 +156,11 @@ class MetricDaoTest {
         given(domain.getMetricId()).willReturn(METRIC_ID);
         underTest.findAll();
         given(uuidConverter.convertDomain(List.of(METRIC_ID))).willReturn(List.of(METRIC_ID_STRING));
+        given(uuidConverter.convertEntity(METRIC_ID_STRING)).willReturn(METRIC_ID);
 
         underTest.deleteByMetricIdNotIn(List.of(METRIC_ID));
 
         then(repository).should().deleteByMetricIdNotIn(List.of(METRIC_ID_STRING));
-        assertThat(ReflectionUtils.<Map<?, ?>>getFieldValue(underTest, "cache")).isEmpty();
+        assertThat(ReflectionUtils.<Map<?, ?>>getFieldValue(underTest, "cache")).isNotEmpty();
     }
 }

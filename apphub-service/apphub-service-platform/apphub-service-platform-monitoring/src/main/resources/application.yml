@@ -6,7 +6,6 @@ liquibase:
   schema: monitoring
 
 monitoring:
-  metricExpirationDuration: P365D
   aggregation:
     #Reported metrics are aggregated to second precision
     SECOND:
@@ -17,7 +16,7 @@ monitoring:
       #Minute precision metrics are aggregate to hour precision after 5 hours
       expirationDuration: PT5H
       stepDuration: PT1H
-      #Hour precision metrics are deleted after 365 days
     HOUR:
+      #Hour precision metrics are deleted after 365 days
       expirationDuration: P365D
       stepDuration: P1D

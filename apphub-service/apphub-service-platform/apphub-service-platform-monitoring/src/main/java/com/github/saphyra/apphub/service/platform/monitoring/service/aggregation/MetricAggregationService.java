@@ -60,7 +60,7 @@ public class MetricAggregationService {
                 .stream()
                 .collect(Collectors.groupingBy(metricData -> new BiWrapper<>(metricData.getMetricId(), metricData.getService())));
 
-            log.info("Aggregating {} types of records between {} and {}", metrics.size(), expirationStart, expirationEnd);
+            log.info("Aggregating {} metric of type {} between {} and {}", metrics.size(), metricDataType, expirationStart, expirationEnd);
 
             LocalDateTime timestamp = expirationEnd;
             executorServiceBean.processCollectionWithWait(
@@ -76,7 +76,7 @@ public class MetricAggregationService {
     }
 
     private Void aggregate(MetricAggregationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {
-        log.info("Aggregating {} metrics for metricId {} and service {} to timestamp: {}", metrics.size(), metricId, service, timestamp);
+        log.info("Aggregating {} metric of type {} for metricId {} and service {} to timestamp: {}", metrics.size(), dataProvider.getType(), metricId, service, timestamp);
         Map<String, Double> aggregatedProperties = metricPropertyAggregator.aggregateProperties(metricId, metrics);
         MetricData aggregated = metricDataFactory.create(metricId, service, timestamp, dataProvider.getResultType(), aggregatedProperties);
 
