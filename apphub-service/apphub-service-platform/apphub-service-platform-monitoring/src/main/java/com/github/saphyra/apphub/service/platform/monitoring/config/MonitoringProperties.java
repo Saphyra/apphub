@@ -15,7 +15,6 @@ import java.util.Map;
 @Data
 @Slf4j
 public class MonitoringProperties {
-    private Duration metricExpirationDuration;
     private Map<MetricDataType, Aggregation> aggregation;
 
     @PostConstruct

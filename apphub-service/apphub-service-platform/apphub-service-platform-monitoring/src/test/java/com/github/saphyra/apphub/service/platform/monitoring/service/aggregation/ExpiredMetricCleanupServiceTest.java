@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation;
 
+import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.platform.monitoring.config.MonitoringProperties;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -48,10 +50,14 @@ class ExpiredMetricCleanupServiceTest {
     @InjectMocks
     private ExpiredMetricCleanupService underTest;
 
+    @Mock
+    private MonitoringProperties.Aggregation aggregation;
+
     @Test
     void cleanup() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
-        given(monitoringProperties.getMetricExpirationDuration()).willReturn(METRIC_EXPIRATION_DURATION);
+        given(monitoringProperties.getAggregation()).willReturn(Map.of(MetricDataType.HOUR, aggregation));
+        given(aggregation.getExpirationDuration()).willReturn(METRIC_EXPIRATION_DURATION);
         given(metricDataDao.getMetricIds()).willReturn(List.of(METRIC_ID));
         given(metricDataDao.getServices()).willReturn(List.of(SERVICE));
 

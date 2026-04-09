@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import jakarta.annotation.Nullable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@Slf4j
 public class MetricDataDao extends AbstractDao<MetricDataEntity, MetricData, String, MetricDataRepository> {
     private final UuidConverter uuidConverter;
 

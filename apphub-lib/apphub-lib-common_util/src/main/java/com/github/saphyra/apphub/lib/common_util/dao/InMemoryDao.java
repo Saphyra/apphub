@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.common_util.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * A DAO implementation that uses an in-memory cache that never expires.
  */
+@Slf4j
 public abstract class InMemoryDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> extends AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY> {
     protected final ConcurrentHashMap<ID, DOMAIN> cache = new ConcurrentHashMap<>();
 
@@ -24,6 +26,8 @@ public abstract class InMemoryDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
         cache.clear();
 
         findAll();
+
+        log.info("Cached DAO {} is successfully loaded with {} items.", getClass().getSimpleName(), cache.size());
     }
 
     @Override
