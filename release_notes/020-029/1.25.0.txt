@@ -7,5 +7,7 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    EliteBase
+        OrphanedRecordCleaner reports to monitoring instead of error report
 
 ===ETC===

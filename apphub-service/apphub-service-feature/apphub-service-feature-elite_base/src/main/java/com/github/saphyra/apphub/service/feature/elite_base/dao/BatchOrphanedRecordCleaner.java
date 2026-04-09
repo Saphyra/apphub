@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,8 +11,8 @@ import java.util.List;
 public abstract class BatchOrphanedRecordCleaner extends OrphanedRecordCleaner {
     protected final EliteBaseProperties eliteBaseProperties;
 
-    public BatchOrphanedRecordCleaner(ErrorReporterService errorReporterService, EliteBaseProperties eliteBaseProperties) {
-        super(errorReporterService);
+    public BatchOrphanedRecordCleaner(ErrorReporterService errorReporterService, MonitoringInstruments monitoringInstruments, EliteBaseProperties eliteBaseProperties) {
+        super(errorReporterService, monitoringInstruments);
         this.eliteBaseProperties = eliteBaseProperties;
     }
 

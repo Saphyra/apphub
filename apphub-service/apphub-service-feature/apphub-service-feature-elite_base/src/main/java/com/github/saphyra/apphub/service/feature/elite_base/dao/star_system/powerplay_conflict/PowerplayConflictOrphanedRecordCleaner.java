@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.powerplay_conflict;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
 import com.github.saphyra.apphub.lib.sql_builder.column.DistinctColumn;
 import com.github.saphyra.apphub.lib.sql_builder.condition.InCondition;
@@ -29,8 +30,8 @@ class PowerplayConflictOrphanedRecordCleaner extends BatchOrphanedRecordCleaner 
     private final JdbcTemplate jdbcTemplate;
     private final EliteBaseProperties eliteBaseProperties;
 
-    PowerplayConflictOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate, EliteBaseProperties eliteBaseProperties) {
-        super(errorReporterService, eliteBaseProperties);
+    PowerplayConflictOrphanedRecordCleaner(ErrorReporterService errorReporterService, MonitoringInstruments monitoringInstruments, JdbcTemplate jdbcTemplate, EliteBaseProperties eliteBaseProperties) {
+        super(errorReporterService, monitoringInstruments, eliteBaseProperties);
         this.jdbcTemplate = jdbcTemplate;
         this.eliteBaseProperties = eliteBaseProperties;
     }

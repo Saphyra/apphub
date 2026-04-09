@@ -22,14 +22,17 @@ public class MonitoringInstruments {
     public <T> T wrap(Supplier<T> task, Feature feature, String functionality) {
         StopWatch stopWatch = StopWatch.createStarted();
         boolean success = true;
+        T result = null;
         try {
-            return task.get();
+            result = task.get();
+
+            return result;
         } catch (Exception e) {
             success = false;
             throw e;
         } finally {
             stopWatch.stop();
-            List<MetricPropertyModel> properties = metricMapper.map(feature, functionality, success, stopWatch.getTime(TimeUnit.MILLISECONDS));
+            List<MetricPropertyModel> properties = metricMapper.map(feature, functionality, result, success, stopWatch.getTime(TimeUnit.MILLISECONDS));
             metricRegistry.reportMetric(feature, functionality, properties);
         }
     }

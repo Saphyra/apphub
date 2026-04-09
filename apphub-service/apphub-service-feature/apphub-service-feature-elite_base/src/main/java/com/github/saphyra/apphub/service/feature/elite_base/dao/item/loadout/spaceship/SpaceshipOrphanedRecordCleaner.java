@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.spaceship;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
 import com.github.saphyra.apphub.lib.sql_builder.column.DistinctColumn;
 import com.github.saphyra.apphub.lib.sql_builder.condition.InCondition;
@@ -30,8 +31,8 @@ class SpaceshipOrphanedRecordCleaner extends BatchOrphanedRecordCleaner {
     private final JdbcTemplate jdbcTemplate;
     private final EliteBaseProperties eliteBaseProperties;
 
-    public SpaceshipOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate, EliteBaseProperties eliteBaseProperties) {
-        super(errorReporterService, eliteBaseProperties);
+    public SpaceshipOrphanedRecordCleaner(ErrorReporterService errorReporterService, MonitoringInstruments monitoringInstruments, JdbcTemplate jdbcTemplate, EliteBaseProperties eliteBaseProperties) {
+        super(errorReporterService, monitoringInstruments, eliteBaseProperties);
         this.jdbcTemplate = jdbcTemplate;
         this.eliteBaseProperties = eliteBaseProperties;
     }

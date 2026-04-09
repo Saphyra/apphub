@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricPropertyModel;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class MetricRegistry {
+    @Getter
     private final Map<LocalDateTime, List<PutMetricsRequest>> registry = new ConcurrentHashMap<>();
 
     private final DateTimeUtil dateTimeUtil;

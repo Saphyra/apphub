@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.fleet_carrier;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
 import com.github.saphyra.apphub.lib.sql_builder.column.DistinctColumn;
 import com.github.saphyra.apphub.lib.sql_builder.condition.InCondition;
@@ -29,8 +30,8 @@ public class FleetCarrierOrphanedRecordCleaner extends BatchOrphanedRecordCleane
     private final EliteBaseProperties eliteBaseProperties;
     private final JdbcTemplate jdbcTemplate;
 
-    public FleetCarrierOrphanedRecordCleaner(ErrorReporterService errorReporterService, EliteBaseProperties eliteBaseProperties, JdbcTemplate jdbcTemplate) {
-        super(errorReporterService, eliteBaseProperties);
+    public FleetCarrierOrphanedRecordCleaner(ErrorReporterService errorReporterService, MonitoringInstruments monitoringInstruments, EliteBaseProperties eliteBaseProperties, JdbcTemplate jdbcTemplate) {
+        super(errorReporterService, monitoringInstruments, eliteBaseProperties);
         this.eliteBaseProperties = eliteBaseProperties;
         this.jdbcTemplate = jdbcTemplate;
     }
