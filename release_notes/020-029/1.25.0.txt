@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    Monitoring
+        Changing the feature does not load its functionalities
 
 ===PLATFORM CHANGES===
 
