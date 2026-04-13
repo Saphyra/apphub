@@ -72,7 +72,7 @@ public class MetricAggregationService {
             expirationStart = dataProvider.step(expirationStart);
         }
 
-        log.info("{} migration finished. Oldest record timestamp: {}, expirationStart: {}, expirationEnd: {}", metricDataType, oldestRecordTimestamp, expirationStart, expirationEnd);
+        log.info("{} aggregation finished. Oldest record timestamp: {}, expirationStart: {}, expirationEnd: {}", metricDataType, oldestRecordTimestamp, expirationStart, expirationEnd);
     }
 
     private Void aggregate(MetricAggregationDataProvider dataProvider, LocalDateTime timestamp, UUID metricId, String service, List<MetricData> metrics) {

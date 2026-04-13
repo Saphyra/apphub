@@ -27,6 +27,7 @@ interval:
     aggregateMinuteMetrics: 0 0 * * * ? #Every hour
     deleteExpiredMetrics: 0 0 0 * * ? #Every day at midnight
     reportMemoryStatus: "* * * * * ?" #Every second
+    reportInMemoryDaoStatus: "* * * * * ?" #Every second
     sendCollectedMetrics: "*/5 * * * * ?" #Every 5 seconds
   storage:
     storedFileCleanup: 300000 #5 minutes

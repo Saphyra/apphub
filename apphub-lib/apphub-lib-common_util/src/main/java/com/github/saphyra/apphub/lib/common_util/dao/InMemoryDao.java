@@ -119,4 +119,8 @@ public abstract class InMemoryDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRep
     protected boolean shouldSave(DOMAIN domain) {
         return !Objects.equals(cache.get(extractId(domain)), domain);
     }
+
+    public int getCacheSize() {
+        return cache.size();
+    }
 }

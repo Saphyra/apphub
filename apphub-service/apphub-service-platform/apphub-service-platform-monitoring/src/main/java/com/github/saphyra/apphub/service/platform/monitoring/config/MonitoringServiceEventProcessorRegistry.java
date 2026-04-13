@@ -28,7 +28,7 @@ public class MonitoringServiceEventProcessorRegistry implements EventProcessorRe
             RegisterProcessorRequest.builder()
                 .host(host)
                 .eventName(MonitoringEvent.AGGREGATE_MINUTE_METRICS)
-                .url(MonitoringEndpoints.MONITORING_AGGREGATE_MIGRATE_MINUTE_METRICS)
+                .url(MonitoringEndpoints.MONITORING_EVENT_AGGREGATE_MINUTE_METRICS)
                 .build(),
             RegisterProcessorRequest.builder()
                 .host(host)
