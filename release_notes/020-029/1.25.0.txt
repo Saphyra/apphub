@@ -11,3 +11,5 @@
         OrphanedRecordCleaner reports to monitoring instead of error report
 
 ===ETC===
+    Calendar
+        Highlight border of selected occurrence based on status

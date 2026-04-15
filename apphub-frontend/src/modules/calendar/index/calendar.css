@@ -128,6 +128,36 @@
     position: relative;
 }
 
+.calendar-selected-occurrence-archived {
+    border-style: dashed !important;
+}
+
+.calendar-selected-occurrence-expired {
+    border-color: red !important;
+}
+
+.calendar-selected-occurrence-done {
+    border-color: green !important;
+}
+
+.calendar-selected-occurrence-snoozed {
+    border-color: grey !important;
+}
+
+.calendar-selected-occurrence-done #calendar-selected-occurrence-wrapper,
+.calendar-selected-occurrence-snoozed #calendar-selected-occurrence-wrapper {
+    text-decoration: line-through;
+}
+
+.calendar-selected-occurrence-snoozed #calendar-selected-occurrence-wrapper {
+    opacity: 0.5;
+}
+
+
+.calendar-selected-occurrence-reminder {
+    border-color: orange !important;
+}
+
 #calendar-selected-occurrence-content {
     overflow: auto;
 }
