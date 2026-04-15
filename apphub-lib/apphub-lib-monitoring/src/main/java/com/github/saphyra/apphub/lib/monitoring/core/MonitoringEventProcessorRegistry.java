@@ -29,6 +29,11 @@ public class MonitoringEventProcessorRegistry implements EventProcessorRegistry 
                 .build(),
             RegisterProcessorRequest.builder()
                 .host(host)
+                .eventName(MonitoringEvent.REPORT_IN_MEMORY_DAO_STATUS)
+                .url(MonitoringEndpoints.EVENT_REPORT_IN_MEMORY_DAO_STATUS)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .host(host)
                 .eventName(MonitoringEvent.SEND_COLLECTED_METRICS)
                 .url(MonitoringEndpoints.EVENT_SEND_COLLECTED_METRICS)
                 .build()

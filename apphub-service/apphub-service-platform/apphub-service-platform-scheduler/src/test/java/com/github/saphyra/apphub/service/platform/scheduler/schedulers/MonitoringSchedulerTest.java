@@ -73,6 +73,13 @@ class MonitoringSchedulerTest {
     }
 
     @Test
+    void reportInMemoryDaoStatus() {
+        underTest.reportInMemoryDaoStatus();
+
+        verifyEventSent(MonitoringEvent.REPORT_IN_MEMORY_DAO_STATUS);
+    }
+
+    @Test
     void sendCollectedMetrics() {
         underTest.sendCollectedMetrics();
 

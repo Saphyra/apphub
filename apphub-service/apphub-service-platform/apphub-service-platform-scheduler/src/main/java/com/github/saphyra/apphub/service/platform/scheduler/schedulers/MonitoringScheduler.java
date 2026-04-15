@@ -42,6 +42,12 @@ public class MonitoringScheduler {
         sendEvent(eventName);
     }
 
+    @Scheduled(cron = "${interval.monitoring.reportInMemoryDaoStatus}")
+    void reportInMemoryDaoStatus() {
+        String eventName = MonitoringEvent.REPORT_IN_MEMORY_DAO_STATUS;
+        sendEvent(eventName);
+    }
+
     @Scheduled(cron = "${interval.monitoring.sendCollectedMetrics}")
     void sendCollectedMetrics() {
         sleepService.sleep(500);

@@ -1,0 +1,11 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+    Monitoring
+        InMemoryDao and MetricRegistry monitoring
+
+===ETC===
