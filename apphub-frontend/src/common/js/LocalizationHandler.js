@@ -15,7 +15,7 @@ const LocalizationHandler = class {
 
     get(key, params = {}) {
         return this.getOptional(key, params)
-            .orElseThrow("IllegalArgument", "No localization found for key " + key + " and locale " + this.getLocale());
+            .orElseThrow("IllegalArgument", "No localization found for key " + key + " and locale " + this.getLocale() + ". Available keys are: " + this.getKeys().join(", "));
     }
 
     getOrDefault(key, defaultValue, params = {}) {

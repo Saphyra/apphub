@@ -5,6 +5,7 @@
         Changing the feature does not load its functionalities
 
 ===PLATFORM CHANGES===
+    Separate modules to etc/feature/platform in the frontend
 
 ===TECHNICAL DEBTS===
     EliteBase

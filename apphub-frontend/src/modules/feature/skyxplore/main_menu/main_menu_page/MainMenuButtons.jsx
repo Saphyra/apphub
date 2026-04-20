@@ -1,0 +1,143 @@
+import useLoader from "common/hook/Loader";
+import Stream from "common/js/collection/Stream";
+import { SKYXPLORE_GET_GAMES } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DELETE_GAME } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { IS_ADMIN } from "common/js/dao/endpoints/UserEndpoints";
+import { useEffect, useState } from "react";
+import SavedGame from "./saved_game/SavedGame";
+import Button from "common/component/input/Button";
+import Constants from "common/js/Constants";
+import { SKYXPLORE_ADMIN_MAIN_PAGE } from "common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
+import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
+
+const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
+    const [displaySavedGames, setDisplaySavedGames] = useState(false);
+    const [savedGames, setSavedGames] = useState([]);
+    const [gameToDelete, setGameToDelete] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
+
+    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value) });
+
+    useEffect(() => loadSavedGames(), [displaySavedGames]);
+
+    const loadSavedGames = () => {
+        const fetch = async () => {
+            const response = await SKYXPLORE_GET_GAMES.createRequest()
+                .send();
+
+            setSavedGames(response);
+        }
+        displaySavedGames && fetch();
+    }
+
+    const askDeleteGame = (savedGame) => {
+        setGameToDelete(savedGame);
+    }
+
+    const deleteGame = async () => {
+        await SKYXPLORE_DELETE_GAME.createRequest(null, { gameId: gameToDelete.gameId })
+            .send();
+
+        const copy = new Stream(savedGames)
+            .filter(savedGame => savedGame.gameId !== gameToDelete.gameId)
+            .toList();
+
+        setSavedGames(copy);
+        setGameToDelete(null);
+    }
+
+    const getSavedGames = () => {
+        const getContent = () => {
+            if (savedGames.length === 0) {
+                return <div className="skyxplore-no-saved-games">
+                    {localizationHandler.get("no-saved-games")}
+                </div>
+            }
+
+            return new Stream(savedGames)
+                .sorted((a, b) => -1 * (a.lastPlayed - b.lastPlayed))
+                .map(savedGame =>
+                    <SavedGame
+                        key={savedGame.gameId}
+                        savedGame={savedGame}
+                        localizationHandler={localizationHandler}
+                        deleteGameCallback={askDeleteGame}
+                    />
+                )
+                .toList();
+        }
+
+        return (
+            <div id="skyxplore-main-menu-saved-games-wrapper">
+                {getContent()}
+            </div>
+        );
+    }
+
+    return (
+        <div id="skyxplore-main-menu-buttons">
+            <Button
+                id="skyxplore-new-game-button"
+                className="skyxplore-main-menu-button"
+                onclick={() => setDisplaynNewGameConfirmationDialog(true)}
+                label={localizationHandler.get("new-game")}
+            />
+
+            <Button
+                id="skyxplore-load-game-button"
+                className="skyxplore-main-menu-button"
+                onclick={() => { setDisplaySavedGames(!displaySavedGames) }}
+                label={localizationHandler.get("load-game")}
+            />
+
+            {displaySavedGames && getSavedGames()}
+
+            <Button
+                id="skyxplore-edit-character-button"
+                className="skyxplore-main-menu-button"
+                onclick={() => window.location.href = Constants.SKYXPLORE_CHARACTER_PAGE}
+                label={localizationHandler.get("edit-character")}
+            />
+
+            {isAdmin &&
+                <Button
+                    id="skyxplore-admin-button"
+                    className="skyxplore-main-menu-button"
+                    onclick={() => window.open(SKYXPLORE_ADMIN_MAIN_PAGE)}
+                    label={localizationHandler.get("admin-page")}
+                />
+            }
+
+            <Button
+                id="skyxplore-home-button"
+                className="skyxplore-main-menu-button"
+                onclick={() => window.location.href = Constants.MODULES_PAGE}
+                label={localizationHandler.get("home")}
+            />
+
+            {gameToDelete !== null &&
+                <ConfirmationDialog
+                    id="skyxplore-delete-game"
+                    title={localizationHandler.get("delete-game")}
+                    content={localizationHandler.get("confirm-delete-game", { gameName: gameToDelete.gameName })}
+                    choices={[
+                        <Button
+                            key="delete"
+                            id="skyxplore-delete-game-confirm-button"
+                            label={localizationHandler.get("delete")}
+                            onclick={deleteGame}
+                        />,
+                        <Button
+                            key="cancel"
+                            id="skyxplore-delete-game-cancel-button"
+                            label={localizationHandler.get("cancel")}
+                            onclick={() => setGameToDelete(null)}
+                        />
+                    ]}
+                />
+            }
+        </div>
+    );
+}
+
+export default MainMenuButtons;

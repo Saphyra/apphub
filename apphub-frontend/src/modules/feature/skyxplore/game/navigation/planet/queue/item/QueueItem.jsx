@@ -1,0 +1,94 @@
+import LocalizationHandler from "common/js/LocalizationHandler";
+import "./queue_item.css";
+import localizationData from "./queue_item_localization.json";
+import { useEffect, useState } from "react";
+import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
+import Button from "common/component/input/Button";
+import QueueItemHeader from "./header/QueueItemHeader";
+import ProgressBar from "common/component/progress_bar/ProgressBar";
+import LabelWrappedInputField from "common/component/input/LabelWrappedInputField";
+import NumberInput from "common/component/input/NumberInput";
+
+const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
+    const localizationHandler = new LocalizationHandler(localizationData);
+    const [priority, setPriority] = useState(5);
+
+    useEffect(() => setPriority(queueItem.ownPriority), [queueItem]);
+
+    const changePriority = (newPriority) => {
+        SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
+            .send();
+    }
+
+    const confirmCancelQueueItem = () => {
+        const confirmationDialogData = new ConfirmationDialogData(
+            "skyxplore-planet-queue-item-cancel-confirmation",
+            localizationHandler.get("confirm-cancel-queue-item-title"),
+            localizationHandler.get("confirm-cancel-queue-item-content"),
+            [
+                <Button
+                    key="cancel"
+                    id="skyxplore-game-planet-queue-item-cancel-button"
+                    label={localizationHandler.get("cancel-queue-item")}
+                    onclick={cancelQueueItem}
+                />,
+                <Button
+                    key="continue"
+                    id="skyxplore-game-planet-queue-item-continue-button"
+                    label={localizationHandler.get("continue-queue-item")}
+                    onclick={() => setConfirmationDialogData(null)}
+                />
+            ]
+        );
+
+        setConfirmationDialogData(confirmationDialogData);
+    }
+
+    const cancelQueueItem = async () => {
+        await SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM.createRequest(null, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
+            .send();
+
+        setConfirmationDialogData(null);
+    }
+
+    return (
+        <div className="skyxplore-game-planet-queue-item">
+            <QueueItemHeader
+                queueItem={queueItem}
+                localizationHandler={localizationHandler}
+            />
+
+            <ProgressBar
+                className="skyxplore-game-planet-queue-item-progress-bar"
+                currentPoints={queueItem.currentWorkPoints}
+                targetPoints={queueItem.requiredWorkPoints}
+            />
+
+            <div className="skyxplore-game-planet-queue-item-priority-wrapper">
+                <LabelWrappedInputField
+                    className="skyxplore-game-planet-queue-item-priority"
+                    preLabel={localizationHandler.get("priority") + ": "}
+                    inputField={
+                        <NumberInput
+                            type="range"
+                            min="1"
+                            max="10"
+                            value={priority}
+                            onchangeCallback={(newPriority) => changePriority(newPriority)}
+                        />
+                    }
+                    postLabel={priority}
+                />
+            </div>
+
+            <Button
+                className="skyxplore-game-planet-queue-item-cancel-button"
+                label={localizationHandler.get("cancel")}
+                onclick={confirmCancelQueueItem}
+            />
+        </div>
+    );
+}
+
+export default QueueItem;
