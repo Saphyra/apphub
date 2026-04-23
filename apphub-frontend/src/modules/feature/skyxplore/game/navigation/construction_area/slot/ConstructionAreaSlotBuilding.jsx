@@ -2,10 +2,10 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import buildingModuleLocalizationData from "../../../common/localization/building_module_localization.json";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_DECONSTRUCT_BUILDING_MODULE } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import { hasValue } from "common/js/Utils";
 import BuildingConstruction from "./building/BuildingConstruction";
 import BuildingDeconstruction from "./building/BuildingDeconstruction";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_DECONSTRUCT_BUILDING_MODULE } from "../../../SkyXploreGameEndpoints";
 
 const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildings, setConfirmationDialogData }) => {
     const buildingModuleLocalizationHandler = new LocalizationHandler(buildingModuleLocalizationData);

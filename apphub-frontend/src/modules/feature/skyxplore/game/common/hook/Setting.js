@@ -1,5 +1,5 @@
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_DATA_GET_SETTING } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_GET_SETTING } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 
 const useLoadSetting = (type, location, callback) => {
     const payload = {

@@ -1,6 +1,6 @@
 import Button from "common/component/input/Button";
 import FileInput from "common/component/input/FileInput";
-import { STORAGE_DOWNLOAD_FILE } from "common/js/dao/endpoints/StorageEndpoints";
+import { STORAGE_DOWNLOAD_FILE } from "common/js/GenericEndpoints";
 import { hasValue } from "common/js/Utils";
 import downloadFile from "modules/feature/notebook/common/FileDownloader";
 import { useEffect, useState } from "react";

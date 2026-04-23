@@ -5,9 +5,9 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import { useEffect, useState } from "react";
 import NotificationService from "common/js/notification/NotificationService";
 import { isBlank } from "common/js/Utils";
-import { SKYXPLORE_SOLAR_SYSTEM_RENAME } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
+import { SKYXPLORE_SOLAR_SYSTEM_RENAME } from "../../../SkyXploreGameEndpoints";
 
 const SolarSystemHeader = ({ solarSystemId, solarSystemName, closePage, setSolarSystemName }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

@@ -4,9 +4,9 @@ import "./error_report_list_item.css";
 import { addAndSet, removeAndSet } from "common/js/Utils";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_MARK_ERROR_REPORTS } from "common/js/dao/endpoints/AdminPanelEndpoints";
 import InputField from "common/component/input/InputField";
 import ErrorReportStatus from "../../../ErrorReportStatus";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_MARK_ERROR_REPORTS } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErrorReports, refreshCallback, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

@@ -1,14 +1,14 @@
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
-import { SKYXPLORE_GET_GAMES } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
-import { SKYXPLORE_DELETE_GAME } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
-import { IS_ADMIN } from "common/js/dao/endpoints/UserEndpoints";
+import { SKYXPLORE_GET_GAMES } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { useEffect, useState } from "react";
 import SavedGame from "./saved_game/SavedGame";
 import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
-import { SKYXPLORE_ADMIN_MAIN_PAGE } from "common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
+import { SKYXPLORE_ADMIN_MAIN_PAGE } from "../../admin/SkyXploreAdminEndpoints";
+import { SKYXPLORE_DELETE_GAME } from "../../lobby/SkyXploreLobbyEndpoints";
+import { IS_ADMIN } from "common/js/GenericEndpoints";
 
 const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
     const [displaySavedGames, setDisplaySavedGames] = useState(false);

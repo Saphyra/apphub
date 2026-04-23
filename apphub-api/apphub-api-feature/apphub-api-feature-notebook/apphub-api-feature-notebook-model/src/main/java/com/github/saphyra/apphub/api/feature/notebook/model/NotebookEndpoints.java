@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.feature.notebook.model;
 
 public class NotebookEndpoints {
     //Category

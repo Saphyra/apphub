@@ -1,10 +1,10 @@
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_OCCURRENCES } from "common/js/dao/endpoints/CalendarEndpoints";
 import sortOccurrences from "modules/feature/calendar/common/occurrence/OccurrenceSorter";
 import { useState } from "react";
 import Occurrence from "../../common/occurrence/Occurrence";
 import { hasValue } from "common/js/Utils";
+import { CALENDAR_GET_OCCURRENCES } from "modules/feature/calendar/CalendarEndpoints";
 
 const SelectedDateContent = ({ selectedDate, activeLabel, showArchived, refreshCounter, setDisplaySpinner, setSelectedOccurrence }) => {
     const [occurrences, setOccurrences] = useState([]);

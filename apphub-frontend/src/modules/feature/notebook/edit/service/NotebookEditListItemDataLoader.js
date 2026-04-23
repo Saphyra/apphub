@@ -1,4 +1,4 @@
-import { NOTEBOOK_GET_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
+import { NOTEBOOK_GET_LIST_ITEM } from "../../NotebookEndpoints";
 
 const loadItemData = (listItemId, setDataFromResponse) => {
     const fetch = async () => {

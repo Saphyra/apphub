@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore;
+package com.github.saphyra.apphub.api.feature.skyxplore;
 
 public class SkyXploreGameEndpoints {
     public static final String SKYXPLORE_INTERNAL_CREATE_GAME = "/internal/skyxplore/game";

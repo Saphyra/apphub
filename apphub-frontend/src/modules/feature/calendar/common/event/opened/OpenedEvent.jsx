@@ -3,7 +3,6 @@ import localizationData from "./opened_event_localization.json";
 import repetitionTypeLocalizationData from "../../repetition_type/repetition_type_localization.json";
 import "./opened_event.css";
 import { useState } from "react";
-import { CALENDAR_ARCHIVE_EVENT, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_GET_OCCURRENCES_OF_EVENT, CALENDAR_MERGE_EVENTS } from "common/js/dao/endpoints/CalendarEndpoints";
 import useLoader from "common/hook/Loader";
 import { hasValue, mapOrDefault } from "common/js/Utils";
 import ErrorHandler from "common/js/dao/ErrorHandler";
@@ -16,6 +15,7 @@ import Stream from "common/js/collection/Stream";
 import sortOccurrences from "../../occurrence/OccurrenceSorter";
 import LocalTime from "common/js/date/LocalTime";
 import LocalDate from "common/js/date/LocalDate";
+import { CALENDAR_ARCHIVE_EVENT, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_GET_OCCURRENCES_OF_EVENT, CALENDAR_MERGE_EVENTS } from "modules/feature/calendar/CalendarEndpoints";
 
 const OpenedEvent = ({
     eventId,

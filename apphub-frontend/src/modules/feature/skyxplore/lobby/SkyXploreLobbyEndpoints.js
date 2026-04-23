@@ -1,4 +1,6 @@
-import { Endpoint, RequestMethod } from "../../dao";
+import { Endpoint, RequestMethod } from "common/js/dao/dao";
+
+export const SKYXPLORE_LOBBY_PAGE = "/web/skyxplore/lobby";
 
 export const SKYXPLORE_CREATE_LOBBY = new Endpoint(RequestMethod.PUT, "/api/skyxplore/lobby");
 export const SKYXPLORE_LOBBY_IS_IN_LOBBY = new Endpoint(RequestMethod.GET, "/api/skyxplore/lobby");

@@ -5,9 +5,9 @@ import { useState } from "react";
 import useHasFocus from "common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import NotificationService from "common/js/notification/NotificationService";
-import { ACCOUNT_BAN_SEARCH } from "common/js/dao/endpoints/UserEndpoints";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
+import { ACCOUNT_BAN_SEARCH } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const BanSearch = ({ setUsers }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

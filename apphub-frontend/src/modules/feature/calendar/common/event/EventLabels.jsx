@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./event_localization.json";
 import { useState } from "react";
 import useLoader from "common/hook/Loader";
-import { CALENDAR_GET_LABELS } from "common/js/dao/endpoints/CalendarEndpoints";
 import Stream from "common/js/collection/Stream";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
@@ -11,6 +10,7 @@ import Label from "./Label";
 import MapStream from "common/js/collection/MapStream";
 import NotificationService from "common/js/notification/NotificationService";
 import { MAX_LABEL_LENGTH } from "../../CalendarConstants";
+import { CALENDAR_GET_LABELS } from "../../CalendarEndpoints";
 
 const EventLabels = ({ existingLabels = [], setExistingLabels, setDisplaySpinner, newLabels, setNewLabels }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

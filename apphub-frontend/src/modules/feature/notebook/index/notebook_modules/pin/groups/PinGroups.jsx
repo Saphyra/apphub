@@ -7,11 +7,11 @@ import { hasValue } from "common/js/Utils";
 import Stream from "common/js/collection/Stream";
 import useHasFocus from "common/hook/UseHasFocus";
 import useLoader from "common/hook/Loader";
-import { NOTEBOOK_ADD_ITEM_TO_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS, NOTEBOOK_PIN_GROUP_OPENED } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import Button from "common/component/input/Button";
 import Event from "common/js/event/Event";
+import { NOTEBOOK_ADD_ITEM_TO_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS, NOTEBOOK_PIN_GROUP_OPENED } from "modules/feature/notebook/NotebookEndpoints";
 
 const PinGroups = ({ pinGroupId, setPinGroupId, openedListItem, setOpenedListItem, lastEvent, setLastEvent, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

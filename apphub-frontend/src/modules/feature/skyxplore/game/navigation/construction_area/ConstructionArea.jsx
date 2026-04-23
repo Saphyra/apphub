@@ -5,9 +5,8 @@ import constructionAreaLocalizationData from "../../common/localization/construc
 import buildingModuleCategoryLocalizationData from "../../common/localization/building_module_category_localization.json";
 import { useState } from "react";
 import useCache from "common/hook/Cache";
-import { SKYXPLORE_GET_ITEM_DATA } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_GET_ITEM_DATA } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES, SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
@@ -17,6 +16,7 @@ import ConstructionAreaSlots from "./slot/ConstructionAreaSlots";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Stream from "common/js/collection/Stream";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES, SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA } from "../../SkyXploreGameEndpoints";
 
 const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

@@ -1,9 +1,9 @@
-import { SKYXPLORE_GAME_GET_CHAT_ROOMS, SKYXPLORE_GAME_LEAVE_CHAT_ROOM } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import { useEffect } from "react";
 import ChatRoom from "./room/ChatRoom";
 import { removeAndSet } from "common/js/Utils";
 import Stream from "common/js/collection/Stream";
 import "./room_selector.css";
+import { SKYXPLORE_GAME_GET_CHAT_ROOMS, SKYXPLORE_GAME_LEAVE_CHAT_ROOM } from "../../SkyXploreGameEndpoints";
 
 const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, chatRooms, setChatRooms }) => {
     useEffect(() => loadChatRooms(), []);

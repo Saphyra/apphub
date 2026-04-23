@@ -1,8 +1,8 @@
 import Constants from "common/js/Constants";
-import { LOGIN } from "common/js/dao/endpoints/UserEndpoints";
 import NotificationKey from "common/js/notification/NotificationKey";
 import NotificationService from "common/js/notification/NotificationService";
 import { getQueryParam, setCookie } from "common/js/Utils";
+import { LOGIN } from "../IndexEndpoints";
 
 const login = async (userIdentifier, password, rememberMe) => {
     if (userIdentifier.length === 0 || password.length === 0) {

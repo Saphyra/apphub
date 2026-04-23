@@ -1,10 +1,10 @@
 import Stream from "common/js/collection/Stream";
-import { SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
-import { SKYXPLORE_GAME_TERRAFORM_SURFACE } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { hasValue } from "common/js/Utils";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import TerraformingPossibility from "./terraformin_possibility/TerraformingPossibility";
+import { SKYXPLORE_GAME_TERRAFORM_SURFACE } from "../../../SkyXploreGameEndpoints";
 
 const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage }) => {
     const [terraformingPossibilities, setTerraformingPossibilities] = useState([]);

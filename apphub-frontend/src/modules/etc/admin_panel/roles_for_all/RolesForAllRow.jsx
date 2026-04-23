@@ -1,11 +1,11 @@
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
-import { USER_DATA_ADD_ROLE_TO_ALL, USER_DATA_REMOVE_ROLE_FROM_ALL } from "common/js/dao/endpoints/UserEndpoints";
 import LocalizationHandler from "common/js/LocalizationHandler";
 import NotificationService from "common/js/notification/NotificationService";
 import roleLocalizationData from "modules/etc/admin_panel/role_localization.json";
 import { useState } from "react";
+import { USER_DATA_ADD_ROLE_TO_ALL, USER_DATA_REMOVE_ROLE_FROM_ALL } from "../AdminPanelEndpoints";
 
 const RolesForAllRow = ({ localizationHandler, role }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);

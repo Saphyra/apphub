@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { USER_DATA_ROLES_FOR_ALL_RESTRICTED } from "common/js/dao/endpoints/UserEndpoints";
 import Stream from "common/js/collection/Stream";
 import roles from "modules/etc/admin_panel/roles.json";
 import RolesForAllRow from "./RolesForAllRow";
@@ -15,6 +14,7 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import Constants from "common/js/Constants";
+import { USER_DATA_ROLES_FOR_ALL_RESTRICTED } from "../AdminPanelEndpoints";
 
 const RolesForAllPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

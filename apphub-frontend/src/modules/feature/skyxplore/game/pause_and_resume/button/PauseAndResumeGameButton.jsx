@@ -1,8 +1,8 @@
 import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./pause_and_resume_localization.json";
 import "./pause_and_resume.css";
-import { SKYXPLORE_GAME_PAUSE } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_GAME_PAUSE } from "../../SkyXploreGameEndpoints";
 
 const PauseAndResumeGameButton = ({ isHost, paused }) => {
     const localizationHandler = new LocalizationHandler(localizationData)

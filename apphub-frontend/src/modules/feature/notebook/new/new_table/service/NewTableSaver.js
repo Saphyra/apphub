@@ -1,14 +1,14 @@
 import Stream from "common/js/collection/Stream";
 import Constants from "common/js/Constants";
 import getDefaultErrorHandler from "common/js/dao/DefaultErrorHandler";
-import { NOTEBOOK_CREATE_TABLE } from "common/js/dao/endpoints/NotebookEndpoints";
-import { STORAGE_UPLOAD_FILE } from "common/js/dao/endpoints/StorageEndpoints";
+import { STORAGE_UPLOAD_FILE } from "common/js/GenericEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import { getBrowserLanguage } from "common/js/Utils";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import validateColumnData from "modules/feature/notebook/common/validator/ColumnDataValidator";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "modules/feature/notebook/common/validator/TableHeadNameValidator";
+import { NOTEBOOK_CREATE_TABLE } from "modules/feature/notebook/NotebookEndpoints";
 
 const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom, setDisplaySpinner, files) => {
     const titleValidationResult = validateListItemTitle(listItemTitle);

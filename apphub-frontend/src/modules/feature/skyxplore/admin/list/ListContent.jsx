@@ -1,8 +1,8 @@
 import Stream from "common/js/collection/Stream";
 import ItemData from "../common/ItemData";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_ADMIN_DETAILS_PAGE } from "common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 import { hasValue } from "common/js/Utils";
+import { SKYXPLORE_ADMIN_DETAILS_PAGE } from "../SkyXploreAdminEndpoints";
 
 const ListContent = ({ items, filters, gameId, type }) => {
     return (

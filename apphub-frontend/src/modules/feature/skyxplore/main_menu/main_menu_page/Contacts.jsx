@@ -3,7 +3,7 @@ import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import Stream from "common/js/collection/Stream";
-import { SKYXPLORE_ACCEPT_FRIEND_REQUEST, SKYXPLORE_ADD_FRIEND, SKYXPLORE_CANCEL_FRIEND_REQUEST, SKYXPLORE_GET_FRIENDS, SKYXPLORE_GET_INCOMING_FRIEND_REQUEST, SKYXPLORE_GET_SENT_FRIEND_REQUEST, SKYXPLORE_REMOVE_FRIEND, SKYXPLORE_SEARCH_FOR_FRIENDS } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_ACCEPT_FRIEND_REQUEST, SKYXPLORE_ADD_FRIEND, SKYXPLORE_CANCEL_FRIEND_REQUEST, SKYXPLORE_GET_FRIENDS, SKYXPLORE_GET_INCOMING_FRIEND_REQUEST, SKYXPLORE_GET_SENT_FRIEND_REQUEST, SKYXPLORE_REMOVE_FRIEND, SKYXPLORE_SEARCH_FOR_FRIENDS } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { useEffect, useState } from "react";
 import ContactsListItem from "./contacts/ContactsListItem";
 import InputField from "common/component/input/InputField";

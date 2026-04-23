@@ -1,6 +1,6 @@
-import { ACCOUNT_REGISTER } from "common/js/dao/endpoints/UserEndpoints";
 import NotificationKey from "common/js/notification/NotificationKey";
 import login from "./LoginController";
+import { ACCOUNT_REGISTER } from "../IndexEndpoints";
 
 const register = async (username, email, password) => {
     const body = {

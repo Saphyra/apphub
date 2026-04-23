@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.data.ws;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.AbstractWebSocketHandler;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import org.springframework.stereotype.Component;

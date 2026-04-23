@@ -8,7 +8,7 @@ import PostLabeledInputField from "common/component/input/PostLabeledInputField"
 import InputField from "common/component/input/InputField";
 import { addAndSet, hasValue, removeAndSet } from "common/js/Utils";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_DATA_CREATE_SETTING, SKYXPLORE_DATA_DELETE_SETTING } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_CREATE_SETTING, SKYXPLORE_DATA_DELETE_SETTING } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 
 const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updateHidden, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

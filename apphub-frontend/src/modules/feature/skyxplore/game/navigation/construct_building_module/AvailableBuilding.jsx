@@ -2,11 +2,11 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import buildingModuleLocalizationData from "../../common/localization/building_module_localization.json";
 import { useState } from "react";
 import useCache from "common/hook/Cache";
-import { SKYXPLORE_GET_ITEM_DATA } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_GET_ITEM_DATA } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { hasValue } from "common/js/Utils";
 import ConstructionCost from "../../common/component/construction_cost/ConstructionCost";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE } from "../../SkyXploreGameEndpoints";
 
 const AvailableBuilding = ({ closePage, localizationHandler, dataId, constructionAreaId }) => {
     const buildingModuleLocalizationHandler = new LocalizationHandler(buildingModuleLocalizationData);

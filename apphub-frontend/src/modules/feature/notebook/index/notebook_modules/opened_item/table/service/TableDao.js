@@ -2,15 +2,15 @@ import ConfirmationDialogData from "common/component/confirmation_dialog/Confirm
 import Button from "common/component/input/Button";
 import Stream from "common/js/collection/Stream";
 import getDefaultErrorHandler from "common/js/dao/DefaultErrorHandler";
-import { NOTEBOOK_EDIT_TABLE, NOTEBOOK_GET_TABLE, NOTEBOOK_TABLE_DELETE_CHECKED, NOTEBOOK_TABLE_SET_ROW_STATUS } from "common/js/dao/endpoints/NotebookEndpoints";
-import { STORAGE_UPLOAD_FILE } from "common/js/dao/endpoints/StorageEndpoints";
 import Event from "common/js/event/Event";
 import EventName from "common/js/event/EventName";
+import { STORAGE_UPLOAD_FILE } from "common/js/GenericEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import { copyAndSet, getBrowserLanguage } from "common/js/Utils";
 import validateColumnData from "modules/feature/notebook/common/validator/ColumnDataValidator";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "modules/feature/notebook/common/validator/TableHeadNameValidator";
+import { NOTEBOOK_EDIT_TABLE, NOTEBOOK_GET_TABLE, NOTEBOOK_TABLE_DELETE_CHECKED, NOTEBOOK_TABLE_SET_ROW_STATUS } from "modules/feature/notebook/NotebookEndpoints";
 
 export const loadTable = (listItemId, setDataFromResponse, setDisplaySpinner) => {
     const fetch = async () => {

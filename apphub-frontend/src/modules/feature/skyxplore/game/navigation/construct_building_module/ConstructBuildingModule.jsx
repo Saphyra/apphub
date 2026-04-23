@@ -5,10 +5,10 @@ import buildingModuleCategoryLocalizationData from "../../common/localization/bu
 import buildingModuleLocalizationData from "../../common/localization/building_module_localization.json";
 import { useState } from "react";
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "common/js/collection/Stream";
 import AvailableBuilding from "./AvailableBuilding";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES } from "../../SkyXploreGameEndpoints";
 
 const ConstructBuildingModule = ({ closePage, footer, constructionAreaId, buildingModuleCategory }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

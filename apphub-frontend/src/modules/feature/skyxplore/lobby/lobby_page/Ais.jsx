@@ -3,13 +3,13 @@ import Ai from "./ais/Ai";
 import PanelTitle from "./PanelTitle";
 import { useEffect, useState } from "react";
 import ValidatedField from "common/js/validation/ValidatedField";
-import { SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_GET_AIS } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import Stream from "common/js/collection/Stream";
 import Constants from "common/js/Constants";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import ValidatedInputField from "common/component/input/ValidatedInputField";
 import InputField from "common/component/input/InputField";
 import validate from "common/js/validation/Validator";
+import { SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_GET_AIS } from "../SkyXploreLobbyEndpoints";
 
 const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType }) => {
     const [aiName, setAiName] = useState("");

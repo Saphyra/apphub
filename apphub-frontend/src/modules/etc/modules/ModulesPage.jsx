@@ -4,7 +4,6 @@ import "./modules.css";
 import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
-import { MODULES_GET } from "common/js/dao/endpoints/ModulesEndpoints";
 import Button from "common/component/input/Button";
 import Header from "common/component/Header";
 import logout from "common/js/LogoutController";
@@ -12,6 +11,7 @@ import Favorites from "./modules_page/Favorites";
 import Modules from "./modules_page/Modules";
 import Footer from "common/component/Footer";
 import { ToastContainer } from "react-toastify";
+import { MODULES_GET } from "./ModulesEndpoints";
 
 const ModulesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

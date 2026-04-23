@@ -1,6 +1,6 @@
 import useCache from "common/hook/Cache";
 import Stream from "common/js/collection/Stream";
-import { SKYXPLORE_DATA_CONSTRUCTION_AREAS } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_CONSTRUCTION_AREAS } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { useState } from "react";
 import ConstructionArea from "./ConstructionArea";
 

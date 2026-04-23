@@ -1,10 +1,10 @@
 import InputField from "common/component/input/InputField";
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_LABELS } from "common/js/dao/endpoints/CalendarEndpoints";
 import { cacheAndUpdate, cachedOrDefault, hasValue, isBlank } from "common/js/Utils";
 import { useState } from "react";
 import Label from "./Label";
+import { CALENDAR_GET_LABELS } from "../../CalendarEndpoints";
 
 const CACHE_KEY_SEARCH_TEXT = "calendar.labels.searchText"
 

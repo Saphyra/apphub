@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import PanelTitle from "./PanelTitle";
 import Setting from "./settings/Setting";
 import Constants from "common/js/Constants";
-import { SKYXPLORE_LOBBY_EDIT_SETTINGS } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import NumberInputField from "common/component/input/NumberInputField";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
+import { SKYXPLORE_LOBBY_EDIT_SETTINGS } from "../SkyXploreLobbyEndpoints";
 
 const Settings = ({ localizationHandler, isHost, settings }) => {
     const [maxPlayersPerSolarSystem, setMaxPlayersPerSolarSystem] = useState(0);

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.feature.calendar.model;
 
 public class CalendarEndpoints {
     public static final String CALENDAR_PAGE = "/web/calendar";

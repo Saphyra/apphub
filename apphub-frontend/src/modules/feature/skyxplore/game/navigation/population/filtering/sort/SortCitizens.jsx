@@ -8,7 +8,7 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import { useEffect, useState } from "react";
 import { hasValue } from "common/js/Utils";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_DATA_CREATE_SETTING, SKYXPLORE_DATA_DELETE_SETTING } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_CREATE_SETTING, SKYXPLORE_DATA_DELETE_SETTING } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 
 const SortCitizens = ({
     citizenComparator,

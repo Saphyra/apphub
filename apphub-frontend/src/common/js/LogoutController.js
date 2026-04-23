@@ -1,5 +1,5 @@
+import { LOGOUT } from "modules/etc/index/IndexEndpoints";
 import Constants from "./Constants";
-import { LOGOUT } from "./dao/endpoints/UserEndpoints";
 import NotificationKey from "./notification/NotificationKey";
 
 const logout = async () => {

@@ -6,8 +6,8 @@ import StorageSetting from "./storage_setting/StorageSetting";
 import LocalizationHandler from "common/js/LocalizationHandler";
 import { useState } from "react";
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_PLANET_GET_STORAGE_SETTINGS } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "common/js/collection/Stream";
+import { SKYXPLORE_PLANET_GET_STORAGE_SETTINGS } from "../../../SkyXploreGameEndpoints";
 
 const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

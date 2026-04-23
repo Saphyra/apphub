@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore;
+package com.github.saphyra.apphub.api.feature.skyxplore;
 
 public class GenericSkyXploreEndpoints {
     public static final String SKYXPLORE_MAIN_MENU_PAGE = "/web/skyxplore";

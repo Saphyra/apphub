@@ -1,6 +1,6 @@
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_GAME_CANCEL_TERRAFORMATION } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_GAME_CANCEL_TERRAFORMATION } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const confirmCancelTerraformation = (
     localizationHandler,

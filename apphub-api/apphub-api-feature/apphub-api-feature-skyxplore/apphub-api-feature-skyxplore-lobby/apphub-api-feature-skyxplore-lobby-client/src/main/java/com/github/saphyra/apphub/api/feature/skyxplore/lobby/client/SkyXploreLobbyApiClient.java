@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.lobby.client;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreLobbyEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreLobbyEndpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,8 +1,8 @@
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateFile from "../../common/validator/FileValidator";
-import { NOTEBOOK_CREATE_IMAGE } from "common/js/dao/endpoints/NotebookEndpoints";
 import uploadFile from "../../common/FileUploader";
+import { NOTEBOOK_CREATE_IMAGE } from "../../NotebookEndpoints";
 
 const create = async (listItemTitle, file, parent, setDisplaySpinner) => {
     const listItemTitleValidationResult = validateListItemTitle(listItemTitle);

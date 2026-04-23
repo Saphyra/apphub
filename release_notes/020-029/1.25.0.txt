@@ -6,6 +6,7 @@
 
 ===PLATFORM CHANGES===
     Separate modules to etc/feature/platform in the frontend
+    Move endpoints to their corresponding API lib / FE module
 
 ===TECHNICAL DEBTS===
     EliteBase

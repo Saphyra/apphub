@@ -4,7 +4,6 @@ import "./migration_tasks.css";
 import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
-import { ADMIN_PANEL_MIGRATION_DELETE_TASK, ADMIN_PANEL_MIGRATION_GET_TASKS, ADMIN_PANEL_MIGRATION_TRIGGER_TASK } from "common/js/dao/endpoints/AdminPanelEndpoints";
 import Stream from "common/js/collection/Stream";
 import MigrationTask from "./MigrationTask";
 import Button from "common/component/input/Button";
@@ -13,6 +12,7 @@ import Footer from "common/component/Footer";
 import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
+import { ADMIN_PANEL_MIGRATION_DELETE_TASK, ADMIN_PANEL_MIGRATION_GET_TASKS, ADMIN_PANEL_MIGRATION_TRIGGER_TASK } from "../AdminPanelEndpoints";
 
 const MigrationTasksPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

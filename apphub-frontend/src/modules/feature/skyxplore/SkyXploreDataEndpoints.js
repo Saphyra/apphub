@@ -1,4 +1,4 @@
-import { Endpoint, RequestMethod } from "../../dao";
+import { Endpoint, RequestMethod } from "../../../common/js/dao/dao";
 
 export const SKYXPLORE_PLATFORM_HAS_CHARACTER = new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/exists");
 export const SKYXPLORE_GET_CHARACTER_NAME = new Endpoint(RequestMethod.GET, "/api/skyxplore/data/character/name");

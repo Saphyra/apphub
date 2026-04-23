@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import { NOTEBOOK_CREATE_ONLY_TITLE } from "common/js/dao/endpoints/NotebookEndpoints";
 import Header from "common/component/Header";
 import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
@@ -13,6 +12,7 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
+import { NOTEBOOK_CREATE_ONLY_TITLE } from "../../NotebookEndpoints";
 
 const NewOnlyTitlePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

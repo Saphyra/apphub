@@ -4,9 +4,9 @@ import localizationData from "./citizen_name_localization.json";
 import LocalizationHandler from "common/js/LocalizationHandler";
 import { isBlank } from "common/js/Utils";
 import { useEffect, useState } from "react";
-import { SKYXPLORE_PLANET_RENAME_CITIZEN } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_PLANET_RENAME_CITIZEN } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const CitizenName = ({ citizenId, name }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

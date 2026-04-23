@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreDataEndpoints;
+import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.locale.UserSettingLocaleResolver;
 import org.junit.jupiter.api.Test;
@@ -75,7 +74,7 @@ public class ChangeLocaleFilterTest {
     public void filter_notChangeLocaleEndpoint() {
         given(chain.filter(exchange)).willReturn(mono);
         given(exchange.getRequest()).willReturn(request);
-        given(request.getURI()).willReturn(URI.create(SkyXploreDataEndpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
+        given(request.getURI()).willReturn(URI.create("/asd"));
 
         Mono<Void> result = underTest.filter(exchange, chain);
 

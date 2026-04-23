@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { isBlank } from "common/js/Utils";
 import NotificationService from "common/js/notification/NotificationService";
 import PlanetConstants from "../PlanetConstants";
-import { SKYXPLORE_PLANET_RENAME } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
+import { SKYXPLORE_PLANET_RENAME } from "../../../SkyXploreGameEndpoints";
 
 const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

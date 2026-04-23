@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { ACCOUNT_GET_BANS } from "common/js/dao/endpoints/UserEndpoints";
 import Header from "common/component/Header";
 import { hasValue } from "common/js/Utils";
 import BanUserInfo from "./user_info/BanUserInfo";
@@ -18,6 +17,7 @@ import Button from "common/component/input/Button";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
+import { ACCOUNT_GET_BANS } from "../../AdminPanelEndpoints";
 
 const BanDetailsPage = () => {
     const { userId } = useParams();

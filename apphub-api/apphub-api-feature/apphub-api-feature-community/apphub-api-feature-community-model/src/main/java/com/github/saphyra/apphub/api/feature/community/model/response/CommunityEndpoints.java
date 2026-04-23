@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.feature.community.model.response;
 
 public class CommunityEndpoints {
     public static final String COMMUNITY_PAGE = "/web/community";

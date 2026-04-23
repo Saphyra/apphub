@@ -5,10 +5,10 @@ import { useState } from "react";
 import roles from "modules/etc/admin_panel/roles.json";
 import Button from "common/component/input/Button";
 import NotificationService from "common/js/notification/NotificationService";
-import { USER_DATA_ADD_ROLE, USER_DATA_REMOVE_ROLE } from "common/js/dao/endpoints/UserEndpoints";
 import InputField from "common/component/input/InputField";
 import { hasValue } from "common/js/Utils";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
+import { USER_DATA_ADD_ROLE, USER_DATA_REMOVE_ROLE } from "../../AdminPanelEndpoints";
 
 const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setUsers, query }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);

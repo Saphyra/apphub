@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.EliteBaseEndpoints;
+import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

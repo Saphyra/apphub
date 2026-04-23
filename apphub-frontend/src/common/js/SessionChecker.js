@@ -1,7 +1,7 @@
+import { CHECK_SESSION } from "./GenericEndpoints";
 import getDefaultErrorHandler from "./dao/DefaultErrorHandler";
 import ErrorHandler from "./dao/ErrorHandler";
 import { ResponseStatus } from "./dao/dao";
-import { CHECK_SESSION } from "./dao/endpoints/GenericEndpoints";
 
 const sessionChecker = () => {
     setInterval(checkSession, 10000);

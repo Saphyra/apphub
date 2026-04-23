@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
+import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

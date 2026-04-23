@@ -1,5 +1,5 @@
 import Button from "common/component/input/Button";
-import { MODULES_SET_FAVORITE } from "common/js/dao/endpoints/ModulesEndpoints";
+import { MODULES_SET_FAVORITE } from "modules/etc/modules/ModulesEndpoints";
 
 const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
     const favoriteClassName = module.favorite ? "favorite" : "non-favorite"

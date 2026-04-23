@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.service.feature.training.config;
 
 public class TrainingEndpoints {
     public static final String TRAINING_BOOK_PAGE = "/web/training/{book}/{chapter}";

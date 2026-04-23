@@ -1,7 +1,7 @@
 import { hasValue } from "common/js/Utils";
 import SelectedDateContent from "./SelectedDateContent";
 import SelectedOccurrenceContent from "./SelectedOccurrenceContent";
-import { CALENDAR_CREATE_EVENT_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_CREATE_EVENT_PAGE } from "modules/feature/calendar/CalendarEndpoints";
 
 const RightPanel = ({
     selectedDate,

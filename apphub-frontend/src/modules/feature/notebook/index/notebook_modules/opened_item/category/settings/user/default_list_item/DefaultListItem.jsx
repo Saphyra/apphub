@@ -1,11 +1,11 @@
 import Button from "common/component/input/Button";
 import useLoader from "common/hook/Loader";
 import Optional from "common/js/collection/Optional";
-import { NOTEBOOK_GET_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
 import { hasValue } from "common/js/Utils";
 import { useEffect, useState } from "react";
 import DefaultListItemSelector from "./DefaultListItemSelector";
 import UserSettings from "modules/feature/notebook/common/UserSettings";
+import { NOTEBOOK_GET_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
 
 const DefaultListItem = ({ localizationHandler, userSettings, changeUserSettings }) => {
     const [defaultListItemId, setDefaultListItemId] = useState(null);

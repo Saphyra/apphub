@@ -2,8 +2,8 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./exit_game_button_localization.json";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_EXIT_GAME, SKYXPLORE_GAME_SAVE } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Constants from "common/js/Constants";
+import { SKYXPLORE_EXIT_GAME, SKYXPLORE_GAME_SAVE } from "../SkyXploreGameEndpoints";
 
 const ExitGameButton = ({ setConfirmationDialogData, isHost, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

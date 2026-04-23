@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "common/js/dao/endpoints/AdminPanelEndpoints";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import Header from "common/component/Header";
@@ -17,6 +16,7 @@ import ErrorReportStatus from "../ErrorReportStatus";
 import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
 
 const ErrorReportDetailsPage = () => {
     const { errorReportId } = useParams();

@@ -1,4 +1,4 @@
-import { Endpoint, RequestMethod } from "../dao";
+import { Endpoint, RequestMethod } from "common/js/dao/dao";
 
 export const NOTEBOOK_GET_CATEGORY_TREE = new Endpoint(RequestMethod.GET, "/api/notebook/category/tree");
 export const NOTEBOOK_GET_PINNED_ITEMS = new Endpoint(RequestMethod.GET, "/api/notebook/item/pinned");

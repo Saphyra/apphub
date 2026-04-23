@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_GAME_ADMIN_GET_BY_TYPE } from "common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 import Header from "common/component/Header";
 import SearchBar from "./SearchBar";
 import ListContent from "./ListContent";
@@ -12,6 +11,7 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
+import { SKYXPLORE_GAME_ADMIN_GET_BY_TYPE } from "../SkyXploreAdminEndpoints";
 
 const SkyXploreAdminListPage = () => {
     const { gameId, type } = useLoaderData();

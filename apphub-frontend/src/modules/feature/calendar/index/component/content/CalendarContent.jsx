@@ -1,12 +1,12 @@
 import useLoader from "common/hook/Loader";
 import LocalizationHandler from "common/js/LocalizationHandler";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_OCCURRENCES } from "common/js/dao/endpoints/CalendarEndpoints";
 import dayOfWeekLocalizationData from "common/js/date/day_of_week_localization.json";
 import { useState } from "react";
 import CalendarContentDay from "./CalendarContentDay";
 import { DAYS_OF_WEEK } from "common/js/date/DayOfWeek";
 import { hasValue } from "common/js/Utils";
+import { CALENDAR_GET_OCCURRENCES } from "modules/feature/calendar/CalendarEndpoints";
 
 const CalendarContent = ({
     view,

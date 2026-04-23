@@ -2,8 +2,8 @@ import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import OpenedPageType from "../../common/OpenedPageType";
 import validateUrl from "../../common/validator/UrlValidator";
-import { NOTEBOOK_EDIT_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
 import Constants from "common/js/Constants";
+import { NOTEBOOK_EDIT_LIST_ITEM } from "../../NotebookEndpoints";
 
 const save = async (listItemTitle, listItemType, value, parent, listItemId, setDisplaySpinner) => {
     const listItemTitleResult = validateListItemTitle(listItemTitle);

@@ -3,12 +3,12 @@ import localizationData from "./username_changer_localization.json";
 import { useEffect, useState } from "react";
 import ValidationResult from "common/js/validation/ValidationResult";
 import { validateFilled, validateUsername } from "../validation/AccountInputValidator";
-import { ACCOUNT_CHANGE_USERNAME } from "common/js/dao/endpoints/UserEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import ValidatedInputField from "common/component/input/ValidatedInputField";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
+import { ACCOUNT_CHANGE_USERNAME } from "../AccountEndpoints";
 
 const UsernameChanger = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

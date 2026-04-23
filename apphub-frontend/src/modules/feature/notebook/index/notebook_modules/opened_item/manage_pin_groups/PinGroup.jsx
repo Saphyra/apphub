@@ -1,7 +1,6 @@
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import Stream from "common/js/collection/Stream";
-import { NOTEBOOK_DELETE_PIN_GROUP, NOTEBOOK_GET_PINNED_ITEMS, NOTEBOOK_RENAME_PIN_GROUP } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import NotificationService from "common/js/notification/NotificationService";
 import validatePinGroupName from "modules/feature/notebook/common/validator/PinGroupNameValidator";
@@ -11,6 +10,7 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import InputField from "common/component/input/InputField";
 import Event from "common/js/event/Event";
+import { NOTEBOOK_DELETE_PIN_GROUP, NOTEBOOK_GET_PINNED_ITEMS, NOTEBOOK_RENAME_PIN_GROUP } from "modules/feature/notebook/NotebookEndpoints";
 
 const PinGroup = ({ pinGroupId, pinGroupName, localizationHandler, setLastEvent, setConfirmationDialogData, setPinGroups, lastEvent, setDisplaySpinner }) => {
     const [contentEditingEnabled, setContentEditingEnabled] = useState(false);

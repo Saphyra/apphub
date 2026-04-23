@@ -7,8 +7,8 @@ import { isBlank } from "common/js/Utils";
 import { useState } from "react";
 import { MAX_LABEL_LENGTH } from "../../CalendarConstants";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL } from "common/js/dao/endpoints/CalendarEndpoints";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
+import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL } from "../../CalendarEndpoints";
 
 const Label = ({
     labelId,

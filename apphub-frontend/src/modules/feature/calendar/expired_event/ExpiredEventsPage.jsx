@@ -7,7 +7,6 @@ import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "common/js/Utils";
 import useLoader from "common/hook/Loader";
-import { CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_EXTEND_EXPIRED_EVENT, CALENDAR_GET_EXPIRED_EVENTS, CALENDAR_HIDE_EXPIRED_EVENT, CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import ExpiredEventList from "./component/ExpiredEventList";
 import OpenedEvent from "../common/event/opened/OpenedEvent";
 import Button from "common/component/input/Button";
@@ -19,6 +18,7 @@ import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
 import LocalDate from "common/js/date/LocalDate";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
+import { CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_EXTEND_EXPIRED_EVENT, CALENDAR_GET_EXPIRED_EVENTS, CALENDAR_HIDE_EXPIRED_EVENT, CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const CACHE_KEY_SELECTED_EVENT = "calendar.expiredEvent.selected";
 const CACHE_KEY_SELECTED_OCCURRENCE = "calendar.expiredEvent.selectedOccurrence";

@@ -1,4 +1,4 @@
-import { Endpoint, RequestMethod } from "../../dao";
+import { Endpoint, RequestMethod } from "common/js/dao/dao";
 
 export const SKYXPLORE_GAME_GET_GAME_ID = new Endpoint(RequestMethod.GET, "/api/skyxplore/game");
 

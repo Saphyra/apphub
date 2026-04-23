@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import PanelTitle from "./PanelTitle";
 import "./friends/friends.css"
-import { SKYXPLORE_INVITE_TO_LOBBY, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import Button from "common/component/input/Button";
 import Stream from "common/js/collection/Stream";
+import { SKYXPLORE_INVITE_TO_LOBBY, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS } from "../SkyXploreLobbyEndpoints";
 
 const Friends = ({ localizationHandler, friends, setFriends }) => {
     useEffect(() => loadFriends(), []);

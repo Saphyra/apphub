@@ -3,7 +3,7 @@ import useLoader from "common/hook/Loader";
 import useRefresh from "common/hook/Refresh";
 import useHasFocus from "common/hook/UseHasFocus";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "modules/feature/calendar/CalendarEndpoints";
 import { useState } from "react";
 import { useUpdateEffect } from "react-use";
 

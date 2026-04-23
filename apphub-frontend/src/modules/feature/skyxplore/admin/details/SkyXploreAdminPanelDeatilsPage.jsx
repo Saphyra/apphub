@@ -1,6 +1,5 @@
 import Header from "common/component/Header";
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_ADMIN_DETAILS_PAGE, SKYXPLORE_GAME_ADMIN_GET_BY_TYPE, SKYXPLORE_GAME_ADMIN_GET_ITEM } from "common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import sessionChecker from "common/js/SessionChecker";
 import { hasValue } from "common/js/Utils";
@@ -12,6 +11,7 @@ import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
 import Stream from "common/js/collection/Stream";
+import { SKYXPLORE_ADMIN_DETAILS_PAGE, SKYXPLORE_GAME_ADMIN_GET_BY_TYPE, SKYXPLORE_GAME_ADMIN_GET_ITEM } from "../SkyXploreAdminEndpoints";
 
 const SkyXploreAdminDetailsPage = () => {
     const { gameId, type, id } = useParams();

@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
-import { USER_DATA_GET_USER_ROLES } from "common/js/dao/endpoints/UserEndpoints";
 import React from "react";
+import { USER_DATA_GET_USER_ROLES } from "../AdminPanelEndpoints";
 
 const RoleManagementSearch = ({ localizationHandler, query, setQuery, setUsers }) => {
     const search = async () => {

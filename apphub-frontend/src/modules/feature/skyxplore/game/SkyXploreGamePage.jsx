@@ -6,11 +6,8 @@ import Redirection from "../Redirection";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { IS_ADMIN } from "common/js/dao/endpoints/UserEndpoints";
-import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE, SKYXPLORE_GET_GAME_ID_OF_USER, SKYXPLORE_PROCESS_TICK } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
-import { GET_OWN_USER_ID } from "common/js/dao/endpoints/GenericEndpoints";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
 import { addAndSet, hasValue, isTrue } from "common/js/Utils";
 import MapStream from "common/js/collection/MapStream";
@@ -20,13 +17,15 @@ import Footer from "common/component/Footer";
 import ExitGameButton from "./exit_game/ExitGameButton";
 import PauseAndResumeGameButton from "./pause_and_resume/button/PauseAndResumeGameButton";
 import ToggleChatButton from "./chat/toggle_button/ToggleChatButton";
-import { SKYXPLORE_ADMIN_DETAILS_PAGE } from "common/js/dao/endpoints/skyxplore/SkyXploreAdminEndpoints";
 import Navigation from "./navigation/Navigation";
 import Chat from "./chat/Chat";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
 import "../skyxplore.css";
+import { SKYXPLORE_ADMIN_DETAILS_PAGE } from "../admin/SkyXploreAdminEndpoints";
+import { SKYXPLORE_GAME_IS_HOST, SKYXPLORE_GAME_PAUSE, SKYXPLORE_GAME_SAVE, SKYXPLORE_GET_GAME_ID_OF_USER, SKYXPLORE_PROCESS_TICK } from "./SkyXploreGameEndpoints";
+import { GET_OWN_USER_ID, IS_ADMIN } from "common/js/GenericEndpoints";
 
 const SkyXploreGamePage = () => {
     //===Platform

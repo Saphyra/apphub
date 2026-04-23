@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import SolarSystemConstants from "./SolarSystemConstants";
-import { SKYXPLORE_GET_SOLAR_SYSTEM } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "common/js/collection/Stream";
 import NavigationHistoryItem from "../NavigationHistoryItem";
 import PageName from "../PageName";
 import SolarSystemHeader from "./header/SolarSystemHeader";
 import "./solar_system.css";
+import { SKYXPLORE_GET_SOLAR_SYSTEM } from "../../SkyXploreGameEndpoints";
 
 const SolarSystem = ({ solarSystemId, footer, closePage, openPage }) => {
     const [solarSystemName, setSolarSystemName] = useState("");

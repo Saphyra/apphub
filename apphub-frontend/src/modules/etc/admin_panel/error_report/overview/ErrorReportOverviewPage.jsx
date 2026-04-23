@@ -7,7 +7,6 @@ import NotificationService from "common/js/notification/NotificationService";
 import useHasFocus from "common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import { hasValue, nullIfEmpty } from "common/js/Utils";
-import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DELETE_ALL, ADMIN_PANEL_ERROR_REPORT_DELETE_READ, ADMIN_PANEL_GET_ERROR_REPORTS, ADMIN_PANEL_MARK_ERROR_REPORTS } from "common/js/dao/endpoints/AdminPanelEndpoints";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import ErrorReportStatus from "../ErrorReportStatus";
@@ -20,6 +19,7 @@ import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DELETE_ALL, ADMIN_PANEL_ERROR_REPORT_DELETE_READ, ADMIN_PANEL_GET_ERROR_REPORTS, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
 
 const ErrorReportOverviewPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

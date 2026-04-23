@@ -8,7 +8,6 @@ import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { hasValue } from "common/js/Utils";
-import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import { useExtractAsync } from "common/hook/UseEffectValidated";
 import LocalTime from "common/js/date/LocalTime";
 import LocalDate from "common/js/date/LocalDate";
@@ -33,6 +32,7 @@ import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import Stream from "common/js/collection/Stream";
+import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const CalendarEditOccurrencePage = () => {
     const { occurrenceId } = useParams();

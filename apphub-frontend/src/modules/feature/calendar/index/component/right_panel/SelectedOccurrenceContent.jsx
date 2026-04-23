@@ -3,12 +3,12 @@ import Textarea from "common/component/input/Textarea";
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
 import { ResponseStatus } from "common/js/dao/dao";
-import { CALENDAR_GET_LABELS_OF_EVENT, CALENDAR_GET_OCCURRENCE } from "common/js/dao/endpoints/CalendarEndpoints";
 import ErrorHandler from "common/js/dao/ErrorHandler";
 import LocalTime from "common/js/date/LocalTime";
 import { generateRandomId, hasValue, isBlank } from "common/js/Utils";
 import { useState } from "react";
 import getChoices from "./SelectedOccurrenceChoices";
+import { CALENDAR_GET_LABELS_OF_EVENT, CALENDAR_GET_OCCURRENCE } from "modules/feature/calendar/CalendarEndpoints";
 
 const SelectedOccurrenceContent = ({
     occurrenceId,

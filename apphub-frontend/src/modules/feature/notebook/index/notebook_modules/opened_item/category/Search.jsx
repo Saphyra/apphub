@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./search.css";
 import useHasFocus from "common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
-import { NOTEBOOK_SEARCH } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import Stream from "common/js/collection/Stream";
 import compareListItems from "./ListItemComparator";
@@ -11,6 +10,7 @@ import ListItem from "../../list_item/ListItem";
 import Settings from "./settings/Settings";
 import CategoryNavigation from "./navigation/CategoryNavigation";
 import ListItemMode from "../../list_item/ListItemMode";
+import { NOTEBOOK_SEARCH } from "modules/feature/notebook/NotebookEndpoints";
 
 const Search = ({
     localizationHandler,

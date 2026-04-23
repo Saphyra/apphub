@@ -18,9 +18,9 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import createEvent from "./createEvent";
 import Optional from "common/js/collection/Optional";
-import { CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
+import { CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const CalendarCreateEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

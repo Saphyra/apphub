@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.platform.storage.model;
 
 public class StorageEndpoints {
     public static final String EVENT_CLEAN_UP_STORED_FILES = "/event/storage/cleanup/stored-files";

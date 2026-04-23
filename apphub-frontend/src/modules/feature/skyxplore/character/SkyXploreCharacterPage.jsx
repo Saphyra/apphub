@@ -5,8 +5,7 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Redirection from "../Redirection";
-import { SKYXPLORE_CREATE_OR_UPDATE_CHARACTER, SKYXPLORE_GET_CHARACTER_NAME, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
-import { USER_DATA_GET_USERNAME } from "common/js/dao/endpoints/UserEndpoints";
+import { SKYXPLORE_CREATE_OR_UPDATE_CHARACTER, SKYXPLORE_GET_CHARACTER_NAME, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import ValidatedField from "common/js/validation/ValidatedField";
 import NotificationKey from "common/js/notification/NotificationKey";
 import Constants from "common/js/Constants";
@@ -20,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
 import validate from "common/js/validation/Validator";
 import "../skyxplore.css";
+import { USER_DATA_GET_USERNAME } from "modules/etc/account/AccountEndpoints";
 
 const SkyXploreCharacterPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

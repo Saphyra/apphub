@@ -3,11 +3,10 @@ import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import ValidatedInputField from "common/component/input/ValidatedInputField";
-import Constants from "common/js/Constants";
-import { SKYXPLORE_CREATE_LOBBY } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import ValidatedField from "common/js/validation/ValidatedField";
 import validate from "common/js/validation/Validator";
 import { useEffect, useState } from "react";
+import { SKYXPLORE_CREATE_LOBBY, SKYXPLORE_LOBBY_PAGE } from "../../lobby/SkyXploreLobbyEndpoints";
 
 const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
     const [gameName, setGameName] = useState("");
@@ -30,7 +29,7 @@ const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConf
         await SKYXPLORE_CREATE_LOBBY.createRequest({ value: gameName })
             .send();
 
-        window.location.href = Constants.SKYXPLORE_LOBBY_PAGE;
+        window.location.href = SKYXPLORE_LOBBY_PAGE;
     }
 
     return (

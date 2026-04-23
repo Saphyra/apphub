@@ -10,7 +10,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
-import com.github.saphyra.apphub.lib.config.common.endpoints.EncryptionEndpoints;
+import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionEndpoints;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
 import com.github.saphyra.apphub.test.rest_assured.ErrorResponseValidator;

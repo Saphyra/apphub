@@ -1,7 +1,7 @@
 import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./account_language_selector_localization.json";
-import { ACCOUNT_CHANGE_LANGUAGE } from "common/js/dao/endpoints/UserEndpoints";
 import LanguageSelector from "common/component/language_selector/LanguageSelector";
+import { ACCOUNT_CHANGE_LANGUAGE } from "../AccountEndpoints";
 
 const AccountLanguageSelector = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

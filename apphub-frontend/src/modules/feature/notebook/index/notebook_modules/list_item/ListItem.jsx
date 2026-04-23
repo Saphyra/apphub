@@ -1,6 +1,5 @@
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import NotificationService from "common/js/notification/NotificationService";
 import { addAndSet, removeAndSet, throwException } from "common/js/Utils";
@@ -12,6 +11,7 @@ import InputField from "common/component/input/InputField";
 import Stream from "common/js/collection/Stream";
 import Constants from "common/js/Constants";
 import Event from "common/js/event/Event";
+import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
 
 const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData, selectedItems, setSelectedItems, setDisplaySpinner }) => {
     const handleOnclick = () => {

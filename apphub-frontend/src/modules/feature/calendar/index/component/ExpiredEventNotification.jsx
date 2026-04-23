@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
 import useLoader from "common/hook/Loader";
-import { CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_GET_EXPIRED_EVENTS } from "common/js/dao/endpoints/CalendarEndpoints";
 import { useState } from "react";
+import { CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_GET_EXPIRED_EVENTS } from "../../CalendarEndpoints";
 
 const ExpiredEventNotification = ({ setDisplaySpinner, localizationHandler, refreshCounter }) => {
     const [expiredEvents, setExpiredEvents] = useState([]);

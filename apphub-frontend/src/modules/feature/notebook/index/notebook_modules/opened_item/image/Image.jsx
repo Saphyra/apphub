@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import "./image.css";
-import { NOTEBOOK_GET_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
-import { STORAGE_DOWNLOAD_FILE } from "common/js/dao/endpoints/StorageEndpoints";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import Button from "common/component/input/Button";
+import { NOTEBOOK_GET_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
+import { STORAGE_DOWNLOAD_FILE } from "common/js/GenericEndpoints";
 
 const Image = ({ localizationHandler, openedListItem, setOpenedListItem, setDisplaySpinner }) => {
     const [title, setTitle] = useState("");

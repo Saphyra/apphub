@@ -3,13 +3,13 @@ import localizationData from "./password_changer_localization.json";
 import { useEffect, useState } from "react";
 import ValidationResult from "common/js/validation/ValidationResult";
 import { validateConfirmPassword, validateFilled, validatePassword } from "../validation/AccountInputValidator";
-import { ACCOUNT_CHANGE_PASSWORD } from "common/js/dao/endpoints/UserEndpoints";
 import Constants from "common/js/Constants";
 import NotificationService from "common/js/notification/NotificationService";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import ValidatedInputField from "common/component/input/ValidatedInputField";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
+import { ACCOUNT_CHANGE_PASSWORD } from "../AccountEndpoints";
 
 const PasswordChanger = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

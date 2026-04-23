@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creation.load.ws;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.ws.ApphubWsClientFactory;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.ws.SkyXploreWsClient;
 import lombok.extern.slf4j.Slf4j;

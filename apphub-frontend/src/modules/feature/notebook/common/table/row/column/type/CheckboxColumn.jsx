@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
-import { NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS } from "common/js/dao/endpoints/NotebookEndpoints";
 import { isTrue } from "common/js/Utils";
+import { NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS } from "modules/feature/notebook/NotebookEndpoints";
 
 const CheckboxColumn = ({
     columnData,

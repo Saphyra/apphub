@@ -1,6 +1,6 @@
 import Button from "common/component/input/Button";
 import ProgressBar from "common/component/progress_bar/ProgressBar";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF_BUILDING_MODULE } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF_BUILDING_MODULE } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const BuildingDeconstruction = ({ deconstruction, localizationHandler, setBuildings }) => {
     const cancelDeconstruction = async () => {

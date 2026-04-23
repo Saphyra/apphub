@@ -3,11 +3,11 @@ import localizationData from "./ban_user_deletion_localization.json";
 import "./ban_user_deletion.css";
 import { useState } from "react";
 import NotificationService from "common/js/notification/NotificationService";
-import { ACCOUNT_MARK_FOR_DELETION, ACCOUNT_UNMARK_FOR_DELETION } from "common/js/dao/endpoints/UserEndpoints";
 import InputField from "common/component/input/InputField";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
+import { ACCOUNT_MARK_FOR_DELETION, ACCOUNT_UNMARK_FOR_DELETION } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

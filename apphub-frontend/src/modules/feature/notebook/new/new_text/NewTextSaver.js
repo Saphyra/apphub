@@ -1,7 +1,7 @@
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import { NOTEBOOK_CREATE_TEXT } from "common/js/dao/endpoints/NotebookEndpoints";
 import Constants from "common/js/Constants";
+import { NOTEBOOK_CREATE_TEXT } from "../../NotebookEndpoints";
 
 const create = async (listItemTitle, parent, content) => {
     const result = validateListItemTitle(listItemTitle);

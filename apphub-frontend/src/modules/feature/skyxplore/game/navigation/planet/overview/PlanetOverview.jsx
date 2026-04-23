@@ -3,7 +3,7 @@ import localizationData from "./planet_overview_localization.json";
 import "./planet_overview.css";
 import { useState } from "react";
 import useLoadSetting, { SettingType } from "../../../common/hook/Setting";
-import { SKYXPLORE_DATA_CREATE_SETTING } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_CREATE_SETTING } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { hasValue } from "common/js/Utils";
 import StorageOverview from "./storage/StorageOverview";
 import PopulationOverview from "./population/PopulationOverview";

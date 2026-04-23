@@ -1,10 +1,10 @@
 import useHasFocus from "common/hook/UseHasFocus";
-import { NOTEBOOK_GET_CATEGORY_TREE } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import { useEffect, useState } from "react";
 import { useUpdateEffect } from "react-use";
 import Leaf from "./category_tree/Leaf";
 import "./category_tree/category_tree.css";
+import { NOTEBOOK_GET_CATEGORY_TREE } from "../../NotebookEndpoints";
 
 const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLastEvent, userSettings, setDisplaySpinner }) => {
     const [tree, setTree] = useState([]);

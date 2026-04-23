@@ -9,11 +9,11 @@ import useLoadSetting, { SettingType } from "../../common/hook/Setting";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
-import { SKYXPLORE_PLANET_GET_POPULATION } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "common/js/collection/Stream";
 import Citizen from "./citizen/Citizen";
 import Button from "common/component/input/Button";
 import PopulationFiltering from "./filtering/PopulationFiltering";
+import { SKYXPLORE_PLANET_GET_POPULATION } from "../../SkyXploreGameEndpoints";
 
 const Population = ({ footer, closePage, planetId }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

@@ -2,12 +2,12 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./chat_room_creator_localization.json";
 import "./chat_room_creator.css";
 import { useEffect, useState } from "react";
-import { SKYXPLORE_GAME_CREATE_CHAT_ROOM, SKYXPLORE_GAME_GET_PLAYERS } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import Stream from "common/js/collection/Stream";
 import Button from "common/component/input/Button";
 import { isBlank } from "common/js/Utils";
 import NotificationService from "common/js/notification/NotificationService";
 import InputField from "common/component/input/InputField";
+import { SKYXPLORE_GAME_CREATE_CHAT_ROOM, SKYXPLORE_GAME_GET_PLAYERS } from "../../SkyXploreGameEndpoints";
 
 const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

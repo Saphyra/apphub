@@ -1,10 +1,10 @@
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import Stream from "common/js/collection/Stream";
-import { NOTEBOOK_DELETE_CHECKLIST_ITEM, NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS } from "common/js/dao/endpoints/NotebookEndpoints";
 import { copyAndSet, throwException } from "common/js/Utils";
 import UpdateType from "modules/feature/notebook/common/checklist_item/UpdateType";
 import MoveDirection from "modules/feature/notebook/common/MoveDirection";
+import { NOTEBOOK_DELETE_CHECKLIST_ITEM, NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS } from "modules/feature/notebook/NotebookEndpoints";
 
 export const updateItem = (item, updateType, editingEnabled, items, setItems, setDisplaySpinner) => {
     if (!editingEnabled) {

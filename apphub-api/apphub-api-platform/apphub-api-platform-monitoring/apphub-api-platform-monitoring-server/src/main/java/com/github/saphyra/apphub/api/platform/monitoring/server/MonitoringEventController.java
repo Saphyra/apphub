@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.platform.monitoring.server;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.MonitoringEndpoints;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MonitoringEndpoints;
 import org.springframework.web.bind.annotation.PostMapping;
 
 public interface MonitoringEventController {

@@ -1,7 +1,7 @@
 import Constants from "common/js/Constants";
-import { NOTEBOOK_CREATE_CHECKLIST } from "common/js/dao/endpoints/NotebookEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
+import { NOTEBOOK_CREATE_CHECKLIST } from "modules/feature/notebook/NotebookEndpoints";
 
 const create = async (listItemTitle, parent, items) => {
     const result = validateListItemTitle(listItemTitle);

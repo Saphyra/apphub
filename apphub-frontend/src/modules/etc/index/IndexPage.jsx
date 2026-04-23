@@ -4,7 +4,6 @@ import "./index_page.css";
 import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import NotificationService from "common/js/notification/NotificationService";
-import { CHECK_SESSION } from "common/js/dao/endpoints/GenericEndpoints";
 import ErrorHandler from "common/js/dao/ErrorHandler";
 import { ResponseStatus } from "common/js/dao/dao";
 import Constants from "common/js/Constants";
@@ -15,6 +14,7 @@ import Footer from "common/component/Footer";
 import LanguageSelector from "common/component/language_selector/LanguageSelector";
 import { setCookie } from "common/js/Utils";
 import { ToastContainer } from "react-toastify";
+import { CHECK_SESSION } from "common/js/GenericEndpoints";
 
 const IndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

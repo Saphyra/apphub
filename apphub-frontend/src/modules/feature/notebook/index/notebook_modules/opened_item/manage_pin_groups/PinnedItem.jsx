@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
-import { NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP } from "common/js/dao/endpoints/NotebookEndpoints";
 import Event from "common/js/event/Event";
 import EventName from "common/js/event/EventName";
+import { NOTEBOOK_REMOVE_ITEM_FROM_PIN_GROUP } from "modules/feature/notebook/NotebookEndpoints";
 
 const PinnedItem = ({ listItem, localizationHandler, setLastEvent, pinGroupId, setItems, setDisplaySpinner }) => {
     const remove = async () => {

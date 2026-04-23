@@ -8,7 +8,6 @@ import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_GET_SETTINGS, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import Redirection from "../Redirection";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
 import Constants from "common/js/Constants";
@@ -24,6 +23,7 @@ import Spinner from "common/component/Spinner";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import "../skyxplore.css";
+import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_GET_SETTINGS, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "./SkyXploreLobbyEndpoints";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

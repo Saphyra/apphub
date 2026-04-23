@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.feature.elite_base.model;
 
 public class EliteBaseEndpoints {
     //Events

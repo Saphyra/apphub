@@ -1,8 +1,8 @@
 import Constants from "common/js/Constants";
-import { SKYXPLORE_PLATFORM_HAS_CHARACTER } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
-import { SKYXPLORE_GAME_GET_GAME_ID } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
-import { SKYXPLORE_LOBBY_IS_IN_LOBBY } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_PLATFORM_HAS_CHARACTER } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { hasValue } from "common/js/Utils";
+import { SKYXPLORE_GAME_GET_GAME_ID } from "./game/SkyXploreGameEndpoints";
+import { SKYXPLORE_LOBBY_IS_IN_LOBBY } from "./lobby/SkyXploreLobbyEndpoints";
 
 const redirectToCharacterIfNotPresent = async () => {
     const response = await SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()

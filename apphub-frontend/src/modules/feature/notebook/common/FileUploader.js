@@ -1,5 +1,5 @@
 import getDefaultErrorHandler from "common/js/dao/DefaultErrorHandler";
-import { STORAGE_UPLOAD_FILE } from "common/js/dao/endpoints/StorageEndpoints";
+import { STORAGE_UPLOAD_FILE } from "common/js/GenericEndpoints";
 import { getBrowserLanguage } from "common/js/Utils";
 
 const uploadFile = async (file, storedFileId, setDisplaySpinner = () => { }) => {

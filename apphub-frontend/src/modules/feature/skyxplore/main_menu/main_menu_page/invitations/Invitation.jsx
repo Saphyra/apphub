@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
-import { SKYXPLORE_LOBBY_ACCEPT_INVITATION } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import "./invitations.css";
+import { SKYXPLORE_LOBBY_ACCEPT_INVITATION } from "modules/feature/skyxplore/lobby/SkyXploreLobbyEndpoints";
 
 const Invitaion = ({ senderId, senderName, localizationHandler, declineInvitation }) => {
     const acceptInvitation = async () => {

@@ -1,10 +1,10 @@
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { NOTEBOOK_ADD_CHECKLIST_ITEM, NOTEBOOK_CHECKLIST_DELETE_CHECKED, NOTEBOOK_EDIT_CHECKLIST, NOTEBOOK_GET_CHECKLIST, NOTEBOOK_ORDER_CHECKLIST_ITEMS } from "common/js/dao/endpoints/NotebookEndpoints";
 import Event from "common/js/event/Event";
 import EventName from "common/js/event/EventName";
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
+import { NOTEBOOK_ADD_CHECKLIST_ITEM, NOTEBOOK_CHECKLIST_DELETE_CHECKED, NOTEBOOK_EDIT_CHECKLIST, NOTEBOOK_GET_CHECKLIST, NOTEBOOK_ORDER_CHECKLIST_ITEMS } from "modules/feature/notebook/NotebookEndpoints";
 
 export const loadChecklist = (listItemId, setDataFromResponse, setDisplaySpinner) => {
     const fetch = async () => {

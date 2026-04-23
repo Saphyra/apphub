@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
-import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_OCCURRENCE_REMINDED, CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import { hasValue } from "common/js/Utils";
+import { CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_OCCURRENCE_REMINDED, CALENDAR_PAGE } from "modules/feature/calendar/CalendarEndpoints";
 import confirmEventDeletion from "modules/feature/calendar/common/delete_event/DeleteEvent";
 import confirmOccurrenceDeletion from "modules/feature/calendar/common/delete_occurrence/DeleteOccurrence";
 import { DONE, PENDING, SNOOZED } from "modules/feature/calendar/common/occurrence/OccurrenceStatus";

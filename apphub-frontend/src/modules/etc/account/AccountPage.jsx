@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
-import { ACCOUNT_GET_USER } from "common/js/dao/endpoints/UserEndpoints";
 import Header from "common/component/Header";
 import AccountLanguageSelector from "./language_selector/AccountLanguageSelector";
 import EmailChanger from "./email_changer/EmailChanger";
@@ -18,6 +17,7 @@ import Constants from "common/js/Constants";
 import { hasValue } from "common/js/Utils";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
+import { ACCOUNT_GET_USER } from "./AccountEndpoints";
 
 
 const AccountPage = () => {

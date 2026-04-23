@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.lib.config.common;
 
 public class GenericEndpoints {
     //PAGES

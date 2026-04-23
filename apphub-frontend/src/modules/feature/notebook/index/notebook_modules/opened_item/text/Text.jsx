@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./text.css";
 import useHasFocus from "common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
-import { NOTEBOOK_EDIT_TEXT, NOTEBOOK_GET_TEXT } from "common/js/dao/endpoints/NotebookEndpoints";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
@@ -12,6 +11,7 @@ import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import OpenedListItemHeader from "../OpenedListItemHeader";
 import Textarea from "common/component/input/Textarea";
 import Event from "common/js/event/Event";
+import { NOTEBOOK_EDIT_TEXT, NOTEBOOK_GET_TEXT } from "modules/feature/notebook/NotebookEndpoints";
 
 const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, setDisplaySpinner }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.platform.monitoring.model;
 
 public class MonitoringEndpoints {
     //Internal

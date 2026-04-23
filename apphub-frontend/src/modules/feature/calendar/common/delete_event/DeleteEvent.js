@@ -2,7 +2,7 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./delete_event_localization.json";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { CALENDAR_DELETE_EVENT } from "common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_DELETE_EVENT } from "../../CalendarEndpoints";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 

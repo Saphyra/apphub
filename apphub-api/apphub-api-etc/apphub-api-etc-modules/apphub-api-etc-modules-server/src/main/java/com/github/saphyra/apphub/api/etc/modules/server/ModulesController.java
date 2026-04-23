@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
-import com.github.saphyra.apphub.lib.config.common.endpoints.ModulesEndpoints;
+import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
+import com.github.saphyra.apphub.api.etc.modules.model.response.ModulesEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;

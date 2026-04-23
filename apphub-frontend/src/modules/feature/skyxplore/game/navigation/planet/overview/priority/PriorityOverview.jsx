@@ -2,11 +2,11 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./priority_overview_localization.json";
 import { useEffect, useState } from "react";
 import { isTrue } from "common/js/Utils";
-import { SKYXPLORE_PLANET_UPDATE_PRIORITY } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import MapStream from "common/js/collection/MapStream";
 import Button from "common/component/input/Button";
 import LabelWrappedInputField from "common/component/input/LabelWrappedInputField";
 import NumberInput from "common/component/input/NumberInput";
+import { SKYXPLORE_PLANET_UPDATE_PRIORITY } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, updateTabSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

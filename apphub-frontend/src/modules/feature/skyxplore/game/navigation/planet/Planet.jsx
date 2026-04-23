@@ -3,12 +3,12 @@ import "./planet.css";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
-import { SKYXPLORE_PLANET_GET_OVERVIEW } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import { hasValue } from "common/js/Utils";
 import PlanetHeader from "./header/PlanetHeader";
 import PlanetOverview from "./overview/PlanetOverview";
 import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
+import { SKYXPLORE_PLANET_GET_OVERVIEW } from "../../SkyXploreGameEndpoints";
 
 const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
     //Planet data

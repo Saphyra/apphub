@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.platform.storage.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
-import com.github.saphyra.apphub.lib.config.common.endpoints.StorageEndpoints;
+import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
+import com.github.saphyra.apphub.api.platform.storage.model.StorageEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;

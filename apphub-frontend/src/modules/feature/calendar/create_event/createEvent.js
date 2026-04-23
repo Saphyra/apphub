@@ -2,8 +2,8 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./create_event_page_localization.json";
 import validateEventRequest from "../common/event/validateEventRequest";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_CREATE_EVENT, CALENDAR_CREATE_LABEL, CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
+import { CALENDAR_CREATE_EVENT, CALENDAR_CREATE_LABEL, CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const localizationHandler = new LocalizationHandler(localizationData);
 

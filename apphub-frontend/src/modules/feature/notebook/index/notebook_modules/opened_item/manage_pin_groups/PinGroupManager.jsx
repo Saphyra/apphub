@@ -3,7 +3,6 @@ import "./pin_group_manager.css";
 import useHasFocus from "common/hook/UseHasFocus";
 import { useUpdateEffect } from "react-use";
 import useLoader from "common/hook/Loader";
-import { NOTEBOOK_CREATE_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS } from "common/js/dao/endpoints/NotebookEndpoints";
 import validatePinGroupName from "modules/feature/notebook/common/validator/PinGroupNameValidator";
 import NotificationService from "common/js/notification/NotificationService";
 import EventName from "common/js/event/EventName";
@@ -14,6 +13,7 @@ import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import Event from "common/js/event/Event";
+import { NOTEBOOK_CREATE_PIN_GROUP, NOTEBOOK_GET_PIN_GROUPS } from "modules/feature/notebook/NotebookEndpoints";
 
 const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, lastEvent, setDisplaySpinner }) => {
     const [pinGroups, setPinGroups] = useState([]);

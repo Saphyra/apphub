@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore;
+package com.github.saphyra.apphub.api.feature.skyxplore;
 
 public class SkyXploreLobbyEndpoints {
     public static final String SKYXPLORE_INTERNAL_GAME_LOADED = "/allowed-internal/skyxplore/lobby/{gameId}/loaded";

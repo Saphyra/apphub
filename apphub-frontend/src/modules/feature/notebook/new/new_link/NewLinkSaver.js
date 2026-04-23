@@ -1,8 +1,8 @@
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import validateUrl from "../../common/validator/UrlValidator";
-import { NOTEBOOK_CREATE_LINK } from "common/js/dao/endpoints/NotebookEndpoints";
 import Constants from "common/js/Constants";
+import { NOTEBOOK_CREATE_LINK } from "../../NotebookEndpoints";
 
 const create = async (listItemTitle, url, parent) => {
     const listItemTitleResult = validateListItemTitle(listItemTitle);

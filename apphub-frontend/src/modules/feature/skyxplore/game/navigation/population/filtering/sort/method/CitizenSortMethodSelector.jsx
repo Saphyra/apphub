@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { hasValue, throwException } from "common/js/Utils";
 import useCache from "common/hook/Cache";
 import CacheKey from "modules/feature/skyxplore/game/common/constants/CacheKey";
-import { SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_CITIZEN_STATS_AND_SKILLS } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 
 const CitizenSortMethodSelector = ({
     citizenComparator,

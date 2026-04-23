@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.etc.admin_panel.server;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.MigrationTaskResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.AdminPanelEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

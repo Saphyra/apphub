@@ -5,16 +5,15 @@ import "./disabled_role_management.css";
 import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
-import { USER_DATA_GET_DISABLED_ROLES } from "common/js/dao/endpoints/UserEndpoints";
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
-import roles from "modules/etc/admin_panel/roles.json";
 import DisabledRoleManagementRole from "./DisabledRoleManagementRole";
 import Header from "common/component/Header";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
+import { USER_DATA_GET_DISABLED_ROLES } from "../AdminPanelEndpoints";
 
 const DisabledRoleManagementPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

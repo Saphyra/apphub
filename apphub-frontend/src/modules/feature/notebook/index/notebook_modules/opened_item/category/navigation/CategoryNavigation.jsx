@@ -1,7 +1,6 @@
 import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./category_navigation_localization.json";
 import "./category_navigation.css";
-import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
@@ -9,6 +8,7 @@ import InputField from "common/component/input/InputField";
 import Stream from "common/js/collection/Stream";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import Event from "common/js/event/Event";
+import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
 
 const CategoryNavigation = ({
     openedListItem,

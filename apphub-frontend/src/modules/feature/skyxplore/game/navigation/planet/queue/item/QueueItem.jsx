@@ -2,13 +2,13 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import "./queue_item.css";
 import localizationData from "./queue_item_localization.json";
 import { useEffect, useState } from "react";
-import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
 import QueueItemHeader from "./header/QueueItemHeader";
 import ProgressBar from "common/component/progress_bar/ProgressBar";
 import LabelWrappedInputField from "common/component/input/LabelWrappedInputField";
 import NumberInput from "common/component/input/NumberInput";
+import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

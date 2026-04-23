@@ -3,7 +3,6 @@ import localizationData from "./opened_occurrence_localization.json";
 import "./opened_occurrence.css";
 import { useState } from "react";
 import useLoader from "common/hook/Loader";
-import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "common/js/Utils";
 import ErrorHandler from "common/js/dao/ErrorHandler";
 import LocalTime from "common/js/date/LocalTime";
@@ -12,6 +11,7 @@ import { DONE, PENDING, SNOOZED } from "./OccurrenceStatus";
 import Button from "common/component/input/Button";
 import confirmOccurrenceDeletion from "../delete_occurrence/DeleteOccurrence";
 import NotificationService from "common/js/notification/NotificationService";
+import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../CalendarEndpoints";
 
 const OpenedOccurrence = ({ occurrenceId, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh, backUrl }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

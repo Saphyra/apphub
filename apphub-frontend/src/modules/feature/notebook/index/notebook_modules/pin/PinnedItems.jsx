@@ -1,6 +1,5 @@
 import useHasFocus from "common/hook/UseHasFocus";
 import Stream from "common/js/collection/Stream";
-import { NOTEBOOK_GET_PINNED_ITEMS } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import { hasValue } from "common/js/Utils";
 import { UserSettings } from "modules/feature/calendar/common/UserSettings";
@@ -9,6 +8,7 @@ import { useUpdateEffect } from "react-use";
 import ListItem from "../list_item/ListItem";
 import ListItemMode from "../list_item/ListItemMode";
 import PinGroups from "./groups/PinGroups";
+import { NOTEBOOK_GET_PINNED_ITEMS } from "modules/feature/notebook/NotebookEndpoints";
 
 const PinnedItems = ({ localizationHandler, openedListItem, setOpenedListItem, lastEvent, setLastEvent, userSettings, setDisplaySpinner }) => {
     const [pinnedItems, setPinnedItems] = useState([]);

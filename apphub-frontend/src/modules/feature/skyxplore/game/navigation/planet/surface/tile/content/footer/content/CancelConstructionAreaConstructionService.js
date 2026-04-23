@@ -2,7 +2,7 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import constructionAreaLocalizationData from "../../../../../../../common/localization/construction_area_localization.json";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import { SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
+import { SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
 

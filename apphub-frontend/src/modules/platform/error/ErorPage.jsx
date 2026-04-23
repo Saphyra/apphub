@@ -5,10 +5,8 @@ import errorCodeLocalizationData from "common/js/notification/notification_trans
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useLoader from "common/hook/Loader";
-import { ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE } from "common/js/dao/endpoints/UserEndpoints";
 import Optional from "common/js/collection/Optional";
 import { hasValue } from "common/js/Utils";
-import { CHECK_SESSION } from "common/js/dao/endpoints/GenericEndpoints";
 import ErrorHandler from "common/js/dao/ErrorHandler";
 import { ResponseStatus } from "common/js/dao/dao";
 import Button from "common/component/input/Button";
@@ -17,6 +15,8 @@ import LocalDateTime from "common/js/date/LocalDateTime";
 import Header from "common/component/Header";
 import Footer from "common/component/Footer";
 import Constants from "common/js/Constants";
+import { CHECK_SESSION } from "common/js/GenericEndpoints";
+import { ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const ErrorPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

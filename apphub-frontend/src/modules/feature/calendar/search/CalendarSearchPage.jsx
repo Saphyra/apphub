@@ -7,7 +7,6 @@ import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "common/js/Utils";
 import useLoader from "common/hook/Loader";
-import { CALENDAR_PAGE, CALENDAR_SEARCH_EVENTS, CALENDAR_SEARCH_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import Header from "common/component/Header";
 import InputField from "common/component/input/InputField";
 import OpenedEvent from "../common/event/opened/OpenedEvent";
@@ -18,6 +17,7 @@ import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import EventList from "./component/EventList";
+import { CALENDAR_PAGE, CALENDAR_SEARCH_EVENTS, CALENDAR_SEARCH_PAGE } from "../CalendarEndpoints";
 
 const CACHE_KEY_QUERY = "calendar.searchEvent.query";
 const CACHE_KEY_SELECTED_EVENT = "calendar.searchEvent.selected";

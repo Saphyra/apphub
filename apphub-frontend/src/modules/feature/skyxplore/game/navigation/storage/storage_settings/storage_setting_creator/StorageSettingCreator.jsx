@@ -5,16 +5,16 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import { useEffect, useState } from "react";
 import useCache from "common/hook/Cache";
 import CacheKey from "modules/feature/skyxplore/game/common/constants/CacheKey";
-import { SKYXPLORE_DATA_RESOURCES } from "common/js/dao/endpoints/skyxplore/SkyXploreDataEndpoints";
+import { SKYXPLORE_DATA_RESOURCES } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import Stream from "common/js/collection/Stream";
 import SelectInput, { SelectOption } from "common/component/input/SelectInput";
-import { SKYXPLORE_PLANET_CREATE_STORAGE_SETTING } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import NumberInput from "common/component/input/NumberInput";
 import LabelWrappedInputField from "common/component/input/LabelWrappedInputField";
 import RangeInput from "common/component/input/RangeInput";
 import Button from "common/component/input/Button";
 import { isBlank } from "common/js/Utils";
+import { SKYXPLORE_PLANET_CREATE_STORAGE_SETTING } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

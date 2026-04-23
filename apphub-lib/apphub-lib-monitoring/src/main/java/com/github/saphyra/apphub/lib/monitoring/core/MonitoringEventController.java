@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.monitoring.core;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.MonitoringEndpoints;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MonitoringEndpoints;
 import com.github.saphyra.apphub.lib.monitoring.memory.MemoryStatusReporter;
 import com.github.saphyra.apphub.lib.monitoring.util.InMemoryDaoMonitor;
 import lombok.Builder;

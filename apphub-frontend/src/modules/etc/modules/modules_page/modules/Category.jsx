@@ -1,11 +1,11 @@
 import useCache from "common/hook/Cache";
 import Constants from "common/js/Constants";
-import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/dao/endpoints/UserEndpoints";
 import { isTrue } from "common/js/Utils";
 import { useState } from "react";
 import Module from "./category/Module";
 import Stream from "common/js/collection/Stream";
 import Button from "common/component/input/Button";
+import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints";
 
 const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, categoryId, modules, query = [], updateModules, favorite = false }) => {
     const [collapsed, setCollapsed] = useState(false);

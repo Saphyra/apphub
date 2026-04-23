@@ -1,4 +1,4 @@
-import { CALENDAR_EDIT_OCCURRENCE } from "common/js/dao/endpoints/CalendarEndpoints";
+import { CALENDAR_EDIT_OCCURRENCE } from "../CalendarEndpoints";
 import validateOccurrenceRequest from "./ValidateOccurrenceRequest";
 import NotificationService from "common/js/notification/NotificationService";
 

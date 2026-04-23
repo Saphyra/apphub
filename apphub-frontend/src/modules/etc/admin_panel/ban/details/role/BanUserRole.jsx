@@ -5,7 +5,6 @@ import roles from "modules/etc/admin_panel/roles.json";
 import { useState } from "react";
 import NotificationService from "common/js/notification/NotificationService";
 import { isBlank } from "common/js/Utils";
-import { ACCOUNT_BAN_USER } from "common/js/dao/endpoints/UserEndpoints";
 import Stream from "common/js/collection/Stream";
 import SelectInput, { SelectOption } from "common/component/input/SelectInput";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
@@ -13,6 +12,7 @@ import PostLabeledInputField from "common/component/input/PostLabeledInputField"
 import InputField from "common/component/input/InputField";
 import Textarea from "common/component/input/Textarea";
 import Button from "common/component/input/Button";
+import { ACCOUNT_BAN_USER } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const BanUserRole = ({ userData, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

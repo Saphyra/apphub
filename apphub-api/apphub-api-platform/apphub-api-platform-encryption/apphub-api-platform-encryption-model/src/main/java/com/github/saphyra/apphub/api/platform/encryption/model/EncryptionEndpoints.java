@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.platform.encryption.model;
 
 public class EncryptionEndpoints {
     public static final String ENCRYPTION_INTERNAL_CREATE_KEY = "/internal/encryption/key/{accessMode}";

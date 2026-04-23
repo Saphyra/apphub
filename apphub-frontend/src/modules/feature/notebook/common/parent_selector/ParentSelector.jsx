@@ -2,10 +2,10 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./parent_selector_localization.json";
 import "./parent_selector.css";
 import { useEffect, useState } from "react";
-import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "common/js/dao/endpoints/NotebookEndpoints";
 import Stream from "common/js/collection/Stream";
 import Child from "./Child";
 import Button from "common/component/input/Button";
+import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "../../NotebookEndpoints";
 
 const ParentSelector = ({ parentId, setParentId, listItemId = null, onlyCategory = true, excludedListItemTypes = [], setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

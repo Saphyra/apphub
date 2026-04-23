@@ -1,10 +1,10 @@
 import Stream from "common/js/collection/Stream";
-import { SKYXPLORE_GAME_MAP } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import { useEffect, useState } from "react";
 import MapConstants from "./MapConstants";
 import NavigationHistoryItem from "../NavigationHistoryItem";
 import PageName from "../PageName";
 import "./map.css";
+import { SKYXPLORE_GAME_MAP } from "../../SkyXploreGameEndpoints";
 
 const Map = ({ openPage, footer }) => {
     const [universeSize, setUniverseSize] = useState(0);

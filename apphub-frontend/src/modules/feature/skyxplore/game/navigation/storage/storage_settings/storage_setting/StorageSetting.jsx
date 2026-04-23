@@ -3,7 +3,6 @@ import resourceLocalizationData from "../../../../common/localization/resource_l
 import localizationData from "./storage_setting_localization.json";
 import LocalizationHandler from "common/js/LocalizationHandler";
 import { useEffect, useState } from "react";
-import { SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, SKYXPLORE_PLANET_EDIT_STORAGE_SETTING } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import Button from "common/component/input/Button";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
@@ -11,6 +10,7 @@ import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import NumberInput from "common/component/input/NumberInput";
 import LabelWrappedInputField from "common/component/input/LabelWrappedInputField";
 import RangeInput from "common/component/input/RangeInput";
+import { SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, SKYXPLORE_PLANET_EDIT_STORAGE_SETTING } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
 const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

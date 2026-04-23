@@ -7,7 +7,6 @@ import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { hasValue, nullIfEmpty } from "common/js/Utils";
-import { CALENDAR_GET_EVENT, CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import { useExtractAsync } from "common/hook/UseEffectValidated";
 import LocalDate from "common/js/date/LocalDate";
 import LocalTime from "common/js/date/LocalTime";
@@ -34,6 +33,7 @@ import Spinner from "common/component/Spinner";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import saveEvent from "./saveEvent";
 import Optional from "common/js/collection/Optional";
+import { CALENDAR_GET_EVENT, CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();

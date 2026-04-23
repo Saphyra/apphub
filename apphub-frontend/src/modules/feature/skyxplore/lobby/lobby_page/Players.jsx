@@ -1,9 +1,9 @@
 import Player from "./players/Player";
 import PanelTitle from "./PanelTitle";
 import { useEffect } from "react";
-import { SKYXPLORE_LOBBY_GET_PLAYERS } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import MapStream from "common/js/collection/MapStream";
 import Stream from "common/js/collection/Stream";
+import { SKYXPLORE_LOBBY_GET_PLAYERS } from "../SkyXploreLobbyEndpoints";
 
 const Players = ({ localizationHandler, alliances, isHost, lobbyType, players, setPlayers }) => {
     useEffect(() => loadPlayers(), []);

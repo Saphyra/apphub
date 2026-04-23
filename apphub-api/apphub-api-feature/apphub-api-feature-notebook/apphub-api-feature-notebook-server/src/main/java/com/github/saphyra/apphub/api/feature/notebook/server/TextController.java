@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.response.TextRespons
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.lib.config.common.endpoints.NotebookEndpoints;
+import com.github.saphyra.apphub.api.feature.notebook.model.NotebookEndpoints;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;

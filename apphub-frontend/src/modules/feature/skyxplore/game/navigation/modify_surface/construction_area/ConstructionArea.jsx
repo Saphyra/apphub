@@ -2,10 +2,10 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./construction_area_localization.json";
 import "./construction_area.css";
 import constructionAreaLocalizationData from "../../../common/localization/construction_area_localization.json";
-import { SKYXPLORE_PLANET_SURFACE_CONSTRUCT_CONSTRUCTION_AREA } from "common/js/dao/endpoints/skyxplore/SkyXploreGameEndpoints";
 import ConstructionAreaSlots from "./ConstructionAreaSlots";
 import ConstructionCost from "../../../common/component/construction_cost/ConstructionCost";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_PLANET_SURFACE_CONSTRUCT_CONSTRUCTION_AREA } from "../../../SkyXploreGameEndpoints";
 
 const ConstructionArea = ({ constructionArea, surfaceId, closePage }) => {
     const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);

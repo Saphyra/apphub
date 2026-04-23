@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.lib.config.common.endpoints;
+package com.github.saphyra.apphub.api.etc.modules.model.response;
 
 public class ModulesEndpoints {
     public static final String MODULES_GET_MODULES_OF_USER = "/api/modules";

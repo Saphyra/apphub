@@ -1,10 +1,10 @@
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_EVENTS, CALENDAR_GET_LABEL, CALENDAR_GET_LABELLESS_EVENTS } from "common/js/dao/endpoints/CalendarEndpoints";
 import { hasValue } from "common/js/Utils";
 import { useState } from "react";
 import sortEvents from "../../common/event/sortEvents";
 import Event from "./Event";
+import { CALENDAR_GET_EVENTS, CALENDAR_GET_LABEL, CALENDAR_GET_LABELLESS_EVENTS } from "../../CalendarEndpoints";
 
 const Events = ({ selectedLabel, localizationHandler, setDisplaySpinner, selectedEvent, setSelectedEvent, refreshCounter }) => {
     const [events, setEvents] = useState([]);

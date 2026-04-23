@@ -3,7 +3,7 @@ import localizationData from "./ban_user_localization.json";
 import roleLocalizationData from "modules/etc/admin_panel/role_localization.json";
 import "./ban_user.css";
 import Stream from "common/js/collection/Stream";
-import { ADMIN_PANEL_BAN_DETAILS_PAGE } from "common/js/dao/endpoints/UserEndpoints";
+import { ADMIN_PANEL_BAN_DETAILS_PAGE } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const BanUser = ({ user }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);

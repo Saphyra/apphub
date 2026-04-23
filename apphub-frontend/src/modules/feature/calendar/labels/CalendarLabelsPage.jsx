@@ -10,13 +10,13 @@ import Header from "common/component/Header";
 import LabelList from "./component/LabelList";
 import Events from "./component/Events";
 import OpenedEvent from "../common/event/opened/OpenedEvent";
-import { CALENDAR_LABELS_PAGE, CALENDAR_PAGE } from "common/js/dao/endpoints/CalendarEndpoints";
 import OpenedOccurrence from "../common/occurrence/OpenedOccurrence";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
+import { CALENDAR_LABELS_PAGE, CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const CACHE_KEY_SELECTED_LABEL = "calendar.labels.selectedLabel";
 const CACHE_KEY_SELECTED_EVENT = "calendar.labels.selectedEvent";

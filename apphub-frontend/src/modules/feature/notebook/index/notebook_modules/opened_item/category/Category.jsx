@@ -1,6 +1,5 @@
 import useHasFocus from "common/hook/UseHasFocus";
 import Stream from "common/js/collection/Stream";
-import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "common/js/dao/endpoints/NotebookEndpoints";
 import EventName from "common/js/event/EventName";
 import { useEffect, useState } from "react";
 import { useUpdateEffect } from "react-use";
@@ -12,6 +11,7 @@ import ListItemMode from "../../list_item/ListItemMode";
 import moveListItem from "modules/feature/notebook/common/MoveListItemService";
 import Settings from "./settings/Settings";
 import CategoryNavigation from "./navigation/CategoryNavigation";
+import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "modules/feature/notebook/NotebookEndpoints";
 
 const Category = ({
     localizationHandler,

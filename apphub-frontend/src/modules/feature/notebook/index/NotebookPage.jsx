@@ -6,9 +6,7 @@ import OpenedPageType from "../common/OpenedPageType";
 import { hasValue, throwException } from "common/js/Utils";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
-import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/dao/endpoints/UserEndpoints";
 import UserSettings, { USER_SETTING_CATEGORY_NOTEBOOK } from "../common/UserSettings";
-import { NOTEBOOK_GET_LIST_ITEM } from "common/js/dao/endpoints/NotebookEndpoints";
 import Optional from "common/js/collection/Optional";
 import CategoryTree from "./notebook_modules/CategoryTree";
 import PinnedItems from "./notebook_modules/pin/PinnedItems";
@@ -19,6 +17,8 @@ import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
+import { NOTEBOOK_GET_LIST_ITEM } from "../NotebookEndpoints";
+import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

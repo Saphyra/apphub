@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import WebSocketEventName from "./WebSocketEventName";
 import { hasValue } from "../../js/Utils";
-import { GET_WEB_SOCKET_PROTOCOL } from "../../js/dao/endpoints/GenericEndpoints";
 import useCache from "../Cache";
+import { GET_WEB_SOCKET_PROTOCOL } from "common/js/GenericEndpoints";
 
 const useConnectToWebSocket = (
     endpoint,

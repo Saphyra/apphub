@@ -5,10 +5,10 @@ import { useState } from "react";
 import roleLocalizationData from "modules/etc/admin_panel/role_localization.json";
 import InputField from "common/component/input/InputField";
 import NotificationService from "common/js/notification/NotificationService";
-import { ACCOUNT_REVOKE_BAN } from "common/js/dao/endpoints/UserEndpoints";
 import Textarea from "common/component/input/Textarea";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Button from "common/component/input/Button";
+import { ACCOUNT_REVOKE_BAN } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
 const BanUserBannedRole = ({ userData, ban, setUserData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);

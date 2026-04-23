@@ -1,4 +1,4 @@
-import { Endpoint, RequestMethod } from "../../dao";
+import { Endpoint, RequestMethod } from "common/js/dao/dao";
 
 export const SKYXPLORE_ADMIN_MAIN_PAGE = "/web/skyxplore/game/admin";
 export const SKYXPLORE_ADMIN_DETAILS_PAGE = new Endpoint(RequestMethod.GET, "/web/skyxplore/game/admin/{gameId}/{type}/{id}");

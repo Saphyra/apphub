@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
-import { SKYXPLORE_LOBBY_LOAD_GAME } from "common/js/dao/endpoints/skyxplore/SkyXploreLobbyEndpoints";
 import "./saved_game.css";
+import { SKYXPLORE_LOBBY_LOAD_GAME } from "modules/feature/skyxplore/lobby/SkyXploreLobbyEndpoints";
 
 const SavedGame = ({ localizationHandler, savedGame, deleteGameCallback }) => {
     const loadSavedGame = async () => {
