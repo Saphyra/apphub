@@ -17,7 +17,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.*;
+import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.FUNCTIONALITY_METRIC_COUNT;
+import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_AVERAGE_SIZE;
+import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_MAX_SIZE;
 
 @Component
 @RequiredArgsConstructor
@@ -47,7 +49,9 @@ public class MetricRegistry {
             .filter(entry -> entry.getKey().isBefore(timestamp)) //Send metrics created before the current second
             .collect(Collectors.toMap(Map.Entry::getKey, entry -> compute(entry.getKey(), entry.getValue())));
 
+        log.debug("MetricRegistry size before cleanup: {}", registry.size());
         result.forEach((t, _) -> registry.remove(t));
+        log.debug("MetricRegistry size after cleanup: {}", registry.size());
 
         return result.values()
             .stream()
