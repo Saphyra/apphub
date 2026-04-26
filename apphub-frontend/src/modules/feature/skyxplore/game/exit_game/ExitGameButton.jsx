@@ -2,8 +2,8 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./exit_game_button_localization.json";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import { SKYXPLORE_EXIT_GAME, SKYXPLORE_GAME_SAVE } from "../SkyXploreGameEndpoints";
+import { SKYXPLORE_MAIN_MENU_PAGE } from "../../main_menu/SkyXploreMainMenuEndpoints";
 
 const ExitGameButton = ({ setConfirmationDialogData, isHost, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -44,7 +44,7 @@ const ExitGameButton = ({ setConfirmationDialogData, isHost, setDisplaySpinner }
         await SKYXPLORE_EXIT_GAME.createRequest()
             .send();
 
-        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+        window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
 
     const saveAndExit = async () => {

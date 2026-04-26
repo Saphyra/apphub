@@ -1,4 +1,5 @@
-import { Endpoint, RequestMethod } from "common/js/dao/dao";
+import Endpoint from "common/js/dao/Endpoint";
+import RequestMethod from "common/js/dao/RequestMethod";
 
 export const CALENDAR_PAGE = "/web/calendar";
 export const CALENDAR_LABELS_PAGE = "/web/calendar/labels";

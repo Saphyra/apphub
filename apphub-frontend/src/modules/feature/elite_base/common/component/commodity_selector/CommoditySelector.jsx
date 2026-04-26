@@ -5,7 +5,7 @@ import PreLabeledInputField from "../../../../../../common/component/input/PreLa
 import DataListInputField, { DataListInputEntry } from "../../../../../../common/component/input/DataListInputField";
 import { hasValue } from "../../../../../../common/js/Utils";
 import useCache from "../../../../../../common/hook/Cache";
-import { ELITE_BASE_COMMODITY_TRADING_COMMODITIES } from "../../EliteBaseEndpoints";
+import { ELITE_BASE_COMMODITY_TRADING_COMMODITIES } from "../../../EliteBaseEndpoints";
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./commodity_selector.css";
 

@@ -8,7 +8,7 @@ import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import validateColumnData from "modules/feature/notebook/common/validator/ColumnDataValidator";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
 import validateTableHeadNames from "modules/feature/notebook/common/validator/TableHeadNameValidator";
-import { NOTEBOOK_CREATE_TABLE } from "modules/feature/notebook/NotebookEndpoints";
+import { NOTEBOOK_CREATE_TABLE, NOTEBOOK_PAGE } from "modules/feature/notebook/NotebookEndpoints";
 
 const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom, setDisplaySpinner, files) => {
     const titleValidationResult = validateListItemTitle(listItemTitle);
@@ -44,7 +44,7 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
         uploadFiles(setDisplaySpinner, fileUploadResponse, files);
     }
 
-    window.location.href = Constants.NOTEBOOK_PAGE;
+    window.location.href = NOTEBOOK_PAGE;
 }
 
 const uploadFiles = async (setDisplaySpinner, fileUploadResponse, files) => {

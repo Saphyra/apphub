@@ -3,13 +3,13 @@ import localizationData from "./planet_overview_localization.json";
 import "./planet_overview.css";
 import { useState } from "react";
 import useLoadSetting, { SettingType } from "../../../common/hook/Setting";
-import { SKYXPLORE_DATA_CREATE_SETTING } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { hasValue } from "common/js/Utils";
 import StorageOverview from "./storage/StorageOverview";
 import PopulationOverview from "./population/PopulationOverview";
 import BuildingOverview from "./building/BuildingOverview";
 import PriorityOverview from "./priority/PriorityOverview";
 import Button from "common/component/input/Button";
+import { SKYXPLORE_DATA_CREATE_SETTING } from "../../../SkyXploreGameEndpoints";
 
 const PlanetOverview = ({
     planetId,

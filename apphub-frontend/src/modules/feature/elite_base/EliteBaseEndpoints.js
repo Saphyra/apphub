@@ -1,4 +1,7 @@
-import { Endpoint, RequestMethod } from "../../../../common/js/dao/dao";
+import Endpoint from "common/js/dao/Endpoint";
+import RequestMethod from "common/js/dao/RequestMethod";
+
+export const ELITE_BASE_PAGE = "/web/elite-base";
 
 export const ELITE_BASE_STAR_SYSTEMS_SEARCH = new Endpoint(RequestMethod.POST, "/api/elite-base/star-systems/search");
 export const ELITE_BASE_GET_POWERS = new Endpoint(RequestMethod.GET, "/api/elite-base/powers");

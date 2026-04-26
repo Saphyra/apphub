@@ -17,8 +17,9 @@ import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
-import { NOTEBOOK_GET_LIST_ITEM } from "../NotebookEndpoints";
+import { NOTEBOOK_GET_LIST_ITEM, NOTEBOOK_NEW_PAGE } from "../NotebookEndpoints";
 import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -136,14 +137,14 @@ const NotebookPage = () => {
                 rightButtons={
                     <Button
                         id="notebook-home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 }
                 centerButtons={
                     <Button
                         id="notebook-new-button"
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + (openedListItem.type === OpenedPageType.SEARCH ? null : openedListItem.id)}
+                        onclick={() => window.location.href = NOTEBOOK_NEW_PAGE.assembleUrl({ parent: openedListItem.type === OpenedPageType.SEARCH ? "null" : openedListItem.id })}
                         label={localizationHandler.get("new")}
                     />
                 }

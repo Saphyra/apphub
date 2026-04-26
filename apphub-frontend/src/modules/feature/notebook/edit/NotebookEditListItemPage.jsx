@@ -17,6 +17,7 @@ import Constants from "common/js/Constants";
 import save from "./service/NotebookEditListItemSaverService";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
+import { NOTEBOOK_PAGE } from "../NotebookEndpoints";
 
 const NotebookEditListItemPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -76,7 +77,7 @@ const NotebookEditListItemPage = () => {
                     rightButtons={
                         <Button
                             id="notebook-edit-back-button"
-                            onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                            onclick={() => window.location.href = NOTEBOOK_PAGE}
                             label={localizationHandler.get("back")}
                         />
                     }

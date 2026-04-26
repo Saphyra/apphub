@@ -20,6 +20,7 @@ import { ToastContainer } from "react-toastify";
 import getTable from "./service/NewTableAssembler";
 import Constants from "common/js/Constants";
 import create from "./service/NewTableSaver";
+import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const NewTablePage = ({ checklist, custom }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -85,13 +86,13 @@ const NewTablePage = ({ checklist, custom }) => {
                         key="back-button"
                         id="notebook-new-checklist-back-button"
                         label={localizationHandler.get("back")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + parent}
+                        onclick={() => window.location.href = NOTEBOOK_NEW_PAGE.assembleUrl({ parent: parent })}
                     />,
                     <Button
                         key="home-button"
                         id="notebook-new-checklist-home-button"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                        onclick={() => window.location.href = NOTEBOOK_PAGE}
                     />
                 ]}
             />

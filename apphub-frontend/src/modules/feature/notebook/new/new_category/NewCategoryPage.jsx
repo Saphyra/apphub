@@ -12,7 +12,7 @@ import ParentSelector from "../../common/parent_selector/ParentSelector";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
-import { NOTEBOOK_CREATE_CATEGORY } from "../../NotebookEndpoints";
+import { NOTEBOOK_CREATE_CATEGORY, NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const NewCategoryPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -40,7 +40,7 @@ const NewCategoryPage = () => {
         await NOTEBOOK_CREATE_CATEGORY.createRequest(payload)
             .send();
 
-        window.location.href = Constants.NOTEBOOK_PAGE;
+        window.location.href = NOTEBOOK_PAGE;
     }
 
     return (
@@ -67,13 +67,13 @@ const NewCategoryPage = () => {
                         key="back-button"
                         id="notebook-new-category-back-button"
                         label={localizationHandler.get("back")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + parent}
+                        onclick={() => window.location.href = NOTEBOOK_NEW_PAGE.assembleUrl({ parent: parent })}
                     />,
                     <Button
                         key="home-button"
                         id="notebook-new-category-home-button"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                        onclick={() => window.location.href = NOTEBOOK_PAGE}
                     />
                 ]}
 

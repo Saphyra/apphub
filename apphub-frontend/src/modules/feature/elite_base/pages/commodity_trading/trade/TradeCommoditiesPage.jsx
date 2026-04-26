@@ -15,7 +15,7 @@ import LastUpdateSelector from "../../../common/component/last_update_selector/L
 import PowerRelation from "../../../common/component/power_selector/PowerRelation";
 import PowerSelector from "../../../common/component/power_selector/PowerSelector";
 import useCache from "../../../../../../common/hook/Cache";
-import { ELITE_BASE_COMMODITY_TRADING_TRADE, ELITE_BASE_GET_POWERPLAY_STATES } from "../../../common/EliteBaseEndpoints";
+import { ELITE_BASE_COMMODITY_TRADING_TRADE, ELITE_BASE_GET_POWERPLAY_STATES } from "../../../EliteBaseEndpoints";
 import SelectInput, { SelectOption } from "../../../../../../common/component/input/SelectInput";
 import Stream from "../../../../../../common/js/collection/Stream";
 import Button from "../../../../../../common/component/input/Button";

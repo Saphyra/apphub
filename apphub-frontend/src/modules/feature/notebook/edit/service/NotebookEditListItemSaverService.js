@@ -3,7 +3,7 @@ import validateListItemTitle from "../../common/validator/ListItemTitleValidator
 import OpenedPageType from "../../common/OpenedPageType";
 import validateUrl from "../../common/validator/UrlValidator";
 import Constants from "common/js/Constants";
-import { NOTEBOOK_EDIT_LIST_ITEM } from "../../NotebookEndpoints";
+import { NOTEBOOK_EDIT_LIST_ITEM, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const save = async (listItemTitle, listItemType, value, parent, listItemId, setDisplaySpinner) => {
     const listItemTitleResult = validateListItemTitle(listItemTitle);
@@ -29,7 +29,7 @@ const save = async (listItemTitle, listItemType, value, parent, listItemId, setD
     await NOTEBOOK_EDIT_LIST_ITEM.createRequest(payload, { listItemId: listItemId })
         .send(setDisplaySpinner);
 
-    window.location.href = Constants.NOTEBOOK_PAGE;
+    window.location.href = NOTEBOOK_PAGE;
 }
 
 export default save;

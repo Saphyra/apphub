@@ -8,7 +8,7 @@ import { hasValue } from "common/js/Utils";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import Spinner from "common/component/Spinner";
-import Constants from "common/js/Constants";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const RandomDirectionPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -68,7 +68,7 @@ const RandomDirectionPage = () => {
                 rightButtons={
                     <Button
                         id="home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 } />

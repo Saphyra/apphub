@@ -9,7 +9,7 @@ import localizationData from "./search_nearest_material_trader_localization.json
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import Button from "../../../../../../common/component/input/Button";
 import NotificationService from "../../../../../../common/js/notification/NotificationService";
-import { ELITE_BASE_NEAREST_MATERIAL_TRADERS } from "../../../common/EliteBaseEndpoints";
+import { ELITE_BASE_NEAREST_MATERIAL_TRADERS } from "../../../EliteBaseEndpoints";
 import SearchNearestMaterialTraderResult from "./SearchNearestMaterialTraderResult";
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./search_nearest_material_trader.css";

@@ -10,7 +10,7 @@ import BanUsers from "./users/BanUsers";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
-import Constants from "common/js/Constants";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const BanPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -36,11 +36,11 @@ const BanPage = () => {
             </main>
 
             <Footer
-                leftButtons={[
+                rightButtons={[
                     <Button
                         key="home"
                         id="error-report-home"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 ]}

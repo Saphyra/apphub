@@ -1,4 +1,5 @@
-import { Endpoint, RequestMethod } from "common/js/dao/dao";
+import Endpoint from "common/js/dao/Endpoint";
+import RequestMethod from "common/js/dao/RequestMethod";
 
 export const ACCOUNT_REGISTER = new Endpoint(RequestMethod.POST, "/api/user");
 export const LOGIN = new Endpoint(RequestMethod.POST, "/api/user/authentication/login");

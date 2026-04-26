@@ -13,10 +13,11 @@ import { hasValue } from "common/js/Utils";
 import StackTraceException from "./stack_trace/StackTraceException";
 import Footer from "common/component/Footer";
 import ErrorReportStatus from "../ErrorReportStatus";
-import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
-import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
+import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_PAGE, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import { ERROR_REPORT_PAGE } from "common/js/GenericEndpoints";
 
 const ErrorReportDetailsPage = () => {
     const { errorReportId } = useParams();
@@ -148,13 +149,13 @@ const ErrorReportDetailsPage = () => {
                         key="home"
                         id="error-report-details-home"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                     />,
                     <Button
                         key="back"
                         id="error-report-details-back"
                         label={localizationHandler.get("back")}
-                        onclick={() => window.location.href = Constants.ERROR_REPORT_PAGE}
+                        onclick={() => window.location.href = ADMIN_PANEL_ERROR_REPORT_PAGE}
                     />
 
                 ]}

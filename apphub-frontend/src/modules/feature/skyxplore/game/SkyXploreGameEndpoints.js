@@ -1,4 +1,7 @@
-import { Endpoint, RequestMethod } from "common/js/dao/dao";
+import Endpoint from "common/js/dao/Endpoint";
+import RequestMethod from "common/js/dao/RequestMethod";
+
+export const SKYXPLORE_GAME_PAGE = "/web/skyxplore/game";
 
 export const SKYXPLORE_GAME_GET_GAME_ID = new Endpoint(RequestMethod.GET, "/api/skyxplore/game");
 
@@ -43,3 +46,6 @@ export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODUL
 export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE = new Endpoint(RequestMethod.PUT, "/api/skyxplore/game/surface/construction-area/{constructionAreaId}/building-module");
 export const SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_CONSTRUCTION_OF_BUILDING_MODULE = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/game/surface/construction-area/building-module/{constructionId}/cancel-construction");
 export const SKYXPLORE_PROCESS_TICK = new Endpoint(RequestMethod.POST, "/api/skyxplore/game/tick");
+export const SKYXPLORE_DATA_GET_SETTING = new Endpoint(RequestMethod.POST, "/api/skyxplore/data/setting");
+export const SKYXPLORE_DATA_CREATE_SETTING = new Endpoint(RequestMethod.PUT, "/api/skyxplore/data/setting");
+export const SKYXPLORE_DATA_DELETE_SETTING = new Endpoint(RequestMethod.DELETE, "/api/skyxplore/data/setting");

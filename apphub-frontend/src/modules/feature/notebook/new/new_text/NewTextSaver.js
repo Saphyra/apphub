@@ -1,7 +1,7 @@
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import Constants from "common/js/Constants";
-import { NOTEBOOK_CREATE_TEXT } from "../../NotebookEndpoints";
+import { NOTEBOOK_CREATE_TEXT, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const create = async (listItemTitle, parent, content) => {
     const result = validateListItemTitle(listItemTitle);
@@ -19,7 +19,7 @@ const create = async (listItemTitle, parent, content) => {
     await NOTEBOOK_CREATE_TEXT.createRequest(payload)
         .send();
 
-    window.location.href = Constants.NOTEBOOK_PAGE;
+    window.location.href = NOTEBOOK_PAGE;
 }
 
 export default create;

@@ -5,7 +5,6 @@ import { useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import NotificationService from "common/js/notification/NotificationService";
 import ErrorHandler from "common/js/dao/ErrorHandler";
-import { ResponseStatus } from "common/js/dao/dao";
 import Constants from "common/js/Constants";
 import Header from "common/component/Header";
 import LoginForm from "./index_page/LoginForm";
@@ -15,6 +14,8 @@ import LanguageSelector from "common/component/language_selector/LanguageSelecto
 import { setCookie } from "common/js/Utils";
 import { ToastContainer } from "react-toastify";
 import { CHECK_SESSION } from "common/js/GenericEndpoints";
+import { MODULES_PAGE } from "../modules/ModulesEndpoints";
+import ResponseStatus from "common/js/dao/ResponseStatus";
 
 const IndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -35,7 +36,7 @@ const IndexPage = () => {
                 ))
                 .send();
 
-            const location = searchParams.get("redirect") || Constants.MODULES_PAGE;
+            const location = searchParams.get("redirect") || MODULES_PAGE;
 
             window.location.href = location;
         }

@@ -4,7 +4,7 @@ import localizationData from "./star_selector_localization.json";
 import LocalizationHandler from "../../../../../../common/js/LocalizationHandler";
 import DataListInputField, { DataListInputEntry } from "../../../../../../common/component/input/DataListInputField";
 import { hasValue } from "../../../../../../common/js/Utils";
-import { ELITE_BASE_STAR_SYSTEMS_SEARCH } from "../../EliteBaseEndpoints";
+import { ELITE_BASE_STAR_SYSTEMS_SEARCH } from "../../../EliteBaseEndpoints";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import Stream from "../../../../../../common/js/collection/Stream";
 import "./star_selector.css";

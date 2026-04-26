@@ -1,4 +1,23 @@
-import { Endpoint, RequestMethod } from "common/js/dao/dao";
+import Endpoint from "common/js/dao/Endpoint";
+import RequestMethod from "common/js/dao/RequestMethod";
+
+export const NOTEBOOK_PAGE = "/web/notebook";
+export const NOTEBOOK_EDIT_PAGE = "/web/notebook/edit";
+export const NOTEBOOK_NEW_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/{parent}");
+export const NOTEBOOK_NEW_CATEGORY_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/category/{parent}");
+export const NOTEBOOK_NEW_ONLY_TITLE_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/only-title/{parent}");
+export const NOTEBOOK_NEW_CHECKLIST_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/checklist/{parent}");
+export const NOTEBOOK_NEW_LINK_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/link/{parent}");
+export const NOTEBOOK_NEW_TEXT_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/text/{parent}");
+export const NOTEBOOK_NEW_TABLE_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/table/{parent}");
+export const NOTEBOOK_NEW_CUSTOM_TABLE_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/custom-table/{parent}");
+export const NOTEBOOK_NEW_CHECKLIST_TABLE_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/checklist-table/{parent}");
+export const NOTEBOOK_NEW_IMAGE_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/image/{parent}");
+export const NOTEBOOK_NEW_FILE_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/file/{parent}");
+export const NOTEBOOK_NEW_FILES_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/files/{parent}");
+export const NOTEBOOK_NEW_IMAGES_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/new/images/{parent}");
+export const NOTEBOOK_EDIT_LIST_ITEM_PAGE = new Endpoint(RequestMethod.GET, "/web/notebook/edit/{listItemId}");
+
 
 export const NOTEBOOK_GET_CATEGORY_TREE = new Endpoint(RequestMethod.GET, "/api/notebook/category/tree");
 export const NOTEBOOK_GET_PINNED_ITEMS = new Endpoint(RequestMethod.GET, "/api/notebook/item/pinned");

@@ -11,9 +11,9 @@ import DisabledRoleManagementRole from "./DisabledRoleManagementRole";
 import Header from "common/component/Header";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import { USER_DATA_GET_DISABLED_ROLES } from "../AdminPanelEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const DisabledRoleManagementPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -60,10 +60,10 @@ const DisabledRoleManagementPage = () => {
             </main>
 
             <Footer
-                leftButtons={
+                rightButtons={
                     <Button
                         id="disabled-role-management-home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 }

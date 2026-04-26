@@ -5,7 +5,7 @@ import SelectInput, { SelectOption } from "../../../../../../common/component/in
 import MaterialType from "./MaterialType";
 import MapStream from "../../../../../../common/js/collection/MapStream";
 import ConfirmationDialog from "../../../../../../common/component/confirmation_dialog/ConfirmationDialog";
-import { ELITE_BASE_IS_ADMIN, ELITE_BASE_MATERIAL_TRADER_OVERRIDE_CREATE, ELITE_BASE_MATERIAL_TRADER_OVERRIDE_DELETE, ELITE_BASE_MATERIAL_TRADER_OVERRIDE_VERIFY } from "../../../common/EliteBaseEndpoints";
+import { ELITE_BASE_IS_ADMIN, ELITE_BASE_MATERIAL_TRADER_OVERRIDE_CREATE, ELITE_BASE_MATERIAL_TRADER_OVERRIDE_DELETE, ELITE_BASE_MATERIAL_TRADER_OVERRIDE_VERIFY } from "../../../EliteBaseEndpoints";
 import useCache from "../../../../../../common/hook/Cache";
 
 const MaterialTraderOverride = ({ localizationHandler, record, reload }) => {

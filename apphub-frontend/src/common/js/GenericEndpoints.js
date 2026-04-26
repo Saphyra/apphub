@@ -1,4 +1,9 @@
-import { Endpoint, RequestMethod } from "./dao/dao";
+import Endpoint from "./dao/Endpoint";
+import RequestMethod from "./dao/RequestMethod";
+
+//Pages
+export const INDEX_PAGE = "/web";
+export const ERROR_PAGE = "/web/error";
 
 //Platform
 export const CHECK_SESSION = new Endpoint(RequestMethod.GET, "/api/user/authentication/session");

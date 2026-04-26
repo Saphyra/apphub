@@ -5,10 +5,8 @@ import { useEffect, useState } from "react";
 import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Redirection from "../Redirection";
-import { SKYXPLORE_CREATE_OR_UPDATE_CHARACTER, SKYXPLORE_GET_CHARACTER_NAME, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import ValidatedField from "common/js/validation/ValidatedField";
 import NotificationKey from "common/js/notification/NotificationKey";
-import Constants from "common/js/Constants";
 import Button from "common/component/input/Button";
 import Header from "common/component/Header";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
@@ -20,6 +18,9 @@ import Spinner from "common/component/Spinner";
 import validate from "common/js/validation/Validator";
 import "../skyxplore.css";
 import { USER_DATA_GET_USERNAME } from "modules/etc/account/AccountEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import { SKYXPLORE_MAIN_MENU_PAGE } from "../main_menu/SkyXploreMainMenuEndpoints";
+import { SKYXPLORE_CREATE_OR_UPDATE_CHARACTER, SKYXPLORE_GET_CHARACTER_NAME, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "./SkyXploreCharacterEndpoints";
 
 const SkyXploreCharacterPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -85,14 +86,14 @@ const SkyXploreCharacterPage = () => {
 
         sessionStorage.successCode = NotificationKey.SKYXPLORE_CHARACTER_SAVED;
 
-        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+        window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
 
     const backButton = <Button
         key={"back-button"}
         id={"back-button"}
         label={localizationHandler.get("back-button")}
-        onclick={() => window.location.href = hasCharacter ? Constants.SKYXPLORE_MAIN_MENU_PAGE : Constants.MODULES_PAGE}
+        onclick={() => window.location.href = hasCharacter ? SKYXPLORE_MAIN_MENU_PAGE : MODULES_PAGE}
     />
 
     return (

@@ -9,10 +9,10 @@ import MigrationTask from "./MigrationTask";
 import Button from "common/component/input/Button";
 import Header from "common/component/Header";
 import Footer from "common/component/Footer";
-import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import { ADMIN_PANEL_MIGRATION_DELETE_TASK, ADMIN_PANEL_MIGRATION_GET_TASKS, ADMIN_PANEL_MIGRATION_TRIGGER_TASK } from "../AdminPanelEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const MigrationTasksPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -137,13 +137,14 @@ const MigrationTasksPage = () => {
             </main>
 
             <Footer
-                leftButtons={
+                rightButtons={[
                     <Button
+                        key="home"
                         id="home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
-                }
+                ]}
             />
 
             {confirmationDialogData &&

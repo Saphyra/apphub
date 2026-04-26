@@ -24,17 +24,7 @@ const Constants = {
     SKYXPLORE_MAX_CHAT_MESSAGE_SIZE: 1024,
 
     //PAGES
-    MODULES_PAGE: "/web/modules",
-    ERROR_REPORT_PAGE: "/web/admin-panel/error-report",
-    INDEX_PAGE: "/web",
-    SKYXPLORE_MAIN_MENU_PAGE: "/web/skyxplore",
-    SKYXPLORE_CHARACTER_PAGE: "/web/skyxplore/character",
-    SKYXPLORE_LOBBY_PAGE: "/web/skyxplore/lobby",
-    SKYXPLORE_GAME_PAGE: "/web/skyxplore/game",
-    NOTEBOOK_PAGE: "/web/notebook",
-    NOTEBOOK_NEW_PAGE: "/web/notebook/new",
-    NOTEBOOK_EDIT_PAGE: "/web/notebook/edit",
-
+    
     //SkyXplore Lobby Settings limits
     MIN_PLAYERS_PER_SOLAR_SYSTEM: 1,
     MAX_PLAYERS_PER_SOLAR_SYSTEM: 5,

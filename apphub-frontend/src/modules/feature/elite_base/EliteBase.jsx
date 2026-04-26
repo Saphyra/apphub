@@ -3,7 +3,6 @@ import Footer from "../../../common/component/Footer";
 import Button from "../../../common/component/input/Button";
 import localizationData from "./elite_base_localization.json";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
-import Constants from "../../../common/js/Constants";
 import ConfirmationDialog from "../../../common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "../../../common/component/Spinner";
 import { ToastContainer } from "react-toastify";
@@ -11,6 +10,7 @@ import EliteBasePage from "./EliteBasePage";
 import EliteBaseNavigation from "./navigation/EliteBaseNavigation";
 import "./elite_base.css";
 import EliteBasePages from "./pages/EliteBasePages";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const EliteBase = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -42,7 +42,7 @@ const EliteBase = () => {
                 rightButtons={
                     <Button
                         id="notebook-home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 }

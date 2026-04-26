@@ -13,8 +13,8 @@ import Header from "common/component/Header";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
-import Constants from "common/js/Constants";
 import { USER_DATA_ROLES_FOR_ALL_RESTRICTED } from "../AdminPanelEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const RolesForAllPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -53,10 +53,10 @@ const RolesForAllPage = () => {
             </main>
 
             <Footer
-                leftButtons={
+                rightButtons={
                     <Button
                         id="roles-for-all-home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 }

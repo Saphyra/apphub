@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Constants from "../../../common/js/Constants";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
 import sessionChecker from "../../../common/js/SessionChecker";
 import localizationData from "./monitoring_page_localization.json";
@@ -13,6 +12,7 @@ import MonitoringInputs from "./input/MonitoringInputs";
 import { hasValue } from "../../../common/js/Utils";
 import MonitoringBoard from "./board/MonitoringBoard";
 import "./monitoring.css";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const MonitoringPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -48,7 +48,7 @@ const MonitoringPage = () => {
                 rightButtons={
                     <Button
                         id="home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 }

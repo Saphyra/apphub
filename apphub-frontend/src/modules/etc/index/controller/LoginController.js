@@ -3,6 +3,7 @@ import NotificationKey from "common/js/notification/NotificationKey";
 import NotificationService from "common/js/notification/NotificationService";
 import { getQueryParam, setCookie } from "common/js/Utils";
 import { LOGIN } from "../IndexEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const login = async (userIdentifier, password, rememberMe) => {
     if (userIdentifier.length === 0 || password.length === 0) {
@@ -25,7 +26,7 @@ const login = async (userIdentifier, password, rememberMe) => {
         sessionStorage.clear();
     }
     sessionStorage.userIdentifier = userIdentifier;
-    window.location.href = getQueryParam("redirect") || Constants.MODULES_PAGE;
+    window.location.href = getQueryParam("redirect") || MODULES_PAGE;
 }
 
 export default login;

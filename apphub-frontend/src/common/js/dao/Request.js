@@ -1,75 +1,12 @@
-import "../collection/MapStream";
 import MapStream from "../collection/MapStream";
-import Constants from "../Constants";
 import Stream from "../collection/Stream";
+import Constants from "../Constants";
+import { getBrowserLanguage, hasValue } from "../Utils";
 import getDefaultErrorHandler from "./DefaultErrorHandler";
 import Response from "./Response";
-import { getBrowserLanguage, hasValue } from "../Utils";
+import ResponseStatus from "./ResponseStatus";
 
-export const Endpoint = class {
-    constructor(requestMethod, url) {
-        this.requestMethod = requestMethod;
-        this.url = url;
-    }
-
-    createRequest(body, pathVariables = {}, queryParams = {}, rawBody = false) {
-        const request = new Request(
-            this.requestMethod,
-            this.assembleUrl(pathVariables, queryParams),
-            body,
-            rawBody
-        );
-        if (this.requestMethod !== RequestMethod.GET) {
-            request.header("Content-Type", "application/json");
-        }
-
-        return request;
-    }
-
-    assembleUrl(pathVariables, queryParams) {
-        pathVariables = pathVariables || {};
-        queryParams = queryParams || {};
-
-        const pathVariablesFilled = fillPathVariables(this.url, pathVariables);
-        const queryParamsFilled = fillQueryParams(pathVariablesFilled, queryParams);
-
-        return queryParamsFilled;
-
-        function fillPathVariables(url, pathVariables) {
-            let result = url;
-
-            new MapStream(pathVariables)
-                .forEach((placeholder, value) => {
-                    const key = "{" + placeholder + "}";
-                    result = result.replace(key, value);
-                });
-
-            return result;
-        }
-
-        function fillQueryParams(url, queryParams) {
-            if (Object.keys(queryParams).length === 0) {
-                return url;
-            }
-
-            const queryString = new MapStream(queryParams)
-                .filter((key, value) => hasValue(value))
-                .toList((key, value) => key + "=" + value)
-                .join("&");
-
-            return url + "?" + queryString;
-        }
-    }
-}
-
-export const RequestMethod = {
-    POST: "POST",
-    GET: "GET",
-    PUT: "PUT",
-    DELETE: "DELETE"
-}
-
-const Request = class {
+export default class Request {
     constructor(requestMethod, url, body, rawBody = false) {
         this.requestMethod = requestMethod;
         this.url = url;
@@ -150,22 +87,4 @@ const Request = class {
             .orElse(getDefaultErrorHandler())
             .handle(response);
     }
-}
-
-export const ResponseStatus = {
-    OK: 200,
-    BAD_REQUEST: 400,
-    UNAUTHORIZED: 401,
-    FORBIDDEN: 403,
-    NOT_FOUND: 404,
-    METHOD_NOT_ALLOWED: 405,
-    CONFLICT: 409,
-    GONE: 410,
-    PRECONDITION_FAILED: 412,
-    LOCKED: 423,
-    TOO_MANY_REQUESTS: 429,
-    INTERNAL_SERVER_ERROR: 500,
-    NOT_IMPLEMENTED: 501,
-    GATEWAY_TIMEOUT: 504,
-    CONNECTION_REFUSED: 0,
 }

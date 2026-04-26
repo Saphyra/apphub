@@ -20,7 +20,6 @@ import PostLabeledInputField from "common/component/input/PostLabeledInputField"
 import InputField from "common/component/input/InputField";
 import ExpiredEventNotification from "./component/ExpiredEventNotification";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
@@ -28,6 +27,7 @@ import { USER_SETTING_CATEGORY_CALENDAR, UserSettings } from "../common/UserSett
 import Optional from "common/js/collection/Optional";
 import { CALENDAR_SEARCH_PAGE } from "../CalendarEndpoints";
 import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const CACHE_KEY_REFERENCE_DATE = "calendar.referenceDate";
 const CACHE_KEY_ACTIVE_LABEL = "calendar.activeLabel";
@@ -163,7 +163,7 @@ const CalendarPage = () => {
                     <Button
                         id="calendar-home-button"
                         key="home"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 ]} />

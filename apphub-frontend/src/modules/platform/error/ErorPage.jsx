@@ -8,15 +8,14 @@ import useLoader from "common/hook/Loader";
 import Optional from "common/js/collection/Optional";
 import { hasValue } from "common/js/Utils";
 import ErrorHandler from "common/js/dao/ErrorHandler";
-import { ResponseStatus } from "common/js/dao/dao";
 import Button from "common/component/input/Button";
 import logout from "common/js/LogoutController";
 import LocalDateTime from "common/js/date/LocalDateTime";
 import Header from "common/component/Header";
 import Footer from "common/component/Footer";
-import Constants from "common/js/Constants";
-import { CHECK_SESSION } from "common/js/GenericEndpoints";
+import { CHECK_SESSION, INDEX_PAGE } from "common/js/GenericEndpoints";
 import { ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE } from "modules/etc/admin_panel/AdminPanelEndpoints";
+import ResponseStatus from "common/js/dao/ResponseStatus";
 
 const ErrorPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -99,7 +98,7 @@ const ErrorPage = () => {
                     <Button
                         id="error-home-button"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.INDEX_PAGE}
+                        onclick={() => window.location.href = INDEX_PAGE}
                     />
                 }
                 rightButtons={getLogoutButton()}

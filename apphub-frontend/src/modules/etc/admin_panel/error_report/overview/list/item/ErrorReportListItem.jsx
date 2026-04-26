@@ -105,7 +105,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
                     className="error-report-list-item-open"
                     label={localizationHandler.get("open")}
                     onclick={() => {
-                        window.open(ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.assembleUrl({id: errorReport.id}));
+                        window.open(ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.assembleUrl({errorReportId: errorReport.id}));
                         setTimeout(() => refreshCallback(), 1000);
                     }}
                 />

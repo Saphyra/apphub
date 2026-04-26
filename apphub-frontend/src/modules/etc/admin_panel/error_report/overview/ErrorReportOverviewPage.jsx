@@ -15,11 +15,11 @@ import ErrorReportFilter from "./filter/ErrorReportFilter";
 import ErrorReportPageSelector from "./page/ErrorReportPageSelector";
 import ErrorReportList from "./list/ErrorReportList";
 import Footer from "common/component/Footer";
-import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
 import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DELETE_ALL, ADMIN_PANEL_ERROR_REPORT_DELETE_READ, ADMIN_PANEL_GET_ERROR_REPORTS, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const ErrorReportOverviewPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -234,15 +234,6 @@ const ErrorReportOverviewPage = () => {
             </main>
 
             <Footer
-                leftButtons={[
-                    <Button
-                        key="home"
-                        id="error-report-home"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
-                        label={localizationHandler.get("home")}
-                    />
-                ]}
-
                 centerButtons={getCenterButtons()}
 
                 rightButtons={[
@@ -257,6 +248,12 @@ const ErrorReportOverviewPage = () => {
                         id="error-report-delete-read"
                         onclick={openDeleteReadConfirmation}
                         label={localizationHandler.get("delete-read")}
+                    />,
+                    <Button
+                        key="home"
+                        id="error-report-home"
+                        onclick={() => window.location.href = MODULES_PAGE}
+                        label={localizationHandler.get("home")}
                     />
                 ]}
             />

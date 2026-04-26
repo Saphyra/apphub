@@ -2,7 +2,7 @@ import Stream from "common/js/collection/Stream";
 import MessageType from "./lobby_page/chat/MessageType";
 import { hasValue } from "common/js/Utils";
 import MapStream from "common/js/collection/MapStream";
-import Constants from "common/js/Constants";
+import { SKYXPLORE_MAIN_MENU_PAGE } from "../main_menu/SkyXploreMainMenuEndpoints";
 
 export const processAllianceCreatedEvent = (payload, alliances, setAlliances, ais, setAis, players, setPlayers) => {
     const newAlliacnes = new Stream(alliances)
@@ -43,7 +43,7 @@ export const processChatSendMessageEvent = (payload, ownUserId, messages, setMes
 
 export const processExitEvent = (payload, localizationHandler, messages, setMessages, players, setPlayers) => {
     if (payload.host) {
-        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+        window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
         return;
     }
 

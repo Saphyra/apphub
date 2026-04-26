@@ -14,6 +14,7 @@ import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
 import create from "./NewLinkSaver";
 import { ToastContainer } from "react-toastify";
+import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const NewLinkPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -62,13 +63,13 @@ const NewLinkPage = () => {
                         key="back-button"
                         id="notebook-new-link-back-button"
                         label={localizationHandler.get("back")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + parent}
+                        onclick={() => window.location.href = NOTEBOOK_NEW_PAGE.assembleUrl({ parent: parent })}
                     />,
                     <Button
                         key="home-button"
                         id="notebook-new-link-home-button"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                        onclick={() => window.location.href = NOTEBOOK_PAGE}
                     />
                 ]}
 

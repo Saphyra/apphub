@@ -12,7 +12,7 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
-import { NOTEBOOK_CREATE_ONLY_TITLE } from "../../NotebookEndpoints";
+import { NOTEBOOK_CREATE_ONLY_TITLE, NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const NewOnlyTitlePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -40,7 +40,7 @@ const NewOnlyTitlePage = () => {
         await NOTEBOOK_CREATE_ONLY_TITLE.createRequest(payload)
             .send();
 
-        window.location.href = Constants.NOTEBOOK_PAGE;
+        window.location.href = NOTEBOOK_PAGE;
     }
 
     return (
@@ -67,13 +67,13 @@ const NewOnlyTitlePage = () => {
                         key="back-button"
                         id="notebook-new-only-title-back-button"
                         label={localizationHandler.get("back")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + parent}
+                        onclick={() => window.location.href = NOTEBOOK_NEW_PAGE.assembleUrl({ parent: parent })}
                     />,
                     <Button
                         key="home-button"
                         id="notebook-new-only-title-home-button"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                        onclick={() => window.location.href = NOTEBOOK_PAGE}
                     />
                 ]}
 

@@ -11,7 +11,7 @@ import InputField from "common/component/input/InputField";
 import Stream from "common/js/collection/Stream";
 import Constants from "common/js/Constants";
 import Event from "common/js/event/Event";
-import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_PIN_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
+import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_EDIT_PAGE, NOTEBOOK_PIN_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
 
 const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, listItemMode, setConfirmationDialogData, selectedItems, setSelectedItems, setDisplaySpinner }) => {
     const handleOnclick = () => {
@@ -211,7 +211,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                 {listItemMode !== ListItemMode.PINNED_ITEM &&
                     <Button
                         className="notebook-content-category-content-list-item-edit-button"
-                        onclick={() => window.location.href = Constants.NOTEBOOK_EDIT_PAGE + "/" + data.id}
+                        onclick={() => window.location.href = NOTEBOOK_EDIT_PAGE + "/" + data.id}
                         title={localizationHandler.get("edit")}
                     />
                 }

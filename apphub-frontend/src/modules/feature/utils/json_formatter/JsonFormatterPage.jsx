@@ -9,8 +9,8 @@ import Textarea from "common/component/input/Textarea";
 import Button from "common/component/input/Button";
 import JsonSyntaxHighlight from "common/component/json_syntax_highlight/JsonSyntaxHighlight";
 import Footer from "common/component/Footer";
-import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 
 const JsonFormatterPage = ({ }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -55,7 +55,7 @@ const JsonFormatterPage = ({ }) => {
             <Footer rightButtons={
                 <Button
                     id="home-button"
-                    onclick={() => window.location.href = Constants.MODULES_PAGE}
+                    onclick={() => window.location.href = MODULES_PAGE}
                     label={localizationHandler.get("home")}
                 />
             } />

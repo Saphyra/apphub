@@ -5,11 +5,11 @@ import ValidationResult from "common/js/validation/ValidationResult";
 import { validateFilled } from "../validation/AccountInputValidator";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import ValidatedInputField from "common/component/input/ValidatedInputField";
 import InputField from "common/component/input/InputField";
 import { ACCOUNT_DELETE_ACCOUNT } from "../AccountEndpoints";
+import { INDEX_PAGE } from "common/js/GenericEndpoints";
 
 const AccountDeleter = ({ setConfirmationDialogData }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -50,7 +50,7 @@ const AccountDeleter = ({ setConfirmationDialogData }) => {
 
             sessionStorage.successText = localizationHandler.get("account-deleted");
 
-            window.location.href = Constants.INDEX_PAGE;
+            window.location.href = INDEX_PAGE;
         } finally {
             setConfirmationDialogData(null);
             setPassword("");

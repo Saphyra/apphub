@@ -24,6 +24,8 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import { ToastContainer } from "react-toastify";
 import "../skyxplore.css";
 import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_GET_SETTINGS, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "./SkyXploreLobbyEndpoints";
+import { SKYXPLORE_MAIN_MENU_PAGE } from "../main_menu/SkyXploreMainMenuEndpoints";
+import { SKYXPLORE_GAME_PAGE } from "../game/SkyXploreGameEndpoints";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -114,7 +116,7 @@ const SkyXploreLobbyPage = () => {
                 setDisplaySpinner(true);
                 break;
             case WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED:
-                window.location.href = Constants.SKYXPLORE_GAME_PAGE;
+                window.location.href = SKYXPLORE_GAME_PAGE;
                 break;
             case WebSocketEventName.SKYXPLORE_LOBBY_CHAT_SEND_MESSAGE:
                 processChatSendMessageEvent(event.payload, lobbyData.ownUserId, messages, setMessages);
@@ -186,7 +188,7 @@ const SkyXploreLobbyPage = () => {
         await SKYXPLORE_LOBBY_EXIT.createRequest()
             .send();
 
-        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+        window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
 
     //Buttons

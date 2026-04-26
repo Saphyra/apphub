@@ -1,6 +1,5 @@
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
-import { SKYXPLORE_GET_GAMES } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { useEffect, useState } from "react";
 import SavedGame from "./saved_game/SavedGame";
 import Button from "common/component/input/Button";
@@ -9,6 +8,9 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import { SKYXPLORE_ADMIN_MAIN_PAGE } from "../../admin/SkyXploreAdminEndpoints";
 import { SKYXPLORE_DELETE_GAME } from "../../lobby/SkyXploreLobbyEndpoints";
 import { IS_ADMIN } from "common/js/GenericEndpoints";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import { SKYXPLORE_GET_GAMES } from "../SkyXploreMainMenuEndpoints";
+import { SKYXPLORE_CHARACTER_PAGE } from "../../character/SkyXploreCharacterEndpoints";
 
 const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
     const [displaySavedGames, setDisplaySavedGames] = useState(false);
@@ -95,7 +97,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
             <Button
                 id="skyxplore-edit-character-button"
                 className="skyxplore-main-menu-button"
-                onclick={() => window.location.href = Constants.SKYXPLORE_CHARACTER_PAGE}
+                onclick={() => window.location.href = SKYXPLORE_CHARACTER_PAGE}
                 label={localizationHandler.get("edit-character")}
             />
 
@@ -111,7 +113,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
             <Button
                 id="skyxplore-home-button"
                 className="skyxplore-main-menu-button"
-                onclick={() => window.location.href = Constants.MODULES_PAGE}
+                onclick={() => window.location.href = MODULES_PAGE}
                 label={localizationHandler.get("home")}
             />
 

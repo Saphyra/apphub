@@ -6,7 +6,7 @@ import MapStream from "../../../../../../common/js/collection/MapStream";
 import PowerRelation from "./PowerRelation";
 import useCache from "../../../../../../common/hook/Cache";
 import Stream from "../../../../../../common/js/collection/Stream";
-import { ELITE_BASE_GET_POWERS } from "../../EliteBaseEndpoints";
+import { ELITE_BASE_GET_POWERS } from "../../../EliteBaseEndpoints";
 import "./power_selector.css";
 import PowerNames from "../../localization/PowerNames";
 

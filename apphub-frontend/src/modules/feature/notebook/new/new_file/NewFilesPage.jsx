@@ -17,6 +17,7 @@ import Footer from "common/component/Footer";
 import { addAndSet } from "common/js/Utils";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
+import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
 const NewFilesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -54,7 +55,7 @@ const NewFilesPage = () => {
         }
 
         if (allUploadSuccessful === true) {
-            window.location.href = Constants.NOTEBOOK_PAGE;
+            window.location.href = NOTEBOOK_PAGE;
         } else {
             NotificationService.showError(localizationHandler.get("file-upload-failed"));
         }
@@ -94,13 +95,13 @@ const NewFilesPage = () => {
                         key="back-button"
                         id="notebook-new-file-back-button"
                         label={localizationHandler.get("back")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_NEW_PAGE + "/" + parent}
+                        onclick={() => window.location.href = NOTEBOOK_NEW_PAGE.assembleUrl({ parent: parent })}
                     />,
                     <Button
                         key="home-button"
                         id="notebook-new-file-home-button"
                         label={localizationHandler.get("home")}
-                        onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                        onclick={() => window.location.href = NOTEBOOK_PAGE}
                     />
                 ]}
 

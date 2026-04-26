@@ -1,4 +1,7 @@
-import { Endpoint, RequestMethod } from "common/js/dao/dao";
+import Endpoint from "common/js/dao/Endpoint";
+import RequestMethod from "common/js/dao/RequestMethod";
+
+export const ACCOUNT_PAGE = "/web/user/account";
 
 export const USER_DATA_GET_USERNAME = new Endpoint(RequestMethod.GET, "/api/user/data/name");
 export const ACCOUNT_CHANGE_LANGUAGE = new Endpoint(RequestMethod.POST, "/api/user/account/language");

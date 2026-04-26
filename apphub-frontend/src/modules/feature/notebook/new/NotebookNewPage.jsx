@@ -10,14 +10,15 @@ import Button from "common/component/input/Button";
 import Header from "common/component/Header";
 import Footer from "common/component/Footer";
 import { ToastContainer } from "react-toastify";
-import Constants from "common/js/Constants";
 import listItemTypes from "./list_item_types.json";
+import { NOTEBOOK_PAGE } from "../NotebookEndpoints";
 
 const NotebookNewPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
     const { parent } = useParams();
+    console.log(parent);
 
     useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
@@ -55,7 +56,7 @@ const NotebookNewPage = () => {
                 rightButtons={
                     <Button
                         id="notebook-new-back-button"
-                        onclick={() => window.location.href = Constants.NOTEBOOK_PAGE}
+                        onclick={() => window.location.href = NOTEBOOK_PAGE}
                         label={localizationHandler.get("back")}
                     />
                 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useCache from "../../../../../../common/hook/Cache";
-import { ELITE_BASE_COMMODITY_TRADING_COMMODITIES_AVERAGE_PRICE } from "../../../common/EliteBaseEndpoints";
+import { ELITE_BASE_COMMODITY_TRADING_COMMODITIES_AVERAGE_PRICE } from "../../../EliteBaseEndpoints";
 import { formatNumber, hasValue } from "../../../../../../common/js/Utils";
 
 const TradeCommoditiesGalacticAverage = ({ localizationHandler, commodity }) => {

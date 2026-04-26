@@ -13,11 +13,11 @@ import PasswordChanger from "./password_changer/PasswordChanger";
 import AccountDeleter from "./account_deleter/AccountDeleter";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import { hasValue } from "common/js/Utils";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ToastContainer } from "react-toastify";
 import { ACCOUNT_GET_USER } from "./AccountEndpoints";
+import { MODULES_PAGE } from "../modules/ModulesEndpoints";
 
 
 const AccountPage = () => {
@@ -57,7 +57,7 @@ const AccountPage = () => {
                 rightButtons={
                     <Button
                         id="account-home-button"
-                        onclick={() => window.location.href = Constants.MODULES_PAGE}
+                        onclick={() => window.location.href = MODULES_PAGE}
                         label={localizationHandler.get("home")}
                     />
                 }

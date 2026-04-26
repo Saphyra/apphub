@@ -1,15 +1,15 @@
-import Constants from "common/js/Constants";
-import { SKYXPLORE_PLATFORM_HAS_CHARACTER } from "modules/feature/skyxplore/SkyXploreDataEndpoints";
 import { hasValue } from "common/js/Utils";
-import { SKYXPLORE_GAME_GET_GAME_ID } from "./game/SkyXploreGameEndpoints";
-import { SKYXPLORE_LOBBY_IS_IN_LOBBY } from "./lobby/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_GAME_GET_GAME_ID, SKYXPLORE_GAME_PAGE } from "./game/SkyXploreGameEndpoints";
+import { SKYXPLORE_LOBBY_IS_IN_LOBBY, SKYXPLORE_LOBBY_PAGE } from "./lobby/SkyXploreLobbyEndpoints";
+import { SKYXPLORE_MAIN_MENU_PAGE } from "./main_menu/SkyXploreMainMenuEndpoints";
+import { SKYXPLORE_CHARACTER_PAGE, SKYXPLORE_PLATFORM_HAS_CHARACTER } from "./character/SkyXploreCharacterEndpoints";
 
 const redirectToCharacterIfNotPresent = async () => {
     const response = await SKYXPLORE_PLATFORM_HAS_CHARACTER.createRequest()
         .send();
 
     if (!response.value) {
-        window.location.href = Constants.SKYXPLORE_CHARACTER_PAGE;
+        window.location.href = SKYXPLORE_CHARACTER_PAGE;
     }
 }
 
@@ -18,7 +18,7 @@ const redirectToLobbyIfInOne = async () => {
         .send();
 
     if (response.value) {
-        window.location.href = Constants.SKYXPLORE_LOBBY_PAGE;
+        window.location.href = SKYXPLORE_LOBBY_PAGE;
     }
 }
 
@@ -27,7 +27,7 @@ const redirectToMainMenuIfNotInLobby = async () => {
         .send();
 
     if (!response.value) {
-        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+        window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
 }
 
@@ -36,7 +36,7 @@ const redirectToGameIfInOne = async () => {
         .send()
 
     if (hasValue(response.value)) {
-        window.location.href = Constants.SKYXPLORE_GAME_PAGE;
+        window.location.href = SKYXPLORE_GAME_PAGE;
     }
 }
 
@@ -45,7 +45,7 @@ const redirectToMainMenuIfNotInGame = async () => {
         .send()
 
     if (!hasValue(response.value)) {
-        window.location.href = Constants.SKYXPLORE_MAIN_MENU_PAGE;
+        window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
 }
 
