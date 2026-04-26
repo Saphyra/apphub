@@ -9,3 +9,5 @@
         InMemoryDao and MetricRegistry monitoring
 
 ===ETC===
+    EliteBase
+        Support StationService "initiatives"

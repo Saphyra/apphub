@@ -48,6 +48,7 @@ public enum StationServiceEnum {
     REGISTERING_COLONIZATION("registeringcolonisation"),
     COLONISATION_CONTRIBUTION("colonisationcontribution"),
     REFINERY("refinery"),
+    INITIATIVES("initiatives"),
     ;
 
     private final List<String> value;
