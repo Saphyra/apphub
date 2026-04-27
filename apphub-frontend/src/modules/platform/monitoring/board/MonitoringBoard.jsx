@@ -1,15 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useLoader from "../../../../common/hook/Loader";
 import { MONITORING_GET_METRICS } from "../MonitoringEndpoints";
 import Stream from "../../../../common/js/collection/Stream";
 import MonitoringDisplay from "./display/MonitoringDisplay";
 import { HOUR, MINUTE, SECOND } from "../input/time_frame/TimeFrame";
 import { throwException } from "../../../../common/js/Utils";
+import PropertyFilter from "./filter/PropertyFilter";
 
 const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) => {
     console.log(queryData);
 
     const [metricsData, setMetricsData] = useState({ queryData: null, metrics: [] });
+    const [hiddenProperties, setHiddenProperties] = useState([]);
 
     useLoader({
         request: MONITORING_GET_METRICS.createRequest(
@@ -25,6 +27,12 @@ const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) 
     if (metricsData.queryData == queryData && metricsData.metrics.length > 0) {
         return (
             <div id="monitoring-boards">
+                <PropertyFilter
+                    metrics={metricsData.metrics}
+                    hiddenProperties={hiddenProperties}
+                    setHiddenProperties={setHiddenProperties}
+                />
+
                 {getContent()}
             </div>
         );
@@ -55,6 +63,7 @@ const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) 
                     service={group.service}
                     metrics={metrics}
                     step={getStep(queryData.timeFrame)}
+                    hiddenProperties={hiddenProperties}
                 />
             });
 

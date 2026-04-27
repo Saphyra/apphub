@@ -125,15 +125,17 @@ export const getLabels = (displayedTimestamp, entryMap, colors) => {
  * @param {*} entries  list of entries to be displayed in the diagram
  * @param {*} properties  list of properties to be displayed
  * @param {*} colors  map of properties to colors
+ * @param {*} hiddenProperties list of properties to be hidden
  * @returns  the lines for each property, representing their values over time
  */
-export const getPropertyLines = (entries, properties, colors) => {
+export const getPropertyLines = (entries, properties, colors, hiddenProperties) => {
     const maxValue = new Stream(entries)
         .flatMap(entry => new Stream(Object.values(entry.properties)))
         .max()
         .orElseThrow("IllegalArgument", "No properties found for any entry");
 
     return new Stream(properties)
+        .filter(property => !hiddenProperties.includes(property))
         .map(property => drawLine(property))
         .toList();
 

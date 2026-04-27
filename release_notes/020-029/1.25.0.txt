@@ -1,4 +1,6 @@
 ===FEATURES===
+    Monitoring
+        Hide properties
 
 ===BUGFIXES===
     Monitoring
