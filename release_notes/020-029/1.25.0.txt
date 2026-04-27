@@ -20,3 +20,4 @@
 ===ETC===
     Calendar
         Highlight border of selected occurrence based on status
+    Spring Boot update

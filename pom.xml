@@ -23,7 +23,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
         <!-- Platform Versions -->
-        <versions.spring-boot>3.5.7</versions.spring-boot>
+        <versions.spring-boot>3.5.14</versions.spring-boot>
         <versions.spring-cloud-gateway>4.3.2</versions.spring-cloud-gateway>
         <versions.spring-cloud>4.3.0</versions.spring-cloud>
         <versions.liquibase-core>5.0.1</versions.liquibase-core>

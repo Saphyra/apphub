@@ -20,7 +20,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
-        <versions.spring-boot>3.5.7</versions.spring-boot>
+        <versions.spring-boot>3.5.14</versions.spring-boot>
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
         <versions.lombok>1.18.42</versions.lombok>
         <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
