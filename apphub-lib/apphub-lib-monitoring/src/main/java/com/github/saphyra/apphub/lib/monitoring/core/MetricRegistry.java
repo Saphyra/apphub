@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,7 +26,7 @@ import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_
 @Slf4j
 public class MetricRegistry {
     @Getter
-    private final Map<LocalDateTime, List<PutMetricsRequest>> registry = new ConcurrentHashMap<>();
+    private final List<PutMetricsRequest> registry = new Vector<>();
 
     private final DateTimeUtil dateTimeUtil;
     private final PutMetricRequestFactory putMetricRequestFactory;
@@ -38,30 +37,30 @@ public class MetricRegistry {
 
         PutMetricsRequest request = putMetricRequestFactory.create(feature, functionality, timestamp, properties);
 
-        List<PutMetricsRequest> bucket = registry.computeIfAbsent(timestamp, _ -> new Vector<>());
-        bucket.add(request);
+        registry.add(request);
     }
 
-    public List<List<PutMetricsRequest>> getMetricsToSend() {
+    public List<PutMetricsRequest> getMetricsToSend() {
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
             .withNano(0);
 
-        Map<LocalDateTime, List<PutMetricsRequest>> result = registry.entrySet()
-            .stream()
-            .filter(entry -> entry.getKey().isBefore(timestamp)) //Send metrics created before the current second
-            .collect(Collectors.toMap(Map.Entry::getKey, entry -> compute(entry.getKey(), entry.getValue())));
+        Map<LocalDateTime, List<PutMetricsRequest>> result = registry.stream()
+            .filter(metric -> metric.getTimestamp().isBefore(timestamp)) //Send metrics created before the current second
+            .collect(Collectors.groupingBy(PutMetricsRequest::getTimestamp));
 
         log.debug("MetricRegistry size before cleanup: {}", registry.size());
-        result.forEach((t, _) -> registry.remove(t));
+        //Remove
+        result.values().forEach(registry::removeAll);
         log.debug("MetricRegistry size after cleanup: {}", registry.size());
 
-        return result.values()
+        return result.entrySet()
             .stream()
+            .flatMap(entry -> compute(entry.getKey(), entry.getValue()))
             .toList();
     }
 
     //Adds an extra metric that keeps the number of metrics returned
-    private List<PutMetricsRequest> compute(LocalDateTime timestamp, List<PutMetricsRequest> metrics) {
+    private Stream<PutMetricsRequest> compute(LocalDateTime timestamp, List<PutMetricsRequest> metrics) {
         double count = metrics.size();
 
         MetricPropertyModel maxCount = MetricPropertyModel.builder()
@@ -83,7 +82,6 @@ public class MetricRegistry {
             List.of(maxCount, averageCount)
         );
 
-        return Stream.concat(metrics.stream(), Stream.of(putMetricsRequest))
-            .toList();
+        return Stream.concat(metrics.stream(), Stream.of(putMetricsRequest));
     }
 }

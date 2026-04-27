@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDa
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricDataFactory;
+import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceDao;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service.MetricServiceFactory;
 import com.google.common.util.concurrent.Striped;
@@ -34,51 +35,45 @@ public class PutMetricsService {
     private final MetricDao metricDao;
     private final MetricServiceDao metricServiceDao;
     private final MetricDataDao metricDataDao;
-    private final PutMetricsAggregator putMetricsAggregator;
     private final PutMetricsPropertyValidator putMetricsPropertyValidator;
     private final MetricServiceFactory metricServiceFactory;
     private final MetricDataFactory metricDataFactory;
 
     @Transactional
     @SneakyThrows
-    public void putMetrics(String service, Feature feature, String functionality, List<PutMetricsRequest> request) {
+    public void putMetrics(String service, PutMetricsRequest metric) {
         //Processing of metrics for the same feature and functionality must be synchronized to avoid concurrent creation of the same metric and metric properties.
-        LockKey lockKey = new LockKey(feature, functionality);
+        LockKey lockKey = new LockKey(metric.getFeature(), metric.getFunctionality());
         Lock lock = LOCKS.get(lockKey);
         if (!lock.tryLock(10, TimeUnit.SECONDS)) {
-            throw new IllegalStateException("Could not acquire lock for feature " + feature + " and functionality " + functionality);
+            throw new IllegalStateException("Could not acquire lock for feature " + metric.getFeature() + " and functionality " + metric.getFunctionality());
         }
 
         try {
-            request.stream()
-                //Separate metrics by buckets
-                .collect(Collectors.groupingBy(r -> r.getTimestamp().withNano(0)))
-                .forEach((timestamp, metrics) ->
-                    aggregateAndSave(
-                        service,
-                        feature,
-                        functionality,
-                        timestamp,
-                        metrics.stream().map(PutMetricsRequest::getProperties).toList()
-                    )
-                );
+            save(
+                service,
+                metric.getFeature(),
+                metric.getFunctionality(),
+                metric.getTimestamp().withNano(0),
+                metric.getProperties()
+            );
         } finally {
             lock.unlock();
         }
     }
 
-    private void aggregateAndSave(String service, Feature feature, String functionality, LocalDateTime timestamp, List<List<MetricPropertyModel>> properties) {
+    private void save(String service, Feature feature, String functionality, LocalDateTime timestamp, List<MetricPropertyModel> properties) {
         Metric metric = metricDao.findOrCreate(feature, functionality);
-        metricServiceDao.save(metricServiceFactory.create(metric.getMetricId(), service));
+        MetricService metricService = metricServiceFactory.create(metric.getMetricId(), service);
+        metricServiceDao.save(metricService);
 
         //Verify if each list of properties matches with the metric's schema
-        properties.forEach(p -> putMetricsPropertyValidator.saveOrVerifyProperties(metric.getMetricId(), p));
+        putMetricsPropertyValidator.saveOrVerifyProperties(metric.getMetricId(), properties);
         saveMetricData(
             metric.getMetricId(),
             service,
             timestamp,
-            //Aggregate the bucket's values to a single record
-            putMetricsAggregator.aggregate(properties)
+            properties.stream().collect(Collectors.toMap(MetricPropertyModel::getKey, MetricPropertyModel::getValue))
         );
     }
 

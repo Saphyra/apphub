@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator;
+package com.github.saphyra.apphub.lib.monitoring.core.agggregator;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrategy;
 import lombok.RequiredArgsConstructor;
@@ -10,16 +10,16 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class SumMetricPropertyAggregatorStrategy implements MetricPropertyAggregatorStrategy {
+class AverageMetricPropertyAggregatorStrategy implements MetricPropertyAggregatorStrategy {
+    private final SumMetricPropertyAggregatorStrategy sumMetricPropertyAggregator;
+
     @Override
     public AggregationStrategy getAggregationStrategy() {
-        return AggregationStrategy.SUM;
+        return AggregationStrategy.AVERAGE;
     }
 
     @Override
     public Double apply(List<Double> doubles) {
-        return doubles.stream()
-            .mapToDouble(Double::doubleValue)
-            .sum();
+        return sumMetricPropertyAggregator.apply(doubles) / doubles.size();
     }
 }

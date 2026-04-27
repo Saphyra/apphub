@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrate
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data.MetricData;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricProperty;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric_property.MetricPropertyDao;
-import com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator.MetricPropertyAggregatorStrategy;
+import com.github.saphyra.apphub.lib.monitoring.core.agggregator.MetricPropertyAggregatorStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

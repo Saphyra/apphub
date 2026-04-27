@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.api.platform.monitoring.server.MonitoringController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,20 +34,17 @@ public class MonitoringControllerImpl implements MonitoringController {
     private final PutMetricsRequestValidator putMetricsRequestValidator;
 
     @Override
-    public void internalReportMetrics(String service, List<PutMetricsRequest> entries) {
-        putMetricsRequestValidator.validate(entries);
+    public void internalReportMetrics(String service, List<PutMetricsRequest> metrics) {
+        putMetricsRequestValidator.validate(metrics);
 
-        entries.stream()
-            //Group received metrics by Feature and Functionality
-            .collect(Collectors.groupingBy(request -> new BiWrapper<>(request.getFeature(), request.getFunctionality())))
-            .forEach((key, requests) -> {
-                try {
-                    log.debug("Arrived: {}", requests);
-                    putMetricsService.putMetrics(service, key.getEntity1(), key.getEntity2(), requests);
-                } catch (Exception e) {
-                    errorReporterService.report("Failed to put metrics" + requests, e);
-                }
-            });
+        metrics.forEach((metric) -> {
+            try {
+                log.debug("Arrived: {}", metric);
+                putMetricsService.putMetrics(service, metric);
+            } catch (Exception e) {
+                errorReporterService.report("Failed to put metric" + metric, e);
+            }
+        });
     }
 
     @Override

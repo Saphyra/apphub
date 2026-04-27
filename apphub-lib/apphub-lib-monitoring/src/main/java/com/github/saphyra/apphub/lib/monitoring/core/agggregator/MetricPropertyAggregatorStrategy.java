@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator;
+package com.github.saphyra.apphub.lib.monitoring.core.agggregator;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrategy;
 

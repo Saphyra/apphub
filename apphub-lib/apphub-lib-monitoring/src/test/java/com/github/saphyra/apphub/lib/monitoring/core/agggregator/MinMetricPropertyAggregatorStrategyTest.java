@@ -1,6 +1,7 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator;
+package com.github.saphyra.apphub.lib.monitoring.core.agggregator;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrategy;
+import com.github.saphyra.apphub.lib.monitoring.core.agggregator.MinMetricPropertyAggregatorStrategy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

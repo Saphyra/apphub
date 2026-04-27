@@ -31,6 +31,8 @@ class PutMetricsServiceTest {
     private static final String FUNCTIONALITY = "functionality";
     private static final LocalDateTime TIMESTAMP = LocalDateTime.now();
     private static final UUID METRIC_ID = UUID.randomUUID();
+    private static final String PROPERTY_KEY = "property-key";
+    private static final Double PROPERTY_VALUE = 23.2;
 
     @Mock
     private MetricDao metricDao;
@@ -40,9 +42,6 @@ class PutMetricsServiceTest {
 
     @Mock
     private MetricDataDao metricDataDao;
-
-    @Mock
-    private PutMetricsAggregator putMetricsAggregator;
 
     @Mock
     private PutMetricsPropertyValidator putMetricsPropertyValidator;
@@ -74,15 +73,22 @@ class PutMetricsServiceTest {
     @Test
     void putMetrics() {
         given(request.getTimestamp()).willReturn(TIMESTAMP);
+        given(request.getProperties()).willReturn(List.of(propertyModel));
+        given(request.getFeature()).willReturn(Feature.ELITE_BASE_MESSAGE_PROCESSING);
+        given(request.getFunctionality()).willReturn(FUNCTIONALITY);
+
+        given(propertyModel.getKey()).willReturn(PROPERTY_KEY);
+        given(propertyModel.getValue()).willReturn(PROPERTY_VALUE);
+
         given(metricDao.findOrCreate(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY)).willReturn(metric);
         given(metric.getMetricId()).willReturn(METRIC_ID);
         given(metricServiceFactory.create(METRIC_ID, SERVICE)).willReturn(metricService);
-        given(request.getProperties()).willReturn(List.of(propertyModel));
-        Map<String, Double> properties = Map.of("asd", 3.2);
-        given(putMetricsAggregator.aggregate(List.of(List.of(propertyModel)))).willReturn(properties);
+
+        Map<String, Double> properties = Map.of(PROPERTY_KEY, PROPERTY_VALUE);
         given(metricDataFactory.createSecond(METRIC_ID, SERVICE, TIMESTAMP.withNano(0), properties)).willReturn(metricData);
 
-        underTest.putMetrics(SERVICE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, List.of(request));
+
+        underTest.putMetrics(SERVICE, request);
 
         then(metricServiceDao).should().save(metricService);
         then(putMetricsPropertyValidator).should().saveOrVerifyProperties(METRIC_ID, List.of(propertyModel));

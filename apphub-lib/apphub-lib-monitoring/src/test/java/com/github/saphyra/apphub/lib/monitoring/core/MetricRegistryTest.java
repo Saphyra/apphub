@@ -56,7 +56,7 @@ class MetricRegistryTest {
 
         underTest.reportMetric(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, List.of(propertyModel));
 
-        assertThat(ReflectionUtils.<Map<LocalDateTime, List<PutMetricsRequest>>>getFieldValue(underTest, "registry")).containsEntry(CURRENT_TIME.withNano(0), List.of(request));
+        assertThat(ReflectionUtils.<List<PutMetricsRequest>>getFieldValue(underTest, "registry")).containsExactly(request);
     }
 
     @Test
@@ -64,13 +64,16 @@ class MetricRegistryTest {
         given(dateTimeUtil.getCurrentDateTime())
             .willReturn(CURRENT_TIME)
             .willReturn(CURRENT_TIME.plusSeconds(1));
+
         given(putMetricRequestFactory.create(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, CURRENT_TIME.withNano(0), List.of(propertyModel))).willReturn(request);
+        given(request.getTimestamp()).willReturn(CURRENT_TIME);
         underTest.reportMetric(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, List.of(propertyModel));
+
         given(putMetricRequestFactory.create(eq(Feature.MONITORING_METRICS), eq(FUNCTIONALITY_METRIC_COUNT), eq(CURRENT_TIME), any())).willReturn(request);
 
-        assertThat(underTest.getMetricsToSend().getFirst()).hasSize(2);
+        assertThat(underTest.getMetricsToSend()).hasSize(2);
 
-        assertThat(ReflectionUtils.<Map<LocalDateTime, List<PutMetricsRequest>>>getFieldValue(underTest, "registry")).isEmpty();
+        assertThat(ReflectionUtils.<List<PutMetricsRequest>>getFieldValue(underTest, "registry")).isEmpty();
 
         then(putMetricRequestFactory).should().create(eq(Feature.MONITORING_METRICS), eq(FUNCTIONALITY_METRIC_COUNT), eq(CURRENT_TIME), argumentCaptor.capture());
         Map<String, MetricPropertyModel> properties = argumentCaptor.getValue()

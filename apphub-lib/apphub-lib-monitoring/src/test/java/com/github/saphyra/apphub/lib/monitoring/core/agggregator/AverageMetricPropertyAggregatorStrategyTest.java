@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.monitoring.service.aggregation.agggregator;
+package com.github.saphyra.apphub.lib.monitoring.core.agggregator;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.AggregationStrategy;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class AverageMetricPropertyAggregatorStrategyTest {
-    private final AverageMetricPropertyAggregatorStrategy underTest = new AverageMetricPropertyAggregatorStrategy(new SumMetricPropertyAggregatorStrategy());
+    private final com.github.saphyra.apphub.lib.monitoring.core.agggregator.AverageMetricPropertyAggregatorStrategy underTest = new com.github.saphyra.apphub.lib.monitoring.core.agggregator.AverageMetricPropertyAggregatorStrategy(new com.github.saphyra.apphub.lib.monitoring.core.agggregator.SumMetricPropertyAggregatorStrategy());
 
     @Test
     void getAggregationStrategy() {

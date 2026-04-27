@@ -70,13 +70,10 @@ class MonitoringControllerImplTest {
 
     @Test
     void internalReportMetrics() {
-        given(request.getFeature()).willReturn(Feature.ELITE_BASE_MESSAGE_PROCESSING);
-        given(request.getFunctionality()).willReturn(FUNCTIONALITY);
-
         underTest.internalReportMetrics(SERVICE, List.of(request));
 
         then(putMetricsRequestValidator).should().validate(List.of(request));
-        then(putMetricsService).should().putMetrics(SERVICE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, List.of(request));
+        then(putMetricsService).should().putMetrics(SERVICE, request);
     }
 
     @Test

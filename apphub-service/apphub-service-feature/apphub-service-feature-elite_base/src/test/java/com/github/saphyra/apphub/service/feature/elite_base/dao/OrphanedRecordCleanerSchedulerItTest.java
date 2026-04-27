@@ -55,7 +55,7 @@ class OrphanedRecordCleanerSchedulerItTest {
 
         underTest.cleanup();
 
-        assertThat(metricRegistry.getRegistry().values().stream().flatMap(List::stream)).hasSize(orphanedRecordCleaners.size() + 1);
+        assertThat(metricRegistry.getRegistry()).hasSize(orphanedRecordCleaners.size() + 1);
 
         then(bufferSynchronizationService).should().synchronizeAll();
         then(errorReporterService).should(times(0)).report(any(), any());
