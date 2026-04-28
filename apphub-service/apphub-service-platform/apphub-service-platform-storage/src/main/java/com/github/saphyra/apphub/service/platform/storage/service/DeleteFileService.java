@@ -1,12 +1,9 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,9 +15,7 @@ import java.util.UUID;
 @Slf4j
 public class DeleteFileService {
     private final StoredFileDao storedFileDao;
-    private final FtpClientFactory ftpClientFactory;
-    private final ErrorReporterService errorReporterService;
-    private final UuidConverter uuidConverter;
+    private final StorageClientProvider storageClientProvider;
 
     public void deleteFile(UUID userId, UUID storedFileId) {
         storedFileDao.findById(storedFileId)
@@ -32,11 +27,8 @@ public class DeleteFileService {
             throw ExceptionFactory.forbiddenOperation(userId + " has no access to StoredFile " + storedFile.getStoredFileId());
         }
 
-        try (FtpClientWrapper ftpClient = ftpClientFactory.create()) {
-            ftpClient.deleteFile(uuidConverter.convertDomain(storedFile.getStoredFileId()));
-        } catch (Exception e) {
-            errorReporterService.report("Failed deleting FTP file " + storedFile.getStoredFileId(), e);
-        }
+        storageClientProvider.getClientForType(storedFile.getStorage())
+            .delete(storedFile.getStoredFileId());
 
         storedFileDao.delete(storedFile);
     }

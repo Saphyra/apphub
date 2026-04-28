@@ -21,7 +21,7 @@ spec:
         image: saphyra/apphub-service-feature-training:latest
         env:
           - name: SPRING_ACTIVE_PROFILE
-            value: server
+            value: server,develop
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

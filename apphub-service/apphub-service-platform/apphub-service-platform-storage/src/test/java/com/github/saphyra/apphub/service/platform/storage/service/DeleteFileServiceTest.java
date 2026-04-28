@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,29 +16,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class DeleteFileServiceTest {
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String FILE_NAME = "file-name";
 
     @Mock
     private StoredFileDao storedFileDao;
 
     @Mock
-    private FtpClientFactory ftpClientFactory;
-
-    @Mock
-    private ErrorReporterService errorReporterService;
-
-    @Mock
-    private UuidConverter uuidConverter;
+    private StorageClientProvider storageClientProvider;
 
     @InjectMocks
     private DeleteFileService underTest;
@@ -48,7 +37,7 @@ public class DeleteFileServiceTest {
     private StoredFile storedFile;
 
     @Mock
-    private FtpClientWrapper ftpClient;
+    private StorageClient storageClient;
 
     @Test
     public void forbiddenOperation() {
@@ -64,33 +53,13 @@ public class DeleteFileServiceTest {
     public void deleteFile() {
         given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
         given(storedFile.getUserId()).willReturn(USER_ID);
-        given(ftpClientFactory.create()).willReturn(ftpClient);
-        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);
-
-        underTest.deleteFile(USER_ID, STORED_FILE_ID);
-
-        verify(ftpClient).deleteFile(FILE_NAME);
-        verify(storedFileDao).delete(storedFile);
-        verifyNoInteractions(errorReporterService);
-        verify(ftpClient).close();
-    }
-
-    @Test
-    public void error() {
-        given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
-        given(storedFile.getUserId()).willReturn(USER_ID);
-        given(ftpClientFactory.create()).willReturn(ftpClient);
-        given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);
-        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
-        doThrow(new RuntimeException())
-            .when(ftpClient)
-            .deleteFile(FILE_NAME);
+        given(storedFile.getStorage()).willReturn(Storage.FTP);
+        given(storageClientProvider.getClientForType(Storage.FTP)).willReturn(storageClient);
 
         underTest.deleteFile(USER_ID, STORED_FILE_ID);
 
         verify(storedFileDao).delete(storedFile);
-        verify(errorReporterService).report(any(), any());
-        verify(ftpClient).close();
+        verify(storageClient).delete(STORED_FILE_ID);
     }
 }

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.platform.storage.service.store;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.platform.storage.config.StorageProperties;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.util.UUID;
 class StoredFileFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;
+    private final StorageProperties storageProperties;
 
     StoredFile create(UUID userId, String fileName, Long size) {
         return StoredFile.builder()
@@ -24,6 +26,7 @@ class StoredFileFactory {
             .fileUploaded(false)
             .fileName(fileName)
             .size(size)
+            .storage(storageProperties.getType())
             .build();
     }
 }

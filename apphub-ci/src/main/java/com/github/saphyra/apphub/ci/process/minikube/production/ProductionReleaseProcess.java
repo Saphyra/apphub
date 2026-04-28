@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
 import com.github.saphyra.apphub.ci.value.Constants;
+import com.github.saphyra.apphub.ci.value.Environment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,7 @@ public class ProductionReleaseProcess {
 
         minikubeScaleProcess.scale(Constants.NAMESPACE_NAME_PRODUCTION, 0);
 
-        minikubeNamespaceSetupTask.createNamespace(Constants.NAMESPACE_NAME_PRODUCTION);
+        minikubeNamespaceSetupTask.setupNamespace(Environment.PRODUCTION, Constants.NAMESPACE_NAME_PRODUCTION);
 
         minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
 

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.storage.ftp;
+package com.github.saphyra.apphub.service.platform.storage.client.ftp;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class FtpClientWrapper implements AutoCloseable {
     private final FTPClient client;
 
     @SneakyThrows
-    public FtpClientWrapper(FtpClientProperties properties) {
+    FtpClientWrapper(FtpClientProperties properties) {
         FTPClient client = new FTPClient();
 
         client.connect(properties.getServer(), properties.getPort());

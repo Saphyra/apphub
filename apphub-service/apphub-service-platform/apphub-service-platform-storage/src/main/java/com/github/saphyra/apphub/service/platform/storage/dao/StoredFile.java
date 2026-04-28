@@ -17,4 +17,5 @@ public class StoredFile {
     private final String fileName;
     private final long size;
     private boolean fileUploaded;
+    private Storage storage;
 }

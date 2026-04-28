@@ -35,11 +35,7 @@ public class StartProductionProxyProcess {
 
         portForwardTask.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeProdMainGatewayPort(), Constants.SERVICE_PORT);
 
-        LocalStartTask.builder()
-            .servicePinger(servicePinger)
-            .service(platformProperties.getProductionProxy())
-            .startupIndicator(startupIndicatorFactory.noOpIndicator())
-            .build()
+        new LocalStartTask(servicePinger, platformProperties.getProductionProxy(), startupIndicatorFactory.noOpIndicator())
             .run();
     }
 }

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.storage.ftp;
+package com.github.saphyra.apphub.service.platform.storage.client.ftp;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

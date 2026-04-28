@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.platform.storage.dao;
 
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,4 +27,6 @@ class StoredFileEntity {
     private String size;
     private LocalDateTime createdAt;
     private boolean fileUploaded;
+    @Enumerated(EnumType.STRING)
+    private Storage storage;
 }

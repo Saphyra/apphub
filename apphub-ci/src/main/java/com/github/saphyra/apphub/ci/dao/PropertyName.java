@@ -25,4 +25,7 @@ public enum PropertyName {
     BASH_FILE_LOCATION,
     REMOTE_SERVICE_STARTUP_COUNT_LIMIT,
     REMOTE_INTEGRATION_RETRY_COUNT,
+
+    //Service properties
+    S3_CONFIGURATION,
 }

@@ -23,7 +23,7 @@ spec:
         - name: FTP_CLIENT_USERNAME
           value: ftp_dev
         - name: SPRING_ACTIVE_PROFILE
-          value: server
+          value: server,develop
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

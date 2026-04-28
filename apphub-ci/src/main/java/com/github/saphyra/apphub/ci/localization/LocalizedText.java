@@ -85,6 +85,12 @@ public enum LocalizedText implements LocalizationProvider {
     PROVIDE_YES_OR_NO("Ervenytelen valasz. Igen/nem?", "Invalid answer. Yes/No?"),
     INTEGRATION_RETRY_COUNT("Integractios tesztek ujra probalasa (%s)", "Integration test retry count (%s)"),
     INTEGRATION_RETRY_COUNT_LABEL("Hanyszor probalja ujra a sikertelen teszteket?", "How many times should it retry failed tests?"),
+    S3_SETTINGS("S3 tarhely beallitasok", "S3 storage settings"),
+    SELECT_ENVIRONMENT("Valassz kornyezetet:", "Select environment:"),
+    S3_PROPERTIES_MENU("Tulajdonsag beallitasa a %s kornyezeten", "Set property for environment %s"),
+    S3_PROPERTY_INPUT_LABEL("Tulajdonsag %s erteke a %s kornyezeten:", "Value of property %s for environment %s:"),
+    S3_DELETE_ENVIRONMENT_SETTINGS("Kornyezet beallitasianak torlese", "Delete environment settings"),
+    S3_CONFIRM_ENVIRONMENT_DELETION("Biztosan torli a %s kornyezet beallitasait?", "Are you sure you want to delete settings of environment %s?"),
     ;
 
     private final String hu;

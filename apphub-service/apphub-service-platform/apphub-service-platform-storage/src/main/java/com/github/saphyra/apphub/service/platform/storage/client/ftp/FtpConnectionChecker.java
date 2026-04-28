@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.storage.ftp;
+package com.github.saphyra.apphub.service.platform.storage.client.ftp;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 @Profile("!test")
-public class FtpConnectionChecker {
+@FtpClientEnabled
+class FtpConnectionChecker {
     private final FtpClientFactory ftpClientFactory;
 
     @PostConstruct

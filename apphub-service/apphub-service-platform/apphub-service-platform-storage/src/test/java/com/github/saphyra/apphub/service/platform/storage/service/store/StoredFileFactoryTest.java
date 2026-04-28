@@ -2,6 +2,8 @@ package com.github.saphyra.apphub.service.platform.storage.service.store;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.service.platform.storage.config.StorageProperties;
+import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,6 +31,9 @@ public class StoredFileFactoryTest {
     @Mock
     private DateTimeUtil dateTimeUtil;
 
+    @Mock
+    private StorageProperties storageProperties;
+
     @InjectMocks
     private StoredFileFactory underTest;
 
@@ -36,6 +41,7 @@ public class StoredFileFactoryTest {
     public void create() {
         given(idGenerator.randomUuid()).willReturn(STORED_FILE_ID);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CREATED_AT);
+        given(storageProperties.getType()).willReturn(Storage.FTP);
 
         StoredFile result = underTest.create(USER_ID, FILE_NAME, SIZE);
 
@@ -45,5 +51,6 @@ public class StoredFileFactoryTest {
         assertThat(result.isFileUploaded()).isFalse();
         assertThat(result.getFileName()).isEqualTo(FILE_NAME);
         assertThat(result.getSize()).isEqualTo(SIZE);
+        assertThat(result.getStorage()).isEqualTo(Storage.FTP);
     }
 }

@@ -31,11 +31,7 @@ public class IntegrationServerStarter {
             process.waitFor();
 
             StartupIndicator startupIndicator = startupIndicatorFactory.noOpIndicator();
-            LocalStartTask.builder()
-                .servicePinger(servicePinger)
-                .service(integrationServer)
-                .startupIndicator(startupIndicator)
-                .build()
+            new LocalStartTask(servicePinger, integrationServer, startupIndicator)
                 .run();
         } else {
             log.info("Integration server is already running.");

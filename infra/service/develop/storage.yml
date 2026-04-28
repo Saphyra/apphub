@@ -23,7 +23,27 @@ spec:
         - name: FTP_CLIENT_USERNAME
           value: ftp_dev
         - name: SPRING_ACTIVE_PROFILE
-          value: server
+          value: server,develop
+        - name: S3_ENABLED
+          valueFrom:
+            secretKeyRef:
+              name: s3-configuration
+              key: S3_ENABLED
+        - name: S3_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: s3-configuration
+              key: S3_ACCESS_KEY_ID
+        - name: S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: s3-configuration
+              key: S3_SECRET_KEY
+        - name: S3_BUCKET_NAME
+          valueFrom:
+            secretKeyRef:
+              name: s3-configuration
+              key: S3_BUCKET_NAME
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

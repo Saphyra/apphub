@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.platform.storage.ftp;
+package com.github.saphyra.apphub.service.platform.storage.client.ftp;
 
 import lombok.Data;
 import lombok.ToString;
@@ -12,6 +12,7 @@ import jakarta.annotation.PostConstruct;
 @ToString(exclude = "password")
 @Slf4j
 @Data
+@FtpClientEnabled
 class FtpClientProperties {
     @Value("${ftp.client.server}")
     private String server;

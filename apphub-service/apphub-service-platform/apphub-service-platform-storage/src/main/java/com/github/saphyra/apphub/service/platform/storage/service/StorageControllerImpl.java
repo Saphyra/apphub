@@ -4,7 +4,9 @@ import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
+import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -46,22 +48,22 @@ public class StorageControllerImpl implements StorageController {
     @Override
     public ResponseEntity<StreamingResponseBody> downloadFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
         log.info("{} wants to query file {}", accessTokenHeader.getUserId(), storedFileId);
-        DownloadResult result = downloadFileService.downloadFile(accessTokenHeader.getUserId(), storedFileId);
+        BiWrapper<String, DownloadResult> result = downloadFileService.downloadFile(accessTokenHeader.getUserId(), storedFileId);
 
         StreamingResponseBody responseBody = outputStream -> {
 
             int numberOfBytesToWrite;
             byte[] data = new byte[4096];
-            while ((numberOfBytesToWrite = result.getInputStream().read(data, 0, data.length)) != -1) {
+            DownloadResult downloadResult = result.getEntity2();
+            while ((numberOfBytesToWrite = downloadResult.getInputStream().read(data, 0, data.length)) != -1) {
                 outputStream.write(data, 0, numberOfBytesToWrite);
             }
 
-            result.getInputStream().close();
-            result.getFtpClient().close();
+            downloadResult.close();
         };
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", result.getStoredFile().getFileName()))
+            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", result.getEntity1()))
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .body(responseBody);
     }

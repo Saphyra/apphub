@@ -78,22 +78,56 @@ public class StoredFileRepositoryTest {
     }
 
     @Test
-    void getAllView() {
+    void getViewsByStorage() {
         StoredFileEntity entity1 = StoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_1)
             .fileUploaded(true)
+            .storage(Storage.FTP)
             .build();
         underTest.save(entity1);
         StoredFileEntity entity2 = StoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_2)
             .fileUploaded(false)
+            .storage(Storage.FTP)
             .build();
         underTest.save(entity2);
+        StoredFileEntity entity3 = StoredFileEntity.builder()
+            .storedFileId(STORED_FILE_ID_3)
+            .fileUploaded(false)
+            .storage(Storage.S3)
+            .build();
+        underTest.save(entity3);
 
-        assertThat(underTest.getAllView())
+        assertThat(underTest.getViewsByStorage(Storage.FTP))
             .containsExactlyInAnyOrder(
                 new StoredFileView(STORED_FILE_ID_1, true),
                 new StoredFileView(STORED_FILE_ID_2, false)
             );
+    }
+
+    @Test
+    void deleteByStorageAndStoredFileIdIn() {
+        StoredFileEntity entity1 = StoredFileEntity.builder()
+            .storedFileId(STORED_FILE_ID_1)
+            .fileUploaded(true)
+            .storage(Storage.FTP)
+            .build();
+        underTest.save(entity1);
+        StoredFileEntity entity2 = StoredFileEntity.builder()
+            .storedFileId(STORED_FILE_ID_2)
+            .fileUploaded(false)
+            .storage(Storage.FTP)
+            .build();
+        underTest.save(entity2);
+        StoredFileEntity entity3 = StoredFileEntity.builder()
+            .storedFileId(STORED_FILE_ID_3)
+            .fileUploaded(false)
+            .storage(Storage.S3)
+            .build();
+        underTest.save(entity3);
+
+        underTest.deleteByStorageAndStoredFileIdIn(Storage.FTP, List.of(STORED_FILE_ID_1, STORED_FILE_ID_3));
+
+        assertThat(underTest.findAll()).containsExactly(entity2, entity3);
     }
 }

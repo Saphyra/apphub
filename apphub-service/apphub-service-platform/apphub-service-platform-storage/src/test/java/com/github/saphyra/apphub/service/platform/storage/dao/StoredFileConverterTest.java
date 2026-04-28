@@ -56,6 +56,7 @@ public class StoredFileConverterTest {
             .fileUploaded(true)
             .fileName(FILE_NAME)
             .size(SIZE)
+            .storage(Storage.S3)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -73,6 +74,7 @@ public class StoredFileConverterTest {
         assertThat(result.isFileUploaded()).isTrue();
         assertThat(result.getFileName()).isEqualTo(ENCRYPTED_FILE_NAME);
         assertThat(result.getSize()).isEqualTo(ENCRYPTED_SIZE);
+        assertThat(result.getStorage()).isEqualTo(Storage.S3);
     }
 
     @Test
@@ -84,6 +86,7 @@ public class StoredFileConverterTest {
             .fileUploaded(true)
             .fileName(ENCRYPTED_FILE_NAME)
             .size(ENCRYPTED_SIZE)
+            .storage(Storage.S3)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -101,5 +104,6 @@ public class StoredFileConverterTest {
         assertThat(result.isFileUploaded()).isTrue();
         assertThat(result.getFileName()).isEqualTo(FILE_NAME);
         assertThat(result.getSize()).isEqualTo(SIZE);
+        assertThat(result.getStorage()).isEqualTo(Storage.S3);
     }
 }

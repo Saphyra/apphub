@@ -1,10 +1,9 @@
-package com.github.saphyra.apphub.service.platform.storage.event;
+package com.github.saphyra.apphub.service.platform.storage.client.ftp;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileView;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
 import org.apache.commons.net.ftp.FTPFile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +18,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class FileCleanupEventProcessorTest {
+class FtpStorageCleanerTest {
     private static final String EXISTING_FILE_NAME_STRING = UUID.randomUUID().toString();
     private static final UUID NOT_FOUND_FILE_NAME = UUID.randomUUID();
     private static final String NOT_FOUND_FILE_NAME_STRING = NOT_FOUND_FILE_NAME.toString();
@@ -35,7 +34,7 @@ class FileCleanupEventProcessorTest {
     private UuidConverter uuidConverter;
 
     @InjectMocks
-    private FileCleanupEventProcessor underTest;
+    private FtpStorageCleaner underTest;
 
     @Mock
     private FtpClientWrapper client;
@@ -58,7 +57,7 @@ class FileCleanupEventProcessorTest {
     @Test
     void cleanup() {
         given(ftpClientFactory.create()).willReturn(client);
-        given(storedFileDao.getAllView()).willReturn(List.of(viewWithFile, viewWithNoFileUploaded, viewWithFileNotFound));
+        given(storedFileDao.getViewsByStorage(Storage.FTP)).willReturn(List.of(viewWithFile, viewWithNoFileUploaded, viewWithFileNotFound));
         given(viewWithFile.isFileUploaded()).willReturn(true);
         given(viewWithNoFileUploaded.isFileUploaded()).willReturn(false);
         given(viewWithFileNotFound.isFileUploaded()).willReturn(true);
@@ -74,7 +73,7 @@ class FileCleanupEventProcessorTest {
         underTest.cleanup();
 
         then(client).should().deleteFile(UNKNOWN_FILE_NAME);
-        then(storedFileDao).should().deleteAllById(List.of(NOT_FOUND_FILE_NAME));
+        then(storedFileDao).should().deleteByStorageAndIds(Storage.FTP, List.of(NOT_FOUND_FILE_NAME));
         then(client).should().close();
     }
 }

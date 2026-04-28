@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
 import com.github.saphyra.apphub.ci.utils.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DeployMode;
+import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -40,7 +41,7 @@ public class PreprodReleaseProcess {
 
         minikubeScaleProcess.scale(Constants.NAMESPACE_NAME_PREPROD, 0);
 
-        minikubeNamespaceSetupTask.createNamespace(Constants.NAMESPACE_NAME_PREPROD);
+        minikubeNamespaceSetupTask.setupNamespace(Environment.PREPROD, Constants.NAMESPACE_NAME_PREPROD);
 
         minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, 30);
 

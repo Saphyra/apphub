@@ -10,6 +10,7 @@
     Separate modules to etc/feature/platform in the frontend
     Move endpoints to their corresponding API lib / FE module
     index.js imports path from Endpoints
+    S3 integration
 
 ===TECHNICAL DEBTS===
     EliteBase

@@ -2,10 +2,14 @@ package com.github.saphyra.apphub.service.platform.storage.event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageEventController;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageCleaner;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -13,7 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StorageEventControllerImpl implements StorageEventController {
     private final DeleteAccountEventProcessor deleteAccountEventProcessor;
     private final StoredFileCleanupEventProcessor storedFileCleanupEventProcessor;
-    private final FileCleanupEventProcessor fileCleanupEventProcessor;
+    private final List<StorageCleaner> storageCleaners;
+    private final ExecutorServiceBean executorServiceBean;
 
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
@@ -29,6 +34,6 @@ public class StorageEventControllerImpl implements StorageEventController {
 
     @Override
     public void cleanupFiles() {
-        fileCleanupEventProcessor.cleanup();
+        storageCleaners.forEach(storageCleaner -> executorServiceBean.execute(storageCleaner::cleanup));
     }
 }
