@@ -1,0 +1,57 @@
+<html>
+<head>
+    <title>Production configure - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Production configure</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<form class="menu" action="/production/configure" method="POST">
+    <a href="/production">Back</a>
+
+    <ul>
+        <li>
+            <label>
+                Build thread count:
+                <input type="number" name="default_build_thread_count" th:value="${default_build_thread_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Integration test thread count:
+                <input type="number" name="integration_test_thread_count" th:value="${integration_test_thread_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Pre-create WebDrivers before starting integration tests:
+                <input type="number" name="pre_create_webdriver_count" th:value="${pre_create_webdriver_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Integration test retry limit:
+                <input type="number" name="integration_test_retry_count" th:value="${integration_test_retry_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Service startup limit:
+                <input type="number" name="service_startup_limit" th:value="${service_startup_limit}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Bash file location:
+                <input type="text" name="bash_file_location" th:value="${bash_file_location}"/>
+            </label>
+        </li>
+    </ul>
+
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

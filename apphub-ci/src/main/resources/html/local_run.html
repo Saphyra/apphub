@@ -1,0 +1,42 @@
+<html>
+<head>
+    <title>Local run - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Local run (<span th:text="${task_queue_size}"></span>)</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<ul class="menu">
+    <li><a href="/">Back</a></li>
+    <li><a href="/local-run/build">Build</a> - Builds the application and runs unit tests</li>
+    <li><a href="/local-run/start">Start</a> - Builds and starts the application</li>
+    <li>
+        <form action="/local-run/start-services" method="POST">
+            <button>Start services</button>
+            <input type="text" name="value" required placeholder="Service names" th:value="${latest_services}"/>
+            - Comma-separated list of service names to start
+        </form>
+    </li>
+    <li><a href="/local-run/run-tests">Run tests</a> - Runs all the integration tests</li>
+    <li>
+        <form action="/local-run/run-test-groups" method="POST">
+            <button>Run test groups</button>
+            <input type="text" name="value" required placeholder="Test groups" th:value="${latest_test_groups}"/>
+            - Comma-separated list of test group names to run
+        </form>
+    </li>
+    <li><a href="/local-run/stop">Stop</a> - Stops all the services</li>
+    <li>
+        <form action="/local-run/stop-service" method="POST">
+            <button>Stop services</button>
+            <input type="text" name="value" required placeholder="Service names" th:value="${latest_services}"/>
+            - Comma-separated list of service names to stop
+        </form>
+    </li>
+    <li><a href="/local-run/configure">Configure</a></li>
+</ul>
+</body>
+</html>

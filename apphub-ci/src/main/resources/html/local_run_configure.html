@@ -1,0 +1,76 @@
+<html>
+<head>
+    <title>Local run configure - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Local run configure</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<form class="menu" action="/local-run/configure" method="POST">
+    <a href="/local-run">Back</a>
+
+    <ul>
+        <li>
+            <label>
+                Deploy mode:
+                <select name="deploy_mode">
+                    <option value="DEFAULT" th:selected="${deploy_mode == 'DEFAULT'}">Default</option>
+                    <option value="SKIP_TESTS" th:selected="${deploy_mode == 'SKIP_TESTS'}">Skip unit tests</option>
+                    <option value="SKIP_BUILD" th:selected="${deploy_mode == 'SKIP_BUILD'}">Skip build</option>
+                </select>
+            </label>
+        </li>
+        <li>
+            <label>
+                Default build thread count:
+                <input type="number" name="default_build_thread_count" th:value="${default_build_thread_count}"/>
+            </label>
+            <label>
+                Skip tests build thread count:
+                <input type="number" name="skip_test_build_thread_count" th:value="${skip_test_build_thread_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Integration test thread count:
+                <input type="number" name="integration_test_thread_count" th:value="${integration_test_thread_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Pre-create WebDrivers before starting integration tests:
+                <input type="number" name="pre_create_webdriver_count" th:value="${pre_create_webdriver_count}"/>
+            </label>
+        </li>
+        <li>
+            <label>
+                Integration test retry limit:
+                <input type="number" name="integration_test_retry_count" th:value="${integration_test_retry_count}"/>
+            </label>
+        </li>
+        <li>
+            <fieldset>
+                <legend>Services</legend>
+                <div th:each="service : ${services}">
+                    <label>
+                        <input type="checkbox" th:name="'disabled_service_' + ${service}" th:checked="${!disabled_services.contains(service)}" th:value="${service}"/>
+                        <span th:text="${service}"></span>
+                    </label>
+                </div>
+            </fieldset>
+        </li>
+        <li>
+            <label>
+                Service startup limit:
+                <input type="number" name="service_startup_limit" th:value="${service_startup_limit}"/>
+            </label>
+        </li>
+    </ul>
+
+    <button type="submit">Save</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<html>
+<head>
+    <title>S3 Settings - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>S3 Settings for environment <span th:text="${environment}"></span></h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<div class="menu">
+    <div>
+        <a href="/settings">Back</a>
+    </div>
+    <form th:action="@{|/settings/s3/${environment}|}" method="POST">
+        <ul>
+            <li>
+                <label>
+                    <input type="checkbox" name="enabled" th:checked="${enabled}" value="true"/>
+                    Enabled
+                </label>
+            </li>
+            <li>
+                <label>
+                    Access key:
+                    <input type="text" name="access_key_id" th:value="${access_key_id}"/>
+                </label>
+            </li>
+            <li>
+                <label>
+                    Secret key:
+                    <input type="text" name="secret_key" th:value="${secret_key}"/>
+                </label>
+            </li>
+            <li>
+                <label>
+                    Bucket name:
+                    <input type="text" name="bucket_name" th:value="${bucket_name}"/>
+                </label>
+            </li>
+        </ul>
+
+        <input type="submit" value="Save"/>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+body{
+    background: black;
+    color: white;
+}
+
+.menu, .menu button, .menu input, .menu select{
+    font-size: 24px;
+}
+
+.menu li{
+    margin: 16px 0;
+}
+
+a, button, select{
+    color: white;
+    border: 3px outset white;
+    padding: 3px;
+}
+
+option{
+    background: black;
+}
+
+a{
+    text-decoration: none;
+}
+
+button, select{
+    background: transparent;
+}
+
+a:hover, button:hover{
+    border-color: red;
+}
+
+a:active, button:active{
+    border: 3px inset orange;
+}
+
+input{
+    color: white;
+    background: transparent;
+    border: 3px outset white;
+    outline: none;
+}
+
+input:focus{
+    border: 3px inset red;
+}
+
+form{
+    margin-bottom: 0;
+}
+
+.error{
+    color: red;
+}
+
+.success{
+    color: lime;
+}
+
+label{
+    display: block;
+}
+
+.menu input[type=checkbox]{
+    transform: scale(1.5);
+}
+
+fieldset{
+    display: inline-block;
+    margin: 10px 0;
+}

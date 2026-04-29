@@ -1,0 +1,43 @@
+<html>
+<head>
+    <title>Minikube - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Minikube (<span th:text="${task_queue_size}"></span>)</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<ul class="menu">
+    <li><a href="/">Back</a></li>
+    <li><a href="/minikube/start-vm">Start Virtual Machine</a></li>
+    <li><a href="/minikube/deploy">Deploy</a></li>
+    <li>
+        <form action="/minikube/deploy-services" method="POST">
+            <button>Deploy services</button>
+            <input type="text" name="value" required placeholder="Service names" th:value="${latest_services}"/>
+            - Comma-separated list of service names to start
+        </form>
+    </li>
+    <li><a href="/minikube/run-tests">Run tests</a> - Runs all the integration tests</li>
+    <li>
+        <form action="/minikube/run-test-groups" method="POST">
+            <button>Run test groups</button>
+            <input type="text" name="value" required placeholder="Test groups" th:value="${latest_test_groups}"/>
+            - Comma-separated list of test group names to run
+        </form>
+    </li>
+    <li><a href="/minikube/port-forward">Port forward</a> - Forwards the main-gateway to the host's <span th:text="${minikube_port}"></span> port</li>
+    <li><a href="/minikube/scale">Scale down</a></li>
+    <li>
+        <form action="/minikube/delete-namespace" method="GET">
+            <input type="checkbox" required />
+            <input type="submit" value="Delete namespace" />
+        </form>
+    </li>
+    <li><a href="/minikube/stop-vm">Stop Virtual Machine</a></li>
+    <li><a href="/minikube/configure">Configure</a></li>
+</ul>
+</body>
+</html>
