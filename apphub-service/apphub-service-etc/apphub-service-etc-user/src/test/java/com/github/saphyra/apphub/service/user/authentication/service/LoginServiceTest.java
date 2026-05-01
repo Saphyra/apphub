@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -60,7 +59,7 @@ public class LoginServiceTest {
     private User user;
 
     @Mock
-    private AccessToken accessToken;
+    private com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken;
 
     @Test
     public void userNotFound() {
@@ -107,7 +106,7 @@ public class LoginServiceTest {
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS);
 
-        verify(accessTokenProvider).set(AccessTokenHeader.builder().userId(USER_ID).build());
+        verify(accessTokenProvider).set(AccessToken.builder().userId(USER_ID).build());
         verify(accessTokenProvider).clear();
     }
 
@@ -138,11 +137,11 @@ public class LoginServiceTest {
             .rememberMe(null)
             .build();
 
-        AccessToken result = underTest.login(request);
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken result = underTest.login(request);
 
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
         verify(accessTokenDao).save(accessToken);
-        verify(accessTokenProvider).set(AccessTokenHeader.builder().userId(USER_ID).build());
+        verify(accessTokenProvider).set(AccessToken.builder().userId(USER_ID).build());
         verify(accessTokenProvider).clear();
 
         assertThat(result).isEqualTo(accessToken);

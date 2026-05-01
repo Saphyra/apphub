@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.queue;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,23 +29,23 @@ public class PlanetQueueControllerTest {
     private PlanetQueueController underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void setItemPriority() {
-        underTest.setItemPriority(new OneParamRequest<>(PRIORITY), PLANET_ID, TYPE, ITEM_ID, accessTokenHeader);
+        underTest.setItemPriority(new OneParamRequest<>(PRIORITY), PLANET_ID, TYPE, ITEM_ID, accessToken);
 
         verify(queueFacade).setPriority(USER_ID, PLANET_ID, TYPE, ITEM_ID, PRIORITY);
     }
 
     @Test
     public void cancelItem() {
-        underTest.cancelItem(PLANET_ID, TYPE, ITEM_ID, accessTokenHeader);
+        underTest.cancelItem(PLANET_ID, TYPE, ITEM_ID, accessToken);
 
         verify(queueFacade).cancelItem(USER_ID, PLANET_ID, TYPE, ITEM_ID);
     }

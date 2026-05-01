@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationCli
 import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
@@ -14,7 +14,6 @@ import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
@@ -100,25 +99,25 @@ public class AuthenticationControllerItTest {
     public void deleteExpiredAccessTokens() {
         LocalDateTime referenceDate = LocalDateTime.now(ZoneOffset.UTC);
 
-        AccessToken expiredNonPersistentAccessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken expiredNonPersistentAccessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)
             .lastAccess(referenceDate.minusDays(1).withNano(0))
             .build();
-        AccessToken validNonPersistentAccessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken validNonPersistentAccessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_2)
             .userId(USER_ID)
             .persistent(false)
             .lastAccess(referenceDate.plusHours(1).withNano(0))
             .build();
-        AccessToken expiredPersistentAccessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken expiredPersistentAccessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_3)
             .userId(USER_ID)
             .persistent(true)
             .lastAccess(referenceDate.minusYears(3).withNano(0))
             .build();
-        AccessToken validPersistentAccessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken validPersistentAccessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_4)
             .userId(USER_ID)
             .persistent(true)
@@ -142,7 +141,7 @@ public class AuthenticationControllerItTest {
     public void updateLastAccess() {
         LocalDateTime referenceDate = LocalDateTime.now(ZoneOffset.UTC);
 
-        AccessToken accessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)
@@ -237,7 +236,7 @@ public class AuthenticationControllerItTest {
     public void logout() {
         LocalDateTime referenceDate = LocalDateTime.now();
 
-        AccessToken accessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)
@@ -245,7 +244,7 @@ public class AuthenticationControllerItTest {
             .build();
         accessTokenDao.save(accessToken);
 
-        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+        AccessToken accessTokenHeader = AccessToken.builder()
             .userId(USER_ID)
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .build();
@@ -270,7 +269,7 @@ public class AuthenticationControllerItTest {
     public void getAccessTokenById_accessTokenExpired() {
         LocalDateTime referenceDate = LocalDateTime.now();
 
-        AccessToken accessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)
@@ -287,7 +286,7 @@ public class AuthenticationControllerItTest {
     public void getAccessTokenById() {
         LocalDateTime referenceDate = LocalDateTime.now(ZoneOffset.UTC);
 
-        AccessToken accessToken = AccessToken.builder()
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken = com.github.saphyra.apphub.service.user.authentication.dao.AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID_1)
             .userId(USER_ID)
             .persistent(false)

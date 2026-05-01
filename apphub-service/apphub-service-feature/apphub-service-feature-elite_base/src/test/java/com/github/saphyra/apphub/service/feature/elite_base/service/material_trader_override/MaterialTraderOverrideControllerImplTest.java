@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.material_tr
 
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.server.EliteBaseAccountController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.station.material_trader_override.MaterialTraderOverride;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.station.material_trader_override.MaterialTraderOverrideDao;
@@ -43,17 +43,17 @@ class MaterialTraderOverrideControllerImplTest {
     private CreateMaterialTraderOverrideRequest request;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private MaterialTraderOverride materialTraderOverride;
 
     @Test
     void createOverride() {
-        given(eliteBaseAccountController.isAdmin(accessTokenHeader)).willReturn(true);
+        given(eliteBaseAccountController.isAdmin(accessToken)).willReturn(true);
         given(materialTraderOverrideFactory.create(request, true)).willReturn(materialTraderOverride);
 
-        underTest.createOverride(request, accessTokenHeader);
+        underTest.createOverride(request, accessToken);
 
         then(createMaterialTraderOverrideRequestValidator).should().validate(request);
         then(materialTraderOverrideDao).should().save(materialTraderOverride);
@@ -64,7 +64,7 @@ class MaterialTraderOverrideControllerImplTest {
         given(materialTraderOverrideDao.findByIdValidated(STATION_ID)).willReturn(materialTraderOverride);
         given(materialTraderOverride.isVerified()).willReturn(true);
 
-        ExceptionValidator.validateNotLoggedException(() -> underTest.deleteOverride(STATION_ID, accessTokenHeader), HttpStatus.LOCKED, ErrorCode.INVALID_STATUS);
+        ExceptionValidator.validateNotLoggedException(() -> underTest.deleteOverride(STATION_ID, accessToken), HttpStatus.LOCKED, ErrorCode.INVALID_STATUS);
     }
 
     @Test
@@ -72,7 +72,7 @@ class MaterialTraderOverrideControllerImplTest {
         given(materialTraderOverrideDao.findByIdValidated(STATION_ID)).willReturn(materialTraderOverride);
         given(materialTraderOverride.isVerified()).willReturn(false);
 
-        underTest.deleteOverride(STATION_ID, accessTokenHeader);
+        underTest.deleteOverride(STATION_ID, accessToken);
 
         then(materialTraderOverrideDao).should().delete(materialTraderOverride);
     }
@@ -82,7 +82,7 @@ class MaterialTraderOverrideControllerImplTest {
         given(materialTraderOverrideDao.findByIdValidated(STATION_ID)).willReturn(materialTraderOverride);
         given(materialTraderOverride.isVerified()).willReturn(true);
 
-        ExceptionValidator.validateNotLoggedException(() -> underTest.verifyOverride(STATION_ID, accessTokenHeader), HttpStatus.LOCKED, ErrorCode.INVALID_STATUS);
+        ExceptionValidator.validateNotLoggedException(() -> underTest.verifyOverride(STATION_ID, accessToken), HttpStatus.LOCKED, ErrorCode.INVALID_STATUS);
     }
 
     @Test
@@ -90,7 +90,7 @@ class MaterialTraderOverrideControllerImplTest {
         given(materialTraderOverrideDao.findByIdValidated(STATION_ID)).willReturn(materialTraderOverride);
         given(materialTraderOverride.isVerified()).willReturn(false);
 
-        underTest.verifyOverride(STATION_ID, accessTokenHeader);
+        underTest.verifyOverride(STATION_ID, accessToken);
 
         then(materialTraderOverride).should().setVerified(true);
         then(materialTraderOverrideDao).should().save(materialTraderOverride);

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.lobby.server.SkyXploreLob
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyViewForPage;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
@@ -39,74 +39,74 @@ public class SkyXploreLobbyControllerImpl implements SkyXploreLobbyController {
     private final GameLoadedService gameLoadedService;
 
     @Override
-    public OneParamResponse<Boolean> isUserInLobby(AccessTokenHeader accessTokenHeader) {
-        boolean isInLobby = lobbyDao.findByUserId(accessTokenHeader.getUserId())
+    public OneParamResponse<Boolean> isUserInLobby(AccessToken accessToken) {
+        boolean isInLobby = lobbyDao.findByUserId(accessToken.getUserId())
             .isPresent();
 
-        log.info("{} is in lobby: {}", accessTokenHeader.getUserId(), isInLobby);
+        log.info("{} is in lobby: {}", accessToken.getUserId(), isInLobby);
 
         return new OneParamResponse<>(isInLobby);
     }
 
     @Override
-    public void createLobby(OneParamRequest<String> lobbyName, AccessTokenHeader accessTokenHeader) {
-        log.info("Creating lobby for user {} if not exists", accessTokenHeader.getUserId());
-        lobbyCreationService.createNew(accessTokenHeader.getUserId(), lobbyName.getValue());
+    public void createLobby(OneParamRequest<String> lobbyName, AccessToken accessToken) {
+        log.info("Creating lobby for user {} if not exists", accessToken.getUserId());
+        lobbyCreationService.createNew(accessToken.getUserId(), lobbyName.getValue());
     }
 
     @Override
-    public LobbyViewForPage lobbyForPage(AccessTokenHeader accessTokenHeader) {
-        log.info("Checking if user {} is in lobby...", accessTokenHeader.getUserId());
+    public LobbyViewForPage lobbyForPage(AccessToken accessToken) {
+        log.info("Checking if user {} is in lobby...", accessToken.getUserId());
 
-        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
+        Lobby lobby = lobbyDao.findByUserIdValidated(accessToken.getUserId());
         return LobbyViewForPage.builder()
             .lobbyName(lobby.getLobbyName())
-            .isHost(accessTokenHeader.getUserId().equals(lobby.getHost()))
+            .isHost(accessToken.getUserId().equals(lobby.getHost()))
             .lobbyType(lobby.getType().name())
-            .ownUserId(accessTokenHeader.getUserId())
+            .ownUserId(accessToken.getUserId())
             .build();
     }
 
     @Override
-    public void exitFromLobby(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to exit from lobby", accessTokenHeader.getUserId());
-        exitFromLobbyService.exit(accessTokenHeader.getUserId());
+    public void exitFromLobby(AccessToken accessToken) {
+        log.info("{} wants to exit from lobby", accessToken.getUserId());
+        exitFromLobbyService.exit(accessToken.getUserId());
     }
 
     @Override
-    public void inviteToLobby(UUID friendId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to invite {} to lobby.", accessTokenHeader.getUserId(), friendId);
-        invitationService.invite(accessTokenHeader, friendId);
+    public void inviteToLobby(UUID friendId, AccessToken accessToken) {
+        log.info("{} wants to invite {} to lobby.", accessToken.getUserId(), friendId);
+        invitationService.invite(accessToken, friendId);
     }
 
     @Override
-    public void acceptInvitation(UUID invitorId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to join to lobby of {}", accessTokenHeader.getUserId(), invitorId);
-        joinToLobbyService.acceptInvitation(accessTokenHeader.getUserId(), invitorId);
+    public void acceptInvitation(UUID invitorId, AccessToken accessToken) {
+        log.info("{} wants to join to lobby of {}", accessToken.getUserId(), invitorId);
+        joinToLobbyService.acceptInvitation(accessToken.getUserId(), invitorId);
     }
 
     @Override
-    public List<LobbyPlayerResponse> getPlayersOfLobby(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the players of his lobby.", accessTokenHeader.getUserId());
-        return lobbyPlayerQueryService.getPlayers(accessTokenHeader.getUserId());
+    public List<LobbyPlayerResponse> getPlayersOfLobby(AccessToken accessToken) {
+        log.info("{} wants to know the players of his lobby.", accessToken.getUserId());
+        return lobbyPlayerQueryService.getPlayers(accessToken.getUserId());
     }
 
     @Override
-    public void startGame(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to start the game.", accessTokenHeader.getUserId());
-        startGameService.startGame(accessTokenHeader.getUserId());
+    public void startGame(AccessToken accessToken) {
+        log.info("{} wants to start the game.", accessToken.getUserId());
+        startGameService.startGame(accessToken.getUserId());
     }
 
     @Override
-    public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his active friends", accessTokenHeader.getUserId());
-        return activeFriendsService.getActiveFriends(accessTokenHeader);
+    public List<ActiveFriendResponse> getActiveFriends(AccessToken accessToken) {
+        log.info("{} wants to know his active friends", accessToken.getUserId());
+        return activeFriendsService.getActiveFriends(accessToken);
     }
 
     @Override
-    public void loadGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to load game {}", accessTokenHeader.getUserId(), gameId);
-        lobbyCreationService.createForExistingGame(accessTokenHeader.getUserId(), gameId);
+    public void loadGame(UUID gameId, AccessToken accessToken) {
+        log.info("{} wants to load game {}", accessToken.getUserId(), gameId);
+        lobbyCreationService.createForExistingGame(accessToken.getUserId(), gameId);
     }
 
     @Override

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.UUID;
 
 @FeignClient(name = "user-authentication", url = "${serviceUrls.user}")
+//TODO delete
+@Deprecated(forRemoval = true)
 public interface UserAuthenticationClient {
     @RequestMapping(method = RequestMethod.GET, value = UserEndpoints.USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID)
     InternalAccessTokenResponse getAccessTokenById(@PathVariable("accessTokenId") UUID accessTokenId, @RequestHeader(Constants.LOCALE_HEADER) String locale);

@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authorization
+  labels:
+    app: authorization
+    type: spring-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: authorization
+  template:
+    metadata:
+      labels:
+        serviceType: spring-app
+        name: authorization
+    spec:
+      containers:
+        - name: authorization
+          image: saphyra/apphub-service-platform-authorization:latest
+          env:
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,preprod
+            - name: PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: authorization-certificate
+                  key: PRIVATE_KEY
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: authorization-certificate
+                  key: PUBLIC_KEY
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 500Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authorization
+  labels:
+    app: authorization
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    name: authorization

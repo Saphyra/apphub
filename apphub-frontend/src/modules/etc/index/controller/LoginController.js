@@ -20,7 +20,7 @@ const login = async (userIdentifier, password, rememberMe) => {
     const loginResponse = await LOGIN.createRequest(body)
         .send();
 
-    setCookie("access-token", loginResponse.accessTokenId, loginResponse.expirationDays);
+    setCookie("access-token", loginResponse.accessToken.jwt, loginResponse.accessToken.expiration, loginResponse.accessToken.path);
     //Clear sessionStorage so stored values of a different user does not cause problems
     if (sessionStorage.userIdentifier !== userIdentifier) {
         sessionStorage.clear();

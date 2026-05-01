@@ -9,6 +9,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true) //TODO delete
 class MessageAssembler {
     String assembleMessage(String localizedMessage, Map<String, String> params) {
         String result = localizedMessage;

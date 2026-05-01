@@ -12,6 +12,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Deprecated(forRemoval = true) //TODO delete
 public class InternalAccessTokenResponse {
     private UUID accessTokenId;
     private UUID userId;

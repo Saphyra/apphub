@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.pin.PinGroupResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.pin.PinService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupCreationService;
@@ -59,7 +59,7 @@ class PinControllerImplTest {
     private PinControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private NotebookView notebookView;
@@ -69,12 +69,12 @@ class PinControllerImplTest {
 
     @BeforeEach
     void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void pinListItem() {
-        underTest.pinListItem(LIST_ITEM_ID, new OneParamRequest<>(true), accessTokenHeader);
+        underTest.pinListItem(LIST_ITEM_ID, new OneParamRequest<>(true), accessToken);
 
         verify(pinService).pinListItem(LIST_ITEM_ID, true);
     }
@@ -83,7 +83,7 @@ class PinControllerImplTest {
     public void getPinnedItems() {
         given(pinService.getPinnedItems(USER_ID, PIN_GROUP_ID)).willReturn(Arrays.asList(notebookView));
 
-        List<NotebookView> result = underTest.getPinnedItems(PIN_GROUP_ID, accessTokenHeader);
+        List<NotebookView> result = underTest.getPinnedItems(PIN_GROUP_ID, accessToken);
 
         assertThat(result).containsExactly(notebookView);
     }
@@ -92,7 +92,7 @@ class PinControllerImplTest {
     void createPinGroup() {
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
-        assertThat(underTest.createPinGroup(new OneParamRequest<>(PIN_GROUP_NAME), accessTokenHeader)).containsExactly(pinGroupResponse);
+        assertThat(underTest.createPinGroup(new OneParamRequest<>(PIN_GROUP_NAME), accessToken)).containsExactly(pinGroupResponse);
 
         then(pinGroupCreationService).should().create(USER_ID, PIN_GROUP_NAME);
     }
@@ -101,14 +101,14 @@ class PinControllerImplTest {
     void getPinGroups() {
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
-        assertThat(underTest.getPinGroups(accessTokenHeader)).containsExactly(pinGroupResponse);
+        assertThat(underTest.getPinGroups(accessToken)).containsExactly(pinGroupResponse);
     }
 
     @Test
     void renamePinGroup() {
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
-        assertThat(underTest.renamePinGroup(new OneParamRequest<>(PIN_GROUP_NAME), PIN_GROUP_ID, accessTokenHeader)).containsExactly(pinGroupResponse);
+        assertThat(underTest.renamePinGroup(new OneParamRequest<>(PIN_GROUP_NAME), PIN_GROUP_ID, accessToken)).containsExactly(pinGroupResponse);
 
         then(pinGroupRenameService).should().rename(PIN_GROUP_ID, PIN_GROUP_NAME);
     }
@@ -117,7 +117,7 @@ class PinControllerImplTest {
     void deletePinGroup() {
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
-        assertThat(underTest.deletePinGroup(PIN_GROUP_ID, accessTokenHeader)).containsExactly(pinGroupResponse);
+        assertThat(underTest.deletePinGroup(PIN_GROUP_ID, accessToken)).containsExactly(pinGroupResponse);
 
         then(pinGroupDeletionService).should().delete(PIN_GROUP_ID);
     }
@@ -126,7 +126,7 @@ class PinControllerImplTest {
     void addItemToPinGroup() {
         given(pinService.getPinnedItems(USER_ID, PIN_GROUP_ID)).willReturn(Arrays.asList(notebookView));
 
-        assertThat(underTest.addItemToPinGroup(PIN_GROUP_ID, LIST_ITEM_ID, accessTokenHeader)).containsExactly(notebookView);
+        assertThat(underTest.addItemToPinGroup(PIN_GROUP_ID, LIST_ITEM_ID, accessToken)).containsExactly(notebookView);
 
         then(pinGroupItemService).should().addItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
     }
@@ -135,7 +135,7 @@ class PinControllerImplTest {
     void removeItemFromPinGroup() {
         given(pinService.getPinnedItems(USER_ID, PIN_GROUP_ID)).willReturn(Arrays.asList(notebookView));
 
-        assertThat(underTest.removeItemFromPinGroup(PIN_GROUP_ID, LIST_ITEM_ID, accessTokenHeader)).containsExactly(notebookView);
+        assertThat(underTest.removeItemFromPinGroup(PIN_GROUP_ID, LIST_ITEM_ID, accessToken)).containsExactly(notebookView);
 
         then(pinGroupItemService).should().removeItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
     }
@@ -144,7 +144,7 @@ class PinControllerImplTest {
     void pinGroupOpened(){
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
-        assertThat(underTest.pinGroupOpened(PIN_GROUP_ID,  accessTokenHeader)).containsExactly(pinGroupResponse);
+        assertThat(underTest.pinGroupOpened(PIN_GROUP_ID, accessToken)).containsExactly(pinGroupResponse);
 
         then(pinGroupUpdateService).should().setLastOpened(PIN_GROUP_ID);
     }

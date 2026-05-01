@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.common;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
@@ -45,8 +45,8 @@ public class CheckPasswordService {
                     if (user.getPasswordFailureCount() % passwordProperties.getLockAccountFailures() == 0) {
                         user.setLockedUntil(dateTimeUtil.getCurrentDateTime().plusMinutes(passwordProperties.getLockedMinutes()));
 
-                        AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
-                        logoutService.logout(accessTokenHeader.getAccessTokenId(), userId);
+                        AccessToken accessToken = accessTokenProvider.get();
+                        logoutService.logout(accessToken.getAccessTokenId(), userId); //TODO proper logout
 
                         throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, "Incorrect password. Account locked.");
                     }

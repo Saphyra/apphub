@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.service.power;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.star_system_data.Power;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.star_system_data.PowerplayState;
 import org.junit.jupiter.api.Test;
@@ -17,15 +17,15 @@ class PowerControllerImplTest {
     private PowerControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     void getPowers() {
-        assertThat(underTest.getPowers(accessTokenHeader)).hasSize(Power.values().length);
+        assertThat(underTest.getPowers(accessToken)).hasSize(Power.values().length);
     }
 
     @Test
     void getPowerplayStates() {
-        assertThat(underTest.getPowerplayStates(accessTokenHeader)).hasSize(PowerplayState.values().length);
+        assertThat(underTest.getPowerplayStates(accessToken)).hasSize(PowerplayState.values().length);
     }
 }

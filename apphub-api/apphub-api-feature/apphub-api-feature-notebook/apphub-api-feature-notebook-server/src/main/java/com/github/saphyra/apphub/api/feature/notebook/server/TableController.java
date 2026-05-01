@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableReque
 import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.NotebookEndpoints;
@@ -22,20 +22,20 @@ import java.util.UUID;
 
 public interface TableController {
     @RequestMapping(method = RequestMethod.PUT, path = NotebookEndpoints.NOTEBOOK_CREATE_TABLE)
-    List<TableFileUploadResponse> createTable(@RequestBody CreateTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<TableFileUploadResponse> createTable(@RequestBody CreateTableRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.POST, path = NotebookEndpoints.NOTEBOOK_EDIT_TABLE)
-    EditTableResponse editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    EditTableResponse editTable(@RequestBody EditTableRequest request, @PathVariable(name = "listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.GET, path = NotebookEndpoints.NOTEBOOK_GET_TABLE)
-    TableResponse getTable(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    TableResponse getTable(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(path = NotebookEndpoints.NOTEBOOK_TABLE_SET_ROW_STATUS)
-    void setRowStatus(@PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void setRowStatus(@PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(NotebookEndpoints.NOTEBOOK_TABLE_DELETE_CHECKED)
-    TableResponse deleteCheckedRows(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    TableResponse deleteCheckedRows(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS)
-    void setCheckboxColumnStatus(@PathVariable("columnId") UUID columnId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void setCheckboxColumnStatus(@PathVariable("columnId") UUID columnId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

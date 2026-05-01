@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
 import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
-import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -53,7 +53,7 @@ public class UserSettingLocaleResolver {
         return Optional.ofNullable(cookies.getFirst(ACCESS_TOKEN_COOKIE))
             .map(HttpCookie::getValue)
             .flatMap(accessTokenQueryService::getAccessToken)
-            .map(InternalAccessTokenResponse::getUserId);
+            .map(AccessToken::getUserId);
     }
 
     public void invalidate(MultiValueMap<String, HttpCookie> cookies) {

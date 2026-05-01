@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.Er
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsRequest;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsResponse;
 import com.github.saphyra.apphub.api.etc.admin_panel.server.ErrorReporterController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportStatus;
@@ -39,28 +39,28 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     }
 
     @Override
-    public GetErrorReportsResponse getErrorReports(GetErrorReportsRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query the errorReports with parameters {}", accessTokenHeader.getUserId(), request);
+    public GetErrorReportsResponse getErrorReports(GetErrorReportsRequest request, AccessToken accessToken) {
+        log.info("{} wants to query the errorReports with parameters {}", accessToken.getUserId(), request);
 
         return errorReportOverviewQueryService.query(request);
     }
 
     @Override
     @Transactional
-    public void deleteErrorReports(List<UUID> ids, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete error reports {}}", accessTokenHeader.getUserId(), ids);
+    public void deleteErrorReports(List<UUID> ids, AccessToken accessToken) {
+        log.info("{} wants to delete error reports {}}", accessToken.getUserId(), ids);
         ids.forEach(errorReportDao::deleteById);
     }
 
     @Override
-    public void markErrorReports(List<UUID> ids, String status, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change the status of errorReports {} to {}", accessTokenHeader.getUserId(), ids, status);
+    public void markErrorReports(List<UUID> ids, String status, AccessToken accessToken) {
+        log.info("{} wants to change the status of errorReports {} to {}", accessToken.getUserId(), ids, status);
         markErrorReportService.mark(ids, status);
     }
 
     @Override
-    public ErrorReportResponse getErrorReport(UUID id, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query errorReport {}", accessTokenHeader.getUserId(), id);
+    public ErrorReportResponse getErrorReport(UUID id, AccessToken accessToken) {
+        log.info("{} wants to query errorReport {}", accessToken.getUserId(), id);
         ErrorReport errorReport = errorReportDetailsQueryService.findById(id);
         return ErrorReportResponse.builder()
             .id(errorReport.getId())
@@ -75,14 +75,14 @@ public class ErrorReporterControllerImpl implements ErrorReporterController {
     }
 
     @Override
-    public void deleteReadErrorReports(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete read error reports.", accessTokenHeader.getUserId());
+    public void deleteReadErrorReports(AccessToken accessToken) {
+        log.info("{} wants to delete read error reports.", accessToken.getUserId());
         errorReportDao.deleteByStatus(ErrorReportStatus.READ);
     }
 
     @Override
-    public void deleteAll(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete all error reports.", accessTokenHeader.getUserId());
+    public void deleteAll(AccessToken accessToken) {
+        log.info("{} wants to delete all error reports.", accessToken.getUserId());
         errorReportDao.deleteAllExceptStatus(List.of(ErrorReportStatus.MARKED));
     }
 }

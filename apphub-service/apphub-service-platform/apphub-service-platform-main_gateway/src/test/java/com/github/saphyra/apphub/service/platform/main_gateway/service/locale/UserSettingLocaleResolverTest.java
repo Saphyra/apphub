@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.locale;
 
 import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
-import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +47,7 @@ public class UserSettingLocaleResolverTest {
     private HttpCookie cookie;
 
     @Mock
-    private InternalAccessTokenResponse accessTokenResponse;
+    private AccessToken accessTokenResponse;
 
     private final MultiValueMap<String, HttpCookie> cookies = new LinkedMultiValueMap<>();
 

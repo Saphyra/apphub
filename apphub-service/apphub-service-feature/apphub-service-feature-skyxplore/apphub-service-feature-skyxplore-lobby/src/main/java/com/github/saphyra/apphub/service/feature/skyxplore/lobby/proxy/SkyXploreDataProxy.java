@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreData
 import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
@@ -25,9 +25,9 @@ public class SkyXploreDataProxy {
     private final LocaleProvider localeProvider;
     private final SkyXploreSavedGameClient savedGameClient;
 
-    public List<FriendshipResponse> getFriends(AccessTokenHeader accessTokenHeader) {
+    public List<FriendshipResponse> getFriends(AccessToken accessToken) {
         return dataFriendClient.getFriends(
-            accessTokenHeaderConverter.convertDomain(accessTokenHeader),
+            accessTokenHeaderConverter.convertDomain(accessToken),
             localeProvider.getOrDefault()
         );
     }

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.data.service.account.LanguageService;
 import org.junit.jupiter.api.Test;
@@ -27,13 +27,13 @@ public class LanguageControllerImplTest {
     private LanguageControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void changeLanguage() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.changeLanguage(accessTokenHeader, new OneParamRequest<>(LOCALE));
+        underTest.changeLanguage(accessToken, new OneParamRequest<>(LOCALE));
 
         verify(languageService).changeLanguage(USER_ID, LOCALE);
     }

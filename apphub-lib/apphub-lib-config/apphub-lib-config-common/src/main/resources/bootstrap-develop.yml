@@ -1,3 +1,6 @@
 spring:
   datasource:
     url: jdbc:postgresql://postgres:5432/postgres?ApplicationName=${spring.application.name}
+
+authorization:
+  issuer: apphub-develop

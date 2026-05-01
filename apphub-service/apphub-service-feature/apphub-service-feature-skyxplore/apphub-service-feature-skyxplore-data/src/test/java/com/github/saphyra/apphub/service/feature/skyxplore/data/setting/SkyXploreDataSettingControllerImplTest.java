@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.setting;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingIdentifier;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.setting.service.CreateOrUpdateSettingService;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.setting.service.DeleteSettingService;
@@ -40,19 +40,19 @@ class SkyXploreDataSettingControllerImplTest {
     private SettingModel settingModel;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private SettingIdentifier settingIdentifier;
 
     @BeforeEach
     void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     void createOrUpdateSetting() {
-        underTest.createOrUpdateSetting(settingModel, accessTokenHeader);
+        underTest.createOrUpdateSetting(settingModel, accessToken);
 
         then(createOrUpdateSettingService).should().createOrUpdate(USER_ID, settingModel);
     }
@@ -61,14 +61,14 @@ class SkyXploreDataSettingControllerImplTest {
     void getSetting() {
         given(settingQueryService.getSetting(USER_ID, settingIdentifier)).willReturn(settingModel);
 
-        assertThat(underTest.getSetting(settingIdentifier, accessTokenHeader)).returns(settingModel, OneParamResponse::getValue);
+        assertThat(underTest.getSetting(settingIdentifier, accessToken)).returns(settingModel, OneParamResponse::getValue);
     }
 
     @Test
     void deleteSetting() {
         given(settingQueryService.getSetting(USER_ID, settingIdentifier)).willReturn(settingModel);
 
-        assertThat(underTest.deleteSetting(settingIdentifier, accessTokenHeader)).returns(settingModel, OneParamResponse::getValue);
+        assertThat(underTest.deleteSetting(settingIdentifier, accessToken)).returns(settingModel, OneParamResponse::getValue);
 
         then(deleteSettingService).should().delete(USER_ID, settingIdentifier);
     }

@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistR
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
 import com.github.saphyra.apphub.api.feature.notebook.server.ChecklistController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemAdditionService;
@@ -38,60 +38,60 @@ public class ChecklistControllerImpl implements ChecklistController {
     private final ChecklistItemAdditionService checklistItemAdditionService;
 
     @Override
-    public OneParamResponse<UUID> createChecklist(CreateChecklistRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a new checklist.", accessTokenHeader.getUserId());
-        UUID listItemId = checklistCreationService.create(accessTokenHeader.getUserId(), request);
+    public OneParamResponse<UUID> createChecklist(CreateChecklistRequest request, AccessToken accessToken) {
+        log.info("{} wants to create a new checklist.", accessToken.getUserId());
+        UUID listItemId = checklistCreationService.create(accessToken.getUserId(), request);
         return new OneParamResponse<>(listItemId);
     }
 
     @Override
-    public ChecklistResponse editChecklist(EditChecklistRequest request, UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to edit checklist {}", accessTokenHeader.getUserId(), listItemId);
-        return editChecklistService.edit(accessTokenHeader.getUserId(), listItemId, request);
+    public ChecklistResponse editChecklist(EditChecklistRequest request, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to edit checklist {}", accessToken.getUserId(), listItemId);
+        return editChecklistService.edit(accessToken.getUserId(), listItemId, request);
     }
 
     @Override
-    public ChecklistResponse getChecklist(UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query checklist {}", accessTokenHeader.getUserId(), listItemId);
+    public ChecklistResponse getChecklist(UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to query checklist {}", accessToken.getUserId(), listItemId);
         return checklistQueryService.getChecklistResponse(listItemId);
     }
 
     @Override
-    public void updateStatus(OneParamRequest<Boolean> request, UUID checklistItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change status of checklistItem {}", accessTokenHeader.getUserId(), checklistItemId);
+    public void updateStatus(OneParamRequest<Boolean> request, UUID checklistItemId, AccessToken accessToken) {
+        log.info("{} wants to change status of checklistItem {}", accessToken.getUserId(), checklistItemId);
         checklistItemStatusUpdateService.updateStatus(checklistItemId, request.getValue());
     }
 
     @Override
-    public void deleteChecklistItem(UUID checklistItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete checklistItem {}", accessTokenHeader.getUserId(), checklistItemId);
+    public void deleteChecklistItem(UUID checklistItemId, AccessToken accessToken) {
+        log.info("{} wants to delete checklistItem {}", accessToken.getUserId(), checklistItemId);
         checklistItemDeletionService.deleteChecklistItem(checklistItemId);
     }
 
     @Override
-    public ChecklistResponse deleteCheckedItems(UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete checked items of checklist {}", accessTokenHeader.getUserId(), listItemId);
+    public ChecklistResponse deleteCheckedItems(UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to delete checked items of checklist {}", accessToken.getUserId(), listItemId);
         return deleteCheckedItemsOfChecklistService.deleteCheckedItems(listItemId);
     }
 
     @Override
-    public ChecklistResponse orderItems(UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to order items of checklist {}", accessTokenHeader.getUserId(), listItemId);
+    public ChecklistResponse orderItems(UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to order items of checklist {}", accessToken.getUserId(), listItemId);
         return orderChecklistItemsService.orderItems(listItemId);
     }
 
     @Override
-    public void editChecklistItem(OneParamRequest<String> content, UUID checklistItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to modify checklist item {}", accessTokenHeader.getUserId(), checklistItemId);
+    public void editChecklistItem(OneParamRequest<String> content, UUID checklistItemId, AccessToken accessToken) {
+        log.info("{} wants to modify checklist item {}", accessToken.getUserId(), checklistItemId);
         checklistItemContentUpdateService.updateContent(checklistItemId, content.getValue());
     }
 
     @Override
-    public ChecklistResponse addChecklistItem(AddChecklistItemRequest request, UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add new item to checklist {}", accessTokenHeader.getUserId(), listItemId);
+    public ChecklistResponse addChecklistItem(AddChecklistItemRequest request, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to add new item to checklist {}", accessToken.getUserId(), listItemId);
 
-        checklistItemAdditionService.addChecklistItem(accessTokenHeader.getUserId(), listItemId, request);
+        checklistItemAdditionService.addChecklistItem(accessToken.getUserId(), listItemId, request);
 
-        return getChecklist(listItemId, accessTokenHeader);
+        return getChecklist(listItemId, accessToken);
     }
 }

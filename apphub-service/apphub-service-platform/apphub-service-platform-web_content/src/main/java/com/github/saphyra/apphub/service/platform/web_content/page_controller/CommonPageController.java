@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.web_content.page_controller;
 
 import com.github.saphyra.apphub.api.feature.community.model.response.CommunityEndpoints;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 public class CommonPageController {
     @GetMapping(CommunityEndpoints.COMMUNITY_PAGE)
-    ModelAndView community(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader) {
-        log.info("Community page is called by {}", accessTokenHeader.getUserId());
+    ModelAndView community(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken) {
+        log.info("Community page is called by {}", accessToken.getUserId());
         ModelAndView mav = new ModelAndView("community/community");
-        mav.addObject("userId", accessTokenHeader.getUserId());
+        mav.addObject("userId", accessToken.getUserId());
         return mav;
     }
 }

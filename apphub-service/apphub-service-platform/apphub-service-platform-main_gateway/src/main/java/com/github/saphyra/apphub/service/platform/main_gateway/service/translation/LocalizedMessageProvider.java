@@ -9,6 +9,7 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
+@Deprecated(forRemoval = true) //TODO delete
 public class LocalizedMessageProvider {
     private final LocalizationClient localizationApi;
     private final MessageAssembler messageAssembler;

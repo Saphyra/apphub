@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.community.model.response.group.Grou
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupListResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberRoleRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.feature.community.model.response.CommunityEndpoints;
@@ -22,35 +22,35 @@ import java.util.UUID;
 
 public interface GroupController {
     @GetMapping(CommunityEndpoints.COMMUNITY_GET_GROUPS)
-    List<GroupListResponse> getGroups(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<GroupListResponse> getGroups(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PutMapping(CommunityEndpoints.COMMUNITY_GROUP_CREATE)
-    GroupListResponse createGroup(@RequestBody OneParamRequest<String> groupName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GroupListResponse createGroup(@RequestBody OneParamRequest<String> groupName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CommunityEndpoints.COMMUNITY_GROUP_DELETE)
-    void deleteGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CommunityEndpoints.COMMUNITY_GROUP_CHANGE_OWNER)
-    void changeOwner(@RequestBody OneParamRequest<UUID> groupMemberId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void changeOwner(@RequestBody OneParamRequest<UUID> groupMemberId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CommunityEndpoints.COMMUNITY_GROUP_RENAME)
-    GroupListResponse renameGroup(@RequestBody OneParamRequest<String> groupName, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GroupListResponse renameGroup(@RequestBody OneParamRequest<String> groupName, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CommunityEndpoints.COMMUNITY_GROUP_CHANGE_INVITATION_TYPE)
-    GroupListResponse changeInvitationType(@RequestBody OneParamRequest<GroupInvitationType> invitationType, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GroupListResponse changeInvitationType(@RequestBody OneParamRequest<GroupInvitationType> invitationType, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CommunityEndpoints.COMMUNITY_GROUP_GET_MEMBERS)
-    List<GroupMemberResponse> getMembersOfGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<GroupMemberResponse> getMembersOfGroup(@PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CommunityEndpoints.COMMUNITY_GROUP_SEARCH_MEMBER_CANDIDATES)
-    List<SearchResultItem> searchMemberCandidates(@RequestBody OneParamRequest<String> queryString, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SearchResultItem> searchMemberCandidates(@RequestBody OneParamRequest<String> queryString, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PutMapping(CommunityEndpoints.COMMUNITY_GROUP_CREATE_MEMBER)
-    GroupMemberResponse createMember(@RequestBody OneParamRequest<UUID> memberUserId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GroupMemberResponse createMember(@RequestBody OneParamRequest<UUID> memberUserId, @PathVariable("groupId") UUID groupId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CommunityEndpoints.COMMUNITY_GROUP_DELETE_MEMBER)
-    void deleteMember(@PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteMember(@PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CommunityEndpoints.COMMUNITY_GROUP_MEMBER_ROLES)
-    GroupMemberResponse modifyRoles(@RequestBody GroupMemberRoleRequest request, @PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GroupMemberResponse modifyRoles(@RequestBody GroupMemberRoleRequest request, @PathVariable("groupId") UUID groupId, @PathVariable("groupMemberId") UUID groupMemberId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

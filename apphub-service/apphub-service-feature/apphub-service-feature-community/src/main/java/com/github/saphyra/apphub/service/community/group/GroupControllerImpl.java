@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.feature.community.model.response.group.Grou
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberRoleRequest;
 import com.github.saphyra.apphub.api.feature.community.server.GroupController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupCreationService;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupDeletionService;
@@ -39,68 +39,68 @@ public class GroupControllerImpl implements GroupController {
     private final GroupDeletionService groupDeletionService;
 
     @Override
-    public List<GroupListResponse> getGroups(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his groups", accessTokenHeader.getUserId());
-        return groupQueryService.getGroups(accessTokenHeader.getUserId());
+    public List<GroupListResponse> getGroups(AccessToken accessToken) {
+        log.info("{} wants to know his groups", accessToken.getUserId());
+        return groupQueryService.getGroups(accessToken.getUserId());
     }
 
     @Override
-    public GroupListResponse createGroup(OneParamRequest<String> groupName, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create group with name {}", accessTokenHeader.getUserId(), groupName);
-        return groupCreationService.create(accessTokenHeader.getUserId(), groupName.getValue());
+    public GroupListResponse createGroup(OneParamRequest<String> groupName, AccessToken accessToken) {
+        log.info("{} wants to create group with name {}", accessToken.getUserId(), groupName);
+        return groupCreationService.create(accessToken.getUserId(), groupName.getValue());
     }
 
     @Override
-    public void deleteGroup(UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete group {}", accessTokenHeader.getUserId(), groupId);
-        groupDeletionService.deleteGroup(accessTokenHeader.getUserId(), groupId);
+    public void deleteGroup(UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to delete group {}", accessToken.getUserId(), groupId);
+        groupDeletionService.deleteGroup(accessToken.getUserId(), groupId);
     }
 
     @Override
-    public void changeOwner(OneParamRequest<UUID> groupMemberId, UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change owner of group {} to {}", accessTokenHeader.getUserId(), groupId, groupMemberId);
-        groupEditionService.changeOwner(accessTokenHeader.getUserId(), groupId, groupMemberId.getValue());
+    public void changeOwner(OneParamRequest<UUID> groupMemberId, UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to change owner of group {} to {}", accessToken.getUserId(), groupId, groupMemberId);
+        groupEditionService.changeOwner(accessToken.getUserId(), groupId, groupMemberId.getValue());
     }
 
     @Override
-    public GroupListResponse renameGroup(OneParamRequest<String> groupName, UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to rename group {} to {}", accessTokenHeader.getUserId(), groupId, groupName);
-        return groupEditionService.rename(accessTokenHeader.getUserId(), groupId, groupName.getValue());
+    public GroupListResponse renameGroup(OneParamRequest<String> groupName, UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to rename group {} to {}", accessToken.getUserId(), groupId, groupName);
+        return groupEditionService.rename(accessToken.getUserId(), groupId, groupName.getValue());
     }
 
     @Override
-    public GroupListResponse changeInvitationType(OneParamRequest<GroupInvitationType> invitationType, UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change invitationType of Group {} to {}", accessTokenHeader.getUserId(), groupId, invitationType.getValue());
-        return groupEditionService.changeInvitationType(accessTokenHeader.getUserId(), groupId, invitationType.getValue());
+    public GroupListResponse changeInvitationType(OneParamRequest<GroupInvitationType> invitationType, UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to change invitationType of Group {} to {}", accessToken.getUserId(), groupId, invitationType.getValue());
+        return groupEditionService.changeInvitationType(accessToken.getUserId(), groupId, invitationType.getValue());
     }
 
     @Override
-    public List<GroupMemberResponse> getMembersOfGroup(UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know members of group {}", accessTokenHeader.getUserId(), groupId);
-        return groupMemberQueryService.getMembers(accessTokenHeader.getUserId(), groupId);
+    public List<GroupMemberResponse> getMembersOfGroup(UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to know members of group {}", accessToken.getUserId(), groupId);
+        return groupMemberQueryService.getMembers(accessToken.getUserId(), groupId);
     }
 
     @Override
-    public List<SearchResultItem> searchMemberCandidates(OneParamRequest<String> queryString, UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to search GroupMember candidates for Group {}based on text {}", accessTokenHeader.getUserId(), groupId, queryString.getValue());
-        return groupMemberCandidateQueryService.search(accessTokenHeader.getUserId(), groupId, queryString.getValue());
+    public List<SearchResultItem> searchMemberCandidates(OneParamRequest<String> queryString, UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to search GroupMember candidates for Group {}based on text {}", accessToken.getUserId(), groupId, queryString.getValue());
+        return groupMemberCandidateQueryService.search(accessToken.getUserId(), groupId, queryString.getValue());
     }
 
     @Override
-    public GroupMemberResponse createMember(OneParamRequest<UUID> memberUserId, UUID groupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add user {} to Group {}", accessTokenHeader.getUserId(), memberUserId, groupId);
-        return groupMemberCreationService.create(accessTokenHeader.getUserId(), groupId, memberUserId.getValue());
+    public GroupMemberResponse createMember(OneParamRequest<UUID> memberUserId, UUID groupId, AccessToken accessToken) {
+        log.info("{} wants to add user {} to Group {}", accessToken.getUserId(), memberUserId, groupId);
+        return groupMemberCreationService.create(accessToken.getUserId(), groupId, memberUserId.getValue());
     }
 
     @Override
-    public void deleteMember(UUID groupId, UUID groupMemberId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete GroupMember {} of Group {}", accessTokenHeader.getUserId(), groupMemberId, groupId);
-        groupMemberDeletionService.delete(accessTokenHeader.getUserId(), groupId, groupMemberId);
+    public void deleteMember(UUID groupId, UUID groupMemberId, AccessToken accessToken) {
+        log.info("{} wants to delete GroupMember {} of Group {}", accessToken.getUserId(), groupMemberId, groupId);
+        groupMemberDeletionService.delete(accessToken.getUserId(), groupId, groupMemberId);
     }
 
     @Override
-    public GroupMemberResponse modifyRoles(GroupMemberRoleRequest request, UUID groupId, UUID groupMemberId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to modify roles of {} to {} in group {}", accessTokenHeader.getUserId(), groupId, request, groupId);
-        return groupMemberRoleModificationService.modifyRoles(accessTokenHeader.getUserId(), groupId, groupMemberId, request);
+    public GroupMemberResponse modifyRoles(GroupMemberRoleRequest request, UUID groupId, UUID groupMemberId, AccessToken accessToken) {
+        log.info("{} wants to modify roles of {} to {} in group {}", accessToken.getUserId(), groupId, request, groupId);
+        return groupMemberRoleModificationService.modifyRoles(accessToken.getUserId(), groupId, groupMemberId, request);
     }
 }

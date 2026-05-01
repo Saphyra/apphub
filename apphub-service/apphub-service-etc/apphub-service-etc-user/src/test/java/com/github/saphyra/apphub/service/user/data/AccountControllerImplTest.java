@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeUsernameRequest;
-import com.github.saphyra.apphub.api.etc.user.model.login.RegistrationRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -68,7 +68,7 @@ public class AccountControllerImplTest {
     private RegistrationRequest registrationRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private ChangeEmailRequest changeEmailRequest;
@@ -84,14 +84,14 @@ public class AccountControllerImplTest {
 
     @Test
     public void changeEmail() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
         given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        assertThat(underTest.changeEmail(accessTokenHeader, changeEmailRequest))
+        assertThat(underTest.changeEmail(accessToken, changeEmailRequest))
             .returns(USER_ID_1, AccountResponse::getUserId)
             .returns(EMAIL, AccountResponse::getEmail)
             .returns(USERNAME, AccountResponse::getUsername);
@@ -102,14 +102,14 @@ public class AccountControllerImplTest {
 
     @Test
     public void changeUsername() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
         given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        assertThat(underTest.changeUsername(accessTokenHeader, changeUsernameRequest))
+        assertThat(underTest.changeUsername(accessToken, changeUsernameRequest))
             .returns(USER_ID_1, AccountResponse::getUserId)
             .returns(EMAIL, AccountResponse::getEmail)
             .returns(USERNAME, AccountResponse::getUsername);
@@ -119,18 +119,18 @@ public class AccountControllerImplTest {
 
     @Test
     public void changePassword() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        underTest.changePassword(accessTokenHeader, changePasswordRequest);
+        underTest.changePassword(accessToken, changePasswordRequest);
 
         verify(changePasswordService).changePassword(USER_ID_1, changePasswordRequest);
     }
 
     @Test
     public void deleteAccount() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        underTest.deleteAccount(accessTokenHeader, new OneParamRequest<>(PASSWORD));
+        underTest.deleteAccount(accessToken, new OneParamRequest<>(PASSWORD));
 
         verify(deleteAccountService).deleteAccount(USER_ID_1, PASSWORD);
     }
@@ -144,46 +144,46 @@ public class AccountControllerImplTest {
 
     @Test
     public void getUsernameByUserId() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
         given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUsername()).willReturn(USERNAME);
 
-        OneParamResponse<String> result = underTest.getUsernameByUserId(accessTokenHeader);
+        OneParamResponse<String> result = underTest.getUsernameByUserId(accessToken);
 
         assertThat(result.getValue()).isEqualTo(USERNAME);
     }
 
     @Test
     public void searchAccounts_tooShort() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), false, false, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.searchAccount(new OneParamRequest<>("as"), false, false, accessToken));
 
         ExceptionValidator.validateInvalidParam(ex, "value", "too short");
     }
 
     @Test
     public void searchAccounts_filterOwnAccount() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessToken);
 
         assertThat(result).isEmpty();
     }
 
     @Test
     public void searchAccounts_includeSelf() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
 
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, true, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, true, accessToken);
 
         assertThat(result).hasSize(1);
         AccountResponse response = result.get(0);
@@ -194,7 +194,7 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts_filterMarkedForDeletion() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
         given(user.isMarkedForDeletion())
             .willReturn(true)
@@ -203,7 +203,7 @@ public class AccountControllerImplTest {
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessToken);
 
         assertThat(result).hasSize(1);
         AccountResponse response = result.get(0);
@@ -214,13 +214,13 @@ public class AccountControllerImplTest {
 
     @Test
     public void searchAccounts_includeMarkedForDeletion() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
         given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
         given(user.getUserId()).willReturn(USER_ID_2);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), true, false, accessTokenHeader);
+        List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), true, false, accessToken);
 
         assertThat(result).hasSize(2);
     }
@@ -250,13 +250,13 @@ public class AccountControllerImplTest {
 
     @Test
     void getAccount() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID_1);
+        given(accessToken.getUserId()).willReturn(USER_ID_1);
         given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
-        assertThat(underTest.getAccount(accessTokenHeader))
+        assertThat(underTest.getAccount(accessToken))
             .returns(USER_ID_1, AccountResponse::getUserId)
             .returns(EMAIL, AccountResponse::getEmail)
             .returns(USERNAME, AccountResponse::getUsername);

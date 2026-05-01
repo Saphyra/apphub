@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.etc.user.model.role.UserRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -58,7 +58,7 @@ public class RoleControllerImplTest {
     private RoleRequest roleRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void getRoles() {
@@ -71,40 +71,40 @@ public class RoleControllerImplTest {
 
     @Test
     public void addRole() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(roleRequest.getUserId()).willReturn(TARGET_USER_ID);
         given(roleQueryService.getRoles(TARGET_USER_ID)).willReturn(userRoleResponse);
 
-        assertThat(underTest.addRole(roleRequest, accessTokenHeader)).isEqualTo(userRoleResponse);
+        assertThat(underTest.addRole(roleRequest, accessToken)).isEqualTo(userRoleResponse);
 
         verify(roleAdditionService).addRole(USER_ID, roleRequest);
     }
 
     @Test
     public void removeRole() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(roleRequest.getUserId()).willReturn(TARGET_USER_ID);
         given(roleQueryService.getRoles(TARGET_USER_ID)).willReturn(userRoleResponse);
 
-        assertThat(underTest.removeRole(roleRequest, accessTokenHeader)).isEqualTo(userRoleResponse);
+        assertThat(underTest.removeRole(roleRequest, accessToken)).isEqualTo(userRoleResponse);
 
         verify(roleRemovalService).removeRole(USER_ID, roleRequest);
     }
 
     @Test
     public void addToAll() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.addToAll(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
+        underTest.addToAll(new OneParamRequest<>(PASSWORD), ROLE, accessToken);
 
         verify(roleToAllService).addToAll(USER_ID, PASSWORD, ROLE);
     }
 
     @Test
     public void removeFromAll() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.removeFromAll(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
+        underTest.removeFromAll(new OneParamRequest<>(PASSWORD), ROLE, accessToken);
 
         verify(roleToAllService).removeFromAll(USER_ID, PASSWORD, ROLE);
     }
@@ -120,11 +120,11 @@ public class RoleControllerImplTest {
 
     @Test
     void isUserAdmin() {
-        given(accessTokenHeader.getRoles())
+        given(accessToken.getRoles())
             .willReturn(List.of(Constants.ROLE_ADMIN))
             .willReturn(List.of());
 
-        assertThat(underTest.isUserAdmin(accessTokenHeader)).returns(true, OneParamResponse::getValue);
-        assertThat(underTest.isUserAdmin(accessTokenHeader)).returns(false, OneParamResponse::getValue);
+        assertThat(underTest.isUserAdmin(accessToken)).returns(true, OneParamResponse::getValue);
+        assertThat(underTest.isUserAdmin(accessToken)).returns(false, OneParamResponse::getValue);
     }
 }

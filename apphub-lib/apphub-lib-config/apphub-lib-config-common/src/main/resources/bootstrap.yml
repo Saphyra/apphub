@@ -62,6 +62,8 @@ fileUpload:
   maxFileSize: 104_857_600 #100MB
 webSocketSession:
   expirationSeconds: 30
+authorization:
+  accessTokenExpiration: PT15M
 
 endpoint:
   whitelisting:
@@ -81,9 +83,6 @@ endpoint:
       indexPage:
         pattern: /web
         method: GET
-      login:
-        pattern: /api/user/authentication/login
-        method: POST
       register:
         pattern: /api/user
         method: POST
@@ -92,6 +91,9 @@ endpoint:
         method: GET
       bannedDetails:
         pattern: /api/user/ban/details
+        method: POST
+      authorization:
+        pattern: /api/authorization/**
         method: POST
 logging:
   level:

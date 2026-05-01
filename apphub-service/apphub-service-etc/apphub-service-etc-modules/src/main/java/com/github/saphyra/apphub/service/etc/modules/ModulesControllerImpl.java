@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.etc.modules;
 import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.api.etc.modules.server.ModulesController;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
@@ -32,7 +32,7 @@ public class ModulesControllerImpl implements ModulesController {
     }
 
     @Override
-    public Map<String, List<ModuleResponse>> getModules(AccessTokenHeader accessToken, boolean mobileClient) {
+    public Map<String, List<ModuleResponse>> getModules(AccessToken accessToken, boolean mobileClient) {
         log.info("Querying available modules for user {}, mobileClient: {}", accessToken.getUserId(), mobileClient);
         Map<String, List<ModuleResponse>> result = modulesQueryService.getModules(accessToken.getUserId(), mobileClient);
         log.info("Available modules for user {}: {}", accessToken.getUserId(), result);
@@ -40,7 +40,7 @@ public class ModulesControllerImpl implements ModulesController {
     }
 
     @Override
-    public Map<String, List<ModuleResponse>> setFavorite(AccessTokenHeader accessToken, String module, OneParamRequest<Boolean> favorite) {
+    public Map<String, List<ModuleResponse>> setFavorite(AccessToken accessToken, String module, OneParamRequest<Boolean> favorite) {
         log.info("Setting favorite status of module {} for user {}", module, accessToken.getUserId());
         favoriteUpdateService.updateFavorite(accessToken.getUserId(), module, favorite.getValue());
         return modulesQueryService.getModules(accessToken.getUserId(), false);

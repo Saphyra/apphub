@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.community.model.response.SearchResu
 import com.github.saphyra.apphub.api.feature.community.model.response.friend_request.FriendRequestResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.community.server.FriendRequestController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.friendship.service.AcceptFriendRequestService;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendCandidateSearchService;
@@ -29,38 +29,38 @@ class FriendRequestControllerImpl implements FriendRequestController {
     private final AcceptFriendRequestService acceptFriendRequestService;
 
     @Override
-    public List<SearchResultItem> search(OneParamRequest<String> query, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query users to send FriendRequest based on text {}", accessTokenHeader.getUserId(), query.getValue());
-        return friendCandidateSearchService.search(accessTokenHeader.getUserId(), query.getValue());
+    public List<SearchResultItem> search(OneParamRequest<String> query, AccessToken accessToken) {
+        log.info("{} wants to query users to send FriendRequest based on text {}", accessToken.getUserId(), query.getValue());
+        return friendCandidateSearchService.search(accessToken.getUserId(), query.getValue());
     }
 
     @Override
-    public List<FriendRequestResponse> getSentFriendRequests(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his sent FriendRequest", accessTokenHeader.getUserId());
-        return friendRequestQueryService.getSentFriendRequests(accessTokenHeader.getUserId());
+    public List<FriendRequestResponse> getSentFriendRequests(AccessToken accessToken) {
+        log.info("{} wants to know his sent FriendRequest", accessToken.getUserId());
+        return friendRequestQueryService.getSentFriendRequests(accessToken.getUserId());
     }
 
     @Override
-    public List<FriendRequestResponse> getReceivedFriendRequests(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his received friend requests", accessTokenHeader.getUserId());
-        return friendRequestQueryService.getReceivedFriendRequests(accessTokenHeader.getUserId());
+    public List<FriendRequestResponse> getReceivedFriendRequests(AccessToken accessToken) {
+        log.info("{} wants to know his received friend requests", accessToken.getUserId());
+        return friendRequestQueryService.getReceivedFriendRequests(accessToken.getUserId());
     }
 
     @Override
-    public FriendRequestResponse create(OneParamRequest<UUID> friendUserId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to send a FriendRequest to {}", accessTokenHeader.getUserId(), friendUserId.getValue());
-        return friendRequestCreationService.create(accessTokenHeader.getUserId(), friendUserId.getValue());
+    public FriendRequestResponse create(OneParamRequest<UUID> friendUserId, AccessToken accessToken) {
+        log.info("{} wants to send a FriendRequest to {}", accessToken.getUserId(), friendUserId.getValue());
+        return friendRequestCreationService.create(accessToken.getUserId(), friendUserId.getValue());
     }
 
     @Override
-    public void delete(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete FriendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
-        friendRequestDeletionService.delete(accessTokenHeader.getUserId(), friendRequestId);
+    public void delete(UUID friendRequestId, AccessToken accessToken) {
+        log.info("{} wants to delete FriendRequest {}", accessToken.getUserId(), friendRequestId);
+        friendRequestDeletionService.delete(accessToken.getUserId(), friendRequestId);
     }
 
     @Override
-    public FriendshipResponse accept(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to accept FriendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
-        return acceptFriendRequestService.accept(accessTokenHeader.getUserId(), friendRequestId);
+    public FriendshipResponse accept(UUID friendRequestId, AccessToken accessToken) {
+        log.info("{} wants to accept FriendRequest {}", accessToken.getUserId(), friendRequestId);
+        return acceptFriendRequestService.accept(accessToken.getUserId(), friendRequestId);
     }
 }

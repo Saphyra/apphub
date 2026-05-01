@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway;
 
-import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
@@ -18,13 +18,14 @@ import java.util.UUID;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
+//TODO unit test
 public class RootController {
     private final AccessTokenQueryService accessTokenQueryService;
 
     @GetMapping(GenericEndpoints.GET_OWN_USER_ID)
     ResponseEntity<OneParamResponse<UUID>> getOwnUserId(@CookieValue(value = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessTokenId) {
         return accessTokenQueryService.getAccessToken(accessTokenId)
-            .map(InternalAccessTokenResponse::getUserId)
+            .map(AccessToken::getUserId)
             .map(OneParamResponse::new)
             .map(ResponseEntity::ok)
             .orElseGet(() -> new ResponseEntity<>(new OneParamResponse<>(null), HttpStatus.UNAUTHORIZED));

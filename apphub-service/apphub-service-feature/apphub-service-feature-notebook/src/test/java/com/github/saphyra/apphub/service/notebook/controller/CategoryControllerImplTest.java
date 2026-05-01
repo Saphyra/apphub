@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.ChildrenOfCategoryResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryChildrenQueryService;
 import com.github.saphyra.apphub.service.notebook.service.category.CategoryTreeQueryService;
@@ -42,7 +42,7 @@ public class CategoryControllerImplTest {
     private CategoryControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private CreateCategoryRequest createCategoryRequest;
@@ -55,14 +55,14 @@ public class CategoryControllerImplTest {
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void createCategory() {
         given(categoryCreationService.createCategory(USER_ID, createCategoryRequest)).willReturn(CATEGORY_ID);
 
-        OneParamResponse<UUID> response = underTest.createCategory(createCategoryRequest, accessTokenHeader);
+        OneParamResponse<UUID> response = underTest.createCategory(createCategoryRequest, accessToken);
 
         assertThat(response.getValue()).isEqualTo(CATEGORY_ID);
     }
@@ -71,7 +71,7 @@ public class CategoryControllerImplTest {
     public void getCategoryTree() {
         given(categoryTreeQueryService.getCategoryTree(USER_ID)).willReturn(Arrays.asList(categoryTreeView));
 
-        List<CategoryTreeView> result = underTest.getCategoryTree(accessTokenHeader);
+        List<CategoryTreeView> result = underTest.getCategoryTree(accessToken);
 
         assertThat(result).containsExactly(categoryTreeView);
     }
@@ -80,7 +80,7 @@ public class CategoryControllerImplTest {
     public void getChildrenOfCategory() {
         given(categoryChildrenQueryService.getChildrenOfCategory(USER_ID, CATEGORY_ID, TYPE, EXCLUSION)).willReturn(childrenOfCategoryResponse);
 
-        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(accessTokenHeader, CATEGORY_ID, TYPE, EXCLUSION);
+        ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(accessToken, CATEGORY_ID, TYPE, EXCLUSION);
 
         assertThat(result).isEqualTo(childrenOfCategoryResponse);
     }

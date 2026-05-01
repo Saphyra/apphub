@@ -11,6 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = "password")
+@Deprecated(forRemoval = true) //TODO delete
 public class LoginRequest {
     private String userIdentifier;
     private String password;

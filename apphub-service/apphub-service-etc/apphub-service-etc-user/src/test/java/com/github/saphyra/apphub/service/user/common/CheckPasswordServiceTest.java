@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.common;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
@@ -64,7 +64,7 @@ public class CheckPasswordServiceTest {
     private User user;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void incorrectPassword() {
@@ -96,8 +96,8 @@ public class CheckPasswordServiceTest {
         given(user.getPasswordFailureCount()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(passwordProperties.getLockedMinutes()).willReturn(LOCKED_MINUTES);
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
 
         Throwable ex = catchThrowable(() -> underTest.checkPassword(USER_ID, PASSWORD));
 

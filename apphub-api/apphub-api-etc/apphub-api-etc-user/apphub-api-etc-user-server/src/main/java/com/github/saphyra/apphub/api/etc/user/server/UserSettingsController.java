@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.etc.user.server;
 
 import com.github.saphyra.apphub.api.etc.user.model.SetUserSettingsRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +17,11 @@ public interface UserSettingsController {
      * Searching for user settings of the given category, falling back to default values if the user has no settings stored in the database.
      */
     @GetMapping(UserEndpoints.GET_USER_SETTINGS)
-    Map<String, String> getUserSettings(@PathVariable("category") String category, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    Map<String, String> getUserSettings(@PathVariable("category") String category, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Saving the setting to the database after checking if the given key is applicable for the given category.
      */
     @PostMapping(UserEndpoints.SET_USER_SETTINGS)
-    Map<String, String> setUserSettings(@RequestBody SetUserSettingsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    Map<String, String> setUserSettings(@RequestBody SetUserSettingsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

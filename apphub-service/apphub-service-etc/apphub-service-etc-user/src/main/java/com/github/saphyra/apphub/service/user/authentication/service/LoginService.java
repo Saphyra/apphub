@@ -1,13 +1,12 @@
 package com.github.saphyra.apphub.service.user.authentication.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -32,7 +31,7 @@ public class LoginService {
     private final CheckPasswordService checkPasswordService;
     private final AccessTokenProvider accessTokenProvider;
 
-    public AccessToken login(LoginRequest loginRequest) {
+    public com.github.saphyra.apphub.service.user.authentication.dao.AccessToken login(LoginRequest loginRequest) {
         User user = userDao.findByUsernameOrEmail(loginRequest.getUserIdentifier().toLowerCase())
             .filter(u -> !u.isMarkedForDeletion())
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, String.format("User not found with email %s", loginRequest.getUserIdentifier())));
@@ -42,7 +41,7 @@ public class LoginService {
         }
 
         try {
-            accessTokenProvider.set(AccessTokenHeader.builder().userId(user.getUserId()).build());
+            accessTokenProvider.set(AccessToken.builder().userId(user.getUserId()).build());
             checkPasswordService.checkPassword(user.getUserId(), loginRequest.getPassword());
         } catch (RestException e) {
             if (e.getErrorMessage().getErrorCode() == ErrorCode.INCORRECT_PASSWORD) {
@@ -53,7 +52,7 @@ public class LoginService {
             accessTokenProvider.clear();
         }
 
-        AccessToken accessToken = accessTokenFactory.create(user.getUserId(), isTrue(loginRequest.getRememberMe()));
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken = accessTokenFactory.create(user.getUserId(), isTrue(loginRequest.getRememberMe()));
         accessTokenDao.save(accessToken);
         return accessToken;
     }

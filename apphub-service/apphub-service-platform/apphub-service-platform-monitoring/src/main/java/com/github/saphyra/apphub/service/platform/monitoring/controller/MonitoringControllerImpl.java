@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsRespons
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
 import com.github.saphyra.apphub.api.platform.monitoring.server.MonitoringController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
@@ -48,22 +48,22 @@ public class MonitoringControllerImpl implements MonitoringController {
     }
 
     @Override
-    public List<Feature> getFeatures(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query the available features", accessTokenHeader.getUserId());
+    public List<Feature> getFeatures(AccessToken accessToken) {
+        log.info("{} wants to query the available features", accessToken.getUserId());
 
         return metricDao.getFeatures();
     }
 
     @Override
-    public List<String> getFunctionalities(Feature feature, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query the available functionalities for feature {}", accessTokenHeader.getUserId(), feature);
+    public List<String> getFunctionalities(Feature feature, AccessToken accessToken) {
+        log.info("{} wants to query the available functionalities for feature {}", accessToken.getUserId(), feature);
 
         return metricDao.getFunctionalitiesOfFeature(feature);
     }
 
     @Override
-    public List<String> getServices(Feature feature, @Nullable String functionality, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query the available services for feature {} and functionality {}", accessTokenHeader.getUserId(), feature, functionality);
+    public List<String> getServices(Feature feature, @Nullable String functionality, AccessToken accessToken) {
+        log.info("{} wants to query the available services for feature {} and functionality {}", accessToken.getUserId(), feature, functionality);
 
         List<UUID> metricIds = metricDao.getByFeatureAndOptionalFunctionality(feature, functionality)
             .stream()
@@ -77,8 +77,8 @@ public class MonitoringControllerImpl implements MonitoringController {
     }
 
     @Override
-    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query the metrics for type {}, feature {}, functionality {} and service {}", accessTokenHeader.getUserId(), type, feature, functionality, service);
+    public List<GetMetricsResponse> getMetrics(MetricDataType type, Feature feature, @Nullable String functionality, @Nullable String service, AccessToken accessToken) {
+        log.info("{} wants to query the metrics for type {}, feature {}, functionality {} and service {}", accessToken.getUserId(), type, feature, functionality, service);
 
         return metricDataQueryService.getMetrics(type, feature, functionality, service);
     }

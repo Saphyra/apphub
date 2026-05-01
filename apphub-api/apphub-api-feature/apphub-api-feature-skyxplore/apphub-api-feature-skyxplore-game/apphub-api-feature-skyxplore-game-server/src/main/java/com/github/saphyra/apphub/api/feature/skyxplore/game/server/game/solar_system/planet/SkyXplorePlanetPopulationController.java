@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.game.server.game.solar_system.planet;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
@@ -16,8 +16,8 @@ import java.util.UUID;
 
 public interface SkyXplorePlanetPopulationController {
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_GET_POPULATION)
-    List<CitizenResponse> getPopulation(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<CitizenResponse> getPopulation(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_RENAME_CITIZEN)
-    void renameCitizen(@RequestBody OneParamRequest<String> newName, @PathVariable("citizenId") UUID citizenId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void renameCitizen(@RequestBody OneParamRequest<String> newName, @PathVariable("citizenId") UUID citizenId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreDataEndpoints;
@@ -26,13 +26,13 @@ public interface SkyXploreSavedGameController {
     void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_GET_GAMES)
-    List<SavedGameResponse> getSavedGames(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SavedGameResponse> getSavedGames(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_DELETE_GAME)
-    void deleteGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
-    GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
     GameModel getGameModel(@PathVariable("gameId") UUID gameId);

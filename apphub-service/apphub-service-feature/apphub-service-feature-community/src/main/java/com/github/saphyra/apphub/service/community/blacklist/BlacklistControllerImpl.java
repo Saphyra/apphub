@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.community.blacklist;
 import com.github.saphyra.apphub.api.feature.community.model.response.blacklist.BlacklistResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.SearchResultItem;
 import com.github.saphyra.apphub.api.feature.community.server.BlacklistController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.blacklist.service.BlacklistCreationService;
 import com.github.saphyra.apphub.service.community.blacklist.service.BlacklistDeletionService;
@@ -26,26 +26,26 @@ public class BlacklistControllerImpl implements BlacklistController {
     private final BlacklistDeletionService blacklistDeletionService;
 
     @Override
-    public List<SearchResultItem> search(OneParamRequest<String> queryString, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query users to blacklist based on text {}", accessTokenHeader.getUserId(), queryString.getValue());
-        return blacklistSearchService.search(accessTokenHeader.getUserId(), queryString.getValue());
+    public List<SearchResultItem> search(OneParamRequest<String> queryString, AccessToken accessToken) {
+        log.info("{} wants to query users to blacklist based on text {}", accessToken.getUserId(), queryString.getValue());
+        return blacklistSearchService.search(accessToken.getUserId(), queryString.getValue());
     }
 
     @Override
-    public List<BlacklistResponse> getBlacklist(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his blacklist", accessTokenHeader.getUserId());
-        return blacklistQueryService.getBlacklist(accessTokenHeader.getUserId());
+    public List<BlacklistResponse> getBlacklist(AccessToken accessToken) {
+        log.info("{} wants to know his blacklist", accessToken.getUserId());
+        return blacklistQueryService.getBlacklist(accessToken.getUserId());
     }
 
     @Override
-    public BlacklistResponse create(OneParamRequest<UUID> blockedUserId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add {} to his blacklist", accessTokenHeader.getUserId(), blockedUserId.getValue());
-        return blacklistCreationService.create(accessTokenHeader.getUserId(), blockedUserId.getValue());
+    public BlacklistResponse create(OneParamRequest<UUID> blockedUserId, AccessToken accessToken) {
+        log.info("{} wants to add {} to his blacklist", accessToken.getUserId(), blockedUserId.getValue());
+        return blacklistCreationService.create(accessToken.getUserId(), blockedUserId.getValue());
     }
 
     @Override
-    public void delete(UUID blacklistId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete blacklist {}", accessTokenHeader.getUserId(), blacklistId);
-        blacklistDeletionService.delete(accessTokenHeader.getUserId(), blacklistId);
+    public void delete(UUID blacklistId, AccessToken accessToken) {
+        log.info("{} wants to delete blacklist {}", accessToken.getUserId(), blacklistId);
+        blacklistDeletionService.delete(accessToken.getUserId(), blacklistId);
     }
 }

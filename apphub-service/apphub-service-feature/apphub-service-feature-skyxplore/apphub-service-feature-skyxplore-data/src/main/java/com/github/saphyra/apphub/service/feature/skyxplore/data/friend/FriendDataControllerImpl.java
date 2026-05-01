@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterM
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.SentFriendRequestResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.friendship.service.FriendshipQueryService;
@@ -33,49 +33,49 @@ public class FriendDataControllerImpl implements SkyXploreFriendDataController {
     private final FriendshipDeletionService friendshipDeletionService;
 
     @Override
-    public List<SkyXploreCharacterModel> getFriendCandidates(OneParamRequest<String> queryString, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to get the characters with name {}", accessTokenHeader.getUserId(), queryString.getValue());
-        return friendCandidateQueryService.getFriendCandidates(accessTokenHeader.getUserId(), queryString.getValue());
+    public List<SkyXploreCharacterModel> getFriendCandidates(OneParamRequest<String> queryString, AccessToken accessToken) {
+        log.info("{} wants to get the characters with name {}", accessToken.getUserId(), queryString.getValue());
+        return friendCandidateQueryService.getFriendCandidates(accessToken.getUserId(), queryString.getValue());
     }
 
     @Override
-    public SentFriendRequestResponse createFriendRequest(OneParamRequest<UUID> userId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add {} as friend", accessTokenHeader.getUserId(), userId.getValue());
-        return friendRequestCreationService.createFriendRequest(accessTokenHeader.getUserId(), userId.getValue());
+    public SentFriendRequestResponse createFriendRequest(OneParamRequest<UUID> userId, AccessToken accessToken) {
+        log.info("{} wants to add {} as friend", accessToken.getUserId(), userId.getValue());
+        return friendRequestCreationService.createFriendRequest(accessToken.getUserId(), userId.getValue());
     }
 
     @Override
-    public List<SentFriendRequestResponse> getSentFriendRequests(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query his sent friend requests", accessTokenHeader.getUserId());
-        return friendRequestQueryService.getSentFriendRequests(accessTokenHeader.getUserId());
+    public List<SentFriendRequestResponse> getSentFriendRequests(AccessToken accessToken) {
+        log.info("{} wants to query his sent friend requests", accessToken.getUserId());
+        return friendRequestQueryService.getSentFriendRequests(accessToken.getUserId());
     }
 
     @Override
-    public List<IncomingFriendRequestResponse> getIncomingFriendRequests(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query his incoming friend requests", accessTokenHeader.getUserId());
-        return friendRequestQueryService.getIncomingFriendRequests(accessTokenHeader.getUserId());
+    public List<IncomingFriendRequestResponse> getIncomingFriendRequests(AccessToken accessToken) {
+        log.info("{} wants to query his incoming friend requests", accessToken.getUserId());
+        return friendRequestQueryService.getIncomingFriendRequests(accessToken.getUserId());
     }
 
     @Override
-    public void cancelFriendRequest(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to cancel friendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
-        friendRequestCancelService.cancelFriendRequest(accessTokenHeader.getUserId(), friendRequestId);
+    public void cancelFriendRequest(UUID friendRequestId, AccessToken accessToken) {
+        log.info("{} wants to cancel friendRequest {}", accessToken.getUserId(), friendRequestId);
+        friendRequestCancelService.cancelFriendRequest(accessToken.getUserId(), friendRequestId);
     }
 
     @Override
-    public FriendshipResponse acceptFriendRequest(UUID friendRequestId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to accept friendRequest {}", accessTokenHeader.getUserId(), friendRequestId);
-        return friendRequestAcceptService.accept(accessTokenHeader.getUserId(), friendRequestId);
+    public FriendshipResponse acceptFriendRequest(UUID friendRequestId, AccessToken accessToken) {
+        log.info("{} wants to accept friendRequest {}", accessToken.getUserId(), friendRequestId);
+        return friendRequestAcceptService.accept(accessToken.getUserId(), friendRequestId);
     }
 
     @Override
-    public List<FriendshipResponse> getFriends(AccessTokenHeader accessTokenHeader) {
-        return friendshipQueryService.getFriends(accessTokenHeader.getUserId());
+    public List<FriendshipResponse> getFriends(AccessToken accessToken) {
+        return friendshipQueryService.getFriends(accessToken.getUserId());
     }
 
     @Override
-    public void removeFriend(UUID friendshipId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to remove friendship {}", accessTokenHeader.getUserId(), friendshipId);
-        friendshipDeletionService.removeFriendship(friendshipId, accessTokenHeader.getUserId());
+    public void removeFriend(UUID friendshipId, AccessToken accessToken) {
+        log.info("{} wants to remove friendship {}", accessToken.getUserId(), friendshipId);
+        friendshipDeletionService.removeFriendship(friendshipId, accessToken.getUserId());
     }
 }

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.api.feature.notebook.server.FileController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.file.FileCreationService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class FileControllerImpl implements FileController {
     private final FileCreationService fileCreationService;
 
     @Override
-    public OneParamResponse<UUID> createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a file", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(fileCreationService.createFile(accessTokenHeader.getUserId(), request));
+    public OneParamResponse<UUID> createFile(CreateFileRequest request, AccessToken accessToken) {
+        log.info("{} wants to create a file", accessToken.getUserId());
+        return new OneParamResponse<>(fileCreationService.createFile(accessToken.getUserId(), request));
     }
 }

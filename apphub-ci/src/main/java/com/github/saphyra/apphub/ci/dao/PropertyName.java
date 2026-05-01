@@ -28,4 +28,5 @@ public enum PropertyName {
 
     //Service properties
     S3_CONFIGURATION,
+    AUTHORIZATION_CERTIFICATE,
 }

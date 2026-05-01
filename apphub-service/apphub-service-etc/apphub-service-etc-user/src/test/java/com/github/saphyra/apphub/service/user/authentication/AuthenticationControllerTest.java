@@ -4,9 +4,8 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenToResponseMapper;
@@ -69,10 +68,10 @@ public class AuthenticationControllerTest {
     private LoginRequest loginRequest;
 
     @Mock
-    private AccessToken accessToken1;
+    private com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken1;
 
     @Mock
-    private AccessToken accessToken2;
+    private com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken2;
 
     @Mock
     private InternalAccessTokenResponse accessTokenResponse;
@@ -119,12 +118,12 @@ public class AuthenticationControllerTest {
 
     @Test
     public void logout() {
-        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+        AccessToken accessToken = AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID)
             .userId(USER_ID)
             .build();
 
-        underTest.logout(accessTokenHeader);
+        underTest.logout(accessToken);
 
         verify(logoutService).logout(ACCESS_TOKEN_ID, USER_ID);
     }

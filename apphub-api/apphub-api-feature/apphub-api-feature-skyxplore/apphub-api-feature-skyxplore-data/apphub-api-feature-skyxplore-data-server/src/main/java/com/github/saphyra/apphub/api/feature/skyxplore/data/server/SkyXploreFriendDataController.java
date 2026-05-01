@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterM
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.SentFriendRequestResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreDataEndpoints;
@@ -24,35 +24,35 @@ public interface SkyXploreFriendDataController {
      * Looking for players by the given name, who can be added as friend
      */
     @PostMapping(SkyXploreDataEndpoints.SKYXPLORE_SEARCH_FOR_FRIENDS)
-    List<SkyXploreCharacterModel> getFriendCandidates(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SkyXploreCharacterModel> getFriendCandidates(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PutMapping(SkyXploreDataEndpoints.SKYXPLORE_ADD_FRIEND)
-    SentFriendRequestResponse createFriendRequest(@RequestBody OneParamRequest<UUID> characterId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    SentFriendRequestResponse createFriendRequest(@RequestBody OneParamRequest<UUID> characterId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Pending friend requests sent by the user
      */
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_GET_SENT_FRIEND_REQUEST)
-    List<SentFriendRequestResponse> getSentFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SentFriendRequestResponse> getSentFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Pending friend requests waiting for the user's decision
      */
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_GET_INCOMING_FRIEND_REQUEST)
-    List<IncomingFriendRequestResponse> getIncomingFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<IncomingFriendRequestResponse> getIncomingFriendRequests(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Can be called by the sender and the receiver to remove the friend request
      */
     @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_CANCEL_FRIEND_REQUEST)
-    void cancelFriendRequest(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void cancelFriendRequest(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreDataEndpoints.SKYXPLORE_ACCEPT_FRIEND_REQUEST)
-    FriendshipResponse acceptFriendRequest(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    FriendshipResponse acceptFriendRequest(@PathVariable("friendRequestId") UUID friendRequestId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_GET_FRIENDS)
-    List<FriendshipResponse> getFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<FriendshipResponse> getFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_REMOVE_FRIEND)
-    void removeFriend(@PathVariable("friendshipId") UUID friendshipId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void removeFriend(@PathVariable("friendshipId") UUID friendshipId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

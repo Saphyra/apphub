@@ -5,9 +5,8 @@ import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginResponse;
 import com.github.saphyra.apphub.api.etc.user.server.UserAuthenticationController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenCleanupService;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenToResponseMapper;
 import com.github.saphyra.apphub.service.user.authentication.service.AccessTokenUpdateService;
@@ -34,12 +33,12 @@ class AuthenticationController implements UserAuthenticationController {
     private final ValidAccessTokenQueryService validAccessTokenQueryService;
 
     @Override
-    public void checkSession(AccessTokenHeader accessTokenHeader) {
-        log.debug("Checking session for {}", accessTokenHeader);
+    public void checkSession(AccessToken accessToken) {
+        log.debug("Checking session for {}", accessToken);
     }
 
     @Override
-    public void extendSession(AccessTokenHeader accessToken) {
+    public void extendSession(AccessToken accessToken) {
         log.debug("Extending session for {}", accessToken.getUserId());
     }
 
@@ -59,7 +58,7 @@ class AuthenticationController implements UserAuthenticationController {
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         log.info("LoginRequest arrived: {}", loginRequest);
-        AccessToken accessToken = loginService.login(loginRequest);
+        com.github.saphyra.apphub.service.user.authentication.dao.AccessToken accessToken = loginService.login(loginRequest);
         Integer expiration = accessToken.isPersistent() ? authenticationProperties.getAccessTokenCookieExpirationDays() : null;
         log.info("Setting up accessToken cookie with accessTokenId {}, expiration {}", accessToken.getAccessTokenId(), expiration);
         return LoginResponse.builder()
@@ -69,7 +68,7 @@ class AuthenticationController implements UserAuthenticationController {
     }
 
     @Override
-    public void logout(AccessTokenHeader accessToken) {
+    public void logout(AccessToken accessToken) {
         logoutService.logout(accessToken.getAccessTokenId(), accessToken.getUserId());
     }
 

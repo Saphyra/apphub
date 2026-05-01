@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
-import com.github.saphyra.apphub.api.etc.user.model.login.RegistrationRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionService;

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.api.etc.user.model.login.InternalAccessTokenResponse;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginRequest;
 import com.github.saphyra.apphub.api.etc.user.model.login.LoginResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.lib.event.RefreshAccessTokenExpirationEvent;
@@ -17,20 +17,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
+@Deprecated(forRemoval = true) //TODO remove
 public interface UserAuthenticationController {
     /**
      * Checking if the given access token is valid.
      * The endpoint itself does nothing, the logic is handled by the general access token check in the main-gateway
      */
     @GetMapping(UserEndpoints.CHECK_SESSION)
-    void checkSession(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);
+    void checkSession(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Extending the current access token validity.
      * The endpoint itself does nothing, logic is handled by the general session-extending logic in the main-gateway
      */
     @PostMapping(UserEndpoints.EXTEND_SESSION)
-    void extendSession(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);
+    void extendSession(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Removing the expired access tokens from the database to prevent flooding.
@@ -51,7 +52,7 @@ public interface UserAuthenticationController {
      * Invalidating the access token by removing it from the database
      */
     @PostMapping(UserEndpoints.LOGOUT)
-    void logout(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken);
+    void logout(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Fetching details about the access token with the given id, including all the roles the owner user has access to.

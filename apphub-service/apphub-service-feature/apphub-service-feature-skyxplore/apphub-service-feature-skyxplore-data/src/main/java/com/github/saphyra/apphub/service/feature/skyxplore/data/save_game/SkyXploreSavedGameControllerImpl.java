@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -42,21 +42,21 @@ public class SkyXploreSavedGameControllerImpl implements SkyXploreSavedGameContr
     }
 
     @Override
-    public List<SavedGameResponse> getSavedGames(AccessTokenHeader accessTokenHeader) {
-        log.info("Querying saved games for {}", accessTokenHeader.getUserId());
-        return savedGameQueryService.getSavedGames(accessTokenHeader.getUserId());
+    public List<SavedGameResponse> getSavedGames(AccessToken accessToken) {
+        log.info("Querying saved games for {}", accessToken.getUserId());
+        return savedGameQueryService.getSavedGames(accessToken.getUserId());
     }
 
     @Override
-    public void deleteGame(UUID gameId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete game {}", accessTokenHeader.getUserId(), gameId);
-        gameDeletionService.deleteByGameId(gameId, accessTokenHeader.getUserId());
+    public void deleteGame(UUID gameId, AccessToken accessToken) {
+        log.info("{} wants to delete game {}", accessToken.getUserId(), gameId);
+        gameDeletionService.deleteByGameId(gameId, accessToken.getUserId());
     }
 
     @Override
-    public GameViewForLobbyCreation getGameForLobbyCreation(UUID gameId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query game {} for lobby creation", accessTokenHeader.getUserId(), gameId);
-        return gameViewForLobbyCreationQueryService.getView(accessTokenHeader.getUserId(), gameId);
+    public GameViewForLobbyCreation getGameForLobbyCreation(UUID gameId, AccessToken accessToken) {
+        log.info("{} wants to query game {} for lobby creation", accessToken.getUserId(), gameId);
+        return gameViewForLobbyCreationQueryService.getView(accessToken.getUserId(), gameId);
     }
 
     @Override

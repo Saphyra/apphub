@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.setting;
 import com.github.saphyra.apphub.api.feature.skyxplore.data.server.SkyXploreSettingsController;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingIdentifier;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.setting.service.CreateOrUpdateSettingService;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.setting.service.DeleteSettingService;
@@ -21,23 +21,23 @@ class SkyXploreDataSettingControllerImpl implements SkyXploreSettingsController 
     private final DeleteSettingService deleteSettingService;
 
     @Override
-    public void createOrUpdateSetting(SettingModel request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to save a setting with type {} at location {}", accessTokenHeader.getUserId(), request.getType(), request.getLocation());
+    public void createOrUpdateSetting(SettingModel request, AccessToken accessToken) {
+        log.info("{} wants to save a setting with type {} at location {}", accessToken.getUserId(), request.getType(), request.getLocation());
 
-        createOrUpdateSettingService.createOrUpdate(accessTokenHeader.getUserId(), request);
+        createOrUpdateSettingService.createOrUpdate(accessToken.getUserId(), request);
     }
 
     @Override
-    public OneParamResponse<SettingModel> getSetting(SettingIdentifier request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to get a setting by {}", accessTokenHeader.getUserId(), request);
-        return new OneParamResponse<>(settingQueryService.getSetting(accessTokenHeader.getUserId(), request));
+    public OneParamResponse<SettingModel> getSetting(SettingIdentifier request, AccessToken accessToken) {
+        log.info("{} wants to get a setting by {}", accessToken.getUserId(), request);
+        return new OneParamResponse<>(settingQueryService.getSetting(accessToken.getUserId(), request));
     }
 
     @Override
-    public OneParamResponse<SettingModel> deleteSetting(SettingIdentifier request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete setting {}", accessTokenHeader.getUserId(), request);
-        deleteSettingService.delete(accessTokenHeader.getUserId(), request);
+    public OneParamResponse<SettingModel> deleteSetting(SettingIdentifier request, AccessToken accessToken) {
+        log.info("{} wants to delete setting {}", accessToken.getUserId(), request);
+        deleteSettingService.delete(accessToken.getUserId(), request);
 
-        return getSetting(request, accessTokenHeader);
+        return getSetting(request, accessToken);
     }
 }

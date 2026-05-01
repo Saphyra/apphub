@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Deprecated(forRemoval = true) //TODO delete
 public class AccessTokenCache extends AbstractCache<UUID, InternalAccessTokenResponse> {
     private final CommonConfigProperties commonConfigProperties;
     private final UserAuthenticationClient authenticationApi;

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.SavedGameResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.save_game.dao.GameDeletionService;
@@ -55,7 +55,7 @@ public class SkyXploreSavedGameControllerImplTest {
     private SkyXploreSavedGameControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private GameViewForLobbyCreation gameViewForLobbyCreation;
@@ -68,19 +68,19 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void deleteGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.deleteGame(GAME_ID, accessTokenHeader);
+        underTest.deleteGame(GAME_ID, accessToken);
 
         verify(gameDeletionService).deleteByGameId(GAME_ID, USER_ID);
     }
 
     @Test
     public void getGameViewForLobbyCreation() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(gameViewForLobbyCreationQueryService.getView(USER_ID, GAME_ID)).willReturn(gameViewForLobbyCreation);
 
-        GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessTokenHeader);
+        GameViewForLobbyCreation result = underTest.getGameForLobbyCreation(GAME_ID, accessToken);
 
         assertThat(result).isEqualTo(gameViewForLobbyCreation);
     }
@@ -101,10 +101,10 @@ public class SkyXploreSavedGameControllerImplTest {
 
     @Test
     public void getSavedGames() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(savedGameQueryService.getSavedGames(USER_ID)).willReturn(Arrays.asList(savedGameResponse));
 
-        List<SavedGameResponse> result = underTest.getSavedGames(accessTokenHeader);
+        List<SavedGameResponse> result = underTest.getSavedGames(accessToken);
 
         assertThat(result).containsExactly(savedGameResponse);
     }

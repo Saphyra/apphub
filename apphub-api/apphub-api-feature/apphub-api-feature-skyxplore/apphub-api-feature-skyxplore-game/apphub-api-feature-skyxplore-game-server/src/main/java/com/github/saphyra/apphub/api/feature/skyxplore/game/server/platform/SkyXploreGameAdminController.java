@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.feature.skyxplore.game.server.platform;
 import com.github.saphyra.apphub.api.feature.skyxplore.admin.SkyXploreGameDataDetails;
 import com.github.saphyra.apphub.api.feature.skyxplore.admin.SkyXploreGameDataEntry;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +19,7 @@ public interface SkyXploreGameAdminController {
     List<SkyXploreGameDataEntry> getByType(
         @PathVariable("type") GameItemType type,
         @RequestAttribute(name = "gameId", required = false) UUID gameId, //Null when querying available games
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_ADMIN_GET_ITEM)
@@ -27,6 +27,6 @@ public interface SkyXploreGameAdminController {
         @PathVariable("gameId") UUID gameId,
         @PathVariable("type") GameItemType type,
         @PathVariable("itemId") UUID itemId,
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 }

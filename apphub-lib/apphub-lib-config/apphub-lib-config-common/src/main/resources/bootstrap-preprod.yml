@@ -4,3 +4,6 @@ spring:
 
 hostIp: 192.168.0.198
 databaseName: apphub_preprod
+
+authorization:
+  issuer: apphub-preprod

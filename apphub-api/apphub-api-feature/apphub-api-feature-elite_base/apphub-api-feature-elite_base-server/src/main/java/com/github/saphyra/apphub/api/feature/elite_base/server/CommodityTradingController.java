@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.feature.elite_base.server;
 
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import java.util.Collection;
 
 public interface CommodityTradingController {
     @PostMapping(EliteBaseEndpoints.ELITE_BASE_COMMODITY_TRADING_TRADE)
-    CommodityTradingResponse bestTradeLocations(@RequestBody CommodityTradingRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    CommodityTradingResponse bestTradeLocations(@RequestBody CommodityTradingRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(EliteBaseEndpoints.ELITE_BASE_COMMODITY_TRADING_COMMODITIES)
-    Collection<String> getCommodities(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    Collection<String> getCommodities(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(EliteBaseEndpoints.ELITE_BASE_COMMODITY_TRADING_COMMODITIES_AVERAGE_PRICE)
-    Integer getCommodityAveragePrice(@PathVariable("commodityName") String commodityName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    Integer getCommodityAveragePrice(@PathVariable("commodityName") String commodityName, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

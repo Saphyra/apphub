@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.feature.notebook.model.pin.PinGroupResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.feature.notebook.server.PinController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.pin.PinService;
 import com.github.saphyra.apphub.service.notebook.service.pin.group.PinGroupCreationService;
@@ -32,75 +32,75 @@ public class PinControllerImpl implements PinController {
     private final PinGroupUpdateService pinGroupUpdateService;
 
     @Override
-    public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change pin status of list item {}", accessTokenHeader.getUserId(), listItemId);
+    public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessToken accessToken) {
+        log.info("{} wants to change pin status of list item {}", accessToken.getUserId(), listItemId);
         pinService.pinListItem(listItemId, pinned.getValue());
     }
 
     @Override
-    public List<NotebookView> getPinnedItems(UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants wo query his pinned items", accessTokenHeader.getUserId());
-        return pinService.getPinnedItems(accessTokenHeader.getUserId(), pinGroupId);
+    public List<NotebookView> getPinnedItems(UUID pinGroupId, AccessToken accessToken) {
+        log.info("{} wants wo query his pinned items", accessToken.getUserId());
+        return pinService.getPinnedItems(accessToken.getUserId(), pinGroupId);
     }
 
     @Override
-    public List<PinGroupResponse> createPinGroup(OneParamRequest<String> groupName, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a pin group.", accessTokenHeader.getUserId());
+    public List<PinGroupResponse> createPinGroup(OneParamRequest<String> groupName, AccessToken accessToken) {
+        log.info("{} wants to create a pin group.", accessToken.getUserId());
 
-        pinGroupCreationService.create(accessTokenHeader.getUserId(), groupName.getValue());
+        pinGroupCreationService.create(accessToken.getUserId(), groupName.getValue());
 
-        return getPinGroups(accessTokenHeader);
+        return getPinGroups(accessToken);
     }
 
     @Override
-    public List<PinGroupResponse> renamePinGroup(OneParamRequest<String> groupName, UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to rename pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
+    public List<PinGroupResponse> renamePinGroup(OneParamRequest<String> groupName, UUID pinGroupId, AccessToken accessToken) {
+        log.info("{} wants to rename pinGroup {}", accessToken.getUserId(), pinGroupId);
 
         pinGroupRenameService.rename(pinGroupId, groupName.getValue());
 
-        return getPinGroups(accessTokenHeader);
+        return getPinGroups(accessToken);
     }
 
     @Override
-    public List<PinGroupResponse> getPinGroups(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his pin groups.", accessTokenHeader.getUserId());
+    public List<PinGroupResponse> getPinGroups(AccessToken accessToken) {
+        log.info("{} wants to know his pin groups.", accessToken.getUserId());
 
-        return pinGroupQueryService.getPinGroups(accessTokenHeader.getUserId());
+        return pinGroupQueryService.getPinGroups(accessToken.getUserId());
     }
 
     @Override
-    public List<PinGroupResponse> deletePinGroup(UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
+    public List<PinGroupResponse> deletePinGroup(UUID pinGroupId, AccessToken accessToken) {
+        log.info("{} wants to delete pinGroup {}", accessToken.getUserId(), pinGroupId);
 
         pinGroupDeletionService.delete(pinGroupId);
 
-        return getPinGroups(accessTokenHeader);
+        return getPinGroups(accessToken);
     }
 
     @Override
-    public List<NotebookView> addItemToPinGroup(UUID pinGroupId, UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add listItem {} to pinGroup {}", accessTokenHeader.getUserId(), listItemId, pinGroupId);
+    public List<NotebookView> addItemToPinGroup(UUID pinGroupId, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to add listItem {} to pinGroup {}", accessToken.getUserId(), listItemId, pinGroupId);
 
-        pinGroupItemService.addItem(accessTokenHeader.getUserId(), pinGroupId, listItemId);
+        pinGroupItemService.addItem(accessToken.getUserId(), pinGroupId, listItemId);
 
-        return getPinnedItems(pinGroupId, accessTokenHeader);
+        return getPinnedItems(pinGroupId, accessToken);
     }
 
     @Override
-    public List<NotebookView> removeItemFromPinGroup(UUID pinGroupId, UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to remove listItem {} from pinGroup {}", accessTokenHeader.getUserId(), listItemId, pinGroupId);
+    public List<NotebookView> removeItemFromPinGroup(UUID pinGroupId, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to remove listItem {} from pinGroup {}", accessToken.getUserId(), listItemId, pinGroupId);
 
-        pinGroupItemService.removeItem(accessTokenHeader.getUserId(), pinGroupId, listItemId);
+        pinGroupItemService.removeItem(accessToken.getUserId(), pinGroupId, listItemId);
 
-        return getPinnedItems(pinGroupId, accessTokenHeader);
+        return getPinnedItems(pinGroupId, accessToken);
     }
 
     @Override
-    public List<PinGroupResponse> pinGroupOpened(UUID pinGroupId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} opened pinGroup {}", accessTokenHeader.getUserId(), pinGroupId);
+    public List<PinGroupResponse> pinGroupOpened(UUID pinGroupId, AccessToken accessToken) {
+        log.info("{} opened pinGroup {}", accessToken.getUserId(), pinGroupId);
 
         pinGroupUpdateService.setLastOpened(pinGroupId);
 
-        return getPinGroups(accessTokenHeader);
+        return getPinGroups(accessToken);
     }
 }

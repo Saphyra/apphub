@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.etc.modules.server;
 
 import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
@@ -25,11 +25,11 @@ public interface ModulesController {
     void deleteAccountEvent(@RequestBody SendEventRequest<DeleteAccountEvent> request);
 
     @RequestMapping(method = RequestMethod.GET, path = ModulesEndpoints.MODULES_GET_MODULES_OF_USER)
-    Map<String, List<ModuleResponse>> getModules(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken, @RequestParam(name = "mobile", required = false, defaultValue = "false") boolean mobileClient);
+    Map<String, List<ModuleResponse>> getModules(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken, @RequestParam(name = "mobile", required = false, defaultValue = "false") boolean mobileClient);
 
     @RequestMapping(method = RequestMethod.POST, path = ModulesEndpoints.MODULES_SET_FAVORITE)
     Map<String, List<ModuleResponse>> setFavorite(
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessToken,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken,
         @PathVariable("module") String module,
         @RequestBody OneParamRequest<Boolean> favorite
     );

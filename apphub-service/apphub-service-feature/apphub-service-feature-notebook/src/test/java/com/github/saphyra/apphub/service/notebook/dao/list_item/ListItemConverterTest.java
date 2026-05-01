@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
@@ -51,7 +51,7 @@ public class ListItemConverterTest {
     private ListItemConverter underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void convertEntity_nullBooleans() {
@@ -66,8 +66,8 @@ public class ListItemConverterTest {
         given(uuidConverter.convertEntity(LIST_ITEM_ID_STRING)).willReturn(LIST_ITEM_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(uuidConverter.convertEntity(PARENT_STRING)).willReturn(PARENT);
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(stringEncryptor.decrypt(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_TITLE)).willReturn(DECRYPTED_TITLE);
 
@@ -97,8 +97,8 @@ public class ListItemConverterTest {
         given(uuidConverter.convertEntity(LIST_ITEM_ID_STRING)).willReturn(LIST_ITEM_ID);
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
         given(uuidConverter.convertEntity(PARENT_STRING)).willReturn(PARENT);
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(stringEncryptor.decrypt(ENCRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_TITLE)).willReturn(DECRYPTED_TITLE);
         given(booleanEncryptor.decrypt(ENCRYPTED_PINNED, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_PINNED)).willReturn(true);
@@ -130,8 +130,8 @@ public class ListItemConverterTest {
         given(uuidConverter.convertDomain(LIST_ITEM_ID)).willReturn(LIST_ITEM_ID_STRING);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(PARENT)).willReturn(PARENT_STRING);
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(stringEncryptor.encrypt(DECRYPTED_TITLE, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_TITLE)).willReturn(ENCRYPTED_TITLE);
         given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID_STRING, LIST_ITEM_ID_STRING, COLUMN_PINNED)).willReturn(ENCRYPTED_PINNED);

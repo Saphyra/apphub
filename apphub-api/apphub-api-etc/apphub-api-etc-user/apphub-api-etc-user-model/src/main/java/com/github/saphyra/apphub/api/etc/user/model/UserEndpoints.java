@@ -25,6 +25,8 @@ public class UserEndpoints {
     public static final String USER_DATA_INTERNAL_GET_ACCOUNT = "/internal/api/user/data/{userId}";
     public static final String USER_DATA_INTERNAL_USER_EXISTS = "/internal/api/user/data/{userId}/exists";
     public static final String USER_DATA_GET_USERNAME = "/api/user/data/name";
+    public static final String INTERNAL_AUTHORIZATION_AUTHORIZE = "/internal/api/user/autorization/authorize";
+    public static final String INTERNAL_AUTHORIZATION_GET_ROLES = "/internal/api/user/autorization/{userId}/roles";
 
     //Ban
     public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";

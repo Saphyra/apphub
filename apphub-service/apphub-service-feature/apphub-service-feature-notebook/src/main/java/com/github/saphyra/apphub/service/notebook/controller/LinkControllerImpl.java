@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.LinkRequest;
 import com.github.saphyra.apphub.api.feature.notebook.server.LinkController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.link.LinkCreationService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class LinkControllerImpl implements LinkController {
     private final LinkCreationService linkCreationService;
 
     @Override
-    public OneParamResponse<UUID> createLink(LinkRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("Creating new link for user {}", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(linkCreationService.create(request, accessTokenHeader.getUserId()));
+    public OneParamResponse<UUID> createLink(LinkRequest request, AccessToken accessToken) {
+        log.info("Creating new link for user {}", accessToken.getUserId());
+        return new OneParamResponse<>(linkCreationService.create(request, accessToken.getUserId()));
     }
 }

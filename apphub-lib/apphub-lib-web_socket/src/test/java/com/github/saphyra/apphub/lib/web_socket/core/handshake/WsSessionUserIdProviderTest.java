@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.web_socket.core.handshake;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class WsSessionUserIdProviderTest {
     private ServerHttpRequest request;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     void noHeader() {
@@ -50,8 +50,8 @@ class WsSessionUserIdProviderTest {
         httpHeaders.put(Constants.ACCESS_TOKEN_HEADER, List.of(ENCODED_ACCESS_TOKEN));
         given(request.getHeaders()).willReturn(httpHeaders);
 
-        given(accessTokenHeaderConverter.convertEntity(ENCODED_ACCESS_TOKEN)).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessTokenHeaderConverter.convertEntity(ENCODED_ACCESS_TOKEN)).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
         Optional<UUID> result = underTest.findUserId(request);
 

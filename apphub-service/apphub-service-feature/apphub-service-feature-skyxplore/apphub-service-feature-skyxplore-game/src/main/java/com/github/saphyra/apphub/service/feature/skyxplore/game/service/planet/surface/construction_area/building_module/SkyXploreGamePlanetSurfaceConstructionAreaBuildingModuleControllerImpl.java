@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.
 
 import com.github.saphyra.apphub.api.feature.skyxplore.game.server.game.solar_system.planet.surface.construction_area.SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleController;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import lombok.RequiredArgsConstructor;
@@ -23,44 +23,44 @@ public class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerI
     private final CancelDeconstructionFacade cancelDeconstructionFacade;
 
     @Override
-    public List<BuildingModuleResponse> getBuildingModules(UUID constructionAreaId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the buildingModules of constructionArea {}", accessTokenHeader.getUserId(), constructionAreaId);
-        return buildingModuleQueryService.getBuildingModulesOfConstructionArea(accessTokenHeader.getUserId(), constructionAreaId);
+    public List<BuildingModuleResponse> getBuildingModules(UUID constructionAreaId, AccessToken accessToken) {
+        log.info("{} wants to know the buildingModules of constructionArea {}", accessToken.getUserId(), constructionAreaId);
+        return buildingModuleQueryService.getBuildingModulesOfConstructionArea(accessToken.getUserId(), constructionAreaId);
     }
 
     @Override
-    public List<BuildingModuleResponse> constructBuildingModule(OneParamRequest<String> buildingModuleDataId, UUID constructionAreaId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to construct buildingModule {} on constructionArea {}", accessTokenHeader.getUserId(), buildingModuleDataId.getValue(), constructionAreaId);
+    public List<BuildingModuleResponse> constructBuildingModule(OneParamRequest<String> buildingModuleDataId, UUID constructionAreaId, AccessToken accessToken) {
+        log.info("{} wants to construct buildingModule {} on constructionArea {}", accessToken.getUserId(), buildingModuleDataId.getValue(), constructionAreaId);
 
-        constructBuildingModuleService.constructBuildingModule(accessTokenHeader.getUserId(), constructionAreaId, buildingModuleDataId.getValue());
+        constructBuildingModuleService.constructBuildingModule(accessToken.getUserId(), constructionAreaId, buildingModuleDataId.getValue());
 
-        return getBuildingModules(constructionAreaId, accessTokenHeader);
+        return getBuildingModules(constructionAreaId, accessToken);
     }
 
     @Override
-    public List<BuildingModuleResponse> cancelConstructionOfBuildingModule(UUID constructionId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to cancel construction {} of buildingModule", accessTokenHeader.getUserId(), constructionId);
+    public List<BuildingModuleResponse> cancelConstructionOfBuildingModule(UUID constructionId, AccessToken accessToken) {
+        log.info("{} wants to cancel construction {} of buildingModule", accessToken.getUserId(), constructionId);
 
-        UUID constructionAreaId = cancelConstructionOfBuildingModuleService.cancelConstruction(accessTokenHeader.getUserId(), constructionId);
+        UUID constructionAreaId = cancelConstructionOfBuildingModuleService.cancelConstruction(accessToken.getUserId(), constructionId);
 
-        return getBuildingModules(constructionAreaId, accessTokenHeader);
+        return getBuildingModules(constructionAreaId, accessToken);
     }
 
     @Override
-    public List<BuildingModuleResponse> deconstructBuildingModule(UUID buildingModuleId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to deconstruct buildingModule {}", accessTokenHeader.getUserId(), buildingModuleId);
+    public List<BuildingModuleResponse> deconstructBuildingModule(UUID buildingModuleId, AccessToken accessToken) {
+        log.info("{} wants to deconstruct buildingModule {}", accessToken.getUserId(), buildingModuleId);
 
-        UUID constructionAreaId = deconstructBuildingModuleService.deconstructBuildingModule(accessTokenHeader.getUserId(), buildingModuleId);
+        UUID constructionAreaId = deconstructBuildingModuleService.deconstructBuildingModule(accessToken.getUserId(), buildingModuleId);
 
-        return getBuildingModules(constructionAreaId, accessTokenHeader);
+        return getBuildingModules(constructionAreaId, accessToken);
     }
 
     @Override
-    public List<BuildingModuleResponse> cancelDeconstructionOfBuildingModule(UUID deconstructionId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to cancel of deconstruction {} of buildingModule", accessTokenHeader.getUserId(), deconstructionId);
+    public List<BuildingModuleResponse> cancelDeconstructionOfBuildingModule(UUID deconstructionId, AccessToken accessToken) {
+        log.info("{} wants to cancel of deconstruction {} of buildingModule", accessToken.getUserId(), deconstructionId);
 
-        UUID constructionAreaId = cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(accessTokenHeader.getUserId(), deconstructionId);
+        UUID constructionAreaId = cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(accessToken.getUserId(), deconstructionId);
 
-        return getBuildingModules(constructionAreaId, accessTokenHeader);
+        return getBuildingModules(constructionAreaId, accessToken);
     }
 }

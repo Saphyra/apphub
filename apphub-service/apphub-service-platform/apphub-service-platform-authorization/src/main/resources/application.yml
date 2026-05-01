@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: authorization
+
+authorization:
+  privateKey: ${PRIVATE_KEY}
+  publicKey: ${PUBLIC_KEY}
+  expirationDuration:
+    refreshToken:
+      rememberMe: P30D
+      default: PT30M
+    accessToken: ${authorization.accessTokenExpiration}

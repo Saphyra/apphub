@@ -56,6 +56,7 @@
         <versions.jackson-core>2.20.1</versions.jackson-core>
         <versions.jackson-databind>3.0.1</versions.jackson-databind>
         <versions.commons-net>3.12.0</versions.commons-net>
+        <versions.jsonwebetoken>0.13.0</versions.jsonwebetoken>
 
         <!-- Plugin Versions -->
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>

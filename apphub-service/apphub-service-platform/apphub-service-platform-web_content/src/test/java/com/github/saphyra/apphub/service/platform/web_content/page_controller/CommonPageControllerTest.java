@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.web_content.page_controller;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,13 +21,13 @@ public class CommonPageControllerTest {
     private CommonPageController underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void getCommunityPage() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        ModelAndView result = underTest.community(accessTokenHeader);
+        ModelAndView result = underTest.community(accessToken);
 
         assertThat(result.getViewName()).isEqualTo("community/community");
         assertThat(result.getModel()).containsEntry("userId", USER_ID);

@@ -44,7 +44,7 @@ class LocalRunConfigurationMenuController {
             .sorted(Comparator.naturalOrder())
             .toList();
         modelAndView.addObject("services", serviceNames);
-        modelAndView.addObject("integration_test_thread_count", propertyDao.getLocalIntegrationRetryCount());
+        modelAndView.addObject("integration_test_thread_count", propertyDao.getLocalRunTestsThreadCount());
         modelAndView.addObject("pre_create_webdriver_count", propertyDao.getLocalRunPreCreateDriverCount());
         modelAndView.addObject("integration_test_retry_count", propertyDao.getLocalIntegrationRetryCount());
         modelAndView.addObject("service_startup_limit", propertyDao.getLocalStartupCountLimit());

@@ -23,15 +23,15 @@ export const getCookie = (key) => {
     return null;
 }
 
-export const setCookie = (key, value, expirationDays) => {
+export const setCookie = (key, value, expiration, path = "/") => {
     let cookieString = key + "=" + value;
-    if (expirationDays !== null && expirationDays !== undefined) {
-        const date = new Date();
-        date.setTime(+ date + (expirationDays * 86400000))
-        cookieString += ";expires=" + date.toGMTString();
+    if (expiration !== null && expiration !== undefined) {
+        const date = new Date(expiration);
+        cookieString += ";expires=" + date.toUTCString();
     }
-    cookieString += "; path=/";
+    cookieString += ";path=" + path;
 
+    console.log(cookieString);
     window.document.cookie = cookieString;
 };
 

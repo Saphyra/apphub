@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.api.platform.monitoring.model.GetMetricsResponse;
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.Metric;
 import com.github.saphyra.apphub.service.platform.monitoring.dao.metric.MetricDao;
@@ -57,7 +57,7 @@ class MonitoringControllerImplTest {
     private PutMetricsRequest request;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private Metric metric;
@@ -80,14 +80,14 @@ class MonitoringControllerImplTest {
     void getFeatures() {
         given(metricDao.getFeatures()).willReturn(List.of(Feature.ELITE_BASE_MESSAGE_PROCESSING));
 
-        assertThat(underTest.getFeatures(accessTokenHeader)).containsExactly(Feature.ELITE_BASE_MESSAGE_PROCESSING);
+        assertThat(underTest.getFeatures(accessToken)).containsExactly(Feature.ELITE_BASE_MESSAGE_PROCESSING);
     }
 
     @Test
     void getFunctionalities() {
         given(metricDao.getFunctionalitiesOfFeature(Feature.ELITE_BASE_MESSAGE_PROCESSING)).willReturn(List.of(FUNCTIONALITY));
 
-        assertThat(underTest.getFunctionalities(Feature.ELITE_BASE_MESSAGE_PROCESSING, accessTokenHeader)).containsExactly(FUNCTIONALITY);
+        assertThat(underTest.getFunctionalities(Feature.ELITE_BASE_MESSAGE_PROCESSING, accessToken)).containsExactly(FUNCTIONALITY);
     }
 
     @Test
@@ -97,13 +97,13 @@ class MonitoringControllerImplTest {
         given(metricServiceDao.getByMetricIds(List.of(METRIC_ID))).willReturn(List.of(metricService));
         given(metricService.getService()).willReturn(SERVICE);
 
-        assertThat(underTest.getServices(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, accessTokenHeader)).containsExactly(SERVICE);
+        assertThat(underTest.getServices(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, accessToken)).containsExactly(SERVICE);
     }
 
     @Test
     void getMetrics() {
         given(metricDataQueryService.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE)).willReturn(List.of(getMetricsResponse));
 
-        assertThat(underTest.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, accessTokenHeader)).containsExactly(getMetricsResponse);
+        assertThat(underTest.getMetrics(MetricDataType.MINUTE, Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, SERVICE, accessToken)).containsExactly(getMetricsResponse);
     }
 }

@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.etc.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.api.etc.user.server.RoleController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -35,31 +35,31 @@ class RoleControllerImpl implements RoleController {
     }
 
     @Override
-    public UserRoleResponse addRole(RoleRequest roleRequest, AccessTokenHeader accessTokenHeader) {
+    public UserRoleResponse addRole(RoleRequest roleRequest, AccessToken accessToken) {
         log.info("AddRoleRequest: {}", roleRequest);
-        roleAdditionService.addRole(accessTokenHeader.getUserId(), roleRequest);
+        roleAdditionService.addRole(accessToken.getUserId(), roleRequest);
 
         return roleQueryService.getRoles(roleRequest.getUserId());
     }
 
     @Override
-    public UserRoleResponse removeRole(RoleRequest roleRequest, AccessTokenHeader accessTokenHeader) {
+    public UserRoleResponse removeRole(RoleRequest roleRequest, AccessToken accessToken) {
         log.info("RemoveRoleRequest: {}", roleRequest);
-        roleRemovalService.removeRole(accessTokenHeader.getUserId(), roleRequest);
+        roleRemovalService.removeRole(accessToken.getUserId(), roleRequest);
 
         return roleQueryService.getRoles(roleRequest.getUserId());
     }
 
     @Override
-    public void addToAll(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to add role {} to all", accessTokenHeader.getUserId(), role);
-        roleToAllService.addToAll(accessTokenHeader.getUserId(), password.getValue(), role);
+    public void addToAll(OneParamRequest<String> password, String role, AccessToken accessToken) {
+        log.info("{} wants to add role {} to all", accessToken.getUserId(), role);
+        roleToAllService.addToAll(accessToken.getUserId(), password.getValue(), role);
     }
 
     @Override
-    public void removeFromAll(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to remove role {} from all", accessTokenHeader.getUserId(), role);
-        roleToAllService.removeFromAll(accessTokenHeader.getUserId(), password.getValue(), role);
+    public void removeFromAll(OneParamRequest<String> password, String role, AccessToken accessToken) {
+        log.info("{} wants to remove role {} from all", accessToken.getUserId(), role);
+        roleToAllService.removeFromAll(accessToken.getUserId(), password.getValue(), role);
     }
 
     @Override
@@ -69,9 +69,9 @@ class RoleControllerImpl implements RoleController {
     }
 
     @Override
-    public OneParamResponse<Boolean> isUserAdmin(AccessTokenHeader accessTokenHeader) {
-        log.info("Checking if user {} is admin", accessTokenHeader.getUserId());
+    public OneParamResponse<Boolean> isUserAdmin(AccessToken accessToken) {
+        log.info("Checking if user {} is admin", accessToken.getUserId());
 
-        return new OneParamResponse<>(accessTokenHeader.getRoles().contains(Constants.ROLE_ADMIN));
+        return new OneParamResponse<>(accessToken.getRoles().contains(Constants.ROLE_ADMIN));
     }
 }

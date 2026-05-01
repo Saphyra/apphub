@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.population;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,28 +35,28 @@ public class SkyXplorePlanetPopulationControllerImplTest {
     private SkyXplorePlanetPopulationControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private CitizenResponse citizenResponse;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getPopulation() {
         given(populationQueryService.getPopulation(USER_ID, PLANET_ID)).willReturn(Arrays.asList(citizenResponse));
 
-        List<CitizenResponse> result = underTest.getPopulation(PLANET_ID, accessTokenHeader);
+        List<CitizenResponse> result = underTest.getPopulation(PLANET_ID, accessToken);
 
         assertThat(result).containsExactly(citizenResponse);
     }
 
     @Test
     public void renameCitizen() {
-        underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessTokenHeader);
+        underTest.renameCitizen(new OneParamRequest<>(NEW_NAME), CITIZEN_ID, accessToken);
 
         then(renameCitizenService).should().renameCitizen(USER_ID, CITIZEN_ID, NEW_NAME);
     }

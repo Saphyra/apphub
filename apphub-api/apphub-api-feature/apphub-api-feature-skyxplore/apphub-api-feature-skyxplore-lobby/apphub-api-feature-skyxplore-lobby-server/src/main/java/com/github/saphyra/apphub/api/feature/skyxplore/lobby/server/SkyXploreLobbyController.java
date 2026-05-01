@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.feature.skyxplore.lobby.server;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyViewForPage;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -21,55 +21,55 @@ import java.util.UUID;
 
 public interface SkyXploreLobbyController {
     @GetMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_IS_IN_LOBBY)
-    OneParamResponse<Boolean> isUserInLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<Boolean> isUserInLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Creating a new lobby with the given game name
      */
     @PutMapping(SkyXploreLobbyEndpoints.SKYXPLORE_CREATE_LOBBY)
-    void createLobby(@RequestBody OneParamRequest<String> name, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void createLobby(@RequestBody OneParamRequest<String> name, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Checking if the given user is already in a lobby, and returning the details of that lobby.
      * Used by WebUI to redirect the user, or display the lobby page.
      */
     @GetMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_VIEW_FOR_PAGE)
-    LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    LobbyViewForPage lobbyForPage(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Removing the user from the lobby. Also deleting the lobby if the host left.
      */
     @DeleteMapping(SkyXploreLobbyEndpoints.SKYXPLORE_EXIT_FROM_LOBBY)
-    void exitFromLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void exitFromLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Inviting the given friend to the lobby.
      * Rate limited
      */
     @PostMapping(SkyXploreLobbyEndpoints.SKYXPLORE_INVITE_TO_LOBBY)
-    void inviteToLobby(@PathVariable("friendId") UUID friendId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void inviteToLobby(@PathVariable("friendId") UUID friendId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_ACCEPT_INVITATION)
-    void acceptInvitation(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void acceptInvitation(@PathVariable("invitorId") UUID invitorId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_GET_PLAYERS)
-    List<LobbyPlayerResponse> getPlayersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LobbyPlayerResponse> getPlayersOfLobby(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Starting the game creation / loading depending on the lobby was created as brand-new, or from a saved game.
      */
     @PostMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_START_GAME)
-    void startGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void startGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS)
-    List<ActiveFriendResponse> getActiveFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<ActiveFriendResponse> getActiveFriends(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Creating a lobby from a saved game.
      * Automatically invites the players of the given game
      */
     @PostMapping(SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_LOAD_GAME)
-    void loadGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void loadGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Callback for game service to notify the lobby members about the game is loaded.
