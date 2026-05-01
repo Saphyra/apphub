@@ -39,10 +39,10 @@ public class LanguageControllerImplTest {
     }
 
     @Test
-    public void getLanguage() {
+    public void getLanguageInternal() {
         given(languageService.getLanguage(USER_ID)).willReturn(LOCALE);
 
-        String result = underTest.getLanguage(USER_ID);
+        String result = underTest.getLanguageInternal(USER_ID);
 
         assertThat(result).isEqualTo(LOCALE);
     }

@@ -9,6 +9,8 @@ import RequestMethod from "./RequestMethod";
 import Response from "./Response";
 import ResponseStatus from "./ResponseStatus";
 
+const REFRESH_URL = "/api/authorization/token/refresh";
+
 export default class Request {
     constructor(requestMethod, url, body, rawBody = false) {
         this.requestMethod = requestMethod;
@@ -46,7 +48,7 @@ export default class Request {
         return this;
     }
 
-    send(setDisplaySpinner = () => { }) {
+    send(setDisplaySpinner = () => { }, shouldRefreshTokens = true) {
         setDisplaySpinner(true);
 
         const xhr = new XMLHttpRequest();
@@ -69,10 +71,14 @@ export default class Request {
                 if (response.status === ResponseStatus.OK) {
                     const parsedBody = this.responseConverter(response);
                     resolve(parsedBody);
-                } else if (response.status === ResponseStatus.UNAUTHORIZED) {
-                    return refreshTokens()
-                        .then(() => this.send(setDisplaySpinner))
-                        .then(resolve);
+                } else if (response.status === ResponseStatus.UNAUTHORIZED && shouldRefreshTokens) {
+                    if (this.url.endsWith(REFRESH_URL)) {
+                        reject();
+                    } else {
+                        return refreshTokens()
+                            .then(() => this.send(setDisplaySpinner))
+                            .then(resolve);
+                    }
                 } else {
                     this.handleError(response);
                     reject();
@@ -99,9 +105,9 @@ export default class Request {
 }
 
 async function refreshTokens() {
-    return new Request(RequestMethod.POST, "/api/authorization/token/refresh")
+    return new Request(RequestMethod.POST, REFRESH_URL)
         .addErrorHandler(new ErrorHandler(
-            (response) => response.status === ResponseStatus.UNAUTHORIZED,
+            (response) => response.status == ResponseStatus.UNAUTHORIZED,
             () => {
                 sessionStorage.errorCode = NotificationKey.NO_VALID_SESSION;
                 window.location.href = "/web?redirect=/" + (window.location.pathname + window.location.search).substr(1);

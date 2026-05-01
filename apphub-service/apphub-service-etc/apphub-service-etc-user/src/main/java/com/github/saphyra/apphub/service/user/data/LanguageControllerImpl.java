@@ -24,7 +24,7 @@ class LanguageControllerImpl implements LanguageController {
     }
 
     @Override
-    public String getLanguage(UUID userId) {
+    public String getLanguageInternal(UUID userId) {
         return languageService.getLanguage(userId);
     }
 }

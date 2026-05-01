@@ -24,5 +24,5 @@ public interface LanguageController {
      * Called by main-gateway's LocaleFilter
      */
     @RequestMapping(method = RequestMethod.GET, value = UserEndpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
-    String getLanguage(@PathVariable("userId") UUID userId);
+    String getLanguageInternal(@PathVariable("userId") UUID userId);
 }

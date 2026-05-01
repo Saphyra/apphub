@@ -68,9 +68,9 @@ public class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    public void register(RegistrationRequest registrationRequest, String locale) {
-        log.info("RegistrationRequest arrived for username {} and email {}", registrationRequest.getUsername(), registrationRequest.getEmail());
-        registrationService.register(registrationRequest, locale);
+    public void register(RegistrationRequest registrationRequest) {
+        log.info("{} arrived", registrationRequest);
+        registrationService.register(registrationRequest);
     }
 
     @Override
@@ -100,6 +100,7 @@ public class AccountControllerImpl implements AccountController {
             .userId(user.getUserId())
             .email(user.getEmail())
             .username(user.getUsername())
+            .locale(user.getLanguage())
             .build();
     }
 

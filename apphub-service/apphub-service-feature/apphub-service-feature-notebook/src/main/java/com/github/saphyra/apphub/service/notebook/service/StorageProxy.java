@@ -26,16 +26,16 @@ public class StorageProxy {
             .fileName(fileName)
             .size(size)
             .build();
-        return storageClient.createFile(request, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+        return storageClient.createFile(request, accessTokenProvider.getAsString(), localeProvider.getOrDefault());
     }
 
     public void deleteFile(UUID fileId) {
-        storageClient.deleteFile(fileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+        storageClient.deleteFile(fileId, accessTokenProvider.getAsString(), localeProvider.getOrDefault());
     }
 
     public StoredFileResponse getFileMetadata(UUID storedFileId) {
         try {
-            return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+            return storageClient.getFileMetadata(storedFileId, accessTokenProvider.getAsString(), localeProvider.getOrDefault());
         } catch (FeignException e) {
             if (e.status() == HttpStatus.NOT_FOUND.value()) {
                 log.warn("StoredFile not found with id {}", storedFileId);

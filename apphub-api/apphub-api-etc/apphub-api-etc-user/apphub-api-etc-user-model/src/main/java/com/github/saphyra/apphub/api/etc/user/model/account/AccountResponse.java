@@ -15,4 +15,5 @@ public class AccountResponse {
     private UUID userId;
     private String email;
     private String username;
+    private String locale;
 }

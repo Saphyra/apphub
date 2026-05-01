@@ -132,14 +132,16 @@ public class WebDriverProvider {
                 driver.close();
             }
 
-            driver.switchTo().window(handles.get(0));
+            driver.manage()
+                .deleteAllCookies();
+
+            driver.switchTo().window(handles.getFirst());
             driver.navigate().to(UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
 
             AwaitilityWrapper.createDefault()
                 .until(() -> driver.getCurrentUrl().endsWith(GenericEndpoints.ERROR_PAGE))
                 .assertTrue("Failed to redirect to Error page. Current url: " + driver.getCurrentUrl());
-            driver.manage()
-                .deleteAllCookies();
+
         } catch (Exception e) {
             log.error("Failed releasing driver. Removing from cache...");
             try {

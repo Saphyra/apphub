@@ -11,12 +11,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Component
 @Slf4j
+@Deprecated(forRemoval = true) //TODO remove
 public class LocaleCookieFilter implements GlobalFilter, Ordered {
     private final ApphubLocaleResolver localeResolver;
     private final ErrorReporterService errorReporterService;

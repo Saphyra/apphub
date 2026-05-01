@@ -18,7 +18,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.github.saphyra.apphub.lib.common_domain.Constants.ACCESS_TOKEN_COOKIE;
-
+@Deprecated(forRemoval = true) //TODO remove
 @RequiredArgsConstructor
 @Slf4j
 @Component

@@ -6,11 +6,13 @@ import com.github.saphrya.apphub.service.platform.authorization.service.RefreshT
 import com.github.saphyra.apphub.api.platform.authorization.model.LoginRequest;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
 import com.github.saphyra.apphub.api.platform.authorization.server.AuthorizationController;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import static feign.Util.isBlank;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,12 +31,20 @@ class AuthorizationControllerImpl implements AuthorizationController {
     }
 
     @Override
-    public void logout(String refreshToken) {
-        logoutService.logout(refreshToken);
+    public void logout(String refreshToken, String accessToken) {
+        if (isBlank(refreshToken)) {
+            return;
+        }
+
+        logoutService.logout(refreshToken, accessToken);
     }
 
     @Override
-    public TokenResponse refresh(@CookieValue(Constants.REFRESH_TOKEN_COOKIE) String refreshToken) {
-        return refreshTokenService.refresh(refreshToken);
+    public ResponseEntity<TokenResponse> refresh(String refreshToken) {
+        if (isBlank(refreshToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(refreshTokenService.refresh(refreshToken), HttpStatus.OK);
     }
 }

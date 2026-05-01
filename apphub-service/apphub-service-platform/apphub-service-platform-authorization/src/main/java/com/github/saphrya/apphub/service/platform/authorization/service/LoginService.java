@@ -8,8 +8,11 @@ import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationR
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
 import com.github.saphyra.apphub.api.platform.authorization.model.LoginRequest;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,11 +36,18 @@ public class LoginService {
 
         AuthorizationResponse response = authorizationClientProxy.authorize(request);
 
-        RefreshToken refreshToken = tokenService.createRefreshToken(response.getUserId(), loginRequest.getRememberMe());
-        refreshTokenDao.save(refreshToken);
+        return switch (response.getAuthorizationResult()) {
+            case AUTHORIZED -> {
+                RefreshToken refreshToken = tokenService.createRefreshToken(response.getUserId(), loginRequest.getRememberMe());
+                refreshTokenDao.save(refreshToken);
 
-        AccessTokenDto accessToken = tokenService.createAccessToken(response.getUserId(), response.getRoles());
+                AccessTokenDto accessToken = tokenService.createAccessToken(response.getUserId(), response.getRoles());
 
-        return tokenResponseMapper.create(refreshToken, accessToken);
+                yield tokenResponseMapper.create(refreshToken, accessToken);
+            }
+            case USER_NOT_FOUND -> throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, "User not found by " + loginRequest.getUserIdentifier());
+            case USER_LOCKED -> throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, response.getUserId() + " is locked.");
+            case INCORRECT_PASSWORD -> throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, "Incorrect password for user " + response.getUserId());
+        };
     }
 }

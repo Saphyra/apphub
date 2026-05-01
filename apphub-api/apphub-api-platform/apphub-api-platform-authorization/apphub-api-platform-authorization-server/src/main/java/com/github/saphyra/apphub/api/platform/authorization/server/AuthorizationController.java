@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.authorization.model.AuthorizationE
 import com.github.saphyra.apphub.api.platform.authorization.model.LoginRequest;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,11 @@ public interface AuthorizationController {
     TokenResponse login(@RequestBody LoginRequest loginRequest);
 
     @PostMapping(AUTHORIZATION_LOGOUT)
-    void logout(@CookieValue(Constants.REFRESH_TOKEN_COOKIE) String refreshToken);
+    void logout(
+        @CookieValue(name = Constants.REFRESH_TOKEN_COOKIE, required = false) String refreshToken,
+        @CookieValue(name = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessToken
+    );
 
     @PostMapping(AUTHORIZATION_REFRESH_TOKEN)
-    TokenResponse refresh(@CookieValue(Constants.REFRESH_TOKEN_COOKIE) String refreshToken);
+    ResponseEntity<TokenResponse> refresh(@CookieValue(name = Constants.REFRESH_TOKEN_COOKIE, required = false) String refreshToken);
 }

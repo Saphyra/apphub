@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import tools.jackson.databind.ObjectMapper;
@@ -22,9 +21,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
 
-@Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true) //TODO remove
 class LocaleMandatoryFilter extends OncePerRequestFilter {
     private final AntPathMatcher antPathMatcher;
     private final CommonConfigProperties commonConfigProperties;
@@ -43,7 +42,7 @@ class LocaleMandatoryFilter extends OncePerRequestFilter {
             ErrorResponseWrapper errorResponse = errorResponseFactory.create(
                 commonConfigProperties.getDefaultLocale(),
                 HttpStatus.BAD_REQUEST,
-                ErrorCode.LOCALE_NOT_FOUND
+                ErrorCode.GENERAL_ERROR
             );
 
             response.setStatus(errorResponse.getStatus().value());

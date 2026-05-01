@@ -90,8 +90,10 @@ public class AccountControllerImplTest {
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
+        given(user.getLanguage()).willReturn(LOCALE);
 
         assertThat(underTest.changeEmail(accessToken, changeEmailRequest))
+            .returns(LOCALE, AccountResponse::getLocale)
             .returns(USER_ID_1, AccountResponse::getUserId)
             .returns(EMAIL, AccountResponse::getEmail)
             .returns(USERNAME, AccountResponse::getUsername);
@@ -108,10 +110,12 @@ public class AccountControllerImplTest {
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
+        given(user.getLanguage()).willReturn(LOCALE);
 
         assertThat(underTest.changeUsername(accessToken, changeUsernameRequest))
             .returns(USER_ID_1, AccountResponse::getUserId)
             .returns(EMAIL, AccountResponse::getEmail)
+            .returns(LOCALE, AccountResponse::getLocale)
             .returns(USERNAME, AccountResponse::getUsername);
 
         verify(changeUsernameService).changeUsername(USER_ID_1, changeUsernameRequest);
@@ -137,9 +141,9 @@ public class AccountControllerImplTest {
 
     @Test
     public void register() {
-        underTest.register(registrationRequest, LOCALE);
+        underTest.register(registrationRequest);
 
-        verify(registrationService).register(registrationRequest, LOCALE);
+        verify(registrationService).register(registrationRequest);
     }
 
     @Test
@@ -182,6 +186,7 @@ public class AccountControllerImplTest {
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
+        given(user.getLanguage()).willReturn(LOCALE);
 
         List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, true, accessToken);
 
@@ -189,6 +194,7 @@ public class AccountControllerImplTest {
         AccountResponse response = result.get(0);
         assertThat(response.getUserId()).isEqualTo(USER_ID_1);
         assertThat(response.getEmail()).isEqualTo(EMAIL);
+        assertThat(response.getLocale()).isEqualTo(LOCALE)  ;
         assertThat(response.getUsername()).isEqualTo(USERNAME);
     }
 
@@ -202,6 +208,7 @@ public class AccountControllerImplTest {
         given(user.getUserId()).willReturn(USER_ID_2);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
+        given(user.getLanguage()).willReturn(LOCALE);
 
         List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessToken);
 
@@ -210,6 +217,7 @@ public class AccountControllerImplTest {
         assertThat(response.getUserId()).isEqualTo(USER_ID_2);
         assertThat(response.getEmail()).isEqualTo(EMAIL);
         assertThat(response.getUsername()).isEqualTo(USERNAME);
+        assertThat(response.getLocale()).isEqualTo(LOCALE);
     }
 
     @Test
@@ -231,12 +239,14 @@ public class AccountControllerImplTest {
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
+        given(user.getLanguage()).willReturn(LOCALE);
 
         AccountResponse result = underTest.getAccountInternal(USER_ID_1);
 
         assertThat(result.getUserId()).isEqualTo(USER_ID_1);
         assertThat(result.getEmail()).isEqualTo(EMAIL);
         assertThat(result.getUsername()).isEqualTo(USERNAME);
+        assertThat(result.getLocale()).isEqualTo(LOCALE);
     }
 
     @Test
@@ -255,10 +265,12 @@ public class AccountControllerImplTest {
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
+        given(user.getLanguage()).willReturn(LOCALE);
 
         assertThat(underTest.getAccount(accessToken))
             .returns(USER_ID_1, AccountResponse::getUserId)
             .returns(EMAIL, AccountResponse::getEmail)
+            .returns(LOCALE, AccountResponse::getLocale)
             .returns(USERNAME, AccountResponse::getUsername);
     }
 

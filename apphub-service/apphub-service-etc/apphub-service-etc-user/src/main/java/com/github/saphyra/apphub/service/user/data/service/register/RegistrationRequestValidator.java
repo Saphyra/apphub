@@ -18,6 +18,7 @@ class RegistrationRequestValidator {
         String email = registrationRequest.getEmail();
         String username = registrationRequest.getUsername();
         String password = registrationRequest.getPassword();
+        //TODO validate language
 
         emailValidator.validateEmail(email);
         usernameValidator.validateUsername(username);

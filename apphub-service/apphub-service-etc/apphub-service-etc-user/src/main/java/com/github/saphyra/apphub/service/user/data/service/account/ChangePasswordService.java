@@ -47,7 +47,7 @@ public class ChangePasswordService {
                 .toList();
 
             accessTokenDao.deleteAll(accessTokens);
-            eventGatewayProxy.sendEvent(EmptyEvent.ACCESS_TOKENS_INVALIDATED, accessTokenIds, true);
+            eventGatewayProxy.sendEvent(EmptyEvent.ACCESS_TOKENS_INVALIDATED, accessTokenIds, true); //TODO rework
         }
     }
 }

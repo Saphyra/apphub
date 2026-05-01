@@ -20,10 +20,10 @@ public class RegistrationService {
     private final UserDao userDao;
     private final UserFactory userFactory;
 
-    public void register(RegistrationRequest registrationRequest, String locale) {
+    public void register(RegistrationRequest registrationRequest) {
         registrationRequestValidator.validate(registrationRequest);
 
-        User user = userFactory.create(registrationRequest.getEmail(), registrationRequest.getUsername(), registrationRequest.getPassword(), locale);
+        User user = userFactory.create(registrationRequest.getEmail(), registrationRequest.getUsername(), registrationRequest.getPassword(), registrationRequest.getLanguage());
         userDao.save(user);
         log.info("User successfully registered with userId {}", user.getUserId());
         addDefaultRoles(user.getUserId());

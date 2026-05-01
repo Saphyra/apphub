@@ -35,7 +35,7 @@ public interface AccountController {
     void deleteAccount(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken, @RequestBody OneParamRequest<String> password);
 
     @PostMapping(UserEndpoints.ACCOUNT_REGISTER)
-    void register(@RequestBody RegistrationRequest registrationRequest, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void register(@RequestBody RegistrationRequest registrationRequest);
 
     @GetMapping(UserEndpoints.USER_DATA_GET_USERNAME)
     OneParamResponse<String> getUsernameByUserId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

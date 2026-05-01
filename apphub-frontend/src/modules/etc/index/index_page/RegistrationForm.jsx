@@ -108,7 +108,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                 <Button
                     id="registration-button"
                     label={localizationHandler.get("register")}
-                    onclick={() => register(username, email, password)}
+                    onclick={() => register(username, email, password, localizationHandler.getLocale())}
                     disabled={!isFormValid()}
                 />
             </div>

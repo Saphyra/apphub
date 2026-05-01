@@ -3,6 +3,7 @@ package com.github.saphrya.apphub.service.platform.authorization.service;
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.config.AuthorizationProperties;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -105,6 +106,20 @@ class TokenService {
         return AccessTokenDto.builder()
             .jwt(jwt)
             .expiration(expiration)
+            .build();
+    }
+
+    public AccessToken parseAccessToken(String accessToken) {
+        Claims claims = Jwts.parser()
+            .verifyWith(keyService.getPublicKey())
+            .build()
+            .parseSignedClaims(accessToken)
+            .getPayload();
+
+        return AccessToken.builder()
+            .accessTokenId(uuidConverter.convertEntity(claims.getId()))
+            .userId(uuidConverter.convertEntity(claims.getSubject()))
+            .roles(objectMapper.readValue(claims.get(Constants.CLAIM_ROLES, String.class), List.class))
             .build();
     }
 }

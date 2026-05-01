@@ -75,7 +75,7 @@ public class CreateNewGameServiceTest {
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
         given(lobby.getSettings()).willReturn(settings);
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(lobby.getLobbyName()).willReturn(GAME_NAME);
         given(lobbyPlayer.getUserId()).willReturn(USER_ID);
         given(gameCreationClient.createGame(any(SkyXploreGameCreationRequest.class), eq(LOCALE))).willReturn(GAME_ID);

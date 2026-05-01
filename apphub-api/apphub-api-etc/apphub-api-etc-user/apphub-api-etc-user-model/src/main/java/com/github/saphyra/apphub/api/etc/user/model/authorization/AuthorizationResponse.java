@@ -13,6 +13,7 @@ import java.util.UUID;
 @Data
 @Builder
 public class AuthorizationResponse {
+    private AuthorizationResult authorizationResult;
     private UUID userId;
     private List<String> roles;
 }

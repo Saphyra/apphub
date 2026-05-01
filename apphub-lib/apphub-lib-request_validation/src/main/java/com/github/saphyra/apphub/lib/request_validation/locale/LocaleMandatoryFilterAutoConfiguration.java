@@ -2,26 +2,23 @@ package com.github.saphyra.apphub.lib.request_validation.locale;
 
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import com.github.saphyra.apphub.lib.config.common.FilterOrder;
-import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.util.AntPathMatcher;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@AutoConfiguration
 @Slf4j
-@ComponentScan
+/*@ComponentScan
 @EnableErrorTranslation
 @ConfigurationProperties(prefix = "locale-mandatory-filter")
+ */
 @Data
+@Deprecated(forRemoval = true) //TODO remove
 class LocaleMandatoryFilterAutoConfiguration {
     private List<WhiteListedEndpoint> whiteListedEndpoints = new ArrayList<>();
 
@@ -31,7 +28,6 @@ class LocaleMandatoryFilterAutoConfiguration {
         return new AntPathMatcher();
     }
 
-    @Bean
     FilterRegistrationBean<LocaleMandatoryFilter> localeMandatoryFilterFilterRegistrationBean(LocaleMandatoryFilter contextFilter) {
         log.debug("LocaleMandatoryFilter order: {}", FilterOrder.LOCALE_MANDATORY_FILTER);
         FilterRegistrationBean<LocaleMandatoryFilter> filterRegistrationBean = new FilterRegistrationBean<>();

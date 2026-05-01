@@ -1,12 +1,16 @@
 package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class Navigation {
     public static String toIndexPage(int serverPort, WebDriver driver) {
         String url = UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE);
         toUrl(driver, url);
+
+        AwaitilityWrapper.retry(() -> driver.findElement(By.cssSelector(".language.en")).click());
+
         return url;
     }
 

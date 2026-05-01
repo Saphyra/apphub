@@ -10,13 +10,12 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.Ordered;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Component
 @Slf4j
+@Deprecated(forRemoval = true)
 public class ChangeLocaleFilter implements GlobalFilter, Ordered {
     private final ErrorReporterService errorReporterService;
     private final AntPathMatcher antPathMatcher;
