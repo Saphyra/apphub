@@ -1,7 +1,6 @@
 import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./create_event_page_localization.json";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useQueryParams from "common/hook/UseQueryParams";
 import { hasValue, nullIfEmpty } from "common/js/Utils";
@@ -26,7 +25,6 @@ const CalendarCreateEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const queryParams = useQueryParams();

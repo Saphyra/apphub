@@ -3,7 +3,6 @@ import localizationData from "./error_report_details_localization.json";
 import "./error_report_details.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
@@ -17,7 +16,6 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import { ToastContainer } from "react-toastify";
 import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_PAGE, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
-import { ERROR_REPORT_PAGE } from "common/js/GenericEndpoints";
 
 const ErrorReportDetailsPage = () => {
     const { errorReportId } = useParams();
@@ -27,7 +25,6 @@ const ErrorReportDetailsPage = () => {
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [errorReport, setErrorReport] = useState({});
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useLoader({ request: ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), mapper: setErrorReport });
 

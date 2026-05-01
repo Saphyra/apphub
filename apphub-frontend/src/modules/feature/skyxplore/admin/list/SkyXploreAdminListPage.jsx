@@ -1,7 +1,6 @@
 import { useLoaderData } from "react-router";
 import "./skyxplore_admin_list_page.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Header from "common/component/Header";
@@ -17,7 +16,6 @@ const SkyXploreAdminListPage = () => {
     const { gameId, type } = useLoaderData();
 
     document.title = "Admin - SkyXplore - Apphub";
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 

@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./json_formatter_localization.json";
 import "./json_formatter.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Header from "common/component/Header";
 import Textarea from "common/component/input/Textarea";
@@ -19,7 +18,6 @@ const JsonFormatterPage = ({ }) => {
     const [input, setInput] = useState("");
     const [output, setOutput] = useState("");
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const format = () => {

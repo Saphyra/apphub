@@ -3,7 +3,6 @@ import localizationData from "./disabled_role_management_localization.json";
 import roleLocalizationData from "modules/etc/admin_panel/role_localization.json";
 import "./disabled_role_management.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
@@ -22,7 +21,6 @@ const DisabledRoleManagementPage = () => {
 
     const [roles, setRoles] = useState([]);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     useLoader({ request: USER_DATA_GET_DISABLED_ROLES.createRequest(), mapper: setRoles })

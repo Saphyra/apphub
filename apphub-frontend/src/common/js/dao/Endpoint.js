@@ -58,9 +58,8 @@ export default class Endpoint {
         }
     }
 
-    toPageUrl(){
+    toPageUrl() {
         const result = this.url.replace(/\{(\w+)\}/g, ":$1");
-        console.log(result);
         return result;
     }
 }

@@ -3,7 +3,6 @@ import localizationData from "./notebook_new_page_localization.json";
 import "./notebook_new.css";
 import { useParams } from "react-router";
 import { useEffect } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import MapStream from "common/js/collection/MapStream";
 import Button from "common/component/input/Button";
@@ -20,7 +19,6 @@ const NotebookNewPage = () => {
     const { parent } = useParams();
     console.log(parent);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const getListItemTypes = () => {

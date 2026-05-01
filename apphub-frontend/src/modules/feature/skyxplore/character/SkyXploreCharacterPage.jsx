@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./page_localization.json";
 import "./character_page.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Redirection from "../Redirection";
 import ValidatedField from "common/js/validation/ValidatedField";
@@ -32,7 +31,6 @@ const SkyXploreCharacterPage = () => {
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(() => checkRedirection(), []);
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => fetchCharacterExistence(), []);
     useEffect(() => prefillCharacterName(), [hasCharacter]);

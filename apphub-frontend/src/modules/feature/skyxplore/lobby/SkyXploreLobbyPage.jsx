@@ -5,7 +5,6 @@ import { processAiModifiedEvent, processAiRemovedEvent, processAllianceCreatedEv
 import { useEffect, useState } from "react";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import WebSocketEndpoint from "common/hook/ws/WebSocketEndpoint";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Redirection from "../Redirection";
@@ -75,7 +74,6 @@ const SkyXploreLobbyPage = () => {
     );
 
     useEffect(() => checkRedirection(), []);
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadLobbyData(), []);
     useEffect(() => loadAlliances(), []);

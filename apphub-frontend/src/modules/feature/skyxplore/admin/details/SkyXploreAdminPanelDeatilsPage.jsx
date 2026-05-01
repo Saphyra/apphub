@@ -1,7 +1,6 @@
 import Header from "common/component/Header";
 import useLoader from "common/hook/Loader";
 import NotificationService from "common/js/notification/NotificationService";
-import sessionChecker from "common/js/SessionChecker";
 import { hasValue } from "common/js/Utils";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
@@ -17,7 +16,6 @@ const SkyXploreAdminDetailsPage = () => {
     const { gameId, type, id } = useParams();
 
     document.title = "Admin - SkyXplore - Apphub";
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 

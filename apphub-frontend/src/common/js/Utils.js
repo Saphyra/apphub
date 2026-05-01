@@ -31,7 +31,6 @@ export const setCookie = (key, value, expiration, path = "/") => {
     }
     cookieString += ";path=" + path;
 
-    console.log(cookieString);
     window.document.cookie = cookieString;
 };
 

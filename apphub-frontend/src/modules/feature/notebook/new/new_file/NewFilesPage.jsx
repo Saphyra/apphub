@@ -3,12 +3,10 @@ import localizationData from "./new_file_localization.json";
 import "./new_file.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Stream from "common/js/collection/Stream";
 import FileGroup from "./group/FileGroup";
 import FileGroupData from "./group/FileGroupData";
-import Constants from "common/js/Constants";
 import create from "./NewFileSaver";
 import Header from "common/component/Header";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
@@ -28,7 +26,6 @@ const NewFilesPage = () => {
     const [fileGroups, setFileGroups] = useState([new FileGroupData()]);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const getFileGroups = () => {

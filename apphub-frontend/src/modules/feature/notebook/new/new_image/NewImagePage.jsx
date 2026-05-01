@@ -3,11 +3,9 @@ import localizationData from "./new_image_localization.json";
 import "./new_image.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import { hasValue, isBlank } from "common/js/Utils";
 import create from "./NewImageSaver";
-import Constants from "common/js/Constants";
 import Header from "common/component/Header";
 import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
@@ -29,7 +27,6 @@ const NewImagePage = () => {
     const [preview, setPreview] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => displayPreview(), [image]);
     useEffect(() => updateListItemTitle(), [image]);

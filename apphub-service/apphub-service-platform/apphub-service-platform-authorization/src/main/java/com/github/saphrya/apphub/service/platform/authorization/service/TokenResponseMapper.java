@@ -26,7 +26,7 @@ class TokenResponseMapper {
             .refreshToken(Token.builder()
                 .jwt(refreshToken.getJwt())
                 .expiration(dateTimeUtil.toEpochMillis(refreshToken.getExpiration()))
-                .path("/authorization")
+                .path("/api/authorization")
                 .build())
             .build();
     }

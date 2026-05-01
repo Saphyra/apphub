@@ -3,7 +3,6 @@ import localizationData from "./roles_for_all_localization.json";
 import "./roles_for_all.css";
 import roleLocalizationData from "modules/etc/admin_panel/role_localization.json";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
@@ -23,7 +22,6 @@ const RolesForAllPage = () => {
 
     const [restrictedRoles, setRestrictedRoles] = useState([]);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     useLoader({ request: USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), mapper: setRestrictedRoles });

@@ -1,4 +1,3 @@
-import Constants from "common/js/Constants";
 import NotificationKey from "common/js/notification/NotificationKey";
 import NotificationService from "common/js/notification/NotificationService";
 import { getQueryParam, setCookie } from "common/js/Utils";
@@ -21,12 +20,13 @@ const login = async (userIdentifier, password, rememberMe) => {
         .send();
 
     setCookie("access-token", loginResponse.accessToken.jwt, loginResponse.accessToken.expiration, loginResponse.accessToken.path);
+    setCookie("refresh-token", loginResponse.refreshToken.jwt, loginResponse.refreshToken.expiration, loginResponse.refreshToken.path);
     //Clear sessionStorage so stored values of a different user does not cause problems
     if (sessionStorage.userIdentifier !== userIdentifier) {
         sessionStorage.clear();
     }
     sessionStorage.userIdentifier = userIdentifier;
-    window.location.href = getQueryParam("redirect") || MODULES_PAGE;
+    //window.location.href = getQueryParam("redirect") || MODULES_PAGE;
 }
 
 export default login;

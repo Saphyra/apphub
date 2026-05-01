@@ -3,7 +3,6 @@ import localizationData from "./new_table_localization.json";
 import "./new_table.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import TableHeadData from "../../common/table/table_head/TableHeadData";
 import TableRowData from "../../common/table/row/TableRowData";
@@ -18,7 +17,6 @@ import Footer from "common/component/Footer";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
 import getTable from "./service/NewTableAssembler";
-import Constants from "common/js/Constants";
 import create from "./service/NewTableSaver";
 import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
@@ -34,7 +32,6 @@ const NewTablePage = ({ checklist, custom }) => {
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [files, setFiles] = useState([]);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const addFile = (rowIndex, columnIndex, file) => {

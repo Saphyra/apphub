@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./calendar_labels_page_localization.json";
 import "./calendar_labels.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "common/js/Utils";
@@ -26,7 +25,6 @@ const CalendarLabelsPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);

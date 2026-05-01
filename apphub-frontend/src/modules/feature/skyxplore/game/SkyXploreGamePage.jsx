@@ -3,7 +3,6 @@ import localizationData from "./skyxplore_game_page_localization.json";
 import { useEffect, useState } from "react";
 import ChatConstants from "./chat/ChatConstants";
 import Redirection from "../Redirection";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
@@ -48,7 +47,6 @@ const SkyXploreGamePage = () => {
     const [chatRooms, setChatRooms] = useState([]);
 
     useEffect(() => Redirection.forGame(), []);
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => fetchUserId(), []);
     useEffect(() => fetchIsHost(), []);

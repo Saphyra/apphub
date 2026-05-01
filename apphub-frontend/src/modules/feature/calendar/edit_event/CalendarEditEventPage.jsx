@@ -3,7 +3,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import { useParams } from "react-router";
 import localizationData from "./calendar_edit_event_page_localization.json";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { hasValue, nullIfEmpty } from "common/js/Utils";
@@ -42,7 +41,6 @@ const CalendarEditEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
