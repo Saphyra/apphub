@@ -89,11 +89,11 @@ public class RedirectionTest extends SeleniumTest {
     public void autoLogin() {
         WebDriver driver = extractDriver();
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         Navigation.toIndexPage(serverPort, driver);
         IndexPageActions.registerUser(driver, RegistrationParameters.validParameters());
 
-        Navigation.toIndexPage(serverPort, driver, false);
+        driver.navigate().to(UrlFactory.create(getServerPort(), GenericEndpoints.INDEX_PAGE));
 
         AwaitilityWrapper.awaitAssert(driver::getCurrentUrl, currentUrl -> assertThat(currentUrl).isEqualTo(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE)));
     }

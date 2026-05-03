@@ -1,1 +1,2 @@
 TODO remove authorization-client if not needed
+TODO drop access token table

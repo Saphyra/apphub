@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.game;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
@@ -15,7 +16,8 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.Surface;
@@ -45,15 +47,15 @@ public class ManualTickProcessingTest extends SeleniumTest {
         assertThat(SkyXploreGameActions.getProcessTickButton(driver)).isEmpty();
 
         DatabaseUtil.addRoleByEmail(registrationParameters.getEmail(), Constants.ROLE_ADMIN);
-        SleepUtil.sleep(3000);
-        driver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
+        driver.navigate().to(UrlFactory.create(getServerPort(), SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE));
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreGameActions.getProcessTickButton(driver).isPresent())
             .assertTrue("ProcessTick button not found.");
 
         SkyXploreMapActions.getSolarSystems(driver)
-            .get(0)
+            .getFirst()
             .click();
         SkyXploreSolarSystemActions.getPlanet(driver)
             .click();

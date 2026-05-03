@@ -1,7 +1,7 @@
 package com.github.saphrya.apphub.service.platform.authorization.service;
 
-import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.config.AuthorizationProperties;
+import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -87,7 +87,7 @@ class TokenService {
             .build();
     }
 
-    public AccessTokenDto createAccessToken(UUID userId, List<String> roles) {
+    public AccessTokenDto createAccessToken(UUID userId, UUID refreshTokenId, List<String> roles) {
         UUID accessTokenId = idGenerator.randomUuid();
 
         LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
@@ -97,6 +97,7 @@ class TokenService {
             .id(uuidConverter.convertDomain(accessTokenId))
             .issuer(authorizationProperties.getIssuer())
             .subject(uuidConverter.convertDomain(userId))
+            .claim(Constants.CLAIM_REFRESH_TOKEN_ID, uuidConverter.convertDomain(refreshTokenId))
             .issuedAt(new Date(dateTimeUtil.toEpochMillis(currentTime)))
             .expiration(new Date(dateTimeUtil.toEpochMillis(expiration)))
             .claim(Constants.CLAIM_ROLES, objectMapper.writeValueAsString(roles))

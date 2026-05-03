@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 import static feign.Util.isBlank;
 
 @RestController
@@ -46,5 +48,19 @@ class AuthorizationControllerImpl implements AuthorizationController {
         }
 
         return new ResponseEntity<>(refreshTokenService.refresh(refreshToken), HttpStatus.OK);
+    }
+
+    @Override
+    public void deactivateAllSessions(UUID userId) {
+        log.info("Deactivating all sessions of user {}", userId);
+
+        logoutService.deactivateAllSessions(userId);
+    }
+
+    @Override
+    public void invalidateAllAccessTokens(UUID userId) {
+        log.info("Invalidating all accessTokens of user {}", userId);
+
+        logoutService.invalidateAllAccessTokens(userId);
     }
 }

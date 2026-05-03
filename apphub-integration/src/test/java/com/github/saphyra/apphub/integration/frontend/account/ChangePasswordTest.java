@@ -25,6 +25,8 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class ChangePasswordTest extends SeleniumTest {
     @Test(groups = {"fe", "account"})
     public void changePassword() {
@@ -135,7 +137,7 @@ public class ChangePasswordTest extends SeleniumTest {
         WebDriver driver1 = drivers.get(0);
         WebDriver driver2 = drivers.get(1);
 
-        Integer serverPort = getServerPort();
+        int serverPort = getServerPort();
         Navigation.toIndexPage(serverPort, driver1);
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver1, userData);
@@ -151,12 +153,18 @@ public class ChangePasswordTest extends SeleniumTest {
 
         AwaitilityWrapper.create(20, 3)
             .until(() -> driver1.getCurrentUrl().endsWith(GenericEndpoints.INDEX_PAGE))
-            .assertTrue("Secondary session is not invalidated.");
+            .assertTrue("User is not logged out.");
         ToastMessageUtil.verifySuccessToast(driver1, LocalizedText.ACCOUNT_PASSWORD_CHANGED);
 
-        AwaitilityWrapper.create(20, 3)
-            .until(() -> driver2.getCurrentUrl().equals(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE + "?redirect=" + ModulesEndpoints.MODULES_PAGE)))
-            .assertTrue("Secondary session is not invalidated. PageUrl: " + driver2.getCurrentUrl());
+        AwaitilityWrapper.retry(
+            () -> {
+                driver2.navigate().refresh();
+
+                assertThat(driver2.getCurrentUrl()).isEqualTo(UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE + "?redirect=" + ModulesEndpoints.MODULES_PAGE));
+            },
+            20,
+            3
+        );
     }
 
 }

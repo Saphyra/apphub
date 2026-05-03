@@ -33,7 +33,7 @@ public class RefreshTokenService {
 
         RefreshToken newRefreshToken = tokenService.createRefreshToken(parsedToken.getUserId(), parsedToken.isRememberMe());
         List<String> roles = authorizationClientProxy.getRoles(parsedToken.getUserId());
-        AccessTokenDto accessToken = tokenService.createAccessToken(parsedToken.getUserId(), roles);
+        AccessTokenDto accessToken = tokenService.createAccessToken(parsedToken.getUserId(), newRefreshToken.getRefreshTokenId(), roles);
 
         refreshTokenDao.delete(parsedToken.getUserId(), parsedToken.getRefreshTokenId());
         refreshTokenDao.save(newRefreshToken);

@@ -30,7 +30,7 @@
     </li>
     <li><a href="/local-run/stop">Stop</a> - Stops all the services</li>
     <li>
-        <form action="/local-run/stop-service" method="POST">
+        <form action="/local-run/stop-services" method="POST">
             <button>Stop services</button>
             <input type="text" name="value" required placeholder="Service names" th:value="${latest_services}"/>
             - Comma-separated list of service names to stop

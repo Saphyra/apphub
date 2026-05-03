@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authorization;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -72,8 +73,9 @@ public class TokenParser {
         };
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(uuidConverter.convertEntity(claims.getId()))
+            .refreshTokenId(uuidConverter.convertEntity(claims.get(Constants.CLAIM_REFRESH_TOKEN_ID, String.class)))
             .userId(uuidConverter.convertEntity(claims.getSubject()))
-            .roles(objectMapper.readValue(claims.get("roles", String.class), typeReference))
+            .roles(objectMapper.readValue(claims.get(Constants.CLAIM_ROLES, String.class), typeReference))
             .build();
 
         return Mono.just(accessToken);

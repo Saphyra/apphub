@@ -10,6 +10,7 @@ public class UserEndpoints {
     public static final String EXTEND_SESSION = "/api/user/authentication/session";
     public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
     public static final String EVENT_ACCESS_TOKEN_INVALIDATED = "/event/access-token-invalidated";
+    public static final String EVENT_REFRESH_TOKEN_INVALIDATED = "/event/refresh-token-invalidated";
 
     //Account
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";

@@ -1,12 +1,10 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
-import com.github.saphyra.apphub.service.user.common.EventGatewayProxy;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.validator.PasswordValidator;
@@ -18,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
@@ -31,7 +28,6 @@ public class ChangePasswordServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String PASSWORD = "password";
     private static final String NEW_PASSWORD_HASH = "new-password-hash";
-    private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
 
     @Mock
     private PasswordService passwordService;
@@ -46,10 +42,7 @@ public class ChangePasswordServiceTest {
     private CheckPasswordService checkPasswordService;
 
     @Mock
-    private AccessTokenDao accessTokenDao;
-
-    @Mock
-    private EventGatewayProxy eventGatewayProxy;
+    private AuthorizationClient authorizationClient;
 
     @InjectMocks
     private ChangePasswordService underTest;
@@ -107,15 +100,13 @@ public class ChangePasswordServiceTest {
 
         then(user).should().setPassword(NEW_PASSWORD_HASH);
         then(userDao).should().save(user);
-        then(accessTokenDao).shouldHaveNoInteractions();
+        then(authorizationClient).shouldHaveNoInteractions();
     }
 
     @Test
     public void changePassword_deactivateAllSessions() {
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         given(passwordService.hashPassword(NEW_PASSWORD, USER_ID)).willReturn(NEW_PASSWORD_HASH);
-        given(accessTokenDao.getByUserId(USER_ID)).willReturn(List.of(accessToken));
-        given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
 
         ChangePasswordRequest request = ChangePasswordRequest.builder()
             .newPassword(NEW_PASSWORD)
@@ -126,7 +117,7 @@ public class ChangePasswordServiceTest {
 
         then(user).should().setPassword(NEW_PASSWORD_HASH);
         then(userDao).should().save(user);
-        then(accessTokenDao).should().deleteAll(List.of(accessToken));
-        then(eventGatewayProxy).should().sendEvent(EmptyEvent.ACCESS_TOKENS_INVALIDATED, List.of(ACCESS_TOKEN_ID), true);
+        then(authorizationClient).should().deactivateAllSessions(USER_ID);
+        ;
     }
 }

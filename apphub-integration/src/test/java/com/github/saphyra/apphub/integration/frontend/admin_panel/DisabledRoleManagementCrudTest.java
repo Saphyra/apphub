@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.admin_panel;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.disabled_roles.DisabledRolesActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -10,9 +11,10 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.DisabledRole;
@@ -35,8 +37,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-        SleepUtil.sleep(3000);
-        driver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
         DisabledRole initialRole = initialCheck(driver);
@@ -69,10 +70,14 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DisabledRolesActions.confirmDisableRole(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        Integer serverPort = getServerPort();
-        AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, driver))
-            .assertTrue("User is not logged out.");
+        int serverPort = getServerPort();
+        AwaitilityWrapper.retry(
+            () -> {
+                driver.navigate().refresh();
+
+                assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE));
+            }
+        );
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
@@ -113,10 +118,14 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
         DisabledRolesActions.confirmEnableRole(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        Integer serverPort = getServerPort();
-        AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, driver))
-            .assertTrue("User is not logged out.");
+        int serverPort = getServerPort();
+        AwaitilityWrapper.retry(
+            () -> {
+                driver.navigate().refresh();
+
+                assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE));
+            }
+        );
 
         DatabaseUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));

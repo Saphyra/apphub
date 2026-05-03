@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
@@ -38,6 +39,9 @@ public class BanServiceTest {
     @Mock
     private BanResponseQueryService banResponseQueryService;
 
+    @Mock
+    private AuthorizationClient authorizationClient;
+
     @InjectMocks
     private BanService underTest;
 
@@ -62,5 +66,6 @@ public class BanServiceTest {
         verify(banRequestValidator).validate(request);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
         verify(banDao).save(ban);
+        verify(authorizationClient).invalidateAllAccessTokens(BANNED_USER_ID);
     }
 }

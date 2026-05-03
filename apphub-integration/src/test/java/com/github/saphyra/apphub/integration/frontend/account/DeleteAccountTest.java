@@ -59,10 +59,15 @@ public class DeleteAccountTest extends SeleniumTest {
         DeleteAccountActions.deleteAccount(driver);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        AwaitilityWrapper.create(20, 3)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, UserEndpoints.ACCOUNT_PAGE)))
-            .assertTrue("User not logged out");
+        AwaitilityWrapper.retry(
+            () -> {
+                driver.navigate().refresh();
 
+                assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, UserEndpoints.ACCOUNT_PAGE));
+            },
+            20,
+            3
+        );
     }
 
     private static void delete(WebDriver driver, RegistrationParameters userData) {

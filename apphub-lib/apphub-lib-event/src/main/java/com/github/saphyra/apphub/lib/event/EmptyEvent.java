@@ -12,6 +12,7 @@ public class EmptyEvent {
     public static final String STORAGE_CLEAN_UP_STORED_FILES = "storage-clean-up-stored-files";
     public static final String STORAGE_FILE_CLEANUP = "storage-file-cleanup";
     public static final String ACCESS_TOKENS_INVALIDATED = "access-tokens-invalidated";
+    public static final String REFRESH_TOKENS_INVALIDATED = "refresh-tokens-invalidated";
     public static final String ELITE_BASE_PROCESS_MESSAGES = "elite-base-process-messages";
     public static final String ELITE_BASE_RESET_UNHANDLED_MESSAGES = "elite-base-reset-unhandled-messages";
     public static final String ELITE_BASE_DELETE_EXPIRED_MESSAGES = "elite-base-delete-expired-messages";

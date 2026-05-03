@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedAccessTokenService;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedRefreshTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.authentication.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class AuthorizationService {
     private final AuthenticationService authenticationService;
     private final TokenParser tokenParser;
     private final InvalidatedAccessTokenService  invalidatedAccessTokenService;
+    private final InvalidatedRefreshTokenService invalidatedRefreshTokenService;
 
     public Mono<AuthResultHandler> authorize(ServerHttpRequest request) {
         return Mono.justOrEmpty(request.getCookies().getFirst(ACCESS_TOKEN_COOKIE)) //Get AccessToken from cookie (Web call)
@@ -35,6 +37,7 @@ public class AuthorizationService {
             .switchIfEmpty(Mono.justOrEmpty(request.getHeaders().getFirst(Constants.AUTHORIZATION_HEADER)))//Get AccessToken from Authorization header (Mobile call)
             .flatMap(tokenParser::verifyAccessToken) //Parse and verify JWT
             .filter(accessToken -> !invalidatedAccessTokenService.contains(accessToken.getAccessTokenId()))
+            .filter(accessToken -> !invalidatedRefreshTokenService.contains(accessToken.getRefreshTokenId()))
             .flatMap(
                 accessToken -> authenticationService.authenticate(request, accessToken) //Check if necessary roles granted
                     .switchIfEmpty(Mono.fromSupplier(() -> authResultHandlerFactory.authorized(accessToken)))

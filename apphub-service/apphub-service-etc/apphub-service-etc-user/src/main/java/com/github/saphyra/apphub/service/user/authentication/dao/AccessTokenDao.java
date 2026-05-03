@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@Deprecated(forRemoval = true) //TODO delete
 public class AccessTokenDao extends AbstractDao<AccessTokenEntity, AccessToken, String, AccessTokenRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 

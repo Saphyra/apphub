@@ -13,6 +13,7 @@ serviceUrls:
   storage: storage:8080
   user: user:8080
   monitoring: monitoring:8080
+  authorization: authorization:8080
 
 spring:
   cloud:

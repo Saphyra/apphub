@@ -41,7 +41,7 @@ public class LoginService {
                 RefreshToken refreshToken = tokenService.createRefreshToken(response.getUserId(), loginRequest.getRememberMe());
                 refreshTokenDao.save(refreshToken);
 
-                AccessTokenDto accessToken = tokenService.createAccessToken(response.getUserId(), response.getRoles());
+                AccessTokenDto accessToken = tokenService.createAccessToken(response.getUserId(), refreshToken.getRefreshTokenId(), response.getRoles());
 
                 yield tokenResponseMapper.create(refreshToken, accessToken);
             }

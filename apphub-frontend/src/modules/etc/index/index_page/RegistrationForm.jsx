@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import register from "../controller/RegistrationController";
 import validate from "common/js/validation/Validator";
 
-const RegistrationForm = ({ localizationHandler }) => {
+const RegistrationForm = ({ localizationHandler, setDisplaySpinner }) => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -108,7 +108,7 @@ const RegistrationForm = ({ localizationHandler }) => {
                 <Button
                     id="registration-button"
                     label={localizationHandler.get("register")}
-                    onclick={() => register(username, email, password, localizationHandler.getLocale())}
+                    onclick={() => register(username, email, password, localizationHandler.getLocale(), setDisplaySpinner)}
                     disabled={!isFormValid()}
                 />
             </div>

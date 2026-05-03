@@ -9,6 +9,7 @@ public class Constants {
     public final String ACCESS_TOKEN_HEADER = "apphub-access-token";
     public static final String CLAIM_ROLES = "roles";
     public static final String CLAIM_REMEMBER_ME = "remember_me";
+    public static final String CLAIM_REFRESH_TOKEN_ID = "refresh_token_id";
 
     public final String ROLE_ADMIN = "ADMIN";
 

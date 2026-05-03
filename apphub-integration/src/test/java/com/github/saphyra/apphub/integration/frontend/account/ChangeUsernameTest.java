@@ -37,7 +37,7 @@ public class ChangeUsernameTest extends SeleniumTest {
         tooLongUsername(driver);
         emptyPassword(driver);
         usernameAlreadyExists(driver, existingUserData);
-        incorrectPassword(driver);
+        incorrectPassword(driver); //TODO check account lockout
         change(driver);
     }
 

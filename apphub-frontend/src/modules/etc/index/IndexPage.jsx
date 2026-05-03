@@ -15,11 +15,14 @@ import { ToastContainer } from "react-toastify";
 import { CHECK_SESSION } from "common/js/GenericEndpoints";
 import { MODULES_PAGE } from "../modules/ModulesEndpoints";
 import ResponseStatus from "common/js/dao/ResponseStatus";
+import Spinner from "common/component/Spinner";
 
 const IndexPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(() => NotificationService.displayStoredMessages(), null);
     useEffect(() => redirectIfLoggedIn(), [searchParams]);
@@ -47,9 +50,15 @@ const IndexPage = () => {
             <Header label={localizationHandler.get("title")} />
 
             <main>
-                <LoginForm localizationHandler={localizationHandler} />
+                <LoginForm
+                    localizationHandler={localizationHandler}
+                    setDisplaySpinner={setDisplaySpinner}
+                />
 
-                <RegistrationForm localizationHandler={localizationHandler} />
+                <RegistrationForm
+                    localizationHandler={localizationHandler}
+                    setDisplaySpinner={setDisplaySpinner}
+                />
             </main>
 
             <Footer
@@ -63,6 +72,7 @@ const IndexPage = () => {
             />
 
             <ToastContainer />
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

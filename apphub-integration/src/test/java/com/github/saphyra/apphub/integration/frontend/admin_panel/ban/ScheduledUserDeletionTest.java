@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -8,7 +9,6 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -41,15 +41,14 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
         RegistrationUtils.registerUsers(getServerPort(), List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
-        SleepUtil.sleep(3000);
-        adminDriver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(adminDriver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), adminDriver, ModuleLocation.BAN);
 
         openUser(adminDriver, testUserData);
 
         emptyDate(adminDriver);
         emptyPassword(adminDriver);
-        incorrectPassword(adminDriver);
+        incorrectPassword(adminDriver); //TODO check account locked
         scheduleDeletion(adminDriver, adminUserData);
         deleteSchedule(adminDriver);
     }

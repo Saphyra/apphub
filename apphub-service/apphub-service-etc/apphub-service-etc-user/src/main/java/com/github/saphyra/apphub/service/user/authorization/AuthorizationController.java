@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import com.github.saphyra.apphub.service.user.ban.service.BanService;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.role.Role;
 import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
@@ -34,6 +35,7 @@ public class AuthorizationController implements UserAuthorizationController {
     private final AccessTokenProvider accessTokenProvider;
     private final CheckPasswordService checkPasswordService;
     private final RoleDao roleDao;
+    private final BanService banService;
 
     @Override
     public AuthorizationResponse authorize(AuthorizationRequest request) {
@@ -86,9 +88,14 @@ public class AuthorizationController implements UserAuthorizationController {
     public List<String> getRoles(UUID userId) {
         log.info("Getting roles for user {}", userId);
 
+        userDao.findByIdValidated(userId);
+
+        List<String> bannedRoles = banService.getActivelyBannedRolesOf(userId);
+
         return roleDao.getByUserId(userId)
             .stream()
             .map(Role::getRole)
+            .filter(role -> !bannedRoles.contains(role))
             .toList();
     }
 }

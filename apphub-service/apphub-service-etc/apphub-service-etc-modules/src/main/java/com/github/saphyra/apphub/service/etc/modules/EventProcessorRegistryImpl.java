@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -22,7 +22,7 @@ public class EventProcessorRegistryImpl implements EventProcessorRegistry {
 
     @Override
     public List<RegisterProcessorRequest> getRequests() {
-        return Arrays.asList(
+        return Collections.singletonList(
             RegisterProcessorRequest.builder()
                 .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)

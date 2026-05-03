@@ -132,16 +132,20 @@ public class WebDriverProvider {
                 driver.close();
             }
 
-            driver.manage()
-                .deleteAllCookies();
-
             driver.switchTo().window(handles.getFirst());
-            driver.navigate().to(UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
 
-            AwaitilityWrapper.createDefault()
-                .until(() -> driver.getCurrentUrl().endsWith(GenericEndpoints.ERROR_PAGE))
-                .assertTrue("Failed to redirect to Error page. Current url: " + driver.getCurrentUrl());
+            AwaitilityWrapper.retry(
+                () -> {
+                    driver.navigate().to(UrlFactory.create(serverPort.getItem(), "/api/authorization"));
+                    driver.manage()
+                        .deleteAllCookies();
 
+                    driver.navigate().to(UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
+
+                    driver.manage()
+                        .deleteAllCookies();
+                }
+            );
         } catch (Exception e) {
             log.error("Failed releasing driver. Removing from cache...");
             try {

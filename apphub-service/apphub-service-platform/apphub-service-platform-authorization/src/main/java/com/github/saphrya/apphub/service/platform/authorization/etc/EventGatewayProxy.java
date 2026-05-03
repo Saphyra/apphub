@@ -19,12 +19,21 @@ public class EventGatewayProxy {
     private final EventGatewayApiClient eventGatewayApiClient;
     private final CommonConfigProperties commonConfigProperties;
 
-    public void sendAccessTokenInvalidatedEvent(UUID accessTokenId) {
+    public void sendAccessTokensInvalidatedEvent(UUID accessTokenId) {
         SendEventRequest<List<UUID>> request = SendEventRequest.<List<UUID>>builder()
             .eventName(EmptyEvent.ACCESS_TOKENS_INVALIDATED)
             .payload(List.of(accessTokenId))
             .build()
             .blockingRequest(true);
+
+        eventGatewayApiClient.sendEvent(request, commonConfigProperties.getDefaultLocale());
+    }
+
+    public void sendRefreshTokensInvalidatedEvent(List<UUID> refreshTokenIds) {
+        SendEventRequest<List<UUID>> request = SendEventRequest.<List<UUID>>builder()
+            .eventName(EmptyEvent.REFRESH_TOKENS_INVALIDATED)
+            .payload(refreshTokenIds)
+            .build();
 
         eventGatewayApiClient.sendEvent(request, commonConfigProperties.getDefaultLocale());
     }

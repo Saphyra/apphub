@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.Vector;
 
 @Component
+//TODO unit test
 public class RefreshTokenDao {
     private final List<RefreshToken> repository = new Vector<>(); //TODO use DynamoDB
 
@@ -24,5 +25,21 @@ public class RefreshTokenDao {
             .filter(refreshToken -> refreshToken.getUserId().equals(userId))
             .filter(refreshToken -> refreshToken.getRefreshTokenId().equals(refreshTokenId))
             .findFirst();
+    }
+
+    public List<UUID> deleteByUserId(UUID userId) {
+        List<RefreshToken> toDelete = getByUserId(userId);
+
+        repository.removeAll(toDelete);
+
+        return toDelete.stream()
+            .map(RefreshToken::getRefreshTokenId)
+            .toList();
+    }
+
+    public List<RefreshToken> getByUserId(UUID userId) {
+        return repository.stream()
+            .filter(refreshToken -> refreshToken.getUserId().equals(userId))
+            .toList();
     }
 }

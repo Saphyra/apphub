@@ -26,6 +26,11 @@ public class MainGaitewayEventProcessorRegistry implements EventProcessorRegistr
                 .host(host)
                 .url(UserEndpoints.EVENT_ACCESS_TOKEN_INVALIDATED)
                 .eventName(EmptyEvent.ACCESS_TOKENS_INVALIDATED)
+                .build(),
+            RegisterProcessorRequest.builder()
+                .host(host)
+                .url(UserEndpoints.EVENT_REFRESH_TOKEN_INVALIDATED)
+                .eventName(EmptyEvent.REFRESH_TOKENS_INVALIDATED)
                 .build()
         );
     }

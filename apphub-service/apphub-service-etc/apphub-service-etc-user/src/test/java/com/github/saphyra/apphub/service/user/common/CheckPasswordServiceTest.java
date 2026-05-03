@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.user.common;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.user.authentication.service.LogoutService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -36,7 +34,6 @@ public class CheckPasswordServiceTest {
     private static final Integer LOCK_ACCOUNT_FAILURES = 256;
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final Integer LOCKED_MINUTES = 36;
-    private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
     private static final String UPDATED_PASSWORD = "updated-password";
 
     @Mock
@@ -52,19 +49,13 @@ public class CheckPasswordServiceTest {
     private DateTimeUtil dateTimeUtil;
 
     @Mock
-    private LogoutService logoutService;
-
-    @Mock
-    private AccessTokenProvider accessTokenProvider;
+    private AuthorizationClient authorizationClient;
 
     @InjectMocks
     private CheckPasswordService underTest;
 
     @Mock
     private User user;
-
-    @Mock
-    private AccessToken accessToken;
 
     @Test
     public void incorrectPassword() {
@@ -83,7 +74,7 @@ public class CheckPasswordServiceTest {
         verify(user, times(0)).setPassword(any());
         verify(userDao).save(user);
 
-        verifyNoInteractions(logoutService);
+        verifyNoInteractions(authorizationClient);
     }
 
     @Test
@@ -96,19 +87,17 @@ public class CheckPasswordServiceTest {
         given(user.getPasswordFailureCount()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(passwordProperties.getLockedMinutes()).willReturn(LOCKED_MINUTES);
-        given(accessTokenProvider.get()).willReturn(accessToken);
-        given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
 
         Throwable ex = catchThrowable(() -> underTest.checkPassword(USER_ID, PASSWORD));
 
-        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.LOCKED, ErrorCode.ACCOUNT_LOCKED);
 
         verify(user).setPasswordFailureCount(LOCK_ACCOUNT_FAILURES + 1);
         verify(user).setLockedUntil(CURRENT_TIME.plusMinutes(LOCKED_MINUTES));
         verify(user, times(0)).setPassword(any());
         verify(userDao).save(user);
 
-        verify(logoutService).logout(ACCESS_TOKEN_ID, USER_ID);
+        verify(authorizationClient).deactivateAllSessions(USER_ID);
     }
 
     @Test

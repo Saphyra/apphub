@@ -17,6 +17,7 @@ serviceUrls:
   web-content: localhost:8083
   web-content-localization: localhost:8083
   monitoring: localhost:8084
+  authorization: localhost:8092
 
 authorization:
   issuer: apphub-local

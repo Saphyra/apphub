@@ -15,6 +15,7 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 public class AccessToken {
     private UUID accessTokenId;
+    private UUID refreshTokenId;
     private UUID userId;
     @Builder.Default
     private List<String> roles = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.monitoring;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.monitoring.MonitoringPageActions;
@@ -8,7 +9,6 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.monitoring.Feature;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -26,8 +26,7 @@ public class MonitoringTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-        SleepUtil.sleep(3000);
-        driver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MONITORING);
 
         MonitoringPageActions.selectFeature(driver, Feature.MEMORY_MONITORING);

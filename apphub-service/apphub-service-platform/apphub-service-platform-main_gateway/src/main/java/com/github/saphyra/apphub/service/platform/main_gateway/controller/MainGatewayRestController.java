@@ -7,8 +7,10 @@ import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedAccessTokenService;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedRefreshTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.TokenParser;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -23,15 +25,25 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 //TODO unit test
 class MainGatewayRestController {
     private final InvalidatedAccessTokenService invalidateAccessTokenService;
+    private final InvalidatedRefreshTokenService invalidatedRefreshTokenService;
     private final TokenParser tokenParser;
 
     @PostMapping(UserEndpoints.EVENT_ACCESS_TOKEN_INVALIDATED)
     void accessTokenInvalidated(@RequestBody SendEventRequest<List<UUID>> sendEventRequest) {
+        log.info("Invalidating accessTokens: {}", sendEventRequest.getPayload());
         sendEventRequest.getPayload()
             .forEach(invalidateAccessTokenService::add);
+    }
+
+    @PostMapping(UserEndpoints.EVENT_REFRESH_TOKEN_INVALIDATED)
+    void refreshTokenInvalidated(@RequestBody SendEventRequest<List<UUID>> sendEventRequest) {
+        log.info("Invalidating refreshTokens: {}", sendEventRequest.getPayload());
+        sendEventRequest.getPayload()
+            .forEach(invalidatedRefreshTokenService::add);
     }
 
     @GetMapping("/api/ws/protocol")

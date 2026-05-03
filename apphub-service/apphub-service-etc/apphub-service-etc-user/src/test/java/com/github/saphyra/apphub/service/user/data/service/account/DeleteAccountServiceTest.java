@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -32,7 +32,7 @@ public class DeleteAccountServiceTest {
     private UserDao userDao;
 
     @Mock
-    private AccessTokenDao accessTokenDao;
+    private AuthorizationClient authorizationClient;
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -61,6 +61,6 @@ public class DeleteAccountServiceTest {
         verify(user).setMarkedForDeletion(true);
         verify(user).setMarkedForDeletionAt(CURRENT_DATE);
         verify(userDao).save(user);
-        verify(accessTokenDao).deleteByUserId(USER_ID);
+        verify(authorizationClient).deactivateAllSessions(USER_ID);
     }
 }

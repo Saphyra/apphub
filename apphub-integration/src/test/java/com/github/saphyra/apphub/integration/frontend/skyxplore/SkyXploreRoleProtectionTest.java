@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreAdminEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
@@ -31,7 +31,7 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
-        SleepUtil.sleep(3000);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreDataEndpoints.SKYXPLORE_CHARACTER_PAGE);
@@ -48,7 +48,7 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
-        SleepUtil.sleep(3000);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreAdminEndpoints.SKYXPLORE_GAME_ADMIN_MAIN_PAGE);
         CommonUtils.verifyMissingRole(driver, UrlFactory.create(getServerPort(), SkyXploreAdminEndpoints.SKYXPLORE_GAME_ADMIN_LIST_PAGE, Map.of("type", GameItemType.GAME, "gameId", UUID.randomUUID())), getServerPort());

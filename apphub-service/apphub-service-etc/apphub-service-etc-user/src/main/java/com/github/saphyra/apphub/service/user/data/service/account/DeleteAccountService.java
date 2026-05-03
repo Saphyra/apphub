@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.user.data.service.account;
 
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -20,8 +20,8 @@ import static java.util.Objects.isNull;
 public class DeleteAccountService {
     private final CheckPasswordService checkPasswordService;
     private final UserDao userDao;
-    private final AccessTokenDao accessTokenDao;
     private final DateTimeUtil dateTimeUtil;
+    private final AuthorizationClient authorizationClient;
 
     public void deleteAccount(UUID userId, String password) {
         if (isNull(password)) {
@@ -37,6 +37,6 @@ public class DeleteAccountService {
         user.setMarkedForDeletion(true);
         user.setMarkedForDeletionAt(dateTimeUtil.getCurrentDateTime());
         userDao.save(user);
-        accessTokenDao.deleteByUserId(user.getUserId());
+        authorizationClient.deactivateAllSessions(user.getUserId());
     }
 }

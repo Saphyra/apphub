@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
@@ -26,11 +29,23 @@ public class LogoutService {
 
         refreshTokenDao.delete(parsedToken.getUserId(), parsedToken.getRefreshTokenId());
 
-        if(!isBlank(accessTokenString)){
+        if (!isBlank(accessTokenString)) {
             AccessToken accessToken = tokenService.parseAccessToken(accessTokenString);
 
-            eventGatewayProxy.sendAccessTokenInvalidatedEvent(accessToken.getAccessTokenId());
+            eventGatewayProxy.sendAccessTokensInvalidatedEvent(accessToken.getAccessTokenId());
         }
+    }
 
+    public void deactivateAllSessions(UUID userId) {
+        List<UUID> deactivatedTokens = refreshTokenDao.deleteByUserId(userId);
+        eventGatewayProxy.sendRefreshTokensInvalidatedEvent(deactivatedTokens);
+    }
+
+    public void invalidateAllAccessTokens(UUID userId) {
+        List<UUID> deactivatedTokens = refreshTokenDao.getByUserId(userId)
+            .stream()
+            .map(RefreshToken::getRefreshTokenId)
+            .toList();
+        eventGatewayProxy.sendRefreshTokensInvalidatedEvent(deactivatedTokens);
     }
 }
