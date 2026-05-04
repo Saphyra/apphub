@@ -36,6 +36,7 @@ platform:
   minikubeDatabasePort: 9002
   minikubeTestDatabasePort: 5432
   localDatabasePort: 5432
+  localDynamoDbPort: 8000
 
   minikubeDatabaseName: postgres
   localDatabaseName: apphub

@@ -178,4 +178,10 @@ public class PropertyDao {
             .map(value -> objectMapper.readValue(value, EnvironmentSpecificProperties.class))
             .orElseGet(EnvironmentSpecificProperties::new);
     }
+
+    public String getStringProperty(PropertyName propertyName) {
+        return propertyRepository.findById(propertyName)
+            .map(Property::getValue)
+            .orElse("");
+    }
 }

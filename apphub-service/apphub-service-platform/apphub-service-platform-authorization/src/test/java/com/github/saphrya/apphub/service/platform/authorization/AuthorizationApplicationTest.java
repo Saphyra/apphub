@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;

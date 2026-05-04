@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 class TokenResponseMapper {
     private final DateTimeUtil dateTimeUtil;
 
-    TokenResponse create(RefreshToken refreshToken, AccessTokenDto accessToken) {
+    TokenResponse create(RefreshToken refreshToken, String refreshTokenJwt, AccessTokenDto accessToken) {
         return TokenResponse.builder()
             .accessToken(Token.builder()
                 .jwt(accessToken.getJwt())
@@ -24,7 +24,7 @@ class TokenResponseMapper {
                 .path("/")
                 .build())
             .refreshToken(Token.builder()
-                .jwt(refreshToken.getJwt())
+                .jwt(refreshTokenJwt)
                 .expiration(dateTimeUtil.toEpochMillis(refreshToken.getExpiration()))
                 .path("/api/authorization")
                 .build())

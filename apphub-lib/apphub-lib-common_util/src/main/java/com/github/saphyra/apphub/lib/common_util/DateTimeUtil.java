@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -80,5 +81,10 @@ public class DateTimeUtil {
     //TODO unit test
     public LocalDateTime fromDate(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
+    }
+
+    //TODO unit test
+    public LocalDateTime fromEpochSecond(Long epochSecond) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSecond), ZoneOffset.UTC);
     }
 }

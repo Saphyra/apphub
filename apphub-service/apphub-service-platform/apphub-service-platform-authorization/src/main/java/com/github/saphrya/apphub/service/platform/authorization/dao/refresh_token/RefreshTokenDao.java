@@ -1,45 +1,48 @@
 package com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token;
 
+import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.Vector;
 
 @Component
+@RequiredArgsConstructor
 //TODO unit test
 public class RefreshTokenDao {
-    private final List<RefreshToken> repository = new Vector<>(); //TODO use DynamoDB
+    private final RefreshTokenRepository repository;
+    private final RefreshTokenConverter converter;
+    private final UuidConverter uuidConverter;
 
     public void save(RefreshToken refreshToken) {
-        repository.add(refreshToken);
+        repository.save(converter.convertDomain(refreshToken));
     }
 
     public void delete(UUID userId, UUID refreshTokenId) {
-        repository.removeIf(refreshToken -> refreshToken.getUserId().equals(userId) && refreshToken.getRefreshTokenId().equals(refreshTokenId));
+        repository.delete(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(refreshTokenId));
     }
 
     public Optional<RefreshToken> findByUserIdAndRefreshTokenId(UUID userId, UUID refreshTokenId) {
-        return repository.stream()
-            .filter(refreshToken -> refreshToken.getUserId().equals(userId))
-            .filter(refreshToken -> refreshToken.getRefreshTokenId().equals(refreshTokenId))
-            .findFirst();
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(refreshTokenId)));
     }
 
     public List<UUID> deleteByUserId(UUID userId) {
-        List<RefreshToken> toDelete = getByUserId(userId);
+        List<RefreshTokenEntity> toDelete = repository.getByUserId(uuidConverter.convertDomain(userId));
 
-        repository.removeAll(toDelete);
+        Lists.partition(toDelete, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+                .forEach(repository::delete);
 
         return toDelete.stream()
-            .map(RefreshToken::getRefreshTokenId)
+            .map(RefreshTokenEntity::getRefreshTokenId)
+            .map(uuidConverter::convertEntity)
             .toList();
     }
 
     public List<RefreshToken> getByUserId(UUID userId) {
-        return repository.stream()
-            .filter(refreshToken -> refreshToken.getUserId().equals(userId))
-            .toList();
+        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 }

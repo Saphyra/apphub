@@ -4,6 +4,7 @@ import com.github.saphrya.apphub.service.platform.authorization.config.Authoriza
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -35,7 +36,7 @@ class TokenService {
     private final ObjectMapper objectMapper;
     private final AuthorizationProperties authorizationProperties;
 
-    RefreshToken createRefreshToken(UUID userId, boolean rememberMe) {
+    public BiWrapper<String, RefreshToken> createRefreshToken(UUID userId, boolean rememberMe) {
         UUID refreshTokenId = idGenerator.randomUuid();
 
         LocalDateTime issuedAt = dateTimeUtil.getCurrentDateTime();
@@ -51,14 +52,14 @@ class TokenService {
             .signWith(keyService.getPrivateKey())
             .compact();
 
-        return RefreshToken.builder()
+        RefreshToken refreshToken = RefreshToken.builder()
             .userId(userId)
             .refreshTokenId(refreshTokenId)
             .issuedAt(issuedAt)
             .expiration(expiration)
             .rememberMe(rememberMe)
-            .jwt(token)
             .build();
+        return new BiWrapper<>(token, refreshToken);
     }
 
     public RefreshToken verifyRefreshToken(String refreshToken) {
@@ -83,7 +84,6 @@ class TokenService {
             .issuedAt(dateTimeUtil.fromDate(claims.getIssuedAt()))
             .expiration(expiration)
             .rememberMe(claims.get(Constants.CLAIM_REMEMBER_ME, Boolean.class))
-            .jwt(refreshToken)
             .build();
     }
 

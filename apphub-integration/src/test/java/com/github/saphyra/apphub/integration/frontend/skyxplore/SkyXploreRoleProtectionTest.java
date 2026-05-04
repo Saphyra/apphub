@@ -47,6 +47,7 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
+        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 

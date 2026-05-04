@@ -23,4 +23,5 @@ public class Constants {
     public final String AUTHORIZATION_HEADER = "auth";
 
     public static final String EMPTY_STRING = "";
+    public static final int DYNAMO_DB_DELETE_MAX_BATCH_SIZE = 25;
 }

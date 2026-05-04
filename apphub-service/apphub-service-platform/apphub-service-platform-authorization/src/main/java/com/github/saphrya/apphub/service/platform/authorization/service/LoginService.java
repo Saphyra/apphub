@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationR
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
 import com.github.saphyra.apphub.api.platform.authorization.model.LoginRequest;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
@@ -38,12 +39,12 @@ public class LoginService {
 
         return switch (response.getAuthorizationResult()) {
             case AUTHORIZED -> {
-                RefreshToken refreshToken = tokenService.createRefreshToken(response.getUserId(), loginRequest.getRememberMe());
-                refreshTokenDao.save(refreshToken);
+                BiWrapper<String, RefreshToken> refreshToken = tokenService.createRefreshToken(response.getUserId(), loginRequest.getRememberMe());
+                refreshTokenDao.save(refreshToken.getEntity2());
 
-                AccessTokenDto accessToken = tokenService.createAccessToken(response.getUserId(), refreshToken.getRefreshTokenId(), response.getRoles());
+                AccessTokenDto accessToken = tokenService.createAccessToken(response.getUserId(), refreshToken.getEntity2().getRefreshTokenId(), response.getRoles());
 
-                yield tokenResponseMapper.create(refreshToken, accessToken);
+                yield tokenResponseMapper.create(refreshToken.getEntity2(), refreshToken.getEntity1(), accessToken);
             }
             case USER_NOT_FOUND -> throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.BAD_CREDENTIALS, "User not found by " + loginRequest.getUserIdentifier());
             case USER_LOCKED -> throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.ACCOUNT_LOCKED, response.getUserId() + " is locked.");
