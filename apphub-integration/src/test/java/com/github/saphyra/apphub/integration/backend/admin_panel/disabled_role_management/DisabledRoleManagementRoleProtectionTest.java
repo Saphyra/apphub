@@ -6,27 +6,25 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.util.UUID;
 
 public class DisabledRoleManagementRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void disabledRoleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        SleepUtil.sleep(3000);
-
-        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getGetDisabledRoles(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getEnableRoleResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
-        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getGetDisabledRoles(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getEnableRoleResponse(getServerPort(), accessToken, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessToken, userData.getPassword(), Constants.ROLE_TEST));
     }
 
     @DataProvider(parallel = true)

@@ -34,65 +34,65 @@ public class LinkCrudTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void linkCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_blankTitle(accessTokenId);
-        create_parentNotCategory(accessTokenId);
-        create_parentNotFound(accessTokenId);
-        create_nullUrl(accessTokenId);
-        UUID parentId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
-        UUID linkId = create(accessTokenId, parentId);
-        editLink(accessTokenId, parentId, linkId);
-        delete(accessTokenId, parentId, linkId);
+        create_blankTitle(accessToken);
+        create_parentNotCategory(accessToken);
+        create_parentNotFound(accessToken);
+        create_nullUrl(accessToken);
+        UUID parentId = CategoryActions.createCategory(getServerPort(), accessToken, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
+        UUID linkId = create(accessToken, parentId);
+        editLink(accessToken, parentId, linkId);
+        delete(accessToken, parentId, linkId);
     }
 
-    private static void create_blankTitle(UUID accessTokenId) {
+    private static void create_blankTitle(String accessToken) {
         CreateLinkRequest create_blankTitleRequest = CreateLinkRequest.builder()
             .title(" ")
             .url(URL)
             .build();
-        Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_blankTitleRequest);
+        Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_blankTitleRequest);
         verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
     }
 
-    private static void create_parentNotCategory(UUID accessTokenId) {
-        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title("pt").content("pc").build());
+    private static void create_parentNotCategory(String accessToken) {
+        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessToken, CreateTextRequest.builder().title("pt").content("pc").build());
         CreateLinkRequest create_parentNotCategoryRequest = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(notCategoryParentId)
             .build();
-        Response create_parentNotCategoryResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_parentNotCategoryRequest);
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
-    private static void create_parentNotFound(UUID accessTokenId) {
+    private static void create_parentNotFound(String accessToken) {
         CreateLinkRequest create_parentNotFoundRequest = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(UUID.randomUUID())
             .build();
-        Response create_parentNotFoundResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
-    private static void create_nullUrl(UUID accessTokenId) {
+    private static void create_nullUrl(String accessToken) {
         CreateLinkRequest create_nullUrlRequest = CreateLinkRequest.builder()
             .title(TITLE)
             .url(null)
             .build();
-        Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessTokenId, create_nullUrlRequest);
+        Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_nullUrlRequest);
         verifyInvalidParam(create_nullUrlResponse, "url", "must not be null");
     }
 
-    private static UUID create(UUID accessTokenId, UUID parentId) {
+    private static UUID create(String accessToken, UUID parentId) {
         CreateLinkRequest createRequest = CreateLinkRequest.builder()
             .title(TITLE)
             .url(URL)
             .parent(parentId)
             .build();
-        UUID linkId = LinkActions.createLink(getServerPort(), accessTokenId, createRequest);
-        ChildrenOfCategoryResponse childrenOfCategoryResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId);
+        UUID linkId = LinkActions.createLink(getServerPort(), accessToken, createRequest);
+        ChildrenOfCategoryResponse childrenOfCategoryResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, parentId);
         assertThat(childrenOfCategoryResponse.getChildren()).hasSize(1);
         NotebookView view = childrenOfCategoryResponse.getChildren().get(0);
         assertThat(view.getId()).isEqualTo(linkId);
@@ -102,22 +102,22 @@ public class LinkCrudTest extends BackEndTest {
         return linkId;
     }
 
-    private static void editLink(UUID accessTokenId, UUID parentId, UUID linkId) {
+    private static void editLink(String accessToken, UUID parentId, UUID linkId) {
         EditListItemRequest editLinkRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .value(NEW_URL)
             .parent(parentId)
             .build();
-        ListItemActions.editListItem(getServerPort(), accessTokenId, editLinkRequest, linkId);
-        ChildrenOfCategoryResponse childrenOfLinksParentResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId);
+        ListItemActions.editListItem(getServerPort(), accessToken, editLinkRequest, linkId);
+        ChildrenOfCategoryResponse childrenOfLinksParentResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, parentId);
         assertThat(childrenOfLinksParentResponse.getChildren()).hasSize(1);
         NotebookView linkView = childrenOfLinksParentResponse.getChildren().get(0);
         assertThat(linkView.getValue()).isEqualTo(NEW_URL);
         assertThat(linkView.getTitle()).isEqualTo(NEW_TITLE);
     }
 
-    private static void delete(UUID accessTokenId, UUID parentId, UUID linkId) {
-        ListItemActions.deleteListItem(getServerPort(), accessTokenId, linkId);
-        assertThat(CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, parentId).getChildren()).isEmpty();
+    private static void delete(String accessToken, UUID parentId, UUID linkId) {
+        ListItemActions.deleteListItem(getServerPort(), accessToken, linkId);
+        assertThat(CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, parentId).getChildren()).isEmpty();
     }
 }

@@ -34,13 +34,13 @@ public class RepeatDaysOfMonthEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void repeatDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = create(accessTokenId);
-        edit(accessTokenId, eventId);
+        UUID eventId = create(accessToken);
+        edit(accessToken, eventId);
     }
 
-    private void edit(UUID accessTokenId, UUID eventId) {
+    private void edit(String accessToken, UUID eventId) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.DAYS_OF_MONTH)
             .toBuilder()
             .startDate(NEW_START_DATE)
@@ -48,13 +48,13 @@ public class RepeatDaysOfMonthEventTest extends BackEndTest {
             .repeatForDays(NEW_REPEAT_FOR_DAYS)
             .build();
 
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRepeatForDays()).isEqualTo(NEW_REPEAT_FOR_DAYS);
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId).getRepeatForDays()).isEqualTo(NEW_REPEAT_FOR_DAYS);
 
         List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort(),
-                accessTokenId,
+                accessToken,
                 NEW_START_DATE.minusMonths(2),
                 NEW_END_DATE.plusMonths(2)
             )
@@ -81,7 +81,7 @@ public class RepeatDaysOfMonthEventTest extends BackEndTest {
         );
     }
 
-    private UUID create(UUID accessTokenId) {
+    private UUID create(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.DAYS_OF_MONTH)
             .toBuilder()
             .startDate(START_DATE)
@@ -89,13 +89,13 @@ public class RepeatDaysOfMonthEventTest extends BackEndTest {
             .repeatForDays(REPEAT_FOR_DAYS)
             .build();
 
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRepeatForDays()).isEqualTo(REPEAT_FOR_DAYS);
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId).getRepeatForDays()).isEqualTo(REPEAT_FOR_DAYS);
 
         List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort(),
-                accessTokenId,
+                accessToken,
                 START_DATE.minusMonths(2),
                 END_DATE.plusMonths(2)
             )

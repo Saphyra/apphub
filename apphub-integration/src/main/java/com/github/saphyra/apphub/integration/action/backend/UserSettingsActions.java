@@ -13,29 +13,29 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserSettingsActions {
-    public static Map<String, String> getUserSettings(int serverPort, UUID accessTokenId, String category) {
-        Response response = getQueryUserSettingsResponse(serverPort, accessTokenId, category);
+    public static Map<String, String> getUserSettings(int serverPort, String accessToken, String category) {
+        Response response = getQueryUserSettingsResponse(serverPort, accessToken, category);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(StringStringMap.class);
     }
 
-    public static Response getQueryUserSettingsResponse(int serverPort, UUID accessTokenId, String category) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getQueryUserSettingsResponse(int serverPort, String accessToken, String category) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, UserEndpoints.GET_USER_SETTINGS, "category", category));
     }
 
-    public static Map<String, String> setUserSetting(int serverPort, UUID accessTokenId, SetUserSettingsRequest request) {
-        Response response = getUpdateUserSettingsResponse(serverPort, accessTokenId, request);
+    public static Map<String, String> setUserSetting(int serverPort, String accessToken, SetUserSettingsRequest request) {
+        Response response = getUpdateUserSettingsResponse(serverPort, accessToken, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(StringStringMap.class);
     }
 
-    public static Response getUpdateUserSettingsResponse(int serverPort, UUID accessTokenId, SetUserSettingsRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getUpdateUserSettingsResponse(int serverPort, String accessToken, SetUserSettingsRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .post(UrlFactory.create(serverPort, UserEndpoints.SET_USER_SETTINGS));
     }

@@ -27,22 +27,22 @@ public class CustomTableTimeTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableTimeCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_nullTime(accessTokenId);
-        create_failedToParse(accessTokenId);
-        create(accessTokenId);
+        create_nullTime(accessToken);
+        create_failedToParse(accessToken);
+        create(accessToken);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
-        edit(accessTokenId, listItemId, tableResponse);
+        edit(accessToken, listItemId, tableResponse);
     }
 
-    private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
             tableResponse.getTableHeads().get(0).getTableHeadId(),
@@ -53,33 +53,33 @@ public class CustomTableTimeTest extends BackEndTest {
             ""
         );
 
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
         assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo("");
     }
 
-    private void create(UUID accessTokenId) {
+    private void create(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.TIME, TIME);
 
-        TableActions.createTable(getServerPort(), accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_failedToParse(UUID accessTokenId) {
+    private void create_failedToParse(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.TIME, "asd");
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "time", "failed to parse");
     }
 
-    private void create_nullTime(UUID accessTokenId) {
+    private void create_nullTime(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.TIME, null);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "time", "must not be null");
     }

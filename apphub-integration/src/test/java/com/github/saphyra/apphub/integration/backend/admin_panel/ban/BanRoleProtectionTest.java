@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.MarkUserForDeletionRequest;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
@@ -19,19 +19,19 @@ public class BanRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void banRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        SleepUtil.sleep(3000);
-
-        CommonUtils.verifyMissingRole(() -> BanActions.getBanResponse(getServerPort(), accessTokenId, new BanRequest()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getRevokeBanResponse(getServerPort(), accessTokenId, UUID.randomUUID(), userData.getPassword()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getGetBansResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getMarkForDeletionResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new MarkUserForDeletionRequest()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getUnmarkUserForDeletionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> BanActions.getSearchResponse(getServerPort(), accessTokenId, "asd"));
+        CommonUtils.verifyMissingRole(() -> BanActions.getBanResponse(getServerPort(), accessToken, new BanRequest()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getRevokeBanResponse(getServerPort(), accessToken, UUID.randomUUID(), userData.getPassword()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getGetBansResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getMarkForDeletionResponse(getServerPort(), accessToken, UUID.randomUUID(), new MarkUserForDeletionRequest()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getUnmarkUserForDeletionResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> BanActions.getSearchResponse(getServerPort(), accessToken, "asd"));
     }
 
     @DataProvider(parallel = true)

@@ -16,82 +16,82 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreBuildingModuleActions {
-    public static void constructBuildingModules(int serverPort, UUID accessTokenId, UUID constructionAreaId, String... dataIds) {
+    public static void constructBuildingModules(int serverPort, String accessToken, UUID constructionAreaId, String... dataIds) {
         Arrays.stream(dataIds)
-            .forEach(dataId -> constructBuildingModule(serverPort, accessTokenId, constructionAreaId, dataId));
+            .forEach(dataId -> constructBuildingModule(serverPort, accessToken, constructionAreaId, dataId));
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
 
         AwaitilityWrapper.create(180, 5)
-            .until(() -> getBuildingModules(serverPort, accessTokenId, constructionAreaId).stream().allMatch(buildingModuleResponse -> isNull(buildingModuleResponse.getConstruction())))
+            .until(() -> getBuildingModules(serverPort, accessToken, constructionAreaId).stream().allMatch(buildingModuleResponse -> isNull(buildingModuleResponse.getConstruction())))
             .assertTrue("BuildingModule construction is not finished.");
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, true);
     }
 
-    public static List<BuildingModuleResponse> constructBuildingModule(int serverPort, UUID accessTokenId, UUID constructionAreaId, String dataId) {
-        Response response = getConstructBuildingModuleResponse(serverPort, accessTokenId, constructionAreaId, dataId);
+    public static List<BuildingModuleResponse> constructBuildingModule(int serverPort, String accessToken, UUID constructionAreaId, String dataId) {
+        Response response = getConstructBuildingModuleResponse(serverPort, accessToken, constructionAreaId, dataId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BuildingModuleResponse[].class));
     }
 
-    public static Response getConstructBuildingModuleResponse(int serverPort, UUID accessTokenId, UUID constructionAreaId, String dataId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getConstructBuildingModuleResponse(int serverPort, String accessToken, UUID constructionAreaId, String dataId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(dataId))
             .put(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE, "constructionAreaId", constructionAreaId));
     }
 
-    public static List<BuildingModuleResponse> deconstructBuildingModule(int serverPort, UUID accessTokenId, UUID buildingModuleId) {
-        Response response = getDeconstructBuildingModuleResponse(serverPort, accessTokenId, buildingModuleId);
+    public static List<BuildingModuleResponse> deconstructBuildingModule(int serverPort, String accessToken, UUID buildingModuleId) {
+        Response response = getDeconstructBuildingModuleResponse(serverPort, accessToken, buildingModuleId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BuildingModuleResponse[].class));
     }
 
-    public static Response getDeconstructBuildingModuleResponse(int serverPort, UUID accessTokenId, UUID buildingModuleId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeconstructBuildingModuleResponse(int serverPort, String accessToken, UUID buildingModuleId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_DECONSTRUCT_BUILDING_MODULE, "buildingModuleId", buildingModuleId));
     }
 
-    public static List<BuildingModuleResponse> cancelConstruction(int serverPort, UUID accessTokenId, UUID constructionId) {
-        Response response = getCancelConstructionResponse(serverPort, accessTokenId, constructionId);
+    public static List<BuildingModuleResponse> cancelConstruction(int serverPort, String accessToken, UUID constructionId) {
+        Response response = getCancelConstructionResponse(serverPort, accessToken, constructionId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BuildingModuleResponse[].class));
     }
 
-    public static Response getCancelConstructionResponse(int serverPort, UUID accessTokenId, UUID constructionId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCancelConstructionResponse(int serverPort, String accessToken, UUID constructionId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_CONSTRUCTION_OF_BUILDING_MODULE, "constructionId", constructionId));
     }
 
-    public static List<BuildingModuleResponse> getBuildingModules(int serverPort, UUID accessTokenId, UUID constructionAreaId) {
-        Response response = getBuildingModulesResponse(serverPort, accessTokenId, constructionAreaId);
+    public static List<BuildingModuleResponse> getBuildingModules(int serverPort, String accessToken, UUID constructionAreaId) {
+        Response response = getBuildingModulesResponse(serverPort, accessToken, constructionAreaId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BuildingModuleResponse[].class));
     }
 
-    public static Response getBuildingModulesResponse(int serverPort, UUID accessTokenId, UUID constructionAreaId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getBuildingModulesResponse(int serverPort, String accessToken, UUID constructionAreaId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES, "constructionAreaId", constructionAreaId));
     }
 
-    public static List<BuildingModuleResponse> cancelDeconstruction(int serverPort, UUID accessTokenId, UUID deconstructionId) {
-        Response response = getCancelDeconstructionResponse(serverPort, accessTokenId, deconstructionId);
+    public static List<BuildingModuleResponse> cancelDeconstruction(int serverPort, String accessToken, UUID deconstructionId) {
+        Response response = getCancelDeconstructionResponse(serverPort, accessToken, deconstructionId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BuildingModuleResponse[].class));
     }
 
-    public static Response getCancelDeconstructionResponse(int serverPort, UUID accessTokenId, UUID deconstructionId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCancelDeconstructionResponse(int serverPort, String accessToken, UUID deconstructionId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF_BUILDING_MODULE, "deconstructionId", deconstructionId));
     }
 }

@@ -33,35 +33,35 @@ public class BasicDaysOfMonthEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void basicDaysOfMonthEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = create(accessTokenId);
-        edit(accessTokenId, eventId);
-        delete(accessTokenId, eventId);
+        UUID eventId = create(accessToken);
+        edit(accessToken, eventId);
+        delete(accessToken, eventId);
     }
 
-    private void delete(UUID accessTokenId, UUID eventId) {
-        CalendarEventActions.deleteEvent(getServerPort(), accessTokenId, eventId);
+    private void delete(String accessToken, UUID eventId) {
+        CalendarEventActions.deleteEvent(getServerPort(), accessToken, eventId);
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).isEmpty();
         assertThat(CalendarOccurrenceActions.getOccurrences(
             getServerPort(),
-            accessTokenId,
+            accessToken,
             START_DATE.minusDays(10),
             NEW_END_DATE.plusDays(10)
         )).isEmpty();
     }
 
-    private void edit(UUID accessTokenId, UUID eventId) {
+    private void edit(String accessToken, UUID eventId) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.DAYS_OF_MONTH)
             .toBuilder()
             .startDate(NEW_START_DATE)
             .endDate(NEW_END_DATE)
             .build();
 
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.DAYS_OF_MONTH, EventResponse::getRepetitionType)
             .returns(EventRequestFactory.NEW_REPETITION_DATA_DAYS_OF_MONTH, EventResponse::getRepetitionData)
@@ -72,7 +72,7 @@ public class BasicDaysOfMonthEventTest extends BackEndTest {
             .returns(EventRequestFactory.NEW_CONTENT, EventResponse::getContent)
             .returns(List.of(), EventResponse::getLabels);
 
-        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId)
+        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId)
             .stream()
             .map(OccurrenceResponse::getDate)
             .toList();
@@ -88,16 +88,16 @@ public class BasicDaysOfMonthEventTest extends BackEndTest {
         );
     }
 
-    private UUID create(UUID accessTokenId) {
+    private UUID create(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.DAYS_OF_MONTH)
             .toBuilder()
             .startDate(START_DATE)
             .endDate(END_DATE)
             .build();
 
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.DAYS_OF_MONTH, EventResponse::getRepetitionType)
             .returns(EventRequestFactory.DEFAULT_REPETITION_DATA_DAYS_OF_MONTH, EventResponse::getRepetitionData)
@@ -110,7 +110,7 @@ public class BasicDaysOfMonthEventTest extends BackEndTest {
             .returns(0, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(), EventResponse::getLabels);
 
-        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId)
+        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId)
             .stream()
             .map(OccurrenceResponse::getDate)
             .toList();

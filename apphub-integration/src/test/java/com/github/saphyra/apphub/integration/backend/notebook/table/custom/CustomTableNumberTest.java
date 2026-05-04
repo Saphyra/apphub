@@ -27,25 +27,25 @@ public class CustomTableNumberTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableNumberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_nullData(accessTokenId);
-        create_failedToParse(accessTokenId);
-        create_nullNumberValue(accessTokenId);
-        create_nullNumberStep(accessTokenId);
-        create_tooLowStep(accessTokenId);
-        create(accessTokenId);
+        create_nullData(accessToken);
+        create_failedToParse(accessToken);
+        create_nullNumberValue(accessToken);
+        create_nullNumberStep(accessToken);
+        create_tooLowStep(accessToken);
+        create(accessToken);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
-        edit(accessTokenId, listItemId, tableResponse);
+        edit(accessToken, listItemId, tableResponse);
     }
 
-    private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Number number = new Number(2d, 1d);
 
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
@@ -58,9 +58,9 @@ public class CustomTableNumberTest extends BackEndTest {
             number
         );
 
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -69,52 +69,52 @@ public class CustomTableNumberTest extends BackEndTest {
         assertThat(data.getStep()).isEqualTo(2d);
     }
 
-    private void create(UUID accessTokenId) {
+    private void create(String accessToken) {
         Number number = new Number(32d, 45d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, number);
 
-        TableActions.createTable(getServerPort(), accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_tooLowStep(UUID accessTokenId) {
+    private void create_tooLowStep(String accessToken) {
         Number number = new Number(0d, 23d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, number);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "number.step", "too low");
     }
 
-    private void create_nullNumberStep(UUID accessTokenId) {
+    private void create_nullNumberStep(String accessToken) {
         Number number = new Number(null, 23d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, number);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "number.step", "must not be null");
     }
 
-    private void create_nullNumberValue(UUID accessTokenId) {
+    private void create_nullNumberValue(String accessToken) {
         Number number = new Number(32d, null);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, number);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "number.value", "must not be null");
     }
 
-    private void create_failedToParse(UUID accessTokenId) {
+    private void create_failedToParse(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, "asd");
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "number", "failed to parse");
     }
 
-    private void create_nullData(UUID accessTokenId) {
+    private void create_nullData(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, null);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "number", "must not be null");
     }

@@ -22,9 +22,9 @@ public class RowSwapProtectionTest extends BackEndTest {
     @Test(groups = {"be", "misc"})
     public void rowSwapProtectionTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        ModulesActions.setAsFavorite(getServerPort(), accessTokenId, "account", true);
+        ModulesActions.setAsFavorite(getServerPort(), accessToken, "account", true);
         CreateChecklistRequest createChecklistRequest = CreateChecklistRequest.builder()
             .title(CHECKLIST_TITLE)
             .items(List.of(
@@ -36,12 +36,12 @@ public class RowSwapProtectionTest extends BackEndTest {
                     .build()
             ))
             .build();
-        ChecklistActions.createChecklist(getServerPort(), accessTokenId, createChecklistRequest);
+        ChecklistActions.createChecklist(getServerPort(), accessToken, createChecklistRequest);
 
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
         String data = DatabaseUtil.getEncryptedDataFromCheckedItem(userId);
         DatabaseUtil.injectEncryptedDataToModules(userId, data);
 
-        assertThat(ModulesActions.getModulesResponse(getServerPort(), accessTokenId).getStatusCode()).isNotEqualTo(200);
+        assertThat(ModulesActions.getModulesResponse(getServerPort(), accessToken).getStatusCode()).isNotEqualTo(200);
     }
 }

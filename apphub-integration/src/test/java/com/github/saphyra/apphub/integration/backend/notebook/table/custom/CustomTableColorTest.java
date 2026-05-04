@@ -28,26 +28,26 @@ public class CustomTableColorTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableColorCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_nullColor(accessTokenId);
-        create_invalidLength(accessTokenId);
-        create_doesNotStartWithHashtag(accessTokenId);
-        create_invalidCharacter(accessTokenId);
-        create(accessTokenId);
+        create_nullColor(accessToken);
+        create_invalidLength(accessToken);
+        create_doesNotStartWithHashtag(accessToken);
+        create_invalidCharacter(accessToken);
+        create(accessToken);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
-        edit(accessTokenId, listItemId, tableResponse);
+        edit(accessToken, listItemId, tableResponse);
 
-        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
+        ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
     }
 
-    private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
             tableResponse.getTableHeads().get(0).getTableHeadId(),
@@ -58,49 +58,49 @@ public class CustomTableColorTest extends BackEndTest {
             COLOR_CODE
         );
 
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
         assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(COLOR_CODE);
     }
 
-    private void create(UUID accessTokenId) {
+    private void create(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "");
 
-        TableActions.createTable(getServerPort(), accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_invalidCharacter(UUID accessTokenId) {
+    private void create_invalidCharacter(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "#01234g");
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "color", "failed to parse");
     }
 
-    private void create_doesNotStartWithHashtag(UUID accessTokenId) {
+    private void create_doesNotStartWithHashtag(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "asdasda");
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "color", "first character is not #");
     }
 
-    private void create_invalidLength(UUID accessTokenId) {
+    private void create_invalidLength(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "asd");
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "color", "must be 7 character(s) long");
     }
 
-    private void create_nullColor(UUID accessTokenId) {
+    private void create_nullColor(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, null);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "color", "must not be null");
     }

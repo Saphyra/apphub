@@ -30,7 +30,7 @@ public class BannedDetailsQueryService {
         if (relevantBans.isEmpty()) {
             return BannedDetailsResponse.builder()
                 .build();
-        } else if (relevantBans.stream().anyMatch(Ban::getPermanent)) {
+        } else if (relevantBans.stream().anyMatch(Ban::isPermanent)) {
             return BannedDetailsResponse.builder()
                 .permanent(true)
                 .build();

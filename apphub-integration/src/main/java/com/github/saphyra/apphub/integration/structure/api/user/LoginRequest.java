@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
     private String userIdentifier;
     private String password;
-    private Boolean rememberMe;
+    @Builder.Default
+    private Boolean rememberMe = false;
 }

@@ -20,33 +20,33 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreFriendActions {
-    public static void setUpFriendship(int serverPort, UUID senderAccessTokenId, UUID friendAccessTokenId, UUID friendUserId) {
-        createFriendRequest(serverPort, senderAccessTokenId, friendUserId);
+    public static void setUpFriendship(int serverPort, String senderAccessToken, String friendAccessToken, UUID friendUserId) {
+        createFriendRequest(serverPort, senderAccessToken, friendUserId);
 
-        IncomingFriendRequestResponse friendRequest = getIncomingFriendRequests(serverPort, friendAccessTokenId)
+        IncomingFriendRequestResponse friendRequest = getIncomingFriendRequests(serverPort, friendAccessToken)
             .stream()
             .findFirst()
             .orElseThrow(() -> new RuntimeException("No incoming friendRequests"));
 
-        acceptFriendRequest(serverPort, friendAccessTokenId, friendRequest.getFriendRequestId());
+        acceptFriendRequest(serverPort, friendAccessToken, friendRequest.getFriendRequestId());
     }
 
-    public static SentFriendRequestResponse createFriendRequest(int serverPort, UUID accessTokenId, UUID userId) {
-        Response response = getCreateFriendRequestResponse(serverPort, accessTokenId, userId);
+    public static SentFriendRequestResponse createFriendRequest(int serverPort, String accessToken, UUID userId) {
+        Response response = getCreateFriendRequestResponse(serverPort, accessToken, userId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(SentFriendRequestResponse.class);
     }
 
-    public static Response getCreateFriendRequestResponse(int serverPort, UUID accessTokenId, UUID userId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateFriendRequestResponse(int serverPort, String accessToken, UUID userId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(userId))
             .put(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_ADD_FRIEND));
     }
 
-    public static List<IncomingFriendRequestResponse> getIncomingFriendRequests(int serverPort, UUID accessTokenId) {
-        Response response = getIncomingFriendRequestsResponse(serverPort, accessTokenId);
+    public static List<IncomingFriendRequestResponse> getIncomingFriendRequests(int serverPort, String accessToken) {
+        Response response = getIncomingFriendRequestsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -54,26 +54,26 @@ public class SkyXploreFriendActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getIncomingFriendRequestsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getIncomingFriendRequestsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_GET_INCOMING_FRIEND_REQUEST));
     }
 
-    public static FriendshipResponse acceptFriendRequest(int serverPort, UUID accessTokenId, UUID friendRequestId) {
-        Response response = getAcceptFriendRequestResponse(serverPort, accessTokenId, friendRequestId);
+    public static FriendshipResponse acceptFriendRequest(int serverPort, String accessToken, UUID friendRequestId) {
+        Response response = getAcceptFriendRequestResponse(serverPort, accessToken, friendRequestId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(FriendshipResponse.class);
     }
 
-    public static Response getAcceptFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendRequestId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getAcceptFriendRequestResponse(int serverPort, String accessToken, UUID friendRequestId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_ACCEPT_FRIEND_REQUEST, "friendRequestId", friendRequestId));
     }
 
-    public static List<SkyXploreCharacterModel> getFriendCandidates(int serverPort, UUID accessTokenId, String queryString) {
-        Response response = getFriendCandidatesResponse(serverPort, accessTokenId, queryString);
+    public static List<SkyXploreCharacterModel> getFriendCandidates(int serverPort, String accessToken, String queryString) {
+        Response response = getFriendCandidatesResponse(serverPort, accessToken, queryString);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -81,14 +81,14 @@ public class SkyXploreFriendActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getFriendCandidatesResponse(int serverPort, UUID accessTokenId, String queryString) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getFriendCandidatesResponse(int serverPort, String accessToken, String queryString) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(queryString))
             .post(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_SEARCH_FOR_FRIENDS));
     }
 
-    public static List<SentFriendRequestResponse> getSentFriendRequests(int serverPort, UUID accessTokenId) {
-        Response response = getSentFriendRequestsResponse(serverPort, accessTokenId);
+    public static List<SentFriendRequestResponse> getSentFriendRequests(int serverPort, String accessToken) {
+        Response response = getSentFriendRequestsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -96,48 +96,48 @@ public class SkyXploreFriendActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getSentFriendRequestsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSentFriendRequestsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_GET_SENT_FRIEND_REQUEST));
     }
 
-    public static void cancelFriendRequest(int serverPort, UUID accessTokenId, UUID friendRequestId) {
-        Response response = getCancelFriendRequestResponse(serverPort, accessTokenId, friendRequestId);
+    public static void cancelFriendRequest(int serverPort, String accessToken, UUID friendRequestId) {
+        Response response = getCancelFriendRequestResponse(serverPort, accessToken, friendRequestId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCancelFriendRequestResponse(int serverPort, UUID accessTokenId, UUID friendRequestId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCancelFriendRequestResponse(int serverPort, String accessToken, UUID friendRequestId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_CANCEL_FRIEND_REQUEST, "friendRequestId", friendRequestId));
     }
 
-    public static List<FriendshipResponse> getFriends(int serverPort, UUID accessTokenId) {
-        Response response = getFriendsResponse(serverPort, accessTokenId);
+    public static List<FriendshipResponse> getFriends(int serverPort, String accessToken) {
+        Response response = getFriendsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return Arrays.stream(response.getBody().as(FriendshipResponse[].class))
             .collect(Collectors.toList());
     }
 
-    public static Response getFriendsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getFriendsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_GET_FRIENDS));
     }
 
-    public static void removeFriend(int serverPort, UUID accessTokenId, UUID friendshipId) {
-        Response response = getRemoveFriendResponse(serverPort, accessTokenId, friendshipId);
+    public static void removeFriend(int serverPort, String accessToken, UUID friendshipId) {
+        Response response = getRemoveFriendResponse(serverPort, accessToken, friendshipId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getRemoveFriendResponse(int serverPort, UUID accessTokenId, UUID friendshipId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getRemoveFriendResponse(int serverPort, String accessToken, UUID friendshipId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_REMOVE_FRIEND, "friendshipId", friendshipId));
     }
 
-    public static List<ActiveFriendResponse> getActiveFriends(int serverPort, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static List<ActiveFriendResponse> getActiveFriends(int serverPort, String accessToken) {
+        Response response = RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreLobbyEndpoints.SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS));
 
         assertThat(response.getStatusCode()).isEqualTo(200);

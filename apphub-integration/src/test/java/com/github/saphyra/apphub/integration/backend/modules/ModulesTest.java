@@ -12,7 +12,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import static com.github.saphyra.apphub.integration.core.TestConfiguration.DISABLED_TEST_GROUPS;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
@@ -24,15 +23,17 @@ public class ModulesTest extends BackEndTest {
         RegistrationRequest registrationRequest = RegistrationParameters.validParameters()
             .toRegistrationRequest();
         IndexPageActions.registerUser(getServerPort(), registrationRequest);
-        UUID accessTokenId = IndexPageActions.login(
+        String accessToken = IndexPageActions.login(
             getServerPort(),
             LoginRequest.builder()
                 .userIdentifier(registrationRequest.getEmail())
                 .password(registrationRequest.getPassword())
                 .build()
-        );
+        )
+            .getAccessToken()
+            .getJwt();
 
-        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(getServerPort(), accessTokenId);
+        Map<String, List<ModulesResponse>> result = ModulesActions.getModules(getServerPort(), accessToken);
 
         assertThat(result).containsKeys("accounts", "office", "development-utils");
 
@@ -115,25 +116,25 @@ public class ModulesTest extends BackEndTest {
     @Test(groups = {"be", "modules"})
     public void setAsFavorite() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        unknownModule(accessTokenId);
-        favoriteNull(accessTokenId);
-        setAsFavorite(accessTokenId);
+        unknownModule(accessToken);
+        favoriteNull(accessToken);
+        setAsFavorite(accessToken);
     }
 
-    private static void unknownModule(UUID accessTokenId) {
-        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessTokenId, "unknown-module", true);
+    private static void unknownModule(String accessToken) {
+        Response unknownModuleResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessToken, "unknown-module", true);
         verifyInvalidParam(unknownModuleResponse, "module", "does not exist");
     }
 
-    private static void favoriteNull(UUID accessTokenId) {
-        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessTokenId, "account", null);
+    private static void favoriteNull(String accessToken) {
+        Response favoriteNullResponse = ModulesActions.getSetAsFavoriteResponse(getServerPort(), accessToken, "account", null);
         verifyInvalidParam(favoriteNullResponse, "value", "must not be null");
     }
 
-    private static void setAsFavorite(UUID accessTokenId) {
-        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(getServerPort(), accessTokenId, "account", true);
+    private static void setAsFavorite(String accessToken) {
+        Map<String, List<ModulesResponse>> setAsFavoriteResponse = ModulesActions.setAsFavorite(getServerPort(), accessToken, "account", true);
 
         assertThat(setAsFavoriteResponse).containsKeys("accounts", "office", "development-utils");
         ModulesResponse expectedModule = ModulesResponse.builder()

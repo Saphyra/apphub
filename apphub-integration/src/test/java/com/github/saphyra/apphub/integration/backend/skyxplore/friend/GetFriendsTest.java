@@ -21,34 +21,34 @@ public class GetFriendsTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void getFriends() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, model);
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, model2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessTokenId, userId2);
+        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessToken, userId2);
 
-        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessTokenId)
+        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessToken)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
 
-        Response response = SkyXploreFriendActions.getAcceptFriendRequestResponse(getServerPort(), accessTokenId2, friendRequestId);
+        Response response = SkyXploreFriendActions.getAcceptFriendRequestResponse(getServerPort(), accessToken2, friendRequestId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        assertThat(SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessTokenId)).isEmpty();
-        assertThat(SkyXploreFriendActions.getIncomingFriendRequests(getServerPort(), accessTokenId2)).isEmpty();
+        assertThat(SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessToken)).isEmpty();
+        assertThat(SkyXploreFriendActions.getIncomingFriendRequests(getServerPort(), accessToken2)).isEmpty();
 
-        List<FriendshipResponse> senderFriendships = SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId);
+        List<FriendshipResponse> senderFriendships = SkyXploreFriendActions.getFriends(getServerPort(), accessToken);
         assertThat(senderFriendships).hasSize(1);
         assertThat(senderFriendships.get(0).getFriendName()).isEqualTo(model2.getName());
     }

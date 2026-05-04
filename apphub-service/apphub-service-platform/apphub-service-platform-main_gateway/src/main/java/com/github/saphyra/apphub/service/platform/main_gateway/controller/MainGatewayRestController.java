@@ -28,7 +28,7 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 class MainGatewayRestController {
-    private final InvalidatedAccessTokenService invalidateAccessTokenService;
+    private final InvalidatedAccessTokenService invalidatedAccessTokenService;
     private final InvalidatedRefreshTokenService invalidatedRefreshTokenService;
     private final TokenParser tokenParser;
 
@@ -36,7 +36,7 @@ class MainGatewayRestController {
     void accessTokenInvalidated(@RequestBody SendEventRequest<List<UUID>> sendEventRequest) {
         log.info("Invalidating accessTokens: {}", sendEventRequest.getPayload());
         sendEventRequest.getPayload()
-            .forEach(invalidateAccessTokenService::add);
+            .forEach(invalidatedAccessTokenService::add);
     }
 
     @PostMapping(UserEndpoints.EVENT_REFRESH_TOKEN_INVALIDATED)
@@ -58,5 +58,15 @@ class MainGatewayRestController {
             .map(OneParamResponse::new)
             .map(ResponseEntity::ok)
             .switchIfEmpty(Mono.just(new ResponseEntity<>(new OneParamResponse<>(null), HttpStatus.UNAUTHORIZED)));
+    }
+
+    @GetMapping("/invalidate-access-token/rest")
+    Mono<ResponseEntity<Void>> invalidateAccessToken(@CookieValue(name = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessTokenString) {
+        return tokenParser.verifyAccessToken(accessTokenString)
+            .map(accessToken -> {
+                invalidatedAccessTokenService.add(accessToken.getAccessTokenId());
+
+                return ResponseEntity.ok().build();
+            });
     }
 }

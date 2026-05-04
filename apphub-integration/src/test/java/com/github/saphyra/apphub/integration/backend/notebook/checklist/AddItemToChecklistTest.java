@@ -27,7 +27,7 @@ public class AddItemToChecklistTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void addItemToChecklist() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateChecklistRequest createRequest = CreateChecklistRequest.builder()
             .title(TITLE)
@@ -37,44 +37,44 @@ public class AddItemToChecklistTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessTokenId, createRequest);
+        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessToken, createRequest);
 
-        nullContent(accessTokenId, listItemId);
-        nullIndex(accessTokenId, listItemId);
-        addItemToTheStart(accessTokenId, listItemId);
+        nullContent(accessToken, listItemId);
+        nullIndex(accessToken, listItemId);
+        addItemToTheStart(accessToken, listItemId);
     }
 
-    private void nullContent(UUID accessTokenId, UUID listItemId) {
+    private void nullContent(String accessToken, UUID listItemId) {
         AddChecklistItemRequest request = AddChecklistItemRequest.builder()
             .content(null)
             .index(-1)
             .build();
 
-        Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessTokenId, listItemId, request);
+        Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessToken, listItemId, request);
 
         ResponseValidator.verifyInvalidParam(response, "content", "must not be null");
     }
 
-    private void nullIndex(UUID accessTokenId, UUID listItemId) {
+    private void nullIndex(String accessToken, UUID listItemId) {
         AddChecklistItemRequest request = AddChecklistItemRequest.builder()
             .content(NEW_CONTENT)
             .index(null)
             .build();
 
-        Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessTokenId, listItemId, request);
+        Response response = ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessToken, listItemId, request);
 
         ResponseValidator.verifyInvalidParam(response, "index", "must not be null");
     }
 
-    private void addItemToTheStart(UUID accessTokenId, UUID listItemId) {
+    private void addItemToTheStart(String accessToken, UUID listItemId) {
         AddChecklistItemRequest request = AddChecklistItemRequest.builder()
             .content(NEW_CONTENT)
             .index(-1)
             .build();
 
-        ChecklistActions.addChecklistItem(getServerPort(), accessTokenId, listItemId, request);
+        ChecklistActions.addChecklistItem(getServerPort(), accessToken, listItemId, request);
 
-        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
 
         assertThat(checklistResponse.getItems()).hasSize(2);
         List<ChecklistItemModel> items = checklistResponse.getItems()

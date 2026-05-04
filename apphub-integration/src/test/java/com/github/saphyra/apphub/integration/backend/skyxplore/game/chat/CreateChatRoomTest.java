@@ -38,88 +38,88 @@ public class CreateChatRoomTest extends BackEndTest {
     public void createChatRoom() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        Map<UUID, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
+        Map<String, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1), new Player(accessToken2, userId2));
 
-        nullMembers(accessTokenId1);
-        membersContainsNull(accessTokenId1);
-        memberNotInGame(accessTokenId1);
-        nullRoomTitle(accessTokenId1);
-        roomTitleTooShort(accessTokenId1);
-        roomTitleTooLong(accessTokenId1);
-        create(accessTokenId1, userId2, gameWsClients);
-        getChetRooms(accessTokenId1);
+        nullMembers(accessToken1);
+        membersContainsNull(accessToken1);
+        memberNotInGame(accessToken1);
+        nullRoomTitle(accessToken1);
+        roomTitleTooShort(accessToken1);
+        roomTitleTooLong(accessToken1);
+        create(accessToken1, userId2, gameWsClients);
+        getChetRooms(accessToken1);
     }
 
-    private static void nullMembers(UUID accessTokenId1) {
+    private static void nullMembers(String accessToken1) {
         CreateChatRoomRequest nullMembersRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(null)
             .build();
-        Response nullMembersResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, nullMembersRequest);
+        Response nullMembersResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, nullMembersRequest);
         verifyInvalidParam(nullMembersResponse, "members", "must not be null");
     }
 
-    private static void membersContainsNull(UUID accessTokenId1) {
+    private static void membersContainsNull(String accessToken1) {
         CreateChatRoomRequest membersContainsNullRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
             .members(Arrays.asList(new UUID[]{null}))
             .build();
-        Response membersContainsNullResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, membersContainsNullRequest);
+        Response membersContainsNullResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, membersContainsNullRequest);
         verifyInvalidParam(membersContainsNullResponse, "members", "must not contain null");
     }
 
-    private static void memberNotInGame(UUID accessTokenId1) {
+    private static void memberNotInGame(String accessToken1) {
         CreateChatRoomRequest memberNotInGameRequest = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
-            .members(Arrays.asList(UUID.randomUUID()))
+            .members(List.of(UUID.randomUUID()))
             .build();
-        Response memberNotInGameResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, memberNotInGameRequest);
+        Response memberNotInGameResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, memberNotInGameRequest);
         verifyForbiddenOperation(memberNotInGameResponse);
     }
 
-    private static void nullRoomTitle(UUID accessTokenId1) {
+    private static void nullRoomTitle(String accessToken1) {
         CreateChatRoomRequest nullRoomTitleRequest = CreateChatRoomRequest.builder()
             .roomTitle(null)
             .members(Collections.emptyList())
             .build();
-        Response nullRoomTitleResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, nullRoomTitleRequest);
+        Response nullRoomTitleResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, nullRoomTitleRequest);
         verifyInvalidParam(nullRoomTitleResponse, "roomTitle", "must not be null");
     }
 
-    private static void roomTitleTooShort(UUID accessTokenId1) {
+    private static void roomTitleTooShort(String accessToken1) {
         CreateChatRoomRequest roomTitleTooShortRequest = CreateChatRoomRequest.builder()
             .roomTitle("a")
             .members(Collections.emptyList())
             .build();
-        Response roomTitleTooShortResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, roomTitleTooShortRequest);
+        Response roomTitleTooShortResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, roomTitleTooShortRequest);
         verifyInvalidParam(roomTitleTooShortResponse, "roomTitle", "too short");
     }
 
-    private static void roomTitleTooLong(UUID accessTokenId1) {
+    private static void roomTitleTooLong(String accessToken1) {
         CreateChatRoomRequest roomTitleTooLongRequest = CreateChatRoomRequest.builder()
             .roomTitle(Stream.generate(() -> "a").limit(21).collect(Collectors.joining()))
             .members(Collections.emptyList())
             .build();
-        Response roomTitleTooLongResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, roomTitleTooLongRequest);
+        Response roomTitleTooLongResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, roomTitleTooLongRequest);
         verifyInvalidParam(roomTitleTooLongResponse, "roomTitle", "too long");
     }
 
-    private static void create(UUID accessTokenId1, UUID userId2, Map<UUID, ApphubWsClient> gameWsClients) {
+    private static void create(String accessToken1, UUID userId2, Map<String, ApphubWsClient> gameWsClients) {
         CreateChatRoomRequest request = CreateChatRoomRequest.builder()
             .roomTitle(ROOM_TITLE)
-            .members(Arrays.asList(userId2))
+            .members(List.of(userId2))
             .build();
-        Response createResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId1, request);
+        Response createResponse = SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken1, request);
         assertThat(createResponse.getStatusCode()).isEqualTo(200);
         gameWsClients.values()
             .stream()
@@ -129,8 +129,8 @@ public class CreateChatRoomTest extends BackEndTest {
             .forEach(chatRoomCreatedMessage -> assertThat(chatRoomCreatedMessage.getRoomTitle()).isEqualTo(ROOM_TITLE));
     }
 
-    private void getChetRooms(UUID accessTokenId) {
-        List<ChatRoomResponse> chatRooms = SkyXploreGameChatActions.getChatRooms(getServerPort(), accessTokenId);
+    private void getChetRooms(String accessToken) {
+        List<ChatRoomResponse> chatRooms = SkyXploreGameChatActions.getChatRooms(getServerPort(), accessToken);
 
         assertThat(chatRooms).extracting(ChatRoomResponse::getRoomTitle).containsExactlyInAnyOrder(ROOM_TITLE, Constants.GENERAL_CHAT_ROOM_NAME, Constants.ALLIANCE_CHAT_ROOM_NAME);
     }

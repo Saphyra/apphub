@@ -11,7 +11,8 @@ import java.util.UUID;
 @AllArgsConstructor
 @Data
 @Builder
+@Deprecated(forRemoval = true) //TODO remove
 public class LoginResponse {
-    private UUID accessTokenId;
+    private String accessToken;
     private Integer expirationDays;
 }

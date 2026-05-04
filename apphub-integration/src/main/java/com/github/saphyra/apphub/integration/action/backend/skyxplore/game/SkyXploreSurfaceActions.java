@@ -13,26 +13,26 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreSurfaceActions {
-    public static void terraform(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceUd, String surfaceType) {
-        Response response = getTerraformResponse(serverPort, accessTokenId, planetId, surfaceUd, surfaceType);
+    public static void terraform(int serverPort, String accessToken, UUID planetId, UUID surfaceUd, String surfaceType) {
+        Response response = getTerraformResponse(serverPort, accessToken, planetId, surfaceUd, surfaceType);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getTerraformResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceId, String surfaceType) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getTerraformResponse(int serverPort, String accessToken, UUID planetId, UUID surfaceId, String surfaceType) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(surfaceType))
             .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_TERRAFORM_SURFACE, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
     }
 
-    public static void cancelTerraformation(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        Response response = getCancelTerraformationResponse(serverPort, accessTokenId, planetId, surfaceId);
+    public static void cancelTerraformation(int serverPort, String accessToken, UUID planetId, UUID surfaceId) {
+        Response response = getCancelTerraformationResponse(serverPort, accessToken, planetId, surfaceId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCancelTerraformationResponse(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCancelTerraformationResponse(int serverPort, String accessToken, UUID planetId, UUID surfaceId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("surfaceId", surfaceId))));
     }
 }

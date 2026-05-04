@@ -34,112 +34,112 @@ public class AiSettingsTest extends BackEndTest {
     void aiCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessToken1, GAME_NAME);
 
-        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessTokenId1, accessTokenId2, userId2);
-        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessTokenId1, userId2);
-        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessTokenId2, userId1);
+        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
+        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessToken1, userId2);
+        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessToken2, userId1);
 
-        create_nullName(accessTokenId1);
-        create_tooShortName(accessTokenId1);
-        create_tooLongName(accessTokenId1);
-        create_allianceDoesNotExist(accessTokenId1);
-        ApphubWsClient wsClient = createByNotHost(accessTokenId1, accessTokenId2);
-        create(accessTokenId1, wsClient);
-        create_exceedLimit(accessTokenId1);
-        UUID aiId = rename(accessTokenId1, wsClient);
-        remove(accessTokenId1, wsClient, aiId);
+        create_nullName(accessToken1);
+        create_tooShortName(accessToken1);
+        create_tooLongName(accessToken1);
+        create_allianceDoesNotExist(accessToken1);
+        ApphubWsClient wsClient = createByNotHost(accessToken1, accessToken2);
+        create(accessToken1, wsClient);
+        create_exceedLimit(accessToken1);
+        UUID aiId = rename(accessToken1, wsClient);
+        remove(accessToken1, wsClient, aiId);
     }
 
-    private static void create_nullName(UUID accessTokenId1) {
+    private static void create_nullName(String accessToken1) {
         AiPlayer aiPlayer = AiPlayer.builder()
             .name(null)
             .build();
-        Response response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId1, aiPlayer);
+        Response response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "name", "must not be null");
     }
 
-    private static void create_tooShortName(UUID accessTokenId1) {
+    private static void create_tooShortName(String accessToken1) {
         Response response;
         AiPlayer aiPlayer;
         aiPlayer = AiPlayer.builder()
             .name("aa")
             .build();
-        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId1, aiPlayer);
+        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "name", "too short");
     }
 
-    private static void create_tooLongName(UUID accessTokenId1) {
+    private static void create_tooLongName(String accessToken1) {
         Response response;
         AiPlayer aiPlayer;
         aiPlayer = AiPlayer.builder()
             .name(Stream.generate(() -> "a").limit(31).collect(Collectors.joining()))
             .build();
-        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId1, aiPlayer);
+        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "name", "too long");
     }
 
-    private static void create_allianceDoesNotExist(UUID accessTokenId1) {
+    private static void create_allianceDoesNotExist(String accessToken1) {
         Response response;
         AiPlayer aiPlayer;
         aiPlayer = AiPlayer.builder()
             .name(AI_NAME)
             .allianceId(UUID.randomUUID())
             .build();
-        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId1, aiPlayer);
+        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, aiPlayer);
 
         ResponseValidator.verifyInvalidParam(response, "allianceId", "does not exist");
     }
 
-    private static ApphubWsClient createByNotHost(UUID accessTokenId1, UUID accessTokenId2) {
+    private static ApphubWsClient createByNotHost(String accessToken1, String accessToken2) {
         Response response;
-        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId2, AI_PLAYER);
+        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken2, AI_PLAYER);
 
         ResponseValidator.verifyForbiddenOperation(response);
 
         return ApphubWsClient.createSkyXploreLobby(getServerPort(),
-            accessTokenId1, accessTokenId1);
+            accessToken1, accessToken1);
     }
 
-    private static void create(UUID accessTokenId1, ApphubWsClient wsClient) {
+    private static void create(String accessToken1, ApphubWsClient wsClient) {
         Stream.generate(() -> AI_PLAYER)
             .limit(10)
-            .forEach(ai -> SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessTokenId1, ai));
+            .forEach(ai -> SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessToken1, ai));
 
         assertThat(wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)).isNotEmpty();
     }
 
-    private static void create_exceedLimit(UUID accessTokenId1) {
+    private static void create_exceedLimit(String accessToken1) {
         Response response;
-        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessTokenId1, AI_PLAYER);
+        response = SkyXploreLobbyActions.getCreateOrModifyAiResponse(getServerPort(), accessToken1, AI_PLAYER);
 
         ResponseValidator.verifyErrorResponse(response, 400, ErrorCode.TOO_MANY_AIS);
     }
 
-    private UUID rename(UUID accessTokenId1, ApphubWsClient wsClient) {
+    private UUID rename(String accessToken1, ApphubWsClient wsClient) {
         AiPlayer aiPlayer;
         wsClient.clearMessages();
-        UUID aiId = findRandomAi(accessTokenId1);
+        UUID aiId = findRandomAi(accessToken1);
         aiPlayer = AiPlayer.builder()
             .userId(aiId)
             .name(NEW_AI_NAME)
             .build();
-        SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessTokenId1, aiPlayer);
+        SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessToken1, aiPlayer);
 
-        assertThat(findAiById(accessTokenId1, aiId).getName()).isEqualTo(NEW_AI_NAME);
+        assertThat(findAiById(accessToken1, aiId).getName()).isEqualTo(NEW_AI_NAME);
 
         aiPlayer = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
             .orElseThrow()
@@ -148,10 +148,10 @@ public class AiSettingsTest extends BackEndTest {
         return aiId;
     }
 
-    private static void remove(UUID accessTokenId1, ApphubWsClient wsClient, UUID aiId) {
-        SkyXploreLobbyActions.removeAi(getServerPort(), accessTokenId1, aiId);
+    private static void remove(String accessToken1, ApphubWsClient wsClient, UUID aiId) {
+        SkyXploreLobbyActions.removeAi(getServerPort(), accessToken1, aiId);
 
-        assertThat(SkyXploreLobbyActions.getAis(getServerPort(), accessTokenId1)).hasSize(9);
+        assertThat(SkyXploreLobbyActions.getAis(getServerPort(), accessToken1)).hasSize(9);
 
         UUID removedPlayerId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_REMOVED)
             .orElseThrow()
@@ -159,16 +159,16 @@ public class AiSettingsTest extends BackEndTest {
         assertThat(removedPlayerId).isEqualTo(aiId);
     }
 
-    private UUID findRandomAi(UUID accessTokenId) {
-        return SkyXploreLobbyActions.getAis(getServerPort(), accessTokenId)
+    private UUID findRandomAi(String accessToken) {
+        return SkyXploreLobbyActions.getAis(getServerPort(), accessToken)
             .stream()
             .findAny()
             .map(AiPlayer::getUserId)
             .orElseThrow(() -> new RuntimeException("No Ai found"));
     }
 
-    private AiPlayer findAiById(UUID accessTokenId1, UUID aiId) {
-        return SkyXploreLobbyActions.getAis(getServerPort(), accessTokenId1)
+    private AiPlayer findAiById(String accessToken1, UUID aiId) {
+        return SkyXploreLobbyActions.getAis(getServerPort(), accessToken1)
             .stream()
             .filter(aiPlayer -> aiPlayer.getUserId().equals(aiId))
             .findFirst()

@@ -13,80 +13,78 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeEmailTest extends BackEndTest {
     @Test(groups = {"be", "account"})
     public void changeEmail() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
 
-        nullEmail(userData1, accessTokenId1);
-        invalidEmail(userData1, accessTokenId1);
-        nullPassword(accessTokenId1);
-        incorrectPassword(accessTokenId1);
-        emailAlreadyExists(userData1, accessTokenId1);
-        successfulChange(userData1, accessTokenId1);
+        nullEmail(userData1, accessToken1);
+        invalidEmail(userData1, accessToken1);
+        nullPassword(accessToken1);
+        incorrectPassword(accessToken1); //TODO check lockout
+        emailAlreadyExists(userData1, accessToken1);
+        successfulChange(userData1, accessToken1);
     }
 
-    private static void nullEmail(RegistrationParameters userData1, UUID accessTokenId1) {
+    private static void nullEmail(RegistrationParameters userData1, String accessToken1) {
         ChangeEmailRequest nullEmailRequest = ChangeEmailRequest.builder()
             .email(null)
             .password(userData1.getPassword())
             .build();
-        Response nullEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, nullEmailRequest);
+        Response nullEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, nullEmailRequest);
         ResponseValidator.verifyInvalidParam(nullEmailResponse, "email", "must not be null");
     }
 
-    private static void invalidEmail(RegistrationParameters userData1, UUID accessTokenId1) {
+    private static void invalidEmail(RegistrationParameters userData1, String accessToken1) {
         ChangeEmailRequest invalidEmailRequest = ChangeEmailRequest.builder()
             .email("a@a.a")
             .password(userData1.getPassword())
             .build();
-        Response invalidEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, invalidEmailRequest);
+        Response invalidEmailResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, invalidEmailRequest);
         ResponseValidator.verifyInvalidParam(invalidEmailResponse, "email", "invalid format");
     }
 
-    private static void nullPassword(UUID accessTokenId1) {
+    private static void nullPassword(String accessToken1) {
         ChangeEmailRequest nullPasswordRequest = ChangeEmailRequest.builder()
             .email(RandomDataProvider.generateEmail())
             .password(null)
             .build();
-        Response nullPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, nullPasswordRequest);
+        Response nullPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, nullPasswordRequest);
         ResponseValidator.verifyInvalidParam(nullPasswordResponse, "password", "must not be null");
     }
 
-    private static void incorrectPassword(UUID accessTokenId1) {
+    private static void incorrectPassword(String accessToken1) {
         ChangeEmailRequest incorrectPasswordRequest = ChangeEmailRequest.builder()
             .email(RandomDataProvider.generateEmail())
             .password("incorrect-password")
             .build();
-        Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, incorrectPasswordRequest);
+        Response incorrectPasswordResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, incorrectPasswordRequest);
         ResponseValidator.verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
     }
 
-    private static void emailAlreadyExists(RegistrationParameters userData1, UUID accessTokenId1) {
+    private static void emailAlreadyExists(RegistrationParameters userData1, String accessToken1) {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), userData2);
         ChangeEmailRequest emailAlreadyExistsRequest = ChangeEmailRequest.builder()
             .email(userData2.getEmail())
             .password(userData1.getPassword())
             .build();
-        Response emailAlreadyExistsResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, emailAlreadyExistsRequest);
+        Response emailAlreadyExistsResponse = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, emailAlreadyExistsRequest);
         assertThat(emailAlreadyExistsResponse.getStatusCode()).isEqualTo(409);
         ErrorResponse emailAlreadyExistsErrorResponse = emailAlreadyExistsResponse.getBody().as(ErrorResponse.class);
         assertThat(emailAlreadyExistsErrorResponse.getErrorCode()).isEqualTo(ErrorCode.EMAIL_ALREADY_EXISTS.name());
     }
 
-    private static void successfulChange(RegistrationParameters userData1, UUID accessTokenId1) {
+    private static void successfulChange(RegistrationParameters userData1, String accessToken1) {
         String newEmail = RandomDataProvider.generateEmail();
         ChangeEmailRequest request = ChangeEmailRequest.builder()
             .email(newEmail)
             .password(userData1.getPassword())
             .build();
-        Response response = AccountActions.getChangeEmailResponse(getServerPort(), accessTokenId1, request);
+        Response response = AccountActions.getChangeEmailResponse(getServerPort(), accessToken1, request);
         assertThat(response.getStatusCode()).isEqualTo(200);
         Response failedLoginResponse = IndexPageActions.getLoginResponse(getServerPort(), LoginRequest.builder().password(userData1.getPassword()).userIdentifier(userData1.getEmail()).build());
         assertThat(failedLoginResponse.getStatusCode()).isEqualTo(401);

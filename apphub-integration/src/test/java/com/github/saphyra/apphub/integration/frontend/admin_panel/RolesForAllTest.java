@@ -87,9 +87,11 @@ public class RolesForAllTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
         int serverPort = getServerPort();
-        AwaitilityWrapper.create(20, 2)
-            .until(() -> driver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE)))
-            .assertTrue("User is not logged out");
+        AwaitilityWrapper.retry(() -> {
+            driver.navigate().refresh();
+
+            assertThat(driver.getCurrentUrl()).isEqualTo(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLES_FOR_ALL_PAGE));
+        });
 
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);

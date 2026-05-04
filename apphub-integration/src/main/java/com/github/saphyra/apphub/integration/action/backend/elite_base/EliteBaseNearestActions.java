@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class EliteBaseNearestActions {
-    public static Response getNearestMaterialTradersResponse(int serverPort, UUID accessTokenId, UUID starId, MaterialType materialType, int page) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getNearestMaterialTradersResponse(int serverPort, String accessToken, UUID starId, MaterialType materialType, int page) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(
                 serverPort,
                 EliteBaseEndpoints.ELITE_BASE_NEAREST_MATERIAL_TRADERS,

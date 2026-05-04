@@ -150,8 +150,9 @@ public class DatabaseUtil {
         }
     }
 
-    public static void updateAccessTokenLastAccess(UUID accessTokenId, LocalDateTime newLastAccess) {
-        String sql = String.format(UPDATE_ACCESS_TOKEN_LAST_ACCESS, newLastAccess, accessTokenId);
+    @Deprecated(forRemoval = true) //TODO remove
+    public static void updateAccessTokenLastAccess(String accessToken, LocalDateTime newLastAccess) {
+        String sql = String.format(UPDATE_ACCESS_TOKEN_LAST_ACCESS, newLastAccess, accessToken);
         log.debug("updateAccessTokenLastAccess sql: {}", sql);
 
         try {

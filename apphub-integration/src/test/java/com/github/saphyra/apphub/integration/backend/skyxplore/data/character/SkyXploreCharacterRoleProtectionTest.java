@@ -6,27 +6,26 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
-
 public class SkyXploreCharacterRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void characterRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
-
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> SkyXploreCharacterActions.getCharacterNameResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessTokenId, new SkyXploreCharacterModel()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreCharacterActions.getExistsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreCharacterActions.getCharacterNameResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> SkyXploreCharacterActions.getCreateCharacterResponse(getServerPort(), accessToken, new SkyXploreCharacterModel()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreCharacterActions.getExistsResponse(getServerPort(), accessToken));
     }
 
     @DataProvider(parallel = true)

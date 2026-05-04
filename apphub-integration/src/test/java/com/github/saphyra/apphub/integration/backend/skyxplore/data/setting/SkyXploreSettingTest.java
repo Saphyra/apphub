@@ -31,83 +31,83 @@ public class SkyXploreSettingTest extends BackEndTest {
     public void settingCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
 
-        SkyXploreFlow.startGame(getServerPort(), new Player(accessTokenId, userId));
+        SkyXploreFlow.startGame(getServerPort(), new Player(accessToken, userId));
 
-        create_nullType(accessTokenId);
-        create_dataTooLarge(accessTokenId);
-        create(accessTokenId);
-        update(accessTokenId);
+        create_nullType(accessToken);
+        create_dataTooLarge(accessToken);
+        create(accessToken);
+        update(accessToken);
 
-        create(accessTokenId, LOCATION);
+        create(accessToken, LOCATION);
 
-        delete_notFound(accessTokenId);
-        delete(accessTokenId);
+        delete_notFound(accessToken);
+        delete(accessToken);
     }
 
-    private void delete(UUID accessTokenId) {
-        assertThat(SkyXploreSettingActions.delete(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(LOCATION).build()))
+    private void delete(String accessToken) {
+        assertThat(SkyXploreSettingActions.delete(getServerPort(), accessToken, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(LOCATION).build()))
             .returns(DATA_2, SettingModel::getData);
 
-        assertThat(SkyXploreSettingActions.delete(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build())).isNull();
+        assertThat(SkyXploreSettingActions.delete(getServerPort(), accessToken, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build())).isNull();
     }
 
-    private void delete_notFound(UUID accessTokenId) {
-        ResponseValidator.verifyErrorResponse(SkyXploreSettingActions.getDeleteResponse(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_HIDE).location(LOCATION).build()), 404, ErrorCode.DATA_NOT_FOUND);
+    private void delete_notFound(String accessToken) {
+        ResponseValidator.verifyErrorResponse(SkyXploreSettingActions.getDeleteResponse(getServerPort(), accessToken, SettingIdentifier.builder().type(SettingType.POPULATION_HIDE).location(LOCATION).build()), 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private void create(UUID accessTokenId, UUID location) {
+    private void create(String accessToken, UUID location) {
         SettingModel settingModel = SettingModel.builder()
             .type(SettingType.POPULATION_ORDER)
             .location(location)
             .data(DATA_1)
             .build();
 
-        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessTokenId, settingModel);
+        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessToken, settingModel);
 
-        assertThat(SkyXploreSettingActions.getSetting(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(location).build()))
+        assertThat(SkyXploreSettingActions.getSetting(getServerPort(), accessToken, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).location(location).build()))
             .returns(DATA_1, SettingModel::getData);
     }
 
-    private void update(UUID accessTokenId) {
+    private void update(String accessToken) {
         SettingModel settingModel = SettingModel.builder()
             .type(SettingType.POPULATION_ORDER)
             .data(DATA_2)
             .build();
 
-        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessTokenId, settingModel);
+        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessToken, settingModel);
 
-        assertThat(SkyXploreSettingActions.getSetting(getServerPort(), accessTokenId, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build()))
+        assertThat(SkyXploreSettingActions.getSetting(getServerPort(), accessToken, SettingIdentifier.builder().type(SettingType.POPULATION_ORDER).build()))
             .returns(DATA_2, SettingModel::getData);
     }
 
-    private void create(UUID accessTokenId) {
+    private void create(String accessToken) {
         SettingModel settingModel = SettingModel.builder()
             .type(SettingType.POPULATION_ORDER)
             .data(DATA_1)
             .build();
 
-        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessTokenId, settingModel);
+        SkyXploreSettingActions.createOrUpdate(getServerPort(), accessToken, settingModel);
     }
 
-    private void create_dataTooLarge(UUID accessTokenId) {
+    private void create_dataTooLarge(String accessToken) {
         SettingModel settingModel = SettingModel.builder()
             .type(SettingType.POPULATION_ORDER)
             .data(Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()))
             .build();
 
-        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessTokenId, settingModel), "data", "too long");
+        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessToken, settingModel), "data", "too long");
     }
 
-    private void create_nullType(UUID accessTokenId) {
+    private void create_nullType(String accessToken) {
         SettingModel settingModel = SettingModel.builder()
             .type(null)
             .data(DATA_1)
             .build();
 
-        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessTokenId, settingModel), "type", "must not be null");
+        ResponseValidator.verifyInvalidParam(SkyXploreSettingActions.getCreateOrUpdateSettingResponse(getServerPort(), accessToken, settingModel), "type", "must not be null");
     }
 }

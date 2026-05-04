@@ -45,7 +45,7 @@ public class BanService {
 
         return banDao.getByUserId(userId)
             .stream()
-            .filter(ban -> ban.getExpiration().isBefore(currentTime))
+            .filter(ban -> ban.isPermanent() || ban.getExpiration().isAfter(currentTime))
             .map(Ban::getBannedRole)
             .toList();
     }

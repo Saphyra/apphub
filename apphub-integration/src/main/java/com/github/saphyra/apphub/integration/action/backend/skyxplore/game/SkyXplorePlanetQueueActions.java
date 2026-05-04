@@ -13,14 +13,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXplorePlanetQueueActions {
-    public static void setPriority(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
-        Response response = getSetPriorityResponse(serverPort, accessTokenId, planetId, type, itemId, priority);
+    public static void setPriority(int serverPort, String accessToken, UUID planetId, String type, UUID itemId, int priority) {
+        Response response = getSetPriorityResponse(serverPort, accessToken, planetId, type, itemId, priority);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getSetPriorityResponse(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId, int priority) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSetPriorityResponse(int serverPort, String accessToken, UUID planetId, String type, UUID itemId, int priority) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(priority))
             .post(UrlFactory.create(
                 serverPort,
@@ -33,14 +33,14 @@ public class SkyXplorePlanetQueueActions {
             ));
     }
 
-    public static void cancelItem(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
-        Response response = getCancelItemResponse(serverPort, accessTokenId, planetId, type, itemId);
+    public static void cancelItem(int serverPort, String accessToken, UUID planetId, String type, UUID itemId) {
+        Response response = getCancelItemResponse(serverPort, accessToken, planetId, type, itemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCancelItemResponse(int serverPort, UUID accessTokenId, UUID planetId, String type, UUID itemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCancelItemResponse(int serverPort, String accessToken, UUID planetId, String type, UUID itemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(
                 serverPort,
                 SkyXploreGameEndpoints.SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM,

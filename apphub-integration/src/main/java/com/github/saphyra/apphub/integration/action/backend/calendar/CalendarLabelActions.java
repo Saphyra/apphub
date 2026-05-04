@@ -14,14 +14,14 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarLabelActions {
-    public static Response getCreateLabelResponse(int serverPort, UUID accessTokenId, String label) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateLabelResponse(int serverPort, String accessToken, String label) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(label))
             .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_CREATE_LABEL));
     }
 
-    public static UUID createLabel(int serverPort, UUID accessTokenId, String label) {
-        Response response = getCreateLabelResponse(serverPort, accessTokenId, label);
+    public static UUID createLabel(int serverPort, String accessToken, String label) {
+        Response response = getCreateLabelResponse(serverPort, accessToken, label);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -30,66 +30,66 @@ public class CalendarLabelActions {
             .getObject("value", UUID.class);
     }
 
-    public static List<LabelResponse> getLabels(int serverPort, UUID accessTokenId) {
-        Response response = getGetLabelsResponse(serverPort, accessTokenId);
+    public static List<LabelResponse> getLabels(int serverPort, String accessToken) {
+        Response response = getGetLabelsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(LabelResponse[].class));
     }
 
-    public static Response getGetLabelsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetLabelsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABELS));
     }
 
-    public static LabelResponse getLabel(int serverPort, UUID accessTokenId, UUID labelId) {
-        Response response = getGetLabelResponse(serverPort, accessTokenId, labelId);
+    public static LabelResponse getLabel(int serverPort, String accessToken, UUID labelId) {
+        Response response = getGetLabelResponse(serverPort, accessToken, labelId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(LabelResponse.class);
     }
 
-    public static Response getGetLabelResponse(int serverPort, UUID accessTokenId, UUID labelId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetLabelResponse(int serverPort, String accessToken, UUID labelId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABEL, "labelId", labelId));
     }
 
-    public static Response getEditLabelResponse(int serverPort, UUID accessTokenId, UUID labelId, String label) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getEditLabelResponse(int serverPort, String accessToken, UUID labelId, String label) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(label))
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EDIT_LABEL, "labelId", labelId));
     }
 
-    public static List<LabelResponse> editLabel(int serverPort, UUID accessTokenId, UUID labelId, String label){
-        Response response = getEditLabelResponse(serverPort, accessTokenId, labelId, label);
+    public static List<LabelResponse> editLabel(int serverPort, String accessToken, UUID labelId, String label){
+        Response response = getEditLabelResponse(serverPort, accessToken, labelId, label);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(LabelResponse[].class));
     }
 
-    public static List<LabelResponse> deleteLabel(int serverPort, UUID accessTokenId, UUID labelId) {
-        Response response = getDeleteLabelResponse(serverPort, accessTokenId, labelId);
+    public static List<LabelResponse> deleteLabel(int serverPort, String accessToken, UUID labelId) {
+        Response response = getDeleteLabelResponse(serverPort, accessToken, labelId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(LabelResponse[].class));
     }
 
-    public static Response getDeleteLabelResponse(int serverPort, UUID accessTokenId, UUID labelId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteLabelResponse(int serverPort, String accessToken, UUID labelId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_DELETE_LABEL, "labelId", labelId));
     }
 
-    public static Response getLabelsOfEventResponse(int serverPort, UUID accessTokenId, UUID eventId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getLabelsOfEventResponse(int serverPort, String accessToken, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABELS_OF_EVENT, "eventId", eventId));
     }
 
-    public static List<LabelResponse> getLabelsOfEvent(int serverPort, UUID accessTokenId, UUID labelId) {
-        Response response = getLabelsOfEventResponse(serverPort, accessTokenId, labelId);
+    public static List<LabelResponse> getLabelsOfEvent(int serverPort, String accessToken, UUID labelId) {
+        Response response = getLabelsOfEventResponse(serverPort, accessToken, labelId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

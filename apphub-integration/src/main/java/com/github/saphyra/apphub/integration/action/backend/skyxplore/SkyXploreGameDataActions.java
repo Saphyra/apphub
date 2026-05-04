@@ -16,13 +16,13 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameDataActions {
-    public static Response getGameDateResponse(int serverPort, UUID accessTokenId, String dataId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGameDateResponse(int serverPort, String accessToken, String dataId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_GET_ITEM_DATA, "dataId", dataId));
     }
 
-    public static List<String> getAvailableConstructionAreas(int serverPort, UUID accessTokenId, String surfaceType) {
-        Response response = getAvailableConstructionAreasResponse(serverPort, accessTokenId, surfaceType);
+    public static List<String> getAvailableConstructionAreas(int serverPort, String accessToken, String surfaceType) {
+        Response response = getAvailableConstructionAreasResponse(serverPort, accessToken, surfaceType);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -35,8 +35,8 @@ public class SkyXploreGameDataActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getAvailableConstructionAreasResponse(int serverPort, UUID accessTokenId, String surfaceType) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getAvailableConstructionAreasResponse(int serverPort, String accessToken, String surfaceType) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_CONSTRUCTION_AREAS, "surfaceType", surfaceType));
     }
 }

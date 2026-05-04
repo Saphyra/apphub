@@ -24,24 +24,24 @@ public class GetActiveFriendsTest extends BackEndTest {
     public void getActiveFriends() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessTokenId1, accessTokenId2, userId2);
+        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
 
-        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessToken1, GAME_NAME);
 
-        assertThat(SkyXploreFriendActions.getActiveFriends(getServerPort(), accessTokenId1)).isEmpty();
+        assertThat(SkyXploreFriendActions.getActiveFriends(getServerPort(), accessToken1)).isEmpty();
 
-        ApphubWsClient.createSkyXploreLobbyInvitation(getServerPort(), accessTokenId2, accessTokenId2);
+        ApphubWsClient.createSkyXploreLobbyInvitation(getServerPort(), accessToken2, accessToken2);
 
-        List<ActiveFriendResponse> activeFriends = SkyXploreFriendActions.getActiveFriends(getServerPort(), accessTokenId1);
+        List<ActiveFriendResponse> activeFriends = SkyXploreFriendActions.getActiveFriends(getServerPort(), accessToken1);
         assertThat(activeFriends).hasSize(1);
         assertThat(activeFriends).containsExactly(ActiveFriendResponse.builder().friendId(userId2).friendName(characterModel2.getName()).build());
 

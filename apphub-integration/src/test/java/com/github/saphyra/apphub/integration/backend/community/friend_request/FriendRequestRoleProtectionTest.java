@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -17,18 +17,19 @@ public class FriendRequestRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "community", "role-protection"})
     public void friendRequestRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
-
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        SleepUtil.sleep(3000);
 
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSearchResponse(getServerPort(), accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSentFriendRequestsResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getReceivedFriendRequeestsResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getDeleteFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getAcceptFriendRequestResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSearchResponse(getServerPort(), accessToken, ""));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getSentFriendRequestsResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getReceivedFriendRequeestsResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getCreateFriendRequestResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getDeleteFriendRequestResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> FriendRequestActions.getAcceptFriendRequestResponse(getServerPort(), accessToken, UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

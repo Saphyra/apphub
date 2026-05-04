@@ -12,6 +12,7 @@ public class Constants {
 
     //Cookies
     public final String ACCESS_TOKEN_COOKIE = "access-token";
+    public final String REFRESH_TOKEN_COOKIE = "refresh-token";
     public final String LOCALE_COOKIE = "language";
 
     //Roles
@@ -61,6 +62,7 @@ public class Constants {
     public static final String PASSED = "PASSED";
     public static final String FAILED = "FAILED";
     public static final String DEFAULT_PIN_GROUP_NAME = "All";
+    public static final String DEFAULT_LOCALE = "en";
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";

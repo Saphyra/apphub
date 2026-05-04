@@ -6,6 +6,6 @@ import java.util.UUID;
 
 @Data
 public class Player {
-    private final UUID accessTokenId;
+    private final String accessToken;
     private final UUID userId;
 }

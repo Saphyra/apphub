@@ -15,7 +15,7 @@ public class Ban {
     private final UUID userId;
     private final String bannedRole;
     private final LocalDateTime expiration;
-    private final Boolean permanent;
+    private final boolean permanent;
     private final String reason;
     private final UUID bannedBy;
 }

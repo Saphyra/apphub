@@ -52,7 +52,7 @@ public class BanFactoryTest {
         assertThat(result.getUserId()).isEqualTo(BANNED_USER_ID);
         assertThat(result.getBannedRole()).isEqualTo(BANNED_ROLE);
         assertThat(result.getExpiration()).isNull();
-        assertThat(result.getPermanent()).isTrue();
+        assertThat(result.isPermanent()).isTrue();
         assertThat(result.getReason()).isEqualTo(REASON);
         assertThat(result.getBannedBy()).isEqualTo(USER_ID);
     }
@@ -77,7 +77,7 @@ public class BanFactoryTest {
         assertThat(result.getUserId()).isEqualTo(BANNED_USER_ID);
         assertThat(result.getBannedRole()).isEqualTo(BANNED_ROLE);
         assertThat(result.getExpiration()).isEqualTo(CURRENT_DATE.plusDays(DURATION));
-        assertThat(result.getPermanent()).isFalse();
+        assertThat(result.isPermanent()).isFalse();
         assertThat(result.getReason()).isEqualTo(REASON);
         assertThat(result.getBannedBy()).isEqualTo(USER_ID);
     }

@@ -17,7 +17,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CreateChatRoomRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PriorityType;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.StorageSettingModel;
@@ -31,83 +31,83 @@ public class SkyXploreGameRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void gameRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
-
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
-
-        SleepUtil.sleep(3000);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
         //Terraformation
-        CommonUtils.verifyMissingRole(() -> SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreSurfaceActions.getCancelTerraformationResponse(getServerPort(), accessTokenId, UUID.randomUUID(), UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSurfaceActions.getCancelTerraformationResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID()));
 
         //Priority
-        CommonUtils.verifyMissingRole(() -> SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessTokenId, UUID.randomUUID(), PriorityType.CONSTRUCTION, 2));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken, UUID.randomUUID(), PriorityType.CONSTRUCTION, 2));
 
         //Storage settings
-        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getStorageSettingsResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getCreateStorageSettingResponse(getServerPort(), accessTokenId, UUID.randomUUID(), new StorageSettingModel()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getDeleteStorageSettingResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getEditStorageSettingResponse(getServerPort(), accessTokenId, new StorageSettingModel()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getStorageSettingsResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getCreateStorageSettingResponse(getServerPort(), accessToken, UUID.randomUUID(), new StorageSettingModel()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getDeleteStorageSettingResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreStorageSettingActions.getEditStorageSettingResponse(getServerPort(), accessToken, new StorageSettingModel()));
 
         //Queue
-        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, UUID.randomUUID(), "", UUID.randomUUID(), 3));
-        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetQueueActions.getCancelItemResponse(getServerPort(), accessTokenId, UUID.randomUUID(), "", UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, UUID.randomUUID(), "", UUID.randomUUID(), 3));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetQueueActions.getCancelItemResponse(getServerPort(), accessToken, UUID.randomUUID(), "", UUID.randomUUID()));
 
         //Population
-        CommonUtils.verifyMissingRole(() -> SkyXplorePopulationActions.getPopulationResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePopulationActions.getPopulationResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePopulationActions.getRenameCitizenResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
 
         //Solar system
-        CommonUtils.verifyMissingRole(() -> SkyXploreSolarSystemActions.getSolarSystemResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSolarSystemActions.getSolarSystemResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
 
         //Planet overview
-        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetActions.getPlanetOverviewResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetActions.getPlanetOverviewResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
 
         //Map
-        CommonUtils.verifyMissingRole(() -> SkyXploreMapActions.getMapResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreMapActions.getMapResponse(getServerPort(), accessToken));
 
         //General
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getIsUserInGameResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getExitResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getPauseGameResponse(getServerPort(), accessTokenId, false));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getIsHostResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getSaveGameResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getIsUserInGameResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getExitResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getPauseGameResponse(getServerPort(), accessToken, false));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getIsHostResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getSaveGameResponse(getServerPort(), accessToken));
 
         //Chat
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getPlayersResponse(getServerPort(), accessTokenId));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessTokenId, new CreateChatRoomRequest()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getChatRoomsResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getPlayersResponse(getServerPort(), accessToken));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getCreateChatRoomResponse(getServerPort(), accessToken, new CreateChatRoomRequest()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getLeaveChatRoomResponse(getServerPort(), accessToken, ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameChatActions.getChatRoomsResponse(getServerPort(), accessToken));
 
         //Building module
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getBuildingModulesResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getDeconstructBuildingModuleResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelDeconstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getBuildingModulesResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getConstructBuildingModuleResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelConstructionResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getDeconstructBuildingModuleResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreBuildingModuleActions.getCancelDeconstructionResponse(getServerPort(), accessToken, UUID.randomUUID()));
 
         //Construction area
-        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
-        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelConstructionAreaConstructionResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelDeconstructionOfConstructionAreaResponse(getServerPort(), accessTokenId, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessTokenId, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelConstructionAreaConstructionResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getCancelDeconstructionOfConstructionAreaResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> SkyXploreConstructionAreaActions.getAvailableBuildingsResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
     }
 
     @Test(dataProvider = "adminRoleProvider", groups = {"be", "skyxplore", "role-protection"})
     public void gameAdminRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        SleepUtil.sleep(3000);
-
-        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getProcessTickResponse(getServerPort(), accessTokenId));
+        CommonUtils.verifyMissingRole(() -> SkyXploreGameActions.getProcessTickResponse(getServerPort(), accessToken));
     }
 
     @DataProvider(parallel = true)

@@ -17,35 +17,35 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class CalendarEventActions {
-    public static Response getCreateEventResponse(int serverPort, UUID accessTokenId, EventRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateEventResponse(int serverPort, String accessToken, EventRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_CREATE_EVENT));
     }
 
-    public static Response getGetEventsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetEventsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENTS));
     }
 
-    public static Response getGetEventResponse(int serverPort, UUID accessTokenId, UUID eventId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetEventResponse(int serverPort, String accessToken, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENT, "eventId", eventId));
     }
 
-    public static Response getDeleteEventResponse(int serverPort, UUID accessTokenId, UUID eventId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteEventResponse(int serverPort, String accessToken, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_DELETE_EVENT, "eventId", eventId));
     }
 
-    public static Response getEditEventResponse(int serverPort, UUID accessTokenId, UUID eventId, EventRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getEditEventResponse(int serverPort, String accessToken, UUID eventId, EventRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EDIT_EVENT, "eventId", eventId));
     }
 
-    public static UUID createEvent(int serverPort, UUID accessTokenId, EventRequest request) {
-        Response response = getCreateEventResponse(serverPort, accessTokenId, request);
+    public static UUID createEvent(int serverPort, String accessToken, EventRequest request) {
+        Response response = getCreateEventResponse(serverPort, accessToken, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -54,129 +54,129 @@ public class CalendarEventActions {
             .getObject("value", UUID.class);
     }
 
-    public static EventResponse getEvent(int serverPort, UUID accessTokenId, UUID eventId) {
-        Response response = getGetEventResponse(serverPort, accessTokenId, eventId);
+    public static EventResponse getEvent(int serverPort, String accessToken, UUID eventId) {
+        Response response = getGetEventResponse(serverPort, accessToken, eventId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(EventResponse.class);
     }
 
-    public static void deleteEvent(int serverPort, UUID accessTokenId, UUID eventId) {
-        Response response = getDeleteEventResponse(serverPort, accessTokenId, eventId);
+    public static void deleteEvent(int serverPort, String accessToken, UUID eventId) {
+        Response response = getDeleteEventResponse(serverPort, accessToken, eventId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static List<EventResponse> getEvents(int serverPort, UUID accessTokenId) {
-        Response response = getGetEventsResponse(serverPort, accessTokenId);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-
-        return Arrays.asList(response.getBody().as(EventResponse[].class));
-    }
-
-    public static void editEvent(int serverPort, UUID accessTokenId, UUID eventId, EventRequest request) {
-        Response response = getEditEventResponse(serverPort, accessTokenId, eventId, request);
-
-        assertThat(response.getStatusCode()).isEqualTo(200);
-    }
-
-    public static List<EventResponse> getEvents(int serverPort, UUID accessTokenId, UUID labelId) {
-        Response response = getGetEventsResponse(serverPort, accessTokenId, labelId);
+    public static List<EventResponse> getEvents(int serverPort, String accessToken) {
+        Response response = getGetEventsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
 
-    private static Response getGetEventsResponse(int serverPort, UUID accessTokenId, UUID labelId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static void editEvent(int serverPort, String accessToken, UUID eventId, EventRequest request) {
+        Response response = getEditEventResponse(serverPort, accessToken, eventId, request);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static List<EventResponse> getEvents(int serverPort, String accessToken, UUID labelId) {
+        Response response = getGetEventsResponse(serverPort, accessToken, labelId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return Arrays.asList(response.getBody().as(EventResponse[].class));
+    }
+
+    private static Response getGetEventsResponse(int serverPort, String accessToken, UUID labelId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENTS, Map.of(), Map.of("labelId", labelId)));
     }
 
-    public static Response getGetLabellessEventsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetLabellessEventsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_LABELLESS_EVENTS));
     }
 
-    public static List<EventResponse> getEventsWithoutLabel(int serverPort, UUID accessTokenId) {
-        Response response = getGetLabellessEventsResponse(serverPort, accessTokenId);
+    public static List<EventResponse> getEventsWithoutLabel(int serverPort, String accessToken) {
+        Response response = getGetLabellessEventsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
 
-    public static List<EventResponse> getExpiredEvents(int serverPort, UUID accessTokenId) {
-        Response response  = getExpiredEventsResponse(serverPort, accessTokenId);
+    public static List<EventResponse> getExpiredEvents(int serverPort, String accessToken) {
+        Response response  = getExpiredEventsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
 
-    public static Response getExpiredEventsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getExpiredEventsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EXPIRED_EVENTS));
     }
 
-    public static void hideExpiredEvent(int serverPort, UUID accessTokenId, UUID eventId) {
-        Response response = getHideExpiredEventResponse(serverPort, accessTokenId, eventId);
+    public static void hideExpiredEvent(int serverPort, String accessToken, UUID eventId) {
+        Response response = getHideExpiredEventResponse(serverPort, accessToken, eventId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getHideExpiredEventResponse(int serverPort, UUID accessTokenId, UUID eventId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getHideExpiredEventResponse(int serverPort, String accessToken, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_HIDE_EXPIRED_EVENT, "eventId", eventId));
     }
 
-    public static void extendExpiredEvent(int serverPort, UUID accessTokenId, UUID eventId, LocalDate localDate) {
-        Response response = getExtendExpiredEventResponse(serverPort, accessTokenId, eventId, localDate);
+    public static void extendExpiredEvent(int serverPort, String accessToken, UUID eventId, LocalDate localDate) {
+        Response response = getExtendExpiredEventResponse(serverPort, accessToken, eventId, localDate);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getExtendExpiredEventResponse(int serverPort, UUID accessTokenId, UUID eventId, LocalDate extendUntil) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getExtendExpiredEventResponse(int serverPort, String accessToken, UUID eventId, LocalDate extendUntil) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(extendUntil))
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EXTEND_EXPIRED_EVENT, "eventId", eventId));
     }
 
-    public static Response getMergeEventsResponse(int serverPort, UUID accessTokenId, UUID eventId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getMergeEventsResponse(int serverPort, String accessToken, UUID eventId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_MERGE_EVENTS, "eventId", eventId));
     }
 
-    public static void mergeEvents(int serverPort, UUID accessTokenId, UUID eventId) {
-        Response response = getMergeEventsResponse(serverPort, accessTokenId, eventId);
+    public static void mergeEvents(int serverPort, String accessToken, UUID eventId) {
+        Response response = getMergeEventsResponse(serverPort, accessToken, eventId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String searchText) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSearchResponse(int serverPort, String accessToken, String searchText) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(searchText))
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_SEARCH_EVENTS));
     }
 
-    public static List<EventResponse> search(int serverPort, UUID accessTokenId, String searchText) {
-        Response response = getSearchResponse(serverPort, accessTokenId, searchText);
+    public static List<EventResponse> search(int serverPort, String accessToken, String searchText) {
+        Response response = getSearchResponse(serverPort, accessToken, searchText);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
 
-    public static Response getArchiveEventResponse(int serverPort, UUID accessTokenId, UUID eventId, Boolean archived) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getArchiveEventResponse(int serverPort, String accessToken, UUID eventId, Boolean archived) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(archived))
             .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_ARCHIVE_EVENT, "eventId", eventId));
     }
 
-    public static void archiveEvent(int serverPort, UUID accessTokenId, UUID eventId, Boolean archived) {
-        Response response = getArchiveEventResponse(serverPort, accessTokenId, eventId, archived);
+    public static void archiveEvent(int serverPort, String accessToken, UUID eventId, Boolean archived) {
+        Response response = getArchiveEventResponse(serverPort, accessToken, eventId, archived);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }

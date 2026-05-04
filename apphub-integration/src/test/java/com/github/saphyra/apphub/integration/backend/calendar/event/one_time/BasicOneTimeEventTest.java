@@ -30,14 +30,14 @@ public class BasicOneTimeEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void basicOneTimeEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = create(accessTokenId);
-        edit(accessTokenId, eventId);
-        delete(accessTokenId, eventId);
+        UUID eventId = create(accessToken);
+        edit(accessToken, eventId);
+        delete(accessToken, eventId);
     }
 
-    private void edit(UUID accessTokenId, UUID eventId) {
+    private void edit(String accessToken, UUID eventId) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .title(NEW_TITLE)
@@ -46,9 +46,9 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .time(NEW_TIME)
             .build();
 
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.ONE_TIME, EventResponse::getRepetitionType)
             .returns(null, EventResponse::getRepetitionData)
@@ -61,7 +61,7 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(0, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(), EventResponse::getLabels);
 
-        CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId))
+        CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, OccurrenceResponse::getEventId)
             .returns(NEW_START_DATE, OccurrenceResponse::getDate)
             .returns(NEW_TIME, OccurrenceResponse::getTime)
@@ -73,22 +73,22 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(false, OccurrenceResponse::getReminded);
     }
 
-    private void delete(UUID accessTokenId, UUID eventId) {
-        CalendarEventActions.deleteEvent(getServerPort(), accessTokenId, eventId);
+    private void delete(String accessToken, UUID eventId) {
+        CalendarEventActions.deleteEvent(getServerPort(), accessToken, eventId);
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).isEmpty();
         assertThat(CalendarOccurrenceActions.getOccurrences(
             getServerPort(),
-            accessTokenId,
+            accessToken,
             EventRequestFactory.DEFAULT_START_DATE.minusDays(10),
             EventRequestFactory.DEFAULT_START_DATE.plusDays(10)
         )).isEmpty();
     }
 
-    private UUID create(UUID accessTokenId) {
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, EventRequestFactory.validRequest(RepetitionType.ONE_TIME));
+    private UUID create(String accessToken) {
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, EventRequestFactory.validRequest(RepetitionType.ONE_TIME));
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.ONE_TIME, EventResponse::getRepetitionType)
             .returns(null, EventResponse::getRepetitionData)
@@ -100,7 +100,7 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(0, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(), EventResponse::getLabels);
 
-        CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId))
+        CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, OccurrenceResponse::getEventId)
             .returns(EventRequestFactory.DEFAULT_START_DATE, OccurrenceResponse::getDate)
             .returns(EventRequestFactory.DEFAULT_TIME, OccurrenceResponse::getTime)

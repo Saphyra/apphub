@@ -9,19 +9,19 @@ import io.restassured.response.Response;
 import java.util.UUID;
 
 public class EliteBaseMaterialTraderOverrideActions {
-    public static Response getCreateMaterialTraderOverrideResponse(int serverPort, UUID accessTokenId, CreateMaterialTraderOverrideRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateMaterialTraderOverrideResponse(int serverPort, String accessToken, CreateMaterialTraderOverrideRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_MATERIAL_TRADER_OVERRIDE_CREATE));
     }
 
-    public static Response getDeleteMaterialTraderOverrideResponse(int serverPort, UUID accessTokenId, UUID stationId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteMaterialTraderOverrideResponse(int serverPort, String accessToken, UUID stationId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_MATERIAL_TRADER_OVERRIDE_DELETE, "stationId", stationId));
     }
 
-    public static Response getVerifyMaterialTraderOverrideResponse(int serverPort, UUID accessTokenId, UUID stationId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getVerifyMaterialTraderOverrideResponse(int serverPort, String accessToken, UUID stationId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_MATERIAL_TRADER_OVERRIDE_VERIFY, "stationId", stationId));
     }
 }

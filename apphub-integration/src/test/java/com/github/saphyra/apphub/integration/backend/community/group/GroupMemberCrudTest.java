@@ -27,52 +27,52 @@ public class GroupMemberCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void groupMemberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters friendData1 = RegistrationParameters.validParameters();
-        UUID friendAccessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), friendData1);
+        String friendAccessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), friendData1);
         UUID friendUserId1 = DatabaseUtil.getUserIdByEmail(friendData1.getEmail());
 
         RegistrationParameters friendData2 = RegistrationParameters.validParameters();
-        UUID friendAccessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), friendData2);
+        String friendAccessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), friendData2);
         UUID friendUserId2 = DatabaseUtil.getUserIdByEmail(friendData2.getEmail());
 
         RegistrationParameters friendOfFriendData = RegistrationParameters.validParameters();
-        UUID friendOfFriendAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), friendOfFriendData);
+        String friendOfFriendAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), friendOfFriendData);
         UUID friendOfFriendUserId = DatabaseUtil.getUserIdByEmail(friendOfFriendData.getEmail());
 
-        CommunityActions.setUpFriendship(getServerPort(), accessTokenId, friendAccessTokenId1, friendUserId1);
-        CommunityActions.setUpFriendship(getServerPort(), accessTokenId, friendAccessTokenId2, friendUserId2);
+        CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId1, friendUserId1);
+        CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId2, friendUserId2);
         CommunityActions.setUpFriendship(getServerPort(), friendAccessTokenId1, friendOfFriendAccessTokenId, friendOfFriendUserId);
 
-        GroupListResponse group = GroupActions.createGroup(getServerPort(), accessTokenId, GROUP_NAME);
+        GroupListResponse group = GroupActions.createGroup(getServerPort(), accessToken, GROUP_NAME);
 
-        search_friendsOnly_noMembers(accessTokenId, friendUserId1, friendUserId2, group);
-        create_nullMemberUserId(accessTokenId, group);
-        create_cannotBeAdded(accessTokenId, friendOfFriendUserId, group);
-        GroupMemberResponse groupMember = create(accessTokenId, friendData1, friendUserId1, group);
-        create_alreadyMember(accessTokenId, friendUserId1, group);
-        search_memberNotInList(accessTokenId, friendUserId2, group);
-        search_friendOfFriendShouldAppear(accessTokenId, friendUserId2, friendOfFriendUserId, group);
+        search_friendsOnly_noMembers(accessToken, friendUserId1, friendUserId2, group);
+        create_nullMemberUserId(accessToken, group);
+        create_cannotBeAdded(accessToken, friendOfFriendUserId, group);
+        GroupMemberResponse groupMember = create(accessToken, friendData1, friendUserId1, group);
+        create_alreadyMember(accessToken, friendUserId1, group);
+        search_memberNotInList(accessToken, friendUserId2, group);
+        search_friendOfFriendShouldAppear(accessToken, friendUserId2, friendOfFriendUserId, group);
         create_noRole(friendAccessTokenId1, friendOfFriendUserId, group);
-        modifyRoles_nullCanInvite(accessTokenId, group, groupMember);
-        modifyRoles_nullCanKick(accessTokenId, group, groupMember);
-        modifyRoles_nullCanModifyRoles(accessTokenId, group, groupMember);
-        groupMember = modifyRoles_canInvite(accessTokenId, group, groupMember);
+        modifyRoles_nullCanInvite(accessToken, group, groupMember);
+        modifyRoles_nullCanKick(accessToken, group, groupMember);
+        modifyRoles_nullCanModifyRoles(accessToken, group, groupMember);
+        groupMember = modifyRoles_canInvite(accessToken, group, groupMember);
         UUID friendOfFriendGroupMemberId = createByMember(friendAccessTokenId1, friendOfFriendUserId, group);
         delete_noRole(friendAccessTokenId1, group, friendOfFriendGroupMemberId);
-        delete_own(accessTokenId, userId, friendUserId1, friendOfFriendAccessTokenId, group, friendOfFriendGroupMemberId);
-        delete_owner(accessTokenId, userId, group);
-        groupMember = modifyRoles_canKick(accessTokenId, group, groupMember);
-        delete(accessTokenId, friendAccessTokenId1, friendUserId2, group);
-        UUID friend2GroupMemberId = modifyRoles_noRole(accessTokenId, friendAccessTokenId1, friendUserId2, group);
-        modifyRoles_canModifyRoles(accessTokenId, group, groupMember);
+        delete_own(accessToken, userId, friendUserId1, friendOfFriendAccessTokenId, group, friendOfFriendGroupMemberId);
+        delete_owner(accessToken, userId, group);
+        groupMember = modifyRoles_canKick(accessToken, group, groupMember);
+        delete(accessToken, friendAccessTokenId1, friendUserId2, group);
+        UUID friend2GroupMemberId = modifyRoles_noRole(accessToken, friendAccessTokenId1, friendUserId2, group);
+        modifyRoles_canModifyRoles(accessToken, group, groupMember);
         modifyRoles(friendAccessTokenId1, group, friend2GroupMemberId);
     }
 
-    private static GroupMemberResponse create(UUID accessTokenId, RegistrationParameters friendData1, UUID friendUserId1, GroupListResponse group) {
-        GroupMemberResponse groupMember = GroupActions.createMember(getServerPort(), accessTokenId, group.getGroupId(), friendUserId1);
+    private static GroupMemberResponse create(String accessToken, RegistrationParameters friendData1, UUID friendUserId1, GroupListResponse group) {
+        GroupMemberResponse groupMember = GroupActions.createMember(getServerPort(), accessToken, group.getGroupId(), friendUserId1);
         assertThat(groupMember.getUsername()).isEqualTo(friendData1.getUsername());
         assertThat(groupMember.getEmail()).isEqualTo(friendData1.getEmail());
         assertThat(groupMember.getCanInvite()).isFalse();
@@ -81,91 +81,91 @@ public class GroupMemberCrudTest extends BackEndTest {
         return groupMember;
     }
 
-    private static void search_friendsOnly_noMembers(UUID accessTokenId, UUID friendUserId1, UUID friendUserId2, GroupListResponse group) {
-        List<SearchResultItem> searchResult = GroupActions.search(getServerPort(), accessTokenId, group.getGroupId(), TestBase.getEmailDomain());
+    private static void search_friendsOnly_noMembers(String accessToken, UUID friendUserId1, UUID friendUserId2, GroupListResponse group) {
+        List<SearchResultItem> searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
 
         assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId1, friendUserId2);
     }
 
-    private static void create_nullMemberUserId(UUID accessTokenId, GroupListResponse group) {
+    private static void create_nullMemberUserId(String accessToken, GroupListResponse group) {
         ResponseValidator.verifyInvalidParam(
 
-            GroupActions.getCreateGroupMemberResponse(getServerPort(), accessTokenId, group.getGroupId(), null),
+            GroupActions.getCreateGroupMemberResponse(getServerPort(), accessToken, group.getGroupId(), null),
             "memberUserId",
             "must not be null"
         );
     }
 
-    private static void create_cannotBeAdded(UUID accessTokenId, UUID friendOfFriendUserId, GroupListResponse group) {
+    private static void create_cannotBeAdded(String accessToken, UUID friendOfFriendUserId, GroupListResponse group) {
         ResponseValidator.verifyErrorResponse(
 
-            GroupActions.getCreateGroupMemberResponse(getServerPort(), accessTokenId, group.getGroupId(), friendOfFriendUserId),
+            GroupActions.getCreateGroupMemberResponse(getServerPort(), accessToken, group.getGroupId(), friendOfFriendUserId),
             409,
             ErrorCode.GENERAL_ERROR
         );
     }
 
-    private static void create_alreadyMember(UUID accessTokenId, UUID friendUserId1, GroupListResponse group) {
+    private static void create_alreadyMember(String accessToken, UUID friendUserId1, GroupListResponse group) {
         ResponseValidator.verifyErrorResponse(
 
-            GroupActions.getCreateGroupMemberResponse(getServerPort(), accessTokenId, group.getGroupId(), friendUserId1),
+            GroupActions.getCreateGroupMemberResponse(getServerPort(), accessToken, group.getGroupId(), friendUserId1),
             409,
             ErrorCode.GENERAL_ERROR
         );
     }
 
-    private static void search_memberNotInList(UUID accessTokenId, UUID friendUserId2, GroupListResponse group) {
+    private static void search_memberNotInList(String accessToken, UUID friendUserId2, GroupListResponse group) {
         List<SearchResultItem> searchResult;
-        searchResult = GroupActions.search(getServerPort(), accessTokenId, group.getGroupId(), TestBase.getEmailDomain());
+        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
 
         assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId2);
     }
 
-    private static void search_friendOfFriendShouldAppear(UUID accessTokenId, UUID friendUserId2, UUID friendOfFriendUserId, GroupListResponse group) {
+    private static void search_friendOfFriendShouldAppear(String accessToken, UUID friendUserId2, UUID friendOfFriendUserId, GroupListResponse group) {
         List<SearchResultItem> searchResult;
-        GroupActions.changeInvitationType(getServerPort(), accessTokenId, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
+        GroupActions.changeInvitationType(getServerPort(), accessToken, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
 
-        searchResult = GroupActions.search(getServerPort(), accessTokenId, group.getGroupId(), TestBase.getEmailDomain());
+        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
 
         assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId2, friendOfFriendUserId);
     }
 
-    private static void create_noRole(UUID friendAccessTokenId1, UUID friendOfFriendUserId, GroupListResponse group) {
+    private static void create_noRole(String friendAccessTokenId1, UUID friendOfFriendUserId, GroupListResponse group) {
         ResponseValidator.verifyForbiddenOperation(
 
             GroupActions.getCreateGroupMemberResponse(getServerPort(), friendAccessTokenId1, group.getGroupId(), friendOfFriendUserId)
         );
     }
 
-    private static void modifyRoles_nullCanInvite(UUID accessTokenId, GroupListResponse group, GroupMemberResponse groupMember) {
+    private static void modifyRoles_nullCanInvite(String accessToken, GroupListResponse group, GroupMemberResponse groupMember) {
         ResponseValidator.verifyInvalidParam(
 
-            GroupActions.getModifyRolesResponse(getServerPort(), accessTokenId, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(null, false, false)),
+            GroupActions.getModifyRolesResponse(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(null, false, false)),
             "canInvite",
             "must not be null"
         );
     }
 
-    private static void modifyRoles_nullCanKick(UUID accessTokenId, GroupListResponse group, GroupMemberResponse groupMember) {
+    private static void modifyRoles_nullCanKick(String accessToken, GroupListResponse group, GroupMemberResponse groupMember) {
         ResponseValidator.verifyInvalidParam(
 
-            GroupActions.getModifyRolesResponse(getServerPort(), accessTokenId, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, null, false)),
+            GroupActions.getModifyRolesResponse(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, null, false)),
             "canKick",
             "must not be null"
         );
     }
 
-    private static void modifyRoles_nullCanModifyRoles(UUID accessTokenId, GroupListResponse group, GroupMemberResponse groupMember) {
+    private static void modifyRoles_nullCanModifyRoles(String accessToken, GroupListResponse group, GroupMemberResponse groupMember) {
         ResponseValidator.verifyInvalidParam(
 
-            GroupActions.getModifyRolesResponse(getServerPort(), accessTokenId, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, false, null)),
+            GroupActions.getModifyRolesResponse(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, false, null)),
             "canModifyRoles",
             "must not be null"
         );
     }
 
-    private static GroupMemberResponse modifyRoles_canInvite(UUID accessTokenId, GroupListResponse group, GroupMemberResponse groupMember) {
-        groupMember = GroupActions.modifyRoles(getServerPort(), accessTokenId, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(true, false, false));
+    private static GroupMemberResponse modifyRoles_canInvite(String accessToken, GroupListResponse group, GroupMemberResponse groupMember) {
+        groupMember = GroupActions.modifyRoles(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(true, false, false));
 
         assertThat(groupMember.getCanInvite()).isTrue();
         assertThat(groupMember.getCanKick()).isFalse();
@@ -173,33 +173,33 @@ public class GroupMemberCrudTest extends BackEndTest {
         return groupMember;
     }
 
-    private static UUID createByMember(UUID friendAccessTokenId1, UUID friendOfFriendUserId, GroupListResponse group) {
+    private static UUID createByMember(String friendAccessTokenId1, UUID friendOfFriendUserId, GroupListResponse group) {
         return GroupActions.createMember(getServerPort(), friendAccessTokenId1, group.getGroupId(), friendOfFriendUserId)
             .getGroupMemberId();
     }
 
-    private static void delete_noRole(UUID friendAccessTokenId1, GroupListResponse group, UUID friendOfFriendGroupMemberId) {
+    private static void delete_noRole(String friendAccessTokenId1, GroupListResponse group, UUID friendOfFriendGroupMemberId) {
         ResponseValidator.verifyForbiddenOperation(
 
             GroupActions.getDeleteGroupMemberResponse(getServerPort(), friendAccessTokenId1, group.getGroupId(), friendOfFriendGroupMemberId)
         );
     }
 
-    private static void delete_own(UUID accessTokenId, UUID userId, UUID friendUserId1, UUID friendOfFriendAccessTokenId, GroupListResponse group, UUID friendOfFriendGroupMemberId) {
+    private static void delete_own(String accessToken, UUID userId, UUID friendUserId1, String friendOfFriendAccessTokenId, GroupListResponse group, UUID friendOfFriendGroupMemberId) {
         GroupActions.deleteGroupMember(getServerPort(), friendOfFriendAccessTokenId, group.getGroupId(), friendOfFriendGroupMemberId);
 
-        assertThat(GroupActions.getMembers(getServerPort(), accessTokenId, group.getGroupId()).stream().map(GroupMemberResponse::getUserId)).containsExactlyInAnyOrder(userId, friendUserId1);
+        assertThat(GroupActions.getMembers(getServerPort(), accessToken, group.getGroupId()).stream().map(GroupMemberResponse::getUserId)).containsExactlyInAnyOrder(userId, friendUserId1);
     }
 
-    private void delete_owner(UUID accessTokenId, UUID userId, GroupListResponse group) {
+    private void delete_owner(String accessToken, UUID userId, GroupListResponse group) {
         ResponseValidator.verifyForbiddenOperation(
 
-            GroupActions.getDeleteGroupMemberResponse(getServerPort(), accessTokenId, group.getGroupId(), getOwnMember(accessTokenId, group.getGroupId(), userId).getGroupMemberId())
+            GroupActions.getDeleteGroupMemberResponse(getServerPort(), accessToken, group.getGroupId(), getOwnMember(accessToken, group.getGroupId(), userId).getGroupMemberId())
         );
     }
 
-    private static GroupMemberResponse modifyRoles_canKick(UUID accessTokenId, GroupListResponse group, GroupMemberResponse groupMember) {
-        groupMember = GroupActions.modifyRoles(getServerPort(), accessTokenId, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, true, false));
+    private static GroupMemberResponse modifyRoles_canKick(String accessToken, GroupListResponse group, GroupMemberResponse groupMember) {
+        groupMember = GroupActions.modifyRoles(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, true, false));
 
         assertThat(groupMember.getCanInvite()).isFalse();
         assertThat(groupMember.getCanKick()).isTrue();
@@ -207,14 +207,14 @@ public class GroupMemberCrudTest extends BackEndTest {
         return groupMember;
     }
 
-    private void delete(UUID accessTokenId, UUID friendAccessTokenId1, UUID friendUserId2, GroupListResponse group) {
-        GroupActions.createMember(getServerPort(), accessTokenId, group.getGroupId(), friendUserId2);
+    private void delete(String accessToken, String friendAccessTokenId1, UUID friendUserId2, GroupListResponse group) {
+        GroupActions.createMember(getServerPort(), accessToken, group.getGroupId(), friendUserId2);
 
-        GroupActions.deleteGroupMember(getServerPort(), friendAccessTokenId1, group.getGroupId(), getOwnMember(accessTokenId, group.getGroupId(), friendUserId2).getGroupMemberId());
+        GroupActions.deleteGroupMember(getServerPort(), friendAccessTokenId1, group.getGroupId(), getOwnMember(accessToken, group.getGroupId(), friendUserId2).getGroupMemberId());
     }
 
-    private static UUID modifyRoles_noRole(UUID accessTokenId, UUID friendAccessTokenId1, UUID friendUserId2, GroupListResponse group) {
-        UUID friend2GroupMemberId = GroupActions.createMember(getServerPort(), accessTokenId, group.getGroupId(), friendUserId2)
+    private static UUID modifyRoles_noRole(String accessToken, String friendAccessTokenId1, UUID friendUserId2, GroupListResponse group) {
+        UUID friend2GroupMemberId = GroupActions.createMember(getServerPort(), accessToken, group.getGroupId(), friendUserId2)
             .getGroupMemberId();
 
         ResponseValidator.verifyForbiddenOperation(
@@ -224,15 +224,15 @@ public class GroupMemberCrudTest extends BackEndTest {
         return friend2GroupMemberId;
     }
 
-    private static void modifyRoles_canModifyRoles(UUID accessTokenId, GroupListResponse group, GroupMemberResponse groupMember) {
-        groupMember = GroupActions.modifyRoles(getServerPort(), accessTokenId, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, false, true));
+    private static void modifyRoles_canModifyRoles(String accessToken, GroupListResponse group, GroupMemberResponse groupMember) {
+        groupMember = GroupActions.modifyRoles(getServerPort(), accessToken, group.getGroupId(), groupMember.getGroupMemberId(), new GroupMemberRoleRequest(false, false, true));
 
         assertThat(groupMember.getCanInvite()).isFalse();
         assertThat(groupMember.getCanKick()).isFalse();
         assertThat(groupMember.getCanModifyRoles()).isTrue();
     }
 
-    private static void modifyRoles(UUID friendAccessTokenId1, GroupListResponse group, UUID friend2GroupMemberId) {
+    private static void modifyRoles(String friendAccessTokenId1, GroupListResponse group, UUID friend2GroupMemberId) {
         GroupMemberResponse friend2GroupMember = GroupActions.modifyRoles(getServerPort(), friendAccessTokenId1, group.getGroupId(), friend2GroupMemberId, new GroupMemberRoleRequest(true, true, true));
 
         assertThat(friend2GroupMember.getCanInvite()).isTrue();
@@ -240,8 +240,8 @@ public class GroupMemberCrudTest extends BackEndTest {
         assertThat(friend2GroupMember.getCanModifyRoles()).isTrue();
     }
 
-    private GroupMemberResponse getOwnMember(UUID accessTokenId, UUID groupId, UUID userId) {
-        return GroupActions.getMembers(getServerPort(), accessTokenId, groupId)
+    private GroupMemberResponse getOwnMember(String accessToken, UUID groupId, UUID userId) {
+        return GroupActions.getMembers(getServerPort(), accessToken, groupId)
             .stream()
             .filter(groupMemberResponse -> groupMemberResponse.getUserId().equals(userId))
             .findFirst()

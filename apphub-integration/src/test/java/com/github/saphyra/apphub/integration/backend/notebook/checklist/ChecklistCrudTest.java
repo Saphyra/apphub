@@ -40,33 +40,33 @@ public class ChecklistCrudTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void checklistCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_blankTitle(accessTokenId);
-        create_parentNotFound(accessTokenId);
-        UUID notCategoryParentId = create_parentNotCategory(accessTokenId);
-        create_nullNodes(accessTokenId);
-        create_nullContent(accessTokenId);
-        create_nullChecked(accessTokenId);
-        create_nullOrder(accessTokenId);
-        BiWrapper<UUID, UUID> creationResult = create(accessTokenId);
+        create_blankTitle(accessToken);
+        create_parentNotFound(accessToken);
+        UUID notCategoryParentId = create_parentNotCategory(accessToken);
+        create_nullNodes(accessToken);
+        create_nullContent(accessToken);
+        create_nullChecked(accessToken);
+        create_nullOrder(accessToken);
+        BiWrapper<UUID, UUID> creationResult = create(accessToken);
         UUID checklistItemId = creationResult.getEntity1();
         UUID listItemId = creationResult.getEntity2();
-        listItemNotFound(accessTokenId);
-        ChecklistItemModel edit_validNodeRequest = edit_blankTitle(accessTokenId, listItemId, checklistItemId);
-        edit_nullContent(accessTokenId, listItemId, checklistItemId);
-        edit_nullChecked(accessTokenId, listItemId, checklistItemId);
-        edit_nullOrder(accessTokenId, listItemId, checklistItemId);
-        edit_listItemNotFound(accessTokenId, edit_validNodeRequest);
-        edit_checklistItemNotFound(accessTokenId, listItemId);
-        edit_checklistItemDeleted(accessTokenId, listItemId);
-        ChecklistResponse checklistItemAddedResponse = edit_checklistItemAdded(accessTokenId, listItemId);
-        check_listItemNotFound(accessTokenId);
-        check(accessTokenId, listItemId, checklistItemAddedResponse);
-        uncheck(accessTokenId, listItemId, checklistItemAddedResponse);
-        edit_checklistItemModified(accessTokenId, listItemId, checklistItemAddedResponse);
-        delete_deleteChecked(accessTokenId, listItemId);
-        deleteChecklist(accessTokenId, notCategoryParentId, listItemId);
+        listItemNotFound(accessToken);
+        ChecklistItemModel edit_validNodeRequest = edit_blankTitle(accessToken, listItemId, checklistItemId);
+        edit_nullContent(accessToken, listItemId, checklistItemId);
+        edit_nullChecked(accessToken, listItemId, checklistItemId);
+        edit_nullOrder(accessToken, listItemId, checklistItemId);
+        edit_listItemNotFound(accessToken, edit_validNodeRequest);
+        edit_checklistItemNotFound(accessToken, listItemId);
+        edit_checklistItemDeleted(accessToken, listItemId);
+        ChecklistResponse checklistItemAddedResponse = edit_checklistItemAdded(accessToken, listItemId);
+        check_listItemNotFound(accessToken);
+        check(accessToken, listItemId, checklistItemAddedResponse);
+        uncheck(accessToken, listItemId, checklistItemAddedResponse);
+        edit_checklistItemModified(accessToken, listItemId, checklistItemAddedResponse);
+        delete_deleteChecked(accessToken, listItemId);
+        deleteChecklist(accessToken, notCategoryParentId, listItemId);
         CreateChecklistRequest request = CreateChecklistRequest.builder()
             .title(TITLE)
             .items(Arrays.asList(
@@ -82,14 +82,14 @@ public class ChecklistCrudTest extends BackEndTest {
                     .build()
             ))
             .build();
-        listItemId = ChecklistActions.createChecklist(getServerPort(), accessTokenId, request);
-        ChecklistResponse checklistResponse = order(accessTokenId, listItemId);
-        deleteRow(accessTokenId, listItemId, checklistResponse);
-        editChecklistItem_nullContent(accessTokenId, checklistResponse.getItems().get(1).getChecklistItemId());
-        editChecklistItem(accessTokenId, checklistResponse.getItems().get(1).getChecklistItemId(), listItemId);
+        listItemId = ChecklistActions.createChecklist(getServerPort(), accessToken, request);
+        ChecklistResponse checklistResponse = order(accessToken, listItemId);
+        deleteRow(accessToken, listItemId, checklistResponse);
+        editChecklistItem_nullContent(accessToken, checklistResponse.getItems().get(1).getChecklistItemId());
+        editChecklistItem(accessToken, checklistResponse.getItems().get(1).getChecklistItemId(), listItemId);
     }
 
-    private static void create_blankTitle(UUID accessTokenId) {
+    private static void create_blankTitle(String accessToken) {
         CreateChecklistRequest create_blankTitleRequest = CreateChecklistRequest.builder()
             .title(" ")
             .items(Arrays.asList(ChecklistItemModel.builder()
@@ -98,11 +98,11 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        Response create_blankTitleResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_blankTitleRequest);
+        Response create_blankTitleResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_blankTitleRequest);
         verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
     }
 
-    private static void create_parentNotFound(UUID accessTokenId) {
+    private static void create_parentNotFound(String accessToken) {
         CreateChecklistRequest create_parentNotFoundRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(UUID.randomUUID())
@@ -112,12 +112,12 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        Response create_parentNotFoundResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
-    private static UUID create_parentNotCategory(UUID accessTokenId) {
-        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title("a").content("").build());
+    private static UUID create_parentNotCategory(String accessToken) {
+        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessToken, CreateTextRequest.builder().title("a").content("").build());
         CreateChecklistRequest create_parentNotCategoryRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .parent(notCategoryParentId)
@@ -127,21 +127,21 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        Response create_parentNotCategoryResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_parentNotCategoryRequest);
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
         return notCategoryParentId;
     }
 
-    private static void create_nullNodes(UUID accessTokenId) {
+    private static void create_nullNodes(String accessToken) {
         CreateChecklistRequest create_nullNodesRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .items(null)
             .build();
-        Response create_nullNodesResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_nullNodesRequest);
+        Response create_nullNodesResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullNodesRequest);
         verifyInvalidParam(create_nullNodesResponse, "items", "must not be null");
     }
 
-    private static void create_nullContent(UUID accessTokenId) {
+    private static void create_nullContent(String accessToken) {
         CreateChecklistRequest create_nullContentRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .items(Arrays.asList(ChecklistItemModel.builder()
@@ -150,11 +150,11 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(null)
                 .build()))
             .build();
-        Response create_nullContentResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_nullContentRequest);
+        Response create_nullContentResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullContentRequest);
         verifyInvalidParam(create_nullContentResponse, "item.content", "must not be null");
     }
 
-    private static void create_nullChecked(UUID accessTokenId) {
+    private static void create_nullChecked(String accessToken) {
         CreateChecklistRequest create_nullCheckedRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .items(Arrays.asList(ChecklistItemModel.builder()
@@ -163,11 +163,11 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        Response create_nullCheckedResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_nullCheckedRequest);
+        Response create_nullCheckedResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullCheckedRequest);
         verifyInvalidParam(create_nullCheckedResponse, "item.checked", "must not be null");
     }
 
-    private static void create_nullOrder(UUID accessTokenId) {
+    private static void create_nullOrder(String accessToken) {
         CreateChecklistRequest create_nullOrderRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .items(Arrays.asList(ChecklistItemModel.builder()
@@ -176,11 +176,11 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        Response create_nullOrderResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessTokenId, create_nullOrderRequest);
+        Response create_nullOrderResponse = ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, create_nullOrderRequest);
         verifyInvalidParam(create_nullOrderResponse, "item.index", "must not be null");
     }
 
-    private BiWrapper<UUID, UUID> create(UUID accessTokenId) {
+    private BiWrapper<UUID, UUID> create(String accessToken) {
         CreateChecklistRequest createRequest = CreateChecklistRequest.builder()
             .title(TITLE)
             .items(Arrays.asList(ChecklistItemModel.builder()
@@ -189,8 +189,8 @@ public class ChecklistCrudTest extends BackEndTest {
                 .content(CONTENT)
                 .build()))
             .build();
-        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessTokenId, createRequest);
-        ChecklistResponse createdChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessToken, createRequest);
+        ChecklistResponse createdChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
         UUID checklistItemId = createdChecklistItemResponse.getItems()
             .get(0)
             .getChecklistItemId();
@@ -204,12 +204,12 @@ public class ChecklistCrudTest extends BackEndTest {
         return new BiWrapper<>(checklistItemId, listItemId);
     }
 
-    private static void listItemNotFound(UUID accessTokenId) {
-        Response get_listItemNotFoundResponse = ChecklistActions.getChecklistResponse(getServerPort(), accessTokenId, UUID.randomUUID());
+    private static void listItemNotFound(String accessToken) {
+        Response get_listItemNotFoundResponse = ChecklistActions.getChecklistResponse(getServerPort(), accessToken, UUID.randomUUID());
         verifyListItemNotFound(get_listItemNotFoundResponse);
     }
 
-    private static ChecklistItemModel edit_blankTitle(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
+    private static ChecklistItemModel edit_blankTitle(String accessToken, UUID listItemId, UUID checklistItemId) {
         ChecklistItemModel edit_validNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
             .index(NEW_ORDER)
@@ -221,12 +221,12 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(" ")
             .items(Arrays.asList(edit_validNodeRequest))
             .build();
-        Response edit_blankTitleResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, edit_blankTitleRequest, listItemId);
+        Response edit_blankTitleResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_blankTitleRequest, listItemId);
         verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
         return edit_validNodeRequest;
     }
 
-    private static void edit_nullContent(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
+    private static void edit_nullContent(String accessToken, UUID listItemId, UUID checklistItemId) {
         ChecklistItemModel edit_nullContentNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
             .index(NEW_ORDER)
@@ -237,11 +237,11 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .items(Arrays.asList(edit_nullContentNodeRequest))
             .build();
-        Response edit_nullContentResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, edit_nullContentRequest, listItemId);
+        Response edit_nullContentResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_nullContentRequest, listItemId);
         verifyInvalidParam(edit_nullContentResponse, "item.content", "must not be null");
     }
 
-    private static void edit_nullChecked(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
+    private static void edit_nullChecked(String accessToken, UUID listItemId, UUID checklistItemId) {
         ChecklistItemModel edit_nullCheckedNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
             .index(NEW_ORDER)
@@ -252,11 +252,11 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .items(Arrays.asList(edit_nullCheckedNodeRequest))
             .build();
-        Response edit_nullCheckedResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, edit_nullCheckedRequest, listItemId);
+        Response edit_nullCheckedResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_nullCheckedRequest, listItemId);
         verifyInvalidParam(edit_nullCheckedResponse, "item.checked", "must not be null");
     }
 
-    private static void edit_nullOrder(UUID accessTokenId, UUID listItemId, UUID checklistItemId) {
+    private static void edit_nullOrder(String accessToken, UUID listItemId, UUID checklistItemId) {
         ChecklistItemModel edit_nullOrderNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(checklistItemId)
             .index(null)
@@ -267,20 +267,20 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .items(Arrays.asList(edit_nullOrderNodeRequest))
             .build();
-        Response edit_nullOrderResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, edit_nullOrderRequest, listItemId);
+        Response edit_nullOrderResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_nullOrderRequest, listItemId);
         verifyInvalidParam(edit_nullOrderResponse, "item.index", "must not be null");
     }
 
-    private static void edit_listItemNotFound(UUID accessTokenId, ChecklistItemModel edit_validNodeRequest) {
+    private static void edit_listItemNotFound(String accessToken, ChecklistItemModel edit_validNodeRequest) {
         EditChecklistRequest edit_listItemNotFoundRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
             .items(Arrays.asList(edit_validNodeRequest))
             .build();
-        Response edit_listItemNotFoundResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, edit_listItemNotFoundRequest, UUID.randomUUID());
+        Response edit_listItemNotFoundResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_listItemNotFoundRequest, UUID.randomUUID());
         verifyListItemNotFound(edit_listItemNotFoundResponse);
     }
 
-    private static void edit_checklistItemNotFound(UUID accessTokenId, UUID listItemId) {
+    private static void edit_checklistItemNotFound(String accessToken, UUID listItemId) {
         ChecklistItemModel edit_checklistItemNotFoundNodeRequest = ChecklistItemModel.builder()
             .checklistItemId(UUID.randomUUID())
             .index(NEW_ORDER)
@@ -294,22 +294,22 @@ public class ChecklistCrudTest extends BackEndTest {
             .items(Arrays.asList(edit_checklistItemNotFoundNodeRequest))
             .build();
 
-        Response edit_checklistItemNotFoundResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessTokenId, edit_checklistItemNotFoundRequest, listItemId);
+        Response edit_checklistItemNotFoundResponse = ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, edit_checklistItemNotFoundRequest, listItemId);
         ResponseValidator.verifyErrorResponse(edit_checklistItemNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private static void edit_checklistItemDeleted(UUID accessTokenId, UUID listItemId) {
+    private static void edit_checklistItemDeleted(String accessToken, UUID listItemId) {
         EditChecklistRequest edit_checklistItemDeletedRequest = EditChecklistRequest.builder()
             .title(NEW_TITLE)
             .items(Collections.emptyList())
             .build();
-        ChecklistActions.editChecklist(getServerPort(), accessTokenId, edit_checklistItemDeletedRequest, listItemId);
-        ChecklistResponse deletedChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistActions.editChecklist(getServerPort(), accessToken, edit_checklistItemDeletedRequest, listItemId);
+        ChecklistResponse deletedChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
         assertThat(deletedChecklistItemResponse.getItems()).isEmpty();
         assertThat(deletedChecklistItemResponse.getTitle()).isEqualTo(NEW_TITLE);
     }
 
-    private static ChecklistResponse edit_checklistItemAdded(UUID accessTokenId, UUID listItemId) {
+    private static ChecklistResponse edit_checklistItemAdded(String accessToken, UUID listItemId) {
         ChecklistItemModel edit_checklistItemAddedNodeRequest = ChecklistItemModel.builder()
             .index(NEW_ORDER)
             .checked(false)
@@ -320,8 +320,8 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .items(Arrays.asList(edit_checklistItemAddedNodeRequest))
             .build();
-        ChecklistActions.editChecklist(getServerPort(), accessTokenId, edit_checklistItemAddedRequest, listItemId);
-        ChecklistResponse checklistItemAddedResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistActions.editChecklist(getServerPort(), accessToken, edit_checklistItemAddedRequest, listItemId);
+        ChecklistResponse checklistItemAddedResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
         assertThat(checklistItemAddedResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(checklistItemAddedResponse.getItems()).hasSize(1);
         assertThat(checklistItemAddedResponse.getItems().get(0).getIndex()).isEqualTo(NEW_ORDER);
@@ -330,22 +330,22 @@ public class ChecklistCrudTest extends BackEndTest {
         return checklistItemAddedResponse;
     }
 
-    private static void check_listItemNotFound(UUID accessTokenId) {
-        Response check_listItemNotFoundResponse = ChecklistActions.getUpdateChecklistItemStatusResponse(getServerPort(), accessTokenId, UUID.randomUUID(), true);
+    private static void check_listItemNotFound(String accessToken) {
+        Response check_listItemNotFoundResponse = ChecklistActions.getUpdateChecklistItemStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), true);
         ResponseValidator.verifyErrorResponse(check_listItemNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private static void check(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
-        ChecklistActions.updateChecklistItemStatus(getServerPort(), accessTokenId, checklistItemAddedResponse.getItems().get(0).getChecklistItemId(), true);
-        assertThat(ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId).getItems().get(0).getChecked()).isTrue();
+    private static void check(String accessToken, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
+        ChecklistActions.updateChecklistItemStatus(getServerPort(), accessToken, checklistItemAddedResponse.getItems().get(0).getChecklistItemId(), true);
+        assertThat(ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId).getItems().get(0).getChecked()).isTrue();
     }
 
-    private static void uncheck(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
-        ChecklistActions.updateChecklistItemStatus(getServerPort(), accessTokenId, checklistItemAddedResponse.getItems().get(0).getChecklistItemId(), false);
-        assertThat(ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId).getItems().get(0).getChecked()).isFalse();
+    private static void uncheck(String accessToken, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
+        ChecklistActions.updateChecklistItemStatus(getServerPort(), accessToken, checklistItemAddedResponse.getItems().get(0).getChecklistItemId(), false);
+        assertThat(ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId).getItems().get(0).getChecked()).isFalse();
     }
 
-    private static void edit_checklistItemModified(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
+    private static void edit_checklistItemModified(String accessToken, UUID listItemId, ChecklistResponse checklistItemAddedResponse) {
         UUID checklistItemId;
         checklistItemId = checklistItemAddedResponse.getItems()
             .get(0)
@@ -362,8 +362,8 @@ public class ChecklistCrudTest extends BackEndTest {
             .title(TITLE)
             .items(Arrays.asList(edit_checklistItemModifiedNodeRequest))
             .build();
-        ChecklistActions.editChecklist(getServerPort(), accessTokenId, edit_checklistItemModifiedRequest, listItemId);
-        ChecklistResponse modifiedChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistActions.editChecklist(getServerPort(), accessToken, edit_checklistItemModifiedRequest, listItemId);
+        ChecklistResponse modifiedChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
         assertThat(modifiedChecklistItemResponse.getTitle()).isEqualTo(TITLE);
         assertThat(modifiedChecklistItemResponse.getItems()).hasSize(1);
         assertThat(modifiedChecklistItemResponse.getItems().get(0).getIndex()).isEqualTo(ORDER);
@@ -371,47 +371,47 @@ public class ChecklistCrudTest extends BackEndTest {
         assertThat(modifiedChecklistItemResponse.getItems().get(0).getChecked()).isTrue();
     }
 
-    private static void delete_deleteChecked(UUID accessTokenId, UUID listItemId) {
-        Response response = ChecklistActions.getDeleteCheckedChecklistItemsResponse(getServerPort(), accessTokenId, listItemId);
+    private static void delete_deleteChecked(String accessToken, UUID listItemId) {
+        Response response = ChecklistActions.getDeleteCheckedChecklistItemsResponse(getServerPort(), accessToken, listItemId);
         assertThat(response.getStatusCode()).isEqualTo(200);
-        ChecklistResponse deleteCheckedChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistResponse deleteCheckedChecklistItemResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
         assertThat(deleteCheckedChecklistItemResponse.getItems()).isEmpty();
     }
 
-    private static void deleteChecklist(UUID accessTokenId, UUID notCategoryParentId, UUID listItemId) {
-        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
-        assertThat(CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, notCategoryParentId).getChildren()).isEmpty();
+    private static void deleteChecklist(String accessToken, UUID notCategoryParentId, UUID listItemId) {
+        ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
+        assertThat(CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, notCategoryParentId).getChildren()).isEmpty();
     }
 
-    private ChecklistResponse order(UUID accessTokenId, UUID listItemId) {
-        Response orderResponse = ChecklistActions.getOrderItemsResponse(getServerPort(), accessTokenId, listItemId);
+    private ChecklistResponse order(String accessToken, UUID listItemId) {
+        Response orderResponse = ChecklistActions.getOrderItemsResponse(getServerPort(), accessToken, listItemId);
         assertThat(orderResponse.getStatusCode()).isEqualTo(200);
-        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
         assertThat(checklistResponse.getItems()).hasSize(2);
         assertThat(findByOrder(checklistResponse.getItems(), 0).getContent()).isEqualTo("A");
         assertThat(findByOrder(checklistResponse.getItems(), 1).getContent()).isEqualTo("B");
         return checklistResponse;
     }
 
-    private static void deleteRow(UUID accessTokenId, UUID listItemId, ChecklistResponse checklistResponse) {
-        Response response = ChecklistActions.getDeleteChecklistItemResponse(getServerPort(), accessTokenId, checklistResponse.getItems().get(0).getChecklistItemId());
+    private static void deleteRow(String accessToken, UUID listItemId, ChecklistResponse checklistResponse) {
+        Response response = ChecklistActions.getDeleteChecklistItemResponse(getServerPort(), accessToken, checklistResponse.getItems().get(0).getChecklistItemId());
 
         assertThat(response.getStatusCode()).isEqualTo(200);
-        assertThat(ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId).getItems())
+        assertThat(ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId).getItems())
             .extracting(ChecklistItemModel::getChecklistItemId)
             .containsExactly(checklistResponse.getItems().get(1).getChecklistItemId());
     }
 
-    private void editChecklistItem_nullContent(UUID accessTokenId, UUID checklistItemId) {
-        Response response = ChecklistActions.getEditChecklistItemResponse(getServerPort(), accessTokenId, checklistItemId, null);
+    private void editChecklistItem_nullContent(String accessToken, UUID checklistItemId) {
+        Response response = ChecklistActions.getEditChecklistItemResponse(getServerPort(), accessToken, checklistItemId, null);
 
         ResponseValidator.verifyInvalidParam(response, "content", "must not be null");
     }
 
-    private void editChecklistItem(UUID accessTokenId, UUID checklistItemId, UUID listItemId) {
-        ChecklistActions.editChecklistItem(getServerPort(), accessTokenId, checklistItemId, CONTENT);
+    private void editChecklistItem(String accessToken, UUID checklistItemId, UUID listItemId) {
+        ChecklistActions.editChecklistItem(getServerPort(), accessToken, checklistItemId, CONTENT);
 
-        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessTokenId, listItemId);
+        ChecklistResponse checklistResponse = ChecklistActions.getChecklist(getServerPort(), accessToken, listItemId);
 
         assertThat(checklistResponse.getItems())
             .hasSize(1)

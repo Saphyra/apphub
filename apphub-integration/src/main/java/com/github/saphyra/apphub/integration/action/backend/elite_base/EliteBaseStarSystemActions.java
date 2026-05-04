@@ -6,11 +6,9 @@ import com.github.saphyra.apphub.integration.framework.endpoints.EliteBaseEndpoi
 import com.github.saphyra.apphub.integration.structure.api.OneParamRequest;
 import io.restassured.response.Response;
 
-import java.util.UUID;
-
 public class EliteBaseStarSystemActions {
-    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSearchResponse(int serverPort, String accessToken, String query) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(query))
             .get(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_STAR_SYSTEMS_SEARCH));
     }

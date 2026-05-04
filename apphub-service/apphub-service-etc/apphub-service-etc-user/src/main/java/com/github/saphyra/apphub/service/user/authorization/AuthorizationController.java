@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.etc.user.server.UserAuthorizationController
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.user.ban.service.BanService;
@@ -17,6 +18,7 @@ import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -88,14 +90,22 @@ public class AuthorizationController implements UserAuthorizationController {
     public List<String> getRoles(UUID userId) {
         log.info("Getting roles for user {}", userId);
 
-        userDao.findByIdValidated(userId);
+        userDao.findById(userId)
+            .filter(user -> !user.isMarkedForDeletion())
+            .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND, "User not found or marked for deletion with id " + userId));
 
         List<String> bannedRoles = banService.getActivelyBannedRolesOf(userId);
+        if (!bannedRoles.isEmpty()) {
+            log.info("{} has roles {} banned.", userId, bannedRoles);
+        }
 
-        return roleDao.getByUserId(userId)
+        List<String> result = roleDao.getByUserId(userId)
             .stream()
             .map(Role::getRole)
             .filter(role -> !bannedRoles.contains(role))
             .toList();
+        log.info("{} has roles {}", userId, result);
+
+        return result;
     }
 }

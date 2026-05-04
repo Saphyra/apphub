@@ -23,101 +23,101 @@ public class BlacklistCrudTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void blacklistCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters blockedUserData = RegistrationParameters.validParameters();
-        UUID blockedUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
+        String blockedUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
         UUID blockedUserId = DatabaseUtil.getUserIdByEmail(blockedUserData.getEmail());
 
-        create_userDoesNotExist(accessTokenId);
-        BlacklistResponse blacklistResponse = create(accessTokenId, blockedUserData, blockedUserId);
-        create_alreadyBlocked(accessTokenId, blockedUserId);
-        UUID blacklistId = query(accessTokenId, blockedUserData, blockedUserId, blacklistResponse);
-        delete_notFound(accessTokenId);
+        create_userDoesNotExist(accessToken);
+        BlacklistResponse blacklistResponse = create(accessToken, blockedUserData, blockedUserId);
+        create_alreadyBlocked(accessToken, blockedUserId);
+        UUID blacklistId = query(accessToken, blockedUserData, blockedUserId, blacklistResponse);
+        delete_notFound(accessToken);
         delete_forbiddenOperation(blockedUserAccessTokenId, blacklistId);
-        delete(accessTokenId, blacklistId);
+        delete(accessToken, blacklistId);
     }
 
-    private static void create_userDoesNotExist(UUID accessTokenId) {
-        Response create_userDoesNotExistResponse = BlacklistActions.getCreateResponse(getServerPort(), accessTokenId, UUID.randomUUID());
+    private static void create_userDoesNotExist(String accessToken) {
+        Response create_userDoesNotExistResponse = BlacklistActions.getCreateResponse(getServerPort(), accessToken, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(create_userDoesNotExistResponse, 404, ErrorCode.USER_NOT_FOUND);
     }
 
-    private static BlacklistResponse create(UUID accessTokenId, RegistrationParameters blockedUserData, UUID blockedUserId) {
-        BlacklistResponse blacklistResponse = BlacklistActions.createBlacklist(getServerPort(), accessTokenId, blockedUserId);
+    private static BlacklistResponse create(String accessToken, RegistrationParameters blockedUserData, UUID blockedUserId) {
+        BlacklistResponse blacklistResponse = BlacklistActions.createBlacklist(getServerPort(), accessToken, blockedUserId);
         assertThat(blacklistResponse.getBlockedUserId()).isEqualTo(blockedUserId);
         assertThat(blacklistResponse.getUsername()).isEqualTo(blockedUserData.getUsername());
         assertThat(blacklistResponse.getEmail()).isEqualTo(blockedUserData.getEmail());
         return blacklistResponse;
     }
 
-    private static void create_alreadyBlocked(UUID accessTokenId, UUID blockedUserId) {
-        Response create_alreadyBlockedResponse = BlacklistActions.getCreateResponse(getServerPort(), accessTokenId, blockedUserId);
+    private static void create_alreadyBlocked(String accessToken, UUID blockedUserId) {
+        Response create_alreadyBlockedResponse = BlacklistActions.getCreateResponse(getServerPort(), accessToken, blockedUserId);
 
         ResponseValidator.verifyErrorResponse(create_alreadyBlockedResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
-    private static UUID query(UUID accessTokenId, RegistrationParameters blockedUserData, UUID blockedUserId, BlacklistResponse blacklistResponse) {
-        List<BlacklistResponse> blacklists = BlacklistActions.getBlacklists(getServerPort(), accessTokenId);
+    private static UUID query(String accessToken, RegistrationParameters blockedUserData, UUID blockedUserId, BlacklistResponse blacklistResponse) {
+        List<BlacklistResponse> blacklists = BlacklistActions.getBlacklists(getServerPort(), accessToken);
 
         assertThat(blacklists).hasSize(1);
-        UUID blacklistId = blacklists.get(0).getBlacklistId();
+        UUID blacklistId = blacklists.getFirst().getBlacklistId();
         assertThat(blacklistId).isEqualTo(blacklistResponse.getBlacklistId());
-        assertThat(blacklists.get(0).getBlockedUserId()).isEqualTo(blockedUserId);
-        assertThat(blacklists.get(0).getUsername()).isEqualTo(blockedUserData.getUsername());
-        assertThat(blacklists.get(0).getEmail()).isEqualTo(blockedUserData.getEmail());
+        assertThat(blacklists.getFirst().getBlockedUserId()).isEqualTo(blockedUserId);
+        assertThat(blacklists.getFirst().getUsername()).isEqualTo(blockedUserData.getUsername());
+        assertThat(blacklists.getFirst().getEmail()).isEqualTo(blockedUserData.getEmail());
         return blacklistId;
     }
 
-    private static void delete_notFound(UUID accessTokenId) {
-        Response delete_notFoundResponse = BlacklistActions.getDeleteBlacklistResponse(getServerPort(), accessTokenId, UUID.randomUUID());
+    private static void delete_notFound(String accessToken) {
+        Response delete_notFoundResponse = BlacklistActions.getDeleteBlacklistResponse(getServerPort(), accessToken, UUID.randomUUID());
 
         ResponseValidator.verifyErrorResponse(delete_notFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private static void delete_forbiddenOperation(UUID blockedUserAccessTokenId, UUID blacklistId) {
+    private static void delete_forbiddenOperation(String blockedUserAccessTokenId, UUID blacklistId) {
         Response delete_forbiddenOperationResponse = BlacklistActions.getDeleteBlacklistResponse(getServerPort(), blockedUserAccessTokenId, blacklistId);
 
         ResponseValidator.verifyForbiddenOperation(delete_forbiddenOperationResponse);
     }
 
-    private static void delete(UUID accessTokenId, UUID blacklistId) {
-        BlacklistActions.deleteBlacklist(getServerPort(), accessTokenId, blacklistId);
+    private static void delete(String accessToken, UUID blacklistId) {
+        BlacklistActions.deleteBlacklist(getServerPort(), accessToken, blacklistId);
 
-        assertThat(BlacklistActions.getBlacklists(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(BlacklistActions.getBlacklists(getServerPort(), accessToken)).isEmpty();
     }
 
     @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendship() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters blockedUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
         UUID blockedUserId = DatabaseUtil.getUserIdByEmail(blockedUserData.getEmail());
 
-        FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, blockedUserId);
+        FriendRequestActions.createFriendRequest(getServerPort(), accessToken, blockedUserId);
 
-        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, blockedUserId);
+        BlacklistActions.createBlacklist(getServerPort(), accessToken, blockedUserId);
 
-        assertThat(FriendRequestActions.getSentFriendRequests(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendRequestActions.getSentFriendRequests(getServerPort(), accessToken)).isEmpty();
     }
 
     @Test(groups = {"be", "community"})
     public void createBlacklistShouldRemoveFriendRequest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters blockedUserData = RegistrationParameters.validParameters();
-        UUID blockedUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
+        String blockedUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
         UUID blockedUserId = DatabaseUtil.getUserIdByEmail(blockedUserData.getEmail());
 
-        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, blockedUserId);
+        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessToken, blockedUserId);
         FriendRequestActions.acceptFriendRequest(getServerPort(), blockedUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, blockedUserId);
+        BlacklistActions.createBlacklist(getServerPort(), accessToken, blockedUserId);
 
-        assertThat(FriendshipActions.getFriendships(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(FriendshipActions.getFriendships(getServerPort(), accessToken)).isEmpty();
     }
 }
