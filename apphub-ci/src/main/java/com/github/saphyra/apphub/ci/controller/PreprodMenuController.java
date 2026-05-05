@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -70,25 +69,25 @@ class PreprodMenuController {
     String startVm() {
         taskQueue.add(preprodStartProcess::startServer);
 
-        return "redirect:/preprod?successs=minikube_is_starting";
+        return "redirect:/preprod?success=minikube_is_starting";
     }
 
     @GetMapping("/deploy")
     String deploy() {
         taskQueue.add(preprodDeployProcess::deploy);
 
-        return "redirect:/preprod?successs=deployment_started";
+        return "redirect:/preprod?success=deployment_started";
     }
 
     @PostMapping("/deploy-services")
-    String deployServices(@RequestAttribute("value") String input) {
+    String deployServices(@RequestParam("value") String input) {
         List<String> serviceNames = Arrays.asList(input.split(","));
         List<String> availableServiceNames = services.getServices()
             .stream()
             .map(Service::getName)
             .toList();
         if (serviceNames.stream().anyMatch(serviceName -> !availableServiceNames.contains(serviceName))) {
-            return "redirect:/minikube?error=service_not_found";
+            return "redirect:/preprod?error=service_not_found";
         }
         propertyDao.save(PropertyName.LATEST_SERVICES, serviceNames);
 
@@ -105,7 +104,7 @@ class PreprodMenuController {
     }
 
     @PostMapping("/run-test-groups")
-    String runTestGroups(@RequestAttribute("value") String input) {
+    String runTestGroups(@RequestParam("value") String input) {
         propertyDao.save(PropertyName.LATEST_TEST_GROUPS, input);
 
         taskQueue.add(() -> preprodRunTestsProcess.runTests(input));
@@ -140,6 +139,6 @@ class PreprodMenuController {
     String stopVm() {
         taskQueue.add(preprodStopProcess::stopMinikube);
 
-        return "redirect:/minikube?success=minikube_stopped";
+        return "redirect:/preprod?success=minikube_stopped";
     }
 }

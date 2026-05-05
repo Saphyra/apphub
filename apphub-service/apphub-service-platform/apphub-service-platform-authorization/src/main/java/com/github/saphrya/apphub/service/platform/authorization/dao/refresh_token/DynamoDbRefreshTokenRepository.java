@@ -1,5 +1,6 @@
 package com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token;
 
+import com.github.saphrya.apphub.service.platform.authorization.config.AuthorizationProperties;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,15 @@ import static com.github.saphrya.apphub.service.platform.authorization.BeanNames
 @Profile("!test")
 //TODO unit test
 class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
-    private static final String TABLE = "refresh_token";
-
     private final DynamoDbEnhancedClient client;
+    private final String tableName;
 
-    DynamoDbRefreshTokenRepository(@Qualifier(REFRESH_TOKEN_DYNAMO_DB_CLIENT) DynamoDbEnhancedClient client) {
+    DynamoDbRefreshTokenRepository(
+        @Qualifier(REFRESH_TOKEN_DYNAMO_DB_CLIENT) DynamoDbEnhancedClient client,
+         AuthorizationProperties properties
+    ) {
         this.client = client;
+        this.tableName = properties.getRefreshTokenTableName();
     }
 
     @Override
@@ -62,7 +66,7 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
     }
 
     private DynamoDbTable<RefreshTokenEntity> getTable() {
-        return client.table(TABLE, TableSchema.fromBean(RefreshTokenEntity.class));
+        return client.table(tableName, TableSchema.fromBean(RefreshTokenEntity.class));
     }
 
     @Override
@@ -102,15 +106,18 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
     void createTable() {
         DynamoDbClient dynamoDbClient = client.dynamoDbClient();
         try {
-            dynamoDbClient.describeTable(builder -> builder.tableName(TABLE));
+            dynamoDbClient.describeTable(builder -> builder.tableName(tableName));
+            log.info("DynamoDb table {} already exists", tableName);
         } catch (ResourceNotFoundException e) {
+            log.info("Creating DynamoDb table {}", tableName);
+
             getTable().createTable();
 
             dynamoDbClient.waiter()
-                .waitUntilTableExists(builder -> builder.tableName(TABLE));
+                .waitUntilTableExists(builder -> builder.tableName(tableName));
 
             UpdateTimeToLiveRequest request = UpdateTimeToLiveRequest.builder()
-                .tableName(TABLE)
+                .tableName(tableName)
                 .timeToLiveSpecification(TimeToLiveSpecification.builder()
                     .attributeName("expiration")
                     .enabled(true)

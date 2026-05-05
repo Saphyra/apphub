@@ -18,13 +18,14 @@ import java.util.List;
 public class LocalStopProcess {
     private final Services services;
     private final ProcessKiller processKiller;
-    private final PlatformProperties testProperties;
+    private final PlatformProperties properties;
     private final ExecutorServiceBean executorServiceBean;
 
     public void stopAllServices() {
         log.info("Stopping local server...");
 
-        stop(testProperties.getIntegrationServer());
+        stop(properties.getIntegrationServer());
+        processKiller.killByPort(properties.getLocalDynamoDbPort());
 
         List<String> serviceNames = this.services.getServices()
             .stream()

@@ -8,3 +8,5 @@ aws:
     accessKeyId: dynamo-db-access-key-id
     secretKey: dynamo-db-secret-key
     url: http://localhost:8000
+    refreshToken:
+      tableName: refresh_token

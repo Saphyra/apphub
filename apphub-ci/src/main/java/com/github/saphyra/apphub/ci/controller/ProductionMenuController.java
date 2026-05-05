@@ -49,14 +49,14 @@ class ProductionMenuController {
     String startVm() {
         taskQueue.add(productionStartProcess::startServer);
 
-        return "redirect:/production?successs=minikube_is_starting";
+        return "redirect:/production?success=minikube_is_starting";
     }
 
     @GetMapping("/deploy")
     String deploy() {
         taskQueue.add(productionDeployProcess::deploy);
 
-        return "redirect:/production?successs=deployment_started";
+        return "redirect:/production?success=deployment_started";
     }
 
     @GetMapping("/run-tests")

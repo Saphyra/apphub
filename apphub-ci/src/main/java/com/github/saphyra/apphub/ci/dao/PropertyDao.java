@@ -165,13 +165,6 @@ public class PropertyDao {
             .orElseGet(defaultProperties::getIntegrationRetryCount);
     }
 
-    public EnvironmentSpecificProperties getS3Configuration() {
-        return propertyRepository.findById(PropertyName.S3_CONFIGURATION)
-            .map(Property::getValue)
-            .map(value -> objectMapper.readValue(value, EnvironmentSpecificProperties.class))
-            .orElseGet(EnvironmentSpecificProperties::new);
-    }
-
     public EnvironmentSpecificProperties getEnvironmentSpecificProperties(PropertyName propertyName) {
         return propertyRepository.findById(propertyName)
             .map(Property::getValue)

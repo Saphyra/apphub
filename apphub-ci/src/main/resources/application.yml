@@ -100,6 +100,7 @@ services:
     group: 2
     properties:
       - AUTHORIZATION_CERTIFICATE
+      - DYNAMO_DB_CONFIGURATION
   - name: web-content
     port: 8083
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"

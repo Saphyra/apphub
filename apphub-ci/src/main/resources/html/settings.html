@@ -46,6 +46,15 @@
     </fieldset>
 
     <fieldset>
+        <legend>AWS DynamoDB</legend>
+
+        <ul th:each="environment: ${environments}">
+            <li><a th:href="@{|/settings/dynamo-db/${environment}|}" th:text="${environment}"></a></li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
         <legend>Authorization certificate</legend>
 
         <a href="/settings/authorization/certificate/test">Recreate TEST certificate</a>

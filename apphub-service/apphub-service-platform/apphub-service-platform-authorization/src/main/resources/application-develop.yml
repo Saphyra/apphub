@@ -1,10 +1,7 @@
-server:
-  port: 8092
-
 aws:
   dynamoDb:
     accessKeyId: dynamodbaccesskeyid
     secretKey: dynamodbsecretkey
-    url: http://localhost:8000
+    url: http://dynamodb:8000
     refreshToken:
-      tableName: apphub-local-refresh_token
+      tableName: apphub-dev-refresh_token

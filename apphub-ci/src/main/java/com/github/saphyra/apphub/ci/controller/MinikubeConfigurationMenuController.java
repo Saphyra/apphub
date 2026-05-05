@@ -39,8 +39,6 @@ class MinikubeConfigurationMenuController {
             modelAndView.addObject("success", success);
         }
 
-        log.info("{}", modelAndView);
-
         return modelAndView;
     }
 

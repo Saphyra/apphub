@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.filters;
 
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.FilterOrder;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.AccessTokenCache;
@@ -14,7 +14,6 @@ import org.springframework.core.Ordered;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -24,8 +23,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
+//@Component
 @Slf4j
+@Deprecated(forRemoval = true) //TODO delete
 public class LogoutFilter implements GlobalFilter, Ordered {
     private static final Map<String, HttpMethod> ENDPOINT_MAP = new HashMap<>() {{
         put(UserEndpoints.LOGOUT, HttpMethod.POST);

@@ -10,9 +10,3 @@ authorization:
       rememberMe: P30D
       default: PT30M
     accessToken: ${authorization.accessTokenExpiration}
-
-aws:
-  dynamoDb:
-    accessKeyId: ${DYNAMO_DB_ACCESS_KEY_ID}
-    secretKey: ${DYNAMO_DB_SECRET_KEY}
-    url: ~

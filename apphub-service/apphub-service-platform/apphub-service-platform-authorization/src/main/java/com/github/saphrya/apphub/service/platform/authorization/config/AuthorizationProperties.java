@@ -35,6 +35,9 @@ public class AuthorizationProperties {
     @Value("${aws.dynamoDb.url}")
     private String dynamoDbUrl;
 
+    @Value("${aws.dynamoDb.refreshToken.tableName}")
+    private String refreshTokenTableName;
+
     @PostConstruct
     void logSelf() {
         log.info("{}", this);

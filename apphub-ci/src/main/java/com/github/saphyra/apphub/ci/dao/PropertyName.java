@@ -29,5 +29,6 @@ public enum PropertyName {
 
     //Service properties
     S3_CONFIGURATION,
+    DYNAMO_DB_CONFIGURATION,
     AUTHORIZATION_CERTIFICATE,
 }
