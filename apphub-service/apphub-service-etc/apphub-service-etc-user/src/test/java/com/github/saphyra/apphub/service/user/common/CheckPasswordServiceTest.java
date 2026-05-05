@@ -97,7 +97,7 @@ public class CheckPasswordServiceTest {
         verify(user, times(0)).setPassword(any());
         verify(userDao).save(user);
 
-        verify(authorizationClient).deactivateAllSessions(USER_ID);
+        verify(authorizationClient).invalidateAllRefreshTokens(USER_ID);
     }
 
     @Test

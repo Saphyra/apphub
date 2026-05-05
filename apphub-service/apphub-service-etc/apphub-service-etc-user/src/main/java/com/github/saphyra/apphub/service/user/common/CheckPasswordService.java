@@ -43,7 +43,7 @@ public class CheckPasswordService {
                         log.info("User {} has locked password.", userId);
                         user.setLockedUntil(dateTimeUtil.getCurrentDateTime().plusMinutes(passwordProperties.getLockedMinutes()));
 
-                        authorizationClient.deactivateAllSessions(userId);
+                        authorizationClient.invalidateAllRefreshTokens(userId);
 
                         throw ExceptionFactory.notLoggedException(HttpStatus.LOCKED, ErrorCode.ACCOUNT_LOCKED, "Incorrect password. Account locked.");
                     }

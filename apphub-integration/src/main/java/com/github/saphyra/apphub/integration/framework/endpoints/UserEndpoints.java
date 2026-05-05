@@ -2,10 +2,6 @@ package com.github.saphyra.apphub.integration.framework.endpoints;
 
 public class UserEndpoints {
     //Login Session
-    @Deprecated(forRemoval = true) //TODO delete
-    public static final String LOGIN = "/api/user/authentication/login";
-    @Deprecated(forRemoval = true) //TODO delete
-    public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";
 
     //Account

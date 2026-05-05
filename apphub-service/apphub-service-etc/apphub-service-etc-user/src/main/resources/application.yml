@@ -5,11 +5,6 @@ spring:
 liquibase:
   schema: apphub_user
 
-accessToken:
-  cookie:
-    expirationDays: 365
-  expirationMinutes: 10
-
 password:
   lockAccountFailures: 3
   lockedMinutes: 60

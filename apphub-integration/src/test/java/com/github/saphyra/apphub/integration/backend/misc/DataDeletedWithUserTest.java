@@ -42,7 +42,6 @@ import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//TODO add refresh token table
 public class DataDeletedWithUserTest extends BackEndTest {
     private static final String REASON = "reason";
     private static final String TITLE = "title";

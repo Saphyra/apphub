@@ -61,6 +61,6 @@ public class DeleteAccountServiceTest {
         verify(user).setMarkedForDeletion(true);
         verify(user).setMarkedForDeletionAt(CURRENT_DATE);
         verify(userDao).save(user);
-        verify(authorizationClient).deactivateAllSessions(USER_ID);
+        verify(authorizationClient).invalidateAllRefreshTokens(USER_ID);
     }
 }

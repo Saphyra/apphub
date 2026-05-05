@@ -20,6 +20,6 @@ class AuthorizationEventControllerImp implements AuthorizationEventController {
         DeleteAccountEvent event = request.getPayload();
         log.info("Processing account deletion of user {}", event.getUserId());
 
-        logoutService.deactivateAllSessions(event.getUserId());
+        logoutService.invalidateAllRefreshTokens(event.getUserId());
     }
 }

@@ -26,6 +26,8 @@ import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Component
 @Slf4j
 //TODO unit test
@@ -54,11 +56,20 @@ public class TokenParser {
     }
 
     public Mono<AccessToken> verifyAccessToken(String accessTokenString) {
-        Claims claims = Jwts.parser()
-            .verifyWith(publicKey)
-            .build()
-            .parseSignedClaims(accessTokenString)
-            .getPayload();
+        if (isBlank(accessTokenString)) {
+            return Mono.error(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, "Blank accessToken"));
+        }
+
+        Claims claims;
+        try {
+            claims = Jwts.parser()
+                .verifyWith(publicKey)
+                .build()
+                .parseSignedClaims(accessTokenString)
+                .getPayload();
+        } catch (Exception e) {
+            return Mono.error(() -> ExceptionFactory.reportedException(HttpStatus.UNAUTHORIZED, ErrorCode.INVALID_TOKEN, "Invalid token: " + accessTokenString, e));
+        }
 
         if (!claims.getIssuer().equals(authorizationProperties.getIssuer())) {
             return Mono.error(() -> ExceptionFactory.reportedException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_TOKEN, "Invalid token issuer: " + claims.getIssuer() + " in token " + accessTokenString));

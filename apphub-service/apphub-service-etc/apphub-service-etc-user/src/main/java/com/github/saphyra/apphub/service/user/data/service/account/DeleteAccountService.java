@@ -37,6 +37,6 @@ public class DeleteAccountService {
         user.setMarkedForDeletion(true);
         user.setMarkedForDeletionAt(dateTimeUtil.getCurrentDateTime());
         userDao.save(user);
-        authorizationClient.deactivateAllSessions(user.getUserId());
+        authorizationClient.invalidateAllRefreshTokens(user.getUserId());
     }
 }

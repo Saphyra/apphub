@@ -9,8 +9,8 @@ import java.util.UUID;
 
 @FeignClient(name = "authorization", url = "${serviceUrls.authorization}")
 public interface AuthorizationClient {
-    @DeleteMapping(AuthorizationEndpoints.INTERNAL_DEACTIVATE_ALL_SESSIONS)
-    void deactivateAllSessions(@PathVariable("userId") UUID userId);
+    @DeleteMapping(AuthorizationEndpoints.INTERNAL_INVALIDATE_ALL_REFRESH_TOKENS)
+    void invalidateAllRefreshTokens(@PathVariable("userId") UUID userId);
 
     @DeleteMapping(AuthorizationEndpoints.INTERNAL_INVALIDATE_ALL_ACCESS_TOKENS)
     void invalidateAllAccessTokens(@PathVariable("userId") UUID userId);

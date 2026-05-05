@@ -24,6 +24,7 @@ public class MainGatewayWebController {
 
     @GetMapping("/invalidate-access-token/web")
     Mono<ResponseEntity<Void>> invalidateAccessToken(@CookieValue(name = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessTokenString) {
+        log.info("Invalidating accessToken {}", accessTokenString);
         return tokenParser.verifyAccessToken(accessTokenString)
             .map(accessToken -> {
                 invalidatedAccessTokenService.add(accessToken.getAccessTokenId());

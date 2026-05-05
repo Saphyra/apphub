@@ -29,8 +29,8 @@ public interface AuthorizationController {
     @PostMapping(AUTHORIZATION_REFRESH_TOKEN)
     ResponseEntity<TokenResponse> refresh(@CookieValue(name = Constants.REFRESH_TOKEN_COOKIE, required = false) String refreshToken);
 
-    @DeleteMapping(AuthorizationEndpoints.INTERNAL_DEACTIVATE_ALL_SESSIONS)
-    void deactivateAllSessions(@PathVariable("userId") UUID userId);
+    @DeleteMapping(AuthorizationEndpoints.INTERNAL_INVALIDATE_ALL_REFRESH_TOKENS)
+    void invalidateAllRefreshTokens(@PathVariable("userId") UUID userId);
 
     @DeleteMapping(AuthorizationEndpoints.INTERNAL_INVALIDATE_ALL_ACCESS_TOKENS)
     void invalidateAllAccessTokens(@PathVariable("userId") UUID userId);

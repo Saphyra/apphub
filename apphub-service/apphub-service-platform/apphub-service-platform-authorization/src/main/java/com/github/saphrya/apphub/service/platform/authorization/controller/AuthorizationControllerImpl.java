@@ -51,10 +51,10 @@ class AuthorizationControllerImpl implements AuthorizationController {
     }
 
     @Override
-    public void deactivateAllSessions(UUID userId) {
+    public void invalidateAllRefreshTokens(UUID userId) {
         log.info("Deactivating all sessions of user {}", userId);
 
-        logoutService.deactivateAllSessions(userId);
+        logoutService.invalidateAllRefreshTokens(userId);
     }
 
     @Override

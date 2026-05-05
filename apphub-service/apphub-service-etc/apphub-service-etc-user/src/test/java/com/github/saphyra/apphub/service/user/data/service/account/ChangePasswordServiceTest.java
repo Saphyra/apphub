@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.user.data.service.account;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.encryption.impl.PasswordService;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -49,9 +48,6 @@ public class ChangePasswordServiceTest {
 
     @Mock
     private User user;
-
-    @Mock
-    private AccessToken accessToken;
 
     @AfterEach
     public void check() {
@@ -117,7 +113,6 @@ public class ChangePasswordServiceTest {
 
         then(user).should().setPassword(NEW_PASSWORD_HASH);
         then(userDao).should().save(user);
-        then(authorizationClient).should().deactivateAllSessions(USER_ID);
-        ;
+        then(authorizationClient).should().invalidateAllRefreshTokens(USER_ID);
     }
 }

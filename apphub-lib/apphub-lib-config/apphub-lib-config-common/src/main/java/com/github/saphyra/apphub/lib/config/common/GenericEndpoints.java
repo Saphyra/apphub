@@ -19,7 +19,4 @@ public class GenericEndpoints {
     //WebSocket
     public static final String EVENT_WEB_SOCKET_SEND_PING_EVENT = "/event/web-socket/send-ping";
     public static final String EVENT_WEB_SOCKET_CONNECTION_CLEANUP = "/event/web-socket/connection-cleanup";
-
-    //ETC
-    public static final String GET_OWN_USER_ID = "/user/id";
 }

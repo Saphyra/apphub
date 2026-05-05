@@ -6,7 +6,7 @@ export const INDEX_PAGE = "/web";
 export const ERROR_PAGE = "/web/error";
 
 //Platform
-export const CHECK_SESSION = new Endpoint(RequestMethod.GET, "/api/user/authentication/session");
+export const CHECK_SESSION = new Endpoint(RequestMethod.GET, "/api/session");
 export const GET_OWN_USER_ID = new Endpoint(RequestMethod.GET, "/user/id");
 export const USER_DATA_SEARCH_ACCOUNT = new Endpoint(RequestMethod.POST, "/api/user/accounts");
 export const GET_WEB_SOCKET_PROTOCOL = new Endpoint(RequestMethod.GET, "/api/ws/protocol");

@@ -35,7 +35,7 @@ public class ChangePasswordService {
         userDao.save(user);
 
         if (request.getDeactivateAllSessions()) {
-            authorizationClient.deactivateAllSessions(userId);
+            authorizationClient.invalidateAllRefreshTokens(userId);
         }
     }
 }

@@ -18,5 +18,6 @@
         <module>apphub-api-platform-storage</module>
         <module>apphub-api-platform-monitoring</module>
         <module>apphub-api-platform-authorization</module>
+        <module>apphub-api-platform-main_gateway</module>
     </modules>
 </project>

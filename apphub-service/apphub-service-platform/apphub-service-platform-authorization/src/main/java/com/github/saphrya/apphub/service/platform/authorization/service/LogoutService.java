@@ -2,7 +2,7 @@ package com.github.saphrya.apphub.service.platform.authorization.service;
 
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshTokenDao;
-import com.github.saphrya.apphub.service.platform.authorization.etc.EventGatewayProxy;
+import com.github.saphyra.apphub.api.platform.main_gateway.client.MainGatewayClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class LogoutService {
     private final TokenService tokenService;
     private final RefreshTokenDao refreshTokenDao;
-    private final EventGatewayProxy eventGatewayProxy;
+    private final MainGatewayClient mainGatewayClient;
 
     public void logout(String refreshToken, String accessTokenString) {
         RefreshToken parsedToken = tokenService.verifyRefreshToken(refreshToken);
@@ -28,24 +28,26 @@ public class LogoutService {
         log.info("Logging out user {}", parsedToken.getUserId());
 
         refreshTokenDao.delete(parsedToken.getUserId(), parsedToken.getRefreshTokenId());
+        mainGatewayClient.invalidateRefreshTokens(List.of(parsedToken.getRefreshTokenId()));
 
         if (!isBlank(accessTokenString)) {
             AccessToken accessToken = tokenService.parseAccessToken(accessTokenString);
 
-            eventGatewayProxy.sendAccessTokensInvalidatedEvent(accessToken.getAccessTokenId());
+            mainGatewayClient.invalidateAccessToken(accessToken.getAccessTokenId());
         }
     }
 
-    public void deactivateAllSessions(UUID userId) {
-        List<UUID> deactivatedTokens = refreshTokenDao.deleteByUserId(userId);
-        eventGatewayProxy.sendRefreshTokensInvalidatedEvent(deactivatedTokens);
+    public void invalidateAllRefreshTokens(UUID userId) {
+        List<UUID> invalidatedRefreshTokenIds = refreshTokenDao.deleteByUserId(userId);
+
+        mainGatewayClient.invalidateRefreshTokens(invalidatedRefreshTokenIds);
     }
 
     public void invalidateAllAccessTokens(UUID userId) {
-        List<UUID> deactivatedTokens = refreshTokenDao.getByUserId(userId)
+        List<UUID> invalidatedRefreshTokenIds = refreshTokenDao.getByUserId(userId)
             .stream()
             .map(RefreshToken::getRefreshTokenId)
             .toList();
-        eventGatewayProxy.sendRefreshTokensInvalidatedEvent(deactivatedTokens);
+        mainGatewayClient.invalidateRefreshTokens(invalidatedRefreshTokenIds);
     }
 }

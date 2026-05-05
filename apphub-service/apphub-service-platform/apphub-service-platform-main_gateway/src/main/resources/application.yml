@@ -161,11 +161,6 @@ authorization:
   publicKey: ${PUBLIC_KEY}
   expirationDuration:
     accessToken: ${authorization.accessTokenExpiration}
-nonSessionExtendingUris: #TODO check
-  - pattern: /api/user/authentication/session
-    method: GET
-  - pattern: /api/admin-panel/error-report
-    method: GET
 
 delay:
   filter:

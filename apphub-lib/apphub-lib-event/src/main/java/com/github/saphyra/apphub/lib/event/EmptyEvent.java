@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.lib.event;
 
 public class EmptyEvent {
-    public static final String DELETE_EXPIRED_ACCESS_TOKENS_EVENT_NAME = "delete-expired-access-tokens";
     public static final String SKYXPLORE_LOBBY_CLEANUP_EVENT_NAME = "skyxplore-lobby-cleanup";
     public static final String SKYXPLORE_GAME_CLEANUP_EVENT_NAME = "skyxplore-game-cleanup";
     public static final String SKYXPLORE_GAME_DELETION_EVENT_NAME = "skyxplore-game-deletion";
@@ -11,8 +10,6 @@ public class EmptyEvent {
     public static final String TRIGGER_REVOKE_EXPIRED_BANS = "user-data-trigger-revoke-expired-bans";
     public static final String STORAGE_CLEAN_UP_STORED_FILES = "storage-clean-up-stored-files";
     public static final String STORAGE_FILE_CLEANUP = "storage-file-cleanup";
-    public static final String ACCESS_TOKENS_INVALIDATED = "access-tokens-invalidated";
-    public static final String REFRESH_TOKENS_INVALIDATED = "refresh-tokens-invalidated";
     public static final String ELITE_BASE_PROCESS_MESSAGES = "elite-base-process-messages";
     public static final String ELITE_BASE_RESET_UNHANDLED_MESSAGES = "elite-base-reset-unhandled-messages";
     public static final String ELITE_BASE_DELETE_EXPIRED_MESSAGES = "elite-base-delete-expired-messages";

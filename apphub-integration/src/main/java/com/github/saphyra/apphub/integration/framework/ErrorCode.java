@@ -34,4 +34,5 @@ public enum ErrorCode {
     TOO_MANY_AIS,
     USER_NOT_FOUND,
     USERNAME_ALREADY_EXISTS,
+    INVALID_TOKEN
 }

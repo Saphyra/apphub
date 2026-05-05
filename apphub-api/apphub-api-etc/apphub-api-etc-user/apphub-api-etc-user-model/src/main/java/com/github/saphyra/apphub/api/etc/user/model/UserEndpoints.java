@@ -1,17 +1,6 @@
 package com.github.saphyra.apphub.api.etc.user.model;
 
 public class UserEndpoints {
-    //Login Session
-    public static final String EVENT_DELETE_EXPIRED_ACCESS_TOKENS = "/event/delete-expired-access-tokens";
-    public static final String EVENT_REFRESH_ACCESS_TOKEN_EXPIRATION = "/event/refresh-access-token-expiration";
-    public static final String LOGIN = "/api/user/authentication/login";
-    public static final String LOGOUT = "/api/user/authentication/logout";
-    public static final String CHECK_SESSION = "/api/user/authentication/session";
-    public static final String EXTEND_SESSION = "/api/user/authentication/session";
-    public static final String USER_DATA_INTERNAL_GET_ACCESS_TOKEN_BY_ID = "/internal/user/authentication/{accessTokenId}";
-    public static final String EVENT_ACCESS_TOKEN_INVALIDATED = "/event/access-token-invalidated";
-    public static final String EVENT_REFRESH_TOKEN_INVALIDATED = "/event/refresh-token-invalidated";
-
     //Account
     public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
     public static final String ACCOUNT_REGISTER = "/api/user";
