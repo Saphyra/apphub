@@ -17,7 +17,6 @@ import java.util.Base64;
 @Component
 @Slf4j
 @Getter
-//TODO unit test
 public class KeyService {
     private final PrivateKey privateKey;
     private final PublicKey publicKey;

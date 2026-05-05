@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,5 +43,27 @@ class DateTimeUtilTest {
             Arguments.of(LocalDate.of(2025, 2, 13), LocalDate.of(2025, 2, 14), LocalDate.of(2025, 2, 16), false),
             Arguments.of(LocalDate.of(2025, 2, 17), LocalDate.of(2025, 2, 14), LocalDate.of(2025, 2, 16), false)
         );
+    }
+
+    @Test
+    void fromDate() {
+        // 2026-05-05 12:00:00 UTC expressed as a java.util.Date
+        LocalDateTime expected = LocalDateTime.of(2026, 5, 5, 12, 0, 0);
+        long epochMillis = expected.toInstant(java.time.ZoneOffset.UTC).toEpochMilli();
+        Date date = new Date(epochMillis);
+
+        LocalDateTime result = underTest.fromDate(date);
+
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void fromEpochSecond() {
+        LocalDateTime expected = LocalDateTime.of(2026, 5, 5, 12, 0, 0);
+        long epochSecond = expected.toEpochSecond(java.time.ZoneOffset.UTC);
+
+        LocalDateTime result = underTest.fromEpochSecond(epochSecond);
+
+        assertThat(result).isEqualTo(expected);
     }
 }

@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class RefreshTokenConverter extends ConverterBase<RefreshTokenEntity, RefreshToken> {
     private final UuidConverter uuidConverter;
     private final DateTimeUtil dateTimeUtil;

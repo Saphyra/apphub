@@ -28,7 +28,6 @@ import static com.github.saphrya.apphub.service.platform.authorization.BeanNames
 @Component
 @Slf4j
 @Profile("!test")
-//TODO unit test
 class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
     private final DynamoDbEnhancedClient client;
     private final String tableName;

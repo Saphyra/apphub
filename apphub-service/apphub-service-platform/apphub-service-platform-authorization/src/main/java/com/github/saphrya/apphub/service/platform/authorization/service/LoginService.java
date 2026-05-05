@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LoginService {
     private final TokenService tokenService;
     private final LoginRequestValidator loginRequestValidator;

@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-@Deprecated(forRemoval = true) //TODO delete
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 public class LocaleProvider {
     private final RequestContextProvider requestContextProvider;

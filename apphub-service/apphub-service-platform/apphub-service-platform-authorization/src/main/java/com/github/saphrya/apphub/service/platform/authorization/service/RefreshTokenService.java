@@ -18,7 +18,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class RefreshTokenService {
     private final TokenService tokenService;
     private final RefreshTokenDao refreshTokenDao;

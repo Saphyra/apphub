@@ -19,7 +19,6 @@ import static feign.Util.isBlank;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class AuthorizationControllerImpl implements AuthorizationController {
     private final LoginService loginService;
     private final LogoutService logoutService;

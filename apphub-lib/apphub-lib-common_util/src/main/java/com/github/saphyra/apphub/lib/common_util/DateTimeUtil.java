@@ -78,12 +78,10 @@ public class DateTimeUtil {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
-    //TODO unit test
     public LocalDateTime fromDate(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
     }
 
-    //TODO unit test
     public LocalDateTime fromEpochSecond(Long epochSecond) {
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSecond), ZoneOffset.UTC);
     }

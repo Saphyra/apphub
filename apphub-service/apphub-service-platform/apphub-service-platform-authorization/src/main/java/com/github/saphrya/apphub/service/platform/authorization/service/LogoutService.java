@@ -3,7 +3,6 @@ package com.github.saphrya.apphub.service.platform.authorization.service;
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshTokenDao;
 import com.github.saphyra.apphub.api.platform.main_gateway.client.MainGatewayClient;
-import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LogoutService {
     private final TokenService tokenService;
     private final RefreshTokenDao refreshTokenDao;
@@ -31,9 +29,8 @@ public class LogoutService {
         mainGatewayClient.invalidateRefreshTokens(List.of(parsedToken.getRefreshTokenId()));
 
         if (!isBlank(accessTokenString)) {
-            AccessToken accessToken = tokenService.parseAccessToken(accessTokenString);
-
-            mainGatewayClient.invalidateAccessToken(accessToken.getAccessTokenId());
+            tokenService.parseAccessToken(accessTokenString)
+                .ifPresent(accessToken -> mainGatewayClient.invalidateAccessToken(accessToken.getAccessTokenId()));
         }
     }
 

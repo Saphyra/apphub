@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class RefreshTokenDao {
     private final RefreshTokenRepository repository;
     private final RefreshTokenConverter converter;

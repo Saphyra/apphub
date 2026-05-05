@@ -1,10 +1,15 @@
 package com.github.saphyra.apphub.lib.common_domain;
 
 public enum ErrorCode {
+    //Authorization / account
     ACCOUNT_LOCKED,
-    ALREADY_EXISTS,
     BAD_CREDENTIALS,
     INCORRECT_PASSWORD,
+    MISSING_ROLE,
+    NO_SESSION_AVAILABLE,
+    INVALID_TOKEN,
+
+    ALREADY_EXISTS,
     CATEGORY_NOT_FOUND,
     CHARACTER_NAME_ALREADY_EXISTS,
     DATA_NOT_FOUND,
@@ -25,8 +30,6 @@ public enum ErrorCode {
     LIST_ITEM_NOT_FOUND,
     LOBBY_PLAYER_NOT_READY,
     LOBBY_NOT_FOUND,
-    MISSING_ROLE,
-    NO_SESSION_AVAILABLE,
     NOT_ENOUGH_ALLIANCES,
     NOT_ENOUGH_STORAGE,
     ROLE_ALREADY_EXISTS,
@@ -38,5 +41,4 @@ public enum ErrorCode {
     USERNAME_ALREADY_EXISTS,
     TOO_MANY_AIS,
     TEMPORARILY_NOT_AVAILABLE,
-    INVALID_TOKEN
 }

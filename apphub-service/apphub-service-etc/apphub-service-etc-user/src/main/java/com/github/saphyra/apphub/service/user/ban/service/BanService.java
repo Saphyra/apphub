@@ -39,7 +39,6 @@ public class BanService {
         return banResponseQueryService.getBans(request.getBannedUserId());
     }
 
-    //TODO unit test
     public List<String> getActivelyBannedRolesOf(UUID userId) {
         LocalDateTime currentTime =  dateTimeUtil.getCurrentDateTime();
 

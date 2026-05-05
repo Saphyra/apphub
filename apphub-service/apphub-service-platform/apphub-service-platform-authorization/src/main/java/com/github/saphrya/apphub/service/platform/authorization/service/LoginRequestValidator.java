@@ -15,7 +15,6 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class LoginRequestValidator {
     void validate(LoginRequest loginRequest) {
         if (isBlank(loginRequest.getUserIdentifier()) || isEmpty(loginRequest.getPassword())) {
