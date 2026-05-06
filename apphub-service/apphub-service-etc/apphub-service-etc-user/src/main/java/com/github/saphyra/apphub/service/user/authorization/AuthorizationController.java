@@ -30,7 +30,6 @@ import static java.util.Objects.nonNull;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AuthorizationController implements UserAuthorizationController {
     private final UserDao userDao;
     private final DateTimeUtil dateTimeUtil;

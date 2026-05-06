@@ -17,7 +17,6 @@ import java.net.URI;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MainGatewayWebController {
     private final TokenParser tokenParser;
     private final InvalidatedAccessTokenService invalidatedAccessTokenService;

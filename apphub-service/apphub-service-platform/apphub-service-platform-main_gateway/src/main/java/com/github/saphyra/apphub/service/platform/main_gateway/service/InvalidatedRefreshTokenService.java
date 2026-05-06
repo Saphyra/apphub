@@ -14,7 +14,6 @@ import java.util.UUID;
  */
 @Component
 @Slf4j
-//TODO unit test
 public class InvalidatedRefreshTokenService {
     private final Cache<String, Boolean> invalidatedAccessTokens;
 

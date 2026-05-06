@@ -13,7 +13,7 @@ public class RegistrationParameters {
     private final String password;
     private final String email;
     private final String confirmPassword;
-    private final String language; //TODO registration validation
+    private final String language;
 
     public RegistrationRequest toRegistrationRequest() {
         return RegistrationRequest.builder()

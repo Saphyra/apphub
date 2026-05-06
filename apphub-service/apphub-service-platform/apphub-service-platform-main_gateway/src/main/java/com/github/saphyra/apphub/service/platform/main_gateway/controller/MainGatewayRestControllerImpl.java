@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedAccessTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedRefreshTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.TokenParser;
+import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorLogger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,11 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class MainGatewayRestControllerImpl implements MainGatewayRestController {
     private final InvalidatedAccessTokenService invalidatedAccessTokenService;
     private final InvalidatedRefreshTokenService invalidatedRefreshTokenService;
     private final TokenParser tokenParser;
+    private final ErrorLogger errorLogger;
 
     @Override
     public Mono<Void> invalidateAccessToken(UUID accessTokenId) {
@@ -54,7 +55,7 @@ class MainGatewayRestControllerImpl implements MainGatewayRestController {
 
                 return ResponseEntity.ok().build();
             })
-            .onErrorResume(MainGatewayRestControllerImpl::handleError);
+            .onErrorResume(this::handleError);
     }
 
     @Override
@@ -63,7 +64,7 @@ class MainGatewayRestControllerImpl implements MainGatewayRestController {
             .filter(accessToken -> !invalidatedAccessTokenService.contains(accessToken.getAccessTokenId()))
             .filter(accessToken -> !invalidatedRefreshTokenService.contains(accessToken.getRefreshTokenId()))
             .map(_ -> ResponseEntity.ok().build())
-            .onErrorResume(MainGatewayRestControllerImpl::handleError)
+            .onErrorResume(this::handleError)
             .switchIfEmpty(Mono.fromSupplier(() -> new ResponseEntity<>(HttpStatus.UNAUTHORIZED)));
     }
 
@@ -81,12 +82,13 @@ class MainGatewayRestControllerImpl implements MainGatewayRestController {
             .switchIfEmpty(Mono.just(new ResponseEntity<>(new OneParamResponse<>(null), HttpStatus.UNAUTHORIZED)));
     }
 
-    private static Mono<ResponseEntity<Object>> handleError(Throwable throwable) {
+    private Mono<ResponseEntity<Object>> handleError(Throwable throwable) {
+        errorLogger.log(throwable);
+
         if (throwable instanceof RestException e) {
-            log.warn("RestException during invalidateAccessToken: {}", e.getErrorMessage());
             return Mono.just(ResponseEntity.status(e.getResponseStatus()).body(e.getErrorMessage()));
         }
-        log.error("Unexpected error during invalidateAccessToken", throwable);
+
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 }

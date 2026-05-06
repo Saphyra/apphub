@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
 public class InvalidatedAccessTokenService {
     private final Cache<String, Boolean> invalidatedAccessTokens;
 

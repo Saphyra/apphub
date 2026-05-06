@@ -13,12 +13,9 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-import java.util.HashMap;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class AuthenticationService {
     private final MatchingRoleProvider matchingRoleProvider;
     private final RequiredRoleChecker requiredRoleChecker;
@@ -39,8 +36,7 @@ public class AuthenticationService {
     private ErrorResponseWrapper createErrorResponse() {
         return errorResponseFactory.create(
             HttpStatus.FORBIDDEN,
-            ErrorCode.MISSING_ROLE,
-            new HashMap<>()
+            ErrorCode.MISSING_ROLE
         );
     }
 }

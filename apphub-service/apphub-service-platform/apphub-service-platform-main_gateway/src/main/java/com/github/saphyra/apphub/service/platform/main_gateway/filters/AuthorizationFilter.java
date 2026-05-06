@@ -20,7 +20,6 @@ import java.net.URI;
 
 @Slf4j
 @Component
-//TODO unit test
 public class AuthorizationFilter implements GlobalFilter, Ordered {
     private final UriUtils uriUtils;
     private final AntPathMatcher antPathMatcher;

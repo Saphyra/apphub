@@ -8,12 +8,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
 public class ErrorResponseFactory {
+    public ErrorResponseWrapper create(HttpStatus httpStatus, ErrorCode errorCode) {
+        return create(httpStatus, errorCode, new HashMap<>());
+    }
+
     public ErrorResponseWrapper create(HttpStatus httpStatus, ErrorCode errorCode, Map<String, String> params) {
         ErrorResponse errorResponse = ErrorResponse.builder()
             .errorCode(errorCode)

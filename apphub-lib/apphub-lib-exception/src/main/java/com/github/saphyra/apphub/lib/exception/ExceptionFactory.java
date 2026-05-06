@@ -82,4 +82,8 @@ public class ExceptionFactory {
     public static RestException notFound(String message) {
         return notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, message);
     }
+
+    public static RestException notLoggedException(HttpStatus httpStatus, ErrorCode errorCode, String logMessage, Throwable cause) {
+        return new NotLoggedException(httpStatus, errorCode, logMessage, cause);
+    }
 }

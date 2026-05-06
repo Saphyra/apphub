@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.main_gateway.config.AuthorizationProperties;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 @Slf4j
-//TODO unit test
 public class TokenParser {
     private final PublicKey publicKey;
     private final AuthorizationProperties authorizationProperties;
@@ -67,6 +67,8 @@ public class TokenParser {
                 .build()
                 .parseSignedClaims(accessTokenString)
                 .getPayload();
+        } catch (ExpiredJwtException e) {
+            return Mono.error(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, "AccessToken expired.", e));
         } catch (Exception e) {
             return Mono.error(() -> ExceptionFactory.reportedException(HttpStatus.UNAUTHORIZED, ErrorCode.INVALID_TOKEN, "Invalid token: " + accessTokenString, e));
         }
