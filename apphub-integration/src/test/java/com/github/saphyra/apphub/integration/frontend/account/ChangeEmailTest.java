@@ -41,7 +41,7 @@ public class ChangeEmailTest extends SeleniumTest {
         invalidEmail(driver);
         emptyPassword(driver);
         emailAlreadyExists(driver, existingUserData);
-        incorrectPassword(driver); //TODO Check account lockout
+        incorrectPassword(driver);
         change(driver, userData);
     }
 

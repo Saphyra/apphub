@@ -48,7 +48,7 @@ public class ScheduledUserDeletionTest extends SeleniumTest {
 
         emptyDate(adminDriver);
         emptyPassword(adminDriver);
-        incorrectPassword(adminDriver); //TODO check account locked
+        incorrectPassword(adminDriver);
         scheduleDeletion(adminDriver, adminUserData);
         deleteSchedule(adminDriver);
     }

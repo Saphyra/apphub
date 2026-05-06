@@ -41,7 +41,7 @@ public class AddRoleTest extends BackEndTest {
         blankRole(accessToken);
         nullPassword(accessToken, userId);
         userNotFound(accessToken, userData);
-        incorrectPassword(accessToken, userId); //TODO test lockout
+        incorrectPassword(accessToken, userId);
         roleAlreadyExists(accessToken, userData, userId);
         addRole(accessToken, userData, userId);
     }

@@ -24,7 +24,7 @@ public class ChangeEmailTest extends BackEndTest {
         nullEmail(userData1, accessToken1);
         invalidEmail(userData1, accessToken1);
         nullPassword(accessToken1);
-        incorrectPassword(accessToken1); //TODO check lockout
+        incorrectPassword(accessToken1);
         emailAlreadyExists(userData1, accessToken1);
         successfulChange(userData1, accessToken1);
     }

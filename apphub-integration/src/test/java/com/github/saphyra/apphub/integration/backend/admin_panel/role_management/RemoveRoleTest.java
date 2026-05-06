@@ -39,7 +39,7 @@ public class RemoveRoleTest extends BackEndTest {
         nullPassword(accessToken, userId);
         userNotFound(accessToken, userData);
         roleNotFound(accessToken, userData, userId);
-        incorrectPassword(accessToken, userId); //TODO test lockout
+        incorrectPassword(accessToken, userId);
         removeRole(accessToken, userData, userId);
     }
 

@@ -27,7 +27,7 @@ public class ChangeUsernameTest extends BackEndTest {
         tooLongUsername(userData1, accessToken);
         usernameAlreadyExists(userData1, accessToken);
         nullPassword(accessToken);
-        incorrectPassword(accessToken); //TODO test lockout
+        incorrectPassword(accessToken);
         successfulChange(userData1, accessToken);
     }
 

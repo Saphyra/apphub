@@ -28,7 +28,7 @@ public class ChangePasswordTest extends BackEndTest {
         tooLongPassword(userData, accessToken);
         nullPassword(accessToken);
         nullDeactivateAllSessions(accessToken, userData);
-        incorrectPassword(accessToken); //TODO test lockout
+        incorrectPassword(accessToken);
         successfulPasswordChange(userData, accessToken);
     }
 
