@@ -63,6 +63,6 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     public void cleanupOrphanedRecords() {
         log.info("cleanupOrphanedRecords event arrived");
 
-        executorServiceBean.execute(orphanedRecordCleanerScheduler::cleanup);
+        //executorServiceBean.execute(orphanedRecordCleanerScheduler::cleanup);
     }
 }
