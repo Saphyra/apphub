@@ -55,12 +55,6 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-request_validation</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-feature-skyxplore-lobby-client</artifactId>
             <version>${project.version}</version>
         </dependency>

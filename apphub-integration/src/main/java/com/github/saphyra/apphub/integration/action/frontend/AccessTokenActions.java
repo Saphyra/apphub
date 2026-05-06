@@ -9,6 +9,6 @@ public class AccessTokenActions {
         driver.navigate()
             .to(UrlFactory.create(serverPort, "/invalidate-access-token/web"));
 
-        SleepUtil.sleep(500);
+        SleepUtil.sleep(2000);
     }
 }

@@ -41,7 +41,7 @@ public class CommonUtils {
     public static void verifyMissingRole(int serverPort, WebDriver driver, String page) {
         driver.navigate().to(UrlFactory.create(serverPort, page));
 
-        verifyMissingRole(serverPort, driver.getCurrentUrl());
+        AwaitilityWrapper.awaitAssert(() -> verifyMissingRole(serverPort, driver.getCurrentUrl()));
     }
 
     public static void verifyMissingRole(int serverPort, String uri) {

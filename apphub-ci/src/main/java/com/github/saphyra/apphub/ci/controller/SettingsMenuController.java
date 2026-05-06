@@ -76,6 +76,6 @@ class SettingsMenuController {
 
         propertyDao.save(PropertyName.AUTHORIZATION_CERTIFICATE, certStore);
 
-        return "redirect:/settings?success=test_authorization_certificate_recreated";
+        return "redirect:/settings?success=production_authorization_certificate_recreated";
     }
 }
