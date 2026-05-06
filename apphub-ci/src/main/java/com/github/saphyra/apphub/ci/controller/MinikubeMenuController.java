@@ -72,14 +72,14 @@ class MinikubeMenuController {
     String startVm() {
         taskQueue.add(minikubeStartProcess::startMinikube);
 
-        return "redirect:/minikube?successs=minikube_is_starting";
+        return "redirect:/minikube?success=minikube_is_starting";
     }
 
     @GetMapping("/deploy")
     String deploy() {
         taskQueue.add(minikubeLocalDeployProcess::deploy);
 
-        return "redirect:/minikube?successs=deployment_started";
+        return "redirect:/minikube?success=deployment_started";
     }
 
     @PostMapping("/deploy-services")

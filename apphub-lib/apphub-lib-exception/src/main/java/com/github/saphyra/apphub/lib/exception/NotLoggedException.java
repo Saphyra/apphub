@@ -18,4 +18,8 @@ public class NotLoggedException extends RestException {
     public NotLoggedException(HttpStatus status, ErrorCode errorCode, Map<String, String> params, String message, Exception cause) {
         super(status, errorCode, params, message, cause);
     }
+
+    public NotLoggedException(HttpStatus httpStatus, ErrorCode errorCode, String logMessage, Throwable cause) {
+        super(httpStatus, errorCode, logMessage, cause);
+    }
 }

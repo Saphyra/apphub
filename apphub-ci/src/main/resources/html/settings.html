@@ -33,7 +33,7 @@
                 </li>
             </ul>
 
-            <input type="submit" value="Save" />
+            <input type="submit" value="Save"/>
         </form>
     </fieldset>
 
@@ -43,6 +43,30 @@
         <ul th:each="environment: ${environments}">
             <li><a th:href="@{|/settings/s3/${environment}|}" th:text="${environment}"></a></li>
         </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>AWS DynamoDB</legend>
+
+        <ul th:each="environment: ${environments}">
+            <li><a th:href="@{|/settings/dynamo-db/${environment}|}" th:text="${environment}"></a></li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>Authorization certificate</legend>
+
+        <a href="/settings/authorization/certificate/test">Recreate TEST certificate</a>
+        <fieldset>
+            <form action="/settings/authorization/certificate/production" method="GET">
+                <label>
+                    <input type="checkbox" required>
+                    I understand that recreating production certificate logs all users out
+                </label>
+                <input type="submit" value="Recreate PRODUCTION certificate"/>
+        </fieldset>
+        </form>
     </fieldset>
 </div>
 </body>

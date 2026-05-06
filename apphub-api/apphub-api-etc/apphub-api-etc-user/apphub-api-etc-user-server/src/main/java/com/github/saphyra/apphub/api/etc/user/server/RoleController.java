@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.etc.user.server;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.etc.user.model.role.UserRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -31,25 +31,25 @@ public interface RoleController {
      * Adding a specific role to the given user
      */
     @PutMapping(UserEndpoints.USER_DATA_ADD_ROLE)
-    UserRoleResponse addRole(@RequestBody RoleRequest roleRequest, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    UserRoleResponse addRole(@RequestBody RoleRequest roleRequest, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Removing a specific role to the given user
      */
     @DeleteMapping(UserEndpoints.USER_DATA_REMOVE_ROLE)
-    UserRoleResponse removeRole(@RequestBody RoleRequest roleRequest, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    UserRoleResponse removeRole(@RequestBody RoleRequest roleRequest, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Adding a specific role to all the existing users, after checking the password of the admin
      */
     @PostMapping(UserEndpoints.USER_DATA_ADD_ROLE_TO_ALL)
-    void addToAll(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void addToAll(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Removing a specific role to all the existing users, after checking the password of the admin
      */
     @DeleteMapping(UserEndpoints.USER_DATA_REMOVE_ROLE_FROM_ALL)
-    void removeFromAll(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void removeFromAll(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * For security reasons some roles cannot be added to all of the users by one click.
@@ -58,5 +58,5 @@ public interface RoleController {
     List<String> getRolesForAllRestrictedRoles();
 
     @GetMapping(UserEndpoints.IS_ADMIN)
-    OneParamResponse<Boolean> isUserAdmin(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<Boolean> isUserAdmin(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

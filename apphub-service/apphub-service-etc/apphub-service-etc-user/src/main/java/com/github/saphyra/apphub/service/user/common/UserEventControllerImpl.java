@@ -66,6 +66,6 @@ class UserEventControllerImpl implements UserEventController {
             .build()
             .blockingRequest(false);
 
-        eventGatewayClient.sendEvent(event, localeProvider.getLocaleValidated());
+        eventGatewayClient.sendEvent(event, localeProvider.getOrDefault());
     }
 }

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.proxy;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.jupiter.api.Test;
@@ -34,15 +34,15 @@ public class CharacterProxyTest {
     private CharacterProxy underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private SkyXploreCharacterModel model;
 
     @Test
     public void getCharacter() {
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(model);
 

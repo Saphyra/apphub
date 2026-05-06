@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./expired_events_page_localization.json";
 import "./expired_events.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { cacheAndUpdate, cachedOrDefault, hasValue } from "common/js/Utils";
@@ -27,7 +26,6 @@ const ExpiredEventsPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(0);

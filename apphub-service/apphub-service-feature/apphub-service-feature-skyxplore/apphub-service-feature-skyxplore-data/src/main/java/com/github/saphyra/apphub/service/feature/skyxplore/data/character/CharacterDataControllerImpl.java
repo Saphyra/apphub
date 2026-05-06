@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.character;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.data.server.SkyXploreCharacterDataController;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.character.service.creation.CharacterCreationService;
@@ -24,16 +24,16 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     private final SkyXploreCharacterModelConverter characterModelConverter;
 
     @Override
-    public OneParamResponse<String> getCharacterName(AccessTokenHeader accessTokenHeader) {
-        String result = characterDao.findByIdValidated(accessTokenHeader.getUserId())
+    public OneParamResponse<String> getCharacterName(AccessToken accessToken) {
+        String result = characterDao.findByIdValidated(accessToken.getUserId())
             .getName();
         return new OneParamResponse<>(result);
     }
 
     @Override
-    public void createOrUpdateCharacter(SkyXploreCharacterModel character, AccessTokenHeader accessTokenHeader) {
-        log.info("Creating or updating SkyXplore character for user {}", accessTokenHeader.getUserId());
-        characterCreationService.create(accessTokenHeader.getUserId(), character);
+    public void createOrUpdateCharacter(SkyXploreCharacterModel character, AccessToken accessToken) {
+        log.info("Creating or updating SkyXplore character for user {}", accessToken.getUserId());
+        characterCreationService.create(accessToken.getUserId(), character);
     }
 
     @Override
@@ -45,8 +45,8 @@ public class CharacterDataControllerImpl implements SkyXploreCharacterDataContro
     }
 
     @Override
-    public OneParamResponse<Boolean> exists(AccessTokenHeader accessTokenHeader) {
-        log.info("Checking if character exists for user {}", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(characterDao.exists(accessTokenHeader.getUserId()));
+    public OneParamResponse<Boolean> exists(AccessToken accessToken) {
+        log.info("Checking if character exists for user {}", accessToken.getUserId());
+        return new OneParamResponse<>(characterDao.exists(accessToken.getUserId()));
     }
 }

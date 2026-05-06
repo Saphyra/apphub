@@ -17,6 +17,7 @@ public enum PropertyName {
     LATEST_SERVICES,
     LATEST_TEST_GROUPS,
     LOCAL_INTEGRATION_RETRY_COUNT,
+    DYNAMO_DB_LOCAL_DIRECTORY,
 
     //Remote
     REMOTE_DEPLOY_MODE,
@@ -28,4 +29,6 @@ public enum PropertyName {
 
     //Service properties
     S3_CONFIGURATION,
+    DYNAMO_DB_CONFIGURATION,
+    AUTHORIZATION_CERTIFICATE,
 }

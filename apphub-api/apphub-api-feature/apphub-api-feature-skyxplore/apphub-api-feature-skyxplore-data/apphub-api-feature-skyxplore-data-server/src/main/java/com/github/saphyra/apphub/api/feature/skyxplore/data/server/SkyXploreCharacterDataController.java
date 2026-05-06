@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.data.server;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreDataEndpoints;
@@ -16,14 +16,14 @@ import java.util.UUID;
 
 public interface SkyXploreCharacterDataController {
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_GET_CHARACTER_NAME)
-    OneParamResponse<String> getCharacterName(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<String> getCharacterName(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreDataEndpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER)
-    void createOrUpdateCharacter(@RequestBody SkyXploreCharacterModel character, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void createOrUpdateCharacter(@RequestBody SkyXploreCharacterModel character, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID)
     ResponseEntity<SkyXploreCharacterModel> internalGetCharacterByUserId(@PathVariable("userId") UUID userId);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_CHARACTER_EXISTS)
-    OneParamResponse<Boolean> exists(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<Boolean> exists(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

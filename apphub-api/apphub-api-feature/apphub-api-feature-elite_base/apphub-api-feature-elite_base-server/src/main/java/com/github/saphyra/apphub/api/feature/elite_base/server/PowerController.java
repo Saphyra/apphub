@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.feature.elite_base.server;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface PowerController {
     @GetMapping(EliteBaseEndpoints.ELITE_BASE_GET_POWERS)
-    List<String> getPowers(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<String> getPowers(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(EliteBaseEndpoints.ELITE_BASE_GET_POWERPLAY_STATES)
-    List<String> getPowerplayStates(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<String> getPowerplayStates(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

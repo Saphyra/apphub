@@ -61,6 +61,7 @@ public class MinikubeLocalDeployProcess {
 
         minikubeNamespaceSetupTask.setupNamespace(Environment.MINIKUBE, namespaceName);
         minikubeNamespaceSetupTask.deployPostgres(namespaceName);
+        minikubeNamespaceSetupTask.deployDynamoDb(namespaceName);
 
         minikubeServiceDeployer.deploy(namespaceName, "develop", 15);
 

@@ -32,7 +32,7 @@ public class S3SettingsMenuController {
 
         modelAndView.addObject("environment", environment);
 
-        Map<String, String> s3properties = propertyDao.getS3Configuration()
+        Map<String, String> s3properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.S3_CONFIGURATION)
             .getOrDefault(environment, Map.of());
         modelAndView.addObject("enabled", s3properties.get("S3_ENABLED"));
         modelAndView.addObject("access_key_id", s3properties.get("S3_ACCESS_KEY_ID"));
@@ -61,10 +61,19 @@ public class S3SettingsMenuController {
             "S3_BUCKET_NAME", bucketName
         );
 
-        EnvironmentSpecificProperties properties = propertyDao.getS3Configuration();
+        EnvironmentSpecificProperties properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.S3_CONFIGURATION);
         properties.put(environment, s3properties);
         propertyDao.save(PropertyName.S3_CONFIGURATION, properties);
 
         return "redirect:/settings/s3/" + environment.name() + "?success=saved";
+    }
+
+    @GetMapping("/delete")
+    String deleteSettings(@PathVariable("environment") Environment environment) {
+        EnvironmentSpecificProperties properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.S3_CONFIGURATION);
+        properties.remove(environment);
+        propertyDao.save(PropertyName.S3_CONFIGURATION, properties);
+
+        return "redirect:/settings/s3/" + environment.name() + "?success=deleted";
     }
 }

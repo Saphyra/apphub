@@ -31,49 +31,49 @@ public class CreateAndDeleteGameTest extends BackEndTest {
     public void createAndDeleteGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessTokenId1, accessTokenId2, userId2);
+        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
 
-        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessToken1, GAME_NAME);
 
-        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessTokenId1, userId2);
-        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessTokenId2, userId1);
+        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessToken1, userId2);
+        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessToken2, userId1);
 
-        createGame_notHost(accessTokenId2);
-        createGame_lobbyMemberNotReady(accessTokenId1);
-        createGame(accessTokenId1, accessTokenId2);
-        List<SavedGameResponse> savedGames = verifyingSavedGame(accessTokenId1, characterModel2);
-        deleteGame_gameNotFound(accessTokenId1);
-        deleteGame_notHost(accessTokenId2, savedGames);
-        deleteGame(accessTokenId1, savedGames);
+        createGame_notHost(accessToken2);
+        createGame_lobbyMemberNotReady(accessToken1);
+        createGame(accessToken1, accessToken2);
+        List<SavedGameResponse> savedGames = verifyingSavedGame(accessToken1, characterModel2);
+        deleteGame_gameNotFound(accessToken1);
+        deleteGame_notHost(accessToken2, savedGames);
+        deleteGame(accessToken1, savedGames);
     }
 
-    private static void createGame_notHost(UUID accessTokenId2) {
-        Response forbiddenResponse = SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessTokenId2);
+    private static void createGame_notHost(String accessToken2) {
+        Response forbiddenResponse = SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessToken2);
         assertThat(forbiddenResponse.getStatusCode()).isEqualTo(403);
         ErrorResponse forbiddenErrorResponse = forbiddenResponse.getBody().as(ErrorResponse.class);
         assertThat(forbiddenErrorResponse.getErrorCode()).isEqualTo(ErrorCode.FORBIDDEN_OPERATION.name());
     }
 
-    private static void createGame_lobbyMemberNotReady(UUID accessTokenId1) {
-        Response notReadyResponse = SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessTokenId1);
+    private static void createGame_lobbyMemberNotReady(String accessToken1) {
+        Response notReadyResponse = SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessToken1);
         assertThat(notReadyResponse.getStatusCode()).isEqualTo(412);
         ErrorResponse notReadyErrorResponse = notReadyResponse.getBody().as(ErrorResponse.class);
         assertThat(notReadyErrorResponse.getErrorCode()).isEqualTo(ErrorCode.LOBBY_PLAYER_NOT_READY.name());
     }
 
-    private static void createGame(UUID accessTokenId1, UUID accessTokenId2) {
-        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId1, "host");
-        ApphubWsClient memberLobbyWsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId2, "member");
+    private static void createGame(String accessToken1, String accessToken2) {
+        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessToken1, "host");
+        ApphubWsClient memberLobbyWsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessToken2, "member");
 
         WebSocketEvent readyEvent = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_LOBBY_SET_READINESS)
@@ -82,7 +82,7 @@ public class CreateAndDeleteGameTest extends BackEndTest {
         hostLobbyWsClient.send(readyEvent);
         memberLobbyWsClient.send(readyEvent);
 
-        SkyXploreLobbyActions.startGame(getServerPort(), accessTokenId1);
+        SkyXploreLobbyActions.startGame(getServerPort(), accessToken1);
 
         hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED)
             .orElseThrow(() -> new RuntimeException("Lobby creation initiated event did not arrive."));
@@ -91,29 +91,29 @@ public class CreateAndDeleteGameTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("Game not loaded."));
     }
 
-    private static List<SavedGameResponse> verifyingSavedGame(UUID accessTokenId1, SkyXploreCharacterModel characterModel2) {
-        List<SavedGameResponse> savedGames = SkyXploreSavedGameActions.getSavedGames(getServerPort(), accessTokenId1);
+    private static List<SavedGameResponse> verifyingSavedGame(String accessToken1, SkyXploreCharacterModel characterModel2) {
+        List<SavedGameResponse> savedGames = SkyXploreSavedGameActions.getSavedGames(getServerPort(), accessToken1);
         assertThat(savedGames).hasSize(1);
         assertThat(savedGames.get(0).getGameName()).isEqualTo(GAME_NAME);
         assertThat(savedGames.get(0).getPlayers()).isEqualTo(characterModel2.getName());
         return savedGames;
     }
 
-    private static void deleteGame_gameNotFound(UUID accessTokenId1) {
-        Response deleteGame_gameNotFoundResponse = SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessTokenId1, UUID.randomUUID());
+    private static void deleteGame_gameNotFound(String accessToken1) {
+        Response deleteGame_gameNotFoundResponse = SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessToken1, UUID.randomUUID());
         ResponseValidator.verifyErrorResponse(deleteGame_gameNotFoundResponse, 404, ErrorCode.GAME_NOT_FOUND);
     }
 
-    private static void deleteGame_notHost(UUID accessTokenId2, List<SavedGameResponse> savedGames) {
-        Response deleteGame_notHostResponse = SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessTokenId2, savedGames.get(0).getGameId());
+    private static void deleteGame_notHost(String accessToken2, List<SavedGameResponse> savedGames) {
+        Response deleteGame_notHostResponse = SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessToken2, savedGames.get(0).getGameId());
         ResponseValidator.verifyForbiddenOperation(deleteGame_notHostResponse);
     }
 
-    private static void deleteGame(UUID accessTokenId1, List<SavedGameResponse> savedGames) {
-        Response deleteGameResponse = SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessTokenId1, savedGames.get(0).getGameId());
+    private static void deleteGame(String accessToken1, List<SavedGameResponse> savedGames) {
+        Response deleteGameResponse = SkyXploreSavedGameActions.getDeleteGameResponse(getServerPort(), accessToken1, savedGames.get(0).getGameId());
         assertThat(deleteGameResponse.getStatusCode()).isEqualTo(200);
 
-        savedGames = SkyXploreSavedGameActions.getSavedGames(getServerPort(), accessTokenId1);
+        savedGames = SkyXploreSavedGameActions.getSavedGames(getServerPort(), accessToken1);
         assertThat(savedGames).isEmpty();
 
         ApphubWsClient.cleanUpConnections();

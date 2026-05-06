@@ -12,29 +12,29 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreMapActions {
-    public static MapResponse getMap(int serverPort, UUID accessTokenId) {
-        Response response = getMapResponse(serverPort, accessTokenId);
+    public static MapResponse getMap(int serverPort, String accessToken) {
+        Response response = getMapResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(MapResponse.class);
     }
 
-    public static Response getMapResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getMapResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_MAP));
     }
 
-    public static MapSolarSystemResponse getSolarSystem(int serverPort, UUID accessTokenId) {
-        return getMap(serverPort, accessTokenId)
+    public static MapSolarSystemResponse getSolarSystem(int serverPort, String accessToken) {
+        return getMap(serverPort, accessToken)
             .getSolarSystems()
             .stream()
             .findAny()
             .orElseThrow(() -> new RuntimeException("No visible SolarSystem"));
     }
 
-    public static MapSolarSystemResponse getSolarSystem(int serverPort, UUID accessTokenId, UUID solarSystemId) {
-        return getMap(serverPort, accessTokenId)
+    public static MapSolarSystemResponse getSolarSystem(int serverPort, String accessToken, UUID solarSystemId) {
+        return getMap(serverPort, accessToken)
             .getSolarSystems()
             .stream()
             .filter(response -> response.getSolarSystemId().equals(solarSystemId))

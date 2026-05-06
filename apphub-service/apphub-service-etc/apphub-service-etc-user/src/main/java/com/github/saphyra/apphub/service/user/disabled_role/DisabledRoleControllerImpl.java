@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
 import com.github.saphyra.apphub.api.etc.user.server.DisabledRoleController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
@@ -27,13 +27,13 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     private final CheckPasswordService checkPasswordService;
 
     @Override
-    public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to disable role {}", accessTokenHeader.getUserId(), role);
+    public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, String role, AccessToken accessToken) {
+        log.info("{} wants to disable role {}", accessToken.getUserId(), role);
         if (!properties.getRolesCanBeDisabled().contains(role)) {
             throw ExceptionFactory.invalidParam("role", "unknown or cannot be disabled");
         }
 
-        checkPasswordService.checkPassword(accessTokenHeader.getUserId(), password.getValue());
+        checkPasswordService.checkPassword(accessToken.getUserId(), password.getValue());
 
         repository.save(new DisabledRoleEntity(role));
 
@@ -41,13 +41,13 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     }
 
     @Override
-    public List<DisabledRoleResponse> enableRole(OneParamRequest<String> password, String role, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to enable role {}", accessTokenHeader.getUserId(), role);
+    public List<DisabledRoleResponse> enableRole(OneParamRequest<String> password, String role, AccessToken accessToken) {
+        log.info("{} wants to enable role {}", accessToken.getUserId(), role);
         if (isBlank(role)) {
             throw ExceptionFactory.invalidParam("role", "must not be null or blank");
         }
 
-        checkPasswordService.checkPassword(accessTokenHeader.getUserId(), password.getValue());
+        checkPasswordService.checkPassword(accessToken.getUserId(), password.getValue());
 
         if (repository.existsById(role)) {
             repository.deleteById(role);

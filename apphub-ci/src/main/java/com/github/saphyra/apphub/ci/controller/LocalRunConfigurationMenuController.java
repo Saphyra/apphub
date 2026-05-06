@@ -44,10 +44,11 @@ class LocalRunConfigurationMenuController {
             .sorted(Comparator.naturalOrder())
             .toList();
         modelAndView.addObject("services", serviceNames);
-        modelAndView.addObject("integration_test_thread_count", propertyDao.getLocalIntegrationRetryCount());
+        modelAndView.addObject("integration_test_thread_count", propertyDao.getLocalRunTestsThreadCount());
         modelAndView.addObject("pre_create_webdriver_count", propertyDao.getLocalRunPreCreateDriverCount());
         modelAndView.addObject("integration_test_retry_count", propertyDao.getLocalIntegrationRetryCount());
         modelAndView.addObject("service_startup_limit", propertyDao.getLocalStartupCountLimit());
+        modelAndView.addObject("dynamodb_local_directory", propertyDao.getStringProperty(PropertyName.DYNAMO_DB_LOCAL_DIRECTORY));
 
         if (nonNull(success)) {
             modelAndView.addObject("success", success);
@@ -67,6 +68,7 @@ class LocalRunConfigurationMenuController {
         propertyDao.save(PropertyName.LOCAL_RUN_TESTS_PRE_CREATE_DRIVER_COUNT, request.getParameter("pre_create_webdriver_count"));
         propertyDao.save(PropertyName.LOCAL_INTEGRATION_RETRY_COUNT, request.getParameter("integration_test_retry_count"));
         propertyDao.save(PropertyName.LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT, request.getParameter("service_startup_limit"));
+        propertyDao.save(PropertyName.DYNAMO_DB_LOCAL_DIRECTORY, request.getParameter("dynamodb_local_directory"));
         Enumeration<String> parameterNames = request.getParameterNames();
         List<String> enabledServices = new ArrayList<>();
         while (parameterNames.hasMoreElements()) {

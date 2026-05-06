@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.active
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
@@ -39,11 +39,11 @@ public class UserActiveNotificationService {
     }
 
     private List<UUID> getRecipients(UUID userId) {
-        AccessTokenHeader accessTokenHeader = AccessTokenHeader.builder()
+        AccessToken accessToken = AccessToken.builder()
             .userId(userId)
             .roles(Arrays.asList("SKYXPLORE", "ACCESS"))
             .build();
-        return skyXploreDataProxy.getFriends(accessTokenHeader)
+        return skyXploreDataProxy.getFriends(accessToken)
             .stream()
             .map(FriendshipResponse::getFriendId)
             .filter(this::isInLobby)

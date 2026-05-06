@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
@@ -49,7 +49,7 @@ public class ListItemControllerIImplTest {
     private ListItemControllerIImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private EditListItemRequest editListItemRequest;
@@ -59,9 +59,9 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void deleteListItem() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.deleteListItem(LIST_ITEM_ID, accessTokenHeader);
+        underTest.deleteListItem(LIST_ITEM_ID, accessToken);
 
         verify(listItemDeletionService).deleteListItem(LIST_ITEM_ID, USER_ID);
     }
@@ -82,19 +82,19 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void search() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(searchService.search(USER_ID, SEARCH_TEXT)).willReturn(Arrays.asList(notebookView));
 
-        List<NotebookView> result = underTest.search(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader);
+        List<NotebookView> result = underTest.search(new OneParamRequest<>(SEARCH_TEXT), accessToken);
 
         assertThat(result).containsExactly(notebookView);
     }
 
     @Test
     public void archive() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.archive(new OneParamRequest<>(true), LIST_ITEM_ID, accessTokenHeader);
+        underTest.archive(new OneParamRequest<>(true), LIST_ITEM_ID, accessToken);
 
         verify(archiveService).archive(LIST_ITEM_ID, true);
     }

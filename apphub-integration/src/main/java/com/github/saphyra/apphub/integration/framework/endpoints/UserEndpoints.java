@@ -2,8 +2,6 @@ package com.github.saphyra.apphub.integration.framework.endpoints;
 
 public class UserEndpoints {
     //Login Session
-    public static final String LOGIN = "/api/user/authentication/login";
-    public static final String LOGOUT = "/api/user/authentication/logout";
     public static final String CHECK_SESSION = "/api/user/authentication/session";
 
     //Account

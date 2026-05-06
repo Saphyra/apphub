@@ -1,7 +1,7 @@
 import MapStream from "./collection/MapStream";
 import Optional from "./collection/Optional";
 import Constants from "./Constants";
-import { getBrowserLanguage, getCookie, hasValue } from "./Utils";
+import { getBrowserLanguage, hasValue } from "./Utils";
 
 const LocalizationHandler = class {
     constructor(localization) {
@@ -54,7 +54,7 @@ const LocalizationHandler = class {
     }
 
     getLocale() {
-        return getCookie(Constants.COOKIE_LOCALE) || getBrowserLanguage() || Constants.DEFAULT_LOCALE;
+        return localStorage[Constants.STORAGE_KEY_LOCALE] || getBrowserLanguage() || Constants.DEFAULT_LOCALE;
     }
 }
 

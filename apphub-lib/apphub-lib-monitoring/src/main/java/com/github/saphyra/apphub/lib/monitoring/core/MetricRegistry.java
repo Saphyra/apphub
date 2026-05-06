@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -44,7 +45,8 @@ public class MetricRegistry {
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
             .withNano(0);
 
-        Map<LocalDateTime, List<PutMetricsRequest>> result = registry.stream()
+        Map<LocalDateTime, List<PutMetricsRequest>> result = new ArrayList<>(registry)
+            .stream()
             .filter(metric -> metric.getTimestamp().isBefore(timestamp)) //Send metrics created before the current second
             .collect(Collectors.groupingBy(PutMetricsRequest::getTimestamp));
 

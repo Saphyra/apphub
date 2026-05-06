@@ -33,61 +33,61 @@ public class RenameSolarSystemAndPlanetTest extends BackEndTest {
     public void renameSolarSystemAndPlanet() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId1, userId1))
-            .get(accessTokenId1);
+        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1))
+            .get(accessToken1);
 
-        MapSolarSystemResponse solarSystemResponse = solarSystem_blank(accessTokenId1);
-        solarSystem_tooLong(accessTokenId1, solarSystemResponse);
-        solarSystem_rename(accessTokenId1, solarSystemResponse);
-        PlanetLocationResponse planetLocationResponse = planet_blank(accessTokenId1);
-        planet_tooLong(accessTokenId1, planetLocationResponse);
-        planet_rename(accessTokenId1, solarSystemResponse, planetLocationResponse);
+        MapSolarSystemResponse solarSystemResponse = solarSystem_blank(accessToken1);
+        solarSystem_tooLong(accessToken1, solarSystemResponse);
+        solarSystem_rename(accessToken1, solarSystemResponse);
+        PlanetLocationResponse planetLocationResponse = planet_blank(accessToken1);
+        planet_tooLong(accessToken1, planetLocationResponse);
+        planet_rename(accessToken1, solarSystemResponse, planetLocationResponse);
     }
 
-    private static MapSolarSystemResponse solarSystem_blank(UUID accessTokenId1) {
-        MapSolarSystemResponse solarSystemResponse = SkyXploreMapActions.getSolarSystem(getServerPort(), accessTokenId1);
+    private static MapSolarSystemResponse solarSystem_blank(String accessToken1) {
+        MapSolarSystemResponse solarSystemResponse = SkyXploreMapActions.getSolarSystem(getServerPort(), accessToken1);
 
-        Response solarSystem_blankResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessTokenId1, solarSystemResponse.getSolarSystemId(), " ");
+        Response solarSystem_blankResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId(), " ");
 
         ResponseValidator.verifyInvalidParam(solarSystem_blankResponse, "newName", "must not be null or blank");
         return solarSystemResponse;
     }
 
-    private static void solarSystem_tooLong(UUID accessTokenId1, MapSolarSystemResponse solarSystemResponse) {
-        Response solarSystem_tooLongResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessTokenId1, solarSystemResponse.getSolarSystemId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+    private static void solarSystem_tooLong(String accessToken1, MapSolarSystemResponse solarSystemResponse) {
+        Response solarSystem_tooLongResponse = SkyXploreSolarSystemActions.getRenameSolarSystemResponse(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         ResponseValidator.verifyInvalidParam(solarSystem_tooLongResponse, "newName", "too long");
     }
 
-    private static void solarSystem_rename(UUID accessTokenId1, MapSolarSystemResponse solarSystemResponse) {
-        SkyXploreSolarSystemActions.renameSolarSystem(getServerPort(), accessTokenId1, solarSystemResponse.getSolarSystemId(), NEW_SOLAR_SYSTEM_NAME);
+    private static void solarSystem_rename(String accessToken1, MapSolarSystemResponse solarSystemResponse) {
+        SkyXploreSolarSystemActions.renameSolarSystem(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId(), NEW_SOLAR_SYSTEM_NAME);
 
-        assertThat(SkyXploreMapActions.getSolarSystem(getServerPort(), accessTokenId1, solarSystemResponse.getSolarSystemId()).getSolarSystemName()).isEqualTo(NEW_SOLAR_SYSTEM_NAME);
+        assertThat(SkyXploreMapActions.getSolarSystem(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId()).getSolarSystemName()).isEqualTo(NEW_SOLAR_SYSTEM_NAME);
     }
 
-    private static PlanetLocationResponse planet_blank(UUID accessTokenId1) {
-        PlanetLocationResponse planetLocationResponse = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId1);
+    private static PlanetLocationResponse planet_blank(String accessToken1) {
+        PlanetLocationResponse planetLocationResponse = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessToken1);
 
-        Response planet_blankResponse = SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessTokenId1, planetLocationResponse.getPlanetId(), " ");
+        Response planet_blankResponse = SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessToken1, planetLocationResponse.getPlanetId(), " ");
 
         ResponseValidator.verifyInvalidParam(planet_blankResponse, "newName", "must not be null or blank");
         return planetLocationResponse;
     }
 
-    private static void planet_tooLong(UUID accessTokenId1, PlanetLocationResponse planetLocationResponse) {
-        Response planet_tooLongResponse = SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessTokenId1, planetLocationResponse.getPlanetId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+    private static void planet_tooLong(String accessToken1, PlanetLocationResponse planetLocationResponse) {
+        Response planet_tooLongResponse = SkyXplorePlanetActions.getRenamePlanetResponse(getServerPort(), accessToken1, planetLocationResponse.getPlanetId(), Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
 
         ResponseValidator.verifyInvalidParam(planet_tooLongResponse, "newName", "too long");
     }
 
-    private static void planet_rename(UUID accessTokenId1, MapSolarSystemResponse solarSystemResponse, PlanetLocationResponse planetLocationResponse) {
-        SkyXplorePlanetActions.renamePlanet(getServerPort(), accessTokenId1, planetLocationResponse.getPlanetId(), NEW_PLANET_NAME);
+    private static void planet_rename(String accessToken1, MapSolarSystemResponse solarSystemResponse, PlanetLocationResponse planetLocationResponse) {
+        SkyXplorePlanetActions.renamePlanet(getServerPort(), accessToken1, planetLocationResponse.getPlanetId(), NEW_PLANET_NAME);
 
-        assertThat(SkyXploreSolarSystemActions.findPlanet(getServerPort(), accessTokenId1, solarSystemResponse.getSolarSystemId(), planetLocationResponse.getPlanetId()).getPlanetName()).isEqualTo(NEW_PLANET_NAME);
+        assertThat(SkyXploreSolarSystemActions.findPlanet(getServerPort(), accessToken1, solarSystemResponse.getSolarSystemId(), planetLocationResponse.getPlanetId()).getPlanetName()).isEqualTo(NEW_PLANET_NAME);
 
         ApphubWsClient.cleanUpConnections();
     }

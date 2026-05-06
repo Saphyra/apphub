@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./role_management_localization.json";
 import "./role_management.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Header from "common/component/Header";
 import RoleManagementSearch from "./RoleManagementSearch";
@@ -19,7 +18,6 @@ const RoleManagementPage = () => {
     const [query, setQuery] = useState("");
     const [users, setUsers] = useState([]);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     return (

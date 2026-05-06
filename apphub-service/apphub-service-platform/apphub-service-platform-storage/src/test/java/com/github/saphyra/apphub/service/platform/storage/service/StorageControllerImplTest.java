@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,7 +44,7 @@ public class StorageControllerImplTest {
     private StorageControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private MultipartFile multipartFile;
@@ -57,7 +57,7 @@ public class StorageControllerImplTest {
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
@@ -69,7 +69,7 @@ public class StorageControllerImplTest {
 
         given(storeFileService.createFile(USER_ID, FILE_NAME, SIZE)).willReturn(STORED_FILE_ID);
 
-        UUID result = underTest.createFile(request, accessTokenHeader);
+        UUID result = underTest.createFile(request, accessToken);
 
         assertThat(result).isEqualTo(STORED_FILE_ID);
     }
@@ -79,14 +79,14 @@ public class StorageControllerImplTest {
         given(multipartFile.getSize()).willReturn(SIZE);
         given(multipartFile.getInputStream()).willReturn(inputStream);
 
-        underTest.uploadFile(STORED_FILE_ID, multipartFile, accessTokenHeader);
+        underTest.uploadFile(STORED_FILE_ID, multipartFile, accessToken);
 
         verify(storeFileService).uploadFile(USER_ID, STORED_FILE_ID, inputStream, SIZE);
     }
 
     @Test
     public void deleteFile() {
-        underTest.deleteFile(STORED_FILE_ID, accessTokenHeader);
+        underTest.deleteFile(STORED_FILE_ID, accessToken);
 
         verify(deleteFileService).deleteFile(USER_ID, STORED_FILE_ID);
     }
@@ -95,7 +95,7 @@ public class StorageControllerImplTest {
     public void getFileMetadata() {
         given(metadataQueryService.getMetadata(USER_ID, STORED_FILE_ID)).willReturn(storedFileResponse);
 
-        StoredFileResponse result = underTest.getFileMetadata(STORED_FILE_ID, accessTokenHeader);
+        StoredFileResponse result = underTest.getFileMetadata(STORED_FILE_ID, accessToken);
 
         assertThat(result).isEqualTo(storedFileResponse);
     }

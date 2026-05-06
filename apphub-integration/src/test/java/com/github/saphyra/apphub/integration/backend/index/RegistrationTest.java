@@ -24,9 +24,28 @@ public class RegistrationTest extends BackEndTest {
         usernameTooLong();
         passwordTooShort();
         passwordTooLong();
+        language();
         RegistrationRequest existingUserRequest = existingEmail();
         existingUsername(existingUserRequest);
         successfulRegistration();
+    }
+
+    private void language() {
+        RegistrationRequest nullLanguageRequest = RegistrationParameters.validParameters()
+            .toBuilder()
+            .language(null)
+            .build()
+            .toRegistrationRequest();
+        Response nullLanguageResponse = IndexPageActions.getRegistrationResponse(getServerPort(), nullLanguageRequest);
+        verifyInvalidParam(nullLanguageResponse, "language", "must not be null");;
+
+        RegistrationRequest unsupportedLanguageRequest = RegistrationParameters.validParameters()
+            .toBuilder()
+            .language("unsupported")
+            .build()
+            .toRegistrationRequest();
+        Response unsupportedLanguageResponse = IndexPageActions.getRegistrationResponse(getServerPort(), unsupportedLanguageRequest);
+        verifyInvalidParam(unsupportedLanguageResponse, "language", "must be one of [hu, en]");
     }
 
     private static void invalidEmail() {

@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integration.frontend.elite_base;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.endpoints.EliteBaseEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -23,7 +23,7 @@ public class EliteBaseRoleProtectionTest extends SeleniumTest {
         IndexPageActions.registerUser(driver, userData);
 
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
-        SleepUtil.sleep(3000);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, EliteBaseEndpoints.ELITE_BASE_PAGE);
     }

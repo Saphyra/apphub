@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./new_only_title_localization.json";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import Header from "common/component/Header";
@@ -10,7 +9,6 @@ import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_CREATE_ONLY_TITLE, NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
@@ -23,7 +21,6 @@ const NewOnlyTitlePage = () => {
 
     const [listItemTitle, setListItemTitle] = useState("");
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const create = async () => {

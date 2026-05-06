@@ -52,7 +52,7 @@ class BannedDetailsQueryServiceTest {
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban, irrelevantBan));
         given(irrelevantBan.getBannedRole()).willReturn(IRRELEVANT_ROLE);
         given(ban.getBannedRole()).willReturn(REQUIRED_ROLE);
-        given(ban.getPermanent()).willReturn(true);
+        given(ban.isPermanent()).willReturn(true);
 
         assertThat(underTest.getBannedDetails(USER_ID, List.of(REQUIRED_ROLE)))
             .returns(null, BannedDetailsResponse::getBannedUntil)
@@ -64,7 +64,7 @@ class BannedDetailsQueryServiceTest {
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban, ban, irrelevantBan));
         given(irrelevantBan.getBannedRole()).willReturn(IRRELEVANT_ROLE);
         given(ban.getBannedRole()).willReturn(REQUIRED_ROLE);
-        given(ban.getPermanent()).willReturn(false);
+        given(ban.isPermanent()).willReturn(false);
         given(ban.getExpiration())
             .willReturn(EXPIRATION_1)
             .willReturn(EXPIRATION_2);

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.game.server.game.solar_system.planet.surface;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
@@ -21,11 +21,11 @@ public interface SkyXploreSurfaceTerraformationController {
      * @param surfaceId   ID of the surface
      */
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_TERRAFORM_SURFACE)
-    void terraformSurface(@RequestBody OneParamRequest<String> surfaceType, @PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void terraformSurface(@RequestBody OneParamRequest<String> surfaceType, @PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Cancelling terraformation of the given surface
      */
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_CANCEL_TERRAFORMATION)
-    void cancelTerraformation(@PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void cancelTerraformation(@PathVariable("planetId") UUID planetId, @PathVariable("surfaceId") UUID surfaceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

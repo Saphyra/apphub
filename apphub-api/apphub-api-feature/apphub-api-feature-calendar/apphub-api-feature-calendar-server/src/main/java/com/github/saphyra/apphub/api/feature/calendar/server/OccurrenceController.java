@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.feature.calendar.server;
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -23,13 +23,13 @@ import java.util.UUID;
 
 public interface OccurrenceController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_OCCURRENCE)
-    OneParamResponse<UUID> createOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE)
-    void editOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_OCCURRENCE)
-    void deleteOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Returns all occurrences between startDate and endDate (inclusive). Filters for events with the given label if labelId is specified.
@@ -40,21 +40,21 @@ public interface OccurrenceController {
         @RequestParam("startDate") LocalDate startDate,
         @RequestParam("endDate") LocalDate endDate,
         @RequestParam(name = "labelId", required = false) UUID labelId,
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCE)
-    OccurrenceResponse getOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OccurrenceResponse getOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Returns all occurrences of the given event. Response does not contain reminders of occurrences.
      */
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OCCURRENCES_OF_EVENT)
-    List<OccurrenceResponse> getOccurrencesOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<OccurrenceResponse> getOccurrencesOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE_STATUS)
-    OccurrenceResponse editOccurrenceStatus(@RequestBody OneParamRequest<OccurrenceStatus> status, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OccurrenceResponse editOccurrenceStatus(@RequestBody OneParamRequest<OccurrenceStatus> status, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_OCCURRENCE_REMINDED)
-    OccurrenceResponse setReminded(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OccurrenceResponse setReminded(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

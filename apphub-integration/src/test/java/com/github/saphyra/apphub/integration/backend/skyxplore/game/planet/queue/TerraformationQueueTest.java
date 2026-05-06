@@ -31,30 +31,30 @@ public class TerraformationQueueTest extends BackEndTest {
     public void terraformationQueueCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessToken)
             .getPlanetId();
 
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SkyXploreSurfaceActions.terraform(getServerPort(), accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_LAKE);
+        SkyXploreSurfaceActions.terraform(getServerPort(), accessToken, planetId, surfaceId, Constants.SURFACE_TYPE_LAKE);
 
-        QueueResponse queueResponse = getQueueResponse(accessTokenId, planetId);
-        updatePriority_invalidType(accessTokenId, planetId, queueResponse);
-        updatePriority_priorityTooLow(accessTokenId, planetId, queueResponse);
-        updatePriority_priorityTooHigh(accessTokenId, planetId, queueResponse);
-        queueResponse = updatePriority(accessTokenId, planetId, queueResponse);
-        cancelConstruction_invalidType(accessTokenId, planetId, queueResponse);
-        cancelConstruction(accessTokenId, planetId, queueResponse, surfaceId);
+        QueueResponse queueResponse = getQueueResponse(accessToken, planetId);
+        updatePriority_invalidType(accessToken, planetId, queueResponse);
+        updatePriority_priorityTooLow(accessToken, planetId, queueResponse);
+        updatePriority_priorityTooHigh(accessToken, planetId, queueResponse);
+        queueResponse = updatePriority(accessToken, planetId, queueResponse);
+        cancelConstruction_invalidType(accessToken, planetId, queueResponse);
+        cancelConstruction(accessToken, planetId, queueResponse, surfaceId);
     }
 
-    private static QueueResponse getQueueResponse(UUID accessTokenId, UUID planetId) {
-        List<QueueResponse> queue = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId)
+    private static QueueResponse getQueueResponse(String accessToken, UUID planetId) {
+        List<QueueResponse> queue = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessToken, planetId)
             .getQueue();
 
         assertThat(queue).hasSize(1);
@@ -66,28 +66,28 @@ public class TerraformationQueueTest extends BackEndTest {
         return queueResponse;
     }
 
-    private static void updatePriority_invalidType(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, planetId, "asd", queueResponse.getItemId(), 4);
+    private static void updatePriority_invalidType(String accessToken, UUID planetId, QueueResponse queueResponse) {
+        Response setPriority_invalidTypeResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, planetId, "asd", queueResponse.getItemId(), 4);
 
         ResponseValidator.verifyInvalidParam(setPriority_invalidTypeResponse, "type", "invalid value");
     }
 
-    private static void updatePriority_priorityTooLow(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
+    private static void updatePriority_priorityTooLow(String accessToken, UUID planetId, QueueResponse queueResponse) {
+        Response setPriority_priorityTooLowResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, planetId, queueResponse.getType(), queueResponse.getItemId(), 0);
 
         ResponseValidator.verifyInvalidParam(setPriority_priorityTooLowResponse, "priority", "too low");
     }
 
-    private static void updatePriority_priorityTooHigh(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
+    private static void updatePriority_priorityTooHigh(String accessToken, UUID planetId, QueueResponse queueResponse) {
+        Response setPriority_priorityTooHighResponse = SkyXplorePlanetQueueActions.getSetPriorityResponse(getServerPort(), accessToken, planetId, queueResponse.getType(), queueResponse.getItemId(), 11);
 
         ResponseValidator.verifyInvalidParam(setPriority_priorityTooHighResponse, "priority", "too high");
     }
 
-    private QueueResponse updatePriority(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        SkyXplorePlanetQueueActions.setPriority(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
+    private QueueResponse updatePriority(String accessToken, UUID planetId, QueueResponse queueResponse) {
+        SkyXplorePlanetQueueActions.setPriority(getServerPort(), accessToken, planetId, queueResponse.getType(), queueResponse.getItemId(), 7);
 
-        queueResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId)
+        queueResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessToken, planetId)
             .getQueue()
             .get(0);
 
@@ -96,16 +96,16 @@ public class TerraformationQueueTest extends BackEndTest {
         return queueResponse;
     }
 
-    private static void cancelConstruction_invalidType(UUID accessTokenId, UUID planetId, QueueResponse queueResponse) {
-        Response cancelConstruction_invalidTypeResponse = SkyXplorePlanetQueueActions.getCancelItemResponse(getServerPort(), accessTokenId, planetId, "asd", queueResponse.getItemId());
+    private static void cancelConstruction_invalidType(String accessToken, UUID planetId, QueueResponse queueResponse) {
+        Response cancelConstruction_invalidTypeResponse = SkyXplorePlanetQueueActions.getCancelItemResponse(getServerPort(), accessToken, planetId, "asd", queueResponse.getItemId());
 
         ResponseValidator.verifyInvalidParam(cancelConstruction_invalidTypeResponse, "type", "invalid value");
     }
 
-    private static void cancelConstruction(UUID accessTokenId, UUID planetId, QueueResponse queueResponse, UUID surfaceId) {
-        SkyXplorePlanetQueueActions.cancelItem(getServerPort(), accessTokenId, planetId, queueResponse.getType(), queueResponse.getItemId());
+    private static void cancelConstruction(String accessToken, UUID planetId, QueueResponse queueResponse, UUID surfaceId) {
+        SkyXplorePlanetQueueActions.cancelItem(getServerPort(), accessToken, planetId, queueResponse.getType(), queueResponse.getItemId());
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessToken, planetId);
 
         assertThat(planetOverviewResponse.getQueue()).isEmpty();
         assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), surfaceId).orElseThrow(() -> new RuntimeException("Surface not found")).getTerraformation()).isNull();

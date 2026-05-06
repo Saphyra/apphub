@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
@@ -42,13 +42,13 @@ public class DisabledRoleControllerImplTest {
     private DisabledRoleControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void disableRole_unknownRole() {
         given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
 
-        Throwable ex = catchThrowable(() -> underTest.disableRole(new OneParamRequest<>(PASSWORD), "asd", accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.disableRole(new OneParamRequest<>(PASSWORD), "asd", accessToken));
 
         verifyException(ex, "unknown or cannot be disabled");
     }
@@ -57,10 +57,10 @@ public class DisabledRoleControllerImplTest {
     @Test
     public void disableRole() {
         given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
 
-        List<DisabledRoleResponse> result = underTest.disableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
+        List<DisabledRoleResponse> result = underTest.disableRole(new OneParamRequest<>(PASSWORD), ROLE, accessToken);
 
         verify(repository).save(new DisabledRoleEntity(ROLE));
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
@@ -69,19 +69,19 @@ public class DisabledRoleControllerImplTest {
 
     @Test
     public void enableRole_blank() {
-        Throwable ex = catchThrowable(() -> underTest.enableRole(new OneParamRequest<>(PASSWORD), " ", accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.enableRole(new OneParamRequest<>(PASSWORD), " ", accessToken));
 
         verifyException(ex, "must not be null or blank");
     }
 
     @Test
     public void enableRole() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(repository.existsById(ROLE)).willReturn(true);
         given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
         given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
 
-        List<DisabledRoleResponse> result = underTest.enableRole(new OneParamRequest<>(PASSWORD), ROLE, accessTokenHeader);
+        List<DisabledRoleResponse> result = underTest.enableRole(new OneParamRequest<>(PASSWORD), ROLE, accessToken);
 
         verify(repository).deleteById(ROLE);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.storage_setting;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.StorageSettingApiModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.storage_setting.query.StorageSettingsResponseQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,21 +38,21 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     private SkyXplorePlanetStorageSettingControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private StorageSettingApiModel storageSettingModel;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getStorageSettings() {
         given(storageSettingsResponseQueryService.getStorageSettings(USER_ID, PLANET_ID)).willReturn(List.of(storageSettingModel));
 
-        List<StorageSettingApiModel> result = underTest.getStorageSettings(PLANET_ID, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.getStorageSettings(PLANET_ID, accessToken);
 
         assertThat(result).containsExactly(storageSettingModel);
     }
@@ -61,7 +61,7 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     public void createStorageSetting() {
         given(storageSettingCreationService.createStorageSetting(USER_ID, PLANET_ID, storageSettingModel)).willReturn(List.of(storageSettingModel));
 
-        List<StorageSettingApiModel> result = underTest.createStorageSetting(storageSettingModel, PLANET_ID, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.createStorageSetting(storageSettingModel, PLANET_ID, accessToken);
 
         assertThat(result).containsExactly(storageSettingModel);
     }
@@ -70,7 +70,7 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     public void deleteStorageSetting() {
         given(storageSettingDeletionService.deleteStorageSetting(USER_ID, STORAGE_SETTING_ID)).willReturn(List.of(storageSettingModel));
 
-        List<StorageSettingApiModel> result = underTest.deleteStorageSetting(STORAGE_SETTING_ID, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.deleteStorageSetting(STORAGE_SETTING_ID, accessToken);
 
         assertThat(result).containsExactly(storageSettingModel);
     }
@@ -79,7 +79,7 @@ public class SkyXplorePlanetStorageSettingControllerImplTest {
     public void editStorageSetting() {
         given(storageSettingEditionService.edit(USER_ID, storageSettingModel)).willReturn(List.of(storageSettingModel));
 
-        List<StorageSettingApiModel> result = underTest.editStorageSetting(storageSettingModel, accessTokenHeader);
+        List<StorageSettingApiModel> result = underTest.editStorageSetting(storageSettingModel, accessToken);
 
         assertThat(result).containsExactly(storageSettingModel);
     }

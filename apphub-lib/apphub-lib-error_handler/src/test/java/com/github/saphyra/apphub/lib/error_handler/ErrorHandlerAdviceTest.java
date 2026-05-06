@@ -3,11 +3,9 @@ package com.github.saphyra.apphub.lib.error_handler;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.lib.exception.LoggedException;
 import com.github.saphyra.apphub.lib.exception.NotLoggedException;
 import com.github.saphyra.apphub.lib.exception.ReportedException;
 import feign.FeignException;
@@ -19,11 +17,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -32,7 +29,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class ErrorHandlerAdviceTest {
     private static final String CONTENT = "content";
-    private static final String HEADER_VALUE = "header-value";
 
     @Mock
     private ErrorResponseFactory errorResponseFactory;
@@ -63,13 +59,12 @@ public class ErrorHandlerAdviceTest {
         given(feignException.contentUTF8()).willReturn(CONTENT);
         given(feignException.status()).willReturn(400);
         given(feignException.request()).willReturn(request);
-        given(feignException.responseHeaders()).willReturn(CollectionUtils.singleValueMap("content-type", Arrays.asList(HEADER_VALUE)));
 
         ResponseEntity<?> result = underTest.feignException(feignException);
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(result.getBody()).isEqualTo(CONTENT);
-        assertThat(result.getHeaders()).containsEntry("content-type", List.of(HEADER_VALUE));
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -82,6 +77,7 @@ public class ErrorHandlerAdviceTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
         assertThat(result.getBody()).isEqualTo(errorResponse);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -90,10 +86,11 @@ public class ErrorHandlerAdviceTest {
         given(errorResponseWrapper.getStatus()).willReturn(HttpStatus.BAD_GATEWAY);
         given(errorResponseFactory.create(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, new HashMap<>())).willReturn(errorResponseWrapper);
 
-        ResponseEntity<ErrorResponse> result = underTest.loggedException((LoggedException) ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "message"));
+        ResponseEntity<ErrorResponse> result = underTest.loggedException(ExceptionFactory.loggedException(HttpStatus.NOT_FOUND, ErrorCode.GENERAL_ERROR, "message"));
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
         assertThat(result.getBody()).isEqualTo(errorResponse);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -108,6 +105,7 @@ public class ErrorHandlerAdviceTest {
         verify(errorReporterService).report(HttpStatus.BAD_GATEWAY, errorResponse, exception);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_GATEWAY);
         assertThat(result.getBody()).isEqualTo(errorResponse);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 
     @Test
@@ -121,5 +119,6 @@ public class ErrorHandlerAdviceTest {
         verify(errorReporterService).report(HttpStatus.INTERNAL_SERVER_ERROR, errorResponse, exception);
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
         assertThat(result.getBody()).isEqualTo(errorResponse);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
     }
 }

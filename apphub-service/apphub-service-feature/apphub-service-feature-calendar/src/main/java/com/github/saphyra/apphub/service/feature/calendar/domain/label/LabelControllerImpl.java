@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.api.feature.calendar.server.LabelController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
@@ -22,11 +22,11 @@ class LabelControllerImpl implements LabelController {
     private final LabelService labelService;
 
     @Override
-    public OneParamResponse<UUID> createLabel(OneParamRequest<String> label, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a new label.", accessTokenHeader.getUserId());
+    public OneParamResponse<UUID> createLabel(OneParamRequest<String> label, AccessToken accessToken) {
+        log.info("{} wants to create a new label.", accessToken.getUserId());
         log.debug(label.toString());
 
-        UUID labelId = labelService.createLabel(accessTokenHeader.getUserId(), label.getValue());
+        UUID labelId = labelService.createLabel(accessToken.getUserId(), label.getValue());
         OneParamResponse<UUID> response = new OneParamResponse<>(labelId);
         log.debug("Response: {}", response);
 
@@ -34,18 +34,18 @@ class LabelControllerImpl implements LabelController {
     }
 
     @Override
-    public List<LabelResponse> getLabels(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to get labels.", accessTokenHeader.getUserId());
+    public List<LabelResponse> getLabels(AccessToken accessToken) {
+        log.info("{} wants to get labels.", accessToken.getUserId());
 
-        List<LabelResponse> response = labelQueryService.getByUserId(accessTokenHeader.getUserId());
+        List<LabelResponse> response = labelQueryService.getByUserId(accessToken.getUserId());
         log.debug("Response: {}", response);
 
         return response;
     }
 
     @Override
-    public LabelResponse getLabel(UUID labelId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to get label {}.", accessTokenHeader.getUserId(), labelId);
+    public LabelResponse getLabel(UUID labelId, AccessToken accessToken) {
+        log.info("{} wants to get label {}.", accessToken.getUserId(), labelId);
 
         LabelResponse response = labelQueryService.getLabel(labelId);
         log.debug("Response: {}", response);
@@ -54,27 +54,27 @@ class LabelControllerImpl implements LabelController {
     }
 
     @Override
-    public List<LabelResponse> deleteLabel(UUID labelId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete label {}.", accessTokenHeader.getUserId(), labelId);
+    public List<LabelResponse> deleteLabel(UUID labelId, AccessToken accessToken) {
+        log.info("{} wants to delete label {}.", accessToken.getUserId(), labelId);
 
-        labelService.deleteLabel(accessTokenHeader.getUserId(), labelId);
+        labelService.deleteLabel(accessToken.getUserId(), labelId);
 
-        return getLabels(accessTokenHeader);
+        return getLabels(accessToken);
     }
 
     @Override
-    public List<LabelResponse> editLabel(OneParamRequest<String> label, UUID labelId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to edit label {}", accessTokenHeader.getUserId(), labelId);
+    public List<LabelResponse> editLabel(OneParamRequest<String> label, UUID labelId, AccessToken accessToken) {
+        log.info("{} wants to edit label {}", accessToken.getUserId(), labelId);
         log.debug(label.toString());
 
-        labelService.editLabel(accessTokenHeader.getUserId(), labelId, label.getValue());
+        labelService.editLabel(accessToken.getUserId(), labelId, label.getValue());
 
-        return getLabels(accessTokenHeader);
+        return getLabels(accessToken);
     }
 
     @Override
-    public List<LabelResponse> getLabelsOfEvent(UUID eventId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to get labels of event {}.", accessTokenHeader.getUserId(), eventId);
+    public List<LabelResponse> getLabelsOfEvent(UUID eventId, AccessToken accessToken) {
+        log.info("{} wants to get labels of event {}.", accessToken.getUserId(), eventId);
 
         return labelQueryService.getByEventId(eventId);
     }

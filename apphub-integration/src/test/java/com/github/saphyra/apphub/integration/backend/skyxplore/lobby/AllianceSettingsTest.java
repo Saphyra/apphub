@@ -32,42 +32,42 @@ public class AllianceSettingsTest extends BackEndTest {
     void allianceCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessToken1, GAME_NAME);
 
-        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessTokenId1, accessTokenId2, userId2);
-        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessTokenId1, userId2);
-        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessTokenId2, userId1);
+        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
+        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessToken1, userId2);
+        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessToken2, userId1);
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId1, accessTokenId1);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessToken1, accessToken1);
 
-        setAllianceOfPlayer_notHost(userId1, accessTokenId2);
-        UUID allianceId1 = setAllianceOfPlayer_newAlliance(accessTokenId1, userId1, wsClient);
-        setAllianceOfPlayer_noAlliance(accessTokenId1, userId1, wsClient);
-        setAllianceOfPlayer_existingAlliance(accessTokenId1, userId2, wsClient, allianceId1);
-        UUID aiId = setAllianceOfAi_notHost(accessTokenId1, accessTokenId2, wsClient);
-        setAllianceOfAi_newAlliance(accessTokenId1, wsClient, aiId);
-        setAllianceOfAi_noAlliance(accessTokenId1, wsClient, aiId);
-        setAllianceOfAi_existingAlliance(accessTokenId1, wsClient, allianceId1, aiId);
+        setAllianceOfPlayer_notHost(userId1, accessToken2);
+        UUID allianceId1 = setAllianceOfPlayer_newAlliance(accessToken1, userId1, wsClient);
+        setAllianceOfPlayer_noAlliance(accessToken1, userId1, wsClient);
+        setAllianceOfPlayer_existingAlliance(accessToken1, userId2, wsClient, allianceId1);
+        UUID aiId = setAllianceOfAi_notHost(accessToken1, accessToken2, wsClient);
+        setAllianceOfAi_newAlliance(accessToken1, wsClient, aiId);
+        setAllianceOfAi_noAlliance(accessToken1, wsClient, aiId);
+        setAllianceOfAi_existingAlliance(accessToken1, wsClient, allianceId1, aiId);
     }
 
-    private static void setAllianceOfPlayer_notHost(UUID userId1, UUID accessTokenId2) {
-        Response response = SkyXploreLobbyActions.getChangeAllianceOfPlayerResponse(getServerPort(), accessTokenId2, userId1, Constants.NEW_ALLIANCE_VALUE);
+    private static void setAllianceOfPlayer_notHost(UUID userId1, String accessToken2) {
+        Response response = SkyXploreLobbyActions.getChangeAllianceOfPlayerResponse(getServerPort(), accessToken2, userId1, Constants.NEW_ALLIANCE_VALUE);
 
         ResponseValidator.verifyForbiddenOperation(response);
     }
 
-    private static UUID setAllianceOfPlayer_newAlliance(UUID accessTokenId1, UUID userId1, ApphubWsClient wsClient) {
-        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessTokenId1, userId1, Constants.NEW_ALLIANCE_VALUE);
+    private static UUID setAllianceOfPlayer_newAlliance(String accessToken1, UUID userId1, ApphubWsClient wsClient) {
+        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessToken1, userId1, Constants.NEW_ALLIANCE_VALUE);
 
         AllianceCreatedResponse allianceCreatedResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED)
             .orElseThrow()
@@ -80,8 +80,8 @@ public class AllianceSettingsTest extends BackEndTest {
         return allianceId1;
     }
 
-    private static void setAllianceOfPlayer_noAlliance(UUID accessTokenId1, UUID userId1, ApphubWsClient wsClient) {
-        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessTokenId1, userId1, Constants.NO_ALLIANCE_VALUE);
+    private static void setAllianceOfPlayer_noAlliance(String accessToken1, UUID userId1, ApphubWsClient wsClient) {
+        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessToken1, userId1, Constants.NO_ALLIANCE_VALUE);
 
         LobbyPlayerResponse lobbyPlayerResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
             .orElseThrow()
@@ -90,11 +90,11 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(lobbyPlayerResponse.getAllianceId()).isNull();
     }
 
-    private static void setAllianceOfPlayer_existingAlliance(UUID accessTokenId1, UUID userId2, ApphubWsClient wsClient, UUID allianceId1) {
+    private static void setAllianceOfPlayer_existingAlliance(String accessToken1, UUID userId2, ApphubWsClient wsClient, UUID allianceId1) {
         LobbyPlayerResponse lobbyPlayerResponse;
         wsClient.clearMessages();
 
-        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessTokenId1, userId2, allianceId1);
+        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessToken1, userId2, allianceId1);
 
         lobbyPlayerResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
             .orElseThrow()
@@ -103,23 +103,23 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(lobbyPlayerResponse.getAllianceId()).isEqualTo(allianceId1);
     }
 
-    private static UUID setAllianceOfAi_notHost(UUID accessTokenId1, UUID accessTokenId2, ApphubWsClient wsClient) {
+    private static UUID setAllianceOfAi_notHost(String accessToken1, String accessToken2, ApphubWsClient wsClient) {
         Response response;
-        SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessTokenId1, AiPlayer.builder().name(AI_NAME).build());
+        SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessToken1, AiPlayer.builder().name(AI_NAME).build());
         UUID aiId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
             .orElseThrow()
             .getPayloadAs(AiPlayer.class)
             .getUserId();
 
-        response = SkyXploreLobbyActions.getChangeAllianceOfAiResponse(getServerPort(), accessTokenId2, aiId, Constants.NEW_ALLIANCE_VALUE);
+        response = SkyXploreLobbyActions.getChangeAllianceOfAiResponse(getServerPort(), accessToken2, aiId, Constants.NEW_ALLIANCE_VALUE);
 
         ResponseValidator.verifyForbiddenOperation(response);
         return aiId;
     }
 
-    private static void setAllianceOfAi_newAlliance(UUID accessTokenId1, ApphubWsClient wsClient, UUID aiId) {
+    private static void setAllianceOfAi_newAlliance(String accessToken1, ApphubWsClient wsClient, UUID aiId) {
         AllianceCreatedResponse allianceCreatedResponse;
-        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessTokenId1, aiId, Constants.NEW_ALLIANCE_VALUE);
+        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessToken1, aiId, Constants.NEW_ALLIANCE_VALUE);
 
         allianceCreatedResponse = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED)
             .orElseThrow()
@@ -131,10 +131,10 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(allianceCreatedResponse.getAi().getAllianceId()).isEqualTo(allianceId2);
     }
 
-    private static void setAllianceOfAi_noAlliance(UUID accessTokenId1, ApphubWsClient wsClient, UUID aiId) {
+    private static void setAllianceOfAi_noAlliance(String accessToken1, ApphubWsClient wsClient, UUID aiId) {
         wsClient.clearMessages();
 
-        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessTokenId1, aiId, Constants.NO_ALLIANCE_VALUE);
+        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessToken1, aiId, Constants.NO_ALLIANCE_VALUE);
 
         AiPlayer aiPlayer = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
             .orElseThrow()
@@ -143,11 +143,11 @@ public class AllianceSettingsTest extends BackEndTest {
         assertThat(aiPlayer.getAllianceId()).isNull();
     }
 
-    private static void setAllianceOfAi_existingAlliance(UUID accessTokenId1, ApphubWsClient wsClient, UUID allianceId1, UUID aiId) {
+    private static void setAllianceOfAi_existingAlliance(String accessToken1, ApphubWsClient wsClient, UUID allianceId1, UUID aiId) {
         AiPlayer aiPlayer;
         wsClient.clearMessages();
 
-        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessTokenId1, aiId, allianceId1);
+        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessToken1, aiId, allianceId1);
 
         aiPlayer = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
             .orElseThrow()
@@ -160,22 +160,22 @@ public class AllianceSettingsTest extends BackEndTest {
     void gameDoesNotStartWithOneAlliance() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessToken1, GAME_NAME);
 
-        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId1, accessTokenId1);
+        ApphubWsClient wsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessToken1, accessToken1);
 
-        SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessTokenId1, AiPlayer.builder().name(AI_NAME).build());
+        SkyXploreLobbyActions.createOrModifyAi(getServerPort(), accessToken1, AiPlayer.builder().name(AI_NAME).build());
 
         UUID aiId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_AI_MODIFIED)
             .orElseThrow()
             .getPayloadAs(AiPlayer.class)
             .getUserId();
 
-        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessTokenId1, userId1, Constants.NEW_ALLIANCE_VALUE);
+        SkyXploreLobbyActions.changeAllianceOfPlayer(getServerPort(), accessToken1, userId1, Constants.NEW_ALLIANCE_VALUE);
 
         UUID allianceId = wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_ALLIANCE_CREATED)
             .orElseThrow()
@@ -183,7 +183,7 @@ public class AllianceSettingsTest extends BackEndTest {
             .getAlliance()
             .getAllianceId();
 
-        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessTokenId1, aiId, allianceId);
+        SkyXploreLobbyActions.changeAllianceOfAI(getServerPort(), accessToken1, aiId, allianceId);
 
         wsClient.clearMessages();
 
@@ -197,7 +197,7 @@ public class AllianceSettingsTest extends BackEndTest {
         wsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_PLAYER_MODIFIED)
             .orElseThrow();
 
-        Response response = SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessTokenId1);
+        Response response = SkyXploreLobbyActions.getStartGameResponse(getServerPort(), accessToken1);
 
         ResponseValidator.verifyErrorResponse(response, 412, ErrorCode.NOT_ENOUGH_ALLIANCES);
     }

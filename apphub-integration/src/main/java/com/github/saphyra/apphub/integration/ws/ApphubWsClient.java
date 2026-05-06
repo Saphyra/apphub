@@ -36,16 +36,16 @@ public class ApphubWsClient extends WebSocketClient {
     private volatile boolean opened;
     private final Object name;
 
-    private ApphubWsClient(int serverPort, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
-        this(serverPort, TestConfiguration.DEFAULT_LANGUAGE, endpoint, accessTokenId, name);
+    private ApphubWsClient(int serverPort, String endpoint, String accessToken, Object name) throws URISyntaxException {
+        this(serverPort, TestConfiguration.DEFAULT_LANGUAGE, endpoint, accessToken, name);
     }
 
-    private ApphubWsClient(int serverPort, Language language, String endpoint, UUID accessTokenId, Object name) throws URISyntaxException {
+    private ApphubWsClient(int serverPort, Language language, String endpoint, String accessToken, Object name) throws URISyntaxException {
         super(
             new URI(String.format("ws://localhost:%s%s", serverPort, endpoint)),
             new Draft_6455(),
             CollectionUtils.toMap(
-                new BiWrapper<>("Cookie", Constants.ACCESS_TOKEN_COOKIE + "=" + accessTokenId + "; " + Constants.LOCALE_COOKIE + "=" + language.getLocale()),
+                new BiWrapper<>("Cookie", Constants.ACCESS_TOKEN_COOKIE + "=" + accessToken + "; " + Constants.LOCALE_COOKIE + "=" + language.getLocale()),
                 new BiWrapper<>("Host", "localhost:" + serverPort),
                 new BiWrapper<>("Origin", "http://localhost:" + serverPort)
             ),
@@ -61,33 +61,33 @@ public class ApphubWsClient extends WebSocketClient {
         this.name = name;
     }
 
-    public static ApphubWsClient createSkyXploreMainMenu(int serverPort, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreMainMenu(int serverPort, String accessToken, Object name) {
         try {
-            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessTokenId, name);
+            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_MAIN_MENU, accessToken, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreLobby(int serverPort, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreLobby(int serverPort, String accessToken, Object name) {
         try {
-            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessTokenId, name);
+            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY, accessToken, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ApphubWsClient createSkyXploreGameMain(int serverPort, UUID accessTokenId, Object name) {
+    public static ApphubWsClient createSkyXploreGameMain(int serverPort, String accessToken, Object name) {
         try {
-            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME, accessTokenId, name);
+            return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME, accessToken, name);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }
 
     @SneakyThrows
-    public static ApphubWsClient createSkyXploreLobbyInvitation(int serverPort, UUID accessTokenId, Object name) {
-        return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessTokenId, name);
+    public static ApphubWsClient createSkyXploreLobbyInvitation(int serverPort, String accessToken, Object name) {
+        return new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_LOBBY_INVITATION, accessToken, name);
     }
 
     public static List<WebSocketClient> getClients() {
@@ -95,8 +95,8 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     @SneakyThrows
-    public static ApphubWsClient createSkyXploreGamePlanet(int serverPort, UUID accessTokenId, UUID planetId) {
-        ApphubWsClient client = new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessTokenId, planetId);
+    public static ApphubWsClient createSkyXploreGamePlanet(int serverPort, String accessToken, UUID planetId) {
+        ApphubWsClient client = new ApphubWsClient(serverPort, GenericSkyXploreEndpoints.WS_CONNECTION_SKYXPLORE_GAME_PLANET, accessToken, planetId);
 
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.SKYXPLORE_GAME_PLANET_OPENED)

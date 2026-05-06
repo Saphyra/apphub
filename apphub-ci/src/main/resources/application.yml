@@ -36,6 +36,7 @@ platform:
   minikubeDatabasePort: 9002
   minikubeTestDatabasePort: 5432
   localDatabasePort: 5432
+  localDynamoDbPort: 8000
 
   minikubeDatabaseName: postgres
   localDatabaseName: apphub
@@ -84,7 +85,7 @@ defaults:
   integrationRetryCount: 2
 
 services:
-  #Crutial platform
+  #Crucial platform
   - name: event-gateway
     port: 8081
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-event_gateway/target/application.jar"
@@ -97,6 +98,9 @@ services:
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
     moduleName: apphub-service-platform-main_gateway
     group: 2
+    properties:
+      - AUTHORIZATION_CERTIFICATE
+      - DYNAMO_DB_CONFIGURATION
   - name: web-content
     port: 8083
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"
@@ -123,6 +127,13 @@ services:
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-user/target/application.jar"
     moduleName: apphub-service-etc-user
     group: 1
+  - name: authorization
+    port: 8092
+    location: "./apphub-service/apphub-service-platform/apphub-service-platform-authorization/target/application.jar"
+    moduleName: apphub-service-platform-authorization
+    group: 1
+    properties:
+      - AUTHORIZATION_CERTIFICATE
 
   #Optional platform
   - name: storage

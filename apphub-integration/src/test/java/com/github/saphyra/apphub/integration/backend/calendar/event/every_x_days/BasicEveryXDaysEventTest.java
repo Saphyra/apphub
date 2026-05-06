@@ -26,26 +26,26 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void basicEveryXDaysEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = create(accessTokenId);
-        edit(accessTokenId, eventId);
-        delete(accessTokenId, eventId);
+        UUID eventId = create(accessToken);
+        edit(accessToken, eventId);
+        delete(accessToken, eventId);
     }
 
-    private void delete(UUID accessTokenId, UUID eventId) {
-        CalendarEventActions.deleteEvent(getServerPort(), accessTokenId, eventId);
+    private void delete(String accessToken, UUID eventId) {
+        CalendarEventActions.deleteEvent(getServerPort(), accessToken, eventId);
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).isEmpty();
         assertThat(CalendarOccurrenceActions.getOccurrences(
             getServerPort(),
-            accessTokenId,
+            accessToken,
             EventRequestFactory.DEFAULT_START_DATE.minusDays(10),
             EventRequestFactory.DEFAULT_END_DATE.plusDays(10)
         )).isEmpty();
     }
 
-    private void edit(UUID accessTokenId, UUID eventId) {
+    private void edit(String accessToken, UUID eventId) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.EVERY_X_DAYS)
             .toBuilder()
             .endDate(NEW_END_DATE)
@@ -53,9 +53,9 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
             .remindMeBeforeDays(NEW_REMIND_ME_BEFORE_DAYS)
             .build();
 
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.EVERY_X_DAYS, EventResponse::getRepetitionType)
             .returns(EventRequestFactory.NEW_REPETITION_DATA_EVERY_X_DAYS, EventResponse::getRepetitionData)
@@ -68,7 +68,7 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
             .returns(NEW_REMIND_ME_BEFORE_DAYS, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(), EventResponse::getLabels);
 
-        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId)
+        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId)
             .stream()
             .map(OccurrenceResponse::getDate)
             .toList();
@@ -83,10 +83,10 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
         );
     }
 
-    private UUID create(UUID accessTokenId) {
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, EventRequestFactory.validRequest(RepetitionType.EVERY_X_DAYS));
+    private UUID create(String accessToken) {
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, EventRequestFactory.validRequest(RepetitionType.EVERY_X_DAYS));
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, EventResponse::getEventId)
             .returns(RepetitionType.EVERY_X_DAYS, EventResponse::getRepetitionType)
             .returns(EventRequestFactory.DEFAULT_REPETITION_DATA_EVERY_X_DAYS, EventResponse::getRepetitionData)
@@ -99,7 +99,7 @@ public class BasicEveryXDaysEventTest extends BackEndTest {
             .returns(0, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(), EventResponse::getLabels);
 
-        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId)
+        List<LocalDate> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId)
             .stream()
             .map(OccurrenceResponse::getDate)
             .toList();

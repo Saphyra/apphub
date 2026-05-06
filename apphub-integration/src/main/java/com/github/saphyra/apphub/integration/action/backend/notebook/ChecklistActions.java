@@ -15,90 +15,90 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChecklistActions {
-    public static UUID createChecklist(int serverPort, UUID accessTokenId, CreateChecklistRequest request) {
-        Response response = getCreateChecklistItemResponse(serverPort, accessTokenId, request);
+    public static UUID createChecklist(int serverPort, String accessToken, CreateChecklistRequest request) {
+        Response response = getCreateChecklistItemResponse(serverPort, accessToken, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateChecklistItemResponse(int serverPort, UUID accessTokenId, CreateChecklistRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateChecklistItemResponse(int serverPort, String accessToken, CreateChecklistRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CREATE_CHECKLIST));
     }
 
-    public static ChecklistResponse getChecklist(int serverPort, UUID accessTokenId, UUID listItemId) {
-        Response response = getChecklistResponse(serverPort, accessTokenId, listItemId);
+    public static ChecklistResponse getChecklist(int serverPort, String accessToken, UUID listItemId) {
+        Response response = getChecklistResponse(serverPort, accessToken, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(ChecklistResponse.class);
     }
 
-    public static Response getChecklistResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getChecklistResponse(int serverPort, String accessToken, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_GET_CHECKLIST, "listItemId", listItemId));
     }
 
-    public static void editChecklist(int serverPort, UUID accessTokenId, EditChecklistRequest editRequest, UUID listItemId) {
-        Response response = getEditChecklistResponse(serverPort, accessTokenId, editRequest, listItemId);
+    public static void editChecklist(int serverPort, String accessToken, EditChecklistRequest editRequest, UUID listItemId) {
+        Response response = getEditChecklistResponse(serverPort, accessToken, editRequest, listItemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditChecklistResponse(int serverPort, UUID accessTokenId, EditChecklistRequest editRequest, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getEditChecklistResponse(int serverPort, String accessToken, EditChecklistRequest editRequest, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(editRequest)
             .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_CHECKLIST, "listItemId", listItemId));
     }
 
-    public static void updateChecklistItemStatus(int serverPort, UUID accessTokenId, UUID checklistItemId, boolean status) {
-        Response response = getUpdateChecklistItemStatusResponse(serverPort, accessTokenId, checklistItemId, status);
+    public static void updateChecklistItemStatus(int serverPort, String accessToken, UUID checklistItemId, boolean status) {
+        Response response = getUpdateChecklistItemStatusResponse(serverPort, accessToken, checklistItemId, status);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getUpdateChecklistItemStatusResponse(int serverPort, UUID accessTokenId, UUID checklistItemId, boolean status) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getUpdateChecklistItemStatusResponse(int serverPort, String accessToken, UUID checklistItemId, boolean status) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(status))
             .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS, "checklistItemId", checklistItemId));
     }
 
-    public static Response getDeleteCheckedChecklistItemsResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteCheckedChecklistItemsResponse(int serverPort, String accessToken, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CHECKLIST_DELETE_CHECKED, "listItemId", listItemId));
     }
 
-    public static Response getOrderItemsResponse(int serverPort, UUID accessTokenId, UUID listItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getOrderItemsResponse(int serverPort, String accessToken, UUID listItemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_ORDER_CHECKLIST_ITEMS, "listItemId", listItemId));
     }
 
-    public static Response getDeleteChecklistItemResponse(int serverPort, UUID accessTokenId, UUID checklistItemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteChecklistItemResponse(int serverPort, String accessToken, UUID checklistItemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
     }
 
-    public static void editChecklistItem(int serverPort, UUID accessTokenId, UUID checklistItemId, String content) {
-        Response response = getEditChecklistItemResponse(serverPort, accessTokenId, checklistItemId, content);
+    public static void editChecklistItem(int serverPort, String accessToken, UUID checklistItemId, String content) {
+        Response response = getEditChecklistItemResponse(serverPort, accessToken, checklistItemId, content);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditChecklistItemResponse(int serverPort, UUID accessTokenId, UUID checklistItemId, String content) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getEditChecklistItemResponse(int serverPort, String accessToken, UUID checklistItemId, String content) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(content))
             .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM, "checklistItemId", checklistItemId));
     }
 
-    public static void addChecklistItem(int serverPort, UUID accessTokenId, UUID listItemId, AddChecklistItemRequest request) {
-        Response response = getAddChecklistItemResponse(serverPort, accessTokenId, listItemId, request);
+    public static void addChecklistItem(int serverPort, String accessToken, UUID listItemId, AddChecklistItemRequest request) {
+        Response response = getAddChecklistItemResponse(serverPort, accessToken, listItemId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getAddChecklistItemResponse(int serverPort, UUID accessTokenId, UUID listItemId, AddChecklistItemRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getAddChecklistItemResponse(int serverPort, String accessToken, UUID listItemId, AddChecklistItemRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_ADD_CHECKLIST_ITEM, "listItemId", listItemId));
     }

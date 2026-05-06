@@ -2,10 +2,8 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./new_category_localization.json";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
-import Constants from "common/js/Constants";
 import Header from "common/component/Header";
 import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
@@ -23,7 +21,6 @@ const NewCategoryPage = () => {
 
     const [listItemTitle, setListItemTitle] = useState("");
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const create = async () => {

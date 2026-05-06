@@ -14,17 +14,17 @@ import java.util.Map;
 import java.util.UUID;
 
 public class SkyXplorePriorityActions {
-    public static Map<String, Integer> getPriorities(int serverPort, UUID accessTokenId, UUID planetId) {
-        return SkyXplorePlanetActions.getPlanetOverview(serverPort, accessTokenId, planetId)
+    public static Map<String, Integer> getPriorities(int serverPort, String accessToken, UUID planetId) {
+        return SkyXplorePlanetActions.getPlanetOverview(serverPort, accessToken, planetId)
             .getPriorities();
     }
 
-    public static Response getUpdatePriorityResponse(int serverPort, UUID accessTokenId, UUID planetId, PriorityType priorityType, int newPriority) {
-        return getUpdatePriorityResponse(serverPort, accessTokenId, planetId, priorityType.name(), newPriority);
+    public static Response getUpdatePriorityResponse(int serverPort, String accessToken, UUID planetId, PriorityType priorityType, int newPriority) {
+        return getUpdatePriorityResponse(serverPort, accessToken, planetId, priorityType.name(), newPriority);
     }
 
-    public static Response getUpdatePriorityResponse(int serverPort, UUID accessTokenId, UUID planetId, String priorityType, int newPriority) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getUpdatePriorityResponse(int serverPort, String accessToken, UUID planetId, String priorityType, int newPriority) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(newPriority))
             .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_PLANET_UPDATE_PRIORITY, CollectionUtils.toMap(new BiWrapper<>("planetId", planetId), new BiWrapper<>("priorityType", priorityType))));
     }

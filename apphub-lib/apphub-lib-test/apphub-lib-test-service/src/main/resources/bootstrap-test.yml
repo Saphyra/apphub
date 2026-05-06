@@ -34,3 +34,5 @@ serviceUrls:
   web-content: n-a:8083
   web-content-localization: n-a:8083
   monitoring: n-a:8084
+  authorization: n-a:8084
+  mainGateway: n-a:8080

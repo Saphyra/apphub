@@ -60,4 +60,14 @@ public class MinikubeNamespaceSetupTask {
 
         minikubePodStartupWaiter.waitForPods(namespaceName, 10);
     }
+
+    @SneakyThrows
+    public void deployDynamoDb(String namespaceName) {
+        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-dynamo-db.yaml")
+            .inheritIO()
+            .start()
+            .waitFor();
+
+        minikubePodStartupWaiter.waitForPods(namespaceName, 10);
+    }
 }

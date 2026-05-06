@@ -4,7 +4,6 @@ import { useParams } from "react-router";
 import localizationData from "./calendar_edit_occurrence_page_localization.json";
 import "./edit_occurrence.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useRefresh from "common/hook/Refresh";
 import { hasValue } from "common/js/Utils";
@@ -41,7 +40,6 @@ const CalendarEditOccurrencePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     document.title = localizationHandler.get("title");
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);

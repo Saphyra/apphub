@@ -10,8 +10,8 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UtilActions {
-    public static boolean isUserAdmin(int serverPort, UUID accessTokenId) {
-        Response response = RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static boolean isUserAdmin(int serverPort, String accessToken) {
+        Response response = RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, UserEndpoints.IS_ADMIN));
 
         assertThat(response.getStatusCode()).isEqualTo(200);

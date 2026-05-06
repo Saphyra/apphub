@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateOnlyTitleRequest;
 import com.github.saphyra.apphub.api.feature.notebook.server.OnlyTitleController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.only_title.OnlyTitleCreationService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class OnlyTitleControllerImpl implements OnlyTitleController {
     private final OnlyTitleCreationService onlyTitleCreationService;
 
     @Override
-    public OneParamResponse<UUID> createOnlyTitle(CreateOnlyTitleRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create an only-title item.", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(onlyTitleCreationService.create(request, accessTokenHeader.getUserId()));
+    public OneParamResponse<UUID> createOnlyTitle(CreateOnlyTitleRequest request, AccessToken accessToken) {
+        log.info("{} wants to create an only-title item.", accessToken.getUserId());
+        return new OneParamResponse<>(onlyTitleCreationService.create(request, accessToken.getUserId()));
     }
 }

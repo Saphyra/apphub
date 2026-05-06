@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./modules_page_localization.json";
 import "./modules.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Button from "common/component/input/Button";
 import Header from "common/component/Header";
@@ -19,7 +18,6 @@ const ModulesPage = () => {
     const [modules, setModules] = useState([]);
 
     useEffect(() => fetchModules(), []);
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const fetchModules = () => {

@@ -1,10 +1,15 @@
 import MapStream from "../collection/MapStream";
 import Stream from "../collection/Stream";
 import Constants from "../Constants";
-import { getBrowserLanguage, hasValue } from "../Utils";
+import NotificationKey from "../notification/NotificationKey";
+import { getBrowserLanguage, hasValue, setCookie } from "../Utils";
 import getDefaultErrorHandler from "./DefaultErrorHandler";
+import ErrorHandler from "./ErrorHandler";
+import RequestMethod from "./RequestMethod";
 import Response from "./Response";
 import ResponseStatus from "./ResponseStatus";
+
+const REFRESH_URL = "/api/authorization/token/refresh";
 
 export default class Request {
     constructor(requestMethod, url, body, rawBody = false) {
@@ -43,7 +48,7 @@ export default class Request {
         return this;
     }
 
-    send(setDisplaySpinner = () => { }) {
+    send(setDisplaySpinner = () => { }, shouldRefreshTokens = true) {
         setDisplaySpinner(true);
 
         const xhr = new XMLHttpRequest();
@@ -57,6 +62,8 @@ export default class Request {
         xhr.setRequestHeader(Constants.HEADER_BROWSER_LANGUAGE, getBrowserLanguage());
         xhr.setRequestHeader("accept", "application/json");
 
+        const request = this;
+
         return new Promise((resolve, reject) => {
             xhr.onload = () => {
                 const response = new Response(xhr.status, xhr.responseText);
@@ -64,6 +71,14 @@ export default class Request {
                 if (response.status === ResponseStatus.OK) {
                     const parsedBody = this.responseConverter(response);
                     resolve(parsedBody);
+                } else if (response.status === ResponseStatus.UNAUTHORIZED && shouldRefreshTokens) {
+                    if (this.url.endsWith(REFRESH_URL)) {
+                        reject();
+                    } else {
+                        return refreshTokens()
+                            .then(() => this.send(setDisplaySpinner))
+                            .then(resolve);
+                    }
                 } else {
                     this.handleError(response);
                     reject();
@@ -72,7 +87,7 @@ export default class Request {
 
             xhr.onerror = () => {
                 setDisplaySpinner(false);
-                this.handleError(new Response(xhr.status, xhr.responseText));
+                this.handleError(new Response(xhr.status, xhr.responseText), request);
                 reject();
             }
 
@@ -87,4 +102,20 @@ export default class Request {
             .orElse(getDefaultErrorHandler())
             .handle(response);
     }
+}
+
+async function refreshTokens() {
+    return new Request(RequestMethod.POST, REFRESH_URL)
+        .addErrorHandler(new ErrorHandler(
+            (response) => response.status == ResponseStatus.UNAUTHORIZED,
+            () => {
+                sessionStorage.errorCode = NotificationKey.NO_VALID_SESSION;
+                window.location.href = "/web?redirect=/" + (window.location.pathname + window.location.search).substr(1);
+            }
+        ))
+        .send()
+        .then(response => {
+            setCookie("access-token", response.accessToken.jwt, response.accessToken.expiration, response.accessToken.path);
+            setCookie("refresh-token", response.refreshToken.jwt, response.refreshToken.expiration, response.refreshToken.path);
+        });
 }

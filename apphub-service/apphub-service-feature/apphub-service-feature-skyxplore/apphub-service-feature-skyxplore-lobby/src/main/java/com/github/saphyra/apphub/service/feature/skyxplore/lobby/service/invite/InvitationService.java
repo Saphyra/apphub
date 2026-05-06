@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.invite;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -61,20 +61,20 @@ public class InvitationService {
         this.floodingLimitSeconds = floodingLimitSeconds;
     }
 
-    public void invite(AccessTokenHeader accessTokenHeader, UUID friendId) {
-        boolean friends = dataProxy.getFriends(accessTokenHeader)
+    public void invite(AccessToken accessToken, UUID friendId) {
+        boolean friends = dataProxy.getFriends(accessToken)
             .stream()
             .anyMatch(friendshipResponse -> friendshipResponse.getFriendId().equals(friendId));
         if (!friends) {
-            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessTokenHeader.getUserId() + " is not a friend of " + friendId);
+            throw ExceptionFactory.notLoggedException(HttpStatus.PRECONDITION_FAILED, accessToken.getUserId() + " is not a friend of " + friendId);
         }
 
-        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
+        Lobby lobby = lobbyDao.findByUserIdValidated(accessToken.getUserId());
 
         Optional<Invitation> existingInvitation = lobby.getInvitations()
             .stream()
             .filter(invitation -> invitation.getCharacterId().equals(friendId))
-            .filter(invitation -> invitation.getInvitorId().equals(accessTokenHeader.getUserId()))
+            .filter(invitation -> invitation.getInvitorId().equals(accessToken.getUserId()))
             .max(Comparator.comparing(Invitation::getInvitationTime));
 
         if (existingInvitation.isPresent()) {
@@ -82,11 +82,11 @@ public class InvitationService {
             LocalDateTime localDateTime = dateTimeUtil.getCurrentDateTime()
                 .minusSeconds(floodingLimitSeconds);
             if (invitation.getInvitationTime().isAfter(localDateTime)) {
-                throw ExceptionFactory.notLoggedException(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.TOO_FREQUENT_INVITATIONS, accessTokenHeader.getUserId() + " cannot invite " + friendId + " again yet.");
+                throw ExceptionFactory.notLoggedException(HttpStatus.TOO_MANY_REQUESTS, ErrorCode.TOO_FREQUENT_INVITATIONS, accessToken.getUserId() + " cannot invite " + friendId + " again yet.");
             }
         }
 
-        inviteDirectly(accessTokenHeader.getUserId(), friendId, lobby);
+        inviteDirectly(accessToken.getUserId(), friendId, lobby);
     }
 
     public void inviteDirectly(UUID senderId, UUID characterId, Lobby lobby) {

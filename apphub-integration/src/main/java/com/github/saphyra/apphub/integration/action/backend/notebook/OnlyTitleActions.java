@@ -11,16 +11,16 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OnlyTitleActions {
-    public static UUID createOnlyTitle(int serverPort, UUID accessTokenId, CreateOnlyTitleRequest request) {
-        Response response = getCreateOnlyTitleResponse(serverPort, accessTokenId, request);
+    public static UUID createOnlyTitle(int serverPort, String accessToken, CreateOnlyTitleRequest request) {
+        Response response = getCreateOnlyTitleResponse(serverPort, accessToken, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().jsonPath().getUUID("value");
     }
 
-    public static Response getCreateOnlyTitleResponse(int serverPort, UUID accessTokenId, CreateOnlyTitleRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateOnlyTitleResponse(int serverPort, String accessToken, CreateOnlyTitleRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CREATE_ONLY_TITLE));
     }

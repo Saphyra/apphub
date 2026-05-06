@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.security.access_token;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import jakarta.servlet.FilterChain;
@@ -46,7 +46,7 @@ public class AccessTokenFilterTest {
     private FilterChain filterChain;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void accessTokenHeaderNotSet() throws ServletException, IOException {
@@ -73,11 +73,11 @@ public class AccessTokenFilterTest {
     @Test
     public void accessTokenHeaderIsSet() throws ServletException, IOException {
         given(request.getHeader(Constants.ACCESS_TOKEN_HEADER)).willReturn(ACCESS_TOKEN_HEADER);
-        given(accessTokenHeaderConverter.convert(ACCESS_TOKEN_HEADER)).willReturn(accessTokenHeader);
+        given(accessTokenHeaderConverter.convert(ACCESS_TOKEN_HEADER)).willReturn(accessToken);
 
         underTest.doFilterInternal(request, response, filterChain);
 
-        verify(accessTokenProvider).set(accessTokenHeader);
+        verify(accessTokenProvider).set(accessToken);
         verify(filterChain).doFilter(request, response);
         verify(accessTokenProvider).clear();
     }
@@ -85,7 +85,7 @@ public class AccessTokenFilterTest {
     @Test
     public void filterThrowException() throws ServletException, IOException {
         given(request.getHeader(Constants.ACCESS_TOKEN_HEADER)).willReturn(ACCESS_TOKEN_HEADER);
-        given(accessTokenHeaderConverter.convert(ACCESS_TOKEN_HEADER)).willReturn(accessTokenHeader);
+        given(accessTokenHeaderConverter.convert(ACCESS_TOKEN_HEADER)).willReturn(accessToken);
         RuntimeException thrownException = new RuntimeException();
         doThrow(thrownException).when(filterChain).doFilter(request, response);
 
@@ -93,7 +93,7 @@ public class AccessTokenFilterTest {
 
         assertThat(ex).isEqualTo(thrownException);
 
-        verify(accessTokenProvider).set(accessTokenHeader);
+        verify(accessTokenProvider).set(accessToken);
         verify(filterChain).doFilter(request, response);
         verify(accessTokenProvider).clear();
     }

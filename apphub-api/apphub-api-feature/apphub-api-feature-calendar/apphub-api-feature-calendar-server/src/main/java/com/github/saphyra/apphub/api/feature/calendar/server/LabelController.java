@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.calendar.server;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -19,20 +19,20 @@ import java.util.UUID;
 
 public interface LabelController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_LABEL)
-    OneParamResponse<UUID> createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELS)
-    List<LabelResponse> getLabels(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LabelResponse> getLabels(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABEL)
-    LabelResponse getLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    LabelResponse getLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_LABEL)
-    List<LabelResponse> deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LabelResponse> deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_LABEL)
-    List<LabelResponse> editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LabelResponse> editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELS_OF_EVENT)
-    List<LabelResponse> getLabelsOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<LabelResponse> getLabelsOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

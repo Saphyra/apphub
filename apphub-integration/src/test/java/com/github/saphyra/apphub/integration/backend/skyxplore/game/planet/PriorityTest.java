@@ -30,48 +30,48 @@ public class PriorityTest extends BackEndTest {
     public void testPriorities() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessTokenId1, userId1))
-            .get(accessTokenId1);
+        SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1))
+            .get(accessToken1);
 
-        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId1);
+        PlanetLocationResponse planet = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessToken1);
 
-        get(accessTokenId1, planet);
-        unknownValue(accessTokenId1, planet);
-        tooLow(accessTokenId1, planet);
-        tooHigh(accessTokenId1, planet);
-        update(accessTokenId1, planet);
+        get(accessToken1, planet);
+        unknownValue(accessToken1, planet);
+        tooLow(accessToken1, planet);
+        tooHigh(accessToken1, planet);
+        update(accessToken1, planet);
     }
 
-    private static void get(UUID accessTokenId1, PlanetLocationResponse planet) {
-        Map<String, Integer> priorities = SkyXplorePriorityActions.getPriorities(getServerPort(), accessTokenId1, planet.getPlanetId());
+    private static void get(String accessToken1, PlanetLocationResponse planet) {
+        Map<String, Integer> priorities = SkyXplorePriorityActions.getPriorities(getServerPort(), accessToken1, planet.getPlanetId());
         assertThat(priorities).hasSize(PriorityType.values().length);
         Arrays.stream(PriorityType.values())
             .forEach(priorityType -> assertThat(priorities).containsEntry(priorityType.name().toLowerCase(), 5));
     }
 
-    private static void unknownValue(UUID accessTokenId1, PlanetLocationResponse planet) {
-        Response unknownValueResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessTokenId1, planet.getPlanetId(), "asfaed", 4);
+    private static void unknownValue(String accessToken1, PlanetLocationResponse planet) {
+        Response unknownValueResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken1, planet.getPlanetId(), "asfaed", 4);
         verifyInvalidParam(unknownValueResponse, "priorityType", "unknown value");
     }
 
-    private static void tooLow(UUID accessTokenId1, PlanetLocationResponse planet) {
-        Response tooLowResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 0);
+    private static void tooLow(String accessToken1, PlanetLocationResponse planet) {
+        Response tooLowResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 0);
         verifyInvalidParam(tooLowResponse, "priority", "too low");
     }
 
-    private static void tooHigh(UUID accessTokenId1, PlanetLocationResponse planet) {
-        Response tooHighResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 11);
+    private static void tooHigh(String accessToken1, PlanetLocationResponse planet) {
+        Response tooHighResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 11);
         verifyInvalidParam(tooHighResponse, "priority", "too high");
     }
 
-    private static void update(UUID accessTokenId1, PlanetLocationResponse planet) {
-        Response updateResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessTokenId1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 7);
+    private static void update(String accessToken1, PlanetLocationResponse planet) {
+        Response updateResponse = SkyXplorePriorityActions.getUpdatePriorityResponse(getServerPort(), accessToken1, planet.getPlanetId(), PriorityType.CONSTRUCTION, 7);
         assertThat(updateResponse.getStatusCode()).isEqualTo(200);
-        Map<String, Integer> modifiedPriorities = SkyXplorePriorityActions.getPriorities(getServerPort(), accessTokenId1, planet.getPlanetId());
+        Map<String, Integer> modifiedPriorities = SkyXplorePriorityActions.getPriorities(getServerPort(), accessToken1, planet.getPlanetId());
         assertThat(modifiedPriorities).containsEntry(PriorityType.CONSTRUCTION.name().toLowerCase(), 7);
 
         ApphubWsClient.cleanUpConnections();

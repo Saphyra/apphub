@@ -13,6 +13,10 @@
     <div>
         <a href="/settings">Back</a>
     </div>
+    <form th:action="@{|/settings/s3/${environment}/delete|}" method="GET">
+        <input type="checkbox" required>
+        <input type="submit" value="Delete environment settings"/>
+    </form>
     <form th:action="@{|/settings/s3/${environment}|}" method="POST">
         <ul>
             <li>

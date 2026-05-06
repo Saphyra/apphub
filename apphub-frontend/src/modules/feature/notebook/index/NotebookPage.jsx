@@ -4,7 +4,6 @@ import "./notebook.css";
 import { useEffect, useState } from "react";
 import OpenedPageType from "../common/OpenedPageType";
 import { hasValue, throwException } from "common/js/Utils";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import UserSettings, { USER_SETTING_CATEGORY_NOTEBOOK } from "../common/UserSettings";
 import Optional from "common/js/collection/Optional";
@@ -13,7 +12,6 @@ import PinnedItems from "./notebook_modules/pin/PinnedItems";
 import OpenedListItem from "./notebook_modules/OpenedListItem";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
@@ -44,7 +42,6 @@ const NotebookPage = () => {
         setOpenedListItemD(newListItem);
     }
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadUserSettings(), []);
 

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.admin_panel;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.RoleManagementActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -29,6 +30,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class RoleManagementTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
@@ -54,9 +57,7 @@ public class RoleManagementTest extends SeleniumTest {
             .forEach(future -> future.get(30, TimeUnit.SECONDS));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
-
-        SleepUtil.sleep(3000);
-        adminDriver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(adminDriver, getServerPort());
         ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.ROLE_MANAGEMENT);
 
         addRole_emptyPassword(adminDriver, testUserData);
@@ -110,9 +111,13 @@ public class RoleManagementTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
         int serverPort = getServerPort();
-        AwaitilityWrapper.create(20, 2)
-            .until(() -> adminDriver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
-            .assertTrue("User is not logged out");
+        AwaitilityWrapper.retry(
+            () -> {
+                adminDriver.navigate().refresh();
+
+                assertThat(adminDriver.getCurrentUrl()).isEqualTo(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE));
+            }
+        );
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
@@ -178,17 +183,19 @@ public class RoleManagementTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
         int serverPort = getServerPort();
-        AwaitilityWrapper.create(20, 2)
-            .until(() -> adminDriver.getCurrentUrl().equals(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE)))
-            .assertTrue("User is not logged out");
+        AwaitilityWrapper.retry(
+            () -> {
+                adminDriver.navigate().refresh();
 
+                assertThat(adminDriver.getCurrentUrl()).isEqualTo(UrlFactory.createWithRedirect(serverPort, GenericEndpoints.INDEX_PAGE, AdminPanelEndpoints.ADMIN_PANEL_ROLE_MANAGEMENT_PAGE));
+            }
+        );
         ToastMessageUtil.clearToasts(adminDriver);
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
-        SleepUtil.sleep(3000);
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.create(10, 1)

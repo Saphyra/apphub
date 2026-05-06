@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.game.server.game.solar_system.planet;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.StorageSettingApiModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,14 +17,14 @@ import java.util.UUID;
 
 public interface SkyXplorePlanetStorageSettingController {
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_GET_STORAGE_SETTINGS)
-    List<StorageSettingApiModel> getStorageSettings(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<StorageSettingApiModel> getStorageSettings(@PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PutMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_CREATE_STORAGE_SETTING)
-    List<StorageSettingApiModel> createStorageSetting(@RequestBody StorageSettingApiModel request, @PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<StorageSettingApiModel> createStorageSetting(@RequestBody StorageSettingApiModel request, @PathVariable("planetId") UUID planetId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_DELETE_STORAGE_SETTING)
-    List<StorageSettingApiModel> deleteStorageSetting(@PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<StorageSettingApiModel> deleteStorageSetting(@PathVariable("storageSettingId") UUID storageSettingId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_PLANET_EDIT_STORAGE_SETTING)
-    List<StorageSettingApiModel> editStorageSetting(@RequestBody StorageSettingApiModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<StorageSettingApiModel> editStorageSetting(@RequestBody StorageSettingApiModel request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

@@ -4,7 +4,7 @@ import login from "../controller/LoginController";
 import PostLabeledInputField from "common/component/input/PostLabeledInputField";
 import Button from "common/component/input/Button";
 
-const LoginForm = ({ localizationHandler }) => {
+const LoginForm = ({ localizationHandler, setDisplaySpinner }) => {
     const [userIdentifier, setUserIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [rememberMe, setRememberMe] = useState(false);
@@ -18,7 +18,7 @@ const LoginForm = ({ localizationHandler }) => {
 
     const loginIfEnter = (e) => {
         if (e.which === 13) {
-            login(userIdentifier, password, rememberMe);
+            login(userIdentifier, password, rememberMe, setDisplaySpinner);
         }
     }
 

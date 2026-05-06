@@ -15,6 +15,6 @@ public class SkyXploreGameProxy {
     private final LocaleProvider localeProvider;
 
     public void loadGame(SkyXploreLoadGameRequest request) {
-        gameCreationClient.loadGame(request, localeProvider.getLocaleValidated());
+        gameCreationClient.loadGame(request, localeProvider.getOrDefault());
     }
 }

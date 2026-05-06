@@ -33,33 +33,33 @@ public class SaveGameTest extends BackEndTest {
     public void saveGame() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        Integer serverPort = getServerPort();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(serverPort, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId1, characterModel1);
+        int serverPort = getServerPort();
+        String accessToken1 = IndexPageActions.registerAndLogin(serverPort, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(serverPort, userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(serverPort, userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreFlow.startGame(serverPort, new Player(accessTokenId1, userId1), new Player(accessTokenId2, userId2));
+        SkyXploreFlow.startGame(serverPort, new Player(accessToken1, userId1), new Player(accessToken2, userId2));
 
-        notHost(accessTokenId2);
+        notHost(accessToken2);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId1)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessToken1)
             .getPlanetId();
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId1, planetId, Constants.SURFACE_TYPE_DESERT);
-        UUID gameId = AwaitilityWrapper.getListWithWait(() -> SkyXploreSavedGameActions.getSavedGames(serverPort, accessTokenId1), savedGameResponses -> !savedGameResponses.isEmpty())
-            .get(0)
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessToken1, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID gameId = AwaitilityWrapper.getListWithWait(() -> SkyXploreSavedGameActions.getSavedGames(serverPort, accessToken1), savedGameResponses -> !savedGameResponses.isEmpty())
+            .getFirst()
             .getGameId();
 
-        exitWithoutSaving(accessTokenId1, planetId, surfaceId, gameId);
-        exitAfterSaving(accessTokenId1, planetId, surfaceId, gameId);
+        exitWithoutSaving(accessToken1, planetId, surfaceId, gameId);
+        exitAfterSaving(accessToken1, planetId, surfaceId, gameId);
     }
 
-    private void exitAfterSaving(UUID hostAccessToken, UUID planetId, UUID surfaceId, UUID gameId) {
+    private void exitAfterSaving(String hostAccessToken, UUID planetId, UUID surfaceId, UUID gameId) {
         SkyXploreSurfaceActions.terraform(getServerPort(), hostAccessToken, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
         SkyXploreGameActions.saveGame(getServerPort(), hostAccessToken);
@@ -73,7 +73,7 @@ public class SaveGameTest extends BackEndTest {
         assertThat(terraformation).isNotNull();
     }
 
-    private void exitWithoutSaving(UUID hostAccessToken, UUID planetId, UUID surfaceId, UUID gameId) {
+    private void exitWithoutSaving(String hostAccessToken, UUID planetId, UUID surfaceId, UUID gameId) {
         SkyXploreSurfaceActions.terraform(getServerPort(), hostAccessToken, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
         SkyXploreGameActions.exit(getServerPort(), hostAccessToken);
@@ -86,7 +86,7 @@ public class SaveGameTest extends BackEndTest {
         assertThat(terraformation).isNull();
     }
 
-    private static void loadGame(UUID hostAccessToken, UUID gameId) {
+    private static void loadGame(String hostAccessToken, UUID gameId) {
         SkyXploreLobbyActions.loadGame(getServerPort(), hostAccessToken, gameId);
         ApphubWsClient lobbyWsClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), hostAccessToken, "lobby");
         WebSocketEvent readyEvent = WebSocketEvent.builder()
@@ -100,7 +100,7 @@ public class SaveGameTest extends BackEndTest {
             .orElseThrow(() -> new RuntimeException("GameLoaded event not arrived."));
     }
 
-    private static void notHost(UUID playerAccessToken) {
+    private static void notHost(String playerAccessToken) {
         Response response = SkyXploreGameActions.getSaveGameResponse(getServerPort(), playerAccessToken);
         ResponseValidator.verifyForbiddenOperation(response);
     }

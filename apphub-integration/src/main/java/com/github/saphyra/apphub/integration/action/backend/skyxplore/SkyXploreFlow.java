@@ -14,7 +14,6 @@ import org.java_websocket.client.WebSocketClient;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,25 +21,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class SkyXploreFlow {
-    public static Map<UUID, ApphubWsClient> startGame(int serverPort, Player host, Player... players) {
+    public static Map<String, ApphubWsClient> startGame(int serverPort, Player host, Player... players) {
         return startGame(serverPort, Constants.DEFAULT_GAME_NAME, host, players);
     }
 
-    public static Map<UUID, ApphubWsClient> startGame(int serverPort, String gameName, Player host, Player... players) {
+    public static Map<String, ApphubWsClient> startGame(int serverPort, String gameName, Player host, Player... players) {
         Arrays.stream(players)
-            .forEach(player -> SkyXploreFriendActions.setUpFriendship(serverPort, host.getAccessTokenId(), player.getAccessTokenId(), player.getUserId()));
+            .forEach(player -> SkyXploreFriendActions.setUpFriendship(serverPort, host.getAccessToken(), player.getAccessToken(), player.getUserId()));
 
-        SkyXploreLobbyActions.createLobby(serverPort, host.getAccessTokenId(), gameName);
-        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(serverPort, host.getAccessTokenId(), "host");
-
-        Arrays.stream(players)
-            .forEach(player -> SkyXploreLobbyActions.inviteToLobby(serverPort, host.getAccessTokenId(), player.getUserId()));
+        SkyXploreLobbyActions.createLobby(serverPort, host.getAccessToken(), gameName);
+        ApphubWsClient hostLobbyWsClient = ApphubWsClient.createSkyXploreLobby(serverPort, host.getAccessToken(), "host");
 
         Arrays.stream(players)
-            .forEach(player -> SkyXploreLobbyActions.acceptInvitation(serverPort, player.getAccessTokenId(), host.getUserId()));
+            .forEach(player -> SkyXploreLobbyActions.inviteToLobby(serverPort, host.getAccessToken(), player.getUserId()));
+
+        Arrays.stream(players)
+            .forEach(player -> SkyXploreLobbyActions.acceptInvitation(serverPort, player.getAccessToken(), host.getUserId()));
 
         List<ApphubWsClient> playerLobbyWsClients = Arrays.stream(players)
-            .map(player -> ApphubWsClient.createSkyXploreLobby(serverPort, player.getAccessTokenId(), player.getUserId()))
+            .map(player -> ApphubWsClient.createSkyXploreLobby(serverPort, player.getAccessToken(), player.getUserId()))
             .toList();
 
         hostLobbyWsClient.clearMessages();
@@ -65,7 +64,7 @@ public class SkyXploreFlow {
             }).isPresent());
         assertThat(allPlayersReady).isTrue();
 
-        SkyXploreLobbyActions.startGame(serverPort, host.getAccessTokenId());
+        SkyXploreLobbyActions.startGame(serverPort, host.getAccessToken());
         hostLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED, 60)
             .orElseThrow(() -> new RuntimeException("GameLoaded event not arrived."));
         playerLobbyWsClients.forEach(playerLobbyWsClient -> playerLobbyWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED, 60).orElseThrow(() -> new RuntimeException("GameLoaded event not arrived.")));
@@ -74,6 +73,6 @@ public class SkyXploreFlow {
             .forEach(WebSocketClient::close);
 
         return Stream.concat(Stream.of(host), Arrays.stream(players))
-            .collect(Collectors.toMap(Player::getAccessTokenId, player -> ApphubWsClient.createSkyXploreGameMain(serverPort, player.getAccessTokenId(), player.getUserId())));
+            .collect(Collectors.toMap(Player::getAccessToken, player -> ApphubWsClient.createSkyXploreGameMain(serverPort, player.getAccessToken(), player.getUserId())));
     }
 }

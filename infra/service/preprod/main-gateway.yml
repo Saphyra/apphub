@@ -17,35 +17,40 @@ spec:
         name: main-gateway
     spec:
       containers:
-      - name: main-gateway
-        image: saphyra/apphub-service-platform-main_gateway:latest
-        env:
-          - name: SPRING_ACTIVE_PROFILE
-            value: server,preprod
-        ports:
-        - containerPort: 8080
-        imagePullPolicy: Never
-        startupProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 3600
-        livenessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        readinessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        resources:
-          limits:
-            memory: 500Mi
+        - name: main-gateway
+          image: saphyra/apphub-service-platform-main_gateway:latest
+          env:
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,preprod
+            - name: PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: authorization-certificate
+                  key: PUBLIC_KEY
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
@@ -56,6 +61,6 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 8080
+    - port: 8080
   selector:
     name: main-gateway

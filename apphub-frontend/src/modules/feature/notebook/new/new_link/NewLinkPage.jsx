@@ -3,7 +3,6 @@ import localizationData from "./new_link_localization.json";
 import "./new_link.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import ListItemTitle from "../../common/list_item_title/ListItemTitle";
 import Header from "common/component/Header";
@@ -11,7 +10,6 @@ import ParentSelector from "../../common/parent_selector/ParentSelector";
 import InputField from "common/component/input/InputField";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import create from "./NewLinkSaver";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
@@ -26,7 +24,6 @@ const NewLinkPage = () => {
     const [listItemTitle, setListItemTitle] = useState("");
     const [url, setUrl] = useState("");
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     return (

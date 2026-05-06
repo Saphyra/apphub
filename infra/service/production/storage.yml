@@ -17,57 +17,57 @@ spec:
         name: storage
     spec:
       containers:
-      - name: storage
-        image: saphyra/apphub-service-platform-storage:release
-        env:
-        - name: FTP_CLIENT_USERNAME
-          value: ftp_prod
-        - name: SPRING_ACTIVE_PROFILE
-          value: server,production
-        - name: S3_ENABLED
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_ENABLED
-        - name: S3_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_ACCESS_KEY_ID
-        - name: S3_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_SECRET_KEY
-        - name: S3_BUCKET_NAME
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_BUCKET_NAME
-        ports:
-        - containerPort: 8080
-        imagePullPolicy: Never
-        startupProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 3600
-        livenessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        readinessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        resources:
-          limits:
-            memory: 500Mi
+        - name: storage
+          image: saphyra/apphub-service-platform-storage:release
+          env:
+            - name: FTP_CLIENT_USERNAME
+              value: ftp_prod
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,production
+            - name: S3_ENABLED
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_ENABLED
+            - name: S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_ACCESS_KEY_ID
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_SECRET_KEY
+            - name: S3_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_BUCKET_NAME
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
@@ -78,6 +78,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+    - port: 8080
   selector:
     name: storage

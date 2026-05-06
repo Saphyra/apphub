@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.lobby.server.SkyXploreLob
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.AllianceResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.settings.alliance.AllianceService;
@@ -25,47 +25,47 @@ public class SkyXploreLobbySettingsControllerImpl implements SkyXploreLobbySetti
     private final AllianceService allianceService;
 
     @Override
-    public void editSettings(SkyXploreGameSettings settings, AccessTokenHeader accessTokenHeader) {
-        editSettingsService.editSettings(accessTokenHeader.getUserId(), settings);
+    public void editSettings(SkyXploreGameSettings settings, AccessToken accessToken) {
+        editSettingsService.editSettings(accessToken.getUserId(), settings);
     }
 
     @Override
-    public SkyXploreGameSettings getGameSettings(AccessTokenHeader accessTokenHeader) {
-        return lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId())
+    public SkyXploreGameSettings getGameSettings(AccessToken accessToken) {
+        return lobbyDao.findByUserIdValidated(accessToken.getUserId())
             .getSettings();
     }
 
     @Override
-    public void createOrModifyAi(AiPlayer aiPlayer, AccessTokenHeader accessTokenHeader) {
-        aiService.createOrModifyAi(accessTokenHeader.getUserId(), aiPlayer);
+    public void createOrModifyAi(AiPlayer aiPlayer, AccessToken accessToken) {
+        aiService.createOrModifyAi(accessToken.getUserId(), aiPlayer);
     }
 
     @Override
-    public void removeAi(UUID aiUserId, AccessTokenHeader accessTokenHeader) {
-        aiService.removeAi(accessTokenHeader.getUserId(), aiUserId);
+    public void removeAi(UUID aiUserId, AccessToken accessToken) {
+        aiService.removeAi(accessToken.getUserId(), aiUserId);
     }
 
     @Override
-    public List<AiPlayer> getAis(AccessTokenHeader accessTokenHeader) {
-        return lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId())
+    public List<AiPlayer> getAis(AccessToken accessToken) {
+        return lobbyDao.findByUserIdValidated(accessToken.getUserId())
             .getAis();
     }
 
     @Override
-    public List<AllianceResponse> getAlliancesOfLobby(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the alliances of his lobby.", accessTokenHeader.getUserId());
-        return allianceService.getAlliances(accessTokenHeader.getUserId());
+    public List<AllianceResponse> getAlliancesOfLobby(AccessToken accessToken) {
+        log.info("{} wants to know the alliances of his lobby.", accessToken.getUserId());
+        return allianceService.getAlliances(accessToken.getUserId());
     }
 
     @Override
-    public void changeAllianceOfPlayer(OneParamRequest<String> alliance, UUID userId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change the alliance of player {} to {}", accessTokenHeader.getUserId(), userId, alliance.getValue());
-        allianceService.setAllianceOfPlayer(accessTokenHeader.getUserId(), userId, alliance.getValue());
+    public void changeAllianceOfPlayer(OneParamRequest<String> alliance, UUID userId, AccessToken accessToken) {
+        log.info("{} wants to change the alliance of player {} to {}", accessToken.getUserId(), userId, alliance.getValue());
+        allianceService.setAllianceOfPlayer(accessToken.getUserId(), userId, alliance.getValue());
     }
 
     @Override
-    public void changeAllianceOfAi(OneParamRequest<String> alliance, UUID userId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to change the alliance of ai {} to {}", accessTokenHeader.getUserId(), userId, alliance.getValue());
-        allianceService.setAllianceOfAi(accessTokenHeader.getUserId(), userId, alliance.getValue());
+    public void changeAllianceOfAi(OneParamRequest<String> alliance, UUID userId, AccessToken accessToken) {
+        log.info("{} wants to change the alliance of ai {} to {}", accessToken.getUserId(), userId, alliance.getValue());
+        allianceService.setAllianceOfAi(accessToken.getUserId(), userId, alliance.getValue());
     }
 }

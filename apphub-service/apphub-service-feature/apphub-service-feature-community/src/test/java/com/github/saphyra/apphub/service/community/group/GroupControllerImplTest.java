@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.community.model.response.group.Grou
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupListResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberResponse;
 import com.github.saphyra.apphub.api.feature.community.model.response.group.GroupMemberRoleRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupCreationService;
 import com.github.saphyra.apphub.service.community.group.service.group.GroupDeletionService;
@@ -69,7 +69,7 @@ public class GroupControllerImplTest {
     private GroupControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private GroupListResponse groupListResponse;
@@ -85,14 +85,14 @@ public class GroupControllerImplTest {
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getGroups() {
         given(groupQueryService.getGroups(USER_ID)).willReturn(List.of(groupListResponse));
 
-        List<GroupListResponse> result = underTest.getGroups(accessTokenHeader);
+        List<GroupListResponse> result = underTest.getGroups(accessToken);
 
         assertThat(result).containsExactly(groupListResponse);
     }
@@ -101,21 +101,21 @@ public class GroupControllerImplTest {
     public void createGroup() {
         given(groupCreationService.create(USER_ID, GROUP_NAME)).willReturn(groupListResponse);
 
-        GroupListResponse result = underTest.createGroup(new OneParamRequest<>(GROUP_NAME), accessTokenHeader);
+        GroupListResponse result = underTest.createGroup(new OneParamRequest<>(GROUP_NAME), accessToken);
 
         assertThat(result).isEqualTo(groupListResponse);
     }
 
     @Test
     public void deleteGroup() {
-        underTest.deleteGroup(GROUP_ID, accessTokenHeader);
+        underTest.deleteGroup(GROUP_ID, accessToken);
 
         verify(groupDeletionService).deleteGroup(USER_ID, GROUP_ID);
     }
 
     @Test
     public void changeOwner() {
-        underTest.changeOwner(new OneParamRequest<>(GROUP_MEMBER_ID), GROUP_ID, accessTokenHeader);
+        underTest.changeOwner(new OneParamRequest<>(GROUP_MEMBER_ID), GROUP_ID, accessToken);
 
         verify(groupEditionService).changeOwner(USER_ID, GROUP_ID, GROUP_MEMBER_ID);
     }
@@ -124,7 +124,7 @@ public class GroupControllerImplTest {
     public void renameGroup() {
         given(groupEditionService.rename(USER_ID, GROUP_ID, GROUP_NAME)).willReturn(groupListResponse);
 
-        GroupListResponse result = underTest.renameGroup(new OneParamRequest<>(GROUP_NAME), GROUP_ID, accessTokenHeader);
+        GroupListResponse result = underTest.renameGroup(new OneParamRequest<>(GROUP_NAME), GROUP_ID, accessToken);
 
         assertThat(result).isEqualTo(groupListResponse);
     }
@@ -133,7 +133,7 @@ public class GroupControllerImplTest {
     public void changeInvitationType() {
         given(groupEditionService.changeInvitationType(USER_ID, GROUP_ID, GroupInvitationType.FRIENDS_OF_FRIENDS)).willReturn(groupListResponse);
 
-        GroupListResponse result = underTest.changeInvitationType(new OneParamRequest<>(GroupInvitationType.FRIENDS_OF_FRIENDS), GROUP_ID, accessTokenHeader);
+        GroupListResponse result = underTest.changeInvitationType(new OneParamRequest<>(GroupInvitationType.FRIENDS_OF_FRIENDS), GROUP_ID, accessToken);
 
         assertThat(result).isEqualTo(groupListResponse);
     }
@@ -142,7 +142,7 @@ public class GroupControllerImplTest {
     public void getMembersOfGroup() {
         given(groupMemberQueryService.getMembers(USER_ID, GROUP_ID)).willReturn(List.of(groupMemberResponse));
 
-        List<GroupMemberResponse> result = underTest.getMembersOfGroup(GROUP_ID, accessTokenHeader);
+        List<GroupMemberResponse> result = underTest.getMembersOfGroup(GROUP_ID, accessToken);
 
         assertThat(result).containsExactly(groupMemberResponse);
     }
@@ -151,7 +151,7 @@ public class GroupControllerImplTest {
     public void searchMemberCandidates() {
         given(groupMemberCandidateQueryService.search(USER_ID, GROUP_ID, QUERY)).willReturn(List.of(searchResultItem));
 
-        List<SearchResultItem> result = underTest.searchMemberCandidates(new OneParamRequest<>(QUERY), GROUP_ID, accessTokenHeader);
+        List<SearchResultItem> result = underTest.searchMemberCandidates(new OneParamRequest<>(QUERY), GROUP_ID, accessToken);
 
         assertThat(result).containsExactly(searchResultItem);
     }
@@ -160,14 +160,14 @@ public class GroupControllerImplTest {
     public void createMember() {
         given(groupMemberCreationService.create(USER_ID, GROUP_ID, GROUP_MEMBER_ID)).willReturn(groupMemberResponse);
 
-        GroupMemberResponse result = underTest.createMember(new OneParamRequest<>(GROUP_MEMBER_ID), GROUP_ID, accessTokenHeader);
+        GroupMemberResponse result = underTest.createMember(new OneParamRequest<>(GROUP_MEMBER_ID), GROUP_ID, accessToken);
 
         assertThat(result).isEqualTo(groupMemberResponse);
     }
 
     @Test
     public void deleteMember() {
-        underTest.deleteMember(GROUP_ID, GROUP_MEMBER_ID, accessTokenHeader);
+        underTest.deleteMember(GROUP_ID, GROUP_MEMBER_ID, accessToken);
 
         verify(groupMemberDeletionService).delete(USER_ID, GROUP_ID, GROUP_MEMBER_ID);
     }
@@ -176,7 +176,7 @@ public class GroupControllerImplTest {
     public void modifyRoles() {
         given(groupMemberRoleModificationService.modifyRoles(USER_ID, GROUP_ID, GROUP_MEMBER_ID, groupMemberRoleRequest)).willReturn(groupMemberResponse);
 
-        GroupMemberResponse result = underTest.modifyRoles(groupMemberRoleRequest, GROUP_ID, GROUP_MEMBER_ID, accessTokenHeader);
+        GroupMemberResponse result = underTest.modifyRoles(groupMemberRoleRequest, GROUP_ID, GROUP_MEMBER_ID, accessToken);
 
         assertThat(result).isEqualTo(groupMemberResponse);
     }

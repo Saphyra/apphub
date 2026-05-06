@@ -10,15 +10,18 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.apache.http.params.CoreConnectionPNames;
 
-import java.util.UUID;
-
 import static io.restassured.RestAssured.given;
 import static java.util.Objects.isNull;
 
 public class RequestFactory {
-    public static RequestSpecification createAuthorizedRequest(UUID accessTokenId) {
+    public static RequestSpecification createAuthorizedRequest(String accessToken, String refreshToken) {
+        return createAuthorizedRequest(accessToken)
+            .cookie(Constants.REFRESH_TOKEN_COOKIE, refreshToken);
+    }
+
+    public static RequestSpecification createAuthorizedRequest(String accessToken) {
         return createRequest()
-            .cookie(Constants.ACCESS_TOKEN_COOKIE, accessTokenId);
+            .cookie(Constants.ACCESS_TOKEN_COOKIE, accessToken);
     }
 
     public static RequestSpecification createRequest() {
@@ -45,5 +48,10 @@ public class RequestFactory {
             requestSpecification.filter(new ResponseLoggingFilter()).log().all();
         }
         return requestSpecification;
+    }
+
+    public static RequestSpecification createRefreshRequest(String refreshToken) {
+        return createRequest()
+            .cookie(Constants.REFRESH_TOKEN_COOKIE, refreshToken);
     }
 }

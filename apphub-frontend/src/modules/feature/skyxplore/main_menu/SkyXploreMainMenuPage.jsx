@@ -3,7 +3,6 @@ import localizationData from "./main_menu_resources/page_localization.json";
 import "./main_menu_resources/main_menu_page.css";
 import { useEffect, useState } from "react";
 import Redirection from "../Redirection";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Header from "common/component/Header";
 import NewGameConfirmationDialog from "./main_menu_page/NewGameConfirmationDialog";
@@ -20,7 +19,6 @@ const SkyXploreMainMenuPage = () => {
     const [displaynNewGameConfirmationDialog, setDisplaynNewGameConfirmationDialog] = useState(false);
 
     useEffect(() => Redirection.forMainMenu(), []);
-    useEffect(() => sessionChecker(), []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => { delete sessionStorage.skyXplorePageHistory }, [])
 

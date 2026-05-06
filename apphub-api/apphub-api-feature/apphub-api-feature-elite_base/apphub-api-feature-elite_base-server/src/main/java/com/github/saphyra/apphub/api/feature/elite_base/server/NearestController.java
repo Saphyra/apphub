@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.feature.elite_base.server;
 
 import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.NearestMaterialTraderResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,6 @@ public interface NearestController {
         @PathVariable("starId") UUID starId,
         @PathVariable("materialType") MaterialType materialType,
         @PathVariable("page") Integer page,
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 }

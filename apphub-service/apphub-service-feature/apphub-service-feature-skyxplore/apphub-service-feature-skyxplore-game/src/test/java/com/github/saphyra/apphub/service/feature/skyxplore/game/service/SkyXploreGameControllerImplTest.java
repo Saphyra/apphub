@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
@@ -49,24 +49,24 @@ public class SkyXploreGameControllerImplTest {
     private Game game;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
 
     @Test
     public void userIsInGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.of(game));
         given(game.getGameId()).willReturn(GAME_ID);
 
-        assertThat(underTest.getGameId(accessTokenHeader).getValue()).isEqualTo(GAME_ID);
+        assertThat(underTest.getGameId(accessToken).getValue()).isEqualTo(GAME_ID);
     }
 
     @Test
     public void userIsNotInGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(gameDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
-        assertThat(underTest.getGameId(accessTokenHeader).getValue()).isNull();
+        assertThat(underTest.getGameId(accessToken).getValue()).isNull();
     }
 
     @Test
@@ -78,18 +78,18 @@ public class SkyXploreGameControllerImplTest {
 
     @Test
     public void exitGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.exitGame(accessTokenHeader);
+        underTest.exitGame(accessToken);
 
         verify(exitFromGameService).exitFromGame(USER_ID);
     }
 
     @Test
     public void pauseGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.pauseGame(new OneParamRequest<>(true), accessTokenHeader);
+        underTest.pauseGame(new OneParamRequest<>(true), accessToken);
 
         verify(pauseGameService).setPausedStatus(USER_ID, true);
     }
@@ -103,18 +103,18 @@ public class SkyXploreGameControllerImplTest {
 
     @Test
     void saveGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.saveGame(accessTokenHeader);
+        underTest.saveGame(accessToken);
 
         then(saveGameService).should().saveGame(USER_ID);
     }
 
     @Test
     void processTick() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.processTick(accessTokenHeader);
+        underTest.processTick(accessToken);
 
         then(tickSchedulerLauncher).should().processTick(USER_ID);
     }

@@ -40,7 +40,7 @@ class GameProxyTest {
     @BeforeEach
     void setUp() {
         given(accessTokenProvider.getAsString()).willReturn(ACCESS_TOKEN);
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.etc.modules;
 
 import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
@@ -43,7 +43,7 @@ public class ModulesControllerImplTest {
     private ModulesControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void deleteAccountEvent() {
@@ -62,9 +62,9 @@ public class ModulesControllerImplTest {
         Map<String, List<ModuleResponse>> responseMap = new HashMap<>();
         responseMap.put(CATEGORY, Arrays.asList(new ModuleResponse()));
         given(modulesQueryService.getModules(USER_ID, true)).willReturn(responseMap);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        Map<String, List<ModuleResponse>> result = underTest.getModules(accessTokenHeader, true);
+        Map<String, List<ModuleResponse>> result = underTest.getModules(accessToken, true);
 
         assertThat(result).isEqualTo(responseMap);
     }
@@ -74,9 +74,9 @@ public class ModulesControllerImplTest {
         Map<String, List<ModuleResponse>> responseMap = new HashMap<>();
         responseMap.put(CATEGORY, Arrays.asList(new ModuleResponse()));
         given(modulesQueryService.getModules(USER_ID, false)).willReturn(responseMap);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        Map<String, List<ModuleResponse>> result = underTest.setFavorite(accessTokenHeader, MODULE, new OneParamRequest<>(true));
+        Map<String, List<ModuleResponse>> result = underTest.setFavorite(accessToken, MODULE, new OneParamRequest<>(true));
 
         verify(favoriteUpdateService).updateFavorite(USER_ID, MODULE, true);
         assertThat(result).isEqualTo(responseMap);

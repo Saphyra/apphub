@@ -14,72 +14,72 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BanActions {
-    public static Response getBanResponse(int serverPort, UUID accessTokenId, BanRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getBanResponse(int serverPort, String accessToken, BanRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_BAN_USER));
     }
 
-    public static void ban(int serverPort, UUID accessTokenId, BanRequest request) {
-        Response response = getBanResponse(serverPort, accessTokenId, request);
+    public static void ban(int serverPort, String accessToken, BanRequest request) {
+        Response response = getBanResponse(serverPort, accessToken, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static BanResponse getBans(int serverPort, UUID accessTokenId, UUID testUserId) {
-        Response response = getGetBansResponse(serverPort, accessTokenId, testUserId);
+    public static BanResponse getBans(int serverPort, String accessToken, UUID testUserId) {
+        Response response = getGetBansResponse(serverPort, accessToken, testUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BanResponse.class);
     }
 
-    public static Response getGetBansResponse(int serverPort, UUID accessTokenId, UUID testUserId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetBansResponse(int serverPort, String accessToken, UUID testUserId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_GET_BANS, "userId", testUserId));
     }
 
-    public static Response getRevokeBanResponse(int serverPort, UUID accessTokenId, UUID banId, String password) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getRevokeBanResponse(int serverPort, String accessToken, UUID banId, String password) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(password))
             .delete(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_REVOKE_BAN, "banId", banId));
     }
 
-    public static void revokeBan(int serverPort, UUID accessTokenId, UUID banId, String password) {
-        Response response = getRevokeBanResponse(serverPort, accessTokenId, banId, password);
+    public static void revokeBan(int serverPort, String accessToken, UUID banId, String password) {
+        Response response = getRevokeBanResponse(serverPort, accessToken, banId, password);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static BanResponse markUserForDeletion(int serverPort, UUID accessTokenId, UUID deletedUserId, MarkUserForDeletionRequest request) {
-        Response response = getMarkForDeletionResponse(serverPort, accessTokenId, deletedUserId, request);
+    public static BanResponse markUserForDeletion(int serverPort, String accessToken, UUID deletedUserId, MarkUserForDeletionRequest request) {
+        Response response = getMarkForDeletionResponse(serverPort, accessToken, deletedUserId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BanResponse.class);
     }
 
-    public static Response getMarkForDeletionResponse(int serverPort, UUID accessTokenId, UUID deletedUserId, MarkUserForDeletionRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getMarkForDeletionResponse(int serverPort, String accessToken, UUID deletedUserId, MarkUserForDeletionRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .delete(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_MARK_FOR_DELETION, "userId", deletedUserId));
     }
 
-    public static BanResponse unmarkUserForDeletion(int serverPort, UUID accessTokenId, UUID deletedUserId) {
-        Response response = getUnmarkUserForDeletionResponse(serverPort, accessTokenId, deletedUserId);
+    public static BanResponse unmarkUserForDeletion(int serverPort, String accessToken, UUID deletedUserId) {
+        Response response = getUnmarkUserForDeletionResponse(serverPort, accessToken, deletedUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BanResponse.class);
     }
 
-    public static Response getUnmarkUserForDeletionResponse(int serverPort, UUID accessTokenId, UUID deletedUserId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getUnmarkUserForDeletionResponse(int serverPort, String accessToken, UUID deletedUserId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_UNMARK_FOR_DELETION, "userId", deletedUserId));
     }
 
-    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSearchResponse(int serverPort, String accessToken, String query) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(query))
             .post(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_BAN_SEARCH));
     }

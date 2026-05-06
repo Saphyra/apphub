@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.etc.admin_panel.migration_task;
 
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.MigrationTaskResponse;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.service.etc.admin_panel.migration_task.dao.MigrationTask;
 import com.github.saphyra.apphub.service.etc.admin_panel.migration_task.dao.MigrationTaskDao;
@@ -40,7 +40,7 @@ class MigrationTaskControllerImplTest {
     private MigrationTaskControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Captor
     private ArgumentCaptor<SendEventRequest<?>> argumentCaptor;
@@ -55,14 +55,14 @@ class MigrationTaskControllerImplTest {
             .build();
         given(migrationTaskDao.findAll()).willReturn(List.of(task));
 
-        List<MigrationTaskResponse> result = underTest.getMigrationTasks(accessTokenHeader);
+        List<MigrationTaskResponse> result = underTest.getMigrationTasks(accessToken);
 
         assertThat(result).containsExactly(MigrationTaskResponse.builder().name(NAME).event(EVENT).completed(true).repeatable(false).build());
     }
 
     @Test
     void triggerMigrationTask_notFound() {
-        Throwable ex = catchThrowable(() -> underTest.triggerMigrationTask(EVENT, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.triggerMigrationTask(EVENT, accessToken));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
@@ -77,7 +77,7 @@ class MigrationTaskControllerImplTest {
             .build();
         given(migrationTaskDao.findById(EVENT)).willReturn(Optional.of(task));
 
-        Throwable ex = catchThrowable(() -> underTest.triggerMigrationTask(EVENT, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.triggerMigrationTask(EVENT, accessToken));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.GONE, ErrorCode.GENERAL_ERROR);
     }
@@ -93,7 +93,7 @@ class MigrationTaskControllerImplTest {
         given(migrationTaskDao.findById(EVENT)).willReturn(Optional.of(task));
         given(migrationTaskDao.findAll()).willReturn(List.of(task));
 
-        List<MigrationTaskResponse> result = underTest.triggerMigrationTask(EVENT, accessTokenHeader);
+        List<MigrationTaskResponse> result = underTest.triggerMigrationTask(EVENT, accessToken);
 
         then(eventGatewayProxy).should().sendEvent(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(EVENT);
@@ -114,7 +114,7 @@ class MigrationTaskControllerImplTest {
         given(migrationTaskDao.findById(EVENT)).willReturn(Optional.of(task));
         given(migrationTaskDao.findAll()).willReturn(List.of(task));
 
-        List<MigrationTaskResponse> result = underTest.triggerMigrationTask(EVENT, accessTokenHeader);
+        List<MigrationTaskResponse> result = underTest.triggerMigrationTask(EVENT, accessToken);
 
         then(eventGatewayProxy).should().sendEvent(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getEventName()).isEqualTo(EVENT);
@@ -133,7 +133,7 @@ class MigrationTaskControllerImplTest {
             .build();
         given(migrationTaskDao.findAll()).willReturn(List.of(task));
 
-        List<MigrationTaskResponse> result = underTest.deleteMigrationTask(EVENT, accessTokenHeader);
+        List<MigrationTaskResponse> result = underTest.deleteMigrationTask(EVENT, accessToken);
 
         then(migrationTaskDao).should().deleteById(EVENT);
 

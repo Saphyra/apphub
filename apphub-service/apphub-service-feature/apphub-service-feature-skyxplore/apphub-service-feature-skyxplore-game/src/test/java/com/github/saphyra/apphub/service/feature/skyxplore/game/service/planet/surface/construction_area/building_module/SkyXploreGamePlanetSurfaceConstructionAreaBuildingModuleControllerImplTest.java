@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area.building_module;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.building.BuildingModuleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,22 +49,22 @@ class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerImplTest
     private BuildingModuleResponse buildingModuleResponse;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(buildingModuleQueryService.getBuildingModulesOfConstructionArea(USER_ID, CONSTRUCTION_AREA_ID)).willReturn(List.of(buildingModuleResponse));
     }
 
     @Test
     void getBuildingModules() {
-        assertThat(underTest.getBuildingModules(CONSTRUCTION_AREA_ID, accessTokenHeader)).containsExactly(buildingModuleResponse);
+        assertThat(underTest.getBuildingModules(CONSTRUCTION_AREA_ID, accessToken)).containsExactly(buildingModuleResponse);
     }
 
     @Test
     void constructBuildingModule() {
-        assertThat(underTest.constructBuildingModule(new OneParamRequest<>(BUILDING_MODULE_DATA_ID), CONSTRUCTION_AREA_ID, accessTokenHeader)).containsExactly(buildingModuleResponse);
+        assertThat(underTest.constructBuildingModule(new OneParamRequest<>(BUILDING_MODULE_DATA_ID), CONSTRUCTION_AREA_ID, accessToken)).containsExactly(buildingModuleResponse);
 
         then(constructBuildingModuleService).should().constructBuildingModule(USER_ID, CONSTRUCTION_AREA_ID, BUILDING_MODULE_DATA_ID);
     }
@@ -73,20 +73,20 @@ class SkyXploreGamePlanetSurfaceConstructionAreaBuildingModuleControllerImplTest
     void cancelConstructionOfBuildingModule() {
         given(cancelConstructionOfBuildingModuleService.cancelConstruction(USER_ID, CONSTRUCTION_ID)).willReturn(CONSTRUCTION_AREA_ID);
 
-        assertThat(underTest.cancelConstructionOfBuildingModule(CONSTRUCTION_ID, accessTokenHeader)).containsExactly(buildingModuleResponse);
+        assertThat(underTest.cancelConstructionOfBuildingModule(CONSTRUCTION_ID, accessToken)).containsExactly(buildingModuleResponse);
     }
 
     @Test
     void deconstructBuildingModule() {
         given(deconstructBuildingModuleService.deconstructBuildingModule(USER_ID, BUILDING_MODULE_ID)).willReturn(CONSTRUCTION_AREA_ID);
 
-        assertThat(underTest.deconstructBuildingModule(BUILDING_MODULE_ID, accessTokenHeader)).containsExactly(buildingModuleResponse);
+        assertThat(underTest.deconstructBuildingModule(BUILDING_MODULE_ID, accessToken)).containsExactly(buildingModuleResponse);
     }
 
     @Test
     void cancelDeconstructionOfBuildingModule() {
         given(cancelDeconstructionFacade.cancelDeconstructionOfBuildingModule(USER_ID, DECONSTRUCTION_ID)).willReturn(CONSTRUCTION_AREA_ID);
 
-        assertThat(underTest.cancelDeconstructionOfBuildingModule(DECONSTRUCTION_ID, accessTokenHeader)).containsExactly(buildingModuleResponse);
+        assertThat(underTest.cancelDeconstructionOfBuildingModule(DECONSTRUCTION_ID, accessToken)).containsExactly(buildingModuleResponse);
     }
 }

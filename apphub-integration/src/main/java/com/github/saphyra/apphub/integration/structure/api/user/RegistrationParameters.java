@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.api.user;
 
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.RandomDataProvider;
 import lombok.Builder;
@@ -12,12 +13,14 @@ public class RegistrationParameters {
     private final String password;
     private final String email;
     private final String confirmPassword;
+    private final String language;
 
     public RegistrationRequest toRegistrationRequest() {
         return RegistrationRequest.builder()
             .username(username)
             .password(password)
             .email(email)
+            .language(language)
             .build();
     }
 
@@ -39,6 +42,7 @@ public class RegistrationParameters {
             .username(RandomDataProvider.generateUsername())
             .password(password)
             .confirmPassword(password)
+            .language(Constants.DEFAULT_LOCALE)
             .build();
     }
 

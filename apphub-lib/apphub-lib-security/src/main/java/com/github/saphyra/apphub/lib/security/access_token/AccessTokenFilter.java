@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.security.access_token;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import jakarta.servlet.FilterChain;
@@ -34,7 +34,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
         }
     }
 
-    private Optional<AccessTokenHeader> getHeader(HttpServletRequest request) {
+    private Optional<AccessToken> getHeader(HttpServletRequest request) {
         return Optional.ofNullable(request.getHeader(Constants.ACCESS_TOKEN_HEADER))
             .filter(maybeAccessToken -> !isBlank(maybeAccessToken))
             .map(accessTokenHeaderConverter::convert);

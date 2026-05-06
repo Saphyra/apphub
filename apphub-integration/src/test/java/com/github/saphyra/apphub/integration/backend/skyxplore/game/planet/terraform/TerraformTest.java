@@ -32,49 +32,49 @@ public class TerraformTest extends BackEndTest {
     public void terraformCD() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(getServerPort(), new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(getServerPort(), new Player(accessToken, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessToken)
             .getPlanetId();
 
-        UUID emptySurfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID emptySurfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        invalidSurfaceType(accessTokenId, planetId, emptySurfaceId);
-        surfaceNotEmpty(accessTokenId, planetId);
-        incompatibleSurfaceType(accessTokenId, planetId, emptySurfaceId);
-        terraform(accessTokenId, planetId, emptySurfaceId);
-        terraformationAlreadyInProgress(accessTokenId, planetId, emptySurfaceId);
-        cancel(accessTokenId, planetId, emptySurfaceId);
+        invalidSurfaceType(accessToken, planetId, emptySurfaceId);
+        surfaceNotEmpty(accessToken, planetId);
+        incompatibleSurfaceType(accessToken, planetId, emptySurfaceId);
+        terraform(accessToken, planetId, emptySurfaceId);
+        terraformationAlreadyInProgress(accessToken, planetId, emptySurfaceId);
+        cancel(accessToken, planetId, emptySurfaceId);
     }
 
-    private static void invalidSurfaceType(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        Response invalidSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessTokenId, planetId, emptySurfaceId, "asd");
+    private static void invalidSurfaceType(String accessToken, UUID planetId, UUID emptySurfaceId) {
+        Response invalidSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessToken, planetId, emptySurfaceId, "asd");
 
         ResponseValidator.verifyInvalidParam(invalidSurfaceTypeResponse, "surfaceType", "invalid value");
     }
 
-    private void surfaceNotEmpty(UUID accessTokenId, UUID planetId) {
-        UUID occupiedSurfaceId = findOccupied(accessTokenId, planetId);
+    private void surfaceNotEmpty(String accessToken, UUID planetId) {
+        UUID occupiedSurfaceId = findOccupied(accessToken, planetId);
 
-        Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessTokenId, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
+        Response surfaceOccupiedResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessToken, planetId, occupiedSurfaceId, Constants.SURFACE_TYPE_LAKE);
 
         ResponseValidator.verifyForbiddenOperation(surfaceOccupiedResponse);
     }
 
-    private static void incompatibleSurfaceType(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        Response incompatibleSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_OIL_FIELD);
+    private static void incompatibleSurfaceType(String accessToken, UUID planetId, UUID emptySurfaceId) {
+        Response incompatibleSurfaceTypeResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessToken, planetId, emptySurfaceId, Constants.SURFACE_TYPE_OIL_FIELD);
 
         ResponseValidator.verifyForbiddenOperation(incompatibleSurfaceTypeResponse);
     }
 
-    private void terraform(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        SkyXploreSurfaceActions.terraform(getServerPort(), accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
+    private void terraform(String accessToken, UUID planetId, UUID emptySurfaceId) {
+        SkyXploreSurfaceActions.terraform(getServerPort(), accessToken, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessToken, planetId);
         SurfaceResponse modifiedSurfaceResponse = SkyXplorePlanetActions.findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), emptySurfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
 
@@ -90,16 +90,16 @@ public class TerraformTest extends BackEndTest {
         assertThat(queueItemModifiedEvent.getData()).containsEntry("targetSurfaceType", Constants.SURFACE_TYPE_LAKE);
     }
 
-    private static void terraformationAlreadyInProgress(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        Response alreadyInProgressResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessTokenId, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
+    private static void terraformationAlreadyInProgress(String accessToken, UUID planetId, UUID emptySurfaceId) {
+        Response alreadyInProgressResponse = SkyXploreSurfaceActions.getTerraformResponse(getServerPort(), accessToken, planetId, emptySurfaceId, Constants.SURFACE_TYPE_LAKE);
 
         ResponseValidator.verifyErrorResponse(alreadyInProgressResponse, 409, ErrorCode.ALREADY_EXISTS);
     }
 
-    private void cancel(UUID accessTokenId, UUID planetId, UUID emptySurfaceId) {
-        SkyXploreSurfaceActions.cancelTerraformation(getServerPort(), accessTokenId, planetId, emptySurfaceId);
+    private void cancel(String accessToken, UUID planetId, UUID emptySurfaceId) {
+        SkyXploreSurfaceActions.cancelTerraformation(getServerPort(), accessToken, planetId, emptySurfaceId);
 
-        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessTokenId, planetId);
+        PlanetOverviewResponse planetOverviewResponse = SkyXplorePlanetActions.getPlanetOverview(getServerPort(), accessToken, planetId);
 
         SurfaceResponse modifiedSurfaceResponse = SkyXplorePlanetActions.findSurfaceBySurfaceId(planetOverviewResponse.getSurfaces(), emptySurfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found."));
@@ -112,34 +112,34 @@ public class TerraformTest extends BackEndTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         int serverPort = getServerPort();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId, characterModel1);
+        String accessToken = IndexPageActions.registerAndLogin(serverPort, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(serverPort, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(serverPort, new Player(accessToken, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessToken)
             .getPlanetId();
 
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
 
-        SkyXploreSurfaceActions.terraform(serverPort, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
+        SkyXploreSurfaceActions.terraform(serverPort, accessToken, planetId, surfaceId, Constants.SURFACE_TYPE_CONCRETE);
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
 
         AwaitilityWrapper.create(120, 5)
-            .until(() -> isTerraformationFinished(serverPort, accessTokenId, planetId, surfaceId))
+            .until(() -> isTerraformationFinished(serverPort, accessToken, planetId, surfaceId))
             .assertTrue("Terraformation is not finished.");
     }
 
-    private static boolean isTerraformationFinished(int serverPort, UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceBySurfaceId(SkyXplorePlanetActions.getSurfaces(serverPort, accessTokenId, planetId), surfaceId)
+    private static boolean isTerraformationFinished(int serverPort, String accessToken, UUID planetId, UUID surfaceId) {
+        SurfaceResponse surfaceResponse = SkyXplorePlanetActions.findSurfaceBySurfaceId(SkyXplorePlanetActions.getSurfaces(serverPort, accessToken, planetId), surfaceId)
             .orElseThrow(() -> new RuntimeException("Surface not found"));
         return surfaceResponse.getSurfaceType().equals(Constants.SURFACE_TYPE_CONCRETE) && isNull(surfaceResponse.getTerraformation());
     }
 
-    private UUID findOccupied(UUID accessTokenId, UUID planetId) {
-        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessTokenId, planetId)
+    private UUID findOccupied(String accessToken, UUID planetId) {
+        return SkyXplorePlanetActions.getSurfaces(getServerPort(), accessToken, planetId)
             .stream()
             .filter(surfaceResponse -> !isNull(surfaceResponse.getConstructionArea()))
             .findFirst()

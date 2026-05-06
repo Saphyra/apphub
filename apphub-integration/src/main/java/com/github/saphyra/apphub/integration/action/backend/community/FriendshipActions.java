@@ -13,27 +13,27 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FriendshipActions {
-    public static List<FriendshipResponse> getFriendships(int serverPort, UUID accessTokenId) {
-        Response response = getFriendshipsResponse(serverPort, accessTokenId);
+    public static List<FriendshipResponse> getFriendships(int serverPort, String accessToken) {
+        Response response = getFriendshipsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(FriendshipResponse[].class));
     }
 
-    public static Response getFriendshipsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getFriendshipsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_FRIENDS));
     }
 
-    public static void deleteFriendship(int serverPort, UUID accessTokenId, UUID friendshipId) {
-        Response response = getDeleteFriendshipResponse(serverPort, accessTokenId, friendshipId);
+    public static void deleteFriendship(int serverPort, String accessToken, UUID friendshipId) {
+        Response response = getDeleteFriendshipResponse(serverPort, accessToken, friendshipId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteFriendshipResponse(int serverPort, UUID accessTokenId, UUID friendshipId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteFriendshipResponse(int serverPort, String accessToken, UUID friendshipId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_DELETE_FRIENDSHIP, "friendshipId", friendshipId));
     }
 }

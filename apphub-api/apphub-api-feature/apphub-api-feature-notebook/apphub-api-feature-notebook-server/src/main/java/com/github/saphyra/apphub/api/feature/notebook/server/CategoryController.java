@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.api.feature.notebook.server;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.ChildrenOfCategoryResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.NotebookEndpoints;
@@ -19,10 +19,10 @@ import java.util.UUID;
 
 public interface CategoryController {
     @PutMapping(NotebookEndpoints.NOTEBOOK_CREATE_CATEGORY)
-    OneParamResponse<UUID> createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createCategory(@RequestBody CreateCategoryRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.GET, path = NotebookEndpoints.NOTEBOOK_GET_CATEGORY_TREE)
-    List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<CategoryTreeView> getCategoryTree(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Returning all the direct children of the given category
@@ -33,7 +33,7 @@ public interface CategoryController {
      */
     @RequestMapping(method = RequestMethod.GET, path = NotebookEndpoints.NOTEBOOK_GET_CHILDREN_OF_CATEGORY)
     ChildrenOfCategoryResponse getChildrenOfCategory(
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken,
         @RequestParam(name = "categoryId", required = false) UUID categoryId,
         @RequestParam(name = "type", required = false) String type,
         @RequestParam(name = "exclude", required = false) UUID exclude

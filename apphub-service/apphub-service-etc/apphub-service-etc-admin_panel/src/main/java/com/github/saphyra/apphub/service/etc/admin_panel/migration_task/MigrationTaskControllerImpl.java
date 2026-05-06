@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.etc.admin_panel.migration_task;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.MigrationTaskResponse;
 import com.github.saphyra.apphub.api.etc.admin_panel.server.MigrationTaskController;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.etc.admin_panel.migration_task.dao.MigrationTask;
@@ -24,8 +24,8 @@ public class MigrationTaskControllerImpl implements MigrationTaskController {
     private final EventGatewayProxy eventGatewayProxy;
 
     @Override
-    public List<MigrationTaskResponse> getMigrationTasks(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query the migration tasks", accessTokenHeader.getUserId());
+    public List<MigrationTaskResponse> getMigrationTasks(AccessToken accessToken) {
+        log.info("{} wants to query the migration tasks", accessToken.getUserId());
         return migrationTaskDao.findAll()
             .stream()
             .map(migrationTask -> MigrationTaskResponse.builder()
@@ -38,8 +38,8 @@ public class MigrationTaskControllerImpl implements MigrationTaskController {
     }
 
     @Override
-    public List<MigrationTaskResponse> triggerMigrationTask(String event, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to trigger migration task {}", accessTokenHeader.getUserId(), event);
+    public List<MigrationTaskResponse> triggerMigrationTask(String event, AccessToken accessToken) {
+        log.info("{} wants to trigger migration task {}", accessToken.getUserId(), event);
         MigrationTask migrationTask = migrationTaskDao.findById(event)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "MigrationTask not found with event " + event));
 
@@ -55,15 +55,15 @@ public class MigrationTaskControllerImpl implements MigrationTaskController {
         migrationTask.setCompleted(true);
         migrationTaskDao.save(migrationTask);
 
-        return getMigrationTasks(accessTokenHeader);
+        return getMigrationTasks(accessToken);
     }
 
     @Override
-    public List<MigrationTaskResponse> deleteMigrationTask(String event, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete migration task {}", accessTokenHeader.getUserId(), event);
+    public List<MigrationTaskResponse> deleteMigrationTask(String event, AccessToken accessToken) {
+        log.info("{} wants to delete migration task {}", accessToken.getUserId(), event);
 
         migrationTaskDao.deleteById(event);
 
-        return getMigrationTasks(accessTokenHeader);
+        return getMigrationTasks(accessToken);
     }
 }

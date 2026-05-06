@@ -3,12 +3,10 @@ import localizationData from "./new_image_localization.json";
 import "./new_image.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Stream from "common/js/collection/Stream";
 import ImageGroupData from "./group/ImageGroupData";
 import ImageGroup from "./group/ImageGroup";
-import Constants from "common/js/Constants";
 import create from "./NewImageSaver";
 import Header from "common/component/Header";
 import ParentSelector from "../../common/parent_selector/ParentSelector";
@@ -28,7 +26,6 @@ const NewImagesPage = ()  => {
     const [imageGroups, setImageGroups] = useState([new ImageGroupData()]);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const getImageGroups = () => {

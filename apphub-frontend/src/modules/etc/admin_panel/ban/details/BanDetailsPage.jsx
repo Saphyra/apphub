@@ -3,7 +3,6 @@ import { useParams } from "react-router";
 import localizationData from "./ban_details_localization.json";
 import "./ban_details.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Header from "common/component/Header";
@@ -28,7 +27,6 @@ const BanDetailsPage = () => {
     const [userData, setUserdata] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useLoader({ request: ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), mapper: setUserdata, setDisplaySpinner: setDisplaySpinner });
 

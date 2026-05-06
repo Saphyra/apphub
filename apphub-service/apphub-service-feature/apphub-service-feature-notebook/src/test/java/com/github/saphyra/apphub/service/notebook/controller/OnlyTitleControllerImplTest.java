@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateOnlyTitleRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.only_title.OnlyTitleCreationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,21 +28,21 @@ public class OnlyTitleControllerImplTest {
     private OnlyTitleControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private CreateOnlyTitleRequest request;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void createOnlyTitle() {
         given(onlyTitleCreationService.create(request, USER_ID)).willReturn(LIST_ITEM_ID);
 
-        OneParamResponse<UUID> result = underTest.createOnlyTitle(request, accessTokenHeader);
+        OneParamResponse<UUID> result = underTest.createOnlyTitle(request, accessToken);
 
         assertThat(result.getValue()).isEqualTo(LIST_ITEM_ID);
     }

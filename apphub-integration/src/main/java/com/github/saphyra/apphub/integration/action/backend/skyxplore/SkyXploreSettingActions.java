@@ -14,30 +14,30 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreSettingActions {
-    public static Response getCreateOrUpdateSettingResponse(int serverPort, UUID accessTokenId, SettingModel settingModel) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateOrUpdateSettingResponse(int serverPort, String accessToken, SettingModel settingModel) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(settingModel)
             .put(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_CREATE_SETTING));
     }
 
-    public static Response getSettingResponse(int serverPort, UUID accessTokenId, SettingIdentifier settingIdentifier) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSettingResponse(int serverPort, String accessToken, SettingIdentifier settingIdentifier) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(settingIdentifier)
             .post(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_GET_SETTING));
     }
 
-    public static Response getDeleteResponse(int serverPort, UUID accessTokenId, SettingIdentifier settingIdentifier) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteResponse(int serverPort, String accessToken, SettingIdentifier settingIdentifier) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(settingIdentifier)
             .delete(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_DATA_DELETE_SETTING));
     }
 
-    public static void createOrUpdate(int serverPort, UUID accessTokenId, SettingModel settingModel) {
-        assertThat(getCreateOrUpdateSettingResponse(serverPort, accessTokenId, settingModel).getStatusCode()).isEqualTo(200);
+    public static void createOrUpdate(int serverPort, String accessToken, SettingModel settingModel) {
+        assertThat(getCreateOrUpdateSettingResponse(serverPort, accessToken, settingModel).getStatusCode()).isEqualTo(200);
     }
 
-    public static SettingModel getSetting(int serverPort, UUID accessTokenId, SettingIdentifier settingIdentifier) {
-        Response response = getSettingResponse(serverPort, accessTokenId, settingIdentifier);
+    public static SettingModel getSetting(int serverPort, String accessToken, SettingIdentifier settingIdentifier) {
+        Response response = getSettingResponse(serverPort, accessToken, settingIdentifier);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -47,8 +47,8 @@ public class SkyXploreSettingActions {
         return response.getBody().as(typeRef).getValue();
     }
 
-    public static SettingModel delete(int serverPort, UUID accessTokenId, SettingIdentifier settingIdentifier) {
-        Response response = getDeleteResponse(serverPort, accessTokenId, settingIdentifier);
+    public static SettingModel delete(int serverPort, String accessToken, SettingIdentifier settingIdentifier) {
+        Response response = getDeleteResponse(serverPort, accessToken, settingIdentifier);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

@@ -32,59 +32,59 @@ public class ConstructionAreaCrudTest extends BackEndTest {
     public void constructionAreaCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, characterModel1);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(getServerPort(), Constants.DEFAULT_GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(getServerPort(), Constants.DEFAULT_GAME_NAME, new Player(accessToken, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(getServerPort(), accessToken)
             .getPlanetId();
 
-        construct_nullDataId(accessTokenId, planetId);
-        construct_surfaceNotEmpty(accessTokenId, planetId);
-        construct_unsupportedType(accessTokenId, planetId);
-        construct_terraformationInProgress(accessTokenId, planetId);
-        UUID surfaceId = construct(accessTokenId, planetId);
-        deconstruct_underConstruction(accessTokenId, planetId, surfaceId);
-        cancelConstruction(accessTokenId, planetId, surfaceId);
-        surfaceId = construction_finish(accessTokenId, planetId);
-        deconstruct(accessTokenId, planetId, surfaceId);
-        deconstruct_alreadyUnderDeconstruction(accessTokenId, planetId, surfaceId);
-        deconstruct_cancel(accessTokenId, planetId, surfaceId);
-        deconstruct_finish(accessTokenId, planetId, surfaceId);
+        construct_nullDataId(accessToken, planetId);
+        construct_surfaceNotEmpty(accessToken, planetId);
+        construct_unsupportedType(accessToken, planetId);
+        construct_terraformationInProgress(accessToken, planetId);
+        UUID surfaceId = construct(accessToken, planetId);
+        deconstruct_underConstruction(accessToken, planetId, surfaceId);
+        cancelConstruction(accessToken, planetId, surfaceId);
+        surfaceId = construction_finish(accessToken, planetId);
+        deconstruct(accessToken, planetId, surfaceId);
+        deconstruct_alreadyUnderDeconstruction(accessToken, planetId, surfaceId);
+        deconstruct_cancel(accessToken, planetId, surfaceId);
+        deconstruct_finish(accessToken, planetId, surfaceId);
     }
 
-    private void construct_nullDataId(UUID accessTokenId, UUID planetId) {
-        UUID surfaceId = SkyXplorePlanetActions.findOccupiedSurfaceId(getServerPort(), accessTokenId, planetId);
+    private void construct_nullDataId(String accessToken, UUID planetId) {
+        UUID surfaceId = SkyXplorePlanetActions.findOccupiedSurfaceId(getServerPort(), accessToken, planetId);
 
-        ResponseValidator.verifyInvalidParam(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, surfaceId, null), "dataId", "must not be null");
+        ResponseValidator.verifyInvalidParam(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, surfaceId, null), "dataId", "must not be null");
     }
 
-    private static void deconstruct_finish(UUID accessTokenId, UUID planetId, UUID surfaceId) {
+    private static void deconstruct_finish(String accessToken, UUID planetId, UUID surfaceId) {
         int serverPort = getServerPort();
-        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId)
             .getConstructionArea()
             .getConstructionAreaId();
-        SkyXploreConstructionAreaActions.deconstructConstructionArea(serverPort, accessTokenId, constructionAreaId);
+        SkyXploreConstructionAreaActions.deconstructConstructionArea(serverPort, accessToken, constructionAreaId);
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
 
         AwaitilityWrapper.create(120, 5)
-            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getConstructionArea()))
+            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getConstructionArea()))
             .assertTrue("ConstructionArea is not deconstructed");
     }
 
-    private static void deconstruct_cancel(UUID accessTokenId, UUID planetId, UUID surfaceId) {
+    private static void deconstruct_cancel(String accessToken, UUID planetId, UUID surfaceId) {
         int serverPort = getServerPort();
-        UUID deconstructionId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+        UUID deconstructionId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId)
             .getConstructionArea()
             .getDeconstruction()
             .getDeconstructionId();
-        SkyXploreConstructionAreaActions.cancelDeconstructionOfConstructionArea(serverPort, accessTokenId, deconstructionId);
+        SkyXploreConstructionAreaActions.cancelDeconstructionOfConstructionArea(serverPort, accessToken, deconstructionId);
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId),
             surfaceResponse -> assertThat(surfaceResponse)
                 .extracting(SurfaceResponse::getConstructionArea)
                 .extracting(SurfaceConstructionAreaResponse::getDeconstruction)
@@ -92,23 +92,23 @@ public class ConstructionAreaCrudTest extends BackEndTest {
         );
     }
 
-    private static void deconstruct_alreadyUnderDeconstruction(UUID accessTokenId, UUID planetId, UUID surfaceId) {
+    private static void deconstruct_alreadyUnderDeconstruction(String accessToken, UUID planetId, UUID surfaceId) {
         int serverPort = getServerPort();
-        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId)
             .getConstructionArea()
             .getConstructionAreaId();
-        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(serverPort, accessTokenId, constructionAreaId));
+        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(serverPort, accessToken, constructionAreaId));
     }
 
-    private static void deconstruct(UUID accessTokenId, UUID planetId, UUID surfaceId) {
+    private static void deconstruct(String accessToken, UUID planetId, UUID surfaceId) {
         int serverPort = getServerPort();
-        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId)
             .getConstructionArea()
             .getConstructionAreaId();
-        SkyXploreConstructionAreaActions.deconstructConstructionArea(serverPort, accessTokenId, constructionAreaId);
+        SkyXploreConstructionAreaActions.deconstructConstructionArea(serverPort, accessToken, constructionAreaId);
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId),
             surfaceResponse -> assertThat(surfaceResponse)
                 .extracting(SurfaceResponse::getConstructionArea)
                 .extracting(SurfaceConstructionAreaResponse::getDeconstruction)
@@ -116,53 +116,53 @@ public class ConstructionAreaCrudTest extends BackEndTest {
         );
     }
 
-    private static UUID construction_finish(UUID accessTokenId, UUID planetId) {
+    private static UUID construction_finish(String accessToken, UUID planetId) {
         int serverPort = getServerPort();
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
-        SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessTokenId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
+        SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessToken, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
 
         AwaitilityWrapper.create(120, 5)
-            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getConstructionArea().getConstruction()))
+            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getConstructionArea().getConstruction()))
             .assertTrue("Construction area construction is not finished.");
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, true);
 
         return surfaceId;
     }
 
-    private static void cancelConstruction(UUID accessTokenId, UUID planetId, UUID surfaceId) {
+    private static void cancelConstruction(String accessToken, UUID planetId, UUID surfaceId) {
         int serverPort = getServerPort();
 
-        UUID constructionId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+        UUID constructionId = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId)
             .getConstructionArea()
             .getConstruction()
             .getConstructionId();
-        SkyXploreConstructionAreaActions.cancelConstructionAreaConstruction(serverPort, accessTokenId, constructionId);
+        SkyXploreConstructionAreaActions.cancelConstructionAreaConstruction(serverPort, accessToken, constructionId);
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId),
             surfaceResponse -> assertThat(surfaceResponse)
                 .extracting(SurfaceResponse::getConstructionArea)
                 .isNull()
         );
     }
 
-    private static void deconstruct_underConstruction(UUID accessTokenId, UUID planetId, UUID surfaceId) {
-        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(getServerPort(), accessTokenId, planetId, surfaceId)
+    private static void deconstruct_underConstruction(String accessToken, UUID planetId, UUID surfaceId) {
+        UUID constructionAreaId = SkyXplorePlanetActions.findSurfaceBySurfaceId(getServerPort(), accessToken, planetId, surfaceId)
             .getConstructionArea()
             .getConstructionAreaId();
-        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(getServerPort(), accessTokenId, constructionAreaId));
+        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getDeconstructConstructionAreaResponse(getServerPort(), accessToken, constructionAreaId));
     }
 
-    private static UUID construct(UUID accessTokenId, UUID planetId) {
+    private static UUID construct(String accessToken, UUID planetId) {
         int serverPort = getServerPort();
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
-        SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessTokenId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
+        SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessToken, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId),
             surfaceResponse -> assertThat(surfaceResponse)
                 .extracting(SurfaceResponse::getConstructionArea)
                 .returns(Constants.CONSTRUCTION_AREA_EXTRACTOR, SurfaceConstructionAreaResponse::getDataId)
@@ -173,26 +173,26 @@ public class ConstructionAreaCrudTest extends BackEndTest {
         return surfaceId;
     }
 
-    private static void construct_terraformationInProgress(UUID accessTokenId, UUID planetId) {
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
-        SkyXploreSurfaceActions.terraform(getServerPort(), accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_FOREST);
+    private static void construct_terraformationInProgress(String accessToken, UUID planetId) {
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessToken, planetId, Constants.SURFACE_TYPE_LAKE);
+        SkyXploreSurfaceActions.terraform(getServerPort(), accessToken, planetId, surfaceId, Constants.SURFACE_TYPE_FOREST);
 
         ResponseValidator.verifyErrorResponse(
-            SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR),
+            SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR),
             409,
             ErrorCode.ALREADY_EXISTS
         );
     }
 
-    private static void construct_unsupportedType(UUID accessTokenId, UUID planetId) {
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessTokenId, planetId, Constants.SURFACE_TYPE_LAKE);
+    private static void construct_unsupportedType(String accessToken, UUID planetId) {
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(getServerPort(), accessToken, planetId, Constants.SURFACE_TYPE_LAKE);
 
-        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, surfaceId, Constants.CONSTRUCTION_AREA_DEPOT));
+        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, surfaceId, Constants.CONSTRUCTION_AREA_DEPOT));
     }
 
-    private static void construct_surfaceNotEmpty(UUID accessTokenId, UUID planetId) {
-        UUID surfaceId = SkyXplorePlanetActions.findOccupiedSurfaceId(getServerPort(), accessTokenId, planetId);
+    private static void construct_surfaceNotEmpty(String accessToken, UUID planetId) {
+        UUID surfaceId = SkyXplorePlanetActions.findOccupiedSurfaceId(getServerPort(), accessToken, planetId);
 
-        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessTokenId, surfaceId, Constants.CONSTRUCTION_AREA_DEPOT));
+        ResponseValidator.verifyForbiddenOperation(SkyXploreConstructionAreaActions.getConstructConstructionAreaResponse(getServerPort(), accessToken, surfaceId, Constants.CONSTRUCTION_AREA_DEPOT));
     }
 }

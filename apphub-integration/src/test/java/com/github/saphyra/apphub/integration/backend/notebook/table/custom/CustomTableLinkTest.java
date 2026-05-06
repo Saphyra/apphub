@@ -32,27 +32,27 @@ public class CustomTableLinkTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableLinkCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_nullData(accessTokenId);
-        create_nullLink(accessTokenId);
-        create_blankLabel(accessTokenId);
-        create(accessTokenId);
+        create_nullData(accessToken);
+        create_nullLink(accessToken);
+        create_blankLabel(accessToken);
+        create(accessToken);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         verifyCreatedTable(tableResponse);
 
-        edit_nullData(accessTokenId, listItemId, tableResponse);
-        edit_nullLink(accessTokenId, listItemId, tableResponse);
-        edit_blankLabel(accessTokenId, listItemId, tableResponse);
-        edit(accessTokenId, listItemId, tableResponse);
+        edit_nullData(accessToken, listItemId, tableResponse);
+        edit_nullLink(accessToken, listItemId, tableResponse);
+        edit_blankLabel(accessToken, listItemId, tableResponse);
+        edit(accessToken, listItemId, tableResponse);
 
-        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
+        ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
     }
 
     private void verifyCreatedTable(TableResponse tableResponse) {
@@ -67,7 +67,7 @@ public class CustomTableLinkTest extends BackEndTest {
         assertThat(link.getUrl()).isEqualTo(URL);
     }
 
-    private void edit_nullData(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit_nullData(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
             tableResponse.getTableHeads().get(0).getTableHeadId(),
@@ -78,12 +78,12 @@ public class CustomTableLinkTest extends BackEndTest {
             null
         );
 
-        Response response = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
         ResponseValidator.verifyInvalidParam(response, "link", "must not be null");
     }
 
-    private void edit_nullLink(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit_nullLink(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Link link = Link.builder()
             .label(NEW_LABEL)
             .url(null)
@@ -99,12 +99,12 @@ public class CustomTableLinkTest extends BackEndTest {
             link
         );
 
-        Response response = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
         ResponseValidator.verifyInvalidParam(response, "link.url", "must not be null");
     }
 
-    private void edit_blankLabel(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit_blankLabel(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Link link = Link.builder()
             .label(" ")
             .url(NEW_URL)
@@ -120,12 +120,12 @@ public class CustomTableLinkTest extends BackEndTest {
             link
         );
 
-        Response response = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
         ResponseValidator.verifyInvalidParam(response, "link.label", "must not be null or blank");
     }
 
-    private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Link link = Link.builder()
             .label(NEW_LABEL)
             .url(NEW_URL)
@@ -141,9 +141,9 @@ public class CustomTableLinkTest extends BackEndTest {
             link
         );
 
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -157,7 +157,7 @@ public class CustomTableLinkTest extends BackEndTest {
         assertThat(responseLink.getUrl()).isEqualTo(NEW_URL);
     }
 
-    private void create(UUID accessTokenId) {
+    private void create(String accessToken) {
         Link link = Link.builder()
             .label(LABEL)
             .url(URL)
@@ -165,10 +165,10 @@ public class CustomTableLinkTest extends BackEndTest {
 
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.LINK, link);
 
-        TableActions.createTable(getServerPort(), accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_blankLabel(UUID accessTokenId) {
+    private void create_blankLabel(String accessToken) {
         Link link = Link.builder()
             .label(" ")
             .url(URL)
@@ -176,12 +176,12 @@ public class CustomTableLinkTest extends BackEndTest {
 
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.LINK, link);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "link.label", "must not be null or blank");
     }
 
-    private void create_nullLink(UUID accessTokenId) {
+    private void create_nullLink(String accessToken) {
         Link link = Link.builder()
             .label(LABEL)
             .url(null)
@@ -189,15 +189,15 @@ public class CustomTableLinkTest extends BackEndTest {
 
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.LINK, link);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "link.url", "must not be null");
     }
 
-    private static void create_nullData(UUID accessTokenId) {
+    private static void create_nullData(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.LINK, null);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "link", "must not be null");
     }

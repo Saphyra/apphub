@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.settings;
 
 import com.github.saphyra.apphub.api.etc.user.model.SetUserSettingsRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
@@ -46,21 +46,21 @@ public class UserSettingsControllerImplTest {
     private UserSettingsControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private UserSetting userSetting;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getUserSettings_categoryNotFound() {
         given(properties.getSettings()).willReturn(Collections.emptyMap());
 
-        Throwable ex = catchThrowable(() -> underTest.getUserSettings(CATEGORY, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.getUserSettings(CATEGORY, accessToken));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
@@ -79,7 +79,7 @@ public class UserSettingsControllerImplTest {
         given(userSetting.getKey()).willReturn(KEY);
         given(userSetting.getValue()).willReturn(VALUE);
 
-        Map<String, String> result = underTest.getUserSettings(CATEGORY, accessTokenHeader);
+        Map<String, String> result = underTest.getUserSettings(CATEGORY, accessToken);
 
         assertThat(result).hasSize(2);
         assertThat(result).containsEntry(KEY, VALUE);
@@ -94,7 +94,7 @@ public class UserSettingsControllerImplTest {
             .value(VALUE)
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.setUserSettings(request, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.setUserSettings(request, accessToken));
 
         ExceptionValidator.validateInvalidParam(ex, "key", "must not be null or blank");
     }
@@ -107,7 +107,7 @@ public class UserSettingsControllerImplTest {
             .value(VALUE)
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.setUserSettings(request, accessTokenHeader));
+        Throwable ex = catchThrowable(() -> underTest.setUserSettings(request, accessToken));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
@@ -128,7 +128,7 @@ public class UserSettingsControllerImplTest {
             )
         ));
 
-        Map<String, String> result = underTest.setUserSettings(request, accessTokenHeader);
+        Map<String, String> result = underTest.setUserSettings(request, accessToken);
 
         ArgumentCaptor<UserSetting> argumentCaptor = ArgumentCaptor.forClass(UserSetting.class);
         verify(userSettingDao).save(argumentCaptor.capture());

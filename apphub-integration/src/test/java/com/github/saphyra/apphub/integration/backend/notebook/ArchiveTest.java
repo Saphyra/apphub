@@ -23,35 +23,35 @@ public class ArchiveTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void archiveListItem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID listItemId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title(TITLE).content("").build());
+        UUID listItemId = TextActions.createText(getServerPort(), accessToken, CreateTextRequest.builder().title(TITLE).content("").build());
 
-        archive_nullArchived(accessTokenId, listItemId);
-        archive(accessTokenId, listItemId);
-        unarchive(accessTokenId, listItemId);
+        archive_nullArchived(accessToken, listItemId);
+        archive(accessToken, listItemId);
+        unarchive(accessToken, listItemId);
     }
 
-    private static void archive_nullArchived(UUID accessTokenId, UUID listItemId) {
-        Response pin_nullPinnedResponse = ListItemActions.getArchiveResponse(getServerPort(), accessTokenId, listItemId, null);
+    private static void archive_nullArchived(String accessToken, UUID listItemId) {
+        Response pin_nullPinnedResponse = ListItemActions.getArchiveResponse(getServerPort(), accessToken, listItemId, null);
         ResponseValidator.verifyInvalidParam(pin_nullPinnedResponse, "archived", "must not be null");
     }
 
-    private static void archive(UUID accessTokenId, UUID listItemId) {
-        ListItemActions.archive(getServerPort(), accessTokenId, listItemId, true);
+    private static void archive(String accessToken, UUID listItemId) {
+        ListItemActions.archive(getServerPort(), accessToken, listItemId, true);
 
-        List<NotebookView> pinnedItems = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        List<NotebookView> pinnedItems = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren();
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);
         assertThat(pinnedItems.get(0).isArchived()).isTrue();
     }
 
-    private static void unarchive(UUID accessTokenId, UUID listItemId) {
+    private static void unarchive(String accessToken, UUID listItemId) {
         List<NotebookView> pinnedItems;
-        ListItemActions.archive(getServerPort(), accessTokenId, listItemId, false);
+        ListItemActions.archive(getServerPort(), accessToken, listItemId, false);
 
-        pinnedItems = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        pinnedItems = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren();
         assertThat(pinnedItems).hasSize(1);
         assertThat(pinnedItems.get(0).getId()).isEqualTo(listItemId);

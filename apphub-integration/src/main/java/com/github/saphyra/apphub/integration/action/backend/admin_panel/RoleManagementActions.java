@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RoleManagementActions {
-    public static List<UserRoleResponse> getRoles(int serverPort, UUID accessTokenId, String queryString) {
-        Response response = getRolesResponse(serverPort, accessTokenId, queryString);
+    public static List<UserRoleResponse> getRoles(int serverPort, String accessToken, String queryString) {
+        Response response = getRolesResponse(serverPort, accessToken, queryString);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -25,58 +25,58 @@ public class RoleManagementActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getRolesResponse(int serverPort, UUID accessTokenId, String queryString) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getRolesResponse(int serverPort, String accessToken, String queryString) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(queryString))
             .post(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_GET_USER_ROLES));
     }
 
-    public static UserRoleResponse addRole(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
-        Response response = getAddRoleResponse(serverPort, accessTokenId, roleRequest);
+    public static UserRoleResponse addRole(int serverPort, String accessToken, RoleRequest roleRequest) {
+        Response response = getAddRoleResponse(serverPort, accessToken, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(UserRoleResponse.class);
     }
 
-    public static Response getAddRoleResponse(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getAddRoleResponse(int serverPort, String accessToken, RoleRequest roleRequest) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(roleRequest)
             .put(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_ADD_ROLE));
     }
 
-    public static UserRoleResponse removeRole(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
-        Response response = getRemoveRoleResponse(serverPort, accessTokenId, roleRequest);
+    public static UserRoleResponse removeRole(int serverPort, String accessToken, RoleRequest roleRequest) {
+        Response response = getRemoveRoleResponse(serverPort, accessToken, roleRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
         return response.getBody().as(UserRoleResponse.class);
     }
 
-    public static Response getRemoveRoleResponse(int serverPort, UUID accessTokenId, RoleRequest roleRequest) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getRemoveRoleResponse(int serverPort, String accessToken, RoleRequest roleRequest) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(roleRequest)
             .delete(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_REMOVE_ROLE));
     }
 
-    public static void addToAll(int serverPort, UUID accessTokenId, String password, String roleTest) {
-        Response response = getAddToAllResponse(serverPort, accessTokenId, password, roleTest);
+    public static void addToAll(int serverPort, String accessToken, String password, String roleTest) {
+        Response response = getAddToAllResponse(serverPort, accessToken, password, roleTest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
 
-    public static Response getAddToAllResponse(int serverPort, UUID accessTokenId, String password, String role) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getAddToAllResponse(int serverPort, String accessToken, String password, String role) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(password))
             .post(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_ADD_ROLE_TO_ALL, "role", role));
     }
 
-    public static void removeFromAll(int serverPort, UUID accessTokenId, String password, String roleTest) {
-        Response response = getRemoveFromAllResponse(serverPort, accessTokenId, password, roleTest);
+    public static void removeFromAll(int serverPort, String accessToken, String password, String roleTest) {
+        Response response = getRemoveFromAllResponse(serverPort, accessToken, password, roleTest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getRemoveFromAllResponse(int serverPort, UUID accessTokenId, String password, String role) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getRemoveFromAllResponse(int serverPort, String accessToken, String password, String role) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(password))
             .post(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_REMOVE_ROLE_FROM_ALL, "role", role));
     }

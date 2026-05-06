@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.elite_base.server;
 
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
 import org.springframework.web.bind.annotation.*;
@@ -10,11 +10,11 @@ import java.util.UUID;
 
 public interface MaterialTraderOverrideController {
     @PutMapping(EliteBaseEndpoints.ELITE_BASE_MATERIAL_TRADER_OVERRIDE_CREATE)
-    void createOverride(@RequestBody CreateMaterialTraderOverrideRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void createOverride(@RequestBody CreateMaterialTraderOverrideRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(EliteBaseEndpoints.ELITE_BASE_MATERIAL_TRADER_OVERRIDE_DELETE)
-    void deleteOverride(@PathVariable("stationId") UUID stationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteOverride(@PathVariable("stationId") UUID stationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(EliteBaseEndpoints.ELITE_BASE_MATERIAL_TRADER_OVERRIDE_VERIFY)
-    void verifyOverride(@PathVariable("stationId") UUID stationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void verifyOverride(@PathVariable("stationId") UUID stationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

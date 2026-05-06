@@ -28,26 +28,26 @@ public class RemindEveryXDaysEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void remindEveryXDaysEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = create(accessTokenId);
-        edit(accessTokenId, eventId);
+        UUID eventId = create(accessToken);
+        edit(accessToken, eventId);
     }
 
-    private void edit(UUID accessTokenId, UUID eventId) {
+    private void edit(String accessToken, UUID eventId) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.EVERY_X_DAYS)
             .toBuilder()
             .endDate(NEW_END_DATE)
             .remindMeBeforeDays(NEW_REMIND_ME_BEFORE_DAYS)
             .build();
 
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRemindMeBeforeDays()).isEqualTo(NEW_REMIND_ME_BEFORE_DAYS);
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId).getRemindMeBeforeDays()).isEqualTo(NEW_REMIND_ME_BEFORE_DAYS);
 
         Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort(),
-                accessTokenId,
+                accessToken,
                 EventRequestFactory.NEW_START_DATE .minusDays(6),
                 EventRequestFactory.NEW_END_DATE.plusDays(6)
             )
@@ -66,20 +66,20 @@ public class RemindEveryXDaysEventTest extends BackEndTest {
             .returns(OccurrenceStatus.PENDING, OccurrenceResponse::getStatus);
     }
 
-    private UUID create(UUID accessTokenId) {
+    private UUID create(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.EVERY_X_DAYS)
             .toBuilder()
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .endDate(END_DATE)
             .build();
 
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId).getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
 
         Map<LocalDate, OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrences(
                 getServerPort(),
-                accessTokenId,
+                accessToken,
                 EventRequestFactory.DEFAULT_START_DATE.minusDays(6),
                 EventRequestFactory.DEFAULT_END_DATE
             )

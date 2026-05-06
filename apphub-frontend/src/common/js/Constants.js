@@ -4,6 +4,7 @@ const GIGABYTES = MEGABYTES * 1024;
 
 const Constants = {
     STORAGE_KEY_TEST_MODE: "testMode",
+    STORAGE_KEY_LOCALE: "apphubLocale",
 
     //REQUEST
     COOKIE_LOCALE: "language",

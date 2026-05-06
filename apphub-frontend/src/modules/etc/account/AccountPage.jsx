@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import "./account_page.css";
 import localizationData from "./account_page_localization.json";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Header from "common/component/Header";
@@ -27,7 +26,6 @@ const AccountPage = () => {
     const [confirmationDialogData, setCinfirmationDialogData] = useState(null);
     const [userData, setUserData] = useState({});
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     useLoader({ request: ACCOUNT_GET_USER.createRequest(), mapper: setUserData });

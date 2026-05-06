@@ -3,7 +3,6 @@ import localizationData from "./notebook_edit_page_localization.json";
 import "./notebook_edit_page.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import loadItemData from "./service/NotebookEditListItemDataLoader";
 import Header from "common/component/Header";
@@ -13,7 +12,6 @@ import OpenedPageType from "../common/OpenedPageType";
 import InputField from "common/component/input/InputField";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import save from "./service/NotebookEditListItemSaverService";
 import { ToastContainer } from "react-toastify";
 import Spinner from "common/component/Spinner";
@@ -31,7 +29,6 @@ const NotebookEditListItemPage = () => {
     const [listItemType, setListItemType] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadItemData(listItemId, setDataFromResponse), []);
 

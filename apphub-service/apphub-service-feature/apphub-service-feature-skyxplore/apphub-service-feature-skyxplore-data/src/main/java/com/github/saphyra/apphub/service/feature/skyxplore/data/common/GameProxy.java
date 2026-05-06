@@ -21,7 +21,7 @@ public class GameProxy {
     private final LocaleProvider localeProvider;
 
     public Optional<UUID> getGameId() {
-        OneParamResponse<UUID> response = gameClient.getGameId(accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+        OneParamResponse<UUID> response = gameClient.getGameId(accessTokenProvider.getAsString(), localeProvider.getOrDefault());
         return Optional.ofNullable(response.getValue());
     }
 

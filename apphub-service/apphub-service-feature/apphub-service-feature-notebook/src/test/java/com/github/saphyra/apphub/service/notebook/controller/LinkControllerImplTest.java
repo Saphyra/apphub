@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.LinkRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.link.LinkCreationService;
 import org.junit.jupiter.api.Test;
@@ -30,14 +30,14 @@ public class LinkControllerImplTest {
     private LinkRequest linkRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void createLink() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(linkCreationService.create(linkRequest, USER_ID)).willReturn(LINK_ID);
 
-        OneParamResponse<UUID> result = underTest.createLink(linkRequest, accessTokenHeader);
+        OneParamResponse<UUID> result = underTest.createLink(linkRequest, accessToken);
 
         assertThat(result.getValue()).isEqualTo(LINK_ID);
     }

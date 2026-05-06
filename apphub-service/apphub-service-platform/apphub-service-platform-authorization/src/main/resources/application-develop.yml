@@ -1,0 +1,7 @@
+aws:
+  dynamoDb:
+    accessKeyId: dynamodbaccesskeyid
+    secretKey: dynamodbsecretkey
+    url: http://dynamodb:8000
+    refreshToken:
+      tableName: apphub-dev-refresh_token

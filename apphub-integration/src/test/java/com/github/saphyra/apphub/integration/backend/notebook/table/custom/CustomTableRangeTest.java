@@ -27,29 +27,29 @@ public class CustomTableRangeTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void customTableNumberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_nullData(accessTokenId);
-        create_failedToParse(accessTokenId);
-        create_nullValue(accessTokenId);
-        create_nullStep(accessTokenId);
-        create_tooLowStep(accessTokenId);
-        create_nullMin(accessTokenId);
-        create_nullMax(accessTokenId);
-        create_tooLowMax(accessTokenId);
-        create_valueNotInRange(accessTokenId);
-        create(accessTokenId);
+        create_nullData(accessToken);
+        create_failedToParse(accessToken);
+        create_nullValue(accessToken);
+        create_nullStep(accessToken);
+        create_tooLowStep(accessToken);
+        create_nullMin(accessToken);
+        create_nullMax(accessToken);
+        create_tooLowMax(accessToken);
+        create_valueNotInRange(accessToken);
+        create(accessToken);
 
-        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
             .get(0)
             .getId();
-        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
-        edit(accessTokenId, listItemId, tableResponse);
+        edit(accessToken, listItemId, tableResponse);
     }
 
-    private void edit(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         Range number = new Range(5d, 10d, 7d, 8d);
 
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
@@ -62,9 +62,9 @@ public class CustomTableRangeTest extends BackEndTest {
             number
         );
 
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
 
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
@@ -75,88 +75,88 @@ public class CustomTableRangeTest extends BackEndTest {
         assertThat(data.getMax()).isEqualTo(10d);
     }
 
-    private void create(UUID accessTokenId) {
+    private void create(String accessToken) {
         Range range = new Range(1d, 3d, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.NUMBER, range);
 
-        TableActions.createTable(getServerPort(), accessTokenId, request);
+        TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_valueNotInRange(UUID accessTokenId) {
+    private void create_valueNotInRange(String accessToken) {
         Range range = new Range(1d, 3d, 3d, 0d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.value", "too low");
     }
 
-    private void create_tooLowMax(UUID accessTokenId) {
+    private void create_tooLowMax(String accessToken) {
         Range range = new Range(2d, 1d, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.max", "too low");
     }
 
-    private void create_nullMax(UUID accessTokenId) {
+    private void create_nullMax(String accessToken) {
         Range range = new Range(1d, null, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.max", "must not be null");
     }
 
-    private void create_nullMin(UUID accessTokenId) {
+    private void create_nullMin(String accessToken) {
         Range range = new Range(null, 3d, 3d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.min", "must not be null");
     }
 
-    private void create_tooLowStep(UUID accessTokenId) {
+    private void create_tooLowStep(String accessToken) {
         Range range = new Range(1d, 3d, 0d, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.step", "too low");
     }
 
-    private void create_nullStep(UUID accessTokenId) {
+    private void create_nullStep(String accessToken) {
         Range range = new Range(1d, 3d, null, 2d);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.step", "must not be null");
     }
 
-    private void create_nullValue(UUID accessTokenId) {
+    private void create_nullValue(String accessToken) {
         Range range = new Range(1d, 3d, 4d, null);
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, range);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range.value", "must not be null");
     }
 
-    private void create_failedToParse(UUID accessTokenId) {
+    private void create_failedToParse(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, "asd");
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range", "failed to parse");
     }
 
-    private void create_nullData(UUID accessTokenId) {
+    private void create_nullData(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.RANGE, null);
 
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "range", "must not be null");
     }

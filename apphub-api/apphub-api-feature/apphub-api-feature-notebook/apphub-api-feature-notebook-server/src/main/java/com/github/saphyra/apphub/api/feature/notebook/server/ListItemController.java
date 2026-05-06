@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.feature.notebook.server;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.NotebookEndpoints;
@@ -19,10 +19,10 @@ import java.util.UUID;
 
 public interface ListItemController {
     @GetMapping(NotebookEndpoints.NOTEBOOK_GET_LIST_ITEM)
-    NotebookView findListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    NotebookView findListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.DELETE, path = NotebookEndpoints.NOTEBOOK_DELETE_LIST_ITEM)
-    void deleteListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.POST, path = NotebookEndpoints.NOTEBOOK_EDIT_LIST_ITEM)
     void editListItem(@RequestBody EditListItemRequest request, @PathVariable("listItemId") UUID listItemId);
@@ -34,8 +34,8 @@ public interface ListItemController {
     void cloneListItem(@PathVariable("listItemId") UUID listItemId);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_SEARCH)
-    List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_ARCHIVE_ITEM)
-    void archive(@RequestBody OneParamRequest<Boolean> archived, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void archive(@RequestBody OneParamRequest<Boolean> archived, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

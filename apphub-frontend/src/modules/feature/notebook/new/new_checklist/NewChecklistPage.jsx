@@ -4,7 +4,6 @@ import "./new_checklist.css";
 import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import ChecklistItemData from "../../common/checklist_item/ChecklistItemData";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Button from "common/component/input/Button";
 import { addItemToEdge } from "./service/NewChecklistItemOperations";
@@ -15,7 +14,6 @@ import IndexRange from "../../common/checklist_item/IndexRange";
 import getItems from "./service/NewChecklistItemAssembler";
 import Footer from "common/component/Footer";
 import create from "./service/NewChecklistSaver";
-import Constants from "common/js/Constants";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
 
@@ -28,7 +26,6 @@ const NewChecklistPage = () => {
     const [listItemTitle, setListItemTitle] = useState("");
     const [items, setItems] = useState([new ChecklistItemData(0)]);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const addButton = (indexRange, id) => {

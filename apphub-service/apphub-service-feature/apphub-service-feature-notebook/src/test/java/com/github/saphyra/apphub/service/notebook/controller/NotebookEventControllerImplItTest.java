@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
@@ -43,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class NotebookEventControllerImplItTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
+    private static final AccessToken ACCESS_TOKEN_HEADER = AccessToken.builder()
         .accessTokenId(UUID.randomUUID())
         .userId(USER_ID)
         .build();

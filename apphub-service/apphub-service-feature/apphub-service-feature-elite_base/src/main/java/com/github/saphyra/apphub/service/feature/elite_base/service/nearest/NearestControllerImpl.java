@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.nearest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.NearestMaterialTraderResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.server.NearestController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.elite_base.service.nearest.material_trader.NearestMaterialTraderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,8 @@ class NearestControllerImpl implements NearestController {
     private final NearestMaterialTraderService nearestMaterialTraderService;
 
     @Override
-    public List<NearestMaterialTraderResponse> getNearestMaterialTraders(UUID starId, MaterialType materialType, Integer page, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the page {} of the nearest {} material traders to star {}", accessTokenHeader.getUserId(), page, materialType, starId);
+    public List<NearestMaterialTraderResponse> getNearestMaterialTraders(UUID starId, MaterialType materialType, Integer page, AccessToken accessToken) {
+        log.info("{} wants to know the page {} of the nearest {} material traders to star {}", accessToken.getUserId(), page, materialType, starId);
 
         return nearestMaterialTraderService.getNearestMaterialTraders(starId, materialType, page);
     }

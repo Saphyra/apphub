@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./migration_tasks_page_localization.json";
 import "./migration_tasks.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import Stream from "common/js/collection/Stream";
 import MigrationTask from "./MigrationTask";
@@ -21,7 +20,6 @@ const MigrationTasksPage = () => {
     const [migrationTasks, setMigrationTasks] = useState([]);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadMigrationTasks(), []);
 

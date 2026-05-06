@@ -28,25 +28,25 @@ public class ChatTest extends BackEndTest {
     public void sendMessage() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, characterModel1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, characterModel2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessTokenId1, accessTokenId2, userId2);
+        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
 
-        SkyXploreLobbyActions.createLobby(getServerPort(), accessTokenId1, GAME_NAME);
+        SkyXploreLobbyActions.createLobby(getServerPort(), accessToken1, GAME_NAME);
 
-        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessTokenId1, userId2);
-        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessTokenId2, userId1);
+        SkyXploreLobbyActions.inviteToLobby(getServerPort(), accessToken1, userId2);
+        SkyXploreLobbyActions.acceptInvitation(getServerPort(), accessToken2, userId1);
 
-        ApphubWsClient hostClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId1, accessTokenId1);
-        ApphubWsClient memberClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessTokenId2, accessTokenId2);
+        ApphubWsClient hostClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessToken1, accessToken1);
+        ApphubWsClient memberClient = ApphubWsClient.createSkyXploreLobby(getServerPort(), accessToken2, accessToken2);
 
         messageTooLong(hostClient, memberClient);
         sendMessage(hostClient, userId1, characterModel1, memberClient);

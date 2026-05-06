@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.etc.modules.service;
 
 import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.etc.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
@@ -63,10 +63,10 @@ public class ModulesQueryService {
     }
 
     private boolean userHasRole(List<String> roles) {
-        AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
-        boolean result = accessTokenHeader.getRoles()
+        AccessToken accessToken = accessTokenProvider.get();
+        boolean result = accessToken.getRoles()
             .containsAll(roles);
-        log.info("User {} has all the roles {}: {}. (Granted roles are: {})", accessTokenHeader.getUserId(), roles, result, accessTokenHeader.getRoles());
+        log.info("User {} has all the roles {}: {}. (Granted roles are: {})", accessToken.getUserId(), roles, result, accessToken.getRoles());
         return result;
     }
 

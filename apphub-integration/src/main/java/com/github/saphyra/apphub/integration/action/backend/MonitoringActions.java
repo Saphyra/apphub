@@ -15,55 +15,55 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MonitoringActions {
-    public static List<Feature> getFeatures(int serverPort, UUID accessTokenId) {
-        Response response = getGetFeaturesResponse(serverPort, accessTokenId);
+    public static List<Feature> getFeatures(int serverPort, String accessToken) {
+        Response response = getGetFeaturesResponse(serverPort, accessToken);
 
         assertThat(response.statusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(Feature[].class));
     }
 
-    public static Response getGetFeaturesResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetFeaturesResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, MonitoringEndpoints.MONITORING_GET_FEATURES));
     }
 
-    public static List<String> getFunctionalities(int serverPort, UUID accessTokenId, Feature feature) {
-        Response response = getGetFunctionalitiesResponse(serverPort, accessTokenId, feature);
+    public static List<String> getFunctionalities(int serverPort, String accessToken, Feature feature) {
+        Response response = getGetFunctionalitiesResponse(serverPort, accessToken, feature);
 
         assertThat(response.statusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(String[].class));
     }
 
-    public static Response getGetFunctionalitiesResponse(int serverPort, UUID accessTokenId, Feature feature) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetFunctionalitiesResponse(int serverPort, String accessToken, Feature feature) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, MonitoringEndpoints.MONITORING_GET_FUNCTIONALITIES, "feature", feature));
     }
 
-    public static List<String> getServices(int serverPort, UUID accessTokenId, Feature feature, String functionality) {
-        Response response = getGetServicesResponse(serverPort, accessTokenId, feature, functionality);
+    public static List<String> getServices(int serverPort, String accessToken, Feature feature, String functionality) {
+        Response response = getGetServicesResponse(serverPort, accessToken, feature, functionality);
 
         assertThat(response.statusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(String[].class));
     }
 
-    public static Response getGetServicesResponse(int serverPort, UUID accessTokenId, Feature feature, String functionality) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetServicesResponse(int serverPort, String accessToken, Feature feature, String functionality) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, MonitoringEndpoints.MONITORING_GET_SERVICES, Map.of("feature", feature), Map.of("functionality", functionality)));
     }
 
-    public static List<GetMetricsResponse> getMetrics(int serverPort, UUID accessTokenId, String metricType, Feature feature, String functionality, String service) {
-        Response response = getGetMetricsResponse(serverPort, accessTokenId, metricType, feature, functionality, service);
+    public static List<GetMetricsResponse> getMetrics(int serverPort, String accessToken, String metricType, Feature feature, String functionality, String service) {
+        Response response = getGetMetricsResponse(serverPort, accessToken, metricType, feature, functionality, service);
 
         assertThat(response.statusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(GetMetricsResponse[].class));
     }
 
-    public static Response getGetMetricsResponse(int serverPort, UUID accessTokenId, String type, Feature feature, String functionality, String service) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetMetricsResponse(int serverPort, String accessToken, String type, Feature feature, String functionality, String service) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(
                 serverPort,
                 MonitoringEndpoints.MONITORING_GET_METRICS,

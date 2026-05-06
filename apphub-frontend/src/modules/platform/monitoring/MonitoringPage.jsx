@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import LocalizationHandler from "../../../common/js/LocalizationHandler";
-import sessionChecker from "../../../common/js/SessionChecker";
 import localizationData from "./monitoring_page_localization.json";
 import NotificationService from "../../../common/js/notification/NotificationService";
 import Header from "../../../common/component/Header";
@@ -21,7 +20,6 @@ const MonitoringPage = () => {
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [queryData, setQueryData] = useState(null);
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     return (

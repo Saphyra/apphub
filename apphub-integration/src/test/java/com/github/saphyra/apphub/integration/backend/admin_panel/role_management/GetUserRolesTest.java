@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.RoleMana
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.UserRoleResponse;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,26 +20,29 @@ public class GetUserRolesTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void getRoles() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        nullQueryString(accessTokenId);
-        tooShortQueryString(accessTokenId);
-        getUserRoles(userData, accessTokenId);
+        nullQueryString(accessToken);
+        tooShortQueryString(accessToken);
+        getUserRoles(userData, accessToken);
     }
 
-    private static void nullQueryString(UUID accessTokenId) {
-        Response nullQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessTokenId, null);
+    private static void nullQueryString(String accessToken) {
+        Response nullQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessToken, null);
         verifyInvalidParam(nullQueryStringResponse, "query", "must not be null");
     }
 
-    private static void tooShortQueryString(UUID accessTokenId) {
-        Response tooShortQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessTokenId, "as");
+    private static void tooShortQueryString(String accessToken) {
+        Response tooShortQueryStringResponse = RoleManagementActions.getRolesResponse(getServerPort(), accessToken, "as");
         verifyInvalidParam(tooShortQueryStringResponse, "query", "too short");
     }
 
-    private static void getUserRoles(RegistrationParameters userData, UUID accessTokenId) {
-        List<UserRoleResponse> successfulQueryResponse = RoleManagementActions.getRoles(getServerPort(), accessTokenId, userData.getEmail());
+    private static void getUserRoles(RegistrationParameters userData, String accessToken) {
+        List<UserRoleResponse> successfulQueryResponse = RoleManagementActions.getRoles(getServerPort(), accessToken, userData.getEmail());
 
         assertThat(successfulQueryResponse).hasSize(1);
         UserRoleResponse userRoleResponse = successfulQueryResponse.get(0);

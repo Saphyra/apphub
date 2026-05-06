@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.community.friendship;
 
 import com.github.saphyra.apphub.api.feature.community.model.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.community.server.FriendshipController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendshipQueryService;
 import lombok.RequiredArgsConstructor;
@@ -20,14 +20,14 @@ class FriendshipControllerImpl implements FriendshipController {
     private final FriendshipDeletionService friendshipDeletionService;
 
     @Override
-    public List<FriendshipResponse> getFriendships(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his Friendships", accessTokenHeader.getUserId());
-        return friendshipQueryService.getFriendships(accessTokenHeader.getUserId());
+    public List<FriendshipResponse> getFriendships(AccessToken accessToken) {
+        log.info("{} wants to know his Friendships", accessToken.getUserId());
+        return friendshipQueryService.getFriendships(accessToken.getUserId());
     }
 
     @Override
-    public void delete(UUID friendshipId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete Friendship {}", accessTokenHeader.getUserId(), friendshipId);
-        friendshipDeletionService.delete(accessTokenHeader.getUserId(), friendshipId);
+    public void delete(UUID friendshipId, AccessToken accessToken) {
+        log.info("{} wants to delete Friendship {}", accessToken.getUserId(), friendshipId);
+        friendshipDeletionService.delete(accessToken.getUserId(), friendshipId);
     }
 }

@@ -2,7 +2,6 @@ import LocalizationHandler from "common/js/LocalizationHandler";
 import localizationData from "./base64_localization.json";
 import "./base64.css";
 import { useEffect, useState } from "react";
-import sessionChecker from "common/js/SessionChecker";
 import NotificationService from "common/js/notification/NotificationService";
 import { Base64 } from "js-base64";
 import Header from "common/component/Header";
@@ -19,7 +18,6 @@ const Base64Page = ({ }) => {
     const [input, setInput] = useState("");
     const [output, setOutput] = useState("");
 
-    useEffect(sessionChecker, []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
     const encode = () => {

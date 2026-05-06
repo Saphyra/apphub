@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.terraform;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.surface.SurfaceResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.ToString;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,26 +34,26 @@ public class TerraformationControllerTest {
     private TerraformationController underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private SurfaceResponse surfaceResponse;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void terraformSurface() {
-        underTest.terraformSurface(new OneParamRequest<>(SURFACE_TYPE), PLANET_ID, SURFACE_ID, accessTokenHeader);
+        underTest.terraformSurface(new OneParamRequest<>(SURFACE_TYPE), PLANET_ID, SURFACE_ID, accessToken);
 
         verify(terraformationService).terraform(USER_ID, PLANET_ID, SURFACE_ID, SURFACE_TYPE);
     }
 
     @Test
     public void cancelTerraformation() {
-        underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessTokenHeader);
+        underTest.cancelTerraformation(PLANET_ID, SURFACE_ID, accessToken);
 
         verify(cancelTerraformationService).cancelTerraformationOfSurface(USER_ID, SURFACE_ID);
     }

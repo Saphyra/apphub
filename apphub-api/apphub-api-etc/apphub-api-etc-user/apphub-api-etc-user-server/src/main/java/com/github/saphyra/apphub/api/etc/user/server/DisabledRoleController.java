@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.etc.user.server;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
@@ -20,13 +20,13 @@ public interface DisabledRoleController {
      * Feature is used when a feature is set as default, but should not be enabled, or a critical bug is discovered.
      */
     @PutMapping(UserEndpoints.USER_DATA_DISABLE_ROLE)
-    List<DisabledRoleResponse> disableRole(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<DisabledRoleResponse> disableRole(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Re-enabling a role what had been disabled so users can access the feature
      */
     @DeleteMapping(UserEndpoints.USER_DATA_ENABLE_ROLE)
-    List<DisabledRoleResponse> enableRole(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<DisabledRoleResponse> enableRole(@RequestBody OneParamRequest<String> password, @PathVariable("role") String role, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Currently disabled roles

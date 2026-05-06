@@ -32,7 +32,7 @@ class BanConverter extends ConverterBase<BanEntity, Ban> {
             .userId(uuidConverter.convertDomain(domain.getUserId()))
             .bannedRole(domain.getBannedRole())
             .expiration(domain.getExpiration())
-            .permanent(domain.getPermanent())
+            .permanent(domain.isPermanent())
             .reason(domain.getReason())
             .bannedBy(uuidConverter.convertDomain(domain.getBannedBy()))
             .build();
