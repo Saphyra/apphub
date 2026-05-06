@@ -16,9 +16,28 @@ const ImageColumn = ({
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
     const [overwriteFile, setOverwriteFile] = useState(editingEnabled);
+    const [fullScreenPreviewOpen, setFullScreenPreviewOpen] = useState(false);
 
     useEffect(() => updateData(), [file]);
     useEffect(() => displayPreview(), [columnData.data]);
+    useEffect(
+        () => {
+            if (!fullScreenPreviewOpen) {
+                return;
+            }
+
+            const handleKeyUp = (event) => {
+                if (event.key === "Escape") {
+                    setFullScreenPreviewOpen(false);
+                }
+            }
+
+            window.addEventListener("keyup", handleKeyUp);
+
+            return () => window.removeEventListener("keyup", handleKeyUp);
+        },
+        [fullScreenPreviewOpen]
+    );
     useEffect(
         () => {
             if (overwriteFile && hasValue(columnData.data)) {
@@ -78,6 +97,7 @@ const ImageColumn = ({
                             <img
                                 className="notebook-table-image-preview"
                                 src={preview}
+                                onClick={() => setFullScreenPreviewOpen(true)}
                             />
                         }
                     </div>
@@ -97,6 +117,19 @@ const ImageColumn = ({
                         title={localizationHandler.get("change-column-type")}
                     />
                 </div>
+
+                {fullScreenPreviewOpen &&
+                    <div
+                        className="notebook-table-image-fullscreen-overlay"
+                        onClick={() => setFullScreenPreviewOpen(false)}
+                    >
+                        <img
+                            className="notebook-table-image-fullscreen"
+                            src={preview}
+                            onClick={() => setFullScreenPreviewOpen(false)}
+                        />
+                    </div>
+                }
             </td>
         );
     } else {
@@ -108,6 +141,7 @@ const ImageColumn = ({
                             <img
                                 className="notebook-table-image-preview"
                                 src={preview}
+                                onClick={() => setFullScreenPreviewOpen(true)}
                             />
 
                             <Button
@@ -116,6 +150,19 @@ const ImageColumn = ({
                                 title={localizationHandler.get("download-file")}
                             />
                         </div>
+                    </div>
+                }
+
+                {fullScreenPreviewOpen &&
+                    <div
+                        className="notebook-table-image-fullscreen-overlay"
+                        onClick={() => setFullScreenPreviewOpen(false)}
+                    >
+                        <img
+                            className="notebook-table-image-fullscreen"
+                            src={preview}
+                            onClick={() => setFullScreenPreviewOpen(false)}
+                        />
                     </div>
                 }
             </td>

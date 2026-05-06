@@ -18,6 +18,9 @@ import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_GET_LIST_ITEM, NOTEBOOK_NEW_PAGE } from "../NotebookEndpoints";
 import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import ErrorHandler from "common/js/dao/ErrorHandler";
+import ResponseStatus from "common/js/dao/ResponseStatus";
+import { type } from "@testing-library/user-event/dist/type";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -59,6 +62,12 @@ const NotebookPage = () => {
             const defaultListItemId = parsed[UserSettings.DEFAULT_LIST_ITEM_ID];
             if (!sessionStorage.openedListItem && hasValue(defaultListItemId)) {
                 const listItem = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: defaultListItemId })
+                    .addErrorHandler(
+                        new ErrorHandler(
+                            (response) => response.statusKey === ResponseStatus.NOT_FOUND,
+                            (response) => setOpenedListItemD({id: null, type: OpenedPageType.CATEGORY})
+                        )
+                    )
                     .send(updateDisplaySpinner);
 
                 setOpenedListItemD({ id: listItem.id, type: listItem.type });

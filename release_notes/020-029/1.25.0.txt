@@ -1,6 +1,8 @@
 ===FEATURES===
     Monitoring
         Hide properties
+    Notebook
+        Clicking on an image of custom table opens the image full size
 
 ===BUGFIXES===
     Monitoring
