@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +26,9 @@ public class LocalDynamoDbStartProcess {
         processKiller.killByPort(platformProperties.getLocalDynamoDbPort());
 
         String dynamoDbDirectoryLocation = propertyDao.getStringProperty(PropertyName.DYNAMO_DB_LOCAL_DIRECTORY);
+        if(isBlank(dynamoDbDirectoryLocation)){
+            throw new IllegalStateException("DynamoDB Directory Location is empty");
+        }
 
         List<String> command = List.of(
             "cmd",

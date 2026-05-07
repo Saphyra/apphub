@@ -1,6 +1,8 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    CI
+        Do not start application if DynamoDB location is not set
 
 ===PLATFORM CHANGES===
 
