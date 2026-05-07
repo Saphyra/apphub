@@ -1,0 +1,22 @@
+<html>
+<head>
+    <title>Production - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Production (<span th:text="${task_queue_size}"></span>)</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<ul class="menu">
+    <li><a href="/">Back</a></li>
+    <li><a href="/production/start-vm">Start Virtual Machine</a></li>
+    <li><a href="/production/deploy">Deploy</a></li>
+    <li><a href="/production/run-tests">Run tests</a> - Runs all the integration tests</li>
+    <li><a href="/production/proxy">Start proxy</a> - Starts the proxy application making the application available on LAN on port 8999</li>
+    <li><a href="/production/stop-vm">Stop Virtual Machine</a></li>
+    <li><a href="/production/configure">Configure</a></li>
+</ul>
+</body>
+</html>

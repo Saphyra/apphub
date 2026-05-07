@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.controller;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyViewForPage;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
@@ -69,7 +69,7 @@ public class SkyXploreLobbyControllerImplTest {
     private SkyXploreLobbyControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private ActiveFriendResponse activeFriendResponse;
@@ -82,13 +82,13 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     void lobbyForPage() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getLobbyName()).willReturn(LOBBY_NAME);
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
 
-        LobbyViewForPage result = underTest.lobbyForPage(accessTokenHeader);
+        LobbyViewForPage result = underTest.lobbyForPage(accessToken);
 
         assertThat(result.getLobbyName()).isEqualTo(LOBBY_NAME);
         assertThat(result.isHost()).isTrue();
@@ -98,74 +98,74 @@ public class SkyXploreLobbyControllerImplTest {
 
     @Test
     public void createLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.createLobby(new OneParamRequest<>(LOBBY_NAME), accessTokenHeader);
+        underTest.createLobby(new OneParamRequest<>(LOBBY_NAME), accessToken);
 
         verify(lobbyCreationService).createNew(USER_ID, LOBBY_NAME);
     }
 
     @Test
     public void exitFromLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.exitFromLobby(accessTokenHeader);
+        underTest.exitFromLobby(accessToken);
 
         verify(exitFromLobbyService).exit(USER_ID);
     }
 
     @Test
     public void inviteToLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.inviteToLobby(FRIEND_ID, accessTokenHeader);
+        underTest.inviteToLobby(FRIEND_ID, accessToken);
 
-        verify(invitationService).invite(accessTokenHeader, FRIEND_ID);
+        verify(invitationService).invite(accessToken, FRIEND_ID);
     }
 
     @Test
     public void acceptInvitation() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.acceptInvitation(FRIEND_ID, accessTokenHeader);
+        underTest.acceptInvitation(FRIEND_ID, accessToken);
 
         verify(joinToLobbyService).acceptInvitation(USER_ID, FRIEND_ID);
     }
 
     @Test
     public void getPlayersOfLobby() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(lobbyPlayerQueryService.getPlayers(USER_ID)).willReturn(List.of(lobbyPlayerResponse));
 
-        List<LobbyPlayerResponse> result = underTest.getPlayersOfLobby(accessTokenHeader);
+        List<LobbyPlayerResponse> result = underTest.getPlayersOfLobby(accessToken);
 
         assertThat(result).containsExactly(lobbyPlayerResponse);
     }
 
     @Test
     public void startGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.startGame(accessTokenHeader);
+        underTest.startGame(accessToken);
 
         verify(startGameService).startGame(USER_ID);
     }
 
     @Test
     public void getActiveFriends() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(activeFriendsService.getActiveFriends(accessTokenHeader)).willReturn(Arrays.asList(activeFriendResponse));
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(activeFriendsService.getActiveFriends(accessToken)).willReturn(Arrays.asList(activeFriendResponse));
 
-        List<ActiveFriendResponse> result = underTest.getActiveFriends(accessTokenHeader);
+        List<ActiveFriendResponse> result = underTest.getActiveFriends(accessToken);
 
         assertThat(result).containsExactly(activeFriendResponse);
     }
 
     @Test
     public void loadGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.loadGame(GAME_ID, accessTokenHeader);
+        underTest.loadGame(GAME_ID, accessToken);
 
         verify(lobbyCreationService).createForExistingGame(USER_ID, GAME_ID);
     }

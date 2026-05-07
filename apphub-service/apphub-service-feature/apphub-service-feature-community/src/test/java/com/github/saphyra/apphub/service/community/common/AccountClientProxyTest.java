@@ -42,7 +42,7 @@ public class AccountClientProxyTest {
 
     @BeforeEach
     public void setUp() {
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
     }
 
     @Test

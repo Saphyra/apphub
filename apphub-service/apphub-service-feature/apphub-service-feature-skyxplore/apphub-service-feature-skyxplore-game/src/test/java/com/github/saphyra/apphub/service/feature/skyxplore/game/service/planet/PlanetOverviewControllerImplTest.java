@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.planet.overview.PlanetOverviewResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,28 +32,28 @@ public class PlanetOverviewControllerImplTest {
     private PlanetOverviewControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private PlanetOverviewResponse planetOverviewResponse;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getOverview() {
         given(planetOverviewQueryService.getOverview(USER_ID, PLANET_ID)).willReturn(planetOverviewResponse);
 
-        PlanetOverviewResponse result = underTest.getPlanetOverview(PLANET_ID, accessTokenHeader);
+        PlanetOverviewResponse result = underTest.getPlanetOverview(PLANET_ID, accessToken);
 
         assertThat(result).isEqualTo(planetOverviewResponse);
     }
 
     @Test
     public void renamePlanet() {
-        underTest.renamePlanet(new OneParamRequest<>(NEW_PLANET_NAME), PLANET_ID, accessTokenHeader);
+        underTest.renamePlanet(new OneParamRequest<>(NEW_PLANET_NAME), PLANET_ID, accessToken);
 
         verify(renamePlanetService).rename(USER_ID, PLANET_ID, NEW_PLANET_NAME);
     }

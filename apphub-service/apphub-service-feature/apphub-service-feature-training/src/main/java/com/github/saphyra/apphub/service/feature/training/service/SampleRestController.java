@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.training.service;
 
 import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.config.common.endpoints.TrainingEndpoints;
+import com.github.saphyra.apphub.service.feature.training.config.TrainingEndpoints;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

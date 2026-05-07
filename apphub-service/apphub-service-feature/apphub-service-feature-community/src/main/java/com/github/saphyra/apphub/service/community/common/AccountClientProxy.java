@@ -21,14 +21,14 @@ public class AccountClientProxy {
     private final AccessTokenProvider accessTokenProvider;
 
     public List<AccountResponse> search(String query) {
-        return accountClient.searchAccount(new OneParamRequest<>(query), accessTokenProvider.getAsString(), localeProvider.getLocaleValidated());
+        return accountClient.searchAccount(new OneParamRequest<>(query), accessTokenProvider.getAsString(), localeProvider.getOrDefault());
     }
 
     public AccountResponse getAccount(UUID userId) {
-        return accountClient.getAccountInternal(userId, localeProvider.getLocaleValidated());
+        return accountClient.getAccountInternal(userId, localeProvider.getOrDefault());
     }
 
     public boolean userExists(UUID userId) {
-        return accountClient.userExists(userId, localeProvider.getLocaleValidated());
+        return accountClient.userExists(userId, localeProvider.getOrDefault());
     }
 }

@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.api.feature.community.server;
 
 import com.github.saphyra.apphub.api.feature.community.model.response.SearchResultItem;
 import com.github.saphyra.apphub.api.feature.community.model.response.blacklist.BlacklistResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.CommunityEndpoints;
+import com.github.saphyra.apphub.api.feature.community.model.response.CommunityEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,14 +19,14 @@ import java.util.UUID;
 
 public interface BlacklistController {
     @PostMapping(CommunityEndpoints.COMMUNITY_BLACKLIST_SEARCH)
-    List<SearchResultItem> search(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<SearchResultItem> search(@RequestBody OneParamRequest<String> queryString, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CommunityEndpoints.COMMUNITY_GET_BLACKLIST)
-    List<BlacklistResponse> getBlacklist(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<BlacklistResponse> getBlacklist(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PutMapping(CommunityEndpoints.COMMUNITY_CREATE_BLACKLIST)
-    BlacklistResponse create(@RequestBody OneParamRequest<UUID> blockedUserId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    BlacklistResponse create(@RequestBody OneParamRequest<UUID> blockedUserId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CommunityEndpoints.COMMUNITY_DELETE_BLACKLIST)
-    void delete(@PathVariable("blacklistId") UUID blacklistId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void delete(@PathVariable("blacklistId") UUID blacklistId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

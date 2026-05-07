@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.dao;
 import com.github.saphyra.apphub.ci.localization.Language;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.DeployMode;
+import com.github.saphyra.apphub.ci.value.EnvironmentSpecificProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
@@ -162,5 +163,18 @@ public class PropertyDao {
             .map(Property::getValue)
             .map(Integer::parseInt)
             .orElseGet(defaultProperties::getIntegrationRetryCount);
+    }
+
+    public EnvironmentSpecificProperties getEnvironmentSpecificProperties(PropertyName propertyName) {
+        return propertyRepository.findById(propertyName)
+            .map(Property::getValue)
+            .map(value -> objectMapper.readValue(value, EnvironmentSpecificProperties.class))
+            .orElseGet(EnvironmentSpecificProperties::new);
+    }
+
+    public String getStringProperty(PropertyName propertyName) {
+        return propertyRepository.findById(propertyName)
+            .map(Property::getValue)
+            .orElse("");
     }
 }

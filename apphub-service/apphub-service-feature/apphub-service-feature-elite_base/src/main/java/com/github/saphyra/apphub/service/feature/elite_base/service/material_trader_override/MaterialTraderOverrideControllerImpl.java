@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.material_tr
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.CreateMaterialTraderOverrideRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.server.EliteBaseAccountController;
 import com.github.saphyra.apphub.api.feature.elite_base.server.MaterialTraderOverrideController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.station.material_trader_override.MaterialTraderOverride;
@@ -26,9 +26,9 @@ class MaterialTraderOverrideControllerImpl implements MaterialTraderOverrideCont
     private final MaterialTraderOverrideFactory materialTraderOverrideFactory;
 
     @Override
-    public void createOverride(CreateMaterialTraderOverrideRequest request, AccessTokenHeader accessTokenHeader) {
-        boolean isAdmin = eliteBaseAccountController.isAdmin(accessTokenHeader);
-        log.info("{} wants to create materialTraderOverride based on request {}. Admin: {}", accessTokenHeader.getUserId(), request, isAdmin);
+    public void createOverride(CreateMaterialTraderOverrideRequest request, AccessToken accessToken) {
+        boolean isAdmin = eliteBaseAccountController.isAdmin(accessToken);
+        log.info("{} wants to create materialTraderOverride based on request {}. Admin: {}", accessToken.getUserId(), request, isAdmin);
 
         createMaterialTraderOverrideRequestValidator.validate(request);
 
@@ -38,8 +38,8 @@ class MaterialTraderOverrideControllerImpl implements MaterialTraderOverrideCont
     }
 
     @Override
-    public void deleteOverride(UUID stationId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete materialTraderOverride {}", accessTokenHeader.getUserId(), stationId);
+    public void deleteOverride(UUID stationId, AccessToken accessToken) {
+        log.info("{} wants to delete materialTraderOverride {}", accessToken.getUserId(), stationId);
 
         MaterialTraderOverride materialTraderOverride = materialTraderOverrideDao.findByIdValidated(stationId);
 
@@ -51,8 +51,8 @@ class MaterialTraderOverrideControllerImpl implements MaterialTraderOverrideCont
     }
 
     @Override
-    public void verifyOverride(UUID stationId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to verify materialTraderOverride {}", accessTokenHeader.getUserId(), stationId);
+    public void verifyOverride(UUID stationId, AccessToken accessToken) {
+        log.info("{} wants to verify materialTraderOverride {}", accessToken.getUserId(), stationId);
 
         MaterialTraderOverride materialTraderOverride = materialTraderOverrideDao.findByIdValidated(stationId);
 

@@ -101,18 +101,18 @@ public class StoredFileDaoTest {
     }
 
     @Test
-    void getAllView() {
-        given(repository.getAllView()).willReturn(List.of(storedFileView));
+    void getViewsByStorage() {
+        given(repository.getViewsByStorage(Storage.FTP)).willReturn(List.of(storedFileView));
 
-        assertThat(underTest.getAllView()).containsExactly(storedFileView);
+        assertThat(underTest.getViewsByStorage(Storage.FTP)).containsExactly(storedFileView);
     }
 
     @Test
-    void deleteAllById() {
+    void deleteByStorageAndIds() {
         given(uuidConverter.convertDomain(List.of(STORED_FILE_ID))).willReturn(List.of(STORED_FILE_ID_STRING));
 
-        underTest.deleteAllById(List.of(STORED_FILE_ID));
+        underTest.deleteByStorageAndIds(Storage.S3, List.of(STORED_FILE_ID));
 
-        then(repository).should().deleteAllById(List.of(STORED_FILE_ID_STRING));
+        then(repository).should().deleteByStorageAndStoredFileIdIn(Storage.S3, List.of(STORED_FILE_ID_STRING));
     }
 }

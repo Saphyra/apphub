@@ -24,26 +24,26 @@ public class RepeatOneTimeEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void repeatOneTimeEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = create(accessTokenId);
-        edit(accessTokenId, eventId);
+        UUID eventId = create(accessToken);
+        edit(accessToken, eventId);
     }
 
-    private void edit(UUID accessTokenId, UUID eventId) {
+    private void edit(String accessToken, UUID eventId) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .startDate(NEW_START_DATE)
             .repeatForDays(2)
             .build();
 
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, request);
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(NEW_START_DATE, EventResponse::getStartDate)
             .returns(2, EventResponse::getRepeatForDays);
 
-        List<OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId);
+        List<OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId);
         assertThat(occurrences)
             .extracting(OccurrenceResponse::getDate)
             .containsExactlyInAnyOrder(
@@ -52,17 +52,17 @@ public class RepeatOneTimeEventTest extends BackEndTest {
             );
     }
 
-    private UUID create(UUID accessTokenId) {
+    private UUID create(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .repeatForDays(3)
             .build();
 
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, request);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId).getRepeatForDays()).isEqualTo(3);
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId).getRepeatForDays()).isEqualTo(3);
 
-        List<OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId);
+        List<OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId);
         assertThat(occurrences).hasSize(3)
             .extracting(OccurrenceResponse::getDate)
             .containsExactlyInAnyOrder(EventRequestFactory.DEFAULT_START_DATE, EventRequestFactory.DEFAULT_START_DATE.plusDays(1), EventRequestFactory.DEFAULT_START_DATE.plusDays(2));

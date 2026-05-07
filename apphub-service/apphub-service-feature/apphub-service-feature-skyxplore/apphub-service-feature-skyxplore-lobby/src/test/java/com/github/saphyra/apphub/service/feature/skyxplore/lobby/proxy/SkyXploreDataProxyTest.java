@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreData
 import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreSavedGameClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewForLobbyCreation;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
@@ -49,18 +49,18 @@ public class SkyXploreDataProxyTest {
     private FriendshipResponse friendshipResponse;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private GameViewForLobbyCreation gameViewForLobbyCreation;
 
     @Test
     public void getFriends() {
-        given(accessTokenHeaderConverter.convertDomain(accessTokenHeader)).willReturn(ACCESS_TOKEN_HEADER);
+        given(accessTokenHeaderConverter.convertDomain(accessToken)).willReturn(ACCESS_TOKEN_HEADER);
         given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(dataFriendClient.getFriends(ACCESS_TOKEN_HEADER, LOCALE)).willReturn(Arrays.asList(friendshipResponse));
 
-        List<FriendshipResponse> result = underTest.getFriends(accessTokenHeader);
+        List<FriendshipResponse> result = underTest.getFriends(accessToken);
 
         assertThat(result).containsExactly(friendshipResponse);
     }

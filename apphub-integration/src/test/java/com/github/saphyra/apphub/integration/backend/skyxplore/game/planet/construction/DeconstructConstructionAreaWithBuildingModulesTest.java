@@ -30,22 +30,22 @@ public class DeconstructConstructionAreaWithBuildingModulesTest extends BackEndT
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         int serverPort = getServerPort();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId, characterModel1);
+        String accessToken = IndexPageActions.registerAndLogin(serverPort, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        SkyXploreFlow.startGame(serverPort, Constants.DEFAULT_GAME_NAME, new Player(accessTokenId, userId1));
+        SkyXploreFlow.startGame(serverPort, Constants.DEFAULT_GAME_NAME, new Player(accessToken, userId1));
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessToken)
             .getPlanetId();
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
-        UUID constructionAreaId = SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessTokenId, planetId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
-        SkyXploreBuildingModuleActions.constructBuildingModules(serverPort, accessTokenId, constructionAreaId, Constants.BUILDING_MODULE_HAMSTER_WHEEL, Constants.BUILDING_MODULE_SMALL_BATTERY);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID constructionAreaId = SkyXploreConstructionAreaActions.constructConstructionArea(serverPort, accessToken, planetId, surfaceId, Constants.CONSTRUCTION_AREA_EXTRACTOR);
+        SkyXploreBuildingModuleActions.constructBuildingModules(serverPort, accessToken, constructionAreaId, Constants.BUILDING_MODULE_HAMSTER_WHEEL, Constants.BUILDING_MODULE_SMALL_BATTERY);
 
-        SkyXploreConstructionAreaActions.deconstructConstructionArea(serverPort, accessTokenId, constructionAreaId);
+        SkyXploreConstructionAreaActions.deconstructConstructionArea(serverPort, accessToken, constructionAreaId);
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXploreBuildingModuleActions.getBuildingModules(serverPort, accessTokenId, constructionAreaId),
+            () -> SkyXploreBuildingModuleActions.getBuildingModules(serverPort, accessToken, constructionAreaId),
             buildingModuleResponses -> assertThat(buildingModuleResponses)
                 .hasSize(2)
                 .extracting(BuildingModuleResponse::getDeconstruction)
@@ -53,25 +53,25 @@ public class DeconstructConstructionAreaWithBuildingModulesTest extends BackEndT
         );
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId),
             surfaceResponse -> assertThat(surfaceResponse.getConstructionArea())
                 .extracting(SurfaceConstructionAreaResponse::getDeconstruction)
                 .isNotNull()
         );
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
 
         AwaitilityWrapper.create(180, 5)
-            .until(() -> SkyXploreBuildingModuleActions.getBuildingModules(serverPort, accessTokenId, constructionAreaId).isEmpty())
+            .until(() -> SkyXploreBuildingModuleActions.getBuildingModules(serverPort, accessToken, constructionAreaId).isEmpty())
             .assertTrue("BuildingModules are not deconstructed.");
 
-        assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getConstructionArea())
+        assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getConstructionArea())
             .isNotNull();
 
         AwaitilityWrapper.create(120, 5)
-            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getConstructionArea()))
+            .until(() -> isNull(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getConstructionArea()))
             .assertTrue("ConstructionArea is not deconstructed.");
 
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, true);
     }
 }

@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.platform.storage.service.store;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,8 +27,8 @@ import static org.mockito.Mockito.verify;
 public class StoreFileServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String FILE_NAME = "file-name";
-    private static final Long SIZE = 2345L;
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
+    private static final long FILE_SIZE = 3245L;
 
     @Mock
     private StoredFileFactory storedFileFactory;
@@ -37,13 +37,10 @@ public class StoreFileServiceTest {
     private StoredFileDao storedFileDao;
 
     @Mock
-    private FtpClientFactory ftpClientFactory;
-
-    @Mock
-    private UuidConverter uuidConverter;
-
-    @Mock
     private CommonConfigProperties properties;
+
+    @Mock
+    private StorageClientProvider storageClientProvider;
 
     @InjectMocks
     private StoreFileService underTest;
@@ -55,11 +52,11 @@ public class StoreFileServiceTest {
     private InputStream inputStream;
 
     @Mock
-    private FtpClientWrapper ftpClient;
+    private StorageClient storageClient;
 
     @Test
     public void createFile_nullFileName() {
-        Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, null, SIZE));
+        Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, null, FILE_SIZE));
 
         ExceptionValidator.validateInvalidParam(ex, "fileName", "must not be null");
     }
@@ -73,21 +70,21 @@ public class StoreFileServiceTest {
 
     @Test
     public void createFile_tooHighSize() {
-        given(properties.getMaxUploadedFileSize()).willReturn(SIZE + 1);
+        given(properties.getMaxUploadedFileSize()).willReturn(FILE_SIZE + 1);
 
-        Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, SIZE + 2));
+        Throwable ex = catchThrowable(() -> underTest.createFile(USER_ID, FILE_NAME, FILE_SIZE + 2));
 
         ExceptionValidator.validateInvalidParam(ex, "size", "too high");
     }
 
     @Test
     public void createFile() {
-        given(properties.getMaxUploadedFileSize()).willReturn(SIZE + 1);
+        given(properties.getMaxUploadedFileSize()).willReturn(FILE_SIZE + 1);
 
-        given(storedFileFactory.create(USER_ID, FILE_NAME, SIZE)).willReturn(storedFile);
+        given(storedFileFactory.create(USER_ID, FILE_NAME, FILE_SIZE)).willReturn(storedFile);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);
 
-        UUID result = underTest.createFile(USER_ID, FILE_NAME, SIZE);
+        UUID result = underTest.createFile(USER_ID, FILE_NAME, FILE_SIZE);
 
         verify(storedFileDao).save(storedFile);
 
@@ -96,7 +93,7 @@ public class StoreFileServiceTest {
 
     @Test
     public void uploadFile_tooBig() {
-        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, SIZE + 2));
+        Throwable ex = catchThrowable(() -> underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, FILE_SIZE + 2));
 
         ExceptionValidator.validateInvalidParam(ex, "size", "too high");
     }
@@ -126,19 +123,20 @@ public class StoreFileServiceTest {
 
     @Test
     public void uploadFile() {
+        given(properties.getMaxUploadedFileSize()).willReturn(FILE_SIZE + 1);
+
         given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(false);
+        given(storedFile.getStorage()).willReturn(Storage.FTP);
 
-        given(ftpClientFactory.create()).willReturn(ftpClient);
-        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
+        given(storageClientProvider.getClientForType(Storage.FTP)).willReturn(storageClient);
 
-        underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, 0L);
+        underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, FILE_SIZE);
 
-        verify(ftpClient).storeFile(FILE_NAME, inputStream);
+        verify(storageClient).upload(STORED_FILE_ID, inputStream, FILE_SIZE);
         verify(storedFile).setFileUploaded(true);
         verify(storedFileDao).save(storedFile);
-        verify(ftpClient).close();
     }
 }

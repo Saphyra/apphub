@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.chat;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.ChatRoomResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class SkyXploreGameChatControllerImplTest {
     private static final UUID USER_ID_1 = UUID.randomUUID();
-    public static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder().userId(USER_ID_1).build();
+    public static final AccessToken ACCESS_TOKEN_HEADER = AccessToken.builder().userId(USER_ID_1).build();
     private static final UUID USER_ID_2 = UUID.randomUUID();
     private static final String CHARACTER_NAME = "character-name";
     private static final String ROOM_ID = "room-id";

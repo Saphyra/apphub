@@ -13,8 +13,6 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
-
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyBadRequest;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,84 +21,84 @@ public class ChangePasswordTest extends BackEndTest {
     @Test(groups = {"be", "account"})
     public void changePassword() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        nullNewPassword(userData, accessTokenId);
-        tooShortPassword(userData, accessTokenId);
-        tooLongPassword(userData, accessTokenId);
-        nullPassword(accessTokenId);
-        nullDeactivateAllSessions(accessTokenId, userData);
-        incorrectPassword(accessTokenId);
-        successfulPasswordChange(userData, accessTokenId);
+        nullNewPassword(userData, accessToken);
+        tooShortPassword(userData, accessToken);
+        tooLongPassword(userData, accessToken);
+        nullPassword(accessToken);
+        nullDeactivateAllSessions(accessToken, userData);
+        incorrectPassword(accessToken);
+        successfulPasswordChange(userData, accessToken);
     }
 
-    private static void nullNewPassword(RegistrationParameters userData, UUID accessTokenId) {
+    private static void nullNewPassword(RegistrationParameters userData, String accessToken) {
         ChangePasswordRequest nullNewPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(null)
             .password(userData.getPassword())
             .deactivateAllSessions(false)
             .build();
-        Response nullNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, nullNewPasswordRequest);
+        Response nullNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, nullNewPasswordRequest);
         verifyInvalidParam(nullNewPasswordResponse, "newPassword", "must not be null");
     }
 
-    private static void tooShortPassword(RegistrationParameters userData, UUID accessTokenId) {
+    private static void tooShortPassword(RegistrationParameters userData, String accessToken) {
         ChangePasswordRequest tooShortNewPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.TOO_SHORT_PASSWORD)
             .password(userData.getPassword())
             .deactivateAllSessions(false)
             .build();
-        Response tooShortNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, tooShortNewPasswordRequest);
+        Response tooShortNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, tooShortNewPasswordRequest);
         verifyInvalidParam(tooShortNewPasswordResponse, "password", "too short");
     }
 
-    private static void tooLongPassword(RegistrationParameters userData, UUID accessTokenId) {
+    private static void tooLongPassword(RegistrationParameters userData, String accessToken) {
         ChangePasswordRequest tooLongNewPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.TOO_LONG_PASSWORD)
             .password(userData.getPassword())
             .deactivateAllSessions(false)
             .build();
-        Response tooLongNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, tooLongNewPasswordRequest);
+        Response tooLongNewPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, tooLongNewPasswordRequest);
         verifyInvalidParam(tooLongNewPasswordResponse, "password", "too long");
     }
 
-    private static void nullPassword(UUID accessTokenId) {
+    private static void nullPassword(String accessToken) {
         ChangePasswordRequest nullPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(null)
             .deactivateAllSessions(false)
             .build();
-        Response nullPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, nullPasswordRequest);
+        Response nullPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, nullPasswordRequest);
         verifyInvalidParam(nullPasswordResponse, "password", "must not be null or blank");
     }
 
-    private static void nullDeactivateAllSessions(UUID accessTokenId, RegistrationParameters userData) {
+    private static void nullDeactivateAllSessions(String accessToken, RegistrationParameters userData) {
         ChangePasswordRequest nullPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(userData.getPassword())
             .deactivateAllSessions(null)
             .build();
-        Response nullPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, nullPasswordRequest);
+        Response nullPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, nullPasswordRequest);
         verifyInvalidParam(nullPasswordResponse, "deactivateAllSessions", "must not be null");
     }
 
-    private static void incorrectPassword(UUID accessTokenId) {
+    private static void incorrectPassword(String accessToken) {
         ChangePasswordRequest incorrectPasswordRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(DataConstants.INCORRECT_PASSWORD)
             .deactivateAllSessions(false)
             .build();
-        Response incorrectPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, incorrectPasswordRequest);
+        Response incorrectPasswordResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, incorrectPasswordRequest);
         verifyBadRequest(incorrectPasswordResponse, ErrorCode.INCORRECT_PASSWORD);
     }
 
-    private static void successfulPasswordChange(RegistrationParameters userData, UUID accessTokenId) {
+    private static void successfulPasswordChange(RegistrationParameters userData, String accessToken) {
         ChangePasswordRequest successfulPasswordChangeRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(DataConstants.VALID_PASSWORD)
             .deactivateAllSessions(false)
             .build();
-        Response successfulPasswordChangeResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessTokenId, successfulPasswordChangeRequest);
+        Response successfulPasswordChangeResponse = AccountActions.getChangePasswordResponse(getServerPort(), accessToken, successfulPasswordChangeRequest);
 
         assertThat(successfulPasswordChangeResponse.getStatusCode()).isEqualTo(200);
 
@@ -115,17 +113,19 @@ public class ChangePasswordTest extends BackEndTest {
     @Test(groups = {"be", "account"})
     public void changePassword_deactivateAllSessions() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID accessTokenId2 = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken2 = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
+            .getAccessToken()
+            .getJwt();
 
         ChangePasswordRequest successfulPasswordChangeRequest = ChangePasswordRequest.builder()
             .newPassword(DataConstants.VALID_PASSWORD2)
             .password(DataConstants.VALID_PASSWORD)
             .deactivateAllSessions(true)
             .build();
-        AccountActions.changePassword(getServerPort(), accessTokenId1, successfulPasswordChangeRequest);
+        AccountActions.changePassword(getServerPort(), accessToken1, successfulPasswordChangeRequest);
 
-        assertThat(ModulesActions.getModulesResponse(getServerPort(), accessTokenId1).getStatusCode()).isEqualTo(401);
-        assertThat(ModulesActions.getModulesResponse(getServerPort(), accessTokenId2).getStatusCode()).isEqualTo(401);
+        assertThat(ModulesActions.getModulesResponse(getServerPort(), accessToken1).getStatusCode()).isEqualTo(401);
+        assertThat(ModulesActions.getModulesResponse(getServerPort(), accessToken2).getStatusCode()).isEqualTo(401);
     }
 }

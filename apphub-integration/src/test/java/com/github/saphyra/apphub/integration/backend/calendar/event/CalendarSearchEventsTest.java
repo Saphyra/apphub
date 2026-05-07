@@ -24,60 +24,60 @@ public class CalendarSearchEventsTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void searchEventsTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getSearchResponse(getServerPort(), accessTokenId, "aa"), "searchText", "too short");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getSearchResponse(getServerPort(), accessToken, "aa"), "searchText", "too short");
 
-        UUID eventWithMatchingTitle = createEventWithMatchingTitle(accessTokenId);
-        UUID eventWithMatchingContent = createEventWithMatchingContent(accessTokenId);
-        UUID eventWithMatchingOccurrence = createEventWithMatchingOccurrence(accessTokenId);
-        createUnmatchedEvent(accessTokenId);
+        UUID eventWithMatchingTitle = createEventWithMatchingTitle(accessToken);
+        UUID eventWithMatchingContent = createEventWithMatchingContent(accessToken);
+        UUID eventWithMatchingOccurrence = createEventWithMatchingOccurrence(accessToken);
+        createUnmatchedEvent(accessToken);
 
-        assertThat(CalendarEventActions.search(getServerPort(), accessTokenId, SEARCH_TEXT))
+        assertThat(CalendarEventActions.search(getServerPort(), accessToken, SEARCH_TEXT))
             .extracting(EventResponse::getEventId)
             .containsExactlyInAnyOrder(eventWithMatchingTitle, eventWithMatchingContent, eventWithMatchingOccurrence);
     }
 
-    private void createUnmatchedEvent(UUID accessTokenId) {
+    private void createUnmatchedEvent(String accessToken) {
         EventRequest eventRequest = EventRequestFactory.validRequest(RepetitionType.ONE_TIME);
 
-        CalendarEventActions.createEvent(getServerPort(), accessTokenId, eventRequest);
+        CalendarEventActions.createEvent(getServerPort(), accessToken, eventRequest);
     }
 
-    private UUID createEventWithMatchingOccurrence(UUID accessTokenId) {
+    private UUID createEventWithMatchingOccurrence(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .content(SEARCH_TEXT)
             .build();
 
-        return CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        return CalendarEventActions.createEvent(getServerPort(), accessToken, request);
     }
 
-    private UUID createEventWithMatchingContent(UUID accessTokenId) {
+    private UUID createEventWithMatchingContent(String accessToken) {
         EventRequest eventRequest = EventRequestFactory.validRequest(RepetitionType.ONE_TIME);
 
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, eventRequest);
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, eventRequest);
 
         OccurrenceRequest occurrenceRequest = OccurrenceRequestFactory.editRequest()
             .toBuilder()
             .note(SEARCH_TEXT)
             .build();
 
-        UUID occurrenceId = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId)
+        UUID occurrenceId = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId)
             .getFirst()
             .getOccurrenceId();
 
-        CalendarOccurrenceActions.editOccurrence(getServerPort(), accessTokenId, occurrenceId, occurrenceRequest);
+        CalendarOccurrenceActions.editOccurrence(getServerPort(), accessToken, occurrenceId, occurrenceRequest);
 
         return eventId;
     }
 
-    private UUID createEventWithMatchingTitle(UUID accessTokenId) {
+    private UUID createEventWithMatchingTitle(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .title(SEARCH_TEXT)
             .build();
 
-        return CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        return CalendarEventActions.createEvent(getServerPort(), accessToken, request);
     }
 }

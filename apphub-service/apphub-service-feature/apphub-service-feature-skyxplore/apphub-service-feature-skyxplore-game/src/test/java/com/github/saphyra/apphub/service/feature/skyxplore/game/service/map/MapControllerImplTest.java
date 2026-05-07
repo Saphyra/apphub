@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.map;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.map.MapResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.service.map.query.MapQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,17 +25,17 @@ public class MapControllerImplTest {
     private MapControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private MapResponse mapResponse;
 
     @Test
     public void getMap() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(mapQueryService.getMap(USER_ID)).willReturn(mapResponse);
 
-        MapResponse result = underTest.getMap(accessTokenHeader);
+        MapResponse result = underTest.getMap(accessToken);
 
         assertThat(result).isEqualTo(mapResponse);
     }

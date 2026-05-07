@@ -1,0 +1,27 @@
+===FEATURES===
+    Monitoring
+        Hide properties
+    Notebook
+        Clicking on an image of custom table opens the image full size
+
+===BUGFIXES===
+    Monitoring
+        Changing the feature does not load its functionalities
+
+===PLATFORM CHANGES===
+    Separate modules to etc/feature/platform in the frontend
+    Move endpoints to their corresponding API lib / FE module
+    index.js imports path from Endpoints
+    S3 integration
+    ApphubCI has a WebClient now
+
+===TECHNICAL DEBTS===
+    EliteBase
+        OrphanedRecordCleaner reports to monitoring instead of error report
+    Monitoring
+        Aggregate reports in lib before sending them
+
+===ETC===
+    Calendar
+        Highlight border of selected occurrence based on status
+    Spring Boot update

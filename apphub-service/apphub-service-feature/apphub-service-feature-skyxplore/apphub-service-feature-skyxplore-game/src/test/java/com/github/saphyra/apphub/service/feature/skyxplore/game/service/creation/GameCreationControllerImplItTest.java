@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.Sky
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Range;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreGameEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.SkyXploreGameApplication;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.proxy.CharacterProxy;

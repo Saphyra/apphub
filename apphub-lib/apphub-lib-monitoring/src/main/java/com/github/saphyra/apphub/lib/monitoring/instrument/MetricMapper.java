@@ -17,7 +17,7 @@ public interface MetricMapper {
     Double VALUE_1 = 1d;
     Double VALUE_0 = 0d;
 
-    default List<MetricPropertyModel> map(Feature feature, String functionality, boolean success, double time) {
+    default List<MetricPropertyModel> map(Feature feature, String functionality, Object result, boolean success, double time) {
         return List.of(
             MetricPropertyModel.builder()
                 .key(KEY_TOTAL_COUNT)

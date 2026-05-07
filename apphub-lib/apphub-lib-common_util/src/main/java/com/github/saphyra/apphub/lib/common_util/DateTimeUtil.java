@@ -2,10 +2,12 @@ package com.github.saphyra.apphub.lib.common_util;
 
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.Optional;
 
 @Component
@@ -33,8 +35,11 @@ public class DateTimeUtil {
     }
 
     public Long getCurrentTimeEpochMillis() {
-        return getCurrentDateTime()
-            .toInstant(ZoneOffset.UTC)
+        return toEpochMillis(getCurrentDateTime());
+    }
+
+    public long toEpochMillis(LocalDateTime currentTime) {
+        return currentTime.toInstant(ZoneOffset.UTC)
             .toEpochMilli();
     }
 
@@ -71,5 +76,13 @@ public class DateTimeUtil {
 
     public boolean isBetween(LocalDate date, LocalDate startDate, LocalDate endDate) {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
+
+    public LocalDateTime fromDate(Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneOffset.UTC);
+    }
+
+    public LocalDateTime fromEpochSecond(Long epochSecond) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSecond), ZoneOffset.UTC);
     }
 }

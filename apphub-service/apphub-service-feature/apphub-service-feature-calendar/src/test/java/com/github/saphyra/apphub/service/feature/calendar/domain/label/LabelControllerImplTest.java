@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
@@ -36,7 +36,7 @@ class LabelControllerImplTest {
     private LabelControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private LabelResponse labelResponse;
@@ -44,43 +44,43 @@ class LabelControllerImplTest {
     @Test
     void createLabel() {
         given(labelService.createLabel(USER_ID, LABEL)).willReturn(LABEL_ID);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        assertThat(underTest.createLabel(new OneParamRequest<>(LABEL), accessTokenHeader))
+        assertThat(underTest.createLabel(new OneParamRequest<>(LABEL), accessToken))
             .returns(LABEL_ID, OneParamResponse::getValue);
     }
 
     @Test
     void getLabels() {
         given(labelQueryService.getByUserId(USER_ID)).willReturn(List.of(labelResponse));
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        assertThat(underTest.getLabels(accessTokenHeader)).containsExactly(labelResponse);
+        assertThat(underTest.getLabels(accessToken)).containsExactly(labelResponse);
     }
 
     @Test
     void getLabel() {
         given(labelQueryService.getLabel(LABEL_ID)).willReturn(labelResponse);
 
-        assertThat(underTest.getLabel(LABEL_ID, accessTokenHeader)).isEqualTo(labelResponse);
+        assertThat(underTest.getLabel(LABEL_ID, accessToken)).isEqualTo(labelResponse);
     }
 
     @Test
     void deleteLabel() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(labelQueryService.getByUserId(USER_ID)).willReturn(List.of(labelResponse));
 
-        assertThat(underTest.deleteLabel(LABEL_ID, accessTokenHeader)).containsExactly(labelResponse);
+        assertThat(underTest.deleteLabel(LABEL_ID, accessToken)).containsExactly(labelResponse);
 
         then(labelService).should().deleteLabel(USER_ID, LABEL_ID);
     }
 
     @Test
     void editLabel() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(labelQueryService.getByUserId(USER_ID)).willReturn(List.of(labelResponse));
 
-        assertThat(underTest.editLabel(new OneParamRequest<>(LABEL), LABEL_ID, accessTokenHeader)).containsExactly(labelResponse);
+        assertThat(underTest.editLabel(new OneParamRequest<>(LABEL), LABEL_ID, accessToken)).containsExactly(labelResponse);
 
         then(labelService).should().editLabel(USER_ID, LABEL_ID, LABEL);
     }
@@ -89,6 +89,6 @@ class LabelControllerImplTest {
     void getLabelsOfEvent() {
         given(labelQueryService.getByEventId(EVENT_ID)).willReturn(List.of(labelResponse));
 
-        assertThat(underTest.getLabelsOfEvent(EVENT_ID, accessTokenHeader)).containsExactly(labelResponse);
+        assertThat(underTest.getLabelsOfEvent(EVENT_ID, accessToken)).containsExactly(labelResponse);
     }
 }

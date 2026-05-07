@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.encryption.encryption_key;
 import com.github.saphyra.apphub.api.platform.encryption.model.AccessMode;
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.service.EncryptionKeyCreationService;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.service.EncryptionKeyDeletionService;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.service.EncryptionKeyQueryService;
@@ -43,25 +43,25 @@ public class EncryptionKeyControllerImplTest {
     private EncryptionKey encryptionKey;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void createEncryptionKey() {
         given(encryptionKeyCreationService.createEncryptionKey(USER_ID, encryptionKey, AccessMode.EDIT)).willReturn(ENCRYPTION_KEY);
 
-        String result = underTest.createEncryptionKey(encryptionKey, AccessMode.EDIT, accessTokenHeader);
+        String result = underTest.createEncryptionKey(encryptionKey, AccessMode.EDIT, accessToken);
 
         assertThat(result).isEqualTo(ENCRYPTION_KEY);
     }
 
     @Test
     public void deleteEncryptionKey() {
-        underTest.deleteEncryptionKey(DataType.TEST, EXTERNAL_ID, AccessMode.EDIT, accessTokenHeader);
+        underTest.deleteEncryptionKey(DataType.TEST, EXTERNAL_ID, AccessMode.EDIT, accessToken);
 
         verify(encryptionKeyDeletionService).deleteEncryptionKey(USER_ID, DataType.TEST, EXTERNAL_ID, AccessMode.EDIT);
     }
@@ -70,7 +70,7 @@ public class EncryptionKeyControllerImplTest {
     public void getEncryptionKey() {
         given(encryptionKeyQueryService.getEncryptionKey(USER_ID, DataType.TEST, EXTERNAL_ID, AccessMode.EDIT)).willReturn(Optional.of(ENCRYPTION_KEY));
 
-        String result = underTest.getEncryptionKey(DataType.TEST, EXTERNAL_ID, AccessMode.EDIT, accessTokenHeader);
+        String result = underTest.getEncryptionKey(DataType.TEST, EXTERNAL_ID, AccessMode.EDIT, accessToken);
 
         assertThat(result).isEqualTo(ENCRYPTION_KEY);
     }

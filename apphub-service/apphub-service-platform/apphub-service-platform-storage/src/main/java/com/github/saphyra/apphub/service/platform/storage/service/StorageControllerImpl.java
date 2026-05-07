@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
+import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,48 +29,48 @@ public class StorageControllerImpl implements StorageController {
     private final StoredFileMetadataQueryService metadataQueryService;
 
     @Override
-    public UUID createFile(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a file.", accessTokenHeader.getUserId());
-        return storeFileService.createFile(accessTokenHeader.getUserId(), request.getFileName(), request.getSize());
+    public UUID createFile(CreateFileRequest request, AccessToken accessToken) {
+        log.info("{} wants to create a file.", accessToken.getUserId());
+        return storeFileService.createFile(accessToken.getUserId(), request.getFileName(), request.getSize());
     }
 
     @Override
-    public void uploadFile(UUID storedFileId, MultipartFile file, AccessTokenHeader accessTokenHeader) throws IOException {
-        storeFileService.uploadFile(accessTokenHeader.getUserId(), storedFileId, file.getInputStream(), file.getSize());
+    public void uploadFile(UUID storedFileId, MultipartFile file, AccessToken accessToken) throws IOException {
+        storeFileService.uploadFile(accessToken.getUserId(), storedFileId, file.getInputStream(), file.getSize());
     }
 
     @Override
-    public void deleteFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete file {}", accessTokenHeader.getUserId(), storedFileId);
-        deleteFileService.deleteFile(accessTokenHeader.getUserId(), storedFileId);
+    public void deleteFile(UUID storedFileId, AccessToken accessToken) {
+        log.info("{} wants to delete file {}", accessToken.getUserId(), storedFileId);
+        deleteFileService.deleteFile(accessToken.getUserId(), storedFileId);
     }
 
     @Override
-    public ResponseEntity<StreamingResponseBody> downloadFile(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query file {}", accessTokenHeader.getUserId(), storedFileId);
-        DownloadResult result = downloadFileService.downloadFile(accessTokenHeader.getUserId(), storedFileId);
+    public ResponseEntity<StreamingResponseBody> downloadFile(UUID storedFileId, AccessToken accessToken) {
+        log.info("{} wants to query file {}", accessToken.getUserId(), storedFileId);
+        BiWrapper<String, DownloadResult> result = downloadFileService.downloadFile(accessToken.getUserId(), storedFileId);
 
         StreamingResponseBody responseBody = outputStream -> {
 
             int numberOfBytesToWrite;
             byte[] data = new byte[4096];
-            while ((numberOfBytesToWrite = result.getInputStream().read(data, 0, data.length)) != -1) {
+            DownloadResult downloadResult = result.getEntity2();
+            while ((numberOfBytesToWrite = downloadResult.getInputStream().read(data, 0, data.length)) != -1) {
                 outputStream.write(data, 0, numberOfBytesToWrite);
             }
 
-            result.getInputStream().close();
-            result.getFtpClient().close();
+            downloadResult.close();
         };
 
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", result.getStoredFile().getFileName()))
+            .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=%s", result.getEntity1()))
             .contentType(MediaType.APPLICATION_OCTET_STREAM)
             .body(responseBody);
     }
 
     @Override
-    public StoredFileResponse getFileMetadata(UUID storedFileId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the metadata of file {}", accessTokenHeader.getUserId(), storedFileId);
-        return metadataQueryService.getMetadata(accessTokenHeader.getUserId(), storedFileId);
+    public StoredFileResponse getFileMetadata(UUID storedFileId, AccessToken accessToken) {
+        log.info("{} wants to know the metadata of file {}", accessToken.getUserId(), storedFileId);
+        return metadataQueryService.getMetadata(accessToken.getUserId(), storedFileId);
     }
 }

@@ -30,7 +30,7 @@ public class SkyXploreGameProxyTest {
 
     @Test
     public void loadGame() {
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
 
         underTest.loadGame(loadGameRequest);
 

@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterM
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.IncomingFriendRequestResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.SentFriendRequestResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.friendship.service.FriendshipQueryService;
@@ -60,7 +60,7 @@ public class FriendDataControllerImplTest {
     private FriendDataControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private SkyXploreCharacterModel model;
@@ -76,14 +76,14 @@ public class FriendDataControllerImplTest {
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getFriendCandidates() {
         given(friendCandidateQueryService.getFriendCandidates(USER_ID, QUERY_STRING)).willReturn(Arrays.asList(model));
 
-        List<SkyXploreCharacterModel> result = underTest.getFriendCandidates(new OneParamRequest<>(QUERY_STRING), accessTokenHeader);
+        List<SkyXploreCharacterModel> result = underTest.getFriendCandidates(new OneParamRequest<>(QUERY_STRING), accessToken);
 
         assertThat(result).containsExactly(model);
     }
@@ -92,7 +92,7 @@ public class FriendDataControllerImplTest {
     public void createFriendRequest() {
         given(friendRequestCreationService.createFriendRequest(USER_ID, FRIEND_ID)).willReturn(sentFriendRequestResponse);
 
-        SentFriendRequestResponse result = underTest.createFriendRequest(new OneParamRequest<>(FRIEND_ID), accessTokenHeader);
+        SentFriendRequestResponse result = underTest.createFriendRequest(new OneParamRequest<>(FRIEND_ID), accessToken);
 
         assertThat(result).isEqualTo(sentFriendRequestResponse);
     }
@@ -101,7 +101,7 @@ public class FriendDataControllerImplTest {
     public void getSentFriendRequests() {
         given(friendRequestQueryService.getSentFriendRequests(USER_ID)).willReturn(Arrays.asList(sentFriendRequestResponse));
 
-        List<SentFriendRequestResponse> result = underTest.getSentFriendRequests(accessTokenHeader);
+        List<SentFriendRequestResponse> result = underTest.getSentFriendRequests(accessToken);
 
         assertThat(result).containsExactly(sentFriendRequestResponse);
     }
@@ -110,14 +110,14 @@ public class FriendDataControllerImplTest {
     public void getIncomingFriendRequests() {
         given(friendRequestQueryService.getIncomingFriendRequests(USER_ID)).willReturn(Arrays.asList(incomingFriendRequestResponse));
 
-        List<IncomingFriendRequestResponse> result = underTest.getIncomingFriendRequests(accessTokenHeader);
+        List<IncomingFriendRequestResponse> result = underTest.getIncomingFriendRequests(accessToken);
 
         assertThat(result).containsExactly(incomingFriendRequestResponse);
     }
 
     @Test
     public void cancelFriendRequest() {
-        underTest.cancelFriendRequest(FRIEND_REQUEST_ID, accessTokenHeader);
+        underTest.cancelFriendRequest(FRIEND_REQUEST_ID, accessToken);
 
         verify(friendRequestCancelService).cancelFriendRequest(USER_ID, FRIEND_REQUEST_ID);
     }
@@ -126,7 +126,7 @@ public class FriendDataControllerImplTest {
     public void acceptFriendRequest() {
         given(friendRequestAcceptService.accept(USER_ID, FRIEND_REQUEST_ID)).willReturn(friendshipResponse);
 
-        FriendshipResponse result = underTest.acceptFriendRequest(FRIEND_REQUEST_ID, accessTokenHeader);
+        FriendshipResponse result = underTest.acceptFriendRequest(FRIEND_REQUEST_ID, accessToken);
 
         assertThat(result).isEqualTo(friendshipResponse);
     }
@@ -135,14 +135,14 @@ public class FriendDataControllerImplTest {
     public void getFriends() {
         given(friendshipQueryService.getFriends(USER_ID)).willReturn(Arrays.asList(friendshipResponse));
 
-        List<FriendshipResponse> result = underTest.getFriends(accessTokenHeader);
+        List<FriendshipResponse> result = underTest.getFriends(accessToken);
 
         assertThat(result).containsExactly(friendshipResponse);
     }
 
     @Test
     public void removeFriend() {
-        underTest.removeFriend(FRIENDSHIP_ID, accessTokenHeader);
+        underTest.removeFriend(FRIENDSHIP_ID, accessToken);
 
         verify(friendshipDeletionService).removeFriendship(FRIENDSHIP_ID, USER_ID);
     }

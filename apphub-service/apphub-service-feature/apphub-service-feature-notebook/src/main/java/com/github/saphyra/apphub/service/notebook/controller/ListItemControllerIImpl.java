@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditListItemRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.feature.notebook.server.ListItemController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.ArchiveService;
 import com.github.saphyra.apphub.service.notebook.service.ListItemDeletionService;
@@ -30,14 +30,14 @@ class ListItemControllerIImpl implements ListItemController {
     private final ListItemQueryService listItemQueryService;
 
     @Override
-    public NotebookView findListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
+    public NotebookView findListItem(UUID listItemId, AccessToken accessToken) {
         return listItemQueryService.findListItem(listItemId);
     }
 
     @Override
-    public void deleteListItem(UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to delete listItem with id {}", accessTokenHeader.getUserId(), listItemId);
-        listItemDeletionService.deleteListItem(listItemId, accessTokenHeader.getUserId());
+    public void deleteListItem(UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to delete listItem with id {}", accessToken.getUserId(), listItemId);
+        listItemDeletionService.deleteListItem(listItemId, accessToken.getUserId());
     }
 
     @Override
@@ -59,14 +59,14 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    public List<NotebookView> search(OneParamRequest<String> query, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to search for item(s).", accessTokenHeader.getUserId());
-        return searchService.search(accessTokenHeader.getUserId(), query.getValue());
+    public List<NotebookView> search(OneParamRequest<String> query, AccessToken accessToken) {
+        log.info("{} wants to search for item(s).", accessToken.getUserId());
+        return searchService.search(accessToken.getUserId(), query.getValue());
     }
 
     @Override
-    public void archive(OneParamRequest<Boolean> archived, UUID listItemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to archive an item.", accessTokenHeader.getUserId());
+    public void archive(OneParamRequest<Boolean> archived, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to archive an item.", accessToken.getUserId());
         archiveService.archive(listItemId, archived.getValue());
     }
 }

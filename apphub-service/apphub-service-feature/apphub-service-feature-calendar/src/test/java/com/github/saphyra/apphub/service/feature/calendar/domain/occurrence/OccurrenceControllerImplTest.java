@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence;
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.CreateOccurrenceService;
@@ -52,68 +52,68 @@ class OccurrenceControllerImplTest {
     private OccurrenceRequest occurrenceRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private OccurrenceResponse occurrenceResponse;
 
     @Test
     void createOccurrence() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(createOccurrenceService.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest)).willReturn(OCCURRENCE_ID);
 
-        assertThat(underTest.createOccurrence(occurrenceRequest, EVENT_ID, accessTokenHeader)).isEqualTo(new OneParamResponse<>(OCCURRENCE_ID));
+        assertThat(underTest.createOccurrence(occurrenceRequest, EVENT_ID, accessToken)).isEqualTo(new OneParamResponse<>(OCCURRENCE_ID));
     }
 
     @Test
     void editOccurrence() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.editOccurrence(occurrenceRequest, OCCURRENCE_ID, accessTokenHeader);
+        underTest.editOccurrence(occurrenceRequest, OCCURRENCE_ID, accessToken);
 
         then(editOccurrenceService).should().editOccurrence(OCCURRENCE_ID, occurrenceRequest);
     }
 
     @Test
     void deleteOccurrence() {
-        underTest.deleteOccurrence(OCCURRENCE_ID, accessTokenHeader);
+        underTest.deleteOccurrence(OCCURRENCE_ID, accessToken);
 
         then(deleteOccurrenceService).should().deleteOccurrence(OCCURRENCE_ID);
     }
 
     @Test
     void getOccurrences() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(occurrenceQueryService.getOccurrences(USER_ID, START_DATE, END_DATE, LABEL_ID)).willReturn(List.of(occurrenceResponse));
 
-        assertThat(underTest.getOccurrences(START_DATE, END_DATE, LABEL_ID, accessTokenHeader)).containsExactly(occurrenceResponse);
+        assertThat(underTest.getOccurrences(START_DATE, END_DATE, LABEL_ID, accessToken)).containsExactly(occurrenceResponse);
     }
 
     @Test
     void getOccurrence() {
         given(occurrenceQueryService.getOccurrence(OCCURRENCE_ID)).willReturn(occurrenceResponse);
 
-        assertThat(underTest.getOccurrence(OCCURRENCE_ID, accessTokenHeader)).isEqualTo(occurrenceResponse);
+        assertThat(underTest.getOccurrence(OCCURRENCE_ID, accessToken)).isEqualTo(occurrenceResponse);
     }
 
     @Test
     void getOccurrencesOfEvent() {
         given(occurrenceQueryService.getOccurrencesOfEvent(EVENT_ID)).willReturn(List.of(occurrenceResponse));
 
-        assertThat(underTest.getOccurrencesOfEvent(EVENT_ID, accessTokenHeader)).containsExactly(occurrenceResponse);
+        assertThat(underTest.getOccurrencesOfEvent(EVENT_ID, accessToken)).containsExactly(occurrenceResponse);
     }
 
     @Test
     void editOccurrenceStatus() {
         given(editOccurrenceService.editOccurrenceStatus(OCCURRENCE_ID, OccurrenceStatus.DONE)).willReturn(occurrenceResponse);
 
-        assertThat(underTest.editOccurrenceStatus(new OneParamRequest<>(OccurrenceStatus.DONE), OCCURRENCE_ID, accessTokenHeader)).isEqualTo(occurrenceResponse);
+        assertThat(underTest.editOccurrenceStatus(new OneParamRequest<>(OccurrenceStatus.DONE), OCCURRENCE_ID, accessToken)).isEqualTo(occurrenceResponse);
     }
 
     @Test
     void setReminded() {
         given(editOccurrenceService.setReminded(OCCURRENCE_ID)).willReturn(occurrenceResponse);
 
-        assertThat(underTest.setReminded(OCCURRENCE_ID, accessTokenHeader)).isEqualTo(occurrenceResponse);
+        assertThat(underTest.setReminded(OCCURRENCE_ID, accessToken)).isEqualTo(occurrenceResponse);
     }
 }

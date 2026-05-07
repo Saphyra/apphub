@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.user.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessToken;
-import com.github.saphyra.apphub.service.user.authentication.dao.AccessTokenDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.TestConstants;
@@ -21,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -47,13 +44,9 @@ public class UserEventControllerImplItTest {
     @Autowired
     private UserDao userDao;
 
-    @Autowired
-    private AccessTokenDao accessTokenDao;
-
     @AfterEach
     public void clear() {
         userDao.deleteAll();
-        accessTokenDao.deleteAll();
     }
 
     @Test
@@ -76,18 +69,6 @@ public class UserEventControllerImplItTest {
             .build();
         userDao.saveAll(Arrays.asList(user1, user2));
 
-        AccessToken accessToken1 = AccessToken.builder()
-            .accessTokenId(ACCESS_TOKEN_ID_1)
-            .userId(USER_ID_1)
-            .lastAccess(LocalDateTime.now().withNano(0))
-            .build();
-        AccessToken accessToken2 = AccessToken.builder()
-            .accessTokenId(ACCESS_TOKEN_ID_2)
-            .userId(USER_ID_2)
-            .lastAccess(LocalDateTime.now().withNano(0))
-            .build();
-        accessTokenDao.saveAll(Arrays.asList(accessToken1, accessToken2));
-
         SendEventRequest<DeleteAccountEvent> sendEventRequest = SendEventRequest.<DeleteAccountEvent>builder()
             .payload(new DeleteAccountEvent(USER_ID_1))
             .build();
@@ -99,6 +80,5 @@ public class UserEventControllerImplItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK.value());
 
         assertThat(userDao.findAll()).containsExactly(user2);
-        assertThat(accessTokenDao.findAll()).containsExactly(accessToken2);
     }
 }

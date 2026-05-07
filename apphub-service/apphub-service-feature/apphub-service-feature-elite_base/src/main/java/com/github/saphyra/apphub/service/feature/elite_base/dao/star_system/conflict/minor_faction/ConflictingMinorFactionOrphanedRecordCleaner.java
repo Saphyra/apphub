@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.conflict.minor_faction;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
 import com.github.saphyra.apphub.lib.sql_builder.condition.NotExistsCondition;
 import com.github.saphyra.apphub.lib.sql_builder.column.QualifiedColumn;
@@ -27,8 +28,8 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 class ConflictingMinorFactionOrphanedRecordCleaner extends OrphanedRecordCleaner {
     private final JdbcTemplate jdbcTemplate;
 
-    ConflictingMinorFactionOrphanedRecordCleaner(ErrorReporterService errorReporterService, JdbcTemplate jdbcTemplate) {
-        super(errorReporterService);
+    ConflictingMinorFactionOrphanedRecordCleaner(ErrorReporterService errorReporterService, MonitoringInstruments monitoringInstruments, JdbcTemplate jdbcTemplate) {
+        super(errorReporterService, monitoringInstruments);
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
@@ -40,8 +41,7 @@ public class BanExpirationTest extends SeleniumTest {
         RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
-        SleepUtil.sleep(3000);
-        adminDriver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(adminDriver, getServerPort());
         ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.BAN);
 
         BanActions.searchUser(adminDriver, testUserData.getEmail());
@@ -74,6 +74,7 @@ public class BanExpirationTest extends SeleniumTest {
         AwaitilityWrapper.create(180, 10)
             .until(() -> {
                 log.debug("Checking if user is unlocked...");
+                AccessTokenActions.invalidateAccessToken(testDriver, serverPort);
                 testDriver.navigate()
                     .to(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE));
                 return AwaitilityWrapper.create(5, 1)

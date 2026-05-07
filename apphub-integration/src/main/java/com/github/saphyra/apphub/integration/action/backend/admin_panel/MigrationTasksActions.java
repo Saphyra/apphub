@@ -14,50 +14,50 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MigrationTasksActions {
-    public static MigrationTasksResponse findMigrationTaskByEventValidated(int serverPort, UUID accessTokenId, String event) {
-        return findMigrationTaskByEvent(serverPort, accessTokenId, event)
+    public static MigrationTasksResponse findMigrationTaskByEventValidated(int serverPort, String accessToken, String event) {
+        return findMigrationTaskByEvent(serverPort, accessToken, event)
             .orElseThrow(() -> new RuntimeException("MigrationTask not found by event " + event));
     }
 
-    public static Optional<MigrationTasksResponse> findMigrationTaskByEvent(int serverPort, UUID accessTokenId, String event) {
-        return getMigrationTasks(serverPort, accessTokenId)
+    public static Optional<MigrationTasksResponse> findMigrationTaskByEvent(int serverPort, String accessToken, String event) {
+        return getMigrationTasks(serverPort, accessToken)
             .stream()
             .filter(migrationTasksResponse -> migrationTasksResponse.getEvent().equals(event))
             .findAny();
     }
 
-    private static List<MigrationTasksResponse> getMigrationTasks(int serverPort, UUID accessTokenId) {
-        Response response = getGetMigrationTasksResponse(serverPort, accessTokenId);
+    private static List<MigrationTasksResponse> getMigrationTasks(int serverPort, String accessToken) {
+        Response response = getGetMigrationTasksResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(MigrationTasksResponse[].class));
     }
 
-    public static Response getGetMigrationTasksResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetMigrationTasksResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_GET_TASKS));
     }
 
-    public static void triggerTask(int serverPort, UUID accessTokenId, String event) {
-        Response response = getTriggerTaskResponse(serverPort, accessTokenId, event);
+    public static void triggerTask(int serverPort, String accessToken, String event) {
+        Response response = getTriggerTaskResponse(serverPort, accessToken, event);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getTriggerTaskResponse(int serverPort, UUID accessTokenId, String event) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getTriggerTaskResponse(int serverPort, String accessToken, String event) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .post(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_TRIGGER_TASK, "event", event));
     }
 
-    public static void deleteTask(int serverPort, UUID accessTokenId, String event) {
-        Response response = getDeleteTaskResponse(serverPort, accessTokenId, event);
+    public static void deleteTask(int serverPort, String accessToken, String event) {
+        Response response = getDeleteTaskResponse(serverPort, accessToken, event);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteTaskResponse(int serverPort, UUID accessTokenId, String event) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteTaskResponse(int serverPort, String accessToken, String event) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, AdminPanelEndpoints.ADMIN_PANEL_MIGRATION_DELETE_TASK, "event", event));
     }
 }

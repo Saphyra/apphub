@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.game.server.platform.SkyX
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.CreateChatRoomRequest;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.ChatRoomResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.player.Player;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.service.chat.create.CreateChatRoomService;
@@ -24,15 +24,15 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     private final LeaveChatRoomService leaveChatRoomService;
 
     @Override
-    public List<SkyXploreCharacterModel> getPlayers(Boolean excludeSelf, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the players of game.", accessTokenHeader.getUserId());
-        return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
+    public List<SkyXploreCharacterModel> getPlayers(Boolean excludeSelf, AccessToken accessToken) {
+        log.info("{} wants to know the players of game.", accessToken.getUserId());
+        return gameDao.findByUserIdValidated(accessToken.getUserId())
             .getPlayers()
             .values()
             .stream()
             .filter(player -> !player.isAi())
             .filter(Player::isConnected)
-            .filter(player -> !excludeSelf || !player.getUserId().equals(accessTokenHeader.getUserId()))
+            .filter(player -> !excludeSelf || !player.getUserId().equals(accessToken.getUserId()))
             .map(player -> SkyXploreCharacterModel.builder()
                 .id(player.getUserId())
                 .name(player.getPlayerName())
@@ -42,26 +42,26 @@ public class SkyXploreGameChatControllerImpl implements SkyXploreGameChatControl
     }
 
     @Override
-    public void createChatRoom(CreateChatRoomRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a chat room for members {}", accessTokenHeader.getUserId(), request.getMembers());
-        createChatRoomService.createChatRoom(accessTokenHeader.getUserId(), request);
+    public void createChatRoom(CreateChatRoomRequest request, AccessToken accessToken) {
+        log.info("{} wants to create a chat room for members {}", accessToken.getUserId(), request.getMembers());
+        createChatRoomService.createChatRoom(accessToken.getUserId(), request);
     }
 
     @Override
-    public void leaveChatRoom(String roomId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to leave room {}", accessTokenHeader.getUserId(), roomId);
-        leaveChatRoomService.leave(accessTokenHeader.getUserId(), roomId);
+    public void leaveChatRoom(String roomId, AccessToken accessToken) {
+        log.info("{} wants to leave room {}", accessToken.getUserId(), roomId);
+        leaveChatRoomService.leave(accessToken.getUserId(), roomId);
     }
 
     @Override
-    public List<ChatRoomResponse> getChatRooms(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his chat rooms.", accessTokenHeader.getUserId());
+    public List<ChatRoomResponse> getChatRooms(AccessToken accessToken) {
+        log.info("{} wants to know his chat rooms.", accessToken.getUserId());
 
-        return gameDao.findByUserIdValidated(accessTokenHeader.getUserId())
+        return gameDao.findByUserIdValidated(accessToken.getUserId())
             .getChat()
             .getRooms()
             .stream()
-            .filter(chatRoom -> chatRoom.getMembers().contains(accessTokenHeader.getUserId()))
+            .filter(chatRoom -> chatRoom.getMembers().contains(accessToken.getUserId()))
             .map(chatRoom -> ChatRoomResponse.builder()
                 .roomId(chatRoom.getId())
                 .roomTitle(chatRoom.getRoomTitle())

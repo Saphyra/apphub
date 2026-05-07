@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao;
 
+import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.BufferSynchronizationService;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingLock;
 import com.github.saphyra.apphub.service.feature.elite_base.common.OrphanedRecordCleanerProperties;
+import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,10 +31,10 @@ public class OrphanedRecordCleanerScheduler {
     private final EliteBaseProperties properties;
     private final ExecutorServiceBean executorServiceBean;
     private final List<OrphanedRecordCleaner> orphanedRecordCleaners;
-    private final ErrorReporterService errorReporterService;
     private final MessageProcessingLock messageProcessingLock;
     private final BufferSynchronizationService bufferSynchronizationService;
     private final SleepService sleepService;
+    private final MonitoringInstruments monitoringInstruments;
 
     public synchronized void cleanup() {
         Lock writeLock = messageProcessingLock.writeLock();
@@ -42,51 +44,65 @@ public class OrphanedRecordCleanerScheduler {
 
             OrphanedRecordCleanerProperties orphanedRecordCleanerProperties = properties.getOrphanedRecordCleaner();
 
-            Semaphore semaphore = new Semaphore(orphanedRecordCleanerProperties.getProcessorParallelism());
-            Set<Orphanage> finished = new CopyOnWriteArraySet<>();
-            Set<Orphanage> started = new HashSet<>();
-            Set<Orphanage> all = orphanedRecordCleaners.stream()
-                .map(OrphanedRecordCleaner::getOrphanage)
-                .collect(Collectors.toSet());
+            int totalRows = monitoringInstruments.wrap(
+                () -> doCleanup(orphanedRecordCleanerProperties),
+                Feature.ELITE_BASE_ORPHANED_RECORD_CLEANUP,
+                PerformanceReportingKey.ORPHANED_RECORD_CLEANUP_TOTAL.name()
+            );
 
-            AtomicInteger rowsDeleted = new AtomicInteger(0);
-            Stopwatch stopwatch = Stopwatch.createStarted();
+            log.info("Orphaned records are cleaned up. Total rows deleted: {}", totalRows);
 
-            while (started.size() < all.size() && stopwatch.elapsed(TimeUnit.SECONDS) < orphanedRecordCleanerProperties.getTimeout().toSeconds()) {
-                all.stream()
-                    .filter(orphanage -> !started.contains(orphanage))
-                    .forEach(orphanage -> {
-                        if (schedule(orphanage, finished, semaphore, rowsDeleted)) {
-                            started.add(orphanage);
-                        }
-                    });
-
-                Set<Orphanage> inProgress = started.stream()
-                    .filter(orphanage -> !finished.contains(orphanage))
-                    .collect(Collectors.toSet());
-                Set<Orphanage> toBeStarted = all.stream()
-                    .filter(orphanage -> !started.contains(orphanage))
-                    .collect(Collectors.toSet());
-                log.info("{}/{}/{} Finished orphanedRecordCleaners: {} In progress: {} To be started: {}", finished.size(), inProgress.size(), all.size(), finished, inProgress, toBeStarted);
-
-                sleepService.sleep(2000);
-            }
-
-            log.info("All orphaned record cleaners have been started. Waiting for their completion...");
-
-            while (finished.size() < all.size() && stopwatch.elapsed(TimeUnit.SECONDS) < orphanedRecordCleanerProperties.getTimeout().toSeconds()) {
-                List<Orphanage> inProgress = all.stream()
-                    .filter(orphanage -> !finished.contains(orphanage))
-                    .toList();
-                log.info("{}/{} Finished orphanedRecordCleaners: {} In progress: {}", finished.size(), all.size(), finished, inProgress);
-
-                sleepService.sleep(4000);
-            }
-            stopwatch.stop();
-            errorReporterService.report("EliteBase orphanedRecordCleanup finished in %s seconds. %s rows were deleted.".formatted(stopwatch.elapsed(TimeUnit.SECONDS), rowsDeleted));
         } finally {
             writeLock.unlock();
         }
+    }
+
+    private int doCleanup(OrphanedRecordCleanerProperties orphanedRecordCleanerProperties) {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+
+        Semaphore semaphore = new Semaphore(orphanedRecordCleanerProperties.getProcessorParallelism());
+        Set<Orphanage> finished = new CopyOnWriteArraySet<>();
+        Set<Orphanage> started = new HashSet<>();
+        Set<Orphanage> all = orphanedRecordCleaners.stream()
+            .map(OrphanedRecordCleaner::getOrphanage)
+            .collect(Collectors.toSet());
+
+        AtomicInteger rowsDeleted = new AtomicInteger(0);
+
+        while (started.size() < all.size() && stopwatch.elapsed(TimeUnit.SECONDS) < orphanedRecordCleanerProperties.getTimeout().toSeconds()) {
+            all.stream()
+                .filter(orphanage -> !started.contains(orphanage))
+                .forEach(orphanage -> {
+                    if (schedule(orphanage, finished, semaphore, rowsDeleted)) {
+                        started.add(orphanage);
+                    }
+                });
+
+            Set<Orphanage> inProgress = started.stream()
+                .filter(orphanage -> !finished.contains(orphanage))
+                .collect(Collectors.toSet());
+            Set<Orphanage> toBeStarted = all.stream()
+                .filter(orphanage -> !started.contains(orphanage))
+                .collect(Collectors.toSet());
+            log.info("{}/{}/{} Finished orphanedRecordCleaners: {} In progress: {} To be started: {}", finished.size(), inProgress.size(), all.size(), finished, inProgress, toBeStarted);
+
+            sleepService.sleep(2000);
+        }
+
+        log.info("All orphaned record cleaners have been started. Waiting for their completion...");
+
+        while (finished.size() < all.size() && stopwatch.elapsed(TimeUnit.SECONDS) < orphanedRecordCleanerProperties.getTimeout().toSeconds()) {
+            List<Orphanage> inProgress = all.stream()
+                .filter(orphanage -> !finished.contains(orphanage))
+                .toList();
+            log.info("{}/{} Finished orphanedRecordCleaners: {} In progress: {}", finished.size(), all.size(), finished, inProgress);
+
+            sleepService.sleep(4000);
+        }
+
+        stopwatch.stop();
+
+        return rowsDeleted.get();
     }
 
     /**

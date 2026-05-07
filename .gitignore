@@ -17,3 +17,5 @@ apphub-integration/error_report/**
 
 # production
 **/build
+
+dynamodb-local-metadata.json

@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
+import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.client.ftp.FtpClientWrapper;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,10 +36,7 @@ public class DownloadFileServiceTest {
     private StoredFileDao storedFileDao;
 
     @Mock
-    private FtpClientFactory ftpClientFactory;
-
-    @Mock
-    private UuidConverter uuidConverter;
+    private StorageClientProvider storageClientProvider;
 
     @InjectMocks
     private DownloadFileService underTest;
@@ -50,6 +50,12 @@ public class DownloadFileServiceTest {
     @Mock
     private InputStream inputStream;
 
+    @Mock
+    private StorageClient storageClient;
+
+    @Mock
+    private DownloadResult downloadResult;
+
     @Test
     public void downloadFile_forbiddenOperation() {
         given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
@@ -60,7 +66,6 @@ public class DownloadFileServiceTest {
 
         ExceptionValidator.validateForbiddenOperation(ex);
     }
-
 
     @Test
     public void downloadFile_noFileUploaded() {
@@ -80,16 +85,16 @@ public class DownloadFileServiceTest {
 
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(true);
+        given(storedFile.getStorage()).willReturn(Storage.FTP);
+        given(storedFile.getFileName()).willReturn(FILE_NAME);
 
-        given(ftpClientFactory.create()).willReturn(ftpClient);
-        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(FILE_NAME);
-        given(ftpClient.downloadFile(FILE_NAME)).willReturn(inputStream);
+        given(storageClientProvider.getClientForType(Storage.FTP)).willReturn(storageClient);
+        given(storageClient.download(STORED_FILE_ID)).willReturn(downloadResult);
 
-        DownloadResult result = underTest.downloadFile(USER_ID, STORED_FILE_ID);
+        BiWrapper<String, DownloadResult> result = underTest.downloadFile(USER_ID, STORED_FILE_ID);
 
-        assertThat(result.getInputStream()).isEqualTo(inputStream);
-        assertThat(result.getStoredFile()).isEqualTo(storedFile);
-        assertThat(result.getFtpClient()).isEqualTo(ftpClient);
+        assertThat(result.getEntity1()).isEqualTo(FILE_NAME);
+        assertThat(result.getEntity2()).isEqualTo(downloadResult);
 
         verify(ftpClient, times(0)).close();
     }

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.solar_s
 
 import com.github.saphyra.apphub.api.feature.skyxplore.game.server.game.solar_system.SkyXploreGameSolarSystemController;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.solar_system.SolarSystemResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +18,14 @@ class SolarSystemControllerImpl implements SkyXploreGameSolarSystemController {
     private final RenameSolarSystemService renameSolarSystemService;
 
     @Override
-    public SolarSystemResponse getSolarSystem(UUID solarSystemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to view solarSystem {}", accessTokenHeader.getUserId(), solarSystemId);
-        return solarSystemResponseQueryService.getSolarSystem(accessTokenHeader.getUserId(), solarSystemId);
+    public SolarSystemResponse getSolarSystem(UUID solarSystemId, AccessToken accessToken) {
+        log.info("{} wants to view solarSystem {}", accessToken.getUserId(), solarSystemId);
+        return solarSystemResponseQueryService.getSolarSystem(accessToken.getUserId(), solarSystemId);
     }
 
     @Override
-    public void renameSolarSystem(OneParamRequest<String> solarSystemName, UUID solarSystemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to rename solarSystem {}", accessTokenHeader.getUserId(), solarSystemId);
-        renameSolarSystemService.rename(accessTokenHeader.getUserId(), solarSystemId, solarSystemName.getValue());
+    public void renameSolarSystem(OneParamRequest<String> solarSystemName, UUID solarSystemId, AccessToken accessToken) {
+        log.info("{} wants to rename solarSystem {}", accessToken.getUserId(), solarSystemId);
+        renameSolarSystemService.rename(accessToken.getUserId(), solarSystemId, solarSystemName.getValue());
     }
 }

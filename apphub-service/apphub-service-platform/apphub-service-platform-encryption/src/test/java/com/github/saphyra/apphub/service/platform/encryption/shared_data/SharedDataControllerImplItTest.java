@@ -5,12 +5,12 @@ import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.api.platform.encryption.model.SharedData;
 import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
-import com.github.saphyra.apphub.lib.config.common.endpoints.EncryptionEndpoints;
+import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionEndpoints;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
 import com.github.saphyra.apphub.test.rest_assured.ErrorResponseValidator;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
@@ -47,7 +47,7 @@ public class SharedDataControllerImplItTest {
     private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final UUID EXTERNAL_ID_1 = UUID.randomUUID();
     private static final UUID EXTERNAL_ID_2 = UUID.randomUUID();
-    private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
+    private static final AccessToken ACCESS_TOKEN_HEADER = AccessToken.builder()
         .userId(USER_ID)
         .build();
 

@@ -6,30 +6,28 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.RoleRequest;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.util.UUID;
 
 public class RoleManagementRoleProtectionTest extends BackEndTest {
     @Test(dataProvider = "roleProvider", groups = {"be", "admin-panel", "role-protection"})
     public void roleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        SleepUtil.sleep(3000);
-
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRolesResponse(getServerPort(), accessTokenId, ""));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddRoleResponse(getServerPort(), accessTokenId, new RoleRequest()));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessTokenId, new RoleRequest()));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddToAllResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
-        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveFromAllResponse(getServerPort(), accessTokenId, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRolesResponse(getServerPort(), accessToken, ""));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, new RoleRequest()));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessToken, new RoleRequest()));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getAddToAllResponse(getServerPort(), accessToken, userData.getPassword(), Constants.ROLE_TEST));
+        CommonUtils.verifyMissingRole(() -> RoleManagementActions.getRemoveFromAllResponse(getServerPort(), accessToken, userData.getPassword(), Constants.ROLE_TEST));
     }
 
     @DataProvider(parallel = true)

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.lobby.controller.filter;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
@@ -26,8 +26,8 @@ public class LobbyLastAccessInterceptorFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            AccessTokenHeader accessTokenHeader = accessTokenProvider.get();
-            lobbyDao.findByUserId(accessTokenHeader.getUserId())
+            AccessToken accessToken = accessTokenProvider.get();
+            lobbyDao.findByUserId(accessToken.getUserId())
                 .ifPresent(lobby -> lobby.setLastAccess(dateTimeUtil.getCurrentDateTime()));
         } catch (Exception e) {
             log.error("LobbyInterception failed.", e);

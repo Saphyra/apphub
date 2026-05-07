@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.api.etc.user.client;
 
+import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.UserEndpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

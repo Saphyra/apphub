@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
+import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.common.OrphanedRecordCleanerProperties;
 import lombok.Builder;
@@ -73,8 +74,8 @@ class BatchOrphanedRecordCleanerTest {
         private final Consumer<List<String>> idConsumer;
 
         @Builder
-        protected TestBatchOrphanedRecordCleaner(ErrorReporterService errorReporterService, EliteBaseProperties eliteBaseProperties, Supplier<List<String>> idSupplier, Consumer<List<String>> idConsumer) {
-            super(errorReporterService, eliteBaseProperties);
+        protected TestBatchOrphanedRecordCleaner(ErrorReporterService errorReporterService, MonitoringInstruments monitoringInstruments, EliteBaseProperties eliteBaseProperties, Supplier<List<String>> idSupplier, Consumer<List<String>> idConsumer) {
+            super(errorReporterService, monitoringInstruments, eliteBaseProperties);
             this.idSupplier = idSupplier;
             this.idConsumer = idConsumer;
         }

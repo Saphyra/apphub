@@ -20,20 +20,20 @@ public class CategoryTreeTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void getCategoryTree() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         CreateCategoryRequest parentRequest = CreateCategoryRequest.builder()
             .title(TITLE_1)
             .build();
-        UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, parentRequest);
+        UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessToken, parentRequest);
 
         CreateCategoryRequest childRequest = CreateCategoryRequest.builder()
             .title(TITLE_2)
             .parent(parentCategoryId)
             .build();
-        UUID childCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, childRequest);
+        UUID childCategoryId = CategoryActions.createCategory(getServerPort(), accessToken, childRequest);
 
-        List<CategoryTreeView> result = CategoryActions.getCategoryTree(getServerPort(), accessTokenId);
+        List<CategoryTreeView> result = CategoryActions.getCategoryTree(getServerPort(), accessToken);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getTitle()).isEqualTo(TITLE_1);

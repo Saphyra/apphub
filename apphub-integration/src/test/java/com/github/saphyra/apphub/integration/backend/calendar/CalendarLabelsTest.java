@@ -20,77 +20,77 @@ public class CalendarLabelsTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void labelCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_blank(accessTokenId);
-        create_tooLong(accessTokenId);
-        UUID labelId = create(accessTokenId);
-        create_alreadyExists(accessTokenId);
+        create_blank(accessToken);
+        create_tooLong(accessToken);
+        UUID labelId = create(accessToken);
+        create_alreadyExists(accessToken);
 
-        getLabels(accessTokenId, labelId);
+        getLabels(accessToken, labelId);
 
-        edit_blank(accessTokenId, labelId);
-        edit_tooLong(accessTokenId, labelId);
-        edit_alreadyExists(accessTokenId, labelId);
-        edit(accessTokenId, labelId);
+        edit_blank(accessToken, labelId);
+        edit_tooLong(accessToken, labelId);
+        edit_alreadyExists(accessToken, labelId);
+        edit(accessToken, labelId);
 
-        getLabel(accessTokenId, labelId);
+        getLabel(accessToken, labelId);
 
-        delete(accessTokenId, labelId);
+        delete(accessToken, labelId);
     }
 
-    private void delete(UUID accessTokenId, UUID labelId) {
-        assertThat(CalendarLabelActions.deleteLabel(getServerPort(), accessTokenId, labelId)).isEmpty();
+    private void delete(String accessToken, UUID labelId) {
+        assertThat(CalendarLabelActions.deleteLabel(getServerPort(), accessToken, labelId)).isEmpty();
     }
 
-    private void edit(UUID accessTokenId, UUID labelId) {
-        CustomAssertions.singleListAssertThat(CalendarLabelActions.editLabel(getServerPort(), accessTokenId, labelId, NEW_LABEL))
+    private void edit(String accessToken, UUID labelId) {
+        CustomAssertions.singleListAssertThat(CalendarLabelActions.editLabel(getServerPort(), accessToken, labelId, NEW_LABEL))
             .returns(labelId, LabelResponse::getLabelId)
             .returns(NEW_LABEL, LabelResponse::getLabel);
     }
 
-    private void edit_alreadyExists(UUID accessTokenId, UUID labelId) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessTokenId, labelId, LABEL), "label", "already exists");
+    private void edit_alreadyExists(String accessToken, UUID labelId) {
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, LABEL), "label", "already exists");
     }
 
-    private void edit_tooLong(UUID accessTokenId, UUID labelId) {
+    private void edit_tooLong(String accessToken, UUID labelId) {
         String label = "a".repeat(256);
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessTokenId, labelId, label), "label", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, label), "label", "too long");
     }
 
-    private void edit_blank(UUID accessTokenId, UUID labelId) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessTokenId, labelId, " "), "label", "must not be null or blank");
+    private void edit_blank(String accessToken, UUID labelId) {
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, " "), "label", "must not be null or blank");
     }
 
-    private void getLabel(UUID accessTokenId, UUID labelId) {
-        assertThat(CalendarLabelActions.getLabel(getServerPort(), accessTokenId, labelId))
+    private void getLabel(String accessToken, UUID labelId) {
+        assertThat(CalendarLabelActions.getLabel(getServerPort(), accessToken, labelId))
             .returns(NEW_LABEL, LabelResponse::getLabel).
             returns(labelId, LabelResponse::getLabelId);
     }
 
-    private void getLabels(UUID accessTokenId, UUID labelId) {
-        CustomAssertions.singleListAssertThat(CalendarLabelActions.getLabels(getServerPort(), accessTokenId))
+    private void getLabels(String accessToken, UUID labelId) {
+        CustomAssertions.singleListAssertThat(CalendarLabelActions.getLabels(getServerPort(), accessToken))
             .returns(labelId, LabelResponse::getLabelId)
             .returns(LABEL, LabelResponse::getLabel);
     }
 
-    private void create_alreadyExists(UUID accessTokenId) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessTokenId, LABEL), "label", "already exists");
+    private void create_alreadyExists(String accessToken) {
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, LABEL), "label", "already exists");
     }
 
-    private UUID create(UUID accessTokenId) {
-        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessTokenId, LABEL);
+    private UUID create(String accessToken) {
+        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL);
         assertThat(labelId).isNotNull();
 
         return labelId;
     }
 
-    private void create_tooLong(UUID accessTokenId) {
+    private void create_tooLong(String accessToken) {
         String label = "a".repeat(256);
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessTokenId, label), "label", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, label), "label", "too long");
     }
 
-    private void create_blank(UUID accessTokenId) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessTokenId, " "), "label", "must not be null or blank");
+    private void create_blank(String accessToken) {
+        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, " "), "label", "must not be null or blank");
     }
 }

@@ -22,7 +22,7 @@ public class RequestLoggingFilter implements GlobalFilter, Ordered {
         String uri = request.getURI().getPath();
         log.info("Handling request: {} - {}", method, uri);
         return chain.filter(exchange)
-            .doOnNext(unused -> {
+            .doOnNext(_ -> {
                 ServerHttpResponse response = exchange.getResponse();
                 if (!response.getStatusCode().is2xxSuccessful()) {
                     log.info("Response status of {} - {}: {}", method, uri, response.getStatusCode());

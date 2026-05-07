@@ -13,6 +13,7 @@ import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutionResult;
 import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -40,7 +41,8 @@ public class ConnectionLostTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver1);
 
-        Navigation.toIndexPage(getServerPort(), driver2);
+        driver2.navigate()
+            .to(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> SkyXploreGameActions.isPlayerDisconnectedDialogOpened(driver1))
@@ -75,7 +77,8 @@ public class ConnectionLostTest extends SeleniumTest {
 
         SkyXploreGameActions.resumeGame(driver1);
 
-        Navigation.toIndexPage(getServerPort(), driver1);
+        driver1.navigate()
+            .to(UrlFactory.create(getServerPort(), ModulesEndpoints.MODULES_PAGE));
 
         AwaitilityWrapper.create(15, 1)
             .until(() -> SkyXploreGameActions.isPausedNotHost(driver2))

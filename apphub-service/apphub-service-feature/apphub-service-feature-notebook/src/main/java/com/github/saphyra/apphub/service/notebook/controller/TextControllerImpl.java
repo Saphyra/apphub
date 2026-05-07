@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateTextRe
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.TextResponse;
 import com.github.saphyra.apphub.api.feature.notebook.server.TextController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.text.EditTextService;
 import com.github.saphyra.apphub.service.notebook.service.text.TextQueryService;
@@ -24,9 +24,9 @@ class TextControllerImpl implements TextController {
     private final TextQueryService textQueryService;
 
     @Override
-    public OneParamResponse<UUID> createText(CreateTextRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create a new text item with parentId {}", accessTokenHeader.getUserId(), request.getParent());
-        return new OneParamResponse<>(textCreationService.create(request, accessTokenHeader.getUserId()));
+    public OneParamResponse<UUID> createText(CreateTextRequest request, AccessToken accessToken) {
+        log.info("{} wants to create a new text item with parentId {}", accessToken.getUserId(), request.getParent());
+        return new OneParamResponse<>(textCreationService.create(request, accessToken.getUserId()));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.platform.monitoring.client;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.PutMetricsRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.MonitoringEndpoints;
+import com.github.saphyra.apphub.api.platform.monitoring.model.MonitoringEndpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;

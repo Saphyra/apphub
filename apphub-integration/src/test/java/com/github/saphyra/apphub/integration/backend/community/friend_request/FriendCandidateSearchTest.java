@@ -19,43 +19,43 @@ public class FriendCandidateSearchTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void searchFriendCandidates() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
-        UUID testUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), testUserData);
+        String testUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), testUserData);
         UUID testUserId = DatabaseUtil.getUserIdByEmail(testUserData.getEmail());
 
-        search(accessTokenId, testUserData, testUserId);
-        FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(accessTokenId, testUserId);
-        friendshipAlreadyExists(accessTokenId, testUserAccessTokenId, friendRequestResponse);
-        blacklisted(accessTokenId, testUserId);
+        search(accessToken, testUserData, testUserId);
+        FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(accessToken, testUserId);
+        friendshipAlreadyExists(accessToken, testUserAccessTokenId, friendRequestResponse);
+        blacklisted(accessToken, testUserId);
     }
 
-    private static void search(UUID accessTokenId, RegistrationParameters testUserData, UUID testUserId) {
-        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain());
+    private static void search(String accessToken, RegistrationParameters testUserData, UUID testUserId) {
+        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain());
 
         assertThat(searchResult).hasSize(1);
-        assertThat(searchResult.get(0).getUserId()).isEqualTo(testUserId);
-        assertThat(searchResult.get(0).getUsername()).isEqualTo(testUserData.getUsername());
-        assertThat(searchResult.get(0).getEmail()).isEqualTo(testUserData.getEmail());
+        assertThat(searchResult.getFirst().getUserId()).isEqualTo(testUserId);
+        assertThat(searchResult.getFirst().getUsername()).isEqualTo(testUserData.getUsername());
+        assertThat(searchResult.getFirst().getEmail()).isEqualTo(testUserData.getEmail());
     }
 
-    private static FriendRequestResponse friendRequestAlreadySent(UUID accessTokenId, UUID testUserId) {
-        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, testUserId);
+    private static FriendRequestResponse friendRequestAlreadySent(String accessToken, UUID testUserId) {
+        FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessToken, testUserId);
 
-        assertThat(FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
         return friendRequestResponse;
     }
 
-    private static void friendshipAlreadyExists(UUID accessTokenId, UUID testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
+    private static void friendshipAlreadyExists(String accessToken, String testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
         FriendRequestActions.acceptFriendRequest(getServerPort(), testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        assertThat(FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
     }
 
-    private static void blacklisted(UUID accessTokenId, UUID testUserId) {
-        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, testUserId);
+    private static void blacklisted(String accessToken, UUID testUserId) {
+        BlacklistActions.createBlacklist(getServerPort(), accessToken, testUserId);
 
-        assertThat(FriendRequestActions.search(getServerPort(), accessTokenId, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
     }
 }

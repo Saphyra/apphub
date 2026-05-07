@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.feature.elite_base.server;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.EliteBaseEndpoints;
+import com.github.saphyra.apphub.api.feature.elite_base.model.EliteBaseEndpoints;
 import org.springframework.web.bind.annotation.PostMapping;
 
 public interface EliteBaseEventController {

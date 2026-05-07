@@ -8,7 +8,7 @@ import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationCli
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
-import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.test.common.TestConstants;

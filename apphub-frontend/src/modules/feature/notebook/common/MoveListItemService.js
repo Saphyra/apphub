@@ -1,0 +1,15 @@
+import EventName from "common/js/event/EventName";
+import { NOTEBOOK_MOVE_LIST_ITEM } from "../NotebookEndpoints";
+
+const moveListItem = async (listItemId, newParent, setLastEvent) => {
+    if (listItemId === newParent) {
+        return;
+    }
+
+    await NOTEBOOK_MOVE_LIST_ITEM.createRequest({ value: newParent }, { listItemId: listItemId })
+        .send();
+
+    setLastEvent(new Event(EventName.NOTEBOOK_LIST_ITEM_MODIFIED))
+}
+
+export default moveListItem;

@@ -9,8 +9,8 @@ import io.restassured.response.Response;
 import java.util.UUID;
 
 public class FileActions {
-    public static Response getCreateFileResponse(int serverPort, UUID accessTokenId, CreateFileRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateFileResponse(int serverPort, String accessToken, CreateFileRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_CREATE_FILE));
     }

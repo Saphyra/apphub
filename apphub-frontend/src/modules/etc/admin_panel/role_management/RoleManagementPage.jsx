@@ -1,0 +1,58 @@
+import LocalizationHandler from "common/js/LocalizationHandler";
+import localizationData from "./role_management_localization.json";
+import "./role_management.css";
+import { useEffect, useState } from "react";
+import NotificationService from "common/js/notification/NotificationService";
+import Header from "common/component/Header";
+import RoleManagementSearch from "./RoleManagementSearch";
+import RoleManagementSearchResult from "./search_result/RoleManagementSearchResult";
+import Footer from "common/component/Footer";
+import Button from "common/component/input/Button";
+import { ToastContainer } from "react-toastify";
+import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+
+const RoleManagementPage = () => {
+    const localizationHandler = new LocalizationHandler(localizationData);
+    document.title = localizationHandler.get("title");
+
+    const [query, setQuery] = useState("");
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => NotificationService.displayStoredMessages(), []);
+
+    return (
+        <div id="role-management" className="main-page">
+            <Header label={localizationHandler.get("page-title")} />
+
+            <main>
+                <RoleManagementSearch
+                    localizationHandler={localizationHandler}
+                    query={query}
+                    setQuery={setQuery}
+                    setUsers={setUsers}
+                />
+
+                <RoleManagementSearchResult
+                    localizationHandler={localizationHandler}
+                    users={users}
+                    setUsers={setUsers}
+                    query={query}
+                />
+            </main>
+
+            <Footer
+                rightButtons={
+                    <Button
+                        id="role-management-home-button"
+                        onclick={() => window.location.href = MODULES_PAGE}
+                        label={localizationHandler.get("home")}
+                    />
+                }
+            />
+
+            <ToastContainer />
+        </div>
+    );
+}
+
+export default RoleManagementPage;

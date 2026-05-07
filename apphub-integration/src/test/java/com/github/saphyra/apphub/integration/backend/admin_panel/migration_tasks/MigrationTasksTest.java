@@ -6,13 +6,13 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.MigrationTasksResponse;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,45 +39,51 @@ public class MigrationTasksTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     public void migrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
         DatabaseUtil.insertMigrationTask(EVENT, NAME, false, false);
 
-        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessToken, EVENT);
         assertThat(task.getCompleted()).isFalse();
 
-        MigrationTasksActions.triggerTask(getServerPort(), accessTokenId, EVENT);
-        task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksActions.triggerTask(getServerPort(), accessToken, EVENT);
+        task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessToken, EVENT);
         assertThat(task.getCompleted()).isTrue();
 
-        Response response = MigrationTasksActions.getTriggerTaskResponse(getServerPort(), accessTokenId, EVENT);
+        Response response = MigrationTasksActions.getTriggerTaskResponse(getServerPort(), accessToken, EVENT);
         assertThat(response.getStatusCode()).isEqualTo(410);
 
-        MigrationTasksActions.deleteTask(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksActions.deleteTask(getServerPort(), accessToken, EVENT);
 
-        assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessTokenId, EVENT)).isEmpty();
+        assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessToken, EVENT)).isEmpty();
     }
 
     @Test(groups = {"be", "admin-panel"})
     public void repeatableMigrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
+        String accessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
         DatabaseUtil.insertMigrationTask(EVENT, NAME, false, true);
 
-        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksResponse task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessToken, EVENT);
         assertThat(task.getCompleted()).isFalse();
 
-        MigrationTasksActions.triggerTask(getServerPort(), accessTokenId, EVENT);
-        task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksActions.triggerTask(getServerPort(), accessToken, EVENT);
+        task = MigrationTasksActions.findMigrationTaskByEventValidated(getServerPort(), accessToken, EVENT);
         assertThat(task.getCompleted()).isTrue();
 
-        MigrationTasksActions.triggerTask(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksActions.triggerTask(getServerPort(), accessToken, EVENT);
 
-        MigrationTasksActions.deleteTask(getServerPort(), accessTokenId, EVENT);
+        MigrationTasksActions.deleteTask(getServerPort(), accessToken, EVENT);
 
-        assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessTokenId, EVENT)).isEmpty();
+        assertThat(MigrationTasksActions.findMigrationTaskByEvent(getServerPort(), accessToken, EVENT)).isEmpty();
     }
 }

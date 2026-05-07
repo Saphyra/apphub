@@ -35,12 +35,7 @@ public class StartPreprodProxyProcess {
 
         portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodMainGatewayPort(), Constants.SERVICE_PORT);
 
-        LocalStartTask.builder()
-            .servicePinger(servicePinger)
-            .service(platformProperties.getPreprodProxy())
-            .activeProfiles(Constants.PROFILE_PREPROD)
-            .startupIndicator(startupIndicatorFactory.noOpIndicator())
-            .build()
+        new LocalStartTask(servicePinger, platformProperties.getPreprodProxy(), Constants.PROFILE_PREPROD, startupIndicatorFactory.noOpIndicator())
             .run();
     }
 }

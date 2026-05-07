@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.14</version>
         <relativePath/>
     </parent>
 
@@ -20,7 +20,7 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
-        <versions.spring-boot>3.5.7</versions.spring-boot>
+        <versions.spring-boot>3.5.14</versions.spring-boot>
         <versions.liquibase-core>5.0.1</versions.liquibase-core>
         <versions.postgresql-connector>42.7.8</versions.postgresql-connector>
         <versions.h2>2.4.240</versions.h2>

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.solar_system;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.solar_system.SolarSystemResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,25 +35,25 @@ public class SolarSystemControllerImplTest {
     private SolarSystemResponse solarSystemResponse;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getSolarSystem() {
         given(solarSystemResponseQueryService.getSolarSystem(USER_ID, SOLAR_SYSTEM_ID)).willReturn(solarSystemResponse);
 
-        SolarSystemResponse result = underTest.getSolarSystem(SOLAR_SYSTEM_ID, accessTokenHeader);
+        SolarSystemResponse result = underTest.getSolarSystem(SOLAR_SYSTEM_ID, accessToken);
 
         assertThat(result).isEqualTo(solarSystemResponse);
     }
 
     @Test
     public void renameSolarSystem() {
-        underTest.renameSolarSystem(new OneParamRequest<>(NEW_SOLAR_SYSTEM_NAME), SOLAR_SYSTEM_ID, accessTokenHeader);
+        underTest.renameSolarSystem(new OneParamRequest<>(NEW_SOLAR_SYSTEM_NAME), SOLAR_SYSTEM_ID, accessToken);
 
         verify(renameSolarSystemService).rename(USER_ID, SOLAR_SYSTEM_ID, NEW_SOLAR_SYSTEM_NAME);
     }

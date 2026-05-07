@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.Er
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ErrorReportResponse;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsRequest;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.AdminPanelEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,20 +23,20 @@ public interface ErrorReporterController {
     void reportError(@RequestBody ErrorReport model);
 
     @PostMapping(AdminPanelEndpoints.ADMIN_PANEL_GET_ERROR_REPORTS)
-    GetErrorReportsResponse getErrorReports(@RequestBody GetErrorReportsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    GetErrorReportsResponse getErrorReports(@RequestBody GetErrorReportsRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(AdminPanelEndpoints.ADMIN_PANEL_DELETE_ERROR_REPORTS)
-    void deleteErrorReports(@RequestBody List<UUID> ids, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteErrorReports(@RequestBody List<UUID> ids, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(AdminPanelEndpoints.ADMIN_PANEL_MARK_ERROR_REPORTS)
-    void markErrorReports(@RequestBody List<UUID> ids, @PathVariable("status") String status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void markErrorReports(@RequestBody List<UUID> ids, @PathVariable("status") String status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(AdminPanelEndpoints.ADMIN_PANEL_GET_ERROR_REPORT)
-    ErrorReportResponse getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    ErrorReportResponse getErrorReport(@PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(AdminPanelEndpoints.ADMIN_PANEL_DELETE_READ_ERROR_REPORTS)
-    void deleteReadErrorReports(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteReadErrorReports(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(AdminPanelEndpoints.ADMIN_PANEL_ERROR_REPORT_DELETE_ALL)
-    void deleteAll(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteAll(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

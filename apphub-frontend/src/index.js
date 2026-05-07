@@ -3,91 +3,104 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import IndexPage from './modules/index/IndexPage';
-import "./common/style/reset.css";
-import "./common/style/common.css";
+import "common/style/reset.css";
+import "common/style/common.css";
 import 'react-toastify/dist/ReactToastify.css';
-import ModulesPage from './modules/modules/ModulesPage';
-import SkyXploreCharacterPage from './modules/skyxplore/character/SkyXploreCharacterPage';
-import SkyXploreLobbyPage from './modules/skyxplore/lobby/SkyXploreLobbyPage';
-import SkyXploreMainMenuPage from './modules/skyxplore/main_menu/SkyXploreMainMenuPage';
-import NotebookPage from './modules/notebook/index/NotebookPage';
-import NotebookNewPage from './modules/notebook/new/NotebookNewPage';
-import NewCategoryPage from './modules/notebook/new/new_category/NewCategoryPage';
-import NewTextPage from './modules/notebook/new/new_text/NewTextPage';
-import NotebookEditListItemPage from './modules/notebook/edit/NotebookEditListItemPage';
-import NewLinkPage from './modules/notebook/new/new_link/NewLinkPage';
-import NewOnlyTitlePage from './modules/notebook/new/new_only_title/NewOnlyTitlePage';
-import NewChecklistPage from './modules/notebook/new/new_checklist/NewChecklistPage';
-import NewTablePage from './modules/notebook/new/new_table/NewTablePage';
-import NewImagePage from './modules/notebook/new/new_image/NewImagePage';
-import NewFilePage from './modules/notebook/new/new_file/NewFilePage';
-import MigrationTasksPage from './modules/admin_panel/migration_tasks/MigrationTasksPage';
-import SkyXploreGamePage from './modules/skyxplore/game/SkyXploreGamePage';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import AccountPage from './modules/account/AccountPage';
-import RolesForAllPage from './modules/admin_panel/roles_for_all/RolesForAllPage';
-import RoleManagementPage from './modules/admin_panel/role_management/RoleManagementPage';
-import DisabledRoleManagement from './modules/admin_panel/disabled_role_management/DisabledRoleManagementPage';
-import ErrorReportOverviewPage from './modules/admin_panel/error_report/overview/ErrorReportOverviewPage';
-import ErrorReportDetailsPage from './modules/admin_panel/error_report/details/ErrorReportDetailsPage';
-import BanPage from './modules/admin_panel/ban//index/BanPage';
-import BanDetailsPage from './modules/admin_panel/ban/details/BanDetailsPage';
-import Base64Page from './modules/utils/base64/Base64Page';
-import JsonFormatterPage from './modules/utils/json_formatter/JsonFormatterPage';
-import NewFilesPage from './modules/notebook/new/new_file/NewFilesPage';
-import NewImagesPage from './modules/notebook/new/new_image/NewImagesPage';
-import Constants from './common/js/Constants';
-import Redirection from './Redirection';
-import ErrorPage from './modules/error/ErorPage';
-import EliteBase from './modules/custom/elite_base/EliteBase';
-import RandomDirectionPage from './modules/custom/random_route/RandomDirectionPage';
-import CalendarPage from './modules/calendar/index/CalendarPage';
-import CalendarCreateEventPage from './modules/calendar/create_event/CalendarCreateEventPage';
-import CalendarLabelsPage from './modules/calendar/labels/CalendarLabelsPage';
-import CalendarEditOccurrencePage from './modules/calendar/edit_occurrence/CalendarEditOccurrencePage';
-import CalendarEditEventPage from './modules/calendar/edit_event/CalendarEditEventPage';
-import ExpiredEventsPage from './modules/calendar/expired_event/ExpiredEventsPage';
-import CalendarSearchPage from './modules/calendar/search/CalendarSearchPage';
-import SkyXploreAdminListPage from './modules/skyxplore/admin/list/SkyXploreAdminListPage';
-import SkyXploreAdminDetailsPage from './modules/skyxplore/admin/details/SkyXploreAdminPanelDeatilsPage';
-import MonitoringPage from './modules/platform/monitoring/MonitoringPage';
+import ErrorPage from 'modules/platform/error/ErorPage';
+import IndexPage from 'modules/etc/index/IndexPage';
+import Redirection from 'Redirection';
+import ModulesPage from 'modules/etc/modules/ModulesPage';
+import SkyXploreMainMenuPage from 'modules/feature/skyxplore/main_menu/SkyXploreMainMenuPage';
+import SkyXploreCharacterPage from 'modules/feature/skyxplore/character/SkyXploreCharacterPage';
+import SkyXploreLobbyPage from 'modules/feature/skyxplore/lobby/SkyXploreLobbyPage';
+import SkyXploreGamePage from 'modules/feature/skyxplore/game/SkyXploreGamePage';
+import SkyXploreAdminListPage from 'modules/feature/skyxplore/admin/list/SkyXploreAdminListPage';
+import SkyXploreAdminDetailsPage from 'modules/feature/skyxplore/admin/details/SkyXploreAdminPanelDeatilsPage';
+import NotebookPage from 'modules/feature/notebook/index/NotebookPage';
+import NotebookNewPage from 'modules/feature/notebook/new/NotebookNewPage';
+import NewCategoryPage from 'modules/feature/notebook/new/new_category/NewCategoryPage';
+import NewTextPage from 'modules/feature/notebook/new/new_text/NewTextPage';
+import NewLinkPage from 'modules/feature/notebook/new/new_link/NewLinkPage';
+import NewOnlyTitlePage from 'modules/feature/notebook/new/new_only_title/NewOnlyTitlePage';
+import NewChecklistPage from 'modules/feature/notebook/new/new_checklist/NewChecklistPage';
+import NewTablePage from 'modules/feature/notebook/new/new_table/NewTablePage';
+import NewImagePage from 'modules/feature/notebook/new/new_image/NewImagePage';
+import NewFilePage from 'modules/feature/notebook/new/new_file/NewFilePage';
+import NewFilesPage from 'modules/feature/notebook/new/new_file/NewFilesPage';
+import NewImagesPage from 'modules/feature/notebook/new/new_image/NewImagesPage';
+import NotebookEditListItemPage from 'modules/feature/notebook/edit/NotebookEditListItemPage';
+import MigrationTasksPage from 'modules/etc/admin_panel/migration_tasks/MigrationTasksPage';
+import AccountPage from 'modules/etc/account/AccountPage';
+import RolesForAllPage from 'modules/etc/admin_panel/roles_for_all/RolesForAllPage';
+import RoleManagementPage from 'modules/etc/admin_panel/role_management/RoleManagementPage';
+import DisabledRoleManagementPage from 'modules/etc/admin_panel/disabled_role_management/DisabledRoleManagementPage';
+import ErrorReportOverviewPage from 'modules/etc/admin_panel/error_report/overview/ErrorReportOverviewPage';
+import ErrorReportDetailsPage from 'modules/etc/admin_panel/error_report/details/ErrorReportDetailsPage';
+import BanPage from 'modules/etc/admin_panel/ban/index/BanPage';
+import BanDetailsPage from 'modules/etc/admin_panel/ban/details/BanDetailsPage';
+import Base64Page from 'modules/feature/utils/base64/Base64Page';
+import JsonFormatterPage from 'modules/feature/utils/json_formatter/JsonFormatterPage';
+import EliteBase from 'modules/feature/elite_base/EliteBase';
+import RandomDirectionPage from 'modules/feature/utils/random_direction/RandomDirectionPage';
+import CalendarPage from 'modules/feature/calendar/index/CalendarPage';
+import CalendarCreateEventPage from 'modules/feature/calendar/create_event/CalendarCreateEventPage';
+import CalendarLabelsPage from 'modules/feature/calendar/labels/CalendarLabelsPage';
+import CalendarSearchPage from 'modules/feature/calendar/search/CalendarSearchPage';
+import CalendarEditOccurrencePage from 'modules/feature/calendar/edit_occurrence/CalendarEditOccurrencePage';
+import CalendarEditEventPage from 'modules/feature/calendar/edit_event/CalendarEditEventPage';
+import ExpiredEventsPage from 'modules/feature/calendar/expired_event/ExpiredEventsPage';
+import MonitoringPage from 'modules/platform/monitoring/MonitoringPage';
+import { MODULES_PAGE } from 'modules/etc/modules/ModulesEndpoints';
+import { ERROR_PAGE, INDEX_PAGE } from 'common/js/GenericEndpoints';
+import { SKYXPLORE_MAIN_MENU_PAGE } from 'modules/feature/skyxplore/main_menu/SkyXploreMainMenuEndpoints';
+import { SKYXPLORE_CHARACTER_PAGE } from 'modules/feature/skyxplore/character/SkyXploreCharacterEndpoints';
+import { SKYXPLORE_LOBBY_PAGE } from 'modules/feature/skyxplore/lobby/SkyXploreLobbyEndpoints';
+import { SKYXPLORE_GAME_PAGE } from 'modules/feature/skyxplore/game/SkyXploreGameEndpoints';
+import { SKYXPLORE_ADMIN_DETAILS_PAGE, SKYXPLORE_ADMIN_LIST_PAGE, SKYXPLORE_ADMIN_MAIN_PAGE } from 'modules/feature/skyxplore/admin/SkyXploreAdminEndpoints';
+import { NOTEBOOK_EDIT_LIST_ITEM_PAGE, NOTEBOOK_NEW_CATEGORY_PAGE, NOTEBOOK_NEW_CHECKLIST_PAGE, NOTEBOOK_NEW_CHECKLIST_TABLE_PAGE, NOTEBOOK_NEW_CUSTOM_TABLE_PAGE, NOTEBOOK_NEW_FILE_PAGE, NOTEBOOK_NEW_FILES_PAGE, NOTEBOOK_NEW_IMAGE_PAGE, NOTEBOOK_NEW_IMAGES_PAGE, NOTEBOOK_NEW_LINK_PAGE, NOTEBOOK_NEW_ONLY_TITLE_PAGE, NOTEBOOK_NEW_PAGE, NOTEBOOK_NEW_TABLE_PAGE, NOTEBOOK_NEW_TEXT_PAGE, NOTEBOOK_PAGE } from 'modules/feature/notebook/NotebookEndpoints';
+import { ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, ADMIN_PANEL_MIGRATION_TASKS_PAGE, ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, ADMIN_PANEL_ROLES_FOR_ALL_PAGE, ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_ERROR_REPORT_PAGE, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_BAN_PAGE, ADMIN_PANEL_BAN_DETAILS_PAGE } from 'modules/etc/admin_panel/AdminPanelEndpoints';
+import { ACCOUNT_PAGE } from 'modules/etc/account/AccountEndpoints';
+import { UTILS_BASE_64_PAGE, UTILS_JSON_FORMATTER_PAGE, UTILS_RANDOM_DIRECTION_PAGE } from 'modules/feature/utils/UtilsEndpoints';
+import { ELITE_BASE_PAGE } from 'modules/feature/elite_base/EliteBaseEndpoints';
+import { CALENDAR_CREATE_EVENT_PAGE, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_LABELS_PAGE, CALENDAR_PAGE, CALENDAR_SEARCH_PAGE } from 'modules/feature/calendar/CalendarEndpoints';
+import { MONITORING_PAGE } from 'modules/platform/monitoring/MonitoringEndpoints';
 
 const router = createBrowserRouter([
   {
-    path: "/web/error",
+    path: ERROR_PAGE,
     element: <ErrorPage />,
   },
   {
     path: "/",
-    element: <Redirection url={Constants.INDEX_PAGE} />,
+    element: <Redirection url={INDEX_PAGE} />,
   },
   {
-    path: "/web",
+    path: INDEX_PAGE,
     element: <IndexPage />,
   },
   {
-    path: "/web/modules",
+    path: MODULES_PAGE,
     element: <ModulesPage />,
   },
   {
-    path: "/web/skyxplore",
+    path: SKYXPLORE_MAIN_MENU_PAGE,
     element: <SkyXploreMainMenuPage />
   },
   {
-    path: "/web/skyxplore/character",
+    path: SKYXPLORE_CHARACTER_PAGE,
     element: <SkyXploreCharacterPage />
   },
   {
-    path: "/web/skyxplore/lobby",
+    path: SKYXPLORE_LOBBY_PAGE,
     element: <SkyXploreLobbyPage />
   },
   {
-    path: "/web/skyxplore/game",
+    path: SKYXPLORE_GAME_PAGE,
     element: <SkyXploreGamePage />
   },
   {
-    path: "/web/skyxplore/game/admin",
+    path: SKYXPLORE_ADMIN_MAIN_PAGE,
     element: <SkyXploreAdminListPage />,
     loader: () => {
       return {
@@ -97,7 +110,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/skyxplore/game/admin/:type/:gameId",
+    path: SKYXPLORE_ADMIN_LIST_PAGE.toPageUrl(),
     element: <SkyXploreAdminListPage />,
     loader: ({ params }) => {
       return {
@@ -107,7 +120,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/skyxplore/game/admin/:gameId/:type/:id",
+    path: SKYXPLORE_ADMIN_DETAILS_PAGE.toPageUrl(),
     element: <SkyXploreAdminDetailsPage />,
     loader: ({ params }) => {
       return {
@@ -118,11 +131,11 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook",
+    path: NOTEBOOK_PAGE,
     element: <NotebookPage />
   },
   {
-    path: "/web/notebook/new/:parent",
+    path: NOTEBOOK_NEW_PAGE.toPageUrl(),
     element: <NotebookNewPage />,
     loader: ({ params }) => {
       return {
@@ -131,7 +144,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/category/:parent",
+    path: NOTEBOOK_NEW_CATEGORY_PAGE.toPageUrl(),
     element: <NewCategoryPage />,
     loader: ({ params }) => {
       return {
@@ -140,7 +153,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/text/:parent",
+    path: NOTEBOOK_NEW_TEXT_PAGE.toPageUrl(),
     element: <NewTextPage />,
     loader: ({ params }) => {
       return {
@@ -149,7 +162,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/link/:parent",
+    path: NOTEBOOK_NEW_LINK_PAGE.toPageUrl(),
     element: <NewLinkPage />,
     loader: ({ params }) => {
       return {
@@ -158,7 +171,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/only-title/:parent",
+    path: NOTEBOOK_NEW_ONLY_TITLE_PAGE.toPageUrl(),
     element: <NewOnlyTitlePage />,
     loader: ({ params }) => {
       return {
@@ -167,7 +180,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/checklist/:parent",
+    path: NOTEBOOK_NEW_CHECKLIST_PAGE.toPageUrl(),
     element: <NewChecklistPage />,
     loader: ({ params }) => {
       return {
@@ -176,7 +189,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/table/:parent",
+    path: NOTEBOOK_NEW_TABLE_PAGE.toPageUrl(),
     element: <NewTablePage checklist={false} custom={false} />,
     loader: ({ params }) => {
       return {
@@ -185,7 +198,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/custom-table/:parent",
+    path: NOTEBOOK_NEW_CUSTOM_TABLE_PAGE.toPageUrl(),
     element: <NewTablePage checklist={false} custom={true} />,
     loader: ({ params }) => {
       return {
@@ -194,7 +207,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/checklist-table/:parent",
+    path: NOTEBOOK_NEW_CHECKLIST_TABLE_PAGE.toPageUrl(),
     element: <NewTablePage checklist={true} custom={false} />,
     loader: ({ params }) => {
       return {
@@ -203,7 +216,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/image/:parent",
+    path: NOTEBOOK_NEW_IMAGE_PAGE.toPageUrl(),
     element: <NewImagePage />,
     loader: ({ params }) => {
       return {
@@ -212,7 +225,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/file/:parent",
+    path: NOTEBOOK_NEW_FILE_PAGE.toPageUrl(),
     element: <NewFilePage />,
     loader: ({ params }) => {
       return {
@@ -221,7 +234,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/files/:parent",
+    path: NOTEBOOK_NEW_FILES_PAGE.toPageUrl(),
     element: <NewFilesPage />,
     loader: ({ params }) => {
       return {
@@ -230,7 +243,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/new/images/:parent",
+    path: NOTEBOOK_NEW_IMAGES_PAGE.toPageUrl(),
     element: <NewImagesPage />,
     loader: ({ params }) => {
       return {
@@ -239,7 +252,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/notebook/edit/:listItemId",
+    path: NOTEBOOK_EDIT_LIST_ITEM_PAGE.toPageUrl(),
     element: <NotebookEditListItemPage />,
     loader: ({ params }) => {
       return {
@@ -248,31 +261,31 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/admin-panel/migration-tasks",
+    path: ADMIN_PANEL_MIGRATION_TASKS_PAGE,
     element: <MigrationTasksPage />
   },
   {
-    path: "/web/user/account",
+    path: ACCOUNT_PAGE,
     element: <AccountPage />
   },
   {
-    path: "/web/admin-panel/roles-for-all",
+    path: ADMIN_PANEL_ROLES_FOR_ALL_PAGE,
     element: <RolesForAllPage />
   },
   {
-    path: "/web/admin-panel/role-management",
+    path: ADMIN_PANEL_ROLE_MANAGEMENT_PAGE,
     element: <RoleManagementPage />
   },
   {
-    path: "/web/admin-panel/disabled-role-management",
-    element: <DisabledRoleManagement />
+    path: ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE,
+    element: <DisabledRoleManagementPage />
   },
   {
-    path: "/web/admin-panel/error-report",
+    path: ADMIN_PANEL_ERROR_REPORT_PAGE,
     element: <ErrorReportOverviewPage />
   },
   {
-    path: "/web/admin-panel/error-report/:errorReportId",
+    path: ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.toPageUrl(),
     element: <ErrorReportDetailsPage />,
     loader: ({ params }) => {
       return {
@@ -281,11 +294,11 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/admin-panel/ban",
+    path: ADMIN_PANEL_BAN_PAGE,
     element: <BanPage />
   },
   {
-    path: "/web/admin-panel/ban/:userId",
+    path: ADMIN_PANEL_BAN_DETAILS_PAGE.toPageUrl(),
     element: <BanDetailsPage />,
     loader: ({ params }) => {
       return {
@@ -294,39 +307,39 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/utils/base64",
+    path: UTILS_BASE_64_PAGE,
     element: <Base64Page />
   },
   {
-    path: "/web/utils/json-formatter",
+    path: UTILS_JSON_FORMATTER_PAGE,
     element: <JsonFormatterPage />
   },
   {
-    path: "/web/elite-base",
+    path: ELITE_BASE_PAGE,
     element: <EliteBase />
   },
   {
-    path: "/web/random-direction",
+    path: UTILS_RANDOM_DIRECTION_PAGE,
     element: <RandomDirectionPage />
   },
   {
-    path: "/web/calendar",
+    path: CALENDAR_PAGE,
     element: <CalendarPage />
   },
   {
-    path: "/web/calendar/create-event",
+    path: CALENDAR_CREATE_EVENT_PAGE.toPageUrl(),
     element: <CalendarCreateEventPage />
   },
   {
-    path: "/web/calendar/labels",
+    path: CALENDAR_LABELS_PAGE,
     element: <CalendarLabelsPage />
   },
   {
-    path: "/web/calendar/search",
+    path: CALENDAR_SEARCH_PAGE,
     element: <CalendarSearchPage />
   },
   {
-    path: "/web/calendar/edit-occurrence/:occurrenceId",
+    path: CALENDAR_EDIT_OCCURRENCE_PAGE.toPageUrl(),
     element: <CalendarEditOccurrencePage />,
     loader: ({ params }) => {
       return {
@@ -335,7 +348,7 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/calendar/edit-event/:eventId",
+    path: CALENDAR_EDIT_EVENT_PAGE.toPageUrl(),
     element: <CalendarEditEventPage />,
     loader: ({ params }) => {
       return {
@@ -344,11 +357,11 @@ const router = createBrowserRouter([
     }
   },
   {
-    path: "/web/calendar/expired-events",
+    path: CALENDAR_EXPIRED_EVENTS_PAGE,
     element: <ExpiredEventsPage />
   },
-    {
-    path: "/web/monitoring",
+  {
+    path: MONITORING_PAGE,
     element: <MonitoringPage />
   },
 ]);

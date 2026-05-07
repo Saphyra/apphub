@@ -40,7 +40,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
     * Chat
     * Event feed
     * Setting up groups
-    * Not enabled on production
 * Training
     * HTML
     * CSS
@@ -109,6 +108,10 @@ The app's purpose is to provide an easy-to extend frame for multiple application
   * User role configuration
 * ### utils
   * Small tools
+* ### monitoring
+  * Storing and handling metrics sent by services
+* ### authorization
+  * Handling tokens of the users
 
 ## How to use
 
@@ -122,10 +125,16 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * npm installed
 * PostgreSQL installed and running
 * PgAdmin (or any PostgreSQL-compatible database manager) installed
+* Local DynamoDB downloaded
 
 # Usage
 
 ## Databases used
+
+* AWS DynamoDB: storage of refresh tokens
+* AWS S3: file storage (can be replaced by FTP)
+
+### PostgreSQL
 
 It is recommended/required to create them before first start of the application
 
@@ -138,6 +147,7 @@ It is recommended/required to create them before first start of the application
 ## Start the CI app
 
 * You can start the CI application by running "ci_start.sh"
+* Application WebUI is accessible on port 8079
 
 ## Run the server directly on host
 
@@ -150,11 +160,10 @@ It is recommended/required to create them before first start of the application
   * run command "npm start" from directory "apphub-frontend"
   * Close the opened tab (or change the port to 8080)
 * Select option "Local Run" in the CI app
-* Create database (if it does not exist) apphub
 * Select option "Start" in the CI app
 
-CI tool will stop all the running services, rebuild them, and if build is successful, start them.
-Lots of command lines will open. (One for each service.)
+CI tool stops all the running services, rebuild them, and if build is successful, start them.
+Lots of command lines opens. (One for each service.)
 
 In local environment, React based pages reload automatically after a change is made in the WebUI code.
 
@@ -239,12 +248,19 @@ Production and Preproduction server also run on Minikube, but it has differences
   * "Production release" deploys the built images to DockerHUB (after providing correct credentials)
   * "Run Tests" runs a filtered set of tests, it skips the features not enabled on production
   * "Start Production Proxy" makes the production server available on port 9000
-  
+
+## Settings
+
+* Browser startup limit: how many Selenium WebDrivers can be created parallel.
+* GUI enabled: if checked, a small window opens when starting services locally displaying the status of the services, and how much time they needed to start.
+* AWS configuration: configure S3 and DynamoDB properties separately for each environment.
+* Authorization certificate: create / recreate RSA certificates used for token signing.
+
 ## Testing
 
 * Since apphub-integration is not a child of the apphub project, IntelliJ will not recognize it as a module automatically. If you don't want to see compile errors, add it manually at File -> Project
   Structure -> Modules -> + -> Import module -> Select apphub-integration directory -> Import module from external model -> Maven -> Finish
-* Automated tests require access to the application's endpoints and database. So tests can only be run after port_forward.sh exposed the application.
+* Automated tests require access to the application's endpoints and database.
 * Test framework must know the ports to use, so you have to add "-DserverPort=9001 -DdatabasePort=9002" as VM option to the TestNG template at Run -> Edit configurations -> Templates -> TestNG -> VM
   options -> Paste value here -> Apply -> Ok
 * Run TestNG tests parallel in IntelliJ: Add "-parallel methods -threadcount <threadCount> -dataproviderthreadcount <dpThreadCount>" as Test Runner Param below the VM options

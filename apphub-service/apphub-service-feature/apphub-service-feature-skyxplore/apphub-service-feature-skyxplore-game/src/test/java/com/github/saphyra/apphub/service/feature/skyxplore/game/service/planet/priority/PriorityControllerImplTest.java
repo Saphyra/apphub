@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.priority;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.priority.PriorityType;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,16 +28,16 @@ public class PriorityControllerImplTest {
     private PlanetPriorityControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void updatePriority() {
-        underTest.updatePriority(new OneParamRequest<>(PRIORITY), PLANET_ID, PriorityType.CONSTRUCTION.name(), accessTokenHeader);
+        underTest.updatePriority(new OneParamRequest<>(PRIORITY), PLANET_ID, PriorityType.CONSTRUCTION.name(), accessToken);
 
         verify(priorityUpdateService).updatePriority(USER_ID, PLANET_ID, PriorityType.CONSTRUCTION.name(), PRIORITY);
     }

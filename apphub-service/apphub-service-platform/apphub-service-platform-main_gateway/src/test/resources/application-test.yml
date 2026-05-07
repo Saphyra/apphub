@@ -11,3 +11,7 @@ endpoint:
         pattern: /
         method: GET
         roles:
+
+authorization:
+  issuer: apphub-test
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsh+sEj1YE8JNyQ1nMa5NTTqadOxYCshl3GqfZOqPq5ICc55C5SteXyyOBZ4XoGFduvHVWuu4Jc/W3LrtC15gCZJ00X9wh1OCuCfDaJKwFlGN1IGx8ZxQdw6NqU7P+qLPDeR0iatc+P0KcutLoeACMc7zzCX+l+GptXbtX/kylwURrXQM7XzfA+llRgkna4G3v29pD1IO3BIBV5AiXCWUj/Py2gTNYgn5DO1jumXCh2IGFLSezyguoy/vDDutQDOUdj0lzysTXDq2jpt/uvvM7xcTHi9Fq1cPwRLRoBbPEQetfec3g+Bph45cYlAxYtCZW0Zd54nu68f5ya7yhV/iFwIDAQAB

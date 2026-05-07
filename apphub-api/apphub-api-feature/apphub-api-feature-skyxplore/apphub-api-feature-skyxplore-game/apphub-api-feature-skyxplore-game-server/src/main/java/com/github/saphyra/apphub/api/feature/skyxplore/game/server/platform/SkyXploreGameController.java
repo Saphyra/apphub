@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.game.server.platform;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreGameEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreGameEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,7 @@ public interface SkyXploreGameController {
      * Used by page controllers to redirect the user to the proper page, and SkyXplore data to fetch the current game-id of a player
      */
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
-    OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * If the game is abandoned by the users, it will be shut down and removed from the memory eventually
@@ -29,10 +29,10 @@ public interface SkyXploreGameController {
     void cleanUpExpiredGames();
 
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_EXIT_GAME)
-    void exitGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void exitGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_PAUSE)
-    void pauseGame(@RequestBody OneParamRequest<Boolean> paused, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void pauseGame(@RequestBody OneParamRequest<Boolean> paused, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Saved game is marked for deletion. Triggering the game removal process.
@@ -41,11 +41,11 @@ public interface SkyXploreGameController {
     void deleteGame(@PathVariable("gameId") UUID gameId);
 
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_IS_HOST)
-    OneParamResponse<Boolean> isHost(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<Boolean> isHost(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_GAME_SAVE)
-    void saveGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void saveGame(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_PROCESS_TICK)
-    void processTick(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void processTick(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

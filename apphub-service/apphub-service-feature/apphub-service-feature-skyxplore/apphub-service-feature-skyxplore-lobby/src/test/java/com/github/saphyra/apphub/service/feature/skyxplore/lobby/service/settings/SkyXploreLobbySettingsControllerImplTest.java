@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.settin
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreGameSettings;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.AiPlayer;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.AllianceResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.settings.alliance.AllianceService;
@@ -42,7 +42,7 @@ class SkyXploreLobbySettingsControllerImplTest {
     private SkyXploreLobbySettingsControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private SkyXploreGameSettings settings;
@@ -58,21 +58,21 @@ class SkyXploreLobbySettingsControllerImplTest {
 
     @BeforeEach
     void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     void getAlliancesOfLobby() {
         given(allianceService.getAlliances(USER_ID)).willReturn(List.of(allianceResponse));
 
-        List<AllianceResponse> result = underTest.getAlliancesOfLobby(accessTokenHeader);
+        List<AllianceResponse> result = underTest.getAlliancesOfLobby(accessToken);
 
         assertThat(result).containsExactly(allianceResponse);
     }
 
     @Test
     void editSettings() {
-        underTest.editSettings(settings, accessTokenHeader);
+        underTest.editSettings(settings, accessToken);
 
         verify(editSettingsService).editSettings(USER_ID, settings);
     }
@@ -82,21 +82,21 @@ class SkyXploreLobbySettingsControllerImplTest {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getSettings()).willReturn(settings);
 
-        SkyXploreGameSettings result = underTest.getGameSettings(accessTokenHeader);
+        SkyXploreGameSettings result = underTest.getGameSettings(accessToken);
 
         assertThat(result).isEqualTo(settings);
     }
 
     @Test
     void createOrModifyAi() {
-        underTest.createOrModifyAi(aiPlayer, accessTokenHeader);
+        underTest.createOrModifyAi(aiPlayer, accessToken);
 
         verify(aiService).createOrModifyAi(USER_ID, aiPlayer);
     }
 
     @Test
     void removeAi() {
-        underTest.removeAi(AI_USER_ID, accessTokenHeader);
+        underTest.removeAi(AI_USER_ID, accessToken);
 
         verify(aiService).removeAi(USER_ID, AI_USER_ID);
     }
@@ -106,7 +106,7 @@ class SkyXploreLobbySettingsControllerImplTest {
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getAis()).willReturn(List.of(aiPlayer));
 
-        List<AiPlayer> result = underTest.getAis(accessTokenHeader);
+        List<AiPlayer> result = underTest.getAis(accessToken);
 
         assertThat(result).containsExactly(aiPlayer);
     }

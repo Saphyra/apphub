@@ -2,21 +2,22 @@ package com.github.saphyra.apphub.integration.action.backend;
 
 import com.github.saphyra.apphub.integration.framework.RequestFactory;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.endpoints.AuthorizationEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
-import com.github.saphyra.apphub.integration.structure.api.user.LoginResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationRequest;
 import io.restassured.response.Response;
 
-import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class IndexPageActions {
-    public static UUID registerAndLogin(int serverPort, RegistrationParameters userData) {
+    public static String registerAndLogin(int serverPort, RegistrationParameters userData) {
         registerUser(serverPort, userData.toRegistrationRequest());
-        return login(serverPort, userData.toLoginRequest());
+        return login(serverPort, userData.toLoginRequest())
+            .getAccessToken()
+            .getJwt();
     }
 
     public static void registerUser(int serverPort, RegistrationRequest registrationRequest) {
@@ -31,28 +32,27 @@ public class IndexPageActions {
             .post(UrlFactory.create(serverPort, UserEndpoints.ACCOUNT_REGISTER));
     }
 
-    public static UUID login(int serverPort, LoginRequest loginRequest) {
+    public static TokenResponse login(int serverPort, LoginRequest loginRequest) {
         Response response = getLoginResponse(serverPort, loginRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody()
-            .as(LoginResponse.class)
-            .getAccessTokenId();
+            .as(TokenResponse.class);
     }
 
-    public static LoginResponse getSuccessfulLoginResponse(int serverPort, LoginRequest loginRequest) {
+    public static TokenResponse getSuccessfulLoginResponse(int serverPort, LoginRequest loginRequest) {
         Response response = getLoginResponse(serverPort, loginRequest);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody()
-            .as(LoginResponse.class);
+            .as(TokenResponse.class);
     }
 
     public static Response getLoginResponse(int serverPort, LoginRequest loginRequest) {
         return RequestFactory.createRequest()
             .body(loginRequest)
-            .post(UrlFactory.create(serverPort, UserEndpoints.LOGIN));
+            .post(UrlFactory.create(serverPort, AuthorizationEndpoints.LOGIN));
     }
 }

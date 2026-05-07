@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.api.feature.notebook.server.ImageController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.image.ImageCreationService;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +18,8 @@ public class ImageControllerImpl implements ImageController {
     private final ImageCreationService imageCreationService;
 
     @Override
-    public OneParamResponse<UUID> createImage(CreateFileRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to create an image", accessTokenHeader.getUserId());
-        return new OneParamResponse<>(imageCreationService.createImage(accessTokenHeader.getUserId(), request));
+    public OneParamResponse<UUID> createImage(CreateFileRequest request, AccessToken accessToken) {
+        log.info("{} wants to create an image", accessToken.getUserId());
+        return new OneParamResponse<>(imageCreationService.createImage(accessToken.getUserId(), request));
     }
 }

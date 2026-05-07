@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.lobby.server;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
 import org.springframework.web.bind.annotation.PostMapping;
 
 public interface SkyXploreLobbyEventController {

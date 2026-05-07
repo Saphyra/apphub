@@ -1,0 +1,45 @@
+import LocalizationHandler from "common/js/LocalizationHandler";
+import localizationData from "./surface_tile_content_header_localization.json";
+import { hasValue, throwException } from "common/js/Utils";
+import ConstructionAreaConstructionHeader from "./content/ConstructionAreaConstructionHeader";
+import ConstructionAreaDeconstructionHeader from "./content/ConstructionAreaDeconstructionHeader";
+import ConstructionAreaDefaultHeader from "./content/ConstructionAreaDefaultHeader";
+import TerraformationHeader from "./content/TerraformationHeader";
+
+const SurfaceTileContentHeader = ({ surface }) => {
+    const localizationHandler = new LocalizationHandler(localizationData);
+
+    const getContent = () => {
+        if (hasValue(surface.constructionArea)) {
+            const constructionArea = surface.constructionArea;
+            if (hasValue(constructionArea.construction)) {
+                return <ConstructionAreaConstructionHeader
+                    constructionArea={constructionArea}
+                />
+            } else if (hasValue(constructionArea.deconstruction)) {
+                return <ConstructionAreaDeconstructionHeader
+                    localizationHandler={localizationHandler}
+                />
+            } else {
+                return <ConstructionAreaDefaultHeader
+                    constructionArea={constructionArea}
+                />
+            }
+        } else if (hasValue(surface.terraformation)) {
+            return <TerraformationHeader
+                terraformation={surface.terraformation}
+            />
+        } else {
+            console.log(surface);
+            throwException("IllegalState", "Surface has no building or terraformation in progress. It should be an empty surface.")
+        }
+    }
+
+    return (
+        <div className="skyxplore-game-planet-surface-tile-content-header">
+            {getContent()}
+        </div>
+    )
+}
+
+export default SurfaceTileContentHeader;

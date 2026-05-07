@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.community.friendship;
 
 import com.github.saphyra.apphub.api.feature.community.model.response.friendship.FriendshipResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendshipDeletionService;
 import com.github.saphyra.apphub.service.community.friendship.service.FriendshipQueryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,28 +33,28 @@ public class FriendshipControllerImplTest {
     private FriendshipControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private FriendshipResponse friendshipResponse;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void getFriendships() {
         given(friendshipQueryService.getFriendships(USER_ID)).willReturn(List.of(friendshipResponse));
 
-        List<FriendshipResponse> result = underTest.getFriendships(accessTokenHeader);
+        List<FriendshipResponse> result = underTest.getFriendships(accessToken);
 
         assertThat(result).containsExactly(friendshipResponse);
     }
 
     @Test
     public void delete() {
-        underTest.delete(FRIENDSHIP_ID, accessTokenHeader);
+        underTest.delete(FRIENDSHIP_ID, accessToken);
 
         verify(friendshipDeletionService).delete(USER_ID, FRIENDSHIP_ID);
     }

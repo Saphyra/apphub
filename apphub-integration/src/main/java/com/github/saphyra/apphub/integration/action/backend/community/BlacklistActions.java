@@ -15,55 +15,55 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlacklistActions {
-    public static List<SearchResultItem> search(int serverPort, UUID accessTokenId, String query) {
-        Response response = getSearchResponse(serverPort, accessTokenId, query);
+    public static List<SearchResultItem> search(int serverPort, String accessToken, String query) {
+        Response response = getSearchResponse(serverPort, accessToken, query);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(SearchResultItem[].class));
     }
 
-    public static Response getSearchResponse(int serverPort, UUID accessTokenId, String query) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSearchResponse(int serverPort, String accessToken, String query) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(query))
             .post(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_BLACKLIST_SEARCH));
     }
 
-    public static BlacklistResponse createBlacklist(int serverPort, UUID accessTokenId, UUID blockedUserId) {
-        Response response = getCreateResponse(serverPort, accessTokenId, blockedUserId);
+    public static BlacklistResponse createBlacklist(int serverPort, String accessToken, UUID blockedUserId) {
+        Response response = getCreateResponse(serverPort, accessToken, blockedUserId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(BlacklistResponse.class);
     }
 
-    public static Response getCreateResponse(int serverPort, UUID accessTokenId, UUID blockedUserId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateResponse(int serverPort, String accessToken, UUID blockedUserId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(blockedUserId))
             .put(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_CREATE_BLACKLIST));
     }
 
-    public static List<BlacklistResponse> getBlacklists(int serverPort, UUID accessTokenId) {
-        Response response = getBlacklistsResponse(serverPort, accessTokenId);
+    public static List<BlacklistResponse> getBlacklists(int serverPort, String accessToken) {
+        Response response = getBlacklistsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(BlacklistResponse[].class));
     }
 
-    public static Response getBlacklistsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getBlacklistsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_GET_BLACKLIST));
     }
 
-    public static void deleteBlacklist(int serverPort, UUID accessTokenId, UUID blacklistId) {
-        Response response = getDeleteBlacklistResponse(serverPort, accessTokenId, blacklistId);
+    public static void deleteBlacklist(int serverPort, String accessToken, UUID blacklistId) {
+        Response response = getDeleteBlacklistResponse(serverPort, accessToken, blacklistId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getDeleteBlacklistResponse(int serverPort, UUID accessTokenId, UUID blacklistId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDeleteBlacklistResponse(int serverPort, String accessToken, UUID blacklistId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, CommunityEndpoints.COMMUNITY_DELETE_BLACKLIST, "blacklistId", blacklistId));
     }
 }

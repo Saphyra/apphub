@@ -80,7 +80,7 @@ public class BanConverterTest {
         assertThat(result.getUserId()).isEqualTo(USER_ID);
         assertThat(result.getBannedRole()).isEqualTo(BANNED_ROLE);
         assertThat(result.getExpiration()).isEqualTo(EXPIRATION);
-        assertThat(result.getPermanent()).isTrue();
+        assertThat(result.isPermanent()).isTrue();
         assertThat(result.getReason()).isEqualTo(REASON);
         assertThat(result.getBannedBy()).isEqualTo(BANNED_BY);
     }

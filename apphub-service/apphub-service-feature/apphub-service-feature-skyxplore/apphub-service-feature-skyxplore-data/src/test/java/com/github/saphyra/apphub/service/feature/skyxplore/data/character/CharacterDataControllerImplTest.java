@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.data.character;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.character.dao.CharacterDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.character.dao.SkyXploreCharacter;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class CharacterDataControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final AccessTokenHeader ACCESS_TOKEN_HEADER = AccessTokenHeader.builder()
+    private static final AccessToken ACCESS_TOKEN_HEADER = AccessToken.builder()
         .userId(USER_ID)
         .build();
     private static final String CHARACTER_NAME = "character-name";

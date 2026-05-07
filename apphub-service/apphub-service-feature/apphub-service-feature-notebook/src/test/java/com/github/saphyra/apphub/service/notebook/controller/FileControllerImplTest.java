@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.file.FileCreationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,21 +28,21 @@ public class FileControllerImplTest {
     private FileControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private CreateFileRequest createFileRequest;
 
     @BeforeEach
     public void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     public void createImage() {
         given(fileCreationService.createFile(USER_ID, createFileRequest)).willReturn(STORED_FILE_ID);
 
-        OneParamResponse<UUID> result = underTest.createFile(createFileRequest, accessTokenHeader);
+        OneParamResponse<UUID> result = underTest.createFile(createFileRequest, accessToken);
 
         assertThat(result.getValue()).isEqualTo(STORED_FILE_ID);
     }

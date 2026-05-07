@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.feature.skyxplore.data.client;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreDataEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreDataEndpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;

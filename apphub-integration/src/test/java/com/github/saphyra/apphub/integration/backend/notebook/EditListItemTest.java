@@ -28,54 +28,54 @@ public class EditListItemTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void editListITem() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
+        UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessToken, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
 
-        blankTitle(accessTokenId, parentCategoryId);
-        newParentNotFound(accessTokenId, parentCategoryId);
-        parentNotCategory(accessTokenId, parentCategoryId);
-        listItemNotFound(accessTokenId);
+        blankTitle(accessToken, parentCategoryId);
+        newParentNotFound(accessToken, parentCategoryId);
+        parentNotCategory(accessToken, parentCategoryId);
+        listItemNotFound(accessToken);
     }
 
-    private static void blankTitle(UUID accessTokenId, UUID parentCategoryId) {
+    private static void blankTitle(String accessToken, UUID parentCategoryId) {
         EditListItemRequest blankTitleRequest = EditListItemRequest.builder()
             .title(" ")
             .build();
-        Response blankTitleResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, blankTitleRequest, parentCategoryId);
+        Response blankTitleResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, blankTitleRequest, parentCategoryId);
         verifyInvalidParam(blankTitleResponse, "title", "must not be null or blank");
     }
 
-    private static void newParentNotFound(UUID accessTokenId, UUID parentCategoryId) {
+    private static void newParentNotFound(String accessToken, UUID parentCategoryId) {
         EditListItemRequest newParentNotFoundRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .parent(UUID.randomUUID())
             .build();
-        Response newParentNotFoundResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, newParentNotFoundRequest, parentCategoryId);
+        Response newParentNotFoundResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, newParentNotFoundRequest, parentCategoryId);
         verifyErrorResponse(newParentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
-    private static void parentNotCategory(UUID accessTokenId, UUID parentCategoryId) {
+    private static void parentNotCategory(String accessToken, UUID parentCategoryId) {
         CreateLinkRequest createLinkRequest = CreateLinkRequest.builder()
             .parent(null)
             .title(ORIGINAL_TITLE)
             .url(ORIGINAL_URL)
             .build();
-        UUID linkId = LinkActions.createLink(getServerPort(), accessTokenId, createLinkRequest);
+        UUID linkId = LinkActions.createLink(getServerPort(), accessToken, createLinkRequest);
 
         EditListItemRequest parentNotCategoryRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .parent(linkId)
             .build();
-        Response parentNotCategoryResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, parentNotCategoryRequest, parentCategoryId);
+        Response parentNotCategoryResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, parentNotCategoryRequest, parentCategoryId);
         verifyErrorResponse(parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
-    private static void listItemNotFound(UUID accessTokenId) {
+    private static void listItemNotFound(String accessToken) {
         EditListItemRequest listItemNotFoundRequest = EditListItemRequest.builder()
             .title(NEW_TITLE)
             .build();
-        Response listItemNotFoundResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessTokenId, listItemNotFoundRequest, UUID.randomUUID());
+        Response listItemNotFoundResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, listItemNotFoundRequest, UUID.randomUUID());
         verifyListItemNotFound(listItemNotFoundResponse);
     }
 }

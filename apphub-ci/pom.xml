@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.14</version>
         <relativePath/>
     </parent>
 
@@ -20,11 +20,11 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
-        <versions.spring-boot>3.5.7</versions.spring-boot>
+        <versions.spring-boot>3.5.14</versions.spring-boot>
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
         <versions.lombok>1.18.42</versions.lombok>
         <versions.lombok-maven>1.18.20.0</versions.lombok-maven>
-        <versions.logback-core>1.5.20</versions.logback-core>
+        <versions.logback-core>1.5.32</versions.logback-core>
         <versions.apache-commons.commons-lang3>3.19.0</versions.apache-commons.commons-lang3>
         <versions.liquibase-core>5.0.1</versions.liquibase-core>
         <versions.postgresql-connector>42.7.8</versions.postgresql-connector>
@@ -34,6 +34,12 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+            <version>${versions.spring-boot}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
@@ -54,7 +60,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>
         </dependency>
 

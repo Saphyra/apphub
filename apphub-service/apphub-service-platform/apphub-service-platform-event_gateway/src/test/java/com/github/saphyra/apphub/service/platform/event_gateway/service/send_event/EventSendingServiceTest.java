@@ -38,7 +38,7 @@ public class EventSendingServiceTest {
 
     @BeforeEach
     public void setUp() {
-        given(localeProvider.getLocaleValidated()).willReturn(TestConstants.DEFAULT_LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(TestConstants.DEFAULT_LOCALE);
         given(sendEventTaskFactory.create(sendEventRequest, TestConstants.DEFAULT_LOCALE)).willReturn(task);
     }
 

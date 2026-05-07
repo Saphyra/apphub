@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.*;
+import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -86,18 +87,24 @@ public class DataDeletedWithUserTest extends BackEndTest {
         //apphub_user.apphub_user
         //skyxplore.character
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
-        UUID adminAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), adminUserData);
+        IndexPageActions.registerUser(getServerPort(), adminUserData.toRegistrationRequest());
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), adminUserData.toLoginRequest());
+        String adminAccessToken = tokenResponse.getAccessToken()
+            .getJwt();
 
-        createRecords(accessTokenId, userId, adminUserData, adminAccessTokenId);
+        createRecords(accessToken, userId, adminUserData, adminAccessToken);
 
         verifyRecords(GENERIC_TABLES, userId, rowCount -> rowCount > 0);
 
-        AccountActions.deleteAccount(getServerPort(), accessTokenId, userData.getPassword());
+        accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
+            .getAccessToken()
+            .getJwt();
+        AccountActions.deleteAccount(getServerPort(), accessToken, userData.getPassword());
 
         AwaitilityWrapper.awaitAssert(() -> verifyRecords(GENERIC_TABLES, userId, integer -> integer == 0));
     }
@@ -105,7 +112,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
     @Test(groups = {"be", "community"})
     public void communityDataDeletedWithTheUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
@@ -118,14 +125,14 @@ public class DataDeletedWithUserTest extends BackEndTest {
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
-        UUID accessTokenId3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
+        String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
         UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
 
-        communityTables(accessTokenId, adminUserId, userId2, accessTokenId3, userId3);
+        communityTables(accessToken, adminUserId, userId2, accessToken3, userId3);
 
         verifyRecords(COMMUNITY_TABLES, userId, rowCount -> rowCount > 0);
 
-        AccountActions.deleteAccount(getServerPort(), accessTokenId, userData.getPassword());
+        AccountActions.deleteAccount(getServerPort(), accessToken, userData.getPassword());
 
         AwaitilityWrapper.awaitAssert(() -> verifyRecords(COMMUNITY_TABLES, userId, integer -> integer == 0));
     }
@@ -133,25 +140,25 @@ public class DataDeletedWithUserTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void skyXploreDataDeletedWithTheUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId, SkyXploreCharacterModel.valid());
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, SkyXploreCharacterModel.valid());
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
-        UUID accessTokenId3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
+        String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
         UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId3, SkyXploreCharacterModel.valid());
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, SkyXploreCharacterModel.valid());
 
-        skyXploreTables(accessTokenId, userId2, accessTokenId3, userId3);
+        skyXploreTables(accessToken, userId2, accessToken3, userId3);
 
         verifySkyXploreRecords(userId, rowCount -> rowCount > 0);
 
-        AccountActions.deleteAccount(getServerPort(), accessTokenId, userData.getPassword());
+        AccountActions.deleteAccount(getServerPort(), accessToken, userData.getPassword());
 
         AwaitilityWrapper.awaitAssert(() -> verifySkyXploreRecords(userId, integer -> integer == 0));
     }
@@ -167,22 +174,22 @@ public class DataDeletedWithUserTest extends BackEndTest {
         assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, "skyxplore", "friend_request", "sender_id"))).isTrue();
     }
 
-    private void createRecords(UUID accessTokenId, UUID userId, RegistrationParameters adminUserData, UUID adminAccessTokenId) {
-        apphubUserTables(accessTokenId, userId, adminUserData, adminAccessTokenId);
-        calendarTables(accessTokenId);
-        modulesTables(accessTokenId);
-        notebookTables(accessTokenId);
+    private void createRecords(String accessToken, UUID userId, RegistrationParameters adminUserData, String adminAccessToken) {
+        calendarTables(accessToken);
+        modulesTables(accessToken);
+        notebookTables(accessToken);
+        apphubUserTables(accessToken, userId, adminUserData, adminAccessToken);
     }
 
-    private static void skyXploreTables(UUID accessTokenId, UUID userId2, UUID accessTokenId3, UUID userId3) {
+    private static void skyXploreTables(String accessToken, UUID userId2, String accessToken3, UUID userId3) {
         //skyxplore.friend_request
-        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessTokenId, userId2);
+        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessToken, userId2);
 
         //skyxplore.friendship
-        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessTokenId, accessTokenId3, userId3);
+        SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken, accessToken3, userId3);
     }
 
-    private static void notebookTables(UUID accessTokenId) {
+    private static void notebookTables(String accessToken) {
         //notebook.checked_item
         //notebook.list_item
         //notebook.content
@@ -197,7 +204,7 @@ public class DataDeletedWithUserTest extends BackEndTest {
                     .build()
             ))
             .build();
-        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessTokenId, createChecklistRequest);
+        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessToken, createChecklistRequest);
 
         //notebook.column_type
         //notebook.dimension
@@ -227,43 +234,51 @@ public class DataDeletedWithUserTest extends BackEndTest {
                     .build()
             ))
             .build();
-        TableActions.createTable(getServerPort(), accessTokenId, createTableRequest);
+        TableActions.createTable(getServerPort(), accessToken, createTableRequest);
 
         //notebook.pin_group
-        UUID pinGroupId = PinActions.createPinGroup(getServerPort(), accessTokenId, TITLE)
-            .get(0)
+        UUID pinGroupId = PinActions.createPinGroup(getServerPort(), accessToken, TITLE)
+            .getFirst()
             .getPinGroupId();
 
         //notebook.pin_mapping
-        PinActions.addItemToPinGroup(getServerPort(), accessTokenId, pinGroupId, listItemId);
+        PinActions.addItemToPinGroup(getServerPort(), accessToken, pinGroupId, listItemId);
     }
 
-    private static void modulesTables(UUID accessTokenId) {
+    private static void modulesTables(String accessToken) {
         //modules.favorite
-        ModulesActions.setAsFavorite(getServerPort(), accessTokenId, "notebook", true);
+        ModulesActions.setAsFavorite(getServerPort(), accessToken, "notebook", true);
     }
 
-    private static void communityTables(UUID accessTokenId, UUID adminUserId, UUID userId2, UUID accessTokenId3, UUID userId3) {
+    private static void communityTables(String accessToken, UUID adminUserId, UUID userId2, String accessToken3, UUID userId3) {
         //community.blacklist
-        BlacklistActions.createBlacklist(getServerPort(), accessTokenId, userId2);
+        BlacklistActions.createBlacklist(getServerPort(), accessToken, userId2);
 
         //community.community_group
-        GroupActions.createGroup(getServerPort(), accessTokenId, GROUP_NAME);
+        GroupActions.createGroup(getServerPort(), accessToken, GROUP_NAME);
 
         //community.friend_request
-        FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, adminUserId);
+        FriendRequestActions.createFriendRequest(getServerPort(), accessToken, adminUserId);
 
         //community.friendship
-        FriendRequestActions.createFriendRequest(getServerPort(), accessTokenId, userId3);
-        FriendRequestActions.acceptFriendRequest(getServerPort(), accessTokenId3, FriendRequestActions.getReceivedFriendRequests(getServerPort(), accessTokenId3).get(0).getFriendRequestId());
+        FriendRequestActions.createFriendRequest(getServerPort(), accessToken, userId3);
+        FriendRequestActions.acceptFriendRequest(getServerPort(), accessToken3, FriendRequestActions.getReceivedFriendRequests(getServerPort(), accessToken3).getFirst().getFriendRequestId());
     }
 
-    private static void calendarTables(UUID accessTokenId) {
-        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessTokenId, TITLE);
-        CalendarEventActions.createEvent(getServerPort(), accessTokenId, EventRequestFactory.validRequest(RepetitionType.ONE_TIME).toBuilder().labels(List.of(labelId)).build());
+    private static void calendarTables(String accessToken) {
+        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, TITLE);
+        CalendarEventActions.createEvent(getServerPort(), accessToken, EventRequestFactory.validRequest(RepetitionType.ONE_TIME).toBuilder().labels(List.of(labelId)).build());
     }
 
-    private static void apphubUserTables(UUID accessTokenId, UUID userId, RegistrationParameters adminUserData, UUID adminAccessTokenId) {
+    private static void apphubUserTables(String accessToken, UUID userId, RegistrationParameters adminUserData, String adminAccessToken) {
+        //apphub_user.settings
+        SetUserSettingsRequest setUserSettingsRequest = SetUserSettingsRequest.builder()
+            .category("notebook")
+            .key("show-archived")
+            .value("true")
+            .build();
+        UserSettingsActions.setUserSetting(getServerPort(), accessToken, setUserSettingsRequest);
+
         //apphub_user.ban
         BanRequest banRequest = BanRequest.builder()
             .bannedUserId(userId)
@@ -272,14 +287,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
             .reason(REASON)
             .password(adminUserData.getPassword())
             .build();
-        BanActions.ban(getServerPort(), adminAccessTokenId, banRequest);
-
-        //apphub_user.settings
-        SetUserSettingsRequest setUserSettingsRequest = SetUserSettingsRequest.builder()
-            .category("notebook")
-            .key("show-archived")
-            .value("true")
-            .build();
-        UserSettingsActions.setUserSetting(getServerPort(), accessTokenId, setUserSettingsRequest);
+        BanActions.ban(getServerPort(), adminAccessToken, banRequest);
     }
 }

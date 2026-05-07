@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleActions {
-    public static List<DisabledRoleResponse> getDisabledRoles(int serverPort, UUID accessTokenId) {
-        Response response = getGetDisabledRoles(serverPort, accessTokenId);
+    public static List<DisabledRoleResponse> getDisabledRoles(int serverPort, String accessToken) {
+        Response response = getGetDisabledRoles(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -24,19 +24,19 @@ public class DisabledRoleActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getGetDisabledRoles(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getGetDisabledRoles(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_GET_DISABLED_ROLES));
     }
 
-    public static Response getDisableRoleResponse(int serverPort, UUID accessTokenId, String password, String role) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getDisableRoleResponse(int serverPort, String accessToken, String password, String role) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(password))
             .put(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_DISABLE_ROLE, "role", role));
     }
 
-    public static Response getEnableRoleResponse(int serverPort, UUID accessTokenId, String password, String role) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getEnableRoleResponse(int serverPort, String accessToken, String password, String role) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(password))
             .delete(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_DISABLE_ROLE, "role", role));
     }

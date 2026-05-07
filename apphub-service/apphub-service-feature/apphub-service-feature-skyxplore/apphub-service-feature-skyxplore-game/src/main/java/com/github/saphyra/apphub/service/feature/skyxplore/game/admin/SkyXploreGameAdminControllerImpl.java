@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.admin.SkyXploreGameDataDe
 import com.github.saphyra.apphub.api.feature.skyxplore.admin.SkyXploreGameDataEntry;
 import com.github.saphyra.apphub.api.feature.skyxplore.game.server.platform.SkyXploreGameAdminController;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.admin.service.AdminQueryService;
 import lombok.extern.slf4j.Slf4j;
@@ -27,16 +27,16 @@ public class SkyXploreGameAdminControllerImpl implements SkyXploreGameAdminContr
     }
 
     @Override
-    public List<SkyXploreGameDataEntry> getByType(GameItemType type, UUID gameId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query {}s of game {}", accessTokenHeader.getUserId(), type, gameId);
+    public List<SkyXploreGameDataEntry> getByType(GameItemType type, UUID gameId, AccessToken accessToken) {
+        log.info("{} wants to query {}s of game {}", accessToken.getUserId(), type, gameId);
 
         return getService(type)
             .getAll(gameId);
     }
 
     @Override
-    public SkyXploreGameDataDetails getItem(UUID gameId, GameItemType type, UUID itemId, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query {} - {} of game {}", accessTokenHeader.getUserId(), type, itemId, gameId);
+    public SkyXploreGameDataDetails getItem(UUID gameId, GameItemType type, UUID itemId, AccessToken accessToken) {
+        log.info("{} wants to query {} - {} of game {}", accessToken.getUserId(), type, itemId, gameId);
 
         return getService(type)
             .findById(gameId, itemId);

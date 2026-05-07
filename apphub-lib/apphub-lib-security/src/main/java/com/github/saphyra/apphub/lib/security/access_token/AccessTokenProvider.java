@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.security.access_token;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class AccessTokenProvider implements AutoCloseable {
-    private static final ThreadLocal<AccessTokenHeader> STORAGE = new ThreadLocal<>();
+    private static final ThreadLocal<AccessToken> STORAGE = new ThreadLocal<>();
 
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final UuidConverter uuidConverter;
@@ -20,13 +20,13 @@ public class AccessTokenProvider implements AutoCloseable {
         return uuidConverter.convertDomain(get().getUserId());
     }
 
-    public AutoCloseable set(AccessTokenHeader accessTokenHeader) {
-        STORAGE.set(accessTokenHeader);
+    public AutoCloseable set(AccessToken accessToken) {
+        STORAGE.set(accessToken);
 
         return this;
     }
 
-    public Optional<AccessTokenHeader> getOptional() {
+    public Optional<AccessToken> getOptional() {
         return Optional.ofNullable(STORAGE.get());
     }
 
@@ -35,7 +35,7 @@ public class AccessTokenProvider implements AutoCloseable {
             .map(accessTokenHeaderConverter::convertDomain);
     }
 
-    public AccessTokenHeader get() {
+    public AccessToken get() {
         return getOptional().orElseThrow(() -> new IllegalStateException("AccessTokenHeader is not available for the current thread."));
     }
 

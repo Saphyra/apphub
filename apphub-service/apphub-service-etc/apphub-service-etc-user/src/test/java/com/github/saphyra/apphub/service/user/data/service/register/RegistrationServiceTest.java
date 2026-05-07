@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service.register;
 
-import com.github.saphyra.apphub.api.etc.user.model.login.RegistrationRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionService;
@@ -52,12 +52,13 @@ public class RegistrationServiceTest {
             .email(EMAIL)
             .username(USERNAME)
             .password(PASSWORD)
+            .language(LOCALE)
             .build();
         given(userFactory.create(EMAIL, USERNAME, PASSWORD, LOCALE)).willReturn(user);
         given(registrationProperties.getDefaultRoles()).willReturn(Arrays.asList(ROLE));
         given(user.getUserId()).willReturn(USER_ID);
 
-        underTest.register(registrationRequest, LOCALE);
+        underTest.register(registrationRequest);
 
         verify(registrationRequestValidator).validate(registrationRequest);
         verify(userDao).save(user);

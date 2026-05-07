@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.training;
 
-import com.github.saphyra.apphub.lib.config.common.endpoints.TrainingEndpoints;
+import com.github.saphyra.apphub.service.feature.training.config.TrainingEndpoints;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

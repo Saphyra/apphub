@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.api.etc.admin_panel.client;
 
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ErrorReport;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.config.common.endpoints.AdminPanelEndpoints;
+import com.github.saphyra.apphub.api.etc.admin_panel.model.model.AdminPanelEndpoints;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

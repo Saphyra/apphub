@@ -13,6 +13,12 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-platform-authorization-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-encryption</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -38,12 +44,6 @@
         <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-security</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-request_validation</artifactId>
             <version>${project.version}</version>
         </dependency>
 

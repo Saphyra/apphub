@@ -50,10 +50,16 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
 
     @Override
     public boolean validateObject(PooledObject<WebDriverWrapper> p) {
-        return p.getObject()
-            .getDriver()
-            .getCurrentUrl()
-            .contains(GenericEndpoints.ERROR_PAGE);
+        WebDriver driver = p.getObject()
+            .getDriver();
+        String currentUrl = driver
+            .getCurrentUrl();
+        boolean result = currentUrl
+            .endsWith(GenericEndpoints.ERROR_PAGE);
+        if (!result) {
+            log.warn("Invalid driver in cache with url: {}", currentUrl);
+        }
+        return result;
     }
 
     @Override

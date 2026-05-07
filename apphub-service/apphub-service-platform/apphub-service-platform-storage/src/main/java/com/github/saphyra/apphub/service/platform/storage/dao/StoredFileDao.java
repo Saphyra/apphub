@@ -41,11 +41,11 @@ public class StoredFileDao extends AbstractDao<StoredFileEntity, StoredFile, Str
         repository.deleteByFileUploadedAndCreatedAtBefore(false, expirationTime);
     }
 
-    public List<StoredFileView> getAllView() {
-        return repository.getAllView();
+    public List<StoredFileView> getViewsByStorage(Storage storage) {
+        return repository.getViewsByStorage(storage);
     }
 
-    public void deleteAllById(List<UUID> recordsToDelete) {
-        repository.deleteAllById(uuidConverter.convertDomain(recordsToDelete));
+    public void deleteByStorageAndIds(Storage storage, List<UUID> recordsToDelete) {
+        repository.deleteByStorageAndStoredFileIdIn(storage, uuidConverter.convertDomain(recordsToDelete));
     }
 }

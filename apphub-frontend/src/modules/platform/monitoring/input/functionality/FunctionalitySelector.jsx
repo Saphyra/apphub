@@ -12,6 +12,7 @@ const FunctionalitySelector = ({ localizationHandler, setDisplaySpinner, functio
         request: MONITORING_GET_FUNCTIONALITIES.createRequest(null, { feature: feature }),
         mapper: setFunctionalities,
         setDisplaySpinner: setDisplaySpinner,
+        listener: [feature]
     });
 
     return <PreLabeledInputField

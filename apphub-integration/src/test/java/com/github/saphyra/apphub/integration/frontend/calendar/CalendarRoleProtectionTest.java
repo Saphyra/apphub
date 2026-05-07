@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.integration.frontend.calendar;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
-import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
+import com.github.saphyra.apphub.integration.framework.endpoints.CalendarEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.DataProvider;
@@ -23,15 +22,10 @@ public class CalendarRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
-
         DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
-        SleepUtil.sleep(3000);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
-        driver.navigate()
-            .refresh();
-
-        CommonUtils.verifyMissingRole(getServerPort(), driver.getCurrentUrl());
+        CommonUtils.verifyMissingRole(getServerPort(), driver, CalendarEndpoints.CALENDAR_PAGE);
     }
 
     @DataProvider(parallel = true)

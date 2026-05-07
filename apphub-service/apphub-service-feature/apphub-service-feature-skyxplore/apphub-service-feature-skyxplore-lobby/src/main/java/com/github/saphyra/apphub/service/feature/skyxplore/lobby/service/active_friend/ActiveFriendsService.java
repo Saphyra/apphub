@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.active_friend;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.ws.SkyXploreLobbyInvitationWebSocketHandler;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
@@ -22,10 +22,10 @@ public class ActiveFriendsService {
     private final LobbyDao lobbyDao;
     private final SkyXploreLobbyInvitationWebSocketHandler invitationWebSocketHandler;
 
-    public List<ActiveFriendResponse> getActiveFriends(AccessTokenHeader accessTokenHeader) {
-        Lobby lobby = lobbyDao.findByUserIdValidated(accessTokenHeader.getUserId());
+    public List<ActiveFriendResponse> getActiveFriends(AccessToken accessToken) {
+        Lobby lobby = lobbyDao.findByUserIdValidated(accessToken.getUserId());
 
-        return skyXploreDataProxy.getFriends(accessTokenHeader)
+        return skyXploreDataProxy.getFriends(accessToken)
             .stream()
             .filter(friendshipResponse -> invitationWebSocketHandler.isConnected(friendshipResponse.getFriendId()))
             .filter(friendshipResponse -> LobbyType.NEW_GAME == lobby.getType() || lobby.getExpectedPlayers().contains(friendshipResponse.getFriendId()))

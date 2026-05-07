@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketHandlerContext;
 import com.github.saphyra.apphub.lib.web_socket.core.handler.WebSocketSessionWrapper;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;

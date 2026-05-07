@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.user.settings;
 
 import com.github.saphyra.apphub.api.etc.user.model.SetUserSettingsRequest;
 import com.github.saphyra.apphub.api.etc.user.server.UserSettingsController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -26,12 +26,12 @@ public class UserSettingsControllerImpl implements UserSettingsController {
     private final UserSettingProperties properties;
 
     @Override
-    public Map<String, String> getUserSettings(String category, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know his settings for category {}", accessTokenHeader.getUserId(), category);
+    public Map<String, String> getUserSettings(String category, AccessToken accessToken) {
+        log.info("{} wants to know his settings for category {}", accessToken.getUserId(), category);
 
         Map<String, String> defaults = getDefaults(category);
 
-        Map<String, String> existingSettings = userSettingDao.getByUserIdAndCategory(accessTokenHeader.getUserId(), category)
+        Map<String, String> existingSettings = userSettingDao.getByUserIdAndCategory(accessToken.getUserId(), category)
             .stream()
             .collect(Collectors.toMap(UserSetting::getKey, UserSetting::getValue));
 
@@ -41,8 +41,8 @@ public class UserSettingsControllerImpl implements UserSettingsController {
     }
 
     @Override
-    public Map<String, String> setUserSettings(SetUserSettingsRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to modify his settings of category {}", accessTokenHeader.getUserId(), request.getCategory());
+    public Map<String, String> setUserSettings(SetUserSettingsRequest request, AccessToken accessToken) {
+        log.info("{} wants to modify his settings of category {}", accessToken.getUserId(), request.getCategory());
 
         ValidationUtil.notBlank(request.getKey(), "key");
 
@@ -53,7 +53,7 @@ public class UserSettingsControllerImpl implements UserSettingsController {
         }
 
         UserSetting setting = UserSetting.builder()
-            .userId(accessTokenHeader.getUserId())
+            .userId(accessToken.getUserId())
             .category(request.getCategory())
             .key(request.getKey())
             .value(request.getValue())
@@ -61,7 +61,7 @@ public class UserSettingsControllerImpl implements UserSettingsController {
 
         userSettingDao.save(setting);
 
-        return getUserSettings(request.getCategory(), accessTokenHeader);
+        return getUserSettings(request.getCategory(), accessToken);
     }
 
     private Map<String, String> getDefaults(String category) {

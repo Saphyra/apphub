@@ -45,7 +45,7 @@ spring:
                 /web/utils/json-formatter,\
                 /web/elite-base,\
                 /web/elite-base/*,\
-                /web/random-direction,\
+                /web/util/direction,\
                 /web/calendar,\
                 /web/calendar/**,\
                 /web/user/account"
@@ -82,6 +82,10 @@ spring:
               uri: http://user:8080
               predicates:
                 - Path=/api/user/**
+            - id: authorization
+              uri: http://authorization:8080
+              predicates:
+                - Path=/api/authorization/**
             - id: notebook
               uri: http://notebook:8080
               predicates:
@@ -153,11 +157,10 @@ spring:
               predicates:
                 - Path=/api/ws/skyxplore-game/**
 
-nonSessionExtendingUris:
-  - pattern: /api/user/authentication/session
-    method: GET
-  - pattern: /api/admin-panel/error-report
-    method: GET
+authorization:
+  publicKey: ${PUBLIC_KEY}
+  expirationDuration:
+    accessToken: ${authorization.accessTokenExpiration}
 
 delay:
   filter:

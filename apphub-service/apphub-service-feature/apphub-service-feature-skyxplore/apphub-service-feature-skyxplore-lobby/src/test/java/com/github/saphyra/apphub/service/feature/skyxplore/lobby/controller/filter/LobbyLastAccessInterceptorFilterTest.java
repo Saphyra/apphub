@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.lobby.controller.filter;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
@@ -50,15 +50,15 @@ public class LobbyLastAccessInterceptorFilterTest {
     private FilterChain filterChain;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private Lobby lobby;
 
     @Test
     public void updateLastAccess() throws ServletException, IOException {
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.of(lobby));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(ACTUAL_DATE);
 
@@ -70,8 +70,8 @@ public class LobbyLastAccessInterceptorFilterTest {
 
     @Test
     public void lobbyNotFound() throws ServletException, IOException {
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
         underTest.doFilterInternal(request, response, filterChain);

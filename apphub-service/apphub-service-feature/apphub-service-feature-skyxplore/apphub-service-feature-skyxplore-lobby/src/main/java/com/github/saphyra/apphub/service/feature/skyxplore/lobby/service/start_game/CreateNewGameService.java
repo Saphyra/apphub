@@ -47,7 +47,7 @@ class CreateNewGameService {
 
         allianceSetupValidator.check(request);
 
-        UUID gameId = gameCreationClient.createGame(request, localeProvider.getLocaleValidated());
+        UUID gameId = gameCreationClient.createGame(request, localeProvider.getOrDefault());
         lobby.setGameCreationStarted(true);
         lobby.setGameId(gameId);
 

@@ -49,7 +49,7 @@ public class BanResponseQueryService {
             .id(ban.getId())
             .bannedRole(ban.getBannedRole())
             .expiration(Optional.ofNullable(ban.getExpiration()).map(dateTimeUtil::format).orElse(null))
-            .permanent(ban.getPermanent())
+            .permanent(ban.isPermanent())
             .reason(ban.getReason())
             .bannedById(ban.getBannedBy())
             .bannedByUsername(bannedByUser.getUsername())

@@ -12,14 +12,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreGameChatActions {
-    public static List<SkyXploreCharacterModel> getPlayers(int serverPort, UUID accessTokenId) {
-        Response response = getPlayersResponse(serverPort, accessTokenId);
+    public static List<SkyXploreCharacterModel> getPlayers(int serverPort, String accessToken) {
+        Response response = getPlayersResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
@@ -27,38 +26,38 @@ public class SkyXploreGameChatActions {
             .collect(Collectors.toList());
     }
 
-    public static Response getPlayersResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getPlayersResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_GET_PLAYERS, Collections.emptyMap(), Map.of("excludeSelf", true)));
     }
 
-    public static void createChatRoom(int serverPort, UUID accessTokenId, CreateChatRoomRequest request) {
-        Response response = getCreateChatRoomResponse(serverPort, accessTokenId, request);
+    public static void createChatRoom(int serverPort, String accessToken, CreateChatRoomRequest request) {
+        Response response = getCreateChatRoomResponse(serverPort, accessToken, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getCreateChatRoomResponse(int serverPort, UUID accessTokenId, CreateChatRoomRequest request) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getCreateChatRoomResponse(int serverPort, String accessToken, CreateChatRoomRequest request) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
             .put(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_CREATE_CHAT_ROOM));
     }
 
-    public static Response getLeaveChatRoomResponse(int serverPort, UUID accessTokenId, String roomId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getLeaveChatRoomResponse(int serverPort, String accessToken, String roomId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .delete(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_LEAVE_CHAT_ROOM, "roomId", roomId));
     }
 
-    public static List<ChatRoomResponse> getChatRooms(int serverPort, UUID accessTokenId) {
-        Response response = getChatRoomsResponse(serverPort, accessTokenId);
+    public static List<ChatRoomResponse> getChatRooms(int serverPort, String accessToken) {
+        Response response = getChatRoomsResponse(serverPort, accessToken);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(ChatRoomResponse[].class));
     }
 
-    public static Response getChatRoomsResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getChatRoomsResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GAME_GET_CHAT_ROOMS));
     }
 }

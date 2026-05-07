@@ -26,8 +26,7 @@ public class WebDriverWrapper {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof WebDriverWrapper) {
-            WebDriverWrapper wrapper = (WebDriverWrapper) o;
+        if (o instanceof WebDriverWrapper wrapper) {
             return id.equals(wrapper.getId());
         }
 

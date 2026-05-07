@@ -18,6 +18,12 @@
     <dependencies>
         <dependency>
             <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-feature-community-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-api-platform-web_content-server</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -32,12 +38,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
             <version>${versions.spring-boot}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-request_validation</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>

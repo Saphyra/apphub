@@ -6,11 +6,10 @@ import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
-import jakarta.transaction.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

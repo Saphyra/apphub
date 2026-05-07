@@ -8,12 +8,24 @@ spring:
 liquibase:
   schema: storage
 
+storedFile:
+  expirationSeconds: 1800
+
+storage:
+  type: S3
+
 ftp:
   client:
+    enabled: ${FTP_CLIENT_ENABLED:true}
     server: ${hostIp}
     port: 21
     username: ${FTP_CLIENT_USERNAME}
     password: ${FTP_CLIENT_PASSWORD:}}
 
-storedFile:
-  expirationSeconds: 1800
+aws:
+  s3:
+    enabled: ${S3_ENABLED:false}
+    region: eu-central-1
+    accessKeyId: ${S3_ACCESS_KEY_ID}
+    secretKey: ${S3_SECRET_KEY}
+    bucketName: ${S3_BUCKET_NAME}

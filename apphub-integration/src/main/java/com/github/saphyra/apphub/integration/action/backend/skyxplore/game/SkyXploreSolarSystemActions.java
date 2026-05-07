@@ -15,44 +15,44 @@ import static java.util.Objects.isNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SkyXploreSolarSystemActions {
-    public static PlanetLocationResponse getPopulatedPlanet(int serverPort, UUID accessTokenId) {
-        return SkyXploreMapActions.getMap(serverPort, accessTokenId)
+    public static PlanetLocationResponse getPopulatedPlanet(int serverPort, String accessToken) {
+        return SkyXploreMapActions.getMap(serverPort, accessToken)
             .getSolarSystems()
             .stream()
             .map(MapSolarSystemResponse::getSolarSystemId)
-            .flatMap(solarSystemId -> getSolarSystem(serverPort, accessTokenId, solarSystemId).getPlanets().stream())
+            .flatMap(solarSystemId -> getSolarSystem(serverPort, accessToken, solarSystemId).getPlanets().stream())
             .filter(planetLocationResponse -> !isNull(planetLocationResponse.getOwner()))
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("No populated planet found."));
     }
 
-    public static SolarSystemResponse getSolarSystem(int serverPort, UUID accessTokenId, UUID solarSystemId) {
-        Response response = getSolarSystemResponse(serverPort, accessTokenId, solarSystemId);
+    public static SolarSystemResponse getSolarSystem(int serverPort, String accessToken, UUID solarSystemId) {
+        Response response = getSolarSystemResponse(serverPort, accessToken, solarSystemId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(SolarSystemResponse.class);
     }
 
-    public static Response getSolarSystemResponse(int serverPort, UUID accessTokenId, UUID solarSystemId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getSolarSystemResponse(int serverPort, String accessToken, UUID solarSystemId) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_GET_SOLAR_SYSTEM, "solarSystemId", solarSystemId));
     }
 
-    public static Response getRenameSolarSystemResponse(int serverPort, UUID accessTokenId, UUID solarSystemId, String solarSystemName) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getRenameSolarSystemResponse(int serverPort, String accessToken, UUID solarSystemId, String solarSystemName) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(solarSystemName))
             .post(UrlFactory.create(serverPort, SkyXploreGameEndpoints.SKYXPLORE_SOLAR_SYSTEM_RENAME, "solarSystemId", solarSystemId));
     }
 
-    public static void renameSolarSystem(int serverPort, UUID accessTokenId, UUID solarSystemId, String solarSystemName) {
-        Response response = getRenameSolarSystemResponse(serverPort, accessTokenId, solarSystemId, solarSystemName);
+    public static void renameSolarSystem(int serverPort, String accessToken, UUID solarSystemId, String solarSystemName) {
+        Response response = getRenameSolarSystemResponse(serverPort, accessToken, solarSystemId, solarSystemName);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static PlanetLocationResponse findPlanet(int serverPort, UUID accessTokenId, UUID solarSystemId, UUID planetId) {
-        return getSolarSystem(serverPort, accessTokenId, solarSystemId)
+    public static PlanetLocationResponse findPlanet(int serverPort, String accessToken, UUID solarSystemId, UUID planetId) {
+        return getSolarSystem(serverPort, accessToken, solarSystemId)
             .getPlanets()
             .stream()
             .filter(planetLocationResponse -> planetLocationResponse.getPlanetId().equals(planetId))

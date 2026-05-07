@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.skyxplore.data.server;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.game.citizen.CitizenStatsAndSkills;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.SkyXploreDataEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.SkyXploreDataEndpoints;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 

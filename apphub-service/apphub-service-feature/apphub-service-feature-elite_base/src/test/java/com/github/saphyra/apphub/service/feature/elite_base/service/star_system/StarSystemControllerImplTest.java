@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.service.star_system;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystemSuggestionListCache;
@@ -31,14 +31,14 @@ class StarSystemControllerImplTest {
     private StarSystemControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private StarSystem starSystem;
 
     @Test
     void search_queryTooShort() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.search(new OneParamRequest<>("as"), accessTokenHeader), "query", "too short");
+        ExceptionValidator.validateInvalidParam(() -> underTest.search(new OneParamRequest<>("as"), accessToken), "query", "too short");
     }
 
     @Test
@@ -47,6 +47,6 @@ class StarSystemControllerImplTest {
         given(starSystem.getId()).willReturn(STAR_ID);
         given(starSystem.getStarName()).willReturn(STAR_NAME);
 
-        assertThat(underTest.search(new OneParamRequest<>(QUERY), accessTokenHeader)).containsEntry(STAR_ID, STAR_NAME);
+        assertThat(underTest.search(new OneParamRequest<>(QUERY), accessToken)).containsEntry(STAR_ID, STAR_NAME);
     }
 }

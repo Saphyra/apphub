@@ -1,12 +1,14 @@
 package com.github.saphyra.apphub.ci.process.local.start;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
 import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import com.google.common.base.Stopwatch;
@@ -76,12 +78,7 @@ class ServiceStarter {
 
         try {
             Map<Service, FutureWrapper<Void>> executionResults = groupMembers.stream()
-                .collect(Collectors.toMap(Function.identity(), service -> executorServiceBean.execute(LocalStartTask.builder()
-                    .servicePinger(servicePinger)
-                    .service(service)
-                    .startupIndicator(startupIndicator)
-                    .build()
-                )));
+                .collect(Collectors.toMap(Function.identity(), service -> executorServiceBean.execute(new LocalStartTask(servicePinger, service, startupIndicator, getProperties(service.getProperties())))));
 
             executionResults.forEach((service, voidFutureWrapper) -> {
                 try {
@@ -94,5 +91,16 @@ class ServiceStarter {
         } finally {
             executorServiceBean.stop();
         }
+    }
+
+    private Map<String, String> getProperties(List<PropertyName> properties) {
+        return properties.stream()
+            .flatMap(
+                propertyName -> propertyDao.getEnvironmentSpecificProperties(propertyName)
+                    .getForEnvironmentOrDefault(Environment.LOCAL)
+                    .entrySet()
+                    .stream()
+            )
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

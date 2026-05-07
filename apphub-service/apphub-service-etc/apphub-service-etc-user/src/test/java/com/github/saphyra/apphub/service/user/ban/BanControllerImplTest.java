@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.etc.user.model.ban.BanSearchResponse;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsResponse;
 import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.ban.service.BanResponseQueryService;
 import com.github.saphyra.apphub.service.user.ban.service.BanSearchService;
@@ -68,7 +68,7 @@ public class BanControllerImplTest {
     private BanResponse response;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private BanResponse banResponse;
@@ -87,56 +87,56 @@ public class BanControllerImplTest {
 
     @Test
     public void banUser() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(banService.ban(USER_ID, request)).willReturn(banResponse);
 
-        assertThat(underTest.banUser(request, accessTokenHeader)).isEqualTo(banResponse);
+        assertThat(underTest.banUser(request, accessToken)).isEqualTo(banResponse);
     }
 
     @Test
     public void revokeBan() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(revokeBanService.revokeBan(USER_ID, PASSWORD, BAN_ID)).willReturn(banResponse);
 
-        assertThat(underTest.revokeBan(new OneParamRequest<>(PASSWORD), BAN_ID, accessTokenHeader)).isEqualTo(banResponse);
+        assertThat(underTest.revokeBan(new OneParamRequest<>(PASSWORD), BAN_ID, accessToken)).isEqualTo(banResponse);
     }
 
     @Test
     public void getBans() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(banResponseQueryService.getBans(BANNED_USER_ID)).willReturn(response);
 
-        BanResponse result = underTest.getBans(BANNED_USER_ID, accessTokenHeader);
+        BanResponse result = underTest.getBans(BANNED_USER_ID, accessToken);
 
         assertThat(result).isEqualTo(response);
     }
 
     @Test
     public void markUserForDeletion() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(markUserForDeletionService.markUserForDeletion(DELETED_USER_ID, markUserForDeletionRequest, USER_ID)).willReturn(banResponse);
 
-        BanResponse result = underTest.markUserForDeletion(markUserForDeletionRequest, DELETED_USER_ID, accessTokenHeader);
+        BanResponse result = underTest.markUserForDeletion(markUserForDeletionRequest, DELETED_USER_ID, accessToken);
 
         assertThat(result).isEqualTo(banResponse);
     }
 
     @Test
     public void unmarkUserForDeletion() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(unmarkUserForDeletionService.unmarkUserForDeletion(DELETED_USER_ID)).willReturn(banResponse);
 
-        BanResponse result = underTest.unmarkUserForDeletion(DELETED_USER_ID, accessTokenHeader);
+        BanResponse result = underTest.unmarkUserForDeletion(DELETED_USER_ID, accessToken);
 
         assertThat(result).isEqualTo(banResponse);
     }
 
     @Test
     void search() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(banSearchService.search(QUERY)).willReturn(List.of(banSearchResponse));
 
-        assertThat(underTest.search(new OneParamRequest<>(QUERY), accessTokenHeader)).containsExactly(banSearchResponse);
+        assertThat(underTest.search(new OneParamRequest<>(QUERY), accessToken)).containsExactly(banSearchResponse);
     }
 
     @Test

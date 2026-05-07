@@ -104,7 +104,7 @@ public class UserEventControllerImplTest {
     @Test
     public void triggerAccountDeletion_nullMarkedForDeletionAt() {
         given(userDao.getUsersMarkedToDelete()).willReturn(Arrays.asList(user));
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(user.getUserId()).willReturn(USER_ID);
         given(user.getMarkedForDeletionAt()).willReturn(null);
         given(userProperties.getDeleteAccountBatchCount()).willReturn(1);
@@ -122,7 +122,7 @@ public class UserEventControllerImplTest {
     public void triggerAccountDeletion_pastMarkedForDeletionAt() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(userDao.getUsersMarkedToDelete()).willReturn(Arrays.asList(user));
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(user.getUserId()).willReturn(USER_ID);
         given(user.getMarkedForDeletionAt()).willReturn(CURRENT_TIME.minusSeconds(1));
         given(userProperties.getDeleteAccountBatchCount()).willReturn(1);

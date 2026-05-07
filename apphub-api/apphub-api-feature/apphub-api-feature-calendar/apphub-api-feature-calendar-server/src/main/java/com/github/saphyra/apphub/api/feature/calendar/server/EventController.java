@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.api.feature.calendar.server;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.lib.config.common.endpoints.CalendarEndpoints;
+import com.github.saphyra.apphub.api.feature.calendar.model.CalendarEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,41 +22,41 @@ import java.util.UUID;
 
 public interface EventController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_EVENT)
-    OneParamResponse<UUID> createEvent(@RequestBody EventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    OneParamResponse<UUID> createEvent(@RequestBody EventRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENTS)
     List<EventResponse> getEvents(
         @RequestParam(name = "labelId", required = false) UUID label,
-        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
     @GetMapping(CalendarEndpoints.CALENDAR_LABELLESS_GET_EVENTS)
-    List<EventResponse> getLabellessEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<EventResponse> getLabellessEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENT)
-    EventResponse getEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    EventResponse getEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_EVENT)
-    void deleteEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void deleteEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_EVENT)
-    void editEvent(@RequestBody EventRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void editEvent(@RequestBody EventRequest request, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EXPIRED_EVENTS)
-    List<EventResponse> getExpiredEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<EventResponse> getExpiredEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_HIDE_EXPIRED_EVENT)
-    void hideExpiredEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void hideExpiredEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_EXTEND_EXPIRED_EVENT)
-    void extendExpiredEvent(@RequestBody OneParamRequest<LocalDate> extendUntil, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void extendExpiredEvent(@RequestBody OneParamRequest<LocalDate> extendUntil, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_MERGE_EVENTS)
-    void mergeEvents(@PathVariable UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void mergeEvents(@PathVariable UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_SEARCH_EVENTS)
-    List<EventResponse> searchEvents(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    List<EventResponse> searchEvents(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(CalendarEndpoints.CALENDAR_ARCHIVE_EVENT)
-    void archiveEvent(@RequestBody OneParamRequest<Boolean> archive, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessTokenHeader accessTokenHeader);
+    void archiveEvent(@RequestBody OneParamRequest<Boolean> archive, @PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

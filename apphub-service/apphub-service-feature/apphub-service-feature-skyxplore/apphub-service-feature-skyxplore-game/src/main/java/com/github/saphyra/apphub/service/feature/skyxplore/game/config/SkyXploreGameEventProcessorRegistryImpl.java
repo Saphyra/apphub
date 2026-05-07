@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
-import com.github.saphyra.apphub.lib.config.common.endpoints.skyxplore.GenericSkyXploreEndpoints;
+import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
+import com.github.saphyra.apphub.api.feature.skyxplore.GenericSkyXploreEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;

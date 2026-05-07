@@ -1,0 +1,46 @@
+package com.github.saphyra.apphub.api.etc.user.model;
+
+public class UserEndpoints {
+    //Account
+    public static final String EVENT_TRIGGER_ACCOUNT_DELETION = "/event/user-data/trigger-account-deletion";
+    public static final String ACCOUNT_REGISTER = "/api/user";
+    public static final String ACCOUNT_CHANGE_LANGUAGE = "/api/user/account/language";
+    public static final String ACCOUNT_CHANGE_EMAIL = "/api/user/account/email";
+    public static final String ACCOUNT_CHANGE_USERNAME = "/api/user/account/username";
+    public static final String ACCOUNT_CHANGE_PASSWORD = "/api/user/account/password";
+    public static final String ACCOUNT_DELETE_ACCOUNT = "/api/user/account";
+    public static final String USER_DATA_SEARCH_ACCOUNT = "/api/user/accounts";
+    public static final String USER_DATA_GET_ACCOUNT = "/api/user/account";
+    public static final String USER_DATA_INTERNAL_GET_USER_LANGUAGE = "/internal/user/{userId}/data/language";
+    public static final String USER_DATA_INTERNAL_GET_ACCOUNT = "/internal/api/user/data/{userId}";
+    public static final String USER_DATA_INTERNAL_USER_EXISTS = "/internal/api/user/data/{userId}/exists";
+    public static final String USER_DATA_GET_USERNAME = "/api/user/data/name";
+    public static final String INTERNAL_AUTHORIZATION_AUTHORIZE = "/internal/api/user/autorization/authorize";
+    public static final String INTERNAL_AUTHORIZATION_GET_ROLES = "/internal/api/user/autorization/{userId}/roles";
+
+    //Ban
+    public static final String EVENT_TRIGGER_REVOKE_EXPIRED_BANS = "/event/user-data/trigger-remove-expired-bans";
+    public static final String ACCOUNT_BAN_USER = "/api/user/ban";
+    public static final String ACCOUNT_REVOKE_BAN = "/api/user/ban/{banId}";
+    public static final String ACCOUNT_GET_BANS = "/api/user/ban/{userId}";
+    public static final String ACCOUNT_MARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_UNMARK_FOR_DELETION = "/api/user/ban/{userId}/mark-for-deletion";
+    public static final String ACCOUNT_BAN_SEARCH = "/api/user/ban/search";
+    public static final String ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE = "/api/user/ban/details";
+
+    //SETTINGS
+    public static final String GET_USER_SETTINGS = "/api/user/settings/{category}";
+    public static final String SET_USER_SETTINGS = "/api/user/settings";
+
+    //Role
+    public static final String USER_DATA_GET_USER_ROLES = "/api/user/data/roles";
+    public static final String USER_DATA_ADD_ROLE = "/api/user/data/roles";
+    public static final String USER_DATA_REMOVE_ROLE = "/api/user/data/roles";
+    public static final String USER_DATA_DISABLE_ROLE = "/api/user/data/roles/{role}";
+    public static final String USER_DATA_ENABLE_ROLE = "/api/user/data/roles/{role}";
+    public static final String USER_DATA_GET_DISABLED_ROLES = "/api/user/data/roles/disabled";
+    public static final String USER_DATA_ADD_ROLE_TO_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_REMOVE_ROLE_FROM_ALL = "/api/user/data/roles/all/{role}";
+    public static final String USER_DATA_ROLES_FOR_ALL_RESTRICTED = "/api/user/data/roles/restricted";
+    public static final String IS_ADMIN = "/api/user/admin";
+}

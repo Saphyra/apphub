@@ -97,7 +97,7 @@ modules:
       roles:
       - ELITE_BASE
     - name: random-direction
-      url: /web/random-direction
+      url: /web/util/random-direction
     - name: test
       url: /web/test
       roles:

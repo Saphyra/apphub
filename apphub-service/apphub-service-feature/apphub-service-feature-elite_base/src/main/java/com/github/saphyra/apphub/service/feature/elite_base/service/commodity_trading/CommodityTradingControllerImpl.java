@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.server.CommodityTradingController;
 import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
@@ -26,8 +26,8 @@ class CommodityTradingControllerImpl implements CommodityTradingController {
     private final CommodityAveragePriceDao commodityAveragePriceDao;
 
     @Override
-    public CommodityTradingResponse bestTradeLocations(CommodityTradingRequest request, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to find best trade locations based on {}", accessTokenHeader.getUserId(), request);
+    public CommodityTradingResponse bestTradeLocations(CommodityTradingRequest request, AccessToken accessToken) {
+        log.info("{} wants to find best trade locations based on {}", accessToken.getUserId(), request);
 
         return monitoringInstruments.wrap(
             () -> commodityTradingService.getTradeOffers(request),
@@ -37,15 +37,15 @@ class CommodityTradingControllerImpl implements CommodityTradingController {
     }
 
     @Override
-    public Collection<String> getCommodities(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the trading item names.", accessTokenHeader.getUserId());
+    public Collection<String> getCommodities(AccessToken accessToken) {
+        log.info("{} wants to know the trading item names.", accessToken.getUserId());
 
         return itemTypeDao.getItemNames(ItemType.TRADING_TYPES);
     }
 
     @Override
-    public Integer getCommodityAveragePrice(String commodityName, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know the average price of commodity {}", accessTokenHeader.getUserId(), commodityName);
+    public Integer getCommodityAveragePrice(String commodityName, AccessToken accessToken) {
+        log.info("{} wants to know the average price of commodity {}", accessToken.getUserId(), commodityName);
 
         return commodityAveragePriceDao.findByIdValidated(commodityName)
             .getAveragePrice();

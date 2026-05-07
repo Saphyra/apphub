@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.service.star_system;
 
 import com.github.saphyra.apphub.api.feature.elite_base.server.StarSystemController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
@@ -22,8 +22,8 @@ class StarSystemControllerImpl implements StarSystemController {
     private final StarSystemSuggestionListCache starSystemSuggestionListCache;
 
     @Override
-    public Map<UUID, String> search(OneParamRequest<String> query, AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to query star systems by query {}", accessTokenHeader.getUserId(), query);
+    public Map<UUID, String> search(OneParamRequest<String> query, AccessToken accessToken) {
+        log.info("{} wants to query star systems by query {}", accessToken.getUserId(), query);
 
         ValidationUtil.minLength(query.getValue(), 3, "query");
 

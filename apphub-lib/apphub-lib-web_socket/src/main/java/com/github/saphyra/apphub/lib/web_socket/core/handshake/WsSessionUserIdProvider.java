@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.lib.web_socket.core.handshake;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +23,6 @@ class WsSessionUserIdProvider {
             .stream()
             .findFirst()
             .map(accessTokenHeaderConverter::convertEntity)
-            .map(AccessTokenHeader::getUserId);
+            .map(AccessToken::getUserId);
     }
 }

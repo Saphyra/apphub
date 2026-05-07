@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.controller;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateTextRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.TextResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.text.EditTextService;
 import com.github.saphyra.apphub.service.notebook.service.text.TextQueryService;
@@ -41,7 +41,7 @@ public class ContentControllerImplTest {
     private CreateTextRequest createTextRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private TextResponse textResponse;
@@ -51,10 +51,10 @@ public class ContentControllerImplTest {
 
     @Test
     public void createText() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(textCreationService.create(createTextRequest, USER_ID)).willReturn(LIST_ITEM_ID);
 
-        OneParamResponse<UUID> result = underTest.createText(createTextRequest, accessTokenHeader);
+        OneParamResponse<UUID> result = underTest.createText(createTextRequest, accessToken);
 
         assertThat(result.getValue()).isEqualTo(LIST_ITEM_ID);
     }

@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.7</version>
+        <version>3.5.14</version>
         <relativePath/>
     </parent>
 
@@ -21,7 +21,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
 
         <versions.spring-cloud>4.3.2</versions.spring-cloud>
-        <versions.spring-boot>3.5.7</versions.spring-boot>
+        <versions.spring-boot>3.5.14</versions.spring-boot>
 
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>
 

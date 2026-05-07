@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
 import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
 import com.github.saphyra.apphub.ci.value.Constants;
+import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +59,9 @@ public class MinikubeLocalDeployProcess {
 
         minikubeScaleProcess.scale(namespaceName, 0);
 
-        minikubeNamespaceSetupTask.setupNamespace(namespaceName);
+        minikubeNamespaceSetupTask.setupNamespace(Environment.MINIKUBE, namespaceName);
+        minikubeNamespaceSetupTask.deployPostgres(namespaceName);
+        minikubeNamespaceSetupTask.deployDynamoDb(namespaceName);
 
         minikubeServiceDeployer.deploy(namespaceName, "develop", 15);
 

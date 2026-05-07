@@ -45,41 +45,41 @@ public class TableCrudTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void tableCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_blankTitle(accessTokenId);
-        create_nullListItemType(accessTokenId);
-        create_parentNotFound(accessTokenId);
-        create_parentNotCategory(accessTokenId);
-        create_blankColumnName(accessTokenId);
-        create_nullRows(accessTokenId);
-        create_nullRowIndex(accessTokenId);
-        create_nullColumns(accessTokenId);
-        create_incorrectColumnAmount(accessTokenId);
-        create_nullColumnValue(accessTokenId);
-        create_nullColumnType(accessTokenId);
-        create_nullColumnIndex(accessTokenId);
+        create_blankTitle(accessToken);
+        create_nullListItemType(accessToken);
+        create_parentNotFound(accessToken);
+        create_parentNotCategory(accessToken);
+        create_blankColumnName(accessToken);
+        create_nullRows(accessToken);
+        create_nullRowIndex(accessToken);
+        create_nullColumns(accessToken);
+        create_incorrectColumnAmount(accessToken);
+        create_nullColumnValue(accessToken);
+        create_nullColumnType(accessToken);
+        create_nullColumnIndex(accessToken);
 
         //Create
-        BiWrapper<TableResponse, UUID> tableCreationResult = create(accessTokenId);
+        BiWrapper<TableResponse, UUID> tableCreationResult = create(accessToken);
         TableResponse tableResponse = tableCreationResult.getEntity1();
         UUID listItemId = tableCreationResult.getEntity2();
 
-        get_listItemNotFound(accessTokenId);
+        get_listItemNotFound(accessToken);
 
-        edit_blankTitle(accessTokenId, listItemId, tableResponse);
-        edit_blankColumnName(accessTokenId, listItemId, tableResponse);
-        edit_differentColumnAmount(accessTokenId, listItemId, tableResponse);
-        edit_nullColumnValue(accessTokenId, listItemId, tableResponse);
-        edit_tableHeadNotFound(accessTokenId, listItemId, tableResponse);
-        edit_columnNotFound(accessTokenId, listItemId, tableResponse);
-        edit_listItemNotFound(accessTokenId, tableResponse);
-        edit_columnDeleted(accessTokenId, listItemId);
-        tableResponse = edit_columnAdded(accessTokenId, listItemId);
-        edit_columnModified(accessTokenId, listItemId, tableResponse);
+        edit_blankTitle(accessToken, listItemId, tableResponse);
+        edit_blankColumnName(accessToken, listItemId, tableResponse);
+        edit_differentColumnAmount(accessToken, listItemId, tableResponse);
+        edit_nullColumnValue(accessToken, listItemId, tableResponse);
+        edit_tableHeadNotFound(accessToken, listItemId, tableResponse);
+        edit_columnNotFound(accessToken, listItemId, tableResponse);
+        edit_listItemNotFound(accessToken, tableResponse);
+        edit_columnDeleted(accessToken, listItemId);
+        tableResponse = edit_columnAdded(accessToken, listItemId);
+        edit_columnModified(accessToken, listItemId, tableResponse);
     }
 
-    private static void create_blankTitle(UUID accessTokenId) {
+    private static void create_blankTitle(String accessToken) {
         CreateTableRequest create_blankTitleRequest = CreateTableRequest.builder()
             .title(" ")
             .listItemType(ListItemType.TABLE)
@@ -96,11 +96,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response create_blankTitleResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_blankTitleRequest);
+        Response create_blankTitleResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankTitleRequest);
         verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
     }
 
-    private static void create_nullListItemType(UUID accessTokenId) {
+    private static void create_nullListItemType(String accessToken) {
         CreateTableRequest create_nullListItemTypeRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(null)
@@ -117,11 +117,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response create_nullListItemTypeResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_nullListItemTypeRequest);
+        Response create_nullListItemTypeResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullListItemTypeRequest);
         verifyInvalidParam(create_nullListItemTypeResponse, "listItemType", "must not be null");
     }
 
-    private static void create_parentNotFound(UUID accessTokenId) {
+    private static void create_parentNotFound(String accessToken) {
         CreateTableRequest create_parentNotFoundRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -139,12 +139,12 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response create_parentNotFoundResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_parentNotFoundRequest);
+        Response create_parentNotFoundResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
-    private static void create_parentNotCategory(UUID accessTokenId) {
-        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title("title").content("").build());
+    private static void create_parentNotCategory(String accessToken) {
+        UUID notCategoryParentId = TextActions.createText(getServerPort(), accessToken, CreateTextRequest.builder().title("title").content("").build());
         CreateTableRequest create_parentNotCategoryRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -162,11 +162,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response create_parentNotCategoryResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_parentNotCategoryRequest);
+        Response create_parentNotCategoryResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_parentNotCategoryRequest);
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
-    private static void create_blankColumnName(UUID accessTokenId) {
+    private static void create_blankColumnName(String accessToken) {
         CreateTableRequest create_blankColumnNameRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -183,11 +183,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response create_blankColumnNameResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_blankColumnNameRequest);
+        Response create_blankColumnNameResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankColumnNameRequest);
         verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", "must not be null or blank");
     }
 
-    private static void create_nullRows(UUID accessTokenId) {
+    private static void create_nullRows(String accessToken) {
         CreateTableRequest request = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -197,11 +197,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()))
             .rows(null)
             .build();
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "rows", "must not be null");
     }
 
-    private static void create_nullRowIndex(UUID accessTokenId) {
+    private static void create_nullRowIndex(String accessToken) {
         CreateTableRequest request = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -218,11 +218,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.rowIndex", "must not be null");
     }
 
-    private static void create_nullColumns(UUID accessTokenId) {
+    private static void create_nullColumns(String accessToken) {
         CreateTableRequest request = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -236,11 +236,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.columns", "must not be null");
     }
 
-    private static void create_incorrectColumnAmount(UUID accessTokenId) {
+    private static void create_incorrectColumnAmount(String accessToken) {
         CreateTableRequest create_incorrectColumnAmountRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -264,11 +264,11 @@ public class TableCrudTest extends BackEndTest {
                 ))
                 .build()))
             .build();
-        Response create_incorrectColumnAmountResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_incorrectColumnAmountRequest);
+        Response create_incorrectColumnAmountResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_incorrectColumnAmountRequest);
         verifyInvalidParam(create_incorrectColumnAmountResponse, "row.columns", "item count mismatch");
     }
 
-    private static void create_nullColumnValue(UUID accessTokenId) {
+    private static void create_nullColumnValue(String accessToken) {
         CreateTableRequest create_nullColumnValueRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -285,11 +285,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, create_nullColumnValueRequest);
+        Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
         verifyInvalidParam(create_nullColumnValueResponse, "text", "must not be null");
     }
 
-    private static void create_nullColumnType(UUID accessTokenId) {
+    private static void create_nullColumnType(String accessToken) {
         CreateTableRequest request = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -306,11 +306,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.column.columnType", "must not be null");
     }
 
-    private static void create_nullColumnIndex(UUID accessTokenId) {
+    private static void create_nullColumnIndex(String accessToken) {
         CreateTableRequest request = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -327,11 +327,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessTokenId, request);
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.column.columnIndex", "must not be null");
     }
 
-    private static BiWrapper<TableResponse, UUID> create(UUID accessTokenId) {
+    private static BiWrapper<TableResponse, UUID> create(String accessToken) {
         CreateTableRequest createRequest = CreateTableRequest.builder()
             .title(TABLE_TITLE)
             .listItemType(ListItemType.TABLE)
@@ -348,15 +348,15 @@ public class TableCrudTest extends BackEndTest {
                     .build()))
                 .build()))
             .build();
-        TableActions.createTable(getServerPort(), accessTokenId, createRequest);
-        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessTokenId, null)
+        TableActions.createTable(getServerPort(), accessToken, createRequest);
+        UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
             .stream()
             .filter(notebookView -> notebookView.getTitle().equals(TABLE_TITLE))
             .map(NotebookView::getId)
             .findAny()
             .orElseThrow(() -> new RuntimeException("Table was not created."));
-        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TABLE_TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
         assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
@@ -370,12 +370,12 @@ public class TableCrudTest extends BackEndTest {
         return new BiWrapper<>(tableResponse, listItemId);
     }
 
-    private static void get_listItemNotFound(UUID accessTokenId) {
-        Response get_listItemNotFoundResponse = TableActions.getTableResponse(getServerPort(), accessTokenId, UUID.randomUUID());
+    private static void get_listItemNotFound(String accessToken) {
+        Response get_listItemNotFoundResponse = TableActions.getTableResponse(getServerPort(), accessToken, UUID.randomUUID());
         verifyListItemNotFound(get_listItemNotFoundResponse);
     }
 
-    private static void edit_blankTitle(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_blankTitle(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_blankTitleRequest = EditTableRequest.builder()
             .title(" ")
             .tableHeads(
@@ -400,11 +400,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_blankTitleResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, edit_blankTitleRequest);
+        Response edit_blankTitleResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankTitleRequest);
         verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
     }
 
-    private static void edit_blankColumnName(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_blankColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_blankColumnNameRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -429,11 +429,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_blankColumnNameResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, edit_blankColumnNameRequest);
+        Response edit_blankColumnNameResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankColumnNameRequest);
         verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", "must not be null or blank");
     }
 
-    private static void edit_differentColumnAmount(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_differentColumnAmount(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_differentColumnAmountRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -466,11 +466,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_differentColumnAmountResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, edit_differentColumnAmountRequest);
+        Response edit_differentColumnAmountResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_differentColumnAmountRequest);
         verifyInvalidParam(edit_differentColumnAmountResponse, "row.columns", "item count mismatch");
     }
 
-    private static void edit_nullColumnValue(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_nullColumnValue(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_nullColumnValueRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -495,11 +495,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, edit_nullColumnValueRequest);
+        Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
         verifyInvalidParam(edit_nullColumnValueResponse, "text", "must not be null");
     }
 
-    private static void edit_tableHeadNotFound(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_tableHeadNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_columnHeadNotFoundRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -524,11 +524,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_columnHeadNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, edit_columnHeadNotFoundRequest);
+        Response edit_columnHeadNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_columnHeadNotFoundRequest);
         ResponseValidator.verifyErrorResponse(edit_columnHeadNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private static void edit_columnNotFound(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_columnNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest edit_tableJoinNotFoundRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -553,11 +553,11 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_tableJoinNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, listItemId, edit_tableJoinNotFoundRequest);
+        Response edit_tableJoinNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_tableJoinNotFoundRequest);
         ResponseValidator.verifyErrorResponse(edit_tableJoinNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
-    private static void edit_listItemNotFound(UUID accessTokenId, TableResponse tableResponse) {
+    private static void edit_listItemNotFound(String accessToken, TableResponse tableResponse) {
         EditTableRequest edit_listItemNotFoundRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -582,25 +582,25 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        Response edit_listItemNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessTokenId, UUID.randomUUID(), edit_listItemNotFoundRequest);
+        Response edit_listItemNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, UUID.randomUUID(), edit_listItemNotFoundRequest);
         ResponseValidator.verifyInvalidParam(edit_listItemNotFoundResponse, "tableHead.tableHeadId", "points to different table");
     }
 
-    private static void edit_columnDeleted(UUID accessTokenId, UUID listItemId) {
+    private static void edit_columnDeleted(String accessToken, UUID listItemId) {
         TableResponse tableResponse;
         EditTableRequest edit_columnDeletedRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(Collections.emptyList())
             .rows(Collections.emptyList())
             .build();
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, edit_columnDeletedRequest);
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, edit_columnDeletedRequest);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads()).isEmpty();
         assertThat(tableResponse.getRows()).isEmpty();
     }
 
-    private static TableResponse edit_columnAdded(UUID accessTokenId, UUID listItemId) {
+    private static TableResponse edit_columnAdded(String accessToken, UUID listItemId) {
         TableResponse tableResponse;
         EditTableRequest edit_columnAddedRequest = EditTableRequest.builder()
             .title(TABLE_TITLE)
@@ -623,8 +623,8 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, edit_columnAddedRequest);
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, edit_columnAddedRequest);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TABLE_TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
         assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
@@ -637,7 +637,7 @@ public class TableCrudTest extends BackEndTest {
         return tableResponse;
     }
 
-    private static void edit_columnModified(UUID accessTokenId, UUID listItemId, TableResponse tableResponse) {
+    private static void edit_columnModified(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = EditTableRequest.builder()
             .title(NEW_TITLE)
             .tableHeads(
@@ -662,15 +662,15 @@ public class TableCrudTest extends BackEndTest {
                 .build()
             ))
             .build();
-        TableActions.editTable(getServerPort(), accessTokenId, listItemId, editTableRequest);
-        tableResponse = TableActions.getTable(getServerPort(), accessTokenId, listItemId);
+        TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
+        tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
         assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_NAME);
         assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(NEW_COLUMN_VALUE);
 
-        ListItemActions.deleteListItem(getServerPort(), accessTokenId, listItemId);
+        ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
 
-        List<CategoryTreeView> categoryTreeViews = CategoryActions.getCategoryTree(getServerPort(), accessTokenId);
+        List<CategoryTreeView> categoryTreeViews = CategoryActions.getCategoryTree(getServerPort(), accessToken);
         assertThat(categoryTreeViews).isEmpty();
     }
 }

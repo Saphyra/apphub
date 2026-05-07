@@ -16,7 +16,6 @@ import org.openqa.selenium.WebElement;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,7 +56,9 @@ public class RolesForAllActions {
     }
 
     public static List<String> getRestrictedRoles(int serverPort, RegistrationParameters registrationParameters) {
-        UUID accessToken = IndexPageActions.login(serverPort, registrationParameters.toLoginRequest());
+        String accessToken = IndexPageActions.login(serverPort, registrationParameters.toLoginRequest())
+            .getAccessToken()
+            .getJwt();
 
         Response response = RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, UserEndpoints.USER_DATA_ROLES_FOR_ALL_RESTRICTED));

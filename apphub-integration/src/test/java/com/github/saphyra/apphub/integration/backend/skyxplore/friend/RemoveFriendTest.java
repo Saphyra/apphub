@@ -25,63 +25,63 @@ public class RemoveFriendTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void removeFriend() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
-        UUID accessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
+        String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        UUID accessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
-        UUID accessTokenId3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
+        String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId1, model);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, model);
 
         SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId3, model3);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, model3);
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
-        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessTokenId2, model2);
+        SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, model2);
         UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
 
-        friendNotFound(accessTokenId1);
-        UUID friendshipId = forbiddenOperation(accessTokenId1, accessTokenId2, accessTokenId3, userId2);
-        remove(accessTokenId1, accessTokenId2, friendshipId);
+        friendNotFound(accessToken1);
+        UUID friendshipId = forbiddenOperation(accessToken1, accessToken2, accessToken3, userId2);
+        remove(accessToken1, accessToken2, friendshipId);
     }
 
-    private static void friendNotFound(UUID accessTokenId1) {
-        Response friendNotFoundResponse = SkyXploreFriendActions.getRemoveFriendResponse(getServerPort(), accessTokenId1, UUID.randomUUID());
+    private static void friendNotFound(String accessToken1) {
+        Response friendNotFoundResponse = SkyXploreFriendActions.getRemoveFriendResponse(getServerPort(), accessToken1, UUID.randomUUID());
         verifyErrorResponse(friendNotFoundResponse, 404, ErrorCode.FRIENDSHIP_NOT_FOUND);
     }
 
-    private static UUID forbiddenOperation(UUID accessTokenId1, UUID accessTokenId2, UUID accessTokenId3, UUID userId2) {
-        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessTokenId1, userId2);
-        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessTokenId1)
+    private static UUID forbiddenOperation(String accessToken1, String accessToken2, String accessToken3, UUID userId2) {
+        SkyXploreFriendActions.createFriendRequest(getServerPort(), accessToken1, userId2);
+        UUID friendRequestId = SkyXploreFriendActions.getSentFriendRequests(getServerPort(), accessToken1)
             .stream()
             .map(SentFriendRequestResponse::getFriendRequestId)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("FriendRequest not found"));
-        SkyXploreFriendActions.acceptFriendRequest(getServerPort(), accessTokenId2, friendRequestId);
+        SkyXploreFriendActions.acceptFriendRequest(getServerPort(), accessToken2, friendRequestId);
 
-        UUID friendshipId = SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId1)
+        UUID friendshipId = SkyXploreFriendActions.getFriends(getServerPort(), accessToken1)
             .stream()
             .map(FriendshipResponse::getFriendshipId)
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Friendship not found"));
 
-        Response forbiddenOperationResponse = SkyXploreFriendActions.getRemoveFriendResponse(getServerPort(), accessTokenId3, friendshipId);
+        Response forbiddenOperationResponse = SkyXploreFriendActions.getRemoveFriendResponse(getServerPort(), accessToken3, friendshipId);
         verifyForbiddenOperation(forbiddenOperationResponse);
-        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId1)).hasSize(1);
-        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId2)).hasSize(1);
+        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessToken1)).hasSize(1);
+        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessToken2)).hasSize(1);
         return friendshipId;
     }
 
-    private static void remove(UUID accessTokenId1, UUID accessTokenId2, UUID friendshipId) {
-        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(getServerPort(), accessTokenId2, accessTokenId2);
+    private static void remove(String accessToken1, String accessToken2, UUID friendshipId) {
+        ApphubWsClient friendClient = ApphubWsClient.createSkyXploreMainMenu(getServerPort(), accessToken2, accessToken2);
 
-        SkyXploreFriendActions.removeFriend(getServerPort(), accessTokenId1, friendshipId);
+        SkyXploreFriendActions.removeFriend(getServerPort(), accessToken1, friendshipId);
 
-        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId1)).isEmpty();
-        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessTokenId2)).isEmpty();
+        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessToken1)).isEmpty();
+        assertThat(SkyXploreFriendActions.getFriends(getServerPort(), accessToken2)).isEmpty();
 
         assertThat(friendClient.awaitForEvent(WebSocketEventName.SKYXPLORE_MAIN_MENU_FRIENDSHIP_DELETED).get().getPayloadAs(UUID.class)).isEqualTo(friendshipId);
 

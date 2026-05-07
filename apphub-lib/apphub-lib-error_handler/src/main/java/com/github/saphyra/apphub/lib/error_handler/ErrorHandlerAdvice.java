@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorMessage;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.error_handler.service.translation.ErrorResponseFactory;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.exception.LoggedException;
@@ -15,14 +14,14 @@ import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -36,9 +35,7 @@ class ErrorHandlerAdvice {
         String content = exception.contentUTF8();
         HttpStatus status = HttpStatus.valueOf(exception.status());
         log.warn("Handling feignException with status {} and content {} for {} - {}", status, content, exception.request().httpMethod(), exception.request().url());
-        Map<String, Collection<String>> headers = CollectionUtils.singleValueMap("content-type", exception.responseHeaders().get("content-type"));
-        log.debug("Headers: {}", headers);
-        return new ResponseEntity<>(content, CollectionUtils.toMultiValueMap(headers), status);
+        return new ResponseEntity<>(content, getHeaders(), status);
     }
 
     @ExceptionHandler(NotLoggedException.class)
@@ -47,7 +44,7 @@ class ErrorHandlerAdvice {
         log.info("Returning errorResponse: {} with logMessage: {}", errorResponse, exception.getMessage());
         log.debug("Exception:", exception);
 
-        return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse.getErrorResponse(), getHeaders(), errorResponse.getStatus());
     }
 
     @ExceptionHandler(LoggedException.class)
@@ -55,7 +52,7 @@ class ErrorHandlerAdvice {
         ErrorResponseWrapper errorResponse = getErrorResponse(exception);
         log.warn("Returning errorResponse: {}", errorResponse, exception);
 
-        return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse.getErrorResponse(), getHeaders(), errorResponse.getStatus());
     }
 
     @ExceptionHandler(ReportedException.class)
@@ -65,7 +62,7 @@ class ErrorHandlerAdvice {
 
         errorReporterService.report(errorResponse.getStatus(), errorResponse.getErrorResponse(), exception);
 
-        return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse.getErrorResponse(), getHeaders(), errorResponse.getStatus());
     }
 
     private ErrorResponseWrapper getErrorResponse(RestException exception) {
@@ -75,11 +72,17 @@ class ErrorHandlerAdvice {
 
     @ExceptionHandler(RuntimeException.class)
     ResponseEntity<ErrorResponse> generalException(HttpServletRequest request, RuntimeException exception) {
-        log.error("Unknown exception occurred when calling {} - {}:",request.getMethod(), request.getRequestURI(), exception);
+        log.error("Unknown exception occurred when calling {} - {}:", request.getMethod(), request.getRequestURI(), exception);
         ErrorResponseWrapper errorResponse = errorResponseFactory.create(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.GENERAL_ERROR, new HashMap<>());
 
         errorReporterService.report(errorResponse.getStatus(), errorResponse.getErrorResponse(), exception);
 
-        return new ResponseEntity<>(errorResponse.getErrorResponse(), errorResponse.getStatus());
+        return new ResponseEntity<>(errorResponse.getErrorResponse(), getHeaders(), errorResponse.getStatus());
+    }
+
+    private static HttpHeaders getHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 }

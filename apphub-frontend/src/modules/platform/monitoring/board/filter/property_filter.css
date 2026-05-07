@@ -1,0 +1,16 @@
+#monitoring-properties {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    top: 0;
+    background: black;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid white;
+    opacity: 1;
+    z-index: 100;
+}
+
+#monitoring-properties label:not(:last-child){
+    margin-right: 10px;
+}

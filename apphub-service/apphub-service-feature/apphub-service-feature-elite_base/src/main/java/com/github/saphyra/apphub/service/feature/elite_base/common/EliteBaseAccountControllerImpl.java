@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.common;
 
 import com.github.saphyra.apphub.api.feature.elite_base.server.EliteBaseAccountController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 class EliteBaseAccountControllerImpl implements EliteBaseAccountController {
     @Override
-    public boolean isAdmin(AccessTokenHeader accessTokenHeader) {
-        log.info("{} wants to know if they are an EliteBase Admin", accessTokenHeader.getUserId());
+    public boolean isAdmin(AccessToken accessToken) {
+        log.info("{} wants to know if they are an EliteBase Admin", accessToken.getUserId());
 
-        return accessTokenHeader.getRoles()
+        return accessToken.getRoles()
             .contains(EliteBaseConstants.ROLE_ELITE_BASE_ADMIN);
     }
 }

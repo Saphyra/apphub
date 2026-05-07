@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.frontend.admin_panel.ban;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.RegistrationUtils;
 import com.github.saphyra.apphub.integration.action.frontend.admin_panel.ban.BanActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
@@ -32,6 +33,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class BanCrudTest extends SeleniumTest {
     private static final String REASON = "reason";
 
@@ -49,8 +52,8 @@ public class BanCrudTest extends SeleniumTest {
         RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
         DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
-        SleepUtil.sleep(3000);
-        adminDriver.navigate().refresh();
+        AccessTokenActions.invalidateAccessToken(adminDriver, getServerPort());
+
         ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.BAN);
 
         openUser(adminDriver, testUserData);
@@ -64,9 +67,15 @@ public class BanCrudTest extends SeleniumTest {
         ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", LocalizedText.INCORRECT_PASSWORD);
         ban_runValidation(adminDriver, Constants.ROLE_TEST, true, 0, "", REASON, "asd", LocalizedText.ACCOUNT_LOCKED);
 
-        AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, adminDriver))
-            .assertTrue("User is not logged out.");
+        AwaitilityWrapper.retry(
+            () -> {
+                adminDriver.navigate().refresh();
+
+                assertThat(IndexPageActions.isLoginPageLoaded(serverPort, adminDriver)).isTrue();
+            },
+            15,
+            1
+        );
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -97,9 +106,15 @@ public class BanCrudTest extends SeleniumTest {
         revokeBan_runValidation(adminDriver, "asd", LocalizedText.INCORRECT_PASSWORD);
         revokeBan_runValidation(adminDriver, "asd", LocalizedText.ACCOUNT_LOCKED);
 
-        AwaitilityWrapper.create(15, 1)
-            .until(() -> IndexPageActions.isLoginPageLoaded(serverPort, adminDriver))
-            .assertTrue("User is not logged out.");
+        AwaitilityWrapper.retry(
+            () -> {
+                adminDriver.navigate().refresh();
+
+                assertThat(IndexPageActions.isLoginPageLoaded(serverPort, adminDriver)).isTrue();
+            },
+            15,
+            1
+        );
 
         DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -109,10 +124,11 @@ public class BanCrudTest extends SeleniumTest {
 
         revokeBan(adminDriver, adminUserData);
 
+        AccessTokenActions.invalidateAccessToken(testDriver, getServerPort());
         testDriver.navigate()
             .to(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE));
         AwaitilityWrapper.createDefault()
-            .until(() -> testDriver.getCurrentUrl().endsWith(ModulesEndpoints.MODULES_PAGE))
+            .until(() -> testDriver.getCurrentUrl().equals(UrlFactory.create(serverPort, ModulesEndpoints.MODULES_PAGE)))
             .assertTrue("TestUser is still banned.");
     }
 

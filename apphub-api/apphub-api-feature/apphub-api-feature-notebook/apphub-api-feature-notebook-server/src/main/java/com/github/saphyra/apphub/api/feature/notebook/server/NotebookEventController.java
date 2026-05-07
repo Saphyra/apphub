@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.notebook.server;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.config.common.endpoints.GenericEndpoints;
+import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.admin;
 import com.github.saphyra.apphub.api.feature.skyxplore.admin.SkyXploreGameDataDetails;
 import com.github.saphyra.apphub.api.feature.skyxplore.admin.SkyXploreGameDataEntry;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.admin.service.AdminQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class SkyXploreGameAdminControllerImplTest {
     private SkyXploreGameDataDetails details;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     void setUp() {
@@ -47,13 +47,13 @@ class SkyXploreGameAdminControllerImplTest {
     void getByType() {
         given(adminQueryService.getAll(GAME_ID)).willReturn(List.of(entry));
 
-        assertThat(underTest.getByType(GameItemType.CONSTRUCTION, GAME_ID, accessTokenHeader)).containsExactly(entry);
+        assertThat(underTest.getByType(GameItemType.CONSTRUCTION, GAME_ID, accessToken)).containsExactly(entry);
     }
 
     @Test
     void getItem() {
         given(adminQueryService.findById(GAME_ID, ITEM_ID)).willReturn(details);
 
-        assertThat(underTest.getItem(GAME_ID, GameItemType.CONSTRUCTION, ITEM_ID, accessTokenHeader)).isEqualTo(details);
+        assertThat(underTest.getItem(GAME_ID, GameItemType.CONSTRUCTION, ITEM_ID, accessToken)).isEqualTo(details);
     }
 }

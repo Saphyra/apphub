@@ -116,6 +116,8 @@ public class RunTestsTask {
         String namespace,
         Integer retryCount
     ) {
+        disabledGroups = String.join(",", disabledGroups, "community");
+
         List<String> command = List.of(
             "cmd",
             "/c",

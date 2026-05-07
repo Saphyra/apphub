@@ -1,5 +1,5 @@
 import MapStream from "../collection/MapStream";
-import { ResponseStatus } from "./dao";
+import ResponseStatus from "./ResponseStatus";
 
 const Response = class {
     constructor(status, body) {

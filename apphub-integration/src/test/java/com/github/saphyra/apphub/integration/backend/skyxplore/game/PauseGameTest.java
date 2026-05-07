@@ -32,63 +32,63 @@ public class PauseGameTest extends BackEndTest {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         int serverPort = getServerPort();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(serverPort, userData1);
-        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessTokenId, characterModel1);
+        String accessToken = IndexPageActions.registerAndLogin(serverPort, userData1);
+        SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken, characterModel1);
         UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
 
-        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(serverPort, GAME_NAME, new Player(accessTokenId, userId1))
-            .get(accessTokenId);
+        ApphubWsClient gameWsClient = SkyXploreFlow.startGame(serverPort, GAME_NAME, new Player(accessToken, userId1))
+            .get(accessToken);
 
-        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessTokenId)
+        UUID planetId = SkyXploreSolarSystemActions.getPopulatedPlanet(serverPort, accessToken)
             .getPlanetId();
-        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(serverPort, accessTokenId, planetId);
+        ApphubWsClient planetWsClient = ApphubWsClient.createSkyXploreGamePlanet(serverPort, accessToken, planetId);
 
-        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessTokenId, planetId, Constants.SURFACE_TYPE_DESERT);
+        UUID surfaceId = SkyXplorePlanetActions.findEmptySurface(serverPort, accessToken, planetId, Constants.SURFACE_TYPE_DESERT);
 
         //Create construction
         planetWsClient.clearMessages();
-        SkyXploreSurfaceActions.terraform(serverPort, accessTokenId, planetId, surfaceId, Constants.SURFACE_TYPE_FOREST);
+        SkyXploreSurfaceActions.terraform(serverPort, accessToken, planetId, surfaceId, Constants.SURFACE_TYPE_FOREST);
 
         AwaitilityWrapper.awaitAssert(
-            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId),
+            () -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId),
             surfaceResponse -> assertThat(surfaceResponse)
                 .extracting(SurfaceResponse::getTerraformation)
                 .isNotNull()
         );
 
         //Resume game
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         //Check if game is running
         AwaitilityWrapper.create(120, 1)
-            .until(() -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getTerraformation().getCurrentWorkPoints() > 0)
+            .until(() -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getTerraformation().getCurrentWorkPoints() > 0)
             .assertTrue("Terraformation work is not started.");
 
         //Pause game
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, true);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, true);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not paused"));
 
         //Check if game is not running
-        int progress = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId)
+        int progress = SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId)
             .getTerraformation()
             .getCurrentWorkPoints();
 
         SleepUtil.sleep(10000);
 
-        assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getTerraformation().getCurrentWorkPoints()).isEqualTo(progress);
+        assertThat(SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getTerraformation().getCurrentWorkPoints()).isEqualTo(progress);
 
         //Resume game
         gameWsClient.clearMessages();
-        SkyXploreGameActions.setPaused(serverPort, accessTokenId, false);
+        SkyXploreGameActions.setPaused(serverPort, accessToken, false);
         gameWsClient.awaitForEvent(WebSocketEventName.SKYXPLORE_GAME_PAUSED, webSocketEvent -> !Boolean.parseBoolean(webSocketEvent.getPayload().toString()))
             .orElseThrow(() -> new RuntimeException("Game is not started"));
 
         //Check if game is running again
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessTokenId, planetId, surfaceId).getTerraformation().getCurrentWorkPoints() > progress)
+            .until(() -> SkyXplorePlanetActions.findSurfaceBySurfaceId(serverPort, accessToken, planetId, surfaceId).getTerraformation().getCurrentWorkPoints() > progress)
             .assertTrue("Progress is not increased.");
     }
 }

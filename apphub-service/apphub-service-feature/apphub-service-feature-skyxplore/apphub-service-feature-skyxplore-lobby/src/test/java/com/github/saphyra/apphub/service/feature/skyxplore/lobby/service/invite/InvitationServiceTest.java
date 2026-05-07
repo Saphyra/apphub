@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.invite
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.LobbyPlayerResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -72,7 +72,7 @@ public class InvitationServiceTest {
     private InvitationService underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private FriendshipResponse friendshipResponse;
@@ -106,20 +106,20 @@ public class InvitationServiceTest {
 
     @Test
     public void notFriends() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(dataProxy.getFriends(accessToken)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(UUID.randomUUID());
 
 
-        Throwable ex = catchThrowable(() -> underTest.invite(accessTokenHeader, FRIEND_ID));
+        Throwable ex = catchThrowable(() -> underTest.invite(accessToken, FRIEND_ID));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.PRECONDITION_FAILED, ErrorCode.GENERAL_ERROR);
     }
 
     @Test
     public void flooding() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(dataProxy.getFriends(accessToken)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getInvitations()).willReturn(Arrays.asList(invitation));
@@ -128,15 +128,15 @@ public class InvitationServiceTest {
         given(invitation.getInvitationTime()).willReturn(CURRENT_DATE);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
-        Throwable ex = catchThrowable(() -> underTest.invite(accessTokenHeader, FRIEND_ID));
+        Throwable ex = catchThrowable(() -> underTest.invite(accessToken, FRIEND_ID));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.TOO_MANY_REQUESTS, ErrorCode.TOO_FREQUENT_INVITATIONS);
     }
 
     @Test
     public void sendInvitation_invitedByDifferentPlayer() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(dataProxy.getFriends(accessToken)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(invitation));
@@ -146,7 +146,7 @@ public class InvitationServiceTest {
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
         given(lobbyPlayerToResponseConverter.convertInvitation(newInvitation)).willReturn(lobbyPlayerResponse);
 
-        underTest.invite(accessTokenHeader, FRIEND_ID);
+        underTest.invite(accessToken, FRIEND_ID);
 
         assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation, newInvitation);
 
@@ -156,8 +156,8 @@ public class InvitationServiceTest {
 
     @Test
     public void sendInvitation_lastInvitationNotTooRecent() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
-        given(dataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(friendshipResponse));
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(dataProxy.getFriends(accessToken)).willReturn(Arrays.asList(friendshipResponse));
         given(friendshipResponse.getFriendId()).willReturn(FRIEND_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getInvitations()).willReturn(CollectionUtils.toList(invitation));
@@ -168,7 +168,7 @@ public class InvitationServiceTest {
         given(characterProxy.getCharacter()).willReturn(SkyXploreCharacterModel.builder().name(PLAYER_NAME).build());
         given(lobbyPlayerToResponseConverter.convertInvitation(invitation)).willReturn(lobbyPlayerResponse);
 
-        underTest.invite(accessTokenHeader, FRIEND_ID);
+        underTest.invite(accessToken, FRIEND_ID);
 
         assertThat(lobby.getInvitations()).containsExactlyInAnyOrder(invitation);
 

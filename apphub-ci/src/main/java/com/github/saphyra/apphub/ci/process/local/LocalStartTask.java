@@ -5,24 +5,43 @@ import com.github.saphyra.apphub.ci.utils.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.google.common.base.Stopwatch;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @Slf4j
 public class LocalStartTask implements Runnable {
     private final ServicePinger servicePinger;
     private final Service service;
-    @Builder.Default
-    private final String activeProfiles = Constants.PROFILE_LOCAL;
     private final StartupIndicator startupIndicator;
+    private final Map<String, String> arguments = new HashMap<>();
+
+    public LocalStartTask(ServicePinger servicePinger, Service service, StartupIndicator startupIndicator) {
+        this(servicePinger, service, Constants.PROFILE_LOCAL, startupIndicator);
+    }
+
+    public LocalStartTask(ServicePinger servicePinger, Service service, String activeProfiles, StartupIndicator startupIndicator) {
+        this(servicePinger, service, activeProfiles, startupIndicator, new HashMap<>());
+    }
+
+    public LocalStartTask(ServicePinger servicePinger, Service service, StartupIndicator startupIndicator, Map<String, String> properties) {
+        this(servicePinger, service, Constants.PROFILE_LOCAL, startupIndicator, properties);
+    }
+
+    public LocalStartTask(ServicePinger servicePinger, Service service, String activeProfiles, StartupIndicator startupIndicator, Map<String, String> arguments) {
+        this.servicePinger = servicePinger;
+        this.service = service;
+        this.startupIndicator = startupIndicator;
+        this.arguments.putAll(arguments);
+        this.arguments.put("SPRING_ACTIVE_PROFILE", activeProfiles);
+    }
 
     @Override
     @SneakyThrows
@@ -30,7 +49,22 @@ public class LocalStartTask implements Runnable {
         Stopwatch stopwatch = Stopwatch.createStarted();
         log.info("Starting service {}", service.getName());
 
-        new ProcessBuilder("cmd", "/c", "start", "java", "-Xmx1024m", "-Dfile.encoding=UTF-8", "-DSPRING_ACTIVE_PROFILE=%s".formatted(activeProfiles), "-jar", service.getLocation())
+        List<String> command = new ArrayList<>();
+        command.addAll(List.of(
+            "cmd",
+            "/c",
+            "start",
+            "java",
+            "-Xmx1024m",
+            "-Dfile.encoding=UTF-8"
+        ));
+        command.addAll(getArguments());
+        command.addAll(List.of(
+            "-jar",
+            service.getLocation()
+        ));
+
+        new ProcessBuilder(command)
             .start();
 
         startupIndicator.startupInitiated(service.getName());
@@ -43,5 +77,12 @@ public class LocalStartTask implements Runnable {
         stopwatch.stop();
         startupIndicator.startupCompleted(service.getName());
         log.info("{} successfully started in {}s.", service.getName(), (stopwatch.elapsed(TimeUnit.MILLISECONDS) / 1000d));
+    }
+
+    private Collection<String> getArguments() {
+        return arguments.entrySet()
+            .stream()
+            .map(entry -> "-D%s=%s".formatted(entry.getKey(), entry.getValue()))
+            .toList();
     }
 }

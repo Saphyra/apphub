@@ -1,0 +1,145 @@
+import useHasFocus from "common/hook/UseHasFocus";
+import Stream from "common/js/collection/Stream";
+import EventName from "common/js/event/EventName";
+import { useEffect, useState } from "react";
+import { useUpdateEffect } from "react-use";
+import "./category.css";
+import compareListItems from "./ListItemComparator";
+import { UserSettings } from "modules/feature/calendar/common/UserSettings";
+import ListItem from "../../list_item/ListItem";
+import ListItemMode from "../../list_item/ListItemMode";
+import moveListItem from "modules/feature/notebook/common/MoveListItemService";
+import Settings from "./settings/Settings";
+import CategoryNavigation from "./navigation/CategoryNavigation";
+import { NOTEBOOK_GET_CHILDREN_OF_CATEGORY } from "modules/feature/notebook/NotebookEndpoints";
+
+const Category = ({
+    localizationHandler,
+    openedListItem,
+    setOpenedListItem,
+    lastEvent,
+    setLastEvent,
+    userSettings,
+    changeUserSettings,
+    setConfirmationDialogData,
+    setDisplaySpinner
+}) => {
+    const [openedCategoryContent, setOpenedCategoryContent] = useState({ children: [] });
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    useEffect(() => processEvent(), [lastEvent]);
+    useEffect(() => loadCategory(), [openedListItem]);
+
+    const isInFocus = useHasFocus();
+    useUpdateEffect(() => {
+        if (isInFocus) {
+            loadCategory();
+        }
+    }, [isInFocus]);
+
+    const processEvent = () => {
+        if (lastEvent === null) {
+            return;
+        }
+
+        switch (lastEvent.eventName) {
+            case EventName.NOTEBOOK_LIST_ITEM_DELETED:
+            case EventName.NOTEBOOK_LIST_ITEM_ARCHIVED:
+            case EventName.NOTEBOOK_LIST_ITEM_PINNED:
+            case EventName.NOTEBOOK_LIST_ITEM_CLONED:
+            case EventName.NOTEBOOK_LIST_ITEM_MODIFIED:
+                loadCategory();
+                break;
+        }
+    }
+
+    const loadCategory = () => {
+        const fetch = async () => {
+            const listItemId = openedListItem.id;
+
+            const queryParams = openedListItem.id === null ? null : { categoryId: openedListItem.id };
+            const response = await NOTEBOOK_GET_CHILDREN_OF_CATEGORY.createRequest(null, null, queryParams)
+                .send(setDisplaySpinner);
+
+            if (openedListItem.id === listItemId) {
+                setOpenedCategoryContent(response);
+            }
+        }
+
+        fetch();
+    }
+
+    const getContent = () => {
+        if (openedCategoryContent.children.length === 0) {
+            return (
+                <div id="notebook-content-category-content-empty">
+                    {localizationHandler.get("category-empty")}
+                </div>
+            );
+        }
+
+        return new Stream(openedCategoryContent.children)
+            .sorted((a, b) => compareListItems(a, b))
+            .filter(child => userSettings[UserSettings.SHOW_ARCHIVED] || !child.archived)
+            .map(child =>
+                <ListItem
+                    key={child.id}
+                    localizationHandler={localizationHandler}
+                    data={child}
+                    setOpenedListItem={setOpenedListItem}
+                    setLastEvent={setLastEvent}
+                    listItemMode={ListItemMode.CATEGORY_CONTENT}
+                    setConfirmationDialogData={setConfirmationDialogData}
+                    selectedItems={selectedItems}
+                    setSelectedItems={setSelectedItems}
+                    setDisplaySpinner={setDisplaySpinner}
+                />
+            )
+            .toList();
+    }
+
+    //Drag & Drop
+    const handleOnDragOver = (e) => {
+        if (openedListItem.id !== null) {
+            e.preventDefault();
+        }
+    }
+
+    const handleOnDrop = (e) => {
+        const movedItemId = e.dataTransfer.getData("id");
+        moveListItem(movedItemId, openedCategoryContent.parent, setLastEvent);
+    }
+
+    return (
+        <div id="notebook-content-category" className="notebook-content">
+            <Settings
+                localizationHandler={localizationHandler}
+                openedListItem={openedListItem}
+                setOpenedListItem={setOpenedListItem}
+                userSettings={userSettings}
+                changeUserSettings={changeUserSettings}
+            />
+
+            <CategoryNavigation
+                openedListItem={openedListItem}
+                title={openedCategoryContent.title}
+                parent={openedCategoryContent.parent}
+                setOpenedListItem={setOpenedListItem}
+                listItems={openedCategoryContent.children}
+                selectedItems={selectedItems}
+                setLastEvent={setLastEvent}
+                setConfirmationDialogData={setConfirmationDialogData}
+                setSelectedItems={setSelectedItems}
+                handleOnDrop={handleOnDrop}
+                handleOnDragOver={handleOnDragOver}
+                setDisplaySpinner={setDisplaySpinner}
+            />
+
+            <div id="notebook-category-content-list">
+                {getContent()}
+            </div>
+        </div>
+    );
+}
+
+export default Category;

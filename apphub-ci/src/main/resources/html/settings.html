@@ -1,0 +1,73 @@
+<html>
+<head>
+    <title>Settings - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Settings</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<div class="menu">
+    <div>
+        <a href="/">Back</a>
+    </div>
+
+    <fieldset>
+        <legend>General</legend>
+
+        <form action="/settings" method="post">
+            <ul>
+                <li>
+                    <label>
+                        Browser startup limit:
+                        <input type="number" name="browser_startup_limit" th:value="${browser_startup_limit}" required>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="gui_enabled" value="true" th:checked="${gui_enabled}"/>
+                        GUI enabled
+                    </label>
+                </li>
+            </ul>
+
+            <input type="submit" value="Save"/>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>AWS S3</legend>
+
+        <ul th:each="environment: ${environments}">
+            <li><a th:href="@{|/settings/s3/${environment}|}" th:text="${environment}"></a></li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>AWS DynamoDB</legend>
+
+        <ul th:each="environment: ${environments}">
+            <li><a th:href="@{|/settings/dynamo-db/${environment}|}" th:text="${environment}"></a></li>
+        </ul>
+    </fieldset>
+
+
+    <fieldset>
+        <legend>Authorization certificate</legend>
+
+        <a href="/settings/authorization/certificate/test">Recreate TEST certificate</a>
+        <fieldset>
+            <form action="/settings/authorization/certificate/production" method="GET">
+                <label>
+                    <input type="checkbox" required>
+                    I understand that recreating production certificate logs all users out
+                </label>
+                <input type="submit" value="Recreate PRODUCTION certificate"/>
+        </fieldset>
+        </form>
+    </fieldset>
+</div>
+</body>
+</html>

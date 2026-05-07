@@ -8,13 +8,13 @@ import io.restassured.response.Response;
 import java.util.UUID;
 
 public class EliteBasePowerActions {
-    public static Response getPowersResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getPowersResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_GET_POWERS));
     }
 
-    public static Response getPowerplayStatesResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getPowerplayStatesResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_GET_POWERPLAY_STATES));
     }
 }

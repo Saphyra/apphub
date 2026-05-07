@@ -3,12 +3,10 @@ package com.github.saphyra.apphub.service.platform.storage.service.store;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +22,8 @@ import java.util.UUID;
 public class StoreFileService {
     private final StoredFileFactory storedFileFactory;
     private final StoredFileDao storedFileDao;
-    private final FtpClientFactory ftpClientFactory;
-    private final UuidConverter uuidConverter;
     private final CommonConfigProperties properties;
+    private final StorageClientProvider storageClientProvider;
 
     public UUID createFile(UUID userId, String fileName, Long size) {
         ValidationUtil.notNull(fileName, "fileName");
@@ -54,12 +51,10 @@ public class StoreFileService {
             throw ExceptionFactory.notLoggedException(HttpStatus.CONFLICT, ErrorCode.ALREADY_EXISTS, "File already uploaded for StoredFile " + storedFile);
         }
 
-        try (FtpClientWrapper ftpClient = ftpClientFactory.create()) {
-            ftpClient.storeFile(uuidConverter.convertDomain(storedFileId), file);
+        storageClientProvider.getClientForType(storedFile.getStorage())
+            .upload(storedFileId, file, size);
 
-            storedFile.setFileUploaded(true);
-
-            storedFileDao.save(storedFile);
-        }
+        storedFile.setFileUploaded(true);
+        storedFileDao.save(storedFile);
     }
 }

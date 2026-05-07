@@ -21,32 +21,32 @@ public class ArchiveEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     public void archiveEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         // Create a one-time event
-        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessTokenId, EventRequestFactory.validRequest(RepetitionType.ONE_TIME));
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, EventRequestFactory.validRequest(RepetitionType.ONE_TIME));
 
         // Archive the event
-        CalendarEventActions.archiveEvent(getServerPort(), accessTokenId, eventId, true);
+        CalendarEventActions.archiveEvent(getServerPort(), accessToken, eventId, true);
 
         // Verify event is archived
-        EventResponse archivedEvent = CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId);
+        EventResponse archivedEvent = CalendarEventActions.getEvent(getServerPort(), accessToken, eventId);
         assertThat(archivedEvent.getArchived()).isTrue();
 
         // Verify occurrences reflect archived flag
-        List<OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId);
+        List<OccurrenceResponse> occurrences = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId);
         CustomAssertions.singleListAssertThat(occurrences)
             .returns(true, OccurrenceResponse::getEventArchived);
 
         // Unarchive the event via editEvent
-        CalendarEventActions.editEvent(getServerPort(), accessTokenId, eventId, EventRequestFactory.editRequest(RepetitionType.ONE_TIME));
+        CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, EventRequestFactory.editRequest(RepetitionType.ONE_TIME));
 
         // Verify event is unarchived
-        EventResponse unarchivedEvent = CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId);
+        EventResponse unarchivedEvent = CalendarEventActions.getEvent(getServerPort(), accessToken, eventId);
         assertThat(unarchivedEvent.getArchived()).isFalse();
 
         // Verify occurrences reflect unarchived flag
-        List<OccurrenceResponse> occurrencesAfterUnarchive = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessTokenId, eventId);
+        List<OccurrenceResponse> occurrencesAfterUnarchive = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId);
         CustomAssertions.singleListAssertThat(occurrencesAfterUnarchive)
             .returns(false, OccurrenceResponse::getEventArchived);
     }

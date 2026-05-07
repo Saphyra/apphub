@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeUsernameRequest;
-import com.github.saphyra.apphub.api.etc.user.model.login.RegistrationRequest;
+import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.api.etc.user.server.AccountController;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -40,56 +40,56 @@ public class AccountControllerImpl implements AccountController {
     private final UserDao userDao;
 
     @Override
-    public AccountResponse changeEmail(AccessTokenHeader accessTokenHeader, ChangeEmailRequest request) {
-        log.info("{} wants to change his email", accessTokenHeader.getUserId());
-        changeEmailService.changeEmail(accessTokenHeader.getUserId(), request);
+    public AccountResponse changeEmail(AccessToken accessToken, ChangeEmailRequest request) {
+        log.info("{} wants to change his email", accessToken.getUserId());
+        changeEmailService.changeEmail(accessToken.getUserId(), request);
 
-        return getAccount(accessTokenHeader);
+        return getAccount(accessToken);
     }
 
     @Override
-    public AccountResponse changeUsername(AccessTokenHeader accessTokenHeader, ChangeUsernameRequest request) {
-        log.info("{} wants to change his username", accessTokenHeader.getUserId());
-        changeUsernameService.changeUsername(accessTokenHeader.getUserId(), request);
+    public AccountResponse changeUsername(AccessToken accessToken, ChangeUsernameRequest request) {
+        log.info("{} wants to change his username", accessToken.getUserId());
+        changeUsernameService.changeUsername(accessToken.getUserId(), request);
 
-        return getAccount(accessTokenHeader);
+        return getAccount(accessToken);
     }
 
     @Override
-    public void changePassword(AccessTokenHeader accessTokenHeader, ChangePasswordRequest request) {
-        log.info("{} wants to change his password", accessTokenHeader.getUserId());
-        changePasswordService.changePassword(accessTokenHeader.getUserId(), request);
+    public void changePassword(AccessToken accessToken, ChangePasswordRequest request) {
+        log.info("{} wants to change his password", accessToken.getUserId());
+        changePasswordService.changePassword(accessToken.getUserId(), request);
     }
 
     @Override
-    public void deleteAccount(AccessTokenHeader accessTokenHeader, OneParamRequest<String> password) {
-        log.info("{} wants to delete his account", accessTokenHeader.getUserId());
-        deleteAccountService.deleteAccount(accessTokenHeader.getUserId(), password.getValue());
+    public void deleteAccount(AccessToken accessToken, OneParamRequest<String> password) {
+        log.info("{} wants to delete his account", accessToken.getUserId());
+        deleteAccountService.deleteAccount(accessToken.getUserId(), password.getValue());
     }
 
     @Override
-    public void register(RegistrationRequest registrationRequest, String locale) {
-        log.info("RegistrationRequest arrived for username {} and email {}", registrationRequest.getUsername(), registrationRequest.getEmail());
-        registrationService.register(registrationRequest, locale);
+    public void register(RegistrationRequest registrationRequest) {
+        log.info("{} arrived", registrationRequest);
+        registrationService.register(registrationRequest);
     }
 
     @Override
-    public OneParamResponse<String> getUsernameByUserId(AccessTokenHeader accessTokenHeader) {
-        log.info("Querying name of user {}", accessTokenHeader.getUserId());
-        String username = userDao.findByIdValidated(accessTokenHeader.getUserId())
+    public OneParamResponse<String> getUsernameByUserId(AccessToken accessToken) {
+        log.info("Querying name of user {}", accessToken.getUserId());
+        String username = userDao.findByIdValidated(accessToken.getUserId())
             .getUsername();
         return new OneParamResponse<>(username);
     }
 
     @Override
-    public List<AccountResponse> searchAccount(OneParamRequest<String> search, Boolean includeMarkedForDeletion, Boolean includeSelf, AccessTokenHeader accessTokenHeader) {
+    public List<AccountResponse> searchAccount(OneParamRequest<String> search, Boolean includeMarkedForDeletion, Boolean includeSelf, AccessToken accessToken) {
         String searchText = search.getValue();
-        log.info("{} wants to query users by {}", accessTokenHeader.getUserId(), searchText);
+        log.info("{} wants to query users by {}", accessToken.getUserId(), searchText);
         ValidationUtil.minLength(searchText, 3, "value");
 
         return userDao.getByUsernameOrEmailContainingIgnoreCase(searchText)
             .stream()
-            .filter(user -> includeSelf || !user.getUserId().equals(accessTokenHeader.getUserId()))
+            .filter(user -> includeSelf || !user.getUserId().equals(accessToken.getUserId()))
             .filter(user -> includeMarkedForDeletion || !user.isMarkedForDeletion())
             .map(this::convert)
             .collect(Collectors.toList());
@@ -100,6 +100,7 @@ public class AccountControllerImpl implements AccountController {
             .userId(user.getUserId())
             .email(user.getEmail())
             .username(user.getUsername())
+            .locale(user.getLanguage())
             .build();
     }
 
@@ -111,8 +112,8 @@ public class AccountControllerImpl implements AccountController {
     }
 
     @Override
-    public AccountResponse getAccount(AccessTokenHeader accessTokenHeader) {
-        return convert(userDao.findByIdValidated(accessTokenHeader.getUserId()));
+    public AccountResponse getAccount(AccessToken accessToken) {
+        return convert(userDao.findByIdValidated(accessToken.getUserId()));
     }
 
     @Override

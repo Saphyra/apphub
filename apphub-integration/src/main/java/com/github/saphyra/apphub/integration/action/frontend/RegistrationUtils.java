@@ -15,7 +15,7 @@ import static com.github.saphyra.apphub.integration.core.TestBase.EXECUTOR_SERVI
 
 public class RegistrationUtils {
     public static void registerUsers(int serverPort, List<BiWrapper<WebDriver, RegistrationParameters>> users) {
-        registerUsers(serverPort, users, (driver, registrationParameters) -> {
+        registerUsers(serverPort, users, (_, _) -> {
         });
     }
 

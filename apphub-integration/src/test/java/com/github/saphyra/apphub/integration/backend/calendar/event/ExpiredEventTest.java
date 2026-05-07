@@ -26,51 +26,51 @@ public class ExpiredEventTest extends BackEndTest {
     @Test(groups = {"be", "calendar"})
     void hideExpiredEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = createExpiredEvent(accessTokenId);
+        UUID eventId = createExpiredEvent(accessToken);
 
-        CustomAssertions.singleListAssertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessTokenId))
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessToken))
             .returns(eventId, EventResponse::getEventId);
 
-        CalendarEventActions.hideExpiredEvent(getServerPort(), accessTokenId, eventId);
+        CalendarEventActions.hideExpiredEvent(getServerPort(), accessToken, eventId);
 
-        assertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessToken)).isEmpty();
     }
 
     @Test(groups = {"be", "calendar"})
     void extendExpiredEvent() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID eventId = createExpiredEvent(accessTokenId);
+        UUID eventId = createExpiredEvent(accessToken);
 
-        CustomAssertions.singleListAssertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessTokenId))
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessToken))
             .returns(eventId, EventResponse::getEventId);
 
-        nullExtendUntil(accessTokenId, eventId);
-        eventDurationTooLong(accessTokenId, eventId);
-        extendExpiredEvent(accessTokenId, eventId);
+        nullExtendUntil(accessToken, eventId);
+        eventDurationTooLong(accessToken, eventId);
+        extendExpiredEvent(accessToken, eventId);
     }
 
-    private void eventDurationTooLong(UUID accessTokenId, UUID eventId) {
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessTokenId, eventId, CURRENT_DATE.plusYears(3)), "eventDuration", "too long");
+    private void eventDurationTooLong(String accessToken, UUID eventId) {
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, CURRENT_DATE.plusYears(3)), "eventDuration", "too long");
     }
 
-    private void nullExtendUntil(UUID accessTokenId, UUID eventId) {
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessTokenId, eventId, null), "endDate", "must not be null");
+    private void nullExtendUntil(String accessToken, UUID eventId) {
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, null), "endDate", "must not be null");
     }
 
-    private static void extendExpiredEvent(UUID accessTokenId, UUID eventId) {
-        CalendarEventActions.extendExpiredEvent(getServerPort(), accessTokenId, eventId, END_DATE.plusWeeks(1));
+    private static void extendExpiredEvent(String accessToken, UUID eventId) {
+        CalendarEventActions.extendExpiredEvent(getServerPort(), accessToken, eventId, END_DATE.plusWeeks(1));
 
-        assertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessTokenId)).isEmpty();
+        assertThat(CalendarEventActions.getExpiredEvents(getServerPort(), accessToken)).isEmpty();
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), accessTokenId, eventId))
+        assertThat(CalendarEventActions.getEvent(getServerPort(), accessToken, eventId))
             .returns(END_DATE.plusWeeks(1), EventResponse::getEndDate);
     }
 
-    private UUID createExpiredEvent(UUID accessTokenId) {
+    private UUID createExpiredEvent(String accessToken) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.DAYS_OF_WEEK)
             .toBuilder()
             .repetitionData(List.of(CURRENT_DATE.getDayOfWeek()))
@@ -78,6 +78,6 @@ public class ExpiredEventTest extends BackEndTest {
             .endDate(END_DATE)
             .build();
 
-        return CalendarEventActions.createEvent(getServerPort(), accessTokenId, request);
+        return CalendarEventActions.createEvent(getServerPort(), accessToken, request);
     }
 }

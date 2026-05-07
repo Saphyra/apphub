@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.skyxplore.data.gamedata.building.BuildingModuleCategory;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.service.planet.surface.construction_area.common.CancelDeconstructionFacade;
@@ -47,16 +47,16 @@ class ConstructionAreaControllerTest {
     private ConstructionAreaController underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @BeforeEach
     void setUp() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
     }
 
     @Test
     void constructConstructionArea() {
-        underTest.constructConstructionArea(new OneParamRequest<>(CONSTRUCTION_AREA_DATA_ID), SURFACE_ID, accessTokenHeader);
+        underTest.constructConstructionArea(new OneParamRequest<>(CONSTRUCTION_AREA_DATA_ID), SURFACE_ID, accessToken);
 
         then(constructConstructionAreaService).should()
             .constructConstructionArea(USER_ID, SURFACE_ID, CONSTRUCTION_AREA_DATA_ID);
@@ -64,21 +64,21 @@ class ConstructionAreaControllerTest {
 
     @Test
     void cancelConstructionAreaConstruction() {
-        underTest.cancelConstructionAreaConstruction(CONSTRUCTION_ID, accessTokenHeader);
+        underTest.cancelConstructionAreaConstruction(CONSTRUCTION_ID, accessToken);
 
         then(cancelConstructionAreaConstructionService).should().cancelConstruction(USER_ID, CONSTRUCTION_ID);
     }
 
     @Test
     void deconstructConstructionArea() {
-        underTest.deconstructConstructionArea(CONSTRUCTION_AREA_ID, accessTokenHeader);
+        underTest.deconstructConstructionArea(CONSTRUCTION_AREA_ID, accessToken);
 
         then(deconstructConstructionAreaService).should().deconstructConstructionArea(USER_ID, CONSTRUCTION_AREA_ID);
     }
 
     @Test
     void cancelDeconstructConstructionArea() {
-        underTest.cancelDeconstructConstructionArea(DECONSTRUCTION_ID, accessTokenHeader);
+        underTest.cancelDeconstructConstructionArea(DECONSTRUCTION_ID, accessToken);
 
         then(cancelDeconstructionFacade).should().cancelDeconstructionOfConstructionArea(USER_ID, DECONSTRUCTION_ID);
     }
@@ -87,6 +87,6 @@ class ConstructionAreaControllerTest {
     void getAvailableBuildingModules() {
         given(availableBuildingModulesService.getAvailableBuildings(USER_ID, CONSTRUCTION_AREA_ID, BuildingModuleCategory.FARM.name())).willReturn(List.of(BUILDING_MODULE_DATA_ID));
 
-        assertThat(underTest.getAvailableBuildingModules(CONSTRUCTION_AREA_ID, BuildingModuleCategory.FARM.name(), accessTokenHeader)).containsExactly(BUILDING_MODULE_DATA_ID);
+        assertThat(underTest.getAvailableBuildingModules(CONSTRUCTION_AREA_ID, BuildingModuleCategory.FARM.name(), accessToken)).containsExactly(BUILDING_MODULE_DATA_ID);
     }
 }

@@ -43,12 +43,6 @@
 
         <dependency>
             <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-request_validation</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-config-liquibase</artifactId>
             <version>${project.version}</version>
         </dependency>

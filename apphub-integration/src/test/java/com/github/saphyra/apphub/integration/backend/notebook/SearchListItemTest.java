@@ -49,15 +49,15 @@ public class SearchListItemTest extends BackEndTest {
     @Test(groups = {"be", "notebook"})
     public void search() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID categoryId = CategoryActions.createCategory(getServerPort(), accessTokenId, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
+        UUID categoryId = CategoryActions.createCategory(getServerPort(), accessToken, CreateCategoryRequest.builder().title(CATEGORY_TITLE).build());
 
-        LinkActions.createLink(getServerPort(), accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
-        TextActions.createText(getServerPort(), accessTokenId, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
+        LinkActions.createLink(getServerPort(), accessToken, CreateLinkRequest.builder().title(LINK_TITLE).parent(categoryId).url(LINK_URL).build());
+        TextActions.createText(getServerPort(), accessToken, CreateTextRequest.builder().title(TEXT_TITLE).content(TEXT_CONTENT).build());
         ChecklistActions.createChecklist(
             getServerPort(),
-            accessTokenId,
+            accessToken,
             CreateChecklistRequest.builder()
                 .title(CHECKLIST_TITLE)
                 .items(Arrays.asList(ChecklistItemModel.builder()
@@ -69,7 +69,7 @@ public class SearchListItemTest extends BackEndTest {
         );
         TableActions.createTable(
             getServerPort(),
-            accessTokenId,
+            accessToken,
             CreateTableRequest.builder()
                 .title(TABLE_TITLE)
                 .listItemType(ListItemType.TABLE)
@@ -90,7 +90,7 @@ public class SearchListItemTest extends BackEndTest {
 
         TableActions.createTable(
             getServerPort(),
-            accessTokenId,
+            accessToken,
             CreateTableRequest.builder()
                 .title(CHECKLIST_TABLE_TITLE)
                 .listItemType(ListItemType.CHECKLIST_TABLE)
@@ -110,42 +110,42 @@ public class SearchListItemTest extends BackEndTest {
                 .build()
         );
 
-        searchTextTooShort(accessTokenId);
+        searchTextTooShort(accessToken);
 
-        search(accessTokenId, CATEGORY_TITLE, CATEGORY_TITLE, ListItemType.CATEGORY);
-        search(accessTokenId, LINK_TITLE, LINK_TITLE, ListItemType.LINK);
-        search(accessTokenId, LINK_URL, LINK_TITLE, ListItemType.LINK);
-        search(accessTokenId, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
-        search(accessTokenId, TEXT_CONTENT, TEXT_TITLE, ListItemType.TEXT);
-        search(accessTokenId, CHECKLIST_TITLE, CHECKLIST_TITLE, ListItemType.CHECKLIST);
-        search(accessTokenId, CHECKLIST_ITEM_CONTENT, CHECKLIST_TITLE, ListItemType.CHECKLIST);
-        search(accessTokenId, TABLE_TITLE, TABLE_TITLE, ListItemType.TABLE);
-        search(accessTokenId, TABLE_COLUMN_NAME, TABLE_TITLE, ListItemType.TABLE);
-        search(accessTokenId, TABLE_COLUMN_VALUE, TABLE_TITLE, ListItemType.TABLE);
-        search(accessTokenId, CHECKLIST_TABLE_TITLE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
-        search(accessTokenId, CHECKLIST_TABLE_COLUMN_NAME, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
-        search(accessTokenId, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(accessToken, CATEGORY_TITLE, CATEGORY_TITLE, ListItemType.CATEGORY);
+        search(accessToken, LINK_TITLE, LINK_TITLE, ListItemType.LINK);
+        search(accessToken, LINK_URL, LINK_TITLE, ListItemType.LINK);
+        search(accessToken, TEXT_TITLE, TEXT_TITLE, ListItemType.TEXT);
+        search(accessToken, TEXT_CONTENT, TEXT_TITLE, ListItemType.TEXT);
+        search(accessToken, CHECKLIST_TITLE, CHECKLIST_TITLE, ListItemType.CHECKLIST);
+        search(accessToken, CHECKLIST_ITEM_CONTENT, CHECKLIST_TITLE, ListItemType.CHECKLIST);
+        search(accessToken, TABLE_TITLE, TABLE_TITLE, ListItemType.TABLE);
+        search(accessToken, TABLE_COLUMN_NAME, TABLE_TITLE, ListItemType.TABLE);
+        search(accessToken, TABLE_COLUMN_VALUE, TABLE_TITLE, ListItemType.TABLE);
+        search(accessToken, CHECKLIST_TABLE_TITLE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(accessToken, CHECKLIST_TABLE_COLUMN_NAME, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
+        search(accessToken, CHECKLIST_TABLE_COLUMN_VALUE, CHECKLIST_TABLE_TITLE, ListItemType.CHECKLIST_TABLE);
     }
 
-    private static void searchTextTooShort(UUID accessTokenId) {
-        Response response = ListItemActions.getSearchResponse(getServerPort(), accessTokenId, "as");
+    private static void searchTextTooShort(String accessToken) {
+        Response response = ListItemActions.getSearchResponse(getServerPort(), accessToken, "as");
         ResponseValidator.verifyInvalidParam(response, "search", "too short");
     }
 
     @Test(groups = {"be", "notebook"})
     public void sameItemShouldBeReturnedOnlyOnce() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        LinkActions.createLink(getServerPort(), accessTokenId, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
+        LinkActions.createLink(getServerPort(), accessToken, CreateLinkRequest.builder().title(LINK_TITLE).url(LINK_TITLE).build());
 
-        List<NotebookView> searchResult = ListItemActions.search(getServerPort(), accessTokenId, LINK_TITLE);
+        List<NotebookView> searchResult = ListItemActions.search(getServerPort(), accessToken, LINK_TITLE);
 
         assertThat(searchResult).hasSize(1);
     }
 
-    private void search(UUID accessTokenId, String search, String listItemTitle, ListItemType type) {
-        List<NotebookView> searchResult = ListItemActions.search(getServerPort(), accessTokenId, search);
+    private void search(String accessToken, String search, String listItemTitle, ListItemType type) {
+        List<NotebookView> searchResult = ListItemActions.search(getServerPort(), accessToken, search);
 
         NotebookView expected = searchResult.stream()
             .filter(notebookView -> notebookView.getTitle().equals(listItemTitle))

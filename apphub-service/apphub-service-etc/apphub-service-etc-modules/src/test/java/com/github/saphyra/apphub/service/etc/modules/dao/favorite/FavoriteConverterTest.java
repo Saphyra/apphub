@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.etc.modules.dao.favorite;
 
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
@@ -38,13 +38,13 @@ public class FavoriteConverterTest {
     private FavoriteConverter underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Test
     public void convertEntity() {
         given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(booleanEncryptor.decrypt(ENCRYPTED_FAVORITE, ACCESS_TOKEN_USER_ID_STRING, MODULE, COLUMN_FAVORITE)).willReturn(true);
 
@@ -68,8 +68,8 @@ public class FavoriteConverterTest {
     @Test
     public void convertDomain() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(accessTokenProvider.get()).willReturn(accessTokenHeader);
-        given(accessTokenHeader.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
+        given(accessTokenProvider.get()).willReturn(accessToken);
+        given(accessToken.getUserId()).willReturn(ACCESS_TOKEN_USER_ID);
         given(uuidConverter.convertDomain(ACCESS_TOKEN_USER_ID)).willReturn(ACCESS_TOKEN_USER_ID_STRING);
         given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID_STRING, MODULE, COLUMN_FAVORITE)).willReturn(ENCRYPTED_FAVORITE);
 

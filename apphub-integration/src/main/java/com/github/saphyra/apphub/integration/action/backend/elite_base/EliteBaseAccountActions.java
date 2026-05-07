@@ -8,8 +8,8 @@ import io.restassured.response.Response;
 import java.util.UUID;
 
 public class EliteBaseAccountActions {
-    public static Response getIsAdminResponse(int serverPort, UUID accessTokenId) {
-        return RequestFactory.createAuthorizedRequest(accessTokenId)
+    public static Response getIsAdminResponse(int serverPort, String accessToken) {
+        return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, EliteBaseEndpoints.ELITE_BASE_IS_ADMIN));
     }
 }

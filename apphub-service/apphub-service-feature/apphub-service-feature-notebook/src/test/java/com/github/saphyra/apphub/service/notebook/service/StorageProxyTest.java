@@ -50,7 +50,7 @@ public class StorageProxyTest {
 
     @BeforeEach
     public void setUp() {
-        given(localeProvider.getLocaleValidated()).willReturn(LOCALE);
+        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(accessTokenProvider.getAsString()).willReturn(ACCESS_TOKEN);
     }
 

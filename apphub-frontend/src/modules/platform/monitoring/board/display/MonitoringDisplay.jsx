@@ -1,14 +1,13 @@
 import { useState } from "react";
-import Polyline from "../../../../../common/component/svg/Polyline";
 import Stream from "../../../../../common/js/collection/Stream";
 import Constants from "../../../../../common/js/Constants";
 import LocalDateTime from "../../../../../common/js/date/LocalDateTime";
-import { generateRandomId, getColors, hasValue } from "../../../../../common/js/Utils";
+import { getColors } from "../../../../../common/js/Utils";
 import { getEntries, getLabels, getPropertyLines, getVerticals } from "./MonitoringDisplayFunctions";
 
 export const MONITORING_VIEWBOX_HEIGHT = Constants.GRAPH_HEIGHT + Constants.GRAPH_PADDING * 2;
 
-const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, functionality, service, metrics }) => {
+const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, functionality, service, metrics, hiddenProperties }) => {
     console.log(
         "Rendering display",
         {
@@ -44,7 +43,7 @@ const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, funct
                 className="monitoring-svg-diagram"
                 viewBox={"0, 0 " + viewboxWidth + " " + MONITORING_VIEWBOX_HEIGHT}
             >
-                {getPropertyLines(entries, properties, colors)}
+                {getPropertyLines(entries, properties, colors, hiddenProperties)}
                 {getVerticals(entries, displayedTimestamp, setDisplayedTimestamp)}
             </svg>
 

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.active
 
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyType;
@@ -41,7 +41,7 @@ public class ActiveFriendsServiceTest {
     private ActiveFriendsService underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private FriendshipResponse activeFriend;
@@ -54,17 +54,17 @@ public class ActiveFriendsServiceTest {
 
     @Test
     public void getActiveFriends_newGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.NEW_GAME);
 
-        given(skyXploreDataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(activeFriend, inactiveFriend));
+        given(skyXploreDataProxy.getFriends(accessToken)).willReturn(Arrays.asList(activeFriend, inactiveFriend));
         given(activeFriend.getFriendId()).willReturn(FRIEND_ID_1);
         given(inactiveFriend.getFriendId()).willReturn(FRIEND_ID_2);
         given(invitationWebSocketHandler.isConnected(FRIEND_ID_1)).willReturn(true);
         given(activeFriend.getFriendName()).willReturn(FRIEND_NAME);
 
-        List<ActiveFriendResponse> result = underTest.getActiveFriends(accessTokenHeader);
+        List<ActiveFriendResponse> result = underTest.getActiveFriends(accessToken);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getFriendId()).isEqualTo(FRIEND_ID_1);
@@ -73,19 +73,19 @@ public class ActiveFriendsServiceTest {
 
     @Test
     public void getActiveFriends_loadGame() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(lobbyDao.findByUserIdValidated(USER_ID)).willReturn(lobby);
         given(lobby.getType()).willReturn(LobbyType.LOAD_GAME);
         given(lobby.getExpectedPlayers()).willReturn(List.of(FRIEND_ID_1));
 
-        given(skyXploreDataProxy.getFriends(accessTokenHeader)).willReturn(Arrays.asList(activeFriend, inactiveFriend));
+        given(skyXploreDataProxy.getFriends(accessToken)).willReturn(Arrays.asList(activeFriend, inactiveFriend));
         given(activeFriend.getFriendId()).willReturn(FRIEND_ID_1);
         given(inactiveFriend.getFriendId()).willReturn(FRIEND_ID_2);
         given(invitationWebSocketHandler.isConnected(FRIEND_ID_1)).willReturn(true);
         given(invitationWebSocketHandler.isConnected(FRIEND_ID_2)).willReturn(true);
         given(activeFriend.getFriendName()).willReturn(FRIEND_NAME);
 
-        List<ActiveFriendResponse> result = underTest.getActiveFriends(accessTokenHeader);
+        List<ActiveFriendResponse> result = underTest.getActiveFriends(accessToken);
 
         assertThat(result).hasSize(1);
         assertThat(result.get(0).getFriendId()).isEqualTo(FRIEND_ID_1);

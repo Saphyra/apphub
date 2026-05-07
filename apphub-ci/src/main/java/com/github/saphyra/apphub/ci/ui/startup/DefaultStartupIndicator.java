@@ -97,7 +97,7 @@ class DefaultStartupIndicator implements StartupIndicator {
     }
 
     private static JFrame createFrame(int serviceSize) {
-        JFrame frame = new JFrame("AppHub CI - Startup up services");
+        JFrame frame = new JFrame("Apphub CI - Startup up services");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout());

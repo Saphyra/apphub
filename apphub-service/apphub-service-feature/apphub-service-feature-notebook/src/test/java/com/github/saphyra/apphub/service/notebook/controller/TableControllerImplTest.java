@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableReque
 import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
@@ -58,7 +58,7 @@ class TableControllerImplTest {
     private CreateTableRequest createTableRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private TableFileUploadResponse fileUploadResponse;
@@ -74,29 +74,29 @@ class TableControllerImplTest {
 
     @Test
     void createTable() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(tableCreationService.create(USER_ID, createTableRequest)).willReturn(List.of(fileUploadResponse));
 
-        assertThat(underTest.createTable(createTableRequest, accessTokenHeader)).containsExactly(fileUploadResponse);
+        assertThat(underTest.createTable(createTableRequest, accessToken)).containsExactly(fileUploadResponse);
     }
 
     @Test
     void editTable() {
         given(tableEditionService.editTable(LIST_ITEM_ID, editTableRequest)).willReturn(editTableResponse);
 
-        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessTokenHeader)).isEqualTo(editTableResponse);
+        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessToken)).isEqualTo(editTableResponse);
     }
 
     @Test
     void getTable() {
         given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
 
-        assertThat(underTest.getTable(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(tableResponse);
+        assertThat(underTest.getTable(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
     }
 
     @Test
     void setRowStatus() {
-        underTest.setRowStatus(ROW_ID, new OneParamRequest<>(true), accessTokenHeader);
+        underTest.setRowStatus(ROW_ID, new OneParamRequest<>(true), accessToken);
 
         then(tableRowStatusUpdateService).should().setRowStatus(ROW_ID, true);
     }
@@ -105,14 +105,14 @@ class TableControllerImplTest {
     void deleteCheckedRows() {
         given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
 
-        assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessTokenHeader)).isEqualTo(tableResponse);
+        assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
 
         then(checkedTableRowDeletionService).should().deleteCheckedRows(LIST_ITEM_ID);
     }
 
     @Test
     void setCheckboxColumnStatus(){
-        underTest.setCheckboxColumnStatus(COLUMN_ID, new OneParamRequest<>(true), accessTokenHeader);
+        underTest.setCheckboxColumnStatus(COLUMN_ID, new OneParamRequest<>(true), accessToken);
 
         then(checkboxColumnStatusUpdateService).should().updateColumnStatus(COLUMN_ID, true);
     }

@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.Er
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.ExceptionModel;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsRequest;
 import com.github.saphyra.apphub.api.etc.admin_panel.model.model.error_report.GetErrorReportsResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportDao;
 import com.github.saphyra.apphub.service.etc.admin_panel.error_report.repository.ErrorReportStatus;
@@ -71,7 +71,7 @@ public class ErrorReporterControllerImplTest {
     private GetErrorReportsRequest getErrorReportsRequest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private ExceptionModel exceptionModel;
@@ -90,7 +90,7 @@ public class ErrorReporterControllerImplTest {
     public void getErrorReports() {
         given(errorReportOverviewQueryService.query(getErrorReportsRequest)).willReturn(getErrorReportsResponse);
 
-        GetErrorReportsResponse result = underTest.getErrorReports(getErrorReportsRequest, accessTokenHeader);
+        GetErrorReportsResponse result = underTest.getErrorReports(getErrorReportsRequest, accessToken);
 
         assertThat(result).isEqualTo(getErrorReportsResponse);
     }
@@ -108,7 +108,7 @@ public class ErrorReporterControllerImplTest {
         given(errorReport.getException()).willReturn(exceptionModel);
         given(errorReport.getStatus()).willReturn(STATUS);
 
-        ErrorReportResponse result = underTest.getErrorReport(ID, accessTokenHeader);
+        ErrorReportResponse result = underTest.getErrorReport(ID, accessToken);
 
         assertThat(result.getId()).isEqualTo(ID);
         assertThat(result.getCreatedAt()).isEqualTo(FORMATTED_CREATED_AT);
@@ -122,28 +122,28 @@ public class ErrorReporterControllerImplTest {
 
     @Test
     public void deleteErrorReports() {
-        underTest.deleteErrorReports(Arrays.asList(ID), accessTokenHeader);
+        underTest.deleteErrorReports(Arrays.asList(ID), accessToken);
 
         verify(errorReportDao).deleteById(ID);
     }
 
     @Test
     public void markErrorReports() {
-        underTest.markErrorReports(Arrays.asList(ID), STATUS, accessTokenHeader);
+        underTest.markErrorReports(Arrays.asList(ID), STATUS, accessToken);
 
         verify(markErrorReportService).mark(Arrays.asList(ID), STATUS);
     }
 
     @Test
     public void deleteReadErrorReports() {
-        underTest.deleteReadErrorReports(accessTokenHeader);
+        underTest.deleteReadErrorReports(accessToken);
 
         verify(errorReportDao).deleteByStatus(ErrorReportStatus.READ);
     }
 
     @Test
     public void deleteAll() {
-        underTest.deleteAll(accessTokenHeader);
+        underTest.deleteAll(accessToken);
 
         verify(errorReportDao).deleteAllExceptStatus(List.of(ErrorReportStatus.MARKED));
     }

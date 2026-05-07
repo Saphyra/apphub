@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.lib.common_domain.AccessTokenHeader;
+import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.CreateEventService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.DeleteEventService;
@@ -58,7 +58,7 @@ class EventControllerImplTest {
     private EventControllerImpl underTest;
 
     @Mock
-    private AccessTokenHeader accessTokenHeader;
+    private AccessToken accessToken;
 
     @Mock
     private EventRequest request;
@@ -68,91 +68,91 @@ class EventControllerImplTest {
 
     @Test
     void createEvent() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(createEventService.create(USER_ID, request)).willReturn(EVENT_ID);
 
-        assertThat(underTest.createEvent(request, accessTokenHeader).getValue()).isEqualTo(EVENT_ID);
+        assertThat(underTest.createEvent(request, accessToken).getValue()).isEqualTo(EVENT_ID);
     }
 
     @Test
     void getEvents() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(eventQueryService.getEvents(USER_ID, LABEL)).willReturn(List.of(eventResponse));
 
-        assertThat(underTest.getEvents(LABEL, accessTokenHeader)).containsExactly(eventResponse);
+        assertThat(underTest.getEvents(LABEL, accessToken)).containsExactly(eventResponse);
     }
 
     @Test
     void getEvent() {
         given(eventQueryService.getEvent(EVENT_ID)).willReturn(eventResponse);
 
-        assertThat(underTest.getEvent(EVENT_ID, accessTokenHeader)).isEqualTo(eventResponse);
+        assertThat(underTest.getEvent(EVENT_ID, accessToken)).isEqualTo(eventResponse);
     }
 
     @Test
     void getLabellessEvents() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(eventQueryService.getLabellessEvents(USER_ID)).willReturn(List.of(eventResponse));
 
-        assertThat(underTest.getLabellessEvents(accessTokenHeader)).containsExactly(eventResponse);
+        assertThat(underTest.getLabellessEvents(accessToken)).containsExactly(eventResponse);
     }
 
     @Test
     void deleteEvent() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.deleteEvent(EVENT_ID, accessTokenHeader);
+        underTest.deleteEvent(EVENT_ID, accessToken);
 
         then(deleteEventService).should().delete(USER_ID, EVENT_ID);
     }
 
     @Test
     void editEvent() {
-        underTest.editEvent(request, EVENT_ID, accessTokenHeader);
+        underTest.editEvent(request, EVENT_ID, accessToken);
 
         then(editEventService).should().edit(EVENT_ID, request);
     }
 
     @Test
     void getExpiredEvents() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(expiredEventService.getExpiredEvents(USER_ID)).willReturn(List.of(eventResponse));
 
-        assertThat(underTest.getExpiredEvents(accessTokenHeader)).containsExactly(eventResponse);
+        assertThat(underTest.getExpiredEvents(accessToken)).containsExactly(eventResponse);
     }
 
     @Test
     void snoozeEvent() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.hideExpiredEvent(EVENT_ID, accessTokenHeader);
+        underTest.hideExpiredEvent(EVENT_ID, accessToken);
 
         then(expiredEventService).should().hide(EVENT_ID);
     }
 
     @Test
     void extendExpiredEvent() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.extendExpiredEvent(new OneParamRequest<>(EXTEND_UNTIL), EVENT_ID, accessTokenHeader);
+        underTest.extendExpiredEvent(new OneParamRequest<>(EXTEND_UNTIL), EVENT_ID, accessToken);
 
         then(expiredEventService).should().extend(EVENT_ID, EXTEND_UNTIL);
     }
 
     @Test
     void mergeEvent() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.mergeEvents(EVENT_ID, accessTokenHeader);
+        underTest.mergeEvents(EVENT_ID, accessToken);
 
         then(mergeEventService).should().merge(EVENT_ID);
     }
 
     @Test
     void search() {
-        given(accessTokenHeader.getUserId()).willReturn(USER_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(searchEventService.search(USER_ID, SEARCH_TEXT)).willReturn(List.of(eventResponse));
 
-        assertThat(underTest.searchEvents(new OneParamRequest<>(SEARCH_TEXT), accessTokenHeader)).containsExactly(eventResponse);
+        assertThat(underTest.searchEvents(new OneParamRequest<>(SEARCH_TEXT), accessToken)).containsExactly(eventResponse);
     }
 }

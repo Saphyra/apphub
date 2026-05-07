@@ -1,18 +1,17 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientFactory;
-import com.github.saphyra.apphub.service.platform.storage.ftp.FtpClientWrapper;
+import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
+import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.io.InputStream;
 import java.util.UUID;
 
 @Component
@@ -20,10 +19,9 @@ import java.util.UUID;
 @Slf4j
 public class DownloadFileService {
     private final StoredFileDao storedFileDao;
-    private final FtpClientFactory ftpClientFactory;
-    private final UuidConverter uuidConverter;
+    private final StorageClientProvider storageClientProvider;
 
-    public DownloadResult downloadFile(UUID userId, UUID storedFileId) {
+    public BiWrapper<String, DownloadResult> downloadFile(UUID userId, UUID storedFileId) {
         StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
 
         if (!storedFile.getUserId().equals(userId)) {
@@ -34,13 +32,9 @@ public class DownloadFileService {
             throw ExceptionFactory.notLoggedException(HttpStatus.LOCKED, ErrorCode.FILE_NOT_UPLOADED, storedFileId + " has not file uploaded.");
         }
 
-        FtpClientWrapper ftpClient = ftpClientFactory.create();
+        DownloadResult downloadResult = storageClientProvider.getClientForType(storedFile.getStorage())
+            .download(storedFileId);
 
-        try {
-            InputStream inputStream = ftpClient.downloadFile(uuidConverter.convertDomain(storedFileId));
-            return new DownloadResult(inputStream, storedFile, ftpClient);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        return new BiWrapper<>(storedFile.getFileName(), downloadResult);
     }
 }

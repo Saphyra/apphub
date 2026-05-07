@@ -16,17 +16,17 @@ public class GetAvailableConstructionAreasTest extends BackEndTest {
     @Test(groups = {"be", "skyxplore"})
     public void getAvailableConstructionAreas() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
-        UUID accessTokenId = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        invalidSurfaceType(accessTokenId);
-        getAvailable(accessTokenId);
+        invalidSurfaceType(accessToken);
+        getAvailable(accessToken);
     }
 
-    private void getAvailable(UUID accessTokenId) {
-        assertThat(SkyXploreGameDataActions.getAvailableConstructionAreas(getServerPort(), accessTokenId, Constants.SURFACE_TYPE_DESERT));
+    private void getAvailable(String accessToken) {
+        assertThat(SkyXploreGameDataActions.getAvailableConstructionAreas(getServerPort(), accessToken, Constants.SURFACE_TYPE_DESERT));
     }
 
-    private void invalidSurfaceType(UUID accessTokenId) {
-        ResponseValidator.verifyInvalidParam(SkyXploreGameDataActions.getAvailableConstructionAreasResponse(getServerPort(), accessTokenId, "asd"), "surfaceType", "invalid value");
+    private void invalidSurfaceType(String accessToken) {
+        ResponseValidator.verifyInvalidParam(SkyXploreGameDataActions.getAvailableConstructionAreasResponse(getServerPort(), accessToken, "asd"), "surfaceType", "invalid value");
     }
 }

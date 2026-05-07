@@ -38,4 +38,12 @@
     <changeSet id="remove-column-last_visited_page-to-access_token" author="saphyra">
         <dropColumn schemaName="apphub_user" tableName="access_token" columnName="last_visited_page"/>
     </changeSet>
+
+    <changeSet id="drop-table-access_token" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="apphub_user" tableName="access_token"/>
+        </preConditions>
+
+        <dropTable schemaName="apphub_user" tableName="access_token" />
+    </changeSet>
 </databaseChangeLog>

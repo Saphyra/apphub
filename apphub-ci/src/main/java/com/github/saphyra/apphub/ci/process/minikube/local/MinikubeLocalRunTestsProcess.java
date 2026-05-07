@@ -23,7 +23,6 @@ public class MinikubeLocalRunTestsProcess {
             integrationServerStarter.start();
 
             runTestsTask.remoteRunTests(testGroups);
-
         } catch (Exception e) {
             log.error("Test run failed.", e);
         }
