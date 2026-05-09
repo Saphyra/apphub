@@ -12,4 +12,7 @@ public class Constants {
     public static final String NAMESPACE_NAME_PREPROD = "preprod";
     public static final String PROFILE_PREPROD = "preprod";
     public static final String PROFILE_LOCAL = "local";
+
+    public static final String PSQL_HOST = "PSQL_HOST";
+    public static final String FTP_HOST = "FTP_HOST";
 }

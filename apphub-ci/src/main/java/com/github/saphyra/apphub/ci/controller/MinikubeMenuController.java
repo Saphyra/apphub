@@ -83,7 +83,7 @@ class MinikubeMenuController {
     }
 
     @PostMapping("/deploy-services")
-    String deployServices(@RequestAttribute("value") String input) {
+    String deployServices(@RequestParam("value") String input) {
         List<String> serviceNames = Arrays.asList(input.split(","));
         List<String> availableServiceNames = services.getServices()
             .stream()

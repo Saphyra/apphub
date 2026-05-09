@@ -10,4 +10,9 @@ public class EnvironmentSpecificProperties extends HashMap<Environment, Map<Stri
     public Map<String, String> getForEnvironmentOrDefault(Environment environment) {
         return getOrDefault(environment, getOrDefault(Environment.DEFAULT, new HashMap<>()));
     }
+
+    public String getForEnvironmentOrDefault(Environment environment, String key, String defaultValue) {
+        return getOrDefault(environment, Map.of(key, defaultValue))
+            .get(key);
+    }
 }

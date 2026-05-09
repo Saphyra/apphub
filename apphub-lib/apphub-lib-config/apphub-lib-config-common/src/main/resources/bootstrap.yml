@@ -28,6 +28,8 @@ liquibase:
   changelog:
     location: classpath:database/changelog-master.xml
 
+postgreSqlHost: ${PSQL_HOST}
+
 eureka:
   client:
     enabled: false

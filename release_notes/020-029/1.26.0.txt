@@ -1,10 +1,12 @@
 ===FEATURES===
 
 ===BUGFIXES===
-    CI
+    ApphubCI
         Do not start application if DynamoDB location is not set
 
 ===PLATFORM CHANGES===
+    ApphubCI
+        PostgreSQL host stored in AppHubCI
 
 ===TECHNICAL DEBTS===
 

@@ -17,7 +17,7 @@ storage:
 ftp:
   client:
     enabled: ${FTP_CLIENT_ENABLED:true}
-    server: ${hostIp}
+    server: ${FTP_HOST}
     port: 21
     username: ${FTP_CLIENT_USERNAME}
     password: ${FTP_CLIENT_PASSWORD:}}

@@ -44,6 +44,16 @@ spec:
                 secretKeyRef:
                   name: s3-configuration
                   key: S3_BUCKET_NAME
+            - name: PSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: psql-host
+                  key: PSQL_HOST
+        - name: FTP_HOST
+          valueFrom:
+            secretKeyRef:
+              name: ftp-host
+              key: FTP_HOST
           ports:
             - containerPort: 8080
           imagePullPolicy: Never

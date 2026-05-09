@@ -53,6 +53,53 @@
         </ul>
     </fieldset>
 
+    <fieldset>
+        <legend>PostgreSQL host</legend>
+        <form action="/settings/psql-host" method="POST">
+            <label>
+                LOCAL:
+                <input type="text" name="LOCAL" th:value="${PSQL_LOCAL}"/>
+            </label>
+            <label>
+                MINIKUBE:
+                <input type="text" name="MINIKUBE" th:value="${PSQL_MINIKUBE}"/>
+            </label>
+            <label>
+                PREPROD:
+                <input type="text" name="PREPROD" th:value="${PSQL_PREPROD}"/>
+            </label>
+            <label>
+                PRODUCTION:
+                <input type="text" name="PRODUCTION" th:value="${PSQL_PRODUCTION}"/>
+            </label>
+
+            <input type="submit" value="Save"/>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>FTP host</legend>
+        <form action="/settings/ftp-host" method="POST">
+            <label>
+                LOCAL:
+                <input type="text" name="LOCAL" th:value="${FTP_LOCAL}"/>
+            </label>
+            <label>
+                MINIKUBE:
+                <input type="text" name="MINIKUBE" th:value="${FTP_MINIKUBE}"/>
+            </label>
+            <label>
+                PREPROD:
+                <input type="text" name="PREPROD" th:value="${FTP_PREPROD}"/>
+            </label>
+            <label>
+                PRODUCTION:
+                <input type="text" name="PRODUCTION" th:value="${FTP_PRODUCTION}"/>
+            </label>
+
+            <input type="submit" value="Save"/>
+        </form>
+    </fieldset>
 
     <fieldset>
         <legend>Authorization certificate</legend>
@@ -65,8 +112,8 @@
                     I understand that recreating production certificate logs all users out
                 </label>
                 <input type="submit" value="Recreate PRODUCTION certificate"/>
+            </form>
         </fieldset>
-        </form>
     </fieldset>
 </div>
 </body>
