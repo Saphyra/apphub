@@ -4,14 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponse;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
-import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
@@ -19,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +37,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
@@ -73,19 +68,11 @@ public class EventGatewayControllerItTest {
     @MockBean
     private RestTemplate restTemplate;
 
-    @MockBean
-    private LocalizationClient localizationClient;
-
     @LocalServerPort
     private int serverPort;
 
     @Captor
     ArgumentCaptor<HttpEntity<SendEventRequest<?>>> argumentCaptor;
-
-    @BeforeEach
-    public void setUp() {
-        given(localizationClient.translate("INVALID_PARAM", "hu")).willReturn(INVALID_PARAM_LOCALIZED_MESSAGE);
-    }
 
     @AfterEach
     public void clear() {
@@ -99,7 +86,6 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("serviceName")).isEqualTo("must not be null or blank");
     }
 
@@ -110,7 +96,6 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("eventName")).isEqualTo("must not be null or blank");
     }
 
@@ -121,7 +106,6 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("url")).isEqualTo("must not be null");
     }
 
@@ -173,7 +157,6 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("metadata")).isEqualTo("must not be null");
     }
 
@@ -193,7 +176,6 @@ public class EventGatewayControllerItTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         ErrorResponse errorResponse = objectMapper.readValue(response.getBody().asString(), ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
-        assertThat(errorResponse.getLocalizedMessage()).isEqualTo(INVALID_PARAM_LOCALIZED_MESSAGE);
         assertThat(errorResponse.getParams().get("eventName")).isEqualTo("must not be null or blank");
     }
 
@@ -247,7 +229,6 @@ public class EventGatewayControllerItTest {
         assertThat(eventProcessor.get().getLastAccess()).isAfter(registerTime);
 
         verify(restTemplate).postForEntity(eq(ASSEMBLED_EVENT_URL), argumentCaptor.capture(), eq(Void.class));
-        assertThat(argumentCaptor.getValue().getHeaders().get(Constants.LOCALE_HEADER)).containsExactly(TestConstants.DEFAULT_LOCALE);
         assertThat(objectMapper.writeValueAsString(argumentCaptor.getValue().getBody())).isEqualTo(objectMapper.writeValueAsString(request));
     }
 

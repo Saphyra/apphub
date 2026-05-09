@@ -21,12 +21,11 @@ class SendEventTaskFactory {
     private final List<LocalEventProcessor> localEventProcessors;
     private final ErrorReporterService errorReporterService;
 
-    SendEventTask create(SendEventRequest<?> sendEventRequest, String locale) {
+    SendEventTask create(SendEventRequest<?> sendEventRequest) {
         return SendEventTask.builder()
             .eventProcessorDao(eventProcessorDao)
             .eventSender(eventSender)
             .sendEventRequest(sendEventRequest)
-            .locale(locale)
             .executorServiceBean(executorServiceBean)
             .localEventProcessors(localEventProcessors)
             .errorReporterService(errorReporterService)

@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.skyxplore.game.client.SkyXploreGame
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.ws.SkyXploreLobbyWebSocketHandler;
@@ -23,7 +22,6 @@ import java.util.stream.Collectors;
 class CreateNewGameService {
     private final SkyXploreLobbyWebSocketHandler skyXploreLobbyWebSocketHandler;
     private final SkyXploreGameCreationApiClient gameCreationClient;
-    private final LocaleProvider localeProvider;
     private final AllianceSetupValidator allianceSetupValidator;
 
     void createNewGame(Lobby lobby) {
@@ -47,7 +45,7 @@ class CreateNewGameService {
 
         allianceSetupValidator.check(request);
 
-        UUID gameId = gameCreationClient.createGame(request, localeProvider.getOrDefault());
+        UUID gameId = gameCreationClient.createGame(request);
         lobby.setGameCreationStarted(true);
         lobby.setGameId(gameId);
 

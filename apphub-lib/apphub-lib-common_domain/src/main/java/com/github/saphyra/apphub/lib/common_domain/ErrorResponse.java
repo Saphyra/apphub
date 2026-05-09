@@ -14,7 +14,5 @@ import java.util.Map;
 @NoArgsConstructor
 public class ErrorResponse {
     private ErrorCode errorCode;
-    @Deprecated
-    private String localizedMessage;
     private Map<String, String> params;
 }

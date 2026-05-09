@@ -1,11 +1,8 @@
 package com.github.saphyra.apphub.service.user.config;
 
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import com.github.saphyra.apphub.lib.web_utils.RequestContextProvider;
 import com.github.saphyra.apphub.service.user.UserApplication;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -21,18 +18,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan(basePackageClasses = UserApplication.class)
 @ComponentScan(basePackages = "com.github.saphyra.util")
 class UserBeanConfiguration {
-    @Bean
-    @ConditionalOnMissingBean(LocaleProvider.class)
-    LocaleProvider localeProvider(RequestContextProvider requestContextProvider, CommonConfigProperties commonConfigProperties) {
-        return new LocaleProvider(requestContextProvider, commonConfigProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(RequestContextProvider.class)
-    RequestContextProvider requestContextProvider() {
-        return new RequestContextProvider();
-    }
-
     @Bean
     UuidConverter uuidConverter() {
         return new UuidConverter();

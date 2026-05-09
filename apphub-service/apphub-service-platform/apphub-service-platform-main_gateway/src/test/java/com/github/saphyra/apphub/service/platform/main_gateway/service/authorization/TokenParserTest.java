@@ -19,7 +19,6 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -34,7 +33,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class TokenParserTest {
     private static final String ISSUER = "test-issuer";
-    private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final UUID ACCESS_TOKEN_ID = UUID.randomUUID();
     private static final UUID REFRESH_TOKEN_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();

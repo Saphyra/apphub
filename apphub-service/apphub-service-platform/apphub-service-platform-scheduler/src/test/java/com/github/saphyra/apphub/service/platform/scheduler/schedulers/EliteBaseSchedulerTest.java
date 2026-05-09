@@ -2,11 +2,9 @@ package com.github.saphyra.apphub.service.platform.scheduler.schedulers;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.platform.scheduler.SchedulerProperties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,11 +20,7 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class EliteBaseSchedulerTest {
-    private static final String LOCALE = "locale";
     private static final long INITIAL_DELAY = 3124;
-
-    @Mock
-    private CommonConfigProperties commonConfigProperties;
 
     @Mock
     private EventGatewayApiClient eventGatewayApi;
@@ -40,30 +34,25 @@ class EliteBaseSchedulerTest {
     @InjectMocks
     private EliteBaseScheduler underTest;
 
-    @BeforeEach
-    void setUp() {
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
-    }
-
     @Test
     void processMessages() {
         underTest.processMessages();
 
-        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_PROCESS_MESSAGES).build(), LOCALE);
+        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_PROCESS_MESSAGES).build());
     }
 
     @Test
     void resetUnhandledMessages() {
         underTest.resetUnhandledMessages();
 
-        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_RESET_UNHANDLED_MESSAGES).build(), LOCALE);
+        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_RESET_UNHANDLED_MESSAGES).build());
     }
 
     @Test
     void deleteExpiredMessages() {
         underTest.deleteExpiredMessages();
 
-        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_DELETE_EXPIRED_MESSAGES).build(), LOCALE);
+        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_DELETE_EXPIRED_MESSAGES).build());
     }
 
     @Test
@@ -76,6 +65,6 @@ class EliteBaseSchedulerTest {
 
         underTest.orphanedRecordCleanup();
 
-        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_ORPHANED_RECORD_CLEANUP).build(), LOCALE);
+        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_ORPHANED_RECORD_CLEANUP).build());
     }
 }

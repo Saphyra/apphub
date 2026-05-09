@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.platform.web_content;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.data.loader.ContentLoaderFactory;
-import com.github.saphyra.apphub.lib.error_handler.EnableErrorTranslation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -11,7 +10,6 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration
-@EnableErrorTranslation
 public class WebContentBeanConfiguration {
     @Bean
     UuidConverter uuidConverter() {

@@ -20,7 +20,6 @@ public class ErrorResponseValidator {
         assertThat(response.getStatusCode()).isEqualTo(status);
         ErrorResponse errorResponse = response.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(errorCode);
-        assertThat(errorResponse.getLocalizedMessage()).isNotBlank();
         return errorResponse;
     }
 

@@ -20,5 +20,5 @@ public interface EventGatewayApiClient {
     void heartbeat(@PathVariable("serviceName") String serviceName);
 
     @RequestMapping(method = RequestMethod.POST, path = GenericEndpoints.SEND_EVENT)
-    void sendEvent(@RequestBody SendEventRequest<?> sendEventRequest, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void sendEvent(@RequestBody SendEventRequest<?> sendEventRequest);
 }

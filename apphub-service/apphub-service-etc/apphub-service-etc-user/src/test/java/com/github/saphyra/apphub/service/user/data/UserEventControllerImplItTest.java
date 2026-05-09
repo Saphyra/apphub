@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
-import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
@@ -35,8 +34,7 @@ public class UserEventControllerImplItTest {
     private static final String USERNAME_1 = "username-1";
     private static final String USERNAME_2 = "username-2";
     private static final String PASSWORD = "password";
-    private static final UUID ACCESS_TOKEN_ID_1 = UUID.randomUUID();
-    private static final UUID ACCESS_TOKEN_ID_2 = UUID.randomUUID();
+    private static final  String LANGUAGE = "en";
 
     @LocalServerPort
     private int serverPort;
@@ -56,7 +54,7 @@ public class UserEventControllerImplItTest {
             .email(EMAIL_1)
             .username(USERNAME_1)
             .password(PASSWORD)
-            .language(TestConstants.DEFAULT_LOCALE)
+            .language(LANGUAGE)
             .passwordFailureCount(0)
             .build();
         User user2 = User.builder()
@@ -64,7 +62,7 @@ public class UserEventControllerImplItTest {
             .email(EMAIL_2)
             .username(USERNAME_2)
             .password(PASSWORD)
-            .language(TestConstants.DEFAULT_LOCALE)
+            .language(LANGUAGE)
             .passwordFailureCount(0)
             .build();
         userDao.saveAll(Arrays.asList(user1, user2));

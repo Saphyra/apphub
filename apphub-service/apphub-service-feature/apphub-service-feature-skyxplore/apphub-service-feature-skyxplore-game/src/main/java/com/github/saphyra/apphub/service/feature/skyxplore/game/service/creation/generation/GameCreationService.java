@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creatio
 import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
@@ -33,10 +32,9 @@ public class GameCreationService {
     private final GameSaverService gameSaverService;
     private final ErrorReporterService errorReporterService;
     private final TickSchedulerLauncher tickSchedulerLauncher;
-    private final CommonConfigProperties commonConfigProperties;
 
     @Builder
-    public GameCreationService(
+    GameCreationService(
         SkyXploreLobbyApiClient lobbyClient,
         GameFactory gameFactory,
         GameDao gameDao,
@@ -44,8 +42,7 @@ public class GameCreationService {
         GameSaverService gameSaverService,
         ExecutorServiceBeanFactory executorServiceBeanFactory,
         ErrorReporterService errorReporterService,
-        TickSchedulerLauncher tickSchedulerLauncher,
-        CommonConfigProperties commonConfigProperties
+        TickSchedulerLauncher tickSchedulerLauncher
     ) {
         this.lobbyClient = lobbyClient;
         this.gameFactory = gameFactory;
@@ -55,7 +52,6 @@ public class GameCreationService {
         executorServiceBean = executorServiceBeanFactory.create(Executors.newFixedThreadPool(3));
         this.errorReporterService = errorReporterService;
         this.tickSchedulerLauncher = tickSchedulerLauncher;
-        this.commonConfigProperties = commonConfigProperties;
     }
 
     private void create(SkyXploreGameCreationRequest request, UUID gameId) {
@@ -67,7 +63,7 @@ public class GameCreationService {
         gameSaverService.save(game);
         tickSchedulerLauncher.launch(game);
 
-        lobbyClient.gameLoaded(gameId, commonConfigProperties.getDefaultLocale());
+        lobbyClient.gameLoaded(gameId);
     }
 
     @PostConstruct

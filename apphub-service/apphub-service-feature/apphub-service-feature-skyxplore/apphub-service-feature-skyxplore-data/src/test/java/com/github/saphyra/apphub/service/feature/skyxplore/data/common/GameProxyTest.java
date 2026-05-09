@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.data.common;
 import com.github.saphyra.apphub.api.feature.skyxplore.game.client.SkyXploreGameApiClient;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class GameProxyTest {
     private static final String ACCESS_TOKEN = "access-token";
-    private static final String LOCALE = "locale";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
@@ -31,28 +29,24 @@ class GameProxyTest {
     @Mock
     private AccessTokenProvider accessTokenProvider;
 
-    @Mock
-    private LocaleProvider localeProvider;
-
     @InjectMocks
     private GameProxy underTest;
 
     @BeforeEach
     void setUp() {
         given(accessTokenProvider.getAsString()).willReturn(ACCESS_TOKEN);
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
     }
 
     @Test
     void getGameIdValidated_notFound() {
-        given(gameClient.getGameId(ACCESS_TOKEN, LOCALE)).willReturn(new OneParamResponse<>());
+        given(gameClient.getGameId(ACCESS_TOKEN)).willReturn(new OneParamResponse<>());
 
         ExceptionValidator.validateForbiddenOperation(catchThrowable(() -> underTest.getGameIdValidated(USER_ID)));
     }
 
     @Test
     void getGameIdValidated() {
-        given(gameClient.getGameId(ACCESS_TOKEN, LOCALE)).willReturn(new OneParamResponse<>(GAME_ID));
+        given(gameClient.getGameId(ACCESS_TOKEN)).willReturn(new OneParamResponse<>(GAME_ID));
 
         assertThat(underTest.getGameIdValidated(USER_ID)).isEqualTo(GAME_ID);
     }

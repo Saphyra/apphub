@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.platform.scheduler.schedulers;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.event.MonitoringEvent;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class MonitoringScheduler {
-    private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
     private final SleepService sleepService;
 
@@ -61,8 +59,7 @@ public class MonitoringScheduler {
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()
                 .eventName(eventName)
-                .build(),
-            commonConfigProperties.getDefaultLocale()
+                .build()
         );
     }
 }

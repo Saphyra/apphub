@@ -22,11 +22,6 @@
             <artifactId>apphub-api-etc-admin_panel-client</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-lib-web_utils</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

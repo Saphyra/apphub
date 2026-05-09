@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.PlayerModel;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.save_game.dao.player.PlayerDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -17,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -31,7 +30,6 @@ public class GameDeletionServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
     private static final String USERNAME = "username";
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
-    private static final String LOCALE = "locale";
 
     @Mock
     private GameDao gameDao;
@@ -45,9 +43,6 @@ public class GameDeletionServiceTest {
     @Mock
     private SkyXploreGameApiClient gameClient;
 
-    @Mock
-    private LocaleProvider localeProvider;
-
     @InjectMocks
     private GameDeletionService underTest;
 
@@ -59,8 +54,8 @@ public class GameDeletionServiceTest {
 
     @Test
     public void deleteByUserId() {
-        given(playerDao.getByUserId(USER_ID)).willReturn(Arrays.asList(playerModel));
-        given(gameDao.getByHost(USER_ID)).willReturn(Arrays.asList(gameModel));
+        given(playerDao.getByUserId(USER_ID)).willReturn(List.of(playerModel));
+        given(gameDao.getByHost(USER_ID)).willReturn(List.of(gameModel));
         given(gameModel.getGameId()).willReturn(GAME_ID);
         given(playerModel.getUsername()).willReturn(USERNAME);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
@@ -100,7 +95,6 @@ public class GameDeletionServiceTest {
     public void deleteByGameId() {
         given(gameDao.findById(GAME_ID)).willReturn(Optional.of(gameModel));
         given(gameModel.getHost()).willReturn(USER_ID);
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
 
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(gameDao.findByIdValidated(GAME_ID)).willReturn(gameModel);
@@ -111,6 +105,6 @@ public class GameDeletionServiceTest {
         verify(gameModel).setMarkedForDeletionAt(CURRENT_TIME);
 
         verify(gameDao).save(gameModel);
-        verify(gameClient).deleteGame(GAME_ID, LOCALE);
+        verify(gameClient).deleteGame(GAME_ID);
     }
 }

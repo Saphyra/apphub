@@ -7,19 +7,16 @@ import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.save_game.dao.game.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.save_game.dao.player.PlayerDao;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import jakarta.transaction.Transactional;
-
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -29,7 +26,6 @@ public class GameDeletionService implements DeleteByUserIdDao {
     private final PlayerDao playerDao;
     private final DateTimeUtil dateTimeUtil;
     private final SkyXploreGameApiClient gameClient;
-    private final LocaleProvider localeProvider;
 
     @Override
     @Transactional
@@ -40,7 +36,7 @@ public class GameDeletionService implements DeleteByUserIdDao {
             .map(GameItem::getGameId)
             .peek(gameId -> log.info("Deleting game by id {} of host {}", gameId, userId))
             .peek(this::markGameForDeletion)
-            .collect(Collectors.toList());
+            .toList();
 
         playerDao.getByUserId(userId)
             .stream()
@@ -64,7 +60,7 @@ public class GameDeletionService implements DeleteByUserIdDao {
     }
 
     private void markGameForDeletion(UUID gameId) {
-        gameClient.deleteGame(gameId, localeProvider.getOrDefault());
+        gameClient.deleteGame(gameId);
 
         GameModel gameModel = gameDao.findByIdValidated(gameId);
         gameModel.setMarkedForDeletion(true);

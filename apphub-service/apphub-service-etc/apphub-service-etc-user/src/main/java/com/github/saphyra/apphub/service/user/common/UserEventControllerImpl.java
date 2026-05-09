@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.etc.user.server.UserEventController;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
 import com.github.saphyra.apphub.service.user.config.UserProperties;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -29,7 +28,6 @@ import static java.util.Objects.isNull;
 class UserEventControllerImpl implements UserEventController {
     private final UserDao userDao;
     private final EventGatewayApiClient eventGatewayClient;
-    private final LocaleProvider localeProvider;
     private final RevokeBanService revokeBanService;
     private final DateTimeUtil dateTimeUtil;
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
@@ -66,6 +64,6 @@ class UserEventControllerImpl implements UserEventController {
             .build()
             .blockingRequest(false);
 
-        eventGatewayClient.sendEvent(event, localeProvider.getOrDefault());
+        eventGatewayClient.sendEvent(event);
     }
 }

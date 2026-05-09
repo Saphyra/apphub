@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.local_event.LocalEventProcessor;
-import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,13 +50,12 @@ public class SendEventTaskFactoryTest {
 
     @Test
     public void create() {
-        SendEventTask result = underTest.create(sendEventRequest, TestConstants.DEFAULT_LOCALE);
+        SendEventTask result = underTest.create(sendEventRequest);
 
         assertThat(result.getSendEventRequest()).isEqualTo(sendEventRequest);
         assertThat(result.getEventProcessorDao()).isEqualTo(eventProcessorDao);
         assertThat(result.getEventSender()).isEqualTo(eventSender);
         assertThat(result.getExecutorServiceBean()).isEqualTo(executorServiceBean);
-        assertThat(result.getLocale()).isEqualTo(TestConstants.DEFAULT_LOCALE);
         assertThat(result.getLocalEventProcessors()).containsExactly(localEventProcessor);
         assertThat(result.getErrorReporterService()).isEqualTo(errorReporterService);
     }

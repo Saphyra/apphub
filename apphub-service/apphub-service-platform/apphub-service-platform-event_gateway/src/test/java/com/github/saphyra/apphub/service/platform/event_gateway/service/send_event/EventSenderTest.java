@@ -1,12 +1,10 @@
 package com.github.saphyra.apphub.service.platform.event_gateway.service.send_event;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
-import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -63,10 +61,9 @@ public class EventSenderTest {
         given(urlAssembler.assemble(eventProcessor)).willReturn(URL);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_DATE);
 
-        underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
+        underTest.sendEvent(eventProcessor, sendEventRequest);
 
         verify(restTemplate).postForEntity(eq(URL), argumentCaptor.capture(), eq(Void.class));
-        assertThat(argumentCaptor.getValue().getHeaders().get(Constants.LOCALE_HEADER)).containsExactly(TestConstants.DEFAULT_LOCALE);
         assertThat(argumentCaptor.getValue().getBody()).isEqualTo(sendEventRequest);
         verify(eventProcessor).setLastAccess(CURRENT_DATE);
         verify(eventProcessorDao).save(eventProcessor);
@@ -77,7 +74,7 @@ public class EventSenderTest {
         RuntimeException exception = new RuntimeException();
         given(urlAssembler.assemble(eventProcessor)).willThrow(exception);
 
-        underTest.sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
+        underTest.sendEvent(eventProcessor, sendEventRequest);
 
         verify(urlAssembler).assemble(eventProcessor);
         verifyNoInteractions(restTemplate, eventProcessorDao, dateTimeUtil);

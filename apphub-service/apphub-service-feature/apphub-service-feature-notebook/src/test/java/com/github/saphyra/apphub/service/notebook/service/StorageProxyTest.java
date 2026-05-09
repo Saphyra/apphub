@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.platform.storage.client.StorageClient;
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,19 +27,14 @@ import static org.mockito.Mockito.verify;
 public class StorageProxyTest {
     private static final String FILE_NAME = "file-name";
     private static final Long SIZE = 2345L;
-    private static final String LOCALE = "locale";
     private static final String ACCESS_TOKEN = "access-token";
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
-    private static final UUID NEW_FILE_ID = UUID.randomUUID();
 
     @Mock
     private StorageClient storageClient;
 
     @Mock
     private AccessTokenProvider accessTokenProvider;
-
-    @Mock
-    private LocaleProvider localeProvider;
 
     @InjectMocks
     private StorageProxy underTest;
@@ -50,20 +44,19 @@ public class StorageProxyTest {
 
     @BeforeEach
     public void setUp() {
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(accessTokenProvider.getAsString()).willReturn(ACCESS_TOKEN);
     }
 
     @Test
     public void createFile() {
-        given(storageClient.createFile(any(), eq(ACCESS_TOKEN), eq(LOCALE))).willReturn(STORED_FILE_ID);
+        given(storageClient.createFile(any(), eq(ACCESS_TOKEN))).willReturn(STORED_FILE_ID);
 
         UUID result = underTest.createFile(FILE_NAME, SIZE);
 
         assertThat(result).isEqualTo(STORED_FILE_ID);
 
         ArgumentCaptor<CreateFileRequest> argumentCaptor = ArgumentCaptor.forClass(CreateFileRequest.class);
-        verify(storageClient).createFile(argumentCaptor.capture(), eq(ACCESS_TOKEN), eq(LOCALE));
+        verify(storageClient).createFile(argumentCaptor.capture(), eq(ACCESS_TOKEN));
 
         CreateFileRequest request = argumentCaptor.getValue();
         assertThat(request.getFileName()).isEqualTo(FILE_NAME);
@@ -74,12 +67,12 @@ public class StorageProxyTest {
     public void deleteFile() {
         underTest.deleteFile(STORED_FILE_ID);
 
-        verify(storageClient).deleteFile(STORED_FILE_ID, ACCESS_TOKEN, LOCALE);
+        verify(storageClient).deleteFile(STORED_FILE_ID, ACCESS_TOKEN);
     }
 
     @Test
     public void getFileMetadata() {
-        given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN, LOCALE)).willReturn(storedFileResponse);
+        given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN)).willReturn(storedFileResponse);
 
         StoredFileResponse result = underTest.getFileMetadata(STORED_FILE_ID);
 
@@ -88,7 +81,7 @@ public class StorageProxyTest {
 
     @Test
     void metadataNotFound() {
-        given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN, LOCALE)).willThrow(new TestFeignException(HttpStatus.NOT_FOUND));
+        given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN)).willThrow(new TestFeignException(HttpStatus.NOT_FOUND));
 
         StoredFileResponse result = underTest.getFileMetadata(STORED_FILE_ID);
 
@@ -98,7 +91,7 @@ public class StorageProxyTest {
     @Test
     void randomException() {
         TestFeignException exception = new TestFeignException(HttpStatus.BAD_REQUEST);
-        given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN, LOCALE)).willThrow(exception);
+        given(storageClient.getFileMetadata(STORED_FILE_ID, ACCESS_TOKEN)).willThrow(exception);
 
         Throwable ex = catchThrowable(() -> underTest.getFileMetadata(STORED_FILE_ID));
 

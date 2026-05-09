@@ -12,5 +12,5 @@ import java.util.UUID;
 @FeignClient(name = "skyxplore-lobby", url = "${serviceUrls.skyxploreLobby}")
 public interface SkyXploreLobbyApiClient {
     @PostMapping(SkyXploreLobbyEndpoints.SKYXPLORE_INTERNAL_GAME_LOADED)
-    void gameLoaded(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void gameLoaded(@PathVariable("gameId") UUID gameId);
 }

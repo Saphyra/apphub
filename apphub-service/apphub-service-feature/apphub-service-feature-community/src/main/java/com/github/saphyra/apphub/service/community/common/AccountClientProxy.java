@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
 import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,19 +15,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountClientProxy {
-    private final LocaleProvider localeProvider;
     private final AccountClient accountClient;
     private final AccessTokenProvider accessTokenProvider;
 
     public List<AccountResponse> search(String query) {
-        return accountClient.searchAccount(new OneParamRequest<>(query), accessTokenProvider.getAsString(), localeProvider.getOrDefault());
+        return accountClient.searchAccount(new OneParamRequest<>(query), accessTokenProvider.getAsString());
     }
 
     public AccountResponse getAccount(UUID userId) {
-        return accountClient.getAccountInternal(userId, localeProvider.getOrDefault());
+        return accountClient.getAccountInternal(userId);
     }
 
     public boolean userExists(UUID userId) {
-        return accountClient.userExists(userId, localeProvider.getOrDefault());
+        return accountClient.userExists(userId);
     }
 }

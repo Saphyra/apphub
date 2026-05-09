@@ -21,14 +21,14 @@ import java.util.UUID;
 @FeignClient(name = "skyxplore-data-game", url = "${serviceUrls.skyxploreData}")
 public interface SkyXploreSavedGameClient {
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
-    GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);
 
     @PostMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_SAVE_GAME_DATA)
-    void saveGameData(@RequestBody List<GameItem> items, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void saveGameData(@RequestBody List<GameItem> items);
 
     @DeleteMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME_ITEM)
-    void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void deleteGameItem(@RequestBody List<BiWrapper<UUID, GameItemType>> items);
 
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_MODEL)
-    GameModel getGameModel(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    GameModel getGameModel(@PathVariable("gameId") UUID gameId);
 }

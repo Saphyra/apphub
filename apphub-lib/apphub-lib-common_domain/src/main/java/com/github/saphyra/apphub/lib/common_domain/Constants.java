@@ -13,9 +13,6 @@ public class Constants {
 
     public final String ROLE_ADMIN = "ADMIN";
 
-    public final String LOCALE_HEADER = "language";
-    public final String LOCALE_COOKIE = "language";
-
     public final String RESOURCE_PATH_PATTERN = "/res/**";
     public final String WEB_PATH_PATTERN = "/web/**";
     public final String SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST = "blocking_request";

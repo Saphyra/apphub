@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.skyxplore.game.client.SkyXploreGame
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,10 +17,9 @@ import java.util.UUID;
 public class GameProxy {
     private final SkyXploreGameApiClient gameClient;
     private final AccessTokenProvider accessTokenProvider;
-    private final LocaleProvider localeProvider;
 
     public Optional<UUID> getGameId() {
-        OneParamResponse<UUID> response = gameClient.getGameId(accessTokenProvider.getAsString(), localeProvider.getOrDefault());
+        OneParamResponse<UUID> response = gameClient.getGameId(accessTokenProvider.getAsString());
         return Optional.ofNullable(response.getValue());
     }
 

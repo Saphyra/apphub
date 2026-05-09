@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.platform.scheduler.schedulers;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.platform.scheduler.SchedulerProperties;
@@ -17,7 +16,6 @@ import java.time.Duration;
 @RequiredArgsConstructor
 @Slf4j
 public class EliteBaseScheduler {
-    private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
     private final SchedulerProperties schedulerProperties;
     private final ScheduledExecutorServiceBean scheduledExecutorServiceBean;
@@ -29,8 +27,7 @@ public class EliteBaseScheduler {
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()
                 .eventName(eventName)
-                .build(),
-            commonConfigProperties.getDefaultLocale()
+                .build()
         );
     }
 
@@ -41,8 +38,7 @@ public class EliteBaseScheduler {
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()
                 .eventName(eventName)
-                .build(),
-            commonConfigProperties.getDefaultLocale()
+                .build()
         );
     }
 
@@ -53,8 +49,7 @@ public class EliteBaseScheduler {
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()
                 .eventName(eventName)
-                .build(),
-            commonConfigProperties.getDefaultLocale()
+                .build()
         );
     }
 
@@ -68,8 +63,7 @@ public class EliteBaseScheduler {
                 eventGatewayApi.sendEvent(
                     SendEventRequest.builder()
                         .eventName(eventName)
-                        .build(),
-                    commonConfigProperties.getDefaultLocale()
+                        .build()
                 );
             },
             Duration.ofMillis(schedulerProperties.getInitialDelay())

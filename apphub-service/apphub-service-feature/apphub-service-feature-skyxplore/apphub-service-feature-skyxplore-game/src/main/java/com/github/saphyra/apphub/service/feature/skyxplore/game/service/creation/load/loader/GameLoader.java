@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creatio
 
 import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.data.player.Player;
@@ -33,7 +32,6 @@ public class GameLoader {
     private final GameDataLoader gameDataLoader;
     private final ProcessLoader processLoader;
     private final TickSchedulerLauncher tickSchedulerLauncher;
-    private final CommonConfigProperties commonConfigProperties;
 
     public void loadGame(GameModel gameModel, List<UUID> members) {
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -63,6 +61,6 @@ public class GameLoader {
         stopwatch.stop();
         log.info("Game loaded in {}s", stopwatch.elapsed(TimeUnit.SECONDS));
 
-        lobbyClient.gameLoaded(game.getGameId(), commonConfigProperties.getDefaultLocale());
+        lobbyClient.gameLoaded(game.getGameId());
     }
 }

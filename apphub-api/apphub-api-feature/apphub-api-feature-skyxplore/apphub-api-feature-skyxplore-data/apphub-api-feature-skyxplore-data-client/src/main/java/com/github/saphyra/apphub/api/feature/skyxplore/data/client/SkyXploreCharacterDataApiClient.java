@@ -13,5 +13,5 @@ import java.util.UUID;
 @FeignClient(name = "skyxplore-data-character", url = "${serviceUrls.skyxploreData}")
 public interface SkyXploreCharacterDataApiClient {
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID)
-    SkyXploreCharacterModel internalGetCharacterByUserId(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    SkyXploreCharacterModel internalGetCharacterByUserId(@PathVariable("userId") UUID userId);
 }

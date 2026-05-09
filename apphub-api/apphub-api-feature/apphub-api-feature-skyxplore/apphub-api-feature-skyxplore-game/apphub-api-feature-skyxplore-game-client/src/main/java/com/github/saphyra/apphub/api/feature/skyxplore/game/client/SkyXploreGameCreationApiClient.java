@@ -15,8 +15,8 @@ import java.util.UUID;
 @FeignClient(name = "skyxplore-game-creation", url = "${serviceUrls.skyxploreGame}")
 public interface SkyXploreGameCreationApiClient {
     @PutMapping(SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_CREATE_GAME)
-    UUID createGame(@RequestBody SkyXploreGameCreationRequest request, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    UUID createGame(@RequestBody SkyXploreGameCreationRequest request);
 
     @PostMapping(SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_LOAD_GAME)
-    void loadGame(@RequestBody SkyXploreLoadGameRequest request, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void loadGame(@RequestBody SkyXploreLoadGameRequest request);
 }
