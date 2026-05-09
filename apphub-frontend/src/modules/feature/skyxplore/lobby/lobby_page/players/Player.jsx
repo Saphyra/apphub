@@ -3,6 +3,7 @@ import Constants from "common/js/Constants";
 import Stream from "common/js/collection/Stream";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import { SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_PLAYER } from "../../SkyXploreLobbyEndpoints";
+import { SKYXPLORE_LOBBY_TYPE_LOAD } from "../../SkyXploreLobbyConstants";
 
 const Player = ({ player, localizationHandler, alliances, isHost, lobbyType }) => {
     const statusClass = "skyxplore-lobby-player-status-" + player.status.toLowerCase();
@@ -17,7 +18,7 @@ const Player = ({ player, localizationHandler, alliances, isHost, lobbyType }) =
     const getAllianceSelectMenu = () => {
         return (
             <select
-                disabled={!isHost || player.status === "INVITED" || lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_LOAD}
+                disabled={!isHost || player.status === "INVITED" || lobbyType === SKYXPLORE_LOBBY_TYPE_LOAD}
                 value={player.allianceId || ""}
                 onChange={setAlliance}
             >

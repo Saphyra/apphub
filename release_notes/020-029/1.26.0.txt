@@ -11,5 +11,6 @@
 ===TECHNICAL DEBTS===
     User
         Delete old accessToken change set
+    Move constants from Constants.js to their corresponding module
 
 ===ETC===

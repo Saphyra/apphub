@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authorization;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.ErrorResponseFactory;
@@ -74,7 +73,7 @@ class AuthorizationServiceTest {
     void accessTokenNotPresent() {
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());
         given(request.getHeaders()).willReturn(httpHeaders);
-        given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(null);
+        given(httpHeaders.getFirst(HttpHeaders.AUTHORIZATION)).willReturn(null);
         given(errorResponseFactory.create(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE)).willReturn(errorResponseWrapper);
         given(authResultHandlerFactory.unauthorized(httpHeaders, errorResponseWrapper)).willReturn(authResultHandler);
 
@@ -87,7 +86,7 @@ class AuthorizationServiceTest {
     void tokenVerificationFailed() {
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());
         given(request.getHeaders()).willReturn(httpHeaders);
-        given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(JWT);
+        given(httpHeaders.getFirst(HttpHeaders.AUTHORIZATION)).willReturn(JWT);
         Throwable ex = new RuntimeException("asd");
         given(tokenParser.verifyAccessToken(JWT)).willReturn(Mono.error(() -> ex));
         given(errorResponseFactory.create(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE)).willReturn(errorResponseWrapper);
@@ -102,7 +101,7 @@ class AuthorizationServiceTest {
     void accessTokenInvalidated() {
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());
         given(request.getHeaders()).willReturn(httpHeaders);
-        given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(JWT);
+        given(httpHeaders.getFirst(HttpHeaders.AUTHORIZATION)).willReturn(JWT);
         given(tokenParser.verifyAccessToken(JWT)).willReturn(Mono.just(accessToken));
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(invalidatedAccessTokenService.contains(ACCESS_TOKEN_ID)).willReturn(true);
@@ -118,7 +117,7 @@ class AuthorizationServiceTest {
     void refreshTokenInvalidated() {
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());
         given(request.getHeaders()).willReturn(httpHeaders);
-        given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(JWT);
+        given(httpHeaders.getFirst(HttpHeaders.AUTHORIZATION)).willReturn(JWT);
         given(tokenParser.verifyAccessToken(JWT)).willReturn(Mono.just(accessToken));
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(invalidatedAccessTokenService.contains(ACCESS_TOKEN_ID)).willReturn(false);
@@ -136,7 +135,7 @@ class AuthorizationServiceTest {
     void authenticationFailed() {
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());
         given(request.getHeaders()).willReturn(httpHeaders);
-        given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(JWT);
+        given(httpHeaders.getFirst(HttpHeaders.AUTHORIZATION)).willReturn(JWT);
         given(tokenParser.verifyAccessToken(JWT)).willReturn(Mono.just(accessToken));
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(invalidatedAccessTokenService.contains(ACCESS_TOKEN_ID)).willReturn(false);
@@ -153,7 +152,7 @@ class AuthorizationServiceTest {
     void authorized() {
         given(request.getCookies()).willReturn(new LinkedMultiValueMap<>());
         given(request.getHeaders()).willReturn(httpHeaders);
-        given(httpHeaders.getFirst(Constants.AUTHORIZATION_HEADER)).willReturn(JWT);
+        given(httpHeaders.getFirst(HttpHeaders.AUTHORIZATION)).willReturn(JWT);
         given(tokenParser.verifyAccessToken(JWT)).willReturn(Mono.just(accessToken));
         given(accessToken.getAccessTokenId()).willReturn(ACCESS_TOKEN_ID);
         given(invalidatedAccessTokenService.contains(ACCESS_TOKEN_ID)).willReturn(false);
