@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "user-authorization", url = "${serviceUrls.user}")
+@FeignClient(name = "user-authorization", url = "${serviceHosts.user}")
 public interface AuthorizationClient {
     @PostMapping(UserEndpoints.INTERNAL_AUTHORIZATION_AUTHORIZE)
     AuthorizationResponse authorize(@RequestBody AuthorizationRequest request);

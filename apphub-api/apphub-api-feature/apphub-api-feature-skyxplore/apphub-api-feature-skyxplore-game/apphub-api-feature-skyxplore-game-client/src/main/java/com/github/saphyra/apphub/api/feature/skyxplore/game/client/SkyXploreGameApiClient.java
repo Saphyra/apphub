@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-game", url = "${serviceUrls.skyxploreGame}")
+@FeignClient(name = "skyxplore-game", url = "${serviceHosts.skyxploreGame}")
 public interface SkyXploreGameApiClient {
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
     OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);

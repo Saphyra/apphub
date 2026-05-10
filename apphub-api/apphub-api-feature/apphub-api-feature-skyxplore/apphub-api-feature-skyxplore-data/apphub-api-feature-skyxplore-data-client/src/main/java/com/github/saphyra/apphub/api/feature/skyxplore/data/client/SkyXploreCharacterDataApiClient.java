@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-data-character", url = "${serviceUrls.skyxploreData}")
+@FeignClient(name = "skyxplore-data-character", url = "${serviceHosts.skyxploreData}")
 public interface SkyXploreCharacterDataApiClient {
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_CHARACTER_BY_USER_ID)
     SkyXploreCharacterModel internalGetCharacterByUserId(@PathVariable("userId") UUID userId);

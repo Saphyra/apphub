@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.UUID;
 
-@FeignClient(name = "authorization", url = "${serviceUrls.authorization}")
+@FeignClient(name = "authorization", url = "${serviceHosts.authorization}")
 public interface AuthorizationClient {
     @DeleteMapping(AuthorizationEndpoints.INTERNAL_INVALIDATE_ALL_REFRESH_TOKENS)
     void invalidateAllRefreshTokens(@PathVariable("userId") UUID userId);

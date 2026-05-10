@@ -50,16 +50,8 @@
                 <maxHistory>30</maxHistory>
             </rollingPolicy>
 
-            <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
-                <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
-                    <timestampFormat>yyyy-MM-dd' 'HH:mm:ss.SSS</timestampFormat>
-                    <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>
-
-                    <appendLineSeparator>true</appendLineSeparator>
-                    <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
-                        <prettyPrint>false</prettyPrint>
-                    </jsonFormatter>
-                </layout>
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </encoder>
         </appender>
 

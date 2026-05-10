@@ -13,5 +13,6 @@
         Delete old accessToken change set
     Move constants from Constants.js to their corresponding module
     Remove localizedText from errorResponse, and locale header from API calls
+    Use placeholder for service hosts
 
 ===ETC===

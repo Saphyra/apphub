@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-lobby", url = "${serviceUrls.skyxploreLobby}")
+@FeignClient(name = "skyxplore-lobby", url = "${serviceHosts.skyxploreLobby}")
 public interface SkyXploreLobbyApiClient {
     @PostMapping(SkyXploreLobbyEndpoints.SKYXPLORE_INTERNAL_GAME_LOADED)
     void gameLoaded(@PathVariable("gameId") UUID gameId);

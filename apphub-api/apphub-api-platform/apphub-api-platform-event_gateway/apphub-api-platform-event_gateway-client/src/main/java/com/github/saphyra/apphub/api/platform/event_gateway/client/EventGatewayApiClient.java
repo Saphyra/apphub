@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "event-gateway", url = "${serviceUrls.eventGateway}")
+@FeignClient(name = "event-gateway", url = "${serviceHosts.eventGateway}")
 public interface EventGatewayApiClient {
     @RequestMapping(method = RequestMethod.PUT, path = GenericEndpoints.REGISTER_PROCESSOR)
     void registerProcessor(@RequestBody RegisterProcessorRequest registerProcessorRequest);

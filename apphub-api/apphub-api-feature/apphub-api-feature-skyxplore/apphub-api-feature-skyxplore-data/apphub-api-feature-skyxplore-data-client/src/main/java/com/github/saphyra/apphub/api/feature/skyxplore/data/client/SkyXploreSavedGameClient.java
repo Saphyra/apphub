@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-data-game", url = "${serviceUrls.skyxploreData}")
+@FeignClient(name = "skyxplore-data-game", url = "${serviceHosts.skyxploreData}")
 public interface SkyXploreSavedGameClient {
     @GetMapping(SkyXploreDataEndpoints.SKYXPLORE_INTERNAL_GET_GAME_FOR_LOBBY_CREATION)
     GameViewForLobbyCreation getGameForLobbyCreation(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);

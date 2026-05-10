@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-game-creation", url = "${serviceUrls.skyxploreGame}")
+@FeignClient(name = "skyxplore-game-creation", url = "${serviceHosts.skyxploreGame}")
 public interface SkyXploreGameCreationApiClient {
     @PutMapping(SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_CREATE_GAME)
     UUID createGame(@RequestBody SkyXploreGameCreationRequest request);

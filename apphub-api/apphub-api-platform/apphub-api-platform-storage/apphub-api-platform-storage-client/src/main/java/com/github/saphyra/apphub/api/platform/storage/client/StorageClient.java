@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "storage", url = "${serviceUrls.storage}")
+@FeignClient(name = "storage", url = "${serviceHosts.storage}")
 public interface StorageClient {
     @PutMapping(StorageEndpoints.STORAGE_INTERNAL_CREATE_FILE)
     UUID createFile(@RequestBody CreateFileRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "main-gateway", url = "${serviceUrls.mainGateway}")
+@FeignClient(name = "main-gateway", url = "${serviceHosts.mainGateway}")
 public interface MainGatewayClient {
     @DeleteMapping(MainGatewayEndpoints.MAIN_GATEWAY_INTERNAL_INVALIDATE_ACCESS_TOKEN)
     void invalidateAccessToken(@PathVariable("accessTokenId") UUID accessTokenId);

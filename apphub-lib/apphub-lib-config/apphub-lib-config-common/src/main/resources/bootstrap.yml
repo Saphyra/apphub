@@ -45,7 +45,7 @@ feign:
   client:
     config:
       default:
-        connectTimeout: 30000
+        connectTimeout: 5000
         readTimeout: 30000
 
 event:
@@ -75,9 +75,6 @@ endpoint:
         method: GET
       deprecated-resources:
         pattern: /res/**
-        method: GET
-      localization:
-        pattern: /localization/**
         method: GET
       root:
         pattern: /
