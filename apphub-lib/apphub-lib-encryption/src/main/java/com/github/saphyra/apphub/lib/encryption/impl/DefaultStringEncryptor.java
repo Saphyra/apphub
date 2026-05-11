@@ -59,7 +59,7 @@ public class DefaultStringEncryptor implements StringEncryptor {
 
             return encryptedEntity.getEntity();
         } catch (JacksonException e) {
-            log.info("Deprecated encryption structure detected.");
+            log.debug("Deprecated encryption structure detected.");
             return decrypted;
         }
     }
