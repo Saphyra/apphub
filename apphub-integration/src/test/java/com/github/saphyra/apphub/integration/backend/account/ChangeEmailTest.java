@@ -13,6 +13,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.github.saphyra.apphub.integration.framework.Constants.CREDENTIAL_PREFIX;
+import static com.github.saphyra.apphub.integration.framework.RandomDataProvider.ID_GENERATOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ChangeEmailTest extends BackEndTest {
@@ -27,6 +29,23 @@ public class ChangeEmailTest extends BackEndTest {
         incorrectPassword(accessToken1);
         emailAlreadyExists(userData1, accessToken1);
         successfulChange(userData1, accessToken1);
+    }
+
+    @Test(groups = {"be", "account"})
+    void changeEmail_newEmailEqualsUsername() {
+        RegistrationParameters userData = RegistrationParameters.validParameters()
+            .toBuilder()
+            .username(CREDENTIAL_PREFIX + ID_GENERATOR.generateRandomId().split("-")[0] + "@t.hu")
+            .build();
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
+
+        String newEmail = userData.getUsername();
+        ChangeEmailRequest request = ChangeEmailRequest.builder()
+            .email(newEmail)
+            .password(userData.getPassword())
+            .build();
+        Response response = AccountActions.getChangeEmailResponse(getServerPort(), accessToken, request);
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     private static void nullEmail(RegistrationParameters userData1, String accessToken1) {
@@ -67,7 +86,7 @@ public class ChangeEmailTest extends BackEndTest {
 
     private static void emailAlreadyExists(RegistrationParameters userData1, String accessToken1) {
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
-        IndexPageActions.registerAndLogin(getServerPort(), userData2);
+        IndexPageActions.registerUser(getServerPort(), userData2.toRegistrationRequest());
         ChangeEmailRequest emailAlreadyExistsRequest = ChangeEmailRequest.builder()
             .email(userData2.getEmail())
             .password(userData1.getPassword())
@@ -91,5 +110,12 @@ public class ChangeEmailTest extends BackEndTest {
         ErrorResponse errorResponse = failedLoginResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.BAD_CREDENTIALS.name());
         IndexPageActions.login(getServerPort(), LoginRequest.builder().password(userData1.getPassword()).userIdentifier(newEmail).build());
+
+        //New user can be registered with old e-mail address
+        RegistrationParameters userData2 = RegistrationParameters.validParameters()
+            .toBuilder()
+            .email(userData1.getEmail())
+            .build();
+        IndexPageActions.registerUser(getServerPort(), userData2.toRegistrationRequest());
     }
 }

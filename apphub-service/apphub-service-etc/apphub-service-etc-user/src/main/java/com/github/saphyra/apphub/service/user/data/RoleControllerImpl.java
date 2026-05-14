@@ -4,14 +4,16 @@ import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.etc.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.api.etc.user.server.RoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.user.data.service.role.AddRoleToAllProperties;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionService;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleQueryService;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleRemovalService;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleToAllService;
+import com.github.saphyra.apphub.lib.common_domain.Role;
+import com.github.saphyra.apphub.service.user.config.properties.AddRoleToAllProperties;
+import com.github.saphyra.apphub.service.user.data.dao.user.User;
+import com.github.saphyra.apphub.service.user.data.service.RoleAdditionService;
+import com.github.saphyra.apphub.service.user.data.service.RoleRemovalService;
+import com.github.saphyra.apphub.service.user.data.service.RoleToAllService;
+import com.github.saphyra.apphub.service.user.data.service.UserQueryService;
+import com.github.saphyra.apphub.service.user.data.service.mapper.UserRoleResponseMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,31 +25,32 @@ import java.util.List;
 @RestController
 class RoleControllerImpl implements RoleController {
     private final RoleAdditionService roleAdditionService;
-    private final RoleQueryService roleQueryService;
+    private final UserQueryService userQueryService;
     private final RoleRemovalService roleRemovalService;
     private final RoleToAllService roleToAllService;
     private final AddRoleToAllProperties addRoleToAllProperties;
+    private final UserRoleResponseMapper userRoleResponseMapper;
 
     @Override
     public List<UserRoleResponse> getRoles(OneParamRequest<String> queryString) {
         log.info("getRoles called with query string {}", queryString);
-        return roleQueryService.getRoles(queryString.getValue());
+        return userRoleResponseMapper.map(userQueryService.getUsers(queryString.getValue()));
     }
 
     @Override
     public UserRoleResponse addRole(RoleRequest roleRequest, AccessToken accessToken) {
         log.info("AddRoleRequest: {}", roleRequest);
-        roleAdditionService.addRole(accessToken.getUserId(), roleRequest);
+        User user = roleAdditionService.addRole(accessToken.getUserId(), roleRequest);
 
-        return roleQueryService.getRoles(roleRequest.getUserId());
+        return userRoleResponseMapper.map(user);
     }
 
     @Override
     public UserRoleResponse removeRole(RoleRequest roleRequest, AccessToken accessToken) {
         log.info("RemoveRoleRequest: {}", roleRequest);
-        roleRemovalService.removeRole(accessToken.getUserId(), roleRequest);
+        User user = roleRemovalService.removeRole(accessToken.getUserId(), roleRequest);
 
-        return roleQueryService.getRoles(roleRequest.getUserId());
+        return userRoleResponseMapper.map(user);
     }
 
     @Override
@@ -72,6 +75,6 @@ class RoleControllerImpl implements RoleController {
     public OneParamResponse<Boolean> isUserAdmin(AccessToken accessToken) {
         log.info("Checking if user {} is admin", accessToken.getUserId());
 
-        return new OneParamResponse<>(accessToken.getRoles().contains(Constants.ROLE_ADMIN));
+        return new OneParamResponse<>(accessToken.getRoles().contains(Role.ADMIN));
     }
 }

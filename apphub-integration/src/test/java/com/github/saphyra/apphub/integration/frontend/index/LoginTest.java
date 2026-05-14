@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
@@ -100,7 +100,7 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.login(getServerPort(), driver, loginParameters);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        DatabaseUtil.unlockUserByEmail(registrationParameters.getEmail());
+        DynamoDbUtil.unlockUserByEmail(registrationParameters.getEmail());
 
         IndexPageActions.login(getServerPort(), driver, loginParameters);
 

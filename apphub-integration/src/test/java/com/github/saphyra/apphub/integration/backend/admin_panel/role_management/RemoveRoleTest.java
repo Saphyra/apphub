@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.RoleMana
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.RoleRequest;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -25,20 +25,19 @@ public class RemoveRoleTest extends BackEndTest {
     public void removeRole() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
-        UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(testUser.getEmail());
 
         nullUserId(accessToken);
-        blankRole(accessToken);
+        nullRole(accessToken, userData);
         nullPassword(accessToken, userId);
         userNotFound(accessToken, userData);
-        roleNotFound(accessToken, userData, userId);
         incorrectPassword(accessToken, userId);
         removeRole(accessToken, userData, userId);
     }
@@ -72,13 +71,14 @@ public class RemoveRoleTest extends BackEndTest {
         verifyInvalidParam(nullUserIdResponse, "userId", "must not be null");
     }
 
-    private static void blankRole(String accessToken) {
+    private static void nullRole(String accessToken, RegistrationParameters userData) {
         RoleRequest blankRoleRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
-            .role(" ")
+            .role(null)
+            .password(userData.getPassword())
             .build();
         Response blankRoleResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessToken, blankRoleRequest);
-        verifyInvalidParam(blankRoleResponse, "role", "must not be null or blank");
+        verifyInvalidParam(blankRoleResponse, "role", "must not be null");
     }
 
     private static void userNotFound(String accessToken, RegistrationParameters userData) {
@@ -89,16 +89,6 @@ public class RemoveRoleTest extends BackEndTest {
             .build();
         Response userNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessToken, userNotFoundRequest);
         verifyErrorResponse(userNotFoundResponse, 404, ErrorCode.USER_NOT_FOUND);
-    }
-
-    private static void roleNotFound(String accessToken, RegistrationParameters userData, UUID userId) {
-        RoleRequest roleNotFoundRequest = RoleRequest.builder()
-            .userId(userId)
-            .role("non-existing-role")
-            .password(userData.getPassword())
-            .build();
-        Response roleNotFoundResponse = RoleManagementActions.getRemoveRoleResponse(getServerPort(), accessToken, roleNotFoundRequest);
-        verifyErrorResponse(roleNotFoundResponse, 404, ErrorCode.ROLE_NOT_FOUND);
     }
 
     private static void removeRole(String accessToken, RegistrationParameters userData, UUID userId) {

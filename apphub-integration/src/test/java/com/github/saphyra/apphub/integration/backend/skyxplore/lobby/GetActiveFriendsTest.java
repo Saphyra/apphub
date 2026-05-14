@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.ActiveFriendResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -31,7 +31,7 @@ public class GetActiveFriendsTest extends BackEndTest {
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
 

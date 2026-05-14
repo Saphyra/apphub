@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.etc.user.model.authorization;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,5 +16,5 @@ import java.util.UUID;
 public class AuthorizationResponse {
     private AuthorizationResult authorizationResult;
     private UUID userId;
-    private List<String> roles;
+    private List<Role> roles;
 }

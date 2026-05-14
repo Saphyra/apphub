@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authoriz
 
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +17,6 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class RedirectUrlProviderTest {
-    private static final String ROLE = "role";
     private static final UUID USER_ID = UUID.randomUUID();
 
     private final RedirectUrlProvider underTest = new RedirectUrlProvider();
@@ -29,7 +29,7 @@ class RedirectUrlProviderTest {
 
     @Test
     void getRedirectUrl() {
-        given(roleSetting.getRequiredRoles()).willReturn(List.of(ROLE));
+        given(roleSetting.getRequiredRoles()).willReturn(List.of(Role.TEST));
         given(accessToken.getUserId()).willReturn(USER_ID);
 
         String result = underTest.getRedirectUrl(List.of(roleSetting), accessToken);
@@ -39,7 +39,7 @@ class RedirectUrlProviderTest {
             GenericEndpoints.ERROR_PAGE,
             ErrorCode.MISSING_ROLE.name(),
             USER_ID,
-            ROLE
+            Role.TEST
         ));
     }
 }

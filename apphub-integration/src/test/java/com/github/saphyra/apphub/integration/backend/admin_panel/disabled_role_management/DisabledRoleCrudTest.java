@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.DisabledRoleResponse;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyBadRequest;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
-import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DisabledRoleCrudTest extends BackEndTest {
@@ -30,27 +29,21 @@ public class DisabledRoleCrudTest extends BackEndTest {
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
 
 
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         //Initial check
         assertThat(DisabledRoleActions.getDisabledRoles(getServerPort(), accessToken)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
 
-        disableRole_unknownRole(testUser, accessToken);
         accessToken = disableRole_incorrectPassword(userData, accessToken);
         disableRole(testUser, accessToken);
         accessToken = enableRole_incorrectPassword(userData, accessToken);
         enableRole(testUser, accessToken);
-    }
-
-    private static void disableRole_unknownRole(RegistrationParameters testUser, String accessToken) {
-        Response unknownRoleResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessToken, testUser.getPassword(), "asd");
-        verifyInvalidParam(unknownRoleResponse, "role", "unknown or cannot be disabled");
     }
 
     private static String disableRole_incorrectPassword(RegistrationParameters userData, String accessToken) {
@@ -65,7 +58,7 @@ public class DisabledRoleCrudTest extends BackEndTest {
         Response accountLockedDisableRoleResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessToken, "asd", Constants.ROLE_TEST);
         verifyErrorResponse(accountLockedDisableRoleResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();
@@ -90,7 +83,7 @@ public class DisabledRoleCrudTest extends BackEndTest {
         Response accountLockedEnableResponse = DisabledRoleActions.getEnableRoleResponse(getServerPort(), ati2, "asd", Constants.ROLE_TEST);
         verifyErrorResponse(accountLockedEnableResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();

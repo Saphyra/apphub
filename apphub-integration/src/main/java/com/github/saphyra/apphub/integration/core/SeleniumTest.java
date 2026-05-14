@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.integration.core;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverMode;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverProvider;
 import com.github.saphyra.apphub.integration.core.driver.WebDriverWrapper;
+import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.google.gson.GsonBuilder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -24,10 +25,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints.AUTHORIZATION_ROOT;
 import static java.util.Objects.isNull;
 
 @Slf4j
@@ -75,6 +79,24 @@ public abstract class SeleniumTest extends TestBase {
         String directory = getReportDirectory(className, method);
         takeScreenshot(driver, directory, driverIndex);
         saveLogs(driver, directory, driverIndex);
+        saveMetadata(driver, directory, driverIndex);
+    }
+
+    @SneakyThrows
+    private void saveMetadata(WebDriverWrapper driver, String directory, int driverIndex) {
+        Map<String, Object> metadata = new HashMap<>();
+        metadata.put("url", driver.getDriver().getCurrentUrl());
+
+        driver.getDriver().navigate().to(UrlFactory.create(getServerPort(), AUTHORIZATION_ROOT));
+        metadata.put("cookies", driver.getDriver().manage().getCookies());
+
+        String fileName = directory + String.format("/metadata_%s.json", driverIndex);
+        log.debug("Metadata fileName: {}", fileName);
+
+        Path path = Paths.get(fileName);
+        File file = new File(fileName);
+        file.createNewFile();
+        Files.writeString(path, OBJECT_MAPPER_WRAPPER.writeValueAsString(metadata));
     }
 
     private static void takeScreenshot(WebDriverWrapper driver, String directory, int driverIndex) throws IOException {

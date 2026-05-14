@@ -7,6 +7,8 @@
 ===PLATFORM CHANGES===
     ApphubCI
         PostgreSQL host stored in AppHubCI
+    User
+        Migrate user data and roles to DynamoDB
 
 ===TECHNICAL DEBTS===
     User

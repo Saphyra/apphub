@@ -11,8 +11,6 @@ public class Constants {
     public static final String CLAIM_REMEMBER_ME = "remember_me";
     public static final String CLAIM_REFRESH_TOKEN_ID = "refresh_token_id";
 
-    public final String ROLE_ADMIN = "ADMIN";
-
     public final String RESOURCE_PATH_PATTERN = "/res/**";
     public final String WEB_PATH_PATTERN = "/web/**";
     public final String SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST = "blocking_request";

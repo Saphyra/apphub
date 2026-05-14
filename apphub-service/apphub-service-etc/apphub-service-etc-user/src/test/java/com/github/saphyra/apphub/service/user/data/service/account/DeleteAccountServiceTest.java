@@ -58,9 +58,8 @@ public class DeleteAccountServiceTest {
 
         underTest.deleteAccount(USER_ID, PASSWORD);
 
-        verify(user).setMarkedForDeletion(true);
         verify(user).setMarkedForDeletionAt(CURRENT_DATE);
-        verify(userDao).save(user);
+        verify(userDao).updateMarkedForDeletion(user);
         verify(authorizationClient).invalidateAllRefreshTokens(USER_ID);
     }
 }

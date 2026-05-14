@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.etc.user.model.ban;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,6 @@ public class BanSearchResponse {
     private UUID userId;
     private String username;
     private String email;
-    private List<String> bannedRoles;
+    private List<Role> bannedRoles;
     private Boolean markedForDeletion;
 }

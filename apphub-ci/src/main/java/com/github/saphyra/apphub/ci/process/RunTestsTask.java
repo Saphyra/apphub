@@ -1,14 +1,20 @@
 package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.value.Constants;
+import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
 @RequiredArgsConstructor
@@ -32,7 +38,9 @@ public class RunTestsTask {
                 false,
                 false,
                 "",
-                propertyDao.getLocalIntegrationRetryCount()
+                propertyDao.getLocalIntegrationRetryCount(),
+                Environment.LOCAL,
+                "localhost:" + platformProperties.getLocalDynamoDbPort()
             );
         } finally {
             killChromeDriverTask.run();
@@ -54,7 +62,9 @@ public class RunTestsTask {
                 true,
                 true,
                 namespaceNameProvider.getNamespaceName(),
-                propertyDao.getRemoteIntegrationRetryCount()
+                propertyDao.getRemoteIntegrationRetryCount(),
+                Environment.MINIKUBE,
+                "localhost:" + platformProperties.getMinikubeDynamoDbPort()
             );
         } finally {
             killChromeDriverTask.run();
@@ -75,7 +85,9 @@ public class RunTestsTask {
                 true,
                 false,
                 Constants.NAMESPACE_NAME_PREPROD,
-                propertyDao.getRemoteIntegrationRetryCount()
+                propertyDao.getRemoteIntegrationRetryCount(),
+                Environment.PREPROD,
+                "0"
             );
         } finally {
             killChromeDriverTask.run();
@@ -96,7 +108,9 @@ public class RunTestsTask {
                 true,
                 false,
                 Constants.NAMESPACE_NAME_PRODUCTION,
-                propertyDao.getRemoteIntegrationRetryCount()
+                propertyDao.getRemoteIntegrationRetryCount(),
+                Environment.PRODUCTION,
+                "0"
             );
         } finally {
             killChromeDriverTask.run();
@@ -114,44 +128,63 @@ public class RunTestsTask {
         boolean serverConnectionCacheEnabled,
         boolean databaseConnectionCacheEnabled,
         String namespace,
-        Integer retryCount
+        Integer retryCount,
+        Environment environment,
+        String dynamoDbHost
     ) {
         disabledGroups = String.join(",", disabledGroups, "community");
 
-        List<String> command = List.of(
-            "cmd",
-            "/c",
-            "cd",
-            "apphub-integration",
-            "&&",
-            "mvn",
-            "-DthreadCount=\"%s\"".formatted(threadCount),
-            "-DargLine=\"",
-            "-DthreadCount=%s".formatted(threadCount),
-            "-DserverPort=%s".formatted(serverPort),
-            "-DdatabasePort=%s".formatted(databasePort),
-            "-Dheadless=true",
-            "-DretryEnabled=true",
-            "-DrestLoggingEnabled=false",
-            "-DdatabaseName=%s".formatted(databaseName),
-            "-DintegrationServerEnabled=true",
-            "-DenabledGroups=%s".formatted(enabledGroups),
-            "-DdisabledGroups=%s".formatted(disabledGroups),
-            "-DpreCreateWebDrivers=%s".formatted(preCreateDrivers),
-            "-DnamespaceName=%s".formatted(namespace),
-            "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
-            "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
-            "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
-            "-DmaxRetryCount=%s".formatted(retryCount),
+        Map<String, String> dynamoDbProperties = propertyDao.getEnvironmentSpecificProperties(PropertyName.DYNAMO_DB_CONFIGURATION)
+            .getForEnvironmentOrDefault(environment);
+
+        List<String> command = new ArrayList<>();
+        command.addAll(
+            List.of(
+                "cmd",
+                "/c",
+                "cd",
+                "apphub-integration",
+                "&&",
+                "mvn",
+                "-DthreadCount=\"%s\"".formatted(threadCount),
+                "-DargLine=\"",
+                "-DthreadCount=%s".formatted(threadCount),
+                "-DserverPort=%s".formatted(serverPort),
+                "-DdatabasePort=%s".formatted(databasePort),
+                "-Dheadless=true",
+                "-DretryEnabled=true",
+                "-DrestLoggingEnabled=false",
+                "-DdatabaseName=%s".formatted(databaseName),
+                "-DintegrationServerEnabled=true",
+                "-DenabledGroups=%s".formatted(enabledGroups),
+                "-DdisabledGroups=%s".formatted(disabledGroups),
+                "-DpreCreateWebDrivers=%s".formatted(preCreateDrivers),
+                "-DnamespaceName=%s".formatted(namespace),
+                "-DserverConnectionCacheEnabled=%s".formatted(serverConnectionCacheEnabled),
+                "-DdatabaseConnectionCacheEnabled=%s".formatted(databaseConnectionCacheEnabled),
+                "-DbrowserStartupLimit=%s".formatted(propertyDao.getBrowserStartupLimit()),
+                "-DmaxRetryCount=%s".formatted(retryCount),
+                "-Denvironment=%s".formatted(environment.name().toLowerCase())
+                )
+        );
+
+        if (!isBlank(dynamoDbHost)) {
+            command.add("-DdynamoDbHost=%s".formatted(dynamoDbHost));
+        }
+
+        if (!dynamoDbProperties.isEmpty()) {
+            command.add("-DdynamoDbAccessKeyId=%s".formatted(dynamoDbProperties.get(Constants.DYNAMO_DB_ACCESS_KEY_ID)));
+            command.add("-DdynamoDbSecretKey=%s".formatted(dynamoDbProperties.get(Constants.DYNAMO_DB_SECRET_KEY)));
+        }
+
+        command.addAll(List.of(
             "\"",
             "clean",
             "test"
-        );
-
-        String[] array = new String[command.size()];
+        ));
 
         try {
-            Process process = new ProcessBuilder(command.toArray(array))
+            Process process = new ProcessBuilder(command)
                 .inheritIO()
                 .start();
 

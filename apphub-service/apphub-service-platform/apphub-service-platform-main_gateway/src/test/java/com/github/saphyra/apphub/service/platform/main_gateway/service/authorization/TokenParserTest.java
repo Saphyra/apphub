@@ -77,7 +77,7 @@ class TokenParserTest {
     void verifyAccessToken_invalidToken() {
         Throwable ex = catchThrowable(() -> underTest.verifyAccessToken("not-a-jwt").block());
 
-        ExceptionValidator.validateReportedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.INVALID_TOKEN);
+        ExceptionValidator.validateNotLoggedException(ex, HttpStatus.UNAUTHORIZED, ErrorCode.INVALID_TOKEN);
     }
 
     @Test

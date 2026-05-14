@@ -3,20 +3,20 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSavedGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
-import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.ConstructionResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
+import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.ConstructionResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.ws.ApphubWsClient;
 import com.github.saphyra.apphub.integration.ws.model.WebSocketEvent;
@@ -36,13 +36,13 @@ public class SaveGameTest extends BackEndTest {
         int serverPort = getServerPort();
         String accessToken1 = IndexPageActions.registerAndLogin(serverPort, userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
         String accessToken2 = IndexPageActions.registerAndLogin(serverPort, userData2);
         SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken2, characterModel2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreFlow.startGame(serverPort, new Player(accessToken1, userId1), new Player(accessToken2, userId2));
 

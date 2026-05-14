@@ -1,21 +1,21 @@
 package com.github.saphyra.apphub.service.user.data;
 
+import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
-import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.service.user.data.service.RegistrationService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
 import com.github.saphyra.apphub.service.user.data.service.account.DeleteAccountService;
-import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -86,7 +86,7 @@ public class AccountControllerImplTest {
     public void changeEmail() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
@@ -106,7 +106,7 @@ public class AccountControllerImplTest {
     public void changeUsername() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
@@ -149,7 +149,7 @@ public class AccountControllerImplTest {
     @Test
     public void getUsernameByUserId() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
-        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUsername()).willReturn(USERNAME);
 
         OneParamResponse<String> result = underTest.getUsernameByUserId(accessToken);
@@ -170,7 +170,7 @@ public class AccountControllerImplTest {
     public void searchAccounts_filterOwnAccount() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
+        given(userDao.findByUserIdentifier(SEARCH_TEXT)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
 
         List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessToken);
@@ -182,7 +182,7 @@ public class AccountControllerImplTest {
     public void searchAccounts_includeSelf() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
 
-        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user));
+        given(userDao.findByUserIdentifier(SEARCH_TEXT)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
@@ -201,41 +201,32 @@ public class AccountControllerImplTest {
     @Test
     public void searchAccounts_filterMarkedForDeletion() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
-        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
+        given(userDao.findByUserIdentifier(SEARCH_TEXT)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion())
-            .willReturn(true)
-            .willReturn(false);
+            .willReturn(true);
         given(user.getUserId()).willReturn(USER_ID_2);
-        given(user.getEmail()).willReturn(EMAIL);
-        given(user.getUsername()).willReturn(USERNAME);
-        given(user.getLanguage()).willReturn(LOCALE);
 
         List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), false, false, accessToken);
 
-        assertThat(result).hasSize(1);
-        AccountResponse response = result.get(0);
-        assertThat(response.getUserId()).isEqualTo(USER_ID_2);
-        assertThat(response.getEmail()).isEqualTo(EMAIL);
-        assertThat(response.getUsername()).isEqualTo(USERNAME);
-        assertThat(response.getLocale()).isEqualTo(LOCALE);
+        assertThat(result).isEmpty();
     }
 
     @Test
     public void searchAccounts_includeMarkedForDeletion() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
-        given(userDao.getByUsernameOrEmailContainingIgnoreCase(SEARCH_TEXT)).willReturn(List.of(user, user));
+        given(userDao.findByUserIdentifier(SEARCH_TEXT)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID_2);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
 
         List<AccountResponse> result = underTest.searchAccount(new OneParamRequest<>(SEARCH_TEXT), true, false, accessToken);
 
-        assertThat(result).hasSize(2);
+        assertThat(result).hasSize(1);
     }
 
     @Test
     public void getAccountInternal() {
-        given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID_1)).willReturn(Optional.of(user));
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
@@ -251,7 +242,7 @@ public class AccountControllerImplTest {
 
     @Test
     public void getAccountInternal_notFound() {
-        given(userDao.findById(USER_ID_1)).willReturn(Optional.empty());
+        given(userDao.findByUserId(USER_ID_1)).willReturn(Optional.empty());
 
         Throwable ex = catchThrowable(() -> underTest.getAccountInternal(USER_ID_1));
 
@@ -261,7 +252,7 @@ public class AccountControllerImplTest {
     @Test
     void getAccount() {
         given(accessToken.getUserId()).willReturn(USER_ID_1);
-        given(userDao.findByIdValidated(USER_ID_1)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID_1)).willReturn(user);
         given(user.getUserId()).willReturn(USER_ID_1);
         given(user.getEmail()).willReturn(EMAIL);
         given(user.getUsername()).willReturn(USERNAME);
@@ -276,7 +267,7 @@ public class AccountControllerImplTest {
 
     @Test
     public void userExists_markedForDeletion() {
-        given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID_1)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(true);
 
         boolean result = underTest.userExists(USER_ID_1);
@@ -286,7 +277,7 @@ public class AccountControllerImplTest {
 
     @Test
     public void userExists() {
-        given(userDao.findById(USER_ID_1)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID_1)).willReturn(Optional.of(user));
 
         boolean result = underTest.userExists(USER_ID_1);
 

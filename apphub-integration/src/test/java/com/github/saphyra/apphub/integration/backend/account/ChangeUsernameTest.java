@@ -11,6 +11,8 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import static com.github.saphyra.apphub.integration.framework.Constants.CREDENTIAL_PREFIX;
+import static com.github.saphyra.apphub.integration.framework.RandomDataProvider.ID_GENERATOR;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyBadRequest;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyErrorResponse;
 import static com.github.saphyra.apphub.integration.framework.ResponseValidator.verifyInvalidParam;
@@ -29,6 +31,23 @@ public class ChangeUsernameTest extends BackEndTest {
         nullPassword(accessToken);
         incorrectPassword(accessToken);
         successfulChange(userData1, accessToken);
+    }
+
+    @Test(groups = {"be", "account"})
+    void changeUsername_newUsernameEqualsEmail() {
+        RegistrationParameters userData = RegistrationParameters.validParameters()
+            .toBuilder()
+            .email(CREDENTIAL_PREFIX + ID_GENERATOR.generateRandomId().split("-")[0] + "@t.hu")
+            .build();
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
+
+        String newUsername = userData.getEmail();
+        ChangeUsernameRequest request = ChangeUsernameRequest.builder()
+            .username(newUsername)
+            .password(userData.getPassword())
+            .build();
+        Response response = AccountActions.getChangeUsernameResponse(getServerPort(), accessToken, request);
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
     private static void nullUsername(RegistrationParameters userData1, String accessToken) {
@@ -95,5 +114,12 @@ public class ChangeUsernameTest extends BackEndTest {
             .build();
         Response successfulChangeResponse = AccountActions.getChangeUsernameResponse(getServerPort(), accessToken, successfulChangeRequest);
         assertThat(successfulChangeResponse.getStatusCode()).isEqualTo(200);
+
+        //New user can be registered with old username address
+        RegistrationParameters userData2 = RegistrationParameters.validParameters()
+            .toBuilder()
+            .username(userData1.getUsername())
+            .build();
+        IndexPageActions.registerUser(getServerPort(), userData2.toRegistrationRequest());
     }
 }

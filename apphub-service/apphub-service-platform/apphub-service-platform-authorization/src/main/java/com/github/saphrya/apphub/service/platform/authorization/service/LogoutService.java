@@ -37,6 +37,10 @@ public class LogoutService {
     public void invalidateAllRefreshTokens(UUID userId) {
         List<UUID> invalidatedRefreshTokenIds = refreshTokenDao.deleteByUserId(userId);
 
+        if (invalidatedRefreshTokenIds.isEmpty()) {
+            return;
+        }
+
         mainGatewayClient.invalidateRefreshTokens(invalidatedRefreshTokenIds);
     }
 
@@ -45,6 +49,10 @@ public class LogoutService {
             .stream()
             .map(RefreshToken::getRefreshTokenId)
             .toList();
+
+        if (invalidatedRefreshTokenIds.isEmpty()) {
+            return;
+        }
         mainGatewayClient.invalidateRefreshTokens(invalidatedRefreshTokenIds);
     }
 }

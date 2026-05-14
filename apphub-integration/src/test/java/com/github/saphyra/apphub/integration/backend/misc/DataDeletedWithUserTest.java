@@ -88,11 +88,11 @@ public class DataDeletedWithUserTest extends BackEndTest {
         //skyxplore.character
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), adminUserData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), adminUserData.toLoginRequest());
         String adminAccessToken = tokenResponse.getAccessToken()
             .getJwt();
@@ -113,20 +113,20 @@ public class DataDeletedWithUserTest extends BackEndTest {
     public void communityDataDeletedWithTheUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), adminUserData);
-        UUID adminUserId = DatabaseUtil.getUserIdByEmail(adminUserData.getEmail());
-        DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        UUID adminUserId = DynamoDbUtil.getUserIdByEmail(adminUserData.getEmail());
+        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
-        UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
 
         communityTables(accessToken, adminUserId, userId2, accessToken3, userId3);
 
@@ -141,17 +141,17 @@ public class DataDeletedWithUserTest extends BackEndTest {
     public void skyXploreDataDeletedWithTheUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
-        UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, SkyXploreCharacterModel.valid());
 
         skyXploreTables(accessToken, userId2, accessToken3, userId3);

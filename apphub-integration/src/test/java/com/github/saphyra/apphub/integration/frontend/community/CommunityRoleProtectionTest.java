@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
@@ -25,7 +25,7 @@ public class CommunityRoleProtectionTest extends SeleniumTest {
 
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.COMMUNITY);
 
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
         SleepUtil.sleep(3000);
 
         driver.navigate()

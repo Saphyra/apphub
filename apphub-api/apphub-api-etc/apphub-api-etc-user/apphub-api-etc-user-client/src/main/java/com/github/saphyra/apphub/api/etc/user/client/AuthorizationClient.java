@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.api.etc.user.client;
 import com.github.saphyra.apphub.api.etc.user.model.UserEndpoints;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,5 +19,5 @@ public interface AuthorizationClient {
     AuthorizationResponse authorize(@RequestBody AuthorizationRequest request);
 
     @GetMapping(UserEndpoints.INTERNAL_AUTHORIZATION_GET_ROLES)
-    List<String> getRoles(@PathVariable("userId") UUID userId);
+    List<Role> getRoles(@PathVariable("userId") UUID userId);
 }

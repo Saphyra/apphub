@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -23,7 +23,7 @@ public class FriendCandidateSearchTest extends BackEndTest {
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
         String testUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), testUserData);
-        UUID testUserId = DatabaseUtil.getUserIdByEmail(testUserData.getEmail());
+        UUID testUserId = DynamoDbUtil.getUserIdByEmail(testUserData.getEmail());
 
         search(accessToken, testUserData, testUserId);
         FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(accessToken, testUserId);
@@ -32,7 +32,7 @@ public class FriendCandidateSearchTest extends BackEndTest {
     }
 
     private static void search(String accessToken, RegistrationParameters testUserData, UUID testUserId) {
-        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain());
+        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessToken, getTestMethodName());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.getFirst().getUserId()).isEqualTo(testUserId);
@@ -43,19 +43,19 @@ public class FriendCandidateSearchTest extends BackEndTest {
     private static FriendRequestResponse friendRequestAlreadySent(String accessToken, UUID testUserId) {
         FriendRequestResponse friendRequestResponse = FriendRequestActions.createFriendRequest(getServerPort(), accessToken, testUserId);
 
-        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getTestMethodName())).isEmpty();
         return friendRequestResponse;
     }
 
     private static void friendshipAlreadyExists(String accessToken, String testUserAccessTokenId, FriendRequestResponse friendRequestResponse) {
         FriendRequestActions.acceptFriendRequest(getServerPort(), testUserAccessTokenId, friendRequestResponse.getFriendRequestId());
 
-        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getTestMethodName())).isEmpty();
     }
 
     private static void blacklisted(String accessToken, UUID testUserId) {
         BlacklistActions.createBlacklist(getServerPort(), accessToken, testUserId);
 
-        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
+        assertThat(FriendRequestActions.search(getServerPort(), accessToken, getTestMethodName())).isEmpty();
     }
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.UUID;
 public class Ban {
     private final UUID id;
     private final UUID userId;
-    private final String bannedRole;
+    private final Role bannedRole;
     private final LocalDateTime expiration;
     private final boolean permanent;
     private final String reason;

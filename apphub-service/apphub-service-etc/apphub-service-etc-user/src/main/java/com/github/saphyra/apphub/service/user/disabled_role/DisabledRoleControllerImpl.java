@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.etc.user.server.DisabledRoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
@@ -16,8 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -27,7 +26,7 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     private final CheckPasswordService checkPasswordService;
 
     @Override
-    public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, String role, AccessToken accessToken) {
+    public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, Role role, AccessToken accessToken) {
         log.info("{} wants to disable role {}", accessToken.getUserId(), role);
         if (!properties.getRolesCanBeDisabled().contains(role)) {
             throw ExceptionFactory.invalidParam("role", "unknown or cannot be disabled");
@@ -41,11 +40,8 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     }
 
     @Override
-    public List<DisabledRoleResponse> enableRole(OneParamRequest<String> password, String role, AccessToken accessToken) {
+    public List<DisabledRoleResponse> enableRole(OneParamRequest<String> password, Role role, AccessToken accessToken) {
         log.info("{} wants to enable role {}", accessToken.getUserId(), role);
-        if (isBlank(role)) {
-            throw ExceptionFactory.invalidParam("role", "must not be null or blank");
-        }
 
         checkPasswordService.checkPassword(accessToken.getUserId(), password.getValue());
 
@@ -58,7 +54,7 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
 
     @Override
     public List<DisabledRoleResponse> getDisabledRoles() {
-        List<String> disabledRoles = StreamSupport.stream(repository.findAll().spliterator(), false)
+        List<Role> disabledRoles = StreamSupport.stream(repository.findAll().spliterator(), false)
             .map(DisabledRoleEntity::getRole)
             .toList();
 

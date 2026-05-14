@@ -16,11 +16,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -29,6 +34,8 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class ErrorHandlerAdviceTest {
     private static final String CONTENT = "content";
+    private static final String MESSAGE = "message";
+    private static final String PARAM_NAME = "paramName";
 
     @Mock
     private ErrorResponseFactory errorResponseFactory;
@@ -53,6 +60,38 @@ public class ErrorHandlerAdviceTest {
 
     @Mock
     private HttpServletRequest servletRequest;
+
+    @Mock
+    private MethodParameter methodParameter;
+
+    @Test
+    public void httpMessageNotReadableException() {
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException(MESSAGE, (HttpInputMessage) null);
+
+        ResponseEntity<?> result = underTest.httpMessageNotReadableException(ex);
+
+        verify(errorReporterService).report(ex.getMessage(), ex);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+        ErrorResponse body = (ErrorResponse) result.getBody();
+        assertThat(body.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
+        assertThat(body.getParams()).isEqualTo(Map.of("error", ex.getMessage()));
+    }
+
+    @Test
+    public void methodArgumentTypeMismatchException() {
+        given(methodParameter.getParameterName()).willReturn(PARAM_NAME);
+        MethodArgumentTypeMismatchException ex = new MethodArgumentTypeMismatchException(null, String.class, PARAM_NAME, methodParameter, new RuntimeException(MESSAGE));
+
+        ResponseEntity<?> result = underTest.methodArgumentTypeMismatchException(ex);
+
+        verify(errorReporterService).report(ex.getMessage(), ex);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
+        ErrorResponse body2 = (ErrorResponse) result.getBody();
+        assertThat(body2.getErrorCode()).isEqualTo(ErrorCode.INVALID_PARAM);
+        assertThat(body2.getParams()).isEqualTo(Map.of(PARAM_NAME, ex.getMessage()));
+    }
 
     @Test
     public void feignException() {

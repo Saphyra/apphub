@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
@@ -27,11 +27,11 @@ public class GroupCrudTest extends BackEndTest {
     public void groupCrud() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         CommunityActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
 
@@ -167,7 +167,7 @@ public class GroupCrudTest extends BackEndTest {
     private static void changeOwner(String accessToken1, GroupListResponse group, GroupMemberResponse groupMember) {
         GroupActions.changeOwner(getServerPort(), accessToken1, group.getGroupId(), groupMember.getGroupMemberId());
 
-        assertThat(GroupActions.getGroups(getServerPort(), accessToken1).get(0).getOwnerId()).isEqualTo(groupMember.getUserId());
+        assertThat(GroupActions.getGroups(getServerPort(), accessToken1).getFirst().getOwnerId()).isEqualTo(groupMember.getUserId());
     }
 
     private static void deleteGroup_notOwner(String accessToken1, GroupListResponse group) {

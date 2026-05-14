@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
-import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
@@ -23,15 +23,15 @@ public class MarkUserForDeletionService {
 
     public BanResponse markUserForDeletion(UUID deletedUserId, MarkUserForDeletionRequest request, UUID userId) {
         ValidationUtil.notNull(request.getPassword(), "password");
+        ValidationUtil.notNull(request.getMarkForDeletionAt(), "markForDeletionAt");
 
         checkPasswordService.checkPassword(userId, request.getPassword());
         LocalDateTime markedForDeletionAt = convertTime(request);
 
-        User user = userDao.findByIdValidated(deletedUserId);
-        user.setMarkedForDeletion(true);
+        User user = userDao.findByUserIdValidated(deletedUserId);
         user.setMarkedForDeletionAt(markedForDeletionAt);
 
-        userDao.save(user);
+        userDao.updateMarkedForDeletion(user);
 
         return banResponseQueryService.getBans(deletedUserId);
     }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.authentication;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.WhiteListedEndpoint;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,6 @@ class RoleSetting {
     private List<String> methods;
 
     @NotEmpty
-    private List<String> requiredRoles;
+    private List<Role> requiredRoles;
     private List<WhiteListedEndpoint> whitelistedEndpoints;
 }

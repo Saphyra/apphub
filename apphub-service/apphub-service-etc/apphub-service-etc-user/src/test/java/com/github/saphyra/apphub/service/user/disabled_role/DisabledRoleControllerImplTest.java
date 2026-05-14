@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,14 +18,11 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class DisabledRoleControllerImplTest {
-    private static final String ROLE = "role";
-    private static final String ANOTHER_ROLE = "another-role";
     private static final String PASSWORD = "password";
     private static final UUID USER_ID = UUID.randomUUID();
 
@@ -45,61 +42,40 @@ public class DisabledRoleControllerImplTest {
     private AccessToken accessToken;
 
     @Test
-    public void disableRole_unknownRole() {
-        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
-
-        Throwable ex = catchThrowable(() -> underTest.disableRole(new OneParamRequest<>(PASSWORD), "asd", accessToken));
-
-        verifyException(ex, "unknown or cannot be disabled");
-    }
-
-
-    @Test
     public void disableRole() {
-        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(Role.TEST, Role.ADMIN));
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
+        given(repository.findAll()).willReturn(List.of(new DisabledRoleEntity(Role.TEST)));
 
-        List<DisabledRoleResponse> result = underTest.disableRole(new OneParamRequest<>(PASSWORD), ROLE, accessToken);
+        List<DisabledRoleResponse> result = underTest.disableRole(new OneParamRequest<>(PASSWORD), Role.TEST, accessToken);
 
-        verify(repository).save(new DisabledRoleEntity(ROLE));
+        verify(repository).save(new DisabledRoleEntity(Role.TEST));
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
-        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(ROLE, true), new DisabledRoleResponse(ANOTHER_ROLE, false));
-    }
-
-    @Test
-    public void enableRole_blank() {
-        Throwable ex = catchThrowable(() -> underTest.enableRole(new OneParamRequest<>(PASSWORD), " ", accessToken));
-
-        verifyException(ex, "must not be null or blank");
+        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
     }
 
     @Test
     public void enableRole() {
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(repository.existsById(ROLE)).willReturn(true);
-        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
-        given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
+        given(repository.existsById(Role.TEST)).willReturn(true);
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(Role.TEST, Role.ADMIN));
+        given(repository.findAll()).willReturn(List.of(new DisabledRoleEntity(Role.TEST)));
 
-        List<DisabledRoleResponse> result = underTest.enableRole(new OneParamRequest<>(PASSWORD), ROLE, accessToken);
+        List<DisabledRoleResponse> result = underTest.enableRole(new OneParamRequest<>(PASSWORD), Role.TEST, accessToken);
 
-        verify(repository).deleteById(ROLE);
+        verify(repository).deleteById(Role.TEST);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
 
-        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(ROLE, true), new DisabledRoleResponse(ANOTHER_ROLE, false));
+        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
     }
 
     @Test
     public void getDisabledRoles() {
-        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(ROLE, ANOTHER_ROLE));
-        given(repository.findAll()).willReturn(Arrays.asList(new DisabledRoleEntity(ROLE)));
+        given(properties.getRolesCanBeDisabled()).willReturn(Arrays.asList(Role.TEST, Role.ADMIN));
+        given(repository.findAll()).willReturn(List.of(new DisabledRoleEntity(Role.TEST)));
 
         List<DisabledRoleResponse> result = underTest.getDisabledRoles();
 
-        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(ROLE, true), new DisabledRoleResponse(ANOTHER_ROLE, false));
-    }
-
-    private void verifyException(Throwable ex, String message) {
-        ExceptionValidator.validateInvalidParam(ex, "role", message);
+        assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
     }
 }

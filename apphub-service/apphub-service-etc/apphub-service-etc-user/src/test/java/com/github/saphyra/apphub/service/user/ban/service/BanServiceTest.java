@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
@@ -27,7 +28,6 @@ public class BanServiceTest {
     private static final String PASSWORD = "password";
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
-    private static final String BANNED_ROLE = "ROLE_A";
 
     @Mock
     private BanRequestValidator banRequestValidator;
@@ -81,12 +81,12 @@ public class BanServiceTest {
     public void getActivelyBannedRolesOf_permanentBan() {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(ban.isPermanent()).willReturn(true);
-        given(ban.getBannedRole()).willReturn(BANNED_ROLE);
+        given(ban.getBannedRole()).willReturn(Role.TEST);
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban));
 
-        List<String> result = underTest.getActivelyBannedRolesOf(USER_ID);
+        List<Role> result = underTest.getActivelyBannedRolesOf(USER_ID);
 
-        assertThat(result).containsExactly(BANNED_ROLE);
+        assertThat(result).containsExactly(Role.TEST);
     }
 
     @Test
@@ -94,12 +94,12 @@ public class BanServiceTest {
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(ban.isPermanent()).willReturn(false);
         given(ban.getExpiration()).willReturn(CURRENT_TIME.plusHours(1));
-        given(ban.getBannedRole()).willReturn(BANNED_ROLE);
+        given(ban.getBannedRole()).willReturn(Role.TEST);
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban));
 
-        List<String> result = underTest.getActivelyBannedRolesOf(USER_ID);
+        List<Role> result = underTest.getActivelyBannedRolesOf(USER_ID);
 
-        assertThat(result).containsExactly(BANNED_ROLE);
+        assertThat(result).containsExactly(Role.TEST);
     }
 
     @Test
@@ -109,7 +109,7 @@ public class BanServiceTest {
         given(ban.getExpiration()).willReturn(CURRENT_TIME.minusHours(1));
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban));
 
-        List<String> result = underTest.getActivelyBannedRolesOf(USER_ID);
+        List<Role> result = underTest.getActivelyBannedRolesOf(USER_ID);
 
         assertThat(result).isEmpty();
     }

@@ -34,7 +34,7 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
 
     DynamoDbRefreshTokenRepository(
         @Qualifier(REFRESH_TOKEN_DYNAMO_DB_CLIENT) DynamoDbEnhancedClient client,
-         AuthorizationProperties properties
+        AuthorizationProperties properties
     ) {
         this.client = client;
         this.tableName = properties.getRefreshTokenTableName();

@@ -27,12 +27,13 @@ public class LanguageService {
             throw ExceptionFactory.invalidParam("value", "not supported");
         }
 
-        User user = userDao.findByIdValidated(userId);
+        User user = userDao.findByUserIdValidated(userId);
         user.setLanguage(language);
-        userDao.save(user);
+        userDao.saveProfile(user);
     }
 
     public String getLanguage(UUID userId) {
-        return userDao.findByIdValidated(userId).getLanguage();
+        return userDao.findByUserIdValidated(userId)
+            .getLanguage();
     }
 }

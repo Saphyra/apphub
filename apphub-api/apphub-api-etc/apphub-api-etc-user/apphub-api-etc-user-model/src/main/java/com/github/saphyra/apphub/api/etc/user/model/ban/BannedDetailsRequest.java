@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.etc.user.model.ban;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,5 +15,5 @@ import java.util.UUID;
 @Builder
 public class BannedDetailsRequest {
     private UUID userId;
-    private List<String> requiredRoles;
+    private List<Role> requiredRoles;
 }

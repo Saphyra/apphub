@@ -32,6 +32,7 @@ platform:
   minikubeDevServerPort: 9001
   minikubeTestServerPort: 8080
   localServerPort: 8080
+  minikubeDynamoDbPort: 9003
 
   minikubeDatabasePort: 9002
   minikubeTestDatabasePort: 5432
@@ -135,6 +136,7 @@ services:
     group: 1
     properties:
       - PSQL_HOST
+      - DYNAMO_DB_CONFIGURATION
   - name: authorization
     port: 8092
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-authorization/target/application.jar"

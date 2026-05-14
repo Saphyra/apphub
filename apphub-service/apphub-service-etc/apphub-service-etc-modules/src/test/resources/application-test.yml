@@ -8,12 +8,12 @@ modules:
         url: url
         allowedByDefault: false
         roles:
-          - role
+          - TEST
       - name: user-has-no-role
         url: url
         allowedByDefault: false
         roles:
-          - unknown-role
+          - ADMIN
     favorite:
       - name: favorite
         url: url
@@ -22,10 +22,10 @@ modules:
         url: url
         allowedByDefault: true
         roles:
-          - role
+          - TEST
     empty:
       - name: not-allowed
         url: url
         allowedByDefault: false
         roles:
-          - unknown-role
+          - ADMIN

@@ -55,17 +55,17 @@ public class LanguageServiceTest {
     @Test
     public void changeLanguage() {
         given(commonConfigProperties.getSupportedLocales()).willReturn(Arrays.asList(LANGUAGE_1));
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
 
         underTest.changeLanguage(USER_ID, LANGUAGE_1);
 
         verify(user).setLanguage(LANGUAGE_1);
-        verify(userDao).save(user);
+        verify(userDao).saveProfile(user);
     }
 
     @Test
     public void getLanguage() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
         given(user.getLanguage()).willReturn(LANGUAGE_1);
 
         String result = underTest.getLanguage(USER_ID);

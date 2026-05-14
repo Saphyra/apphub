@@ -25,6 +25,7 @@ public class ChangeEmailServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String PASSWORD_HASH = "password-hash";
     private static final String PASSWORD = "password";
+    private static final String ORIGINAL_EMAIL = "original-email";
 
     @Mock
     private EmailValidator emailValidator;
@@ -56,10 +57,11 @@ public class ChangeEmailServiceTest {
     @Test
     public void changeEmail() {
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
+        given(user.getEmail()).willReturn(ORIGINAL_EMAIL);
 
         underTest.changeEmail(USER_ID, ChangeEmailRequest.builder().email(EMAIL).password(PASSWORD).build());
 
         verify(user).setEmail(EMAIL);
-        verify(userDao).save(user);
+        verify(userDao).changeEmail(ORIGINAL_EMAIL, user);
     }
 }

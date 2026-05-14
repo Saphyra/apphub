@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterM
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
@@ -78,7 +79,7 @@ class UserActiveNotificationServiceTest {
         ArgumentCaptor<AccessToken> argumentCaptor = ArgumentCaptor.forClass(AccessToken.class);
         then(skyXploreDataProxy).should().getFriends(argumentCaptor.capture());
         assertThat(argumentCaptor.getValue().getUserId()).isEqualTo(USER_ID);
-        assertThat(argumentCaptor.getValue().getRoles()).containsExactly("SKYXPLORE", "ACCESS");
+        assertThat(argumentCaptor.getValue().getRoles()).containsExactly(Role.SKYXPLORE, Role.ACCESS);
     }
 
     @Test

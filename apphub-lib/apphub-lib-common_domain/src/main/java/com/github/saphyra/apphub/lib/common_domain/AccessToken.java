@@ -18,5 +18,5 @@ public class AccessToken {
     private UUID refreshTokenId;
     private UUID userId;
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 }

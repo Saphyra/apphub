@@ -17,6 +17,7 @@ public class PlatformProperties {
     private Integer minikubeDevServerPort;
     private Integer minikubeTestServerPort;
     private Integer localServerPort;
+    private Integer minikubeDynamoDbPort;
 
     private Integer minikubeDatabasePort;
     private Integer minikubeTestDatabasePort;

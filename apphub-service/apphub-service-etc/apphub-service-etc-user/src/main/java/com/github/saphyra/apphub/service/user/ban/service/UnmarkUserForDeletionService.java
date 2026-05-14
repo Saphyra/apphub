@@ -17,12 +17,11 @@ public class UnmarkUserForDeletionService {
     private final BanResponseQueryService banResponseQueryService;
 
     public BanResponse unmarkUserForDeletion(UUID deletedUserId) {
-        User user = userDao.findByIdValidated(deletedUserId);
+        User user = userDao.findByUserIdValidated(deletedUserId);
 
-        user.setMarkedForDeletion(false);
         user.setMarkedForDeletionAt(null);
 
-        userDao.save(user);
+        userDao.updateMarkedForDeletion(user);
 
         return banResponseQueryService.getBans(deletedUserId);
     }

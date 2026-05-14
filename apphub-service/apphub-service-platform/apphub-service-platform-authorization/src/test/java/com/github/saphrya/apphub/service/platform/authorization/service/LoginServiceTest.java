@@ -7,6 +7,7 @@ import com.github.saphrya.apphub.service.platform.authorization.etc.Authorizatio
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResult;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.platform.authorization.model.LoginRequest;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
@@ -34,7 +35,7 @@ class LoginServiceTest {
     private static final UUID REFRESH_TOKEN_ID = UUID.randomUUID();
     private static final String USER_IDENTIFIER = "user@example.com";
     private static final String PASSWORD = "password";
-    private static final List<String> ROLES = List.of("ROLE_A");
+    private static final List<Role> ROLES = List.of(Role.TEST);
     private static final String REFRESH_TOKEN_JWT = "refresh-jwt";
 
     @Mock

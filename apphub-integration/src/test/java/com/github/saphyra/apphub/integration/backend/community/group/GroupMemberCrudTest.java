@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.community.CommunityA
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.core.TestBase;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
@@ -28,19 +28,19 @@ public class GroupMemberCrudTest extends BackEndTest {
     public void groupMemberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters friendData1 = RegistrationParameters.validParameters();
         String friendAccessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), friendData1);
-        UUID friendUserId1 = DatabaseUtil.getUserIdByEmail(friendData1.getEmail());
+        UUID friendUserId1 = DynamoDbUtil.getUserIdByEmail(friendData1.getEmail());
 
         RegistrationParameters friendData2 = RegistrationParameters.validParameters();
         String friendAccessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), friendData2);
-        UUID friendUserId2 = DatabaseUtil.getUserIdByEmail(friendData2.getEmail());
+        UUID friendUserId2 = DynamoDbUtil.getUserIdByEmail(friendData2.getEmail());
 
         RegistrationParameters friendOfFriendData = RegistrationParameters.validParameters();
         String friendOfFriendAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), friendOfFriendData);
-        UUID friendOfFriendUserId = DatabaseUtil.getUserIdByEmail(friendOfFriendData.getEmail());
+        UUID friendOfFriendUserId = DynamoDbUtil.getUserIdByEmail(friendOfFriendData.getEmail());
 
         CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId1, friendUserId1);
         CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId2, friendUserId2);
@@ -82,7 +82,7 @@ public class GroupMemberCrudTest extends BackEndTest {
     }
 
     private static void search_friendsOnly_noMembers(String accessToken, UUID friendUserId1, UUID friendUserId2, GroupListResponse group) {
-        List<SearchResultItem> searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
+        List<SearchResultItem> searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getTestMethodName());
 
         assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId1, friendUserId2);
     }
@@ -116,7 +116,7 @@ public class GroupMemberCrudTest extends BackEndTest {
 
     private static void search_memberNotInList(String accessToken, UUID friendUserId2, GroupListResponse group) {
         List<SearchResultItem> searchResult;
-        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
+        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getTestMethodName());
 
         assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId2);
     }
@@ -125,7 +125,7 @@ public class GroupMemberCrudTest extends BackEndTest {
         List<SearchResultItem> searchResult;
         GroupActions.changeInvitationType(getServerPort(), accessToken, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
 
-        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
+        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getTestMethodName());
 
         assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId2, friendOfFriendUserId);
     }

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
@@ -38,7 +39,7 @@ public class RowSwapProtectionTest extends BackEndTest {
             .build();
         ChecklistActions.createChecklist(getServerPort(), accessToken, createChecklistRequest);
 
-        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
         String data = DatabaseUtil.getEncryptedDataFromCheckedItem(userId);
         DatabaseUtil.injectEncryptedDataToModules(userId, data);
 

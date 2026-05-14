@@ -12,6 +12,12 @@ import org.springframework.stereotype.Component;
 public class PortForwardTask {
     private final ProcessKiller processKiller;
 
+    /**
+     * @param namespaceName namespace name
+     * @param serviceName   service name
+     * @param localPort     port of the host machine
+     * @param servicePort   port of the service in minikube
+     */
     @SneakyThrows
     public void portForward(String namespaceName, String serviceName, Integer localPort, Integer servicePort) {
         log.info("Forwarding port {} of service {} in namespace {} to local port {}", servicePort, serviceName, namespaceName, localPort);

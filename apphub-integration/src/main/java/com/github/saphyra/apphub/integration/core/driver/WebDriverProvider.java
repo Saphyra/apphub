@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.concurrent.FutureWrapper;
-import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.github.saphyra.apphub.integration.core.driver.WebDriverFactory.numberOfDriversCreated;
+import static com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints.AUTHORIZATION_ROOT;
 
 @Slf4j
 public class WebDriverProvider {
@@ -36,7 +37,7 @@ public class WebDriverProvider {
         WebDriverMode.DEFAULT, DEFAULT_DRIVER_POOL,
         WebDriverMode.HEADED, HEADED_DRIVER_POOL
     );
-    private static final int MAX_HEADED_DRIVER_COUNT = 5;
+    private static final int MAX_HEADED_DRIVER_COUNT = 1;
 
     private static GenericObjectPoolConfig<WebDriverWrapper> defaultDriverPoolConfig() {
         GenericObjectPoolConfig<WebDriverWrapper> config = new GenericObjectPoolConfig<>();
@@ -99,7 +100,7 @@ public class WebDriverProvider {
     public static void stopDrivers() {
         DEFAULT_DRIVER_POOL.close();
         HEADED_DRIVER_POOL.close();
-        log.info("NumberOfDriversCreated: {}", numberOfDriversCreated);
+        log.info("NumberOfDriversCreated: {}", numberOfDriversCreated.get());
     }
 
     @SneakyThrows
@@ -136,12 +137,8 @@ public class WebDriverProvider {
 
             AwaitilityWrapper.retry(
                 () -> {
-                    driver.navigate().to(UrlFactory.create(serverPort.getItem(), "/api/authorization"));
-                    driver.manage()
-                        .deleteAllCookies();
-
-                    driver.navigate().to(UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
-
+                    driver.navigate().to(UrlFactory.create(serverPort.getItem(), AUTHORIZATION_ROOT));
+                    SleepUtil.sleep(1000);
                     driver.manage()
                         .deleteAllCookies();
                 }

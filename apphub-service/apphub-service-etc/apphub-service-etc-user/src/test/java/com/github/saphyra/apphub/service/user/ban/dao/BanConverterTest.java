@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.ban.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +18,6 @@ import static org.mockito.BDDMockito.given;
 public class BanConverterTest {
     private static final UUID BAN_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String BANNED_ROLE = "banned-role";
     private static final LocalDateTime EXPIRATION = LocalDateTime.now();
     private static final String REASON = "reason";
     private static final UUID BANNED_BY = UUID.randomUUID();
@@ -36,7 +36,7 @@ public class BanConverterTest {
         Ban domain = Ban.builder()
             .id(BAN_ID)
             .userId(USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .expiration(EXPIRATION)
             .permanent(true)
             .reason(REASON)
@@ -51,7 +51,7 @@ public class BanConverterTest {
 
         assertThat(result.getId()).isEqualTo(BAN_ID_STRING);
         assertThat(result.getUserId()).isEqualTo(USER_ID_STRING);
-        assertThat(result.getBannedRole()).isEqualTo(BANNED_ROLE);
+        assertThat(result.getBannedRole()).isEqualTo(Role.TEST);
         assertThat(result.getExpiration()).isEqualTo(EXPIRATION);
         assertThat(result.getPermanent()).isTrue();
         assertThat(result.getReason()).isEqualTo(REASON);
@@ -63,7 +63,7 @@ public class BanConverterTest {
         BanEntity entity = BanEntity.builder()
             .id(BAN_ID_STRING)
             .userId(USER_ID_STRING)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .expiration(EXPIRATION)
             .permanent(true)
             .reason(REASON)
@@ -78,7 +78,7 @@ public class BanConverterTest {
 
         assertThat(result.getId()).isEqualTo(BAN_ID);
         assertThat(result.getUserId()).isEqualTo(USER_ID);
-        assertThat(result.getBannedRole()).isEqualTo(BANNED_ROLE);
+        assertThat(result.getBannedRole()).isEqualTo(Role.TEST);
         assertThat(result.getExpiration()).isEqualTo(EXPIRATION);
         assertThat(result.isPermanent()).isTrue();
         assertThat(result.getReason()).isEqualTo(REASON);

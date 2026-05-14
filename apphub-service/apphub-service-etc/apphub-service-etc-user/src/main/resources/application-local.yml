@@ -3,6 +3,14 @@ server:
 
 deleteAccountBatchCount: 50
 
+aws:
+  dynamoDb:
+    accessKeyId: dynamodbaccesskeyid
+    secretKey: dynamodbsecretkey
+    url: http://localhost:8000
+    user:
+      tableName: apphub-local-user
+
 logging:
   level:
     com:

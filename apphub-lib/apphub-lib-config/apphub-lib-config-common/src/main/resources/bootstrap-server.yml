@@ -2,7 +2,7 @@ server:
   port: 8080
 
 serviceHosts:
-  frontend: frontend
+  frontend: frontend:3000
   adminPanel: admin-panel:8080
   eventGateway: event-gateway:8080
   webContent: web-content:8080

@@ -17,40 +17,40 @@ spec:
         name: elite-base
     spec:
       containers:
-      - name: elite-base
-        image: saphyra/apphub-service-feature-elite_base:latest
-        env:
-          - name: SPRING_ACTIVE_PROFILE
-            value: server,develop
-          - name: PSQL_HOST
-            valueFrom:
-              secretKeyRef:
-                name: psql-host
-                key: PSQL_HOST
-        ports:
-        - containerPort: 8080
-        imagePullPolicy: Never
-        startupProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 3600
-        livenessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        readinessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        resources:
-          limits:
-            memory: 1000Mi
+        - name: elite-base
+          image: saphyra/apphub-service-feature-elite_base:latest
+          env:
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,develop
+            - name: PSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: psql-host
+                  key: PSQL_HOST
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 1000Mi
 ---
 apiVersion: v1
 kind: Service
@@ -61,6 +61,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+    - port: 8080
   selector:
     name: elite-base

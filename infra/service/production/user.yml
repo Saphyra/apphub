@@ -17,40 +17,50 @@ spec:
         name: user
     spec:
       containers:
-      - name: user
-        image: saphyra/apphub-service-etc-user:release
-        env:
-          - name: SPRING_ACTIVE_PROFILE
-            value: server,production
-          - name: PSQL_HOST
-            valueFrom:
-              secretKeyRef:
-                name: psql-host
-                key: PSQL_HOST
-        ports:
-        - containerPort: 8080
-        imagePullPolicy: Never
-        startupProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 3600
-        livenessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        readinessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        resources:
-          limits:
-            memory: 500Mi
+        - name: user
+          image: saphyra/apphub-service-etc-user:release
+          env:
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,production
+            - name: PSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: psql-host
+                  key: PSQL_HOST
+            - name: DYNAMO_DB_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_ACCESS_KEY_ID
+            - name: DYNAMO_DB_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_SECRET_KEY
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
@@ -61,6 +71,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+    - port: 8080
   selector:
     name: user

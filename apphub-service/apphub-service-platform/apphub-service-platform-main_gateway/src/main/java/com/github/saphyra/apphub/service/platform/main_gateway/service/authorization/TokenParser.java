@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authoriz
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.service.platform.main_gateway.config.Authorizat
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -69,6 +71,8 @@ public class TokenParser {
                 .getPayload();
         } catch (ExpiredJwtException e) {
             return Mono.error(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, "AccessToken expired.", e));
+        } catch (MalformedJwtException e) {
+            return Mono.error(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.INVALID_TOKEN, "Malformed JWT: " + accessTokenString, e));
         } catch (Exception e) {
             return Mono.error(() -> ExceptionFactory.reportedException(HttpStatus.UNAUTHORIZED, ErrorCode.INVALID_TOKEN, "Invalid token: " + accessTokenString, e));
         }
@@ -82,7 +86,7 @@ public class TokenParser {
             return Mono.error(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, "Token expired."));
         }
 
-        TypeReference<List<String>> typeReference = new TypeReference<>() {
+        TypeReference<List<Role>> typeReference = new TypeReference<>() {
         };
         AccessToken accessToken = AccessToken.builder()
             .accessTokenId(uuidConverter.convertEntity(claims.getId()))

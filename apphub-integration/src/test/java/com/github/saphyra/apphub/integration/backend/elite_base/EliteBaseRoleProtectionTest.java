@@ -1,11 +1,16 @@
 package com.github.saphyra.apphub.integration.backend.elite_base;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.backend.elite_base.*;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseAccountActions;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseCommodityTradingActions;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseMaterialTraderOverrideActions;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseNearestActions;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBasePowerActions;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseStarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.elite_base.CommodityTradingRequest;
@@ -22,7 +27,7 @@ public class EliteBaseRoleProtectionTest extends BackEndTest {
     public void eliteBaseRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
@@ -47,8 +52,8 @@ public class EliteBaseRoleProtectionTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ELITE_BASE_ADMIN);
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ELITE_BASE_ADMIN);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
 
         SleepUtil.sleep(3000);
 

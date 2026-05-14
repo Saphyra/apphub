@@ -24,7 +24,7 @@ public class ChangeUsernameServiceTest {
     private static final String USERNAME = "username";
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String PASSWORD = "password";
-    private static final String PASSWORD_HASH = "password-hash";
+    private static final String ORIGINAL_USERNAME = "original-username";
 
     @Mock
     private CheckPasswordService checkPasswordService;
@@ -56,10 +56,11 @@ public class ChangeUsernameServiceTest {
     @Test
     public void changeUsername() {
         given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
+        given(user.getUsername()).willReturn(ORIGINAL_USERNAME);
 
         underTest.changeUsername(USER_ID, ChangeUsernameRequest.builder().password(PASSWORD).username(USERNAME).build());
 
         verify(user).setUsername(USERNAME);
-        verify(userDao).save(user);
+        verify(userDao).changeUsername(ORIGINAL_USERNAME, user);
     }
 }

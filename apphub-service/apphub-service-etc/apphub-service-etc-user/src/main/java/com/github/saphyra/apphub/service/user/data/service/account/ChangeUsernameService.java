@@ -30,8 +30,9 @@ public class ChangeUsernameService {
         }
 
         User user = checkPasswordService.checkPassword(userId, request.getPassword());
-
+        String originalUsername = user.getUsername();
         user.setUsername(request.getUsername());
-        userDao.save(user);
+
+        userDao.changeUsername(originalUsername, user);
     }
 }

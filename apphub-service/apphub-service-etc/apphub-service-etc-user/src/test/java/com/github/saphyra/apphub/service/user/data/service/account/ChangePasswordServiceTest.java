@@ -95,7 +95,7 @@ public class ChangePasswordServiceTest {
         underTest.changePassword(USER_ID, request);
 
         then(user).should().setPassword(NEW_PASSWORD_HASH);
-        then(userDao).should().save(user);
+        then(userDao).should().saveProfile(user);
         then(authorizationClient).shouldHaveNoInteractions();
     }
 
@@ -112,7 +112,7 @@ public class ChangePasswordServiceTest {
         underTest.changePassword(USER_ID, request);
 
         then(user).should().setPassword(NEW_PASSWORD_HASH);
-        then(userDao).should().save(user);
+        then(userDao).should().saveProfile(user);
         then(authorizationClient).should().invalidateAllRefreshTokens(USER_ID);
     }
 }

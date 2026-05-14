@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.UtilActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -23,7 +23,7 @@ public class UserRoleTest extends BackEndTest {
 
         assertThat(UtilActions.isUserAdmin(getServerPort(), accessToken)).isFalse();
 
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         accessToken = AccessTokenActions.refresh(getServerPort(), tokenResponse.getRefreshToken().getJwt())
             .getAccessToken()
             .getJwt();

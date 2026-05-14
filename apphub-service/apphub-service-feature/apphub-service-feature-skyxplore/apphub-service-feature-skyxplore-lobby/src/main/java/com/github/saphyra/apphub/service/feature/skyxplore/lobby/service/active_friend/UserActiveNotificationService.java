@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.service.active
 import com.github.saphyra.apphub.api.feature.skyxplore.response.friendship.FriendshipResponse;
 import com.github.saphyra.apphub.api.feature.skyxplore.response.lobby.ActiveFriendResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.ApplicationContextProxy;
@@ -30,18 +31,16 @@ public class UserActiveNotificationService {
 
     public void userOnline(UUID userId) {
         lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE, userId));
-        ;
     }
 
     public void userOffline(UUID userId) {
         lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE, userId));
-        ;
     }
 
     private List<UUID> getRecipients(UUID userId) {
         AccessToken accessToken = AccessToken.builder()
             .userId(userId)
-            .roles(Arrays.asList("SKYXPLORE", "ACCESS"))
+            .roles(Arrays.asList(Role.SKYXPLORE, Role.ACCESS))
             .build();
         return skyXploreDataProxy.getFriends(accessToken)
             .stream()
