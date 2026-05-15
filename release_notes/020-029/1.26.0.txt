@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Start DynamoDB option in local run menu
 
 ===BUGFIXES===
     ApphubCI
