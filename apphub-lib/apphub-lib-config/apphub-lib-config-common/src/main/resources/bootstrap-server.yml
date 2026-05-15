@@ -5,7 +5,6 @@ serviceHosts:
   frontend: frontend:3000
   adminPanel: admin-panel:8080
   eventGateway: event-gateway:8080
-  webContent: web-content:8080
   skyxploreData: skyxplore-data:8080
   skyxploreGame: skyxplore-game:8080
   skyxploreLobby: skyxplore-lobby:8080

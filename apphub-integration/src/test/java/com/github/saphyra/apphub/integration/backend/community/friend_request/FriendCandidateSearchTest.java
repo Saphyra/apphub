@@ -32,7 +32,7 @@ public class FriendCandidateSearchTest extends BackEndTest {
     }
 
     private static void search(String accessToken, RegistrationParameters testUserData, UUID testUserId) {
-        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessToken, getTestMethodName());
+        List<SearchResultItem> searchResult = FriendRequestActions.search(getServerPort(), accessToken, testUserData.getUsername());
 
         assertThat(searchResult).hasSize(1);
         assertThat(searchResult.getFirst().getUserId()).isEqualTo(testUserId);

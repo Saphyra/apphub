@@ -86,7 +86,6 @@ public class Constants {
         "skyxplore-lobby",
         "training",
         SERVICE_NAME_USER,
-        "web-content",
         "community",
         "calendar",
         "encryption",

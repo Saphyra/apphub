@@ -104,12 +104,6 @@ services:
     properties:
       - AUTHORIZATION_CERTIFICATE
       - DYNAMO_DB_CONFIGURATION
-  - name: web-content
-    port: 8083
-    location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"
-    moduleName: apphub-service-platform-web_content
-    group: 1
-    optional: true
   - name: scheduler
     port: 8082
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"

@@ -140,15 +140,19 @@ public abstract class TestBase {
 
         log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
         Stopwatch stopwatch = Stopwatch.createStarted();
-        acquirePermit(method, stopwatch);
+        acquirePermit(method, stopwatch, getPermitCount());
         DURATION_STOPWATCH.set(Stopwatch.createStarted());
 
         TEST_METHOD_NAME.set(testMethod.toLowerCase());
         StatusLogger.addToStartOrder(method);
     }
 
-    private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
-        SEMAPHORE.acquire(1);
+    protected int getPermitCount() {
+        return 1;
+    }
+
+    private static synchronized void acquirePermit(Method method, Stopwatch stopwatch, int permits) throws InterruptedException {
+        SEMAPHORE.acquire(permits);
         stopwatch.stop();
         log.debug("Permit acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
     }
@@ -164,7 +168,7 @@ public abstract class TestBase {
         IntegrationServer.reportTestCaseRun(method, duration, testResult.getStatus() == ITestResult.SUCCESS);
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
-        SEMAPHORE.release(1);
+        SEMAPHORE.release(getPermitCount());
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
         StatusLogger.incrementFinishedTestCount(method, duration);

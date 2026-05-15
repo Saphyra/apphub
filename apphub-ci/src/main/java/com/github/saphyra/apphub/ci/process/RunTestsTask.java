@@ -132,8 +132,6 @@ public class RunTestsTask {
         Environment environment,
         String dynamoDbHost
     ) {
-        disabledGroups = String.join(",", disabledGroups, "community");
-
         Map<String, String> dynamoDbProperties = propertyDao.getEnvironmentSpecificProperties(PropertyName.DYNAMO_DB_CONFIGURATION)
             .getForEnvironmentOrDefault(environment);
 

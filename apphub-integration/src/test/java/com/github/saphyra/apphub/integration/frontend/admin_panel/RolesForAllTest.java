@@ -33,9 +33,14 @@ public class RolesForAllTest extends SeleniumTest {
     public void addAndRemoveRoleFromAll() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+
+        RegistrationParameters referenceUserData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, referenceUserData);
+        ModulesPageActions.logout(getServerPort(), driver);
+
+        RegistrationParameters adminUserData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, adminUserData);
+        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.ROLES_FOR_ALL);
 
@@ -43,17 +48,15 @@ public class RolesForAllTest extends SeleniumTest {
             .until(() -> !RolesForAllActions.getRoles(driver).isEmpty())
             .assertTrue("Roles are not loaded.");
 
-        restrictedRolesNotPresent(driver, userData);
-
-        revokeFromAll_emptyPassword(driver);
-        revokeFromAll_incorrectPassword(driver, userData);
-        revokeFromAll(driver, userData);
+        restrictedRolesNotPresent(driver, adminUserData);
 
         addToAll_emptyPassword(driver);
-        addToAll_incorrectPassword(driver, userData);
-        addToAll(driver, userData);
+        addToAll_incorrectPassword(driver, adminUserData);
+        addToAll(driver, adminUserData, referenceUserData);
 
-        revokeFromAll(driver, userData);
+        revokeFromAll_emptyPassword(driver);
+        revokeFromAll_incorrectPassword(driver, adminUserData);
+        revokeFromAll(driver, adminUserData, referenceUserData);
     }
 
     private void restrictedRolesNotPresent(WebDriver driver, RegistrationParameters registrationParameters) {
@@ -61,15 +64,15 @@ public class RolesForAllTest extends SeleniumTest {
             .forEach(role -> assertThat(RolesForAllActions.findRole(driver, role)).isEmpty());
     }
 
-    private void addToAll(WebDriver driver, RegistrationParameters userData) {
+    private void addToAll(WebDriver driver, RegistrationParameters adminUserData, RegistrationParameters referenceUserData) {
         RolesForAllActions.findRoleValidated(driver, Constants.ROLE_TEST)
             .addToAll(driver);
 
-        RolesForAllActions.fillPassword(driver, userData.getPassword());
+        RolesForAllActions.fillPassword(driver, adminUserData.getPassword());
         RolesForAllActions.confirmAddToAll(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ROLES_FOR_ALL_ROLE_ADDED);
 
-        assertThat(DynamoDbUtil.getRoleCount(Constants.ROLE_TEST)).isGreaterThan(0);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(DynamoDbUtil.getRolesByEmail(referenceUserData.getEmail())).contains(Constants.ROLE_TEST));
     }
 
     private void addToAll_incorrectPassword(WebDriver driver, RegistrationParameters userData) {
@@ -112,15 +115,15 @@ public class RolesForAllTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.EMPTY_PASSWORD);
     }
 
-    private void revokeFromAll(WebDriver driver, RegistrationParameters userData) {
+    private void revokeFromAll(WebDriver driver, RegistrationParameters adminUserData, RegistrationParameters referenceUserData) {
         RolesForAllActions.findRoleValidated(driver, Constants.ROLE_TEST)
             .revokeFromAll(driver);
 
-        RolesForAllActions.fillPassword(driver, userData.getPassword());
+        RolesForAllActions.fillPassword(driver, adminUserData.getPassword());
         RolesForAllActions.confirmRevokeFromAll(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ROLES_FOR_ALL_ROLE_REVOKED);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(DynamoDbUtil.getRoleCount(Constants.ROLE_TEST)).isEqualTo(0));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(DynamoDbUtil.getRolesByEmail(referenceUserData.getEmail())).doesNotContain(Constants.ROLE_TEST));
     }
 
     private void revokeFromAll_emptyPassword(WebDriver driver) {

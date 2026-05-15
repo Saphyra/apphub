@@ -64,19 +64,6 @@ public class DynamoDbUtil {
             .toList();
     }
 
-    public static int getRoleCount(String role) {
-        ScanRequest scanRequest = ScanRequest.builder()
-            .tableName(getUserTableName())
-            .filterExpression("#sk = :role")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-            .expressionAttributeValues(Map.of(":role", AttributeValue.builder().s(String.join("#", TYPE_ROLE, role)).build()))
-            .build();
-
-        ScanResponse scanResponse = getClient().scan(scanRequest);
-
-        return scanResponse.items().size();
-    }
-
     public static void markForDeletionByEmail(String email) {
         UUID userId = getUserIdByEmail(email);
         markForDeletion(userId);
