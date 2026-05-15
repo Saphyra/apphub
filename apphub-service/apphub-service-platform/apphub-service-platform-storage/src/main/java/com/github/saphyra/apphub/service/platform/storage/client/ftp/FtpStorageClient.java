@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.platform.storage.client.ftp;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
-import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

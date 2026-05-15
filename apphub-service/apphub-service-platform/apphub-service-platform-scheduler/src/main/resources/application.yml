@@ -27,9 +27,6 @@ interval:
     reportMemoryStatus: "* * * * * ?" #Every second
     reportInMemoryDaoStatus: "* * * * * ?" #Every second
     sendCollectedMetrics: "*/5 * * * * ?" #Every 5 seconds
-  storage:
-    storedFileCleanup: 300000 #5 minutes
-    fileCleanupCron: "0 0 11 1 * ?" #Every first day of month at 11AM
   eliteBase:
     processMessages: PT5S
     resetUnhandledMessages: P7D

@@ -1,7 +1,9 @@
-package com.github.saphyra.apphub.service.platform.storage.dao;
+package com.github.saphyra.apphub.service.platform.storage.dao.deprecated;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +24,7 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class StoredFileDaoTest {
+public class DeprecatedStoredFileDaoTest {
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final String STORED_FILE_ID_STRING = "stored-file-id";
     private static final UUID USER_ID = UUID.randomUUID();
@@ -33,19 +35,19 @@ public class StoredFileDaoTest {
     private UuidConverter uuidConverter;
 
     @Mock
-    private StoredFileRepository repository;
+    private DeprecatedStoredFileRepository repository;
 
     @Mock
-    private StoredFileConverter converter;
+    private DeprecatedStoredFileConverter converter;
 
     @InjectMocks
-    private StoredFileDao underTest;
+    private DeprecatedStoredFileDao underTest;
 
     @Mock
     private StoredFile storedFile;
 
     @Mock
-    private StoredFileEntity entity;
+    private DeprecatedStoredFileEntity entity;
 
     @Mock
     private StoredFileView storedFileView;

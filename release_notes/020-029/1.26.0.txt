@@ -11,6 +11,8 @@
         PostgreSQL host stored in AppHubCI
     User
         Migrate user data and roles to DynamoDB
+    Storage
+        Migrate StoredFile to DynamoDB
 
 ===TECHNICAL DEBTS===
     User

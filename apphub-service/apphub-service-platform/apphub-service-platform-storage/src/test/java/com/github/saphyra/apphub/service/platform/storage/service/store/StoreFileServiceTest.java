@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.service.platform.storage.service.store;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
-import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -100,7 +100,7 @@ public class StoreFileServiceTest {
 
     @Test
     public void uploadFile_forbiddenOperation() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(UUID.randomUUID());
 
@@ -111,7 +111,7 @@ public class StoreFileServiceTest {
 
     @Test
     public void uploadFile_alreadyUploaded() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(true);
@@ -125,7 +125,7 @@ public class StoreFileServiceTest {
     public void uploadFile() {
         given(properties.getMaxUploadedFileSize()).willReturn(FILE_SIZE + 1);
 
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(false);
@@ -136,7 +136,7 @@ public class StoreFileServiceTest {
         underTest.uploadFile(USER_ID, STORED_FILE_ID, inputStream, FILE_SIZE);
 
         verify(storageClient).upload(STORED_FILE_ID, inputStream, FILE_SIZE);
-        verify(storedFile).setFileUploaded(true);
+        verify(storedFile).setExpiration(null);
         verify(storedFileDao).save(storedFile);
     }
 }

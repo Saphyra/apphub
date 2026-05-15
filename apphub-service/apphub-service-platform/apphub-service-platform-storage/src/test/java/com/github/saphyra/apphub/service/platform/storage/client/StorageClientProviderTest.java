@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.storage.client;
 
-import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

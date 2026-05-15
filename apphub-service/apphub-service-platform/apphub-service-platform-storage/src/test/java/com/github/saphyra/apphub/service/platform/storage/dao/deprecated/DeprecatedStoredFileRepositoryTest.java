@@ -1,5 +1,6 @@
-package com.github.saphyra.apphub.service.platform.storage.dao;
+package com.github.saphyra.apphub.service.platform.storage.dao.deprecated;
 
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = RepositoryTestConfiguration.class)
-public class StoredFileRepositoryTest {
+public class DeprecatedStoredFileRepositoryTest {
     private static final String STORED_FILE_ID_1 = "stored-file-id-1";
     private static final String STORED_FILE_ID_2 = "stored-file-id-2";
     private static final String STORED_FILE_ID_3 = "stored-file-id-3";
@@ -25,7 +26,7 @@ public class StoredFileRepositoryTest {
     private static final LocalDateTime EXPIRATION_TIME = LocalDateTime.now();
 
     @Autowired
-    private StoredFileRepository underTest;
+    private DeprecatedStoredFileRepository underTest;
 
     @AfterEach
     public void clear() {
@@ -34,18 +35,18 @@ public class StoredFileRepositoryTest {
 
     @Test
     public void getByUserId() {
-        StoredFileEntity entity1 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity1 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_1)
             .userId(USER_ID_1)
             .build();
         underTest.save(entity1);
-        StoredFileEntity entity2 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity2 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_2)
             .userId(USER_ID_2)
             .build();
         underTest.save(entity2);
 
-        List<StoredFileEntity> result = underTest.getByUserId(USER_ID_1);
+        List<DeprecatedStoredFileEntity> result = underTest.getByUserId(USER_ID_1);
 
         assertThat(result).containsExactly(entity1);
     }
@@ -53,19 +54,19 @@ public class StoredFileRepositoryTest {
     @Test
     @Transactional
     public void deleteByFileUploadedAndCreatedAtBefore() {
-        StoredFileEntity entity1 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity1 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_1)
             .fileUploaded(true)
             .createdAt(EXPIRATION_TIME.minusSeconds(1))
             .build();
         underTest.save(entity1);
-        StoredFileEntity entity2 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity2 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_2)
             .fileUploaded(false)
             .createdAt(EXPIRATION_TIME.plusSeconds(1))
             .build();
         underTest.save(entity2);
-        StoredFileEntity entity3 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity3 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_3)
             .fileUploaded(false)
             .createdAt(EXPIRATION_TIME.minusSeconds(1))
@@ -79,19 +80,21 @@ public class StoredFileRepositoryTest {
 
     @Test
     void getViewsByStorage() {
-        StoredFileEntity entity1 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity1 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_1)
             .fileUploaded(true)
             .storage(Storage.FTP)
+            .userId(USER_ID_1)
             .build();
         underTest.save(entity1);
-        StoredFileEntity entity2 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity2 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_2)
             .fileUploaded(false)
             .storage(Storage.FTP)
+            .userId(USER_ID_1)
             .build();
         underTest.save(entity2);
-        StoredFileEntity entity3 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity3 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_3)
             .fileUploaded(false)
             .storage(Storage.S3)
@@ -100,26 +103,26 @@ public class StoredFileRepositoryTest {
 
         assertThat(underTest.getViewsByStorage(Storage.FTP))
             .containsExactlyInAnyOrder(
-                new StoredFileView(STORED_FILE_ID_1, true),
-                new StoredFileView(STORED_FILE_ID_2, false)
+                new StoredFileView(STORED_FILE_ID_1, USER_ID_1, true),
+                new StoredFileView(STORED_FILE_ID_2, USER_ID_1, false)
             );
     }
 
     @Test
     void deleteByStorageAndStoredFileIdIn() {
-        StoredFileEntity entity1 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity1 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_1)
             .fileUploaded(true)
             .storage(Storage.FTP)
             .build();
         underTest.save(entity1);
-        StoredFileEntity entity2 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity2 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_2)
             .fileUploaded(false)
             .storage(Storage.FTP)
             .build();
         underTest.save(entity2);
-        StoredFileEntity entity3 = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity entity3 = DeprecatedStoredFileEntity.builder()
             .storedFileId(STORED_FILE_ID_3)
             .fileUploaded(false)
             .storage(Storage.S3)

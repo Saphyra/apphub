@@ -1,9 +1,11 @@
-package com.github.saphyra.apphub.service.platform.storage.dao;
+package com.github.saphyra.apphub.service.platform.storage.dao.deprecated;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -15,12 +17,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class StoredFileDao extends AbstractDao<StoredFileEntity, StoredFile, String, StoredFileRepository> {
+@Deprecated(forRemoval = true)
+public class DeprecatedStoredFileDao extends AbstractDao<DeprecatedStoredFileEntity, StoredFile, String, DeprecatedStoredFileRepository> {
     private final UuidConverter uuidConverter;
+    private final DeprecatedStoredFileConverter converter;
 
-    StoredFileDao(StoredFileConverter converter, StoredFileRepository repository, UuidConverter uuidConverter) {
+    DeprecatedStoredFileDao(DeprecatedStoredFileConverter converter, DeprecatedStoredFileRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
+        this.converter = converter;
     }
 
     public Optional<StoredFile> findById(UUID storedFileId) {

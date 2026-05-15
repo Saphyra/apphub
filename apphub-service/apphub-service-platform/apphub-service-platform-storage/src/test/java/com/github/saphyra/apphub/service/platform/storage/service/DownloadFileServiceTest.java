@@ -2,13 +2,13 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
 import com.github.saphyra.apphub.service.platform.storage.client.ftp.FtpClientWrapper;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.io.InputStream;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,9 +47,6 @@ public class DownloadFileServiceTest {
     private FtpClientWrapper ftpClient;
 
     @Mock
-    private InputStream inputStream;
-
-    @Mock
     private StorageClient storageClient;
 
     @Mock
@@ -58,7 +54,7 @@ public class DownloadFileServiceTest {
 
     @Test
     public void downloadFile_forbiddenOperation() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(UUID.randomUUID());
 
@@ -69,7 +65,7 @@ public class DownloadFileServiceTest {
 
     @Test
     public void downloadFile_noFileUploaded() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(false);
@@ -81,7 +77,7 @@ public class DownloadFileServiceTest {
 
     @Test
     public void download() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
 
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.isFileUploaded()).willReturn(true);

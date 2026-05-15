@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class StoreFileService {
     public void uploadFile(UUID userId, UUID storedFileId, InputStream file, Long size) {
         ValidationUtil.maximum(size, properties.getMaxUploadedFileSize(), "size");
 
-        StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
+        StoredFile storedFile = storedFileDao.findByIdValidated(userId, storedFileId);
 
         if (!userId.equals(storedFile.getUserId())) {
             throw ExceptionFactory.forbiddenOperation(userId + " has no access to StoredFile " + storedFileId);
@@ -54,7 +54,7 @@ public class StoreFileService {
         storageClientProvider.getClientForType(storedFile.getStorage())
             .upload(storedFileId, file, size);
 
-        storedFile.setFileUploaded(true);
+        storedFile.setExpiration(null);
         storedFileDao.save(storedFile);
     }
 }
