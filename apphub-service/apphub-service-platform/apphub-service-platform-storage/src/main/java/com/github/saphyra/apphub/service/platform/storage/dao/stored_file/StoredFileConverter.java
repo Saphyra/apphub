@@ -7,14 +7,17 @@ import com.github.saphyra.apphub.lib.encryption.impl.LongEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileConstants.COLUMN_FILE_NAME;
 import static com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileConstants.COLUMN_SIZE;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
+@Slf4j
 class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
@@ -44,7 +47,7 @@ class StoredFileConverter extends ConverterBase<StoredFileEntity, StoredFile> {
             .storedFileId(uuidConverter.convertEntity(entity.getStoredFileId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .createdAt(dateTimeUtil.fromEpochSecond(entity.getCreatedAt()))
-            .expiration(dateTimeUtil.fromEpochSecond(entity.getExpiration()))
+            .expiration(Optional.ofNullable(entity.getExpiration()).filter(e -> e != 0).map(dateTimeUtil::fromEpochSecond).orElse(null))
             .fileName(stringEncryptor.decrypt(entity.getFileName(), userId, entity.getStoredFileId(), COLUMN_FILE_NAME))
             .size(longEncryptor.decrypt(entity.getSize(), userId, entity.getStoredFileId(), COLUMN_SIZE))
             .storage(Storage.valueOf(entity.getStorage()))

@@ -13,7 +13,7 @@ import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbSortK
 @AllArgsConstructor
 @Builder
 @Data
-class StoredFileEntity {
+public class StoredFileEntity {
     private String userId;
     private String storedFileId;
     private String fileName; //Encrypted

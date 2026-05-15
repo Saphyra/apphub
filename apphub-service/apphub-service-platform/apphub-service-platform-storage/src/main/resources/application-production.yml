@@ -3,5 +3,5 @@ aws:
     accessKeyId: ${DYNAMO_DB_ACCESS_KEY_ID}
     secretKey: ${DYNAMO_DB_SECRET_KEY}
     url: ~
-    user:
+    stored_file:
       tableName: apphub-production-stored_file

@@ -49,6 +49,16 @@ spec:
                 secretKeyRef:
                   name: psql-host
                   key: PSQL_HOST
+            - name: DYNAMO_DB_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_ACCESS_KEY_ID
+            - name: DYNAMO_DB_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_SECRET_KEY
         - name: FTP_HOST
           valueFrom:
             secretKeyRef:

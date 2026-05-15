@@ -19,7 +19,6 @@ import java.util.Arrays;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class StoredFileMigrationService {
     private final DeprecatedStoredFileDao deprecatedStoredFileDao;
     private final StoredFileDao storedFileDao;
@@ -47,6 +46,7 @@ class StoredFileMigrationService {
                 StoredFile storedFile = deprecatedStoredFileDao.findByIdValidated(uuidConverter.convertEntity(view.getStoredFileId()));
 
                 storedFileDao.save(storedFile);
+                deprecatedStoredFileDao.deleteById(view.getStoredFileId());
             }
         } catch (Exception e) {
             errorReporterService.report("Failed migrating storedFile " + view.getStoredFileId(), e);

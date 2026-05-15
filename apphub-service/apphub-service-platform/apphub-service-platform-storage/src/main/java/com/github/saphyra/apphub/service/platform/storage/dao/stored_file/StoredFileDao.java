@@ -13,7 +13,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class StoredFileDao {
     private final StoredFileRepository repository;
     private final StoredFileConverter converter;
