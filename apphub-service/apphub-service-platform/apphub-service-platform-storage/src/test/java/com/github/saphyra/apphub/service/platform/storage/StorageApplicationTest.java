@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.platform.storage;
 
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class StorageApplicationTest {
     @LocalServerPort
     private int serverPort;
+
+    @MockitoBean
+    private StoredFileDao storedFileDao;
 
     @Test
     public void startup() {

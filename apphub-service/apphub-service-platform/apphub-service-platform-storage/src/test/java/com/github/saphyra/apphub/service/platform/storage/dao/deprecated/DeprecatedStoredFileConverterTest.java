@@ -1,9 +1,11 @@
-package com.github.saphyra.apphub.service.platform.storage.dao;
+package com.github.saphyra.apphub.service.platform.storage.dao.deprecated;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.LongEncryptor;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,13 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.platform.storage.dao.StoredFileConverter.COLUMN_FILE_NAME;
-import static com.github.saphyra.apphub.service.platform.storage.dao.StoredFileConverter.COLUMN_SIZE;
+import static com.github.saphyra.apphub.service.platform.storage.dao.deprecated.DeprecatedStoredFileConverter.COLUMN_FILE_NAME;
+import static com.github.saphyra.apphub.service.platform.storage.dao.deprecated.DeprecatedStoredFileConverter.COLUMN_SIZE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class StoredFileConverterTest {
+public class DeprecatedStoredFileConverterTest {
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT = LocalDateTime.now();
@@ -29,7 +31,6 @@ public class StoredFileConverterTest {
     private static final String STORED_FILE_ID_STRING = "stored-file-id";
     private static final String USER_ID_STRING = "user-id";
     private static final String ENCRYPTED_FILE_NAME = "encrypted-file-name";
-    private static final String ENCRYPTED_EXTENSION = "encrypted-extension";
     private static final String ENCRYPTED_SIZE = "encrypted-size";
 
     @Mock
@@ -45,7 +46,7 @@ public class StoredFileConverterTest {
     private LongEncryptor longEncryptor;
 
     @InjectMocks
-    private StoredFileConverter underTest;
+    private DeprecatedStoredFileConverter underTest;
 
     @Test
     public void convertDomain() {
@@ -53,7 +54,6 @@ public class StoredFileConverterTest {
             .storedFileId(STORED_FILE_ID)
             .userId(USER_ID)
             .createdAt(CREATED_AT)
-            .fileUploaded(true)
             .fileName(FILE_NAME)
             .size(SIZE)
             .storage(Storage.S3)
@@ -66,7 +66,7 @@ public class StoredFileConverterTest {
         given(stringEncryptor.encrypt(FILE_NAME, ACCESS_TOKEN_USER_ID, STORED_FILE_ID_STRING, COLUMN_FILE_NAME)).willReturn(ENCRYPTED_FILE_NAME);
         given(longEncryptor.encrypt(SIZE, ACCESS_TOKEN_USER_ID, STORED_FILE_ID_STRING, COLUMN_SIZE)).willReturn(ENCRYPTED_SIZE);
 
-        StoredFileEntity result = underTest.convertDomain(storedFile);
+        DeprecatedStoredFileEntity result = underTest.convertDomain(storedFile);
 
         assertThat(result.getStoredFileId()).isEqualTo(STORED_FILE_ID_STRING);
         assertThat(result.getUserId()).isEqualTo(USER_ID_STRING);
@@ -79,7 +79,7 @@ public class StoredFileConverterTest {
 
     @Test
     public void convertEntity() {
-        StoredFileEntity storedFile = StoredFileEntity.builder()
+        DeprecatedStoredFileEntity storedFile = DeprecatedStoredFileEntity.builder().build().builder()
             .storedFileId(STORED_FILE_ID_STRING)
             .userId(USER_ID_STRING)
             .createdAt(CREATED_AT)

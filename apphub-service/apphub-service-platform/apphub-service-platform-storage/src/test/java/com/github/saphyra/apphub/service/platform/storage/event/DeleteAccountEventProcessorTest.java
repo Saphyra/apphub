@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.storage.event;
 
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.service.DeleteFileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

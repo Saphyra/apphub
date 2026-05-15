@@ -1,5 +1,6 @@
-package com.github.saphyra.apphub.service.platform.storage.dao;
+package com.github.saphyra.apphub.service.platform.storage.dao.deprecated;
 
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -19,7 +20,8 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(schema = "storage", name = "stored_file")
-class StoredFileEntity {
+@Deprecated(forRemoval = true)
+class DeprecatedStoredFileEntity {
     @Id
     private String storedFileId;
     private String userId;

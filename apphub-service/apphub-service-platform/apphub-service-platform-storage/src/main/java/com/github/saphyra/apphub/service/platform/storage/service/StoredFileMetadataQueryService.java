@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ class StoredFileMetadataQueryService {
     private final DateTimeUtil dateTimeUtil;
 
     StoredFileResponse getMetadata(UUID userId, UUID storedFileId) {
-        StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
+        StoredFile storedFile = storedFileDao.findByIdValidated(userId, storedFileId);
 
         if (!storedFile.getUserId().equals(userId)) {
             throw ExceptionFactory.forbiddenOperation(userId + " has no access to StoredFile " + storedFile);

@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
-import com.github.saphyra.apphub.service.platform.storage.dao.Storage;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ public class DeleteFileServiceTest {
 
     @Test
     public void forbiddenOperation() {
-        given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
+        given(storedFileDao.findById(USER_ID, STORED_FILE_ID)).willReturn(Optional.of(storedFile));
         given(storedFile.getUserId()).willReturn(UUID.randomUUID());
 
         Throwable ex = catchThrowable(() -> underTest.deleteFile(USER_ID, STORED_FILE_ID));
@@ -51,7 +51,7 @@ public class DeleteFileServiceTest {
 
     @Test
     public void deleteFile() {
-        given(storedFileDao.findById(STORED_FILE_ID)).willReturn(Optional.of(storedFile));
+        given(storedFileDao.findById(USER_ID, STORED_FILE_ID)).willReturn(Optional.of(storedFile));
         given(storedFile.getUserId()).willReturn(USER_ID);
         given(storedFile.getStoredFileId()).willReturn(STORED_FILE_ID);
         given(storedFile.getStorage()).willReturn(Storage.FTP);

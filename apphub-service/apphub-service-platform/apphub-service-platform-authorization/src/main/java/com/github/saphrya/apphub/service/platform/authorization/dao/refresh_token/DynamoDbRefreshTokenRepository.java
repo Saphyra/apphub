@@ -64,10 +64,6 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
         return Optional.ofNullable(getTable().getItem(key));
     }
 
-    private DynamoDbTable<RefreshTokenEntity> getTable() {
-        return client.table(tableName, TableSchema.fromBean(RefreshTokenEntity.class));
-    }
-
     @Override
     public List<RefreshTokenEntity> getByUserId(String userId) {
         DynamoDbTable<RefreshTokenEntity> table = getTable();
@@ -125,5 +121,9 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
 
             dynamoDbClient.updateTimeToLive(request);
         }
+    }
+
+    private DynamoDbTable<RefreshTokenEntity> getTable() {
+        return client.table(tableName, TableSchema.fromBean(RefreshTokenEntity.class));
     }
 }

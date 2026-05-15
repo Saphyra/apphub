@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +22,7 @@ public class DownloadFileService {
     private final StorageClientProvider storageClientProvider;
 
     public BiWrapper<String, DownloadResult> downloadFile(UUID userId, UUID storedFileId) {
-        StoredFile storedFile = storedFileDao.findByIdValidated(storedFileId);
+        StoredFile storedFile = storedFileDao.findByIdValidated(userId, storedFileId);
 
         if (!storedFile.getUserId().equals(userId)) {
             throw ExceptionFactory.forbiddenOperation(userId + " has no access to " + storedFileId);
