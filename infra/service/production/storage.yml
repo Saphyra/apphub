@@ -59,11 +59,11 @@ spec:
                 secretKeyRef:
                   name: dynamo-db-configuration
                   key: DYNAMO_DB_SECRET_KEY
-        - name: FTP_HOST
-          valueFrom:
-            secretKeyRef:
-              name: ftp-host
-              key: FTP_HOST
+            - name: FTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: ftp-host
+                  key: FTP_HOST
           ports:
             - containerPort: 8080
           imagePullPolicy: Never
