@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.ci.controller;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.EnvironmentSpecificProperties;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class DynamoDbSettingsMenuController {
     private final PropertyDao propertyDao;
 
     @GetMapping
-    ModelAndView s3SettingsMenu(
+    ModelAndView dynamoDbSettingsMenu(
         @PathVariable("environment") Environment environment,
         @RequestParam(name = "success", required = false) String success
     ) {
@@ -32,10 +33,10 @@ public class DynamoDbSettingsMenuController {
 
         modelAndView.addObject("environment", environment);
 
-        Map<String, String> s3properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.DYNAMO_DB_CONFIGURATION)
+        Map<String, String> properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.DYNAMO_DB_CONFIGURATION)
             .getOrDefault(environment, Map.of());
-        modelAndView.addObject("access_key_id", s3properties.get("DYNAMO_DB_ACCESS_KEY_ID"));
-        modelAndView.addObject("secret_key", s3properties.get("DYNAMO_DB_SECRET_KEY"));
+        modelAndView.addObject("access_key_id", properties.get(Constants.DYNAMO_DB_ACCESS_KEY_ID));
+        modelAndView.addObject("secret_key", properties.get(Constants.DYNAMO_DB_SECRET_KEY));
 
         if (nonNull(success)) {
             modelAndView.addObject("success", success);
@@ -51,8 +52,8 @@ public class DynamoDbSettingsMenuController {
         @RequestParam("secret_key") String secretKey
     ) {
         Map<String, String> dynamoDbProperties = Map.of(
-            "DYNAMO_DB_ACCESS_KEY_ID", accessKeyId,
-            "DYNAMO_DB_SECRET_KEY", secretKey
+            Constants.DYNAMO_DB_ACCESS_KEY_ID, accessKeyId,
+            Constants.DYNAMO_DB_SECRET_KEY, secretKey
         );
 
         EnvironmentSpecificProperties properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.DYNAMO_DB_CONFIGURATION);

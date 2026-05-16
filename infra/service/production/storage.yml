@@ -44,6 +44,26 @@ spec:
                 secretKeyRef:
                   name: s3-configuration
                   key: S3_BUCKET_NAME
+            - name: PSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: psql-host
+                  key: PSQL_HOST
+            - name: DYNAMO_DB_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_ACCESS_KEY_ID
+            - name: DYNAMO_DB_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_SECRET_KEY
+        - name: FTP_HOST
+          valueFrom:
+            secretKeyRef:
+              name: ftp-host
+              key: FTP_HOST
           ports:
             - containerPort: 8080
           imagePullPolicy: Never

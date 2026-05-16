@@ -7,25 +7,19 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
-import static com.github.saphyra.apphub.test.common.TestConstants.DEFAULT_LOCALE;
 import static io.restassured.RestAssured.given;
 
 public class RequestFactory {
-    public static RequestSpecification createAuthorizedRequest(String headerValue) {
+    public static RequestSpecification createAuthorizedRequest(String accessToken) {
         return createRequest()
-            .header(Constants.ACCESS_TOKEN_HEADER, headerValue);
+            .header(Constants.ACCESS_TOKEN_HEADER, accessToken);
     }
 
     public static RequestSpecification createRequest() {
-        return createRequest(DEFAULT_LOCALE);
-    }
-
-    public static RequestSpecification createRequest(String locale) {
         return given()
             .config(RestAssuredConfig.config().decoderConfig(DecoderConfig.decoderConfig().contentDecoders(DecoderConfig.ContentDecoder.DEFLATE)))
             .filter(new ResponseLoggingFilter())
             .log().all()
-            .contentType(ContentType.JSON)
-            .header(Constants.LOCALE_COOKIE, locale);
+            .contentType(ContentType.JSON);
     }
 }

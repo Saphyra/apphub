@@ -6,3 +6,11 @@ FTP_CLIENT_USERNAME: ftp_dev
 ftp:
   client:
     server: localhost
+
+aws:
+  dynamoDb:
+    accessKeyId: dynamodbaccesskeyid
+    secretKey: dynamodbsecretkey
+    url: http://localhost:8000
+    stored_file:
+      tableName: apphub-local-stored_file

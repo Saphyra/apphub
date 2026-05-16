@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.etc.modules.domain;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +26,5 @@ public class Module {
     private boolean mobileAllowed;
 
     @Builder.Default
-    private List<String> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 }

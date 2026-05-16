@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.ci.controller;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.process.local.LocalDynamoDbStartProcess;
 import com.github.saphyra.apphub.ci.process.local.run_tests.LocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.process.local.start.LocalBuildTask;
 import com.github.saphyra.apphub.ci.process.local.start.LocalStartProcess;
@@ -33,6 +34,7 @@ class LocalRunMenuController {
     private final Services services;
     private final LocalRunTestsProcess localRunTestsProcess;
     private final LocalStopProcess localStopProcess;
+    private final LocalDynamoDbStartProcess localDynamoDbStartProcess;
 
     @GetMapping
     ModelAndView localRunMenu(
@@ -85,7 +87,7 @@ class LocalRunMenuController {
     }
 
     @GetMapping("/run-tests")
-    String runTests(){
+    String runTests() {
         taskQueue.add(localRunTestsProcess::run);
 
         return "redirect:/local-run?success=integration_tests_started";
@@ -122,5 +124,12 @@ class LocalRunMenuController {
         taskQueue.add(() -> localStopProcess.stopServices(serviceNames));
 
         return "redirect:/local-run?success=services_are_stopping";
+    }
+
+    @GetMapping("/dynamo-db")
+    String restartDynamoDb() {
+        taskQueue.add(localDynamoDbStartProcess::startDynamoDb);
+
+        return "redirect:/local-run?success=dynamo_db_is_starting";
     }
 }

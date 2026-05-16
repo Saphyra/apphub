@@ -11,16 +11,9 @@ public class Constants {
     public static final String CLAIM_REMEMBER_ME = "remember_me";
     public static final String CLAIM_REFRESH_TOKEN_ID = "refresh_token_id";
 
-    public final String ROLE_ADMIN = "ADMIN";
-
-    public final String LOCALE_HEADER = "language";
-    public final String LOCALE_COOKIE = "language";
-    public final String BROWSER_LANGUAGE_HEADER = "BrowserLanguage";
-
     public final String RESOURCE_PATH_PATTERN = "/res/**";
     public final String WEB_PATH_PATTERN = "/web/**";
     public final String SEND_EVENT_REQUEST_METADATA_KEY_BLOCKING_REQUEST = "blocking_request";
-    public final String AUTHORIZATION_HEADER = "auth";
 
     public static final String EMPTY_STRING = "";
     public static final int DYNAMO_DB_DELETE_MAX_BATCH_SIZE = 25;

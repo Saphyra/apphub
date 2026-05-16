@@ -2,9 +2,7 @@ package com.github.saphyra.apphub.service.platform.storage.config;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.RegisterProcessorRequest;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
-import com.github.saphyra.apphub.api.platform.storage.model.StorageEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
-import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorRegistry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -29,16 +27,6 @@ class EventProcessorRegistryImpl implements EventProcessorRegistry {
                 .host(host)
                 .eventName(DeleteAccountEvent.EVENT_NAME)
                 .url(GenericEndpoints.EVENT_DELETE_ACCOUNT)
-                .build(),
-            RegisterProcessorRequest.builder()
-                .host(host)
-                .eventName(EmptyEvent.STORAGE_CLEAN_UP_STORED_FILES)
-                .url(StorageEndpoints.EVENT_CLEAN_UP_STORED_FILES)
-                .build(),
-            RegisterProcessorRequest.builder()
-                .host(host)
-                .eventName(EmptyEvent.STORAGE_FILE_CLEANUP)
-                .url(StorageEndpoints.EVENT_FILE_CLEANUP)
                 .build()
         );
     }

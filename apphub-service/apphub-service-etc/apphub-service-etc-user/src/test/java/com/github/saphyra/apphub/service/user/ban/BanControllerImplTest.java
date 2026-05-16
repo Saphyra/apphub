@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.etc.user.model.ban.BanSearchResponse;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsResponse;
 import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.user.ban.service.BanResponseQueryService;
@@ -35,7 +36,6 @@ public class BanControllerImplTest {
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
     private static final UUID DELETED_USER_ID = UUID.randomUUID();
     private static final String QUERY = "query";
-    private static final String ROLE = "role";
 
     @Mock
     private BanService banService;
@@ -142,8 +142,8 @@ public class BanControllerImplTest {
     @Test
     void getBannedDetails() {
         given(bannedDetailsRequest.getUserId()).willReturn(USER_ID);
-        given(bannedDetailsRequest.getRequiredRoles()).willReturn(List.of(ROLE));
-        given(bannedDetailsQueryService.getBannedDetails(USER_ID, List.of(ROLE))).willReturn(bannedDetailsResponse);
+        given(bannedDetailsRequest.getRequiredRoles()).willReturn(List.of(Role.TEST));
+        given(bannedDetailsQueryService.getBannedDetails(USER_ID, List.of(Role.TEST))).willReturn(bannedDetailsResponse);
 
         assertThat(underTest.getBannedDetails(bannedDetailsRequest)).isEqualTo(bannedDetailsResponse);
     }

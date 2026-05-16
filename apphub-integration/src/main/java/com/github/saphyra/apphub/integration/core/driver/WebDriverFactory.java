@@ -20,6 +20,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -29,7 +30,7 @@ import static java.util.Objects.nonNull;
 class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     static final ExecutorService BROWSER_STARTUP_EXECUTOR = Executors.newFixedThreadPool(TestConfiguration.BROWSER_STARTUP_LIMIT);
 
-    public static volatile int numberOfDriversCreated = 0;
+    public static final AtomicInteger numberOfDriversCreated = new AtomicInteger(0);
     private final WebDriverMode mode;
 
     @Override
@@ -52,10 +53,8 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
     public boolean validateObject(PooledObject<WebDriverWrapper> p) {
         WebDriver driver = p.getObject()
             .getDriver();
-        String currentUrl = driver
-            .getCurrentUrl();
-        boolean result = currentUrl
-            .endsWith(GenericEndpoints.ERROR_PAGE);
+        String currentUrl = driver.getCurrentUrl();
+        boolean result = currentUrl.endsWith(GenericEndpoints.AUTHORIZATION_ROOT);
         if (!result) {
             log.warn("Invalid driver in cache with url: {}", currentUrl);
         }
@@ -108,8 +107,8 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                     driver = new ChromeDriver(options);
                     log.debug("Driver created: {}", driver);
                     SleepUtil.sleep(1000);
-                    Navigation.toUrl(driver, UrlFactory.create(serverPort.getItem(), GenericEndpoints.ERROR_PAGE));
-                    numberOfDriversCreated++;
+                    Navigation.toUrl(driver, UrlFactory.create(serverPort.getItem(), GenericEndpoints.AUTHORIZATION_ROOT));
+                    numberOfDriversCreated.addAndGet(1);
                     return driver;
                 } catch (Exception e) {
                     log.error("Could not create driver", e);

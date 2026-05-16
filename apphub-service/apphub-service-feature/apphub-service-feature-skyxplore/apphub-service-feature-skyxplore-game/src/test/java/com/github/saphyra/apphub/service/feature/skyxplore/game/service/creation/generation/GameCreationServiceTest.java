@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creatio
 import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.SkyXploreGameCreationRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
@@ -29,7 +28,6 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class GameCreationServiceTest {
     private static final UUID GAME_ID = UUID.randomUUID();
-    private static final String LOCALE = "locale";
 
     @Mock
     private SkyXploreLobbyApiClient lobbyClient;
@@ -51,9 +49,6 @@ public class GameCreationServiceTest {
     @Mock
     private ErrorReporterService errorReporterService;
 
-    @Mock
-    private CommonConfigProperties commonConfigProperties;
-
     private GameCreationService underTest;
 
     @Mock
@@ -73,14 +68,12 @@ public class GameCreationServiceTest {
             .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class)))
             .errorReporterService(errorReporterService)
             .tickSchedulerLauncher(tickSchedulerLauncher)
-            .commonConfigProperties(commonConfigProperties)
             .build();
     }
 
     @Test
     public void create() throws InterruptedException {
         given(gameFactory.create(request, GAME_ID)).willReturn(game);
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.createGames();
 
@@ -88,7 +81,7 @@ public class GameCreationServiceTest {
 
         verify(gameDao, timeout(1000)).save(game);
 
-        then(lobbyClient).should(timeout(1000)).gameLoaded(GAME_ID, LOCALE);
+        then(lobbyClient).should(timeout(1000)).gameLoaded(GAME_ID);
         verify(gameSaverService).save(game);
         verify(tickSchedulerLauncher).launch(game);
     }

@@ -3,6 +3,7 @@ package com.github.saphrya.apphub.service.platform.authorization.etc;
 import com.github.saphyra.apphub.api.etc.user.client.AuthorizationClient;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class AuthorizationClientProxy {
         return authorizationClient.authorize(request);
     }
 
-    public List<String> getRoles(UUID userId) {
+    public List<Role> getRoles(UUID userId) {
         return authorizationClient.getRoles(userId);
     }
 }

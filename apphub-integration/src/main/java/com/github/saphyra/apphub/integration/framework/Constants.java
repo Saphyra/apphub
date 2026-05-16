@@ -9,6 +9,7 @@ import java.util.List;
 public class Constants {
     public static final Object SERVICE_NAME_MAIN_GATEWAY = "main-gateway";
     public static final Object SERVICE_NAME_POSTGRES = "postgres";
+    public static final String CREDENTIAL_PREFIX = "apphub-test";
 
     //Cookies
     public final String ACCESS_TOKEN_COOKIE = "access-token";
@@ -85,7 +86,6 @@ public class Constants {
         "skyxplore-lobby",
         "training",
         SERVICE_NAME_USER,
-        "web-content",
         "community",
         "calendar",
         "encryption",

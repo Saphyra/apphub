@@ -3,11 +3,12 @@ package com.github.saphyra.apphub.integration.backend.admin_panel.role_managemen
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.RoleManagementActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -23,7 +24,7 @@ public class RolesForAllTest extends BackEndTest {
     public void rolesForAll() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
@@ -34,7 +35,7 @@ public class RolesForAllTest extends BackEndTest {
         addToAll_restrictedRole(accessToken, userData.getPassword());
         addToAll_nullPassword(accessToken);
         addToAll_incorrectPassword(accessToken);
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();
@@ -43,7 +44,7 @@ public class RolesForAllTest extends BackEndTest {
         removeFromAll_restrictedRole(accessToken, userData.getPassword());
         removeFromAll_nullPassword(accessToken);
         removeFromAll_incorrectPassword(accessToken);
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();

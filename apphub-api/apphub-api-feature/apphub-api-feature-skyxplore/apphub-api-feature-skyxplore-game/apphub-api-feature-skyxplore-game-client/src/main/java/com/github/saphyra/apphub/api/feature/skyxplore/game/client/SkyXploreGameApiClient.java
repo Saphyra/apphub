@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.UUID;
 
-@FeignClient(name = "skyxplore-game", url = "${serviceUrls.skyxploreGame}")
+@FeignClient(name = "skyxplore-game", url = "${serviceHosts.skyxploreGame}")
 public interface SkyXploreGameApiClient {
     @GetMapping(SkyXploreGameEndpoints.SKYXPLORE_GET_GAME_ID_OF_USER)
-    OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    OneParamResponse<UUID> getGameId(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);
 
     @PostMapping(GenericSkyXploreEndpoints.EVENT_SKYXPLORE_GAME_CLEANUP)
-    void cleanUpExpiredGames(@RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void cleanUpExpiredGames();
 
     @DeleteMapping(SkyXploreGameEndpoints.SKYXPLORE_INTERNAL_DELETE_GAME)
-    void deleteGame(@PathVariable("gameId") UUID gameId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    void deleteGame(@PathVariable("gameId") UUID gameId);
 }

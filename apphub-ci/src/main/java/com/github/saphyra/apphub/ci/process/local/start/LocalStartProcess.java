@@ -22,9 +22,8 @@ public class LocalStartProcess {
     public void run() {
         localDynamoDbStartProcess.startDynamoDb();
 
-
         localStopProcess.stopAllServices();
-        if(!localBuildTask.buildServices()){
+        if (!localBuildTask.buildServices()) {
             log.error("Build failed. Startup sequence stopped.");
             return;
         }

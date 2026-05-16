@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreChar
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,10 +18,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class CharacterProxyTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String LOCALE = "locale";
-
-    @Mock
-    private LocaleProvider localeProvider;
 
     @Mock
     private SkyXploreCharacterDataApiClient characterClient;
@@ -43,8 +38,7 @@ public class CharacterProxyTest {
     public void getCharacter() {
         given(accessTokenProvider.get()).willReturn(accessToken);
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
-        given(characterClient.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(model);
+        given(characterClient.internalGetCharacterByUserId(USER_ID)).willReturn(model);
 
         SkyXploreCharacterModel result = underTest.getCharacter();
 

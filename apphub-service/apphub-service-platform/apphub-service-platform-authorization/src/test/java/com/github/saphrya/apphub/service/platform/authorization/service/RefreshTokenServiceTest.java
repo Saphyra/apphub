@@ -4,6 +4,7 @@ import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_toke
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshTokenDao;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AuthorizationClientProxy;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -31,7 +32,7 @@ class RefreshTokenServiceTest {
     private static final UUID NEW_REFRESH_TOKEN_ID = UUID.randomUUID();
     private static final String REFRESH_TOKEN_STRING = "refresh-token";
     private static final String NEW_REFRESH_TOKEN_JWT = "new-refresh-jwt";
-    private static final List<String> ROLES = List.of("ROLE_A");
+    private static final List<Role> ROLES = List.of(Role.TEST);
 
     @Mock
     private TokenService tokenService;

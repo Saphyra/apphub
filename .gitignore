@@ -4,6 +4,7 @@
 **/.idea/**
 *.iml
 *.db
+*.db-journal
 *.out
 logs/**
 

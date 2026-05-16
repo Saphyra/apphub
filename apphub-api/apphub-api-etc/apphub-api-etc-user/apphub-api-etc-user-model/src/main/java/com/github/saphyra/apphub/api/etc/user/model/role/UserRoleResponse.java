@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.api.etc.user.model.role;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,5 +23,5 @@ public class UserRoleResponse {
     private final String username;
 
     @NonNull
-    private final List<String> roles;
+    private final List<Role> roles;
 }

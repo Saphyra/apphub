@@ -78,8 +78,10 @@ public class PopulationOverviewSettingsTest extends SeleniumTest {
         //Delete planet defaults
         SkyXplorePopulationOverviewActions.deleteHiddenPlanetDefault(driver);
 
-        assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_AIMING)).isFalse();
-        assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_BUILDING)).isTrue();
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_AIMING)).isFalse();
+            assertThat(SkyXplorePopulationOverviewActions.isSkillDisplayed(driver, Constants.SKILL_BUILDING)).isTrue();
+        });
 
         //Delete global defaults
         SkyXplorePopulationOverviewActions.deleteHiddenGlobalDefault(driver);

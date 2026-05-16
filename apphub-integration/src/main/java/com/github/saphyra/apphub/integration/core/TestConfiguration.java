@@ -40,4 +40,13 @@ public class TestConfiguration {
     //Defaults
     public static final Language DEFAULT_LANGUAGE = Language.ENGLISH;
     public static final Integer MAX_RETRY_COUNT = Integer.parseInt(System.getProperty("maxRetryCount", "2"));
+
+    //DynamoDB
+    public static final String DYNAMO_DB_REGION = "eu-central-1";
+    public static final String DYNAMO_DB_HOST = Optional.of(System.getProperty("dynamoDbHost", "localhost:8000"))
+        .filter(s -> !"0".equals(s))
+        .orElse(null);
+    public static final String DYNAMO_DB_ACCESS_KEY_ID = System.getProperty("dynamoDbAccessKeyId", "dummyAccessKey");
+    public static final String DYNAMO_DB_SECRET_KEY = System.getProperty("dynamoDbSecretKey", "dummySecretKey");
+    public static final String ENVIRONMENT = System.getProperty("environment", "local");
 }

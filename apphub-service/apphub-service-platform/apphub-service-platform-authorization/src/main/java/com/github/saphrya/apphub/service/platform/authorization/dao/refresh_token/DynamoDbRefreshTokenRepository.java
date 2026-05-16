@@ -34,7 +34,7 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
 
     DynamoDbRefreshTokenRepository(
         @Qualifier(REFRESH_TOKEN_DYNAMO_DB_CLIENT) DynamoDbEnhancedClient client,
-         AuthorizationProperties properties
+        AuthorizationProperties properties
     ) {
         this.client = client;
         this.tableName = properties.getRefreshTokenTableName();
@@ -62,10 +62,6 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
             .sortValue(refreshTokenId)
             .build();
         return Optional.ofNullable(getTable().getItem(key));
-    }
-
-    private DynamoDbTable<RefreshTokenEntity> getTable() {
-        return client.table(tableName, TableSchema.fromBean(RefreshTokenEntity.class));
     }
 
     @Override
@@ -125,5 +121,9 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
 
             dynamoDbClient.updateTimeToLive(request);
         }
+    }
+
+    private DynamoDbTable<RefreshTokenEntity> getTable() {
+        return client.table(tableName, TableSchema.fromBean(RefreshTokenEntity.class));
     }
 }

@@ -122,5 +122,9 @@
     "FORBIDDEN_OPERATION": {
         "en": "You cannot do that.",
         "hu": "Ezt nem teheted meg."
+    },
+    "USER_NOT_FOUND": {
+        "en": "User not found.",
+        "hu": "Felhasználó nem található."
     }
 }

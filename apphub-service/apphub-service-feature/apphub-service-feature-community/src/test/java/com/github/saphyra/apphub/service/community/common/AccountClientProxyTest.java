@@ -4,8 +4,6 @@ import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
 import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,12 +19,8 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 public class AccountClientProxyTest {
     private static final String QUERY_STRING = "query-string";
-    private static final String LOCALE = "locale";
     private static final String ACCESS_TOKEN = "access-token";
     private static final UUID USER_ID = UUID.randomUUID();
-
-    @Mock
-    private LocaleProvider localeProvider;
 
     @Mock
     private AccountClient accountClient;
@@ -40,15 +34,10 @@ public class AccountClientProxyTest {
     @Mock
     private AccountResponse accountResponse;
 
-    @BeforeEach
-    public void setUp() {
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
-    }
-
     @Test
     public void search() {
         given(accessTokenProvider.getAsString()).willReturn(ACCESS_TOKEN);
-        given(accountClient.searchAccount(new OneParamRequest<>(QUERY_STRING), ACCESS_TOKEN, LOCALE)).willReturn(List.of(accountResponse));
+        given(accountClient.searchAccount(new OneParamRequest<>(QUERY_STRING), ACCESS_TOKEN)).willReturn(List.of(accountResponse));
 
         List<AccountResponse> result = underTest.search(QUERY_STRING);
 
@@ -57,7 +46,7 @@ public class AccountClientProxyTest {
 
     @Test
     public void getAccount() {
-        given(accountClient.getAccountInternal(USER_ID, LOCALE)).willReturn(accountResponse);
+        given(accountClient.getAccountInternal(USER_ID)).willReturn(accountResponse);
 
         AccountResponse result = underTest.getAccount(USER_ID);
 
@@ -66,7 +55,7 @@ public class AccountClientProxyTest {
 
     @Test
     public void userExists() {
-        given(accountClient.userExists(USER_ID, LOCALE)).willReturn(true);
+        given(accountClient.userExists(USER_ID)).willReturn(true);
 
         boolean result = underTest.userExists(USER_ID);
 

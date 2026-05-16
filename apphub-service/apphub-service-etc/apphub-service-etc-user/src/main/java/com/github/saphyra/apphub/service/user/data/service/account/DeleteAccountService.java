@@ -33,10 +33,9 @@ public class DeleteAccountService {
         deleteAccount(user);
     }
 
-    public void deleteAccount(User user) {
-        user.setMarkedForDeletion(true);
+    private void deleteAccount(User user) {
         user.setMarkedForDeletionAt(dateTimeUtil.getCurrentDateTime());
-        userDao.save(user);
+        userDao.updateMarkedForDeletion(user);
         authorizationClient.invalidateAllRefreshTokens(user.getUserId());
     }
 }

@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
 import com.github.saphyra.apphub.lib.common_util.dao.Buffer;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-@Builder
 public class BufferSynchronizationService {
     private final ScheduledExecutorServiceBean scheduledExecutorServiceBean;
     private final ExecutorServiceBean executorServiceBean;
@@ -31,6 +29,23 @@ public class BufferSynchronizationService {
     private final List<AbstractBuffer<?>> buffers;
     private final DateTimeUtil dateTimeUtil;
     private final MonitoringInstruments monitoringInstruments;
+
+    @Builder
+    public BufferSynchronizationService(
+        ScheduledExecutorServiceBean scheduledExecutorServiceBean,
+        ExecutorServiceBeanFactory executorServiceBeanFactory,
+        EliteBaseProperties properties,
+        List<AbstractBuffer<?>> buffers,
+        DateTimeUtil dateTimeUtil,
+        MonitoringInstruments monitoringInstruments
+    ) {
+        this.scheduledExecutorServiceBean = scheduledExecutorServiceBean;
+        this.executorServiceBean = executorServiceBeanFactory.createFixed(1);
+        this.properties = properties;
+        this.buffers = buffers;
+        this.dateTimeUtil = dateTimeUtil;
+        this.monitoringInstruments = monitoringInstruments;
+    }
 
     public void synchronize() {
         log.debug("Checking if buffers need synchronization");

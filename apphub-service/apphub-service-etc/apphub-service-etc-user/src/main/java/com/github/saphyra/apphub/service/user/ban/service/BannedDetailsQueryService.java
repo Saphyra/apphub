@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
@@ -21,7 +22,7 @@ import java.util.UUID;
 public class BannedDetailsQueryService {
     private final BanDao banDao;
 
-    public BannedDetailsResponse getBannedDetails(UUID userId, List<String> requiredRoles) {
+    public BannedDetailsResponse getBannedDetails(UUID userId, List<Role> requiredRoles) {
         List<Ban> relevantBans = banDao.getByUserId(userId)
             .stream()
             .filter(ban -> requiredRoles.contains(ban.getBannedRole()))

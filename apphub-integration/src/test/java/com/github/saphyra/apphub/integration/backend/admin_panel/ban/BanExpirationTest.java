@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActio
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -30,14 +30,14 @@ public class BanExpirationTest extends BackEndTest {
         int serverPort = getServerPort();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         tokenResponse = AccessTokenActions.refresh(getServerPort(), tokenResponse.getRefreshToken().getJwt());
         String adminAccessToken = tokenResponse.getAccessToken()
             .getJwt();
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(serverPort, testUser.toRegistrationRequest());
-        UUID testUserId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
+        UUID testUserId = DynamoDbUtil.getUserIdByEmail(testUser.getEmail());
 
         //Ban
         BanRequest banRequest = BanRequest.builder()

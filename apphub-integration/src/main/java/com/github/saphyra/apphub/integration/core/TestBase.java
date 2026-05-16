@@ -10,14 +10,19 @@ import com.github.saphyra.apphub.integration.core.testng.RetryAnalyzerAnnotatorS
 import com.github.saphyra.apphub.integration.core.testng.SkipDisabledTestsInterceptor;
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.testng.ITestNGMethod;
 import org.testng.ITestResult;
-import org.testng.annotations.*;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 import tools.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Method;
@@ -29,7 +34,6 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -44,18 +48,23 @@ public abstract class TestBase {
 
     private static final Semaphore SEMAPHORE = new Semaphore(TestConfiguration.AVAILABLE_PERMITS, true);
 
-    private static final ThreadLocal<String> EMAIL_DOMAIN = new ThreadLocal<>();
+    private static final ThreadLocal<String> TEST_METHOD_NAME = new ThreadLocal<>();
     protected static final ThreadLocal<CacheItemWrapper<Integer>> SERVER_PORT_CACHED_ITEM = new ThreadLocal<>();
     private static final ThreadLocal<Stopwatch> DURATION_STOPWATCH = new ThreadLocal<>();
     private static final OffsetDateTime TEST_START_TIME = OffsetDateTime.now();
 
-    public static String getEmailDomain() {
-        return EMAIL_DOMAIN.get();
+    public static String getTestMethodName() {
+        return TEST_METHOD_NAME.get();
     }
 
     protected static int getServerPort() {
-        return SERVER_PORT_CACHED_ITEM.get()
-            .getItem();
+        CacheItemWrapper<Integer> port = SERVER_PORT_CACHED_ITEM.get();
+        if (isNull(port)) {
+            port = ConnectionProvider.getServerPort();
+            SERVER_PORT_CACHED_ITEM.set(port);
+        }
+
+        return port.getItem();
     }
 
     @BeforeSuite(alwaysRun = true)
@@ -76,6 +85,10 @@ public abstract class TestBase {
         log.info("Browser startup limit: {}", TestConfiguration.BROWSER_STARTUP_LIMIT);
         log.info("Retry enabled: {}", TestConfiguration.RETRY_ENABLED);
         log.info("Retry count: {}", TestConfiguration.MAX_RETRY_COUNT);
+        log.info("DynamoDB region: {}", TestConfiguration.DYNAMO_DB_REGION);
+        log.info("DynamoDB accessKeyId: {}", TestConfiguration.DYNAMO_DB_ACCESS_KEY_ID);
+        log.info("DynamoDB host: {}", TestConfiguration.DYNAMO_DB_HOST);
+        log.info("Environment: {}", TestConfiguration.ENVIRONMENT);
 
         IntegrationServer.start();
 
@@ -115,6 +128,7 @@ public abstract class TestBase {
         ConnectionProvider.shutdownCaches();
 
         StatusLogger.logTestStartOrder();
+        deleteTestUsers();
     }
 
     @BeforeMethod(alwaysRun = true)
@@ -126,18 +140,19 @@ public abstract class TestBase {
 
         log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
         Stopwatch stopwatch = Stopwatch.createStarted();
-        acquirePermit(method, stopwatch);
+        acquirePermit(method, stopwatch, getPermitCount());
         DURATION_STOPWATCH.set(Stopwatch.createStarted());
 
-        EMAIL_DOMAIN.set(testMethod.toLowerCase() + "-" + UUID.randomUUID().toString().split("-")[0]);
+        TEST_METHOD_NAME.set(testMethod.toLowerCase());
         StatusLogger.addToStartOrder(method);
-
-        CacheItemWrapper<Integer> serverPort = ConnectionProvider.getServerPort();
-        SERVER_PORT_CACHED_ITEM.set(serverPort);
     }
 
-    private static synchronized void acquirePermit(Method method, Stopwatch stopwatch) throws InterruptedException {
-        SEMAPHORE.acquire(1);
+    protected int getPermitCount() {
+        return 1;
+    }
+
+    private static synchronized void acquirePermit(Method method, Stopwatch stopwatch, int permits) throws InterruptedException {
+        SEMAPHORE.acquire(permits);
         stopwatch.stop();
         log.debug("Permit acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
     }
@@ -153,13 +168,12 @@ public abstract class TestBase {
         IntegrationServer.reportTestCaseRun(method, duration, testResult.getStatus() == ITestResult.SUCCESS);
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
-        SEMAPHORE.release(1);
+        SEMAPHORE.release(getPermitCount());
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
         StatusLogger.incrementFinishedTestCount(method, duration);
-        deleteTestUsers(methodName);
 
-        EMAIL_DOMAIN.remove();
+        TEST_METHOD_NAME.remove();
         DURATION_STOPWATCH.remove();
         if (!isNull(SERVER_PORT_CACHED_ITEM.get())) {
             ConnectionProvider.releaseServerPort(SERVER_PORT_CACHED_ITEM.get());
@@ -200,8 +214,8 @@ public abstract class TestBase {
 
     protected abstract String getTestType();
 
-    private synchronized static void deleteTestUsers(String method) {
-        log.debug("Deleting testUsers for method {}...", method);
-        DatabaseUtil.setMarkedForDeletionByEmailLike(getEmailDomain());
+    private synchronized static void deleteTestUsers() {
+        log.debug("Deleting testUsers...");
+        DynamoDbUtil.markForDeleteWhenEmailEndsWith(Constants.CREDENTIAL_PREFIX);
     }
 }

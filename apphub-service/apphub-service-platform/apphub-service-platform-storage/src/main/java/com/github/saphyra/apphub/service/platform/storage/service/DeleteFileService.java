@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class DeleteFileService {
     private final StorageClientProvider storageClientProvider;
 
     public void deleteFile(UUID userId, UUID storedFileId) {
-        storedFileDao.findById(storedFileId)
+        storedFileDao.findById(userId, storedFileId)
             .ifPresent(storedFile -> deleteFile(userId, storedFile));
     }
 

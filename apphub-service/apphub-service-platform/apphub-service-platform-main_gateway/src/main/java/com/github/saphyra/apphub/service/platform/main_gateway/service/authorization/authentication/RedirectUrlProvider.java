@@ -18,6 +18,7 @@ class RedirectUrlProvider {
         String missingRoles = matchingSettings.stream()
             .flatMap(roleSetting -> roleSetting.getRequiredRoles().stream())
             .distinct()
+            .map(Enum::name)
             .collect(Collectors.joining(","));
         return String.format(
             "%s?error_code=%s&user_id=%s&required_roles=%s",

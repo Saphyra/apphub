@@ -10,4 +10,4 @@ spring:
 
 registration:
   defaultRoles:
-    - ROLE
+    - TEST

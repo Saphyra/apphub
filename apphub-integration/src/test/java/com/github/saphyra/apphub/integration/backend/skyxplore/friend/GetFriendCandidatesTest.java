@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -25,15 +25,15 @@ public class GetFriendCandidatesTest extends BackEndTest {
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
-        UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
 
         RegistrationParameters userData4 = RegistrationParameters.validParameters();
         String accessToken4 = IndexPageActions.registerAndLogin(getServerPort(), userData4);
-        UUID userId4 = DatabaseUtil.getUserIdByEmail(userData4.getEmail());
+        UUID userId4 = DynamoDbUtil.getUserIdByEmail(userData4.getEmail());
 
         SkyXploreCharacterModel model = SkyXploreCharacterModel.valid(characterIdentifier);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, model);

@@ -14,7 +14,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.Sky
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
@@ -46,7 +46,7 @@ public class ManualTickProcessingTest extends SeleniumTest {
 
         assertThat(SkyXploreGameActions.getProcessTickButton(driver)).isEmpty();
 
-        DatabaseUtil.addRoleByEmail(registrationParameters.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(registrationParameters.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         driver.navigate().to(UrlFactory.create(getServerPort(), SkyXploreGameEndpoints.SKYXPLORE_GAME_PAGE));
 

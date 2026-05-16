@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ class RequiredRoleChecker {
         log.debug("Roles of user {}: {}", accessToken.getUserId(), accessToken.getRoles());
 
         List<RoleSetting> failedRoles = roleSettings.stream()
-            .filter(roleSetting -> !accessToken.getRoles().containsAll(roleSetting.getRequiredRoles()))
+            .filter(roleSetting -> !new HashSet<>(accessToken.getRoles()).containsAll(roleSetting.getRequiredRoles()))
             .collect(Collectors.toList());
 
         if (failedRoles.isEmpty()) {

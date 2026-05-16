@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.ChatRoomCreatedMessage;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CreateChatRoomRequest;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -35,13 +35,13 @@ public class LeaveChatRoomTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         Map<String, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1), new Player(accessToken2, userId2));
 

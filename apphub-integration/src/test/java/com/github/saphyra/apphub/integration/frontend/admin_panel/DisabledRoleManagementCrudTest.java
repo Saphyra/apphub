@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -36,7 +36,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
@@ -79,7 +79,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             }
         );
 
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.createDefault()
@@ -127,7 +127,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             }
         );
 
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))

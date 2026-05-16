@@ -32,6 +32,7 @@ platform:
   minikubeDevServerPort: 9001
   minikubeTestServerPort: 8080
   localServerPort: 8080
+  minikubeDynamoDbPort: 9003
 
   minikubeDatabasePort: 9002
   minikubeTestDatabasePort: 5432
@@ -91,6 +92,8 @@ services:
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-event_gateway/target/application.jar"
     moduleName: apphub-service-platform-event_gateway
     group: 0
+    properties:
+      - PSQL_HOST
 
   #Platform
   - name: main-gateway
@@ -101,12 +104,6 @@ services:
     properties:
       - AUTHORIZATION_CERTIFICATE
       - DYNAMO_DB_CONFIGURATION
-  - name: web-content
-    port: 8083
-    location: "./apphub-service/apphub-service-platform/apphub-service-platform-web_content/target/application.jar"
-    moduleName: apphub-service-platform-web_content
-    group: 1
-    optional: true
   - name: scheduler
     port: 8082
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
@@ -117,16 +114,23 @@ services:
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-admin_panel/target/application.jar"
     moduleName: apphub-service-etc-admin_panel
     group: 1
+    properties:
+      - PSQL_HOST
   - name: monitoring
     port: 8084
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-monitoring/target/application.jar"
     moduleName: apphub-service-platform-monitoring
     group: 1
+    properties:
+      - PSQL_HOST
   - name: user
     port: 8085
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-user/target/application.jar"
     moduleName: apphub-service-etc-user
     group: 1
+    properties:
+      - PSQL_HOST
+      - DYNAMO_DB_CONFIGURATION
   - name: authorization
     port: 8092
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-authorization/target/application.jar"
@@ -144,18 +148,25 @@ services:
     optional: true
     properties:
       - S3_CONFIGURATION
+      - FTP_HOST
+      - PSQL_HOST
+      - DYNAMO_DB_CONFIGURATION
   - name: encryption
     port: 8098
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
     moduleName: apphub-service-platform-encryption
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST
   - name: modules
     port: 8088
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-modules/target/application.jar"
     moduleName: apphub-service-etc-modules
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST
 
   #SkyXplore
   - name: skyxplore-data
@@ -164,6 +175,8 @@ services:
     moduleName: apphub-service-feature-skyxplore-data
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST
   - name: skyxplore-game
     port: 8095
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-game/target/application.jar"
@@ -190,21 +203,29 @@ services:
     moduleName: apphub-service-feature-notebook
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST
   - name: community
     port: 8096
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-community/target/application.jar"
     moduleName: apphub-service-feature-community
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST
   - name: calendar
     port: 8097
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-calendar/target/application.jar"
     moduleName: apphub-service-feature-calendar
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST
   - name: elite-base
     port: 8087
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/target/application.jar"
     moduleName: apphub-service-feature-elite_base
     group: 1
     optional: true
+    properties:
+      - PSQL_HOST

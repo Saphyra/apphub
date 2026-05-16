@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFile;
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,6 @@ public class StoredFileMetadataQueryServiceTest {
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final LocalDateTime CREATED_AT = LocalDateTime.now();
-    private static final String EXTENSION = "extension";
     private static final String FILE_NAME = "file-name";
     private static final long SIZE = 546L;
     private static final Long CREATED_AT_EPOCH = 897768L;
@@ -42,7 +41,7 @@ public class StoredFileMetadataQueryServiceTest {
 
     @Test
     public void forbiddenOperation() {
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
         given(storedFile.getUserId()).willReturn(UUID.randomUUID());
 
         Throwable ex = catchThrowable(() -> underTest.getMetadata(USER_ID, STORED_FILE_ID));
@@ -58,9 +57,8 @@ public class StoredFileMetadataQueryServiceTest {
             .createdAt(CREATED_AT)
             .fileName(FILE_NAME)
             .size(SIZE)
-            .fileUploaded(true)
             .build();
-        given(storedFileDao.findByIdValidated(STORED_FILE_ID)).willReturn(storedFile);
+        given(storedFileDao.findByIdValidated(USER_ID, STORED_FILE_ID)).willReturn(storedFile);
         given(dateTimeUtil.toEpochSecond(CREATED_AT)).willReturn(CREATED_AT_EPOCH);
 
         StoredFileResponse result = underTest.getMetadata(USER_ID, STORED_FILE_ID);

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.proxy;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,13 +12,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class CharacterProxy {
-    private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient client;
 
     public SkyXploreCharacterModel getCharacterByUserId(UUID userId) {
-        String locale = localeProvider.getOrDefault();
-        log.debug("Querying character by userId {} with locale {}", userId, locale);
-        SkyXploreCharacterModel skyXploreCharacterModel = client.internalGetCharacterByUserId(userId, locale);
+        log.debug("Querying character by userId {}", userId);
+        SkyXploreCharacterModel skyXploreCharacterModel = client.internalGetCharacterByUserId(userId);
         log.debug("Character found: {}", skyXploreCharacterModel);
         return skyXploreCharacterModel;
     }

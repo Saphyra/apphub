@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
@@ -39,7 +40,7 @@ public class BanService {
         return banResponseQueryService.getBans(request.getBannedUserId());
     }
 
-    public List<String> getActivelyBannedRolesOf(UUID userId) {
+    public List<Role> getActivelyBannedRolesOf(UUID userId) {
         LocalDateTime currentTime =  dateTimeUtil.getCurrentDateTime();
 
         return banDao.getByUserId(userId)

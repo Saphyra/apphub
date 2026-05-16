@@ -1,13 +1,15 @@
 package com.github.saphyra.apphub.service.user.ban.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.Role;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +23,8 @@ class BanEntity {
     @Id
     private String id;
     private String userId;
-    private String bannedRole;
+    @Enumerated(EnumType.STRING)
+    private Role bannedRole;
     private LocalDateTime expiration;
     private Boolean permanent;
     private String reason;

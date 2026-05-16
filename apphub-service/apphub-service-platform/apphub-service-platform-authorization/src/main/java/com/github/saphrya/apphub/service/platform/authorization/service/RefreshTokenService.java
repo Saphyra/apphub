@@ -4,6 +4,7 @@ import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_toke
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshTokenDao;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AuthorizationClientProxy;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.platform.authorization.model.TokenResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -32,7 +33,7 @@ public class RefreshTokenService {
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, "RefreshToken " + parsedToken.getRefreshTokenId() + " of user " + parsedToken.getUserId() + " not found."));
 
         BiWrapper<String, RefreshToken> newRefreshToken = tokenService.createRefreshToken(parsedToken.getUserId(), parsedToken.isRememberMe());
-        List<String> roles = authorizationClientProxy.getRoles(parsedToken.getUserId());
+        List<Role> roles = authorizationClientProxy.getRoles(parsedToken.getUserId());
         AccessTokenDto accessToken = tokenService.createAccessToken(parsedToken.getUserId(), newRefreshToken.getEntity2().getRefreshTokenId(), roles);
 
         refreshTokenDao.delete(parsedToken.getUserId(), parsedToken.getRefreshTokenId());

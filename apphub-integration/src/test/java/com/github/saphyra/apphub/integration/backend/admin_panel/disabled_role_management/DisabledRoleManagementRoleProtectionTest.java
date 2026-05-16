@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.Disabled
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
@@ -16,8 +16,8 @@ public class DisabledRoleManagementRoleProtectionTest extends BackEndTest {
     public void disabledRoleManagementRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();

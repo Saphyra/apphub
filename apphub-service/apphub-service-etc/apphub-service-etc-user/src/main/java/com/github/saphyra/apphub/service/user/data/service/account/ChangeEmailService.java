@@ -30,8 +30,9 @@ public class ChangeEmailService {
         }
 
         User user = checkPasswordService.checkPassword(userId, request.getPassword());
-
+        String originalEmail = user.getEmail();
         user.setEmail(request.getEmail().toLowerCase());
-        userDao.save(user);
+
+        userDao.changeEmail(originalEmail, user);
     }
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@FeignClient(name = "monitoring", url = "${serviceUrls.monitoring}")
+@FeignClient(name = "monitoring", url = "${serviceHosts.monitoring}")
 public interface MonitoringClient {
     @PutMapping(MonitoringEndpoints.MONITORING_REPORT_METRICS)
     void reportMetrics(@PathVariable("service") String service, @RequestBody List<PutMetricsRequest> entries);

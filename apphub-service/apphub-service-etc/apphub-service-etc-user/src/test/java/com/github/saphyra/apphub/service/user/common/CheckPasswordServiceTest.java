@@ -59,7 +59,7 @@ public class CheckPasswordServiceTest {
 
     @Test
     public void incorrectPassword() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordProperties.getLockAccountFailures()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(false);
@@ -72,14 +72,14 @@ public class CheckPasswordServiceTest {
 
         verify(user).setPasswordFailureCount(LOGIN_FAILURE_COUNT + 1);
         verify(user, times(0)).setPassword(any());
-        verify(userDao).save(user);
+        verify(userDao).saveProfile(user);
 
         verifyNoInteractions(authorizationClient);
     }
 
     @Test
     public void incorrectPassword_lockUser() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordProperties.getLockAccountFailures()).willReturn(LOCK_ACCOUNT_FAILURES);
         given(passwordService.authenticateOld(PASSWORD, PASSWORD_HASH)).willReturn(false);
@@ -95,14 +95,14 @@ public class CheckPasswordServiceTest {
         verify(user).setPasswordFailureCount(LOCK_ACCOUNT_FAILURES + 1);
         verify(user).setLockedUntil(CURRENT_TIME.plusMinutes(LOCKED_MINUTES));
         verify(user, times(0)).setPassword(any());
-        verify(userDao).save(user);
+        verify(userDao).saveProfile(user);
 
         verify(authorizationClient).invalidateAllRefreshTokens(USER_ID);
     }
 
     @Test
     public void correctPassword() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(true);
 
@@ -110,14 +110,14 @@ public class CheckPasswordServiceTest {
 
         verify(user).setPasswordFailureCount(0);
         verify(user, times(0)).setPassword(any());
-        verify(userDao).save(user);
+        verify(userDao).saveProfile(user);
 
         assertThat(result).isEqualTo(user);
     }
 
     @Test
     public void updatePassword() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
         given(user.getPassword()).willReturn(PASSWORD_HASH);
         given(passwordService.authenticate(PASSWORD, USER_ID, PASSWORD_HASH)).willReturn(false);
         given(passwordService.authenticateOld(PASSWORD, PASSWORD_HASH)).willReturn(true);
@@ -127,7 +127,7 @@ public class CheckPasswordServiceTest {
 
         verify(user).setPasswordFailureCount(0);
         verify(user).setPassword(UPDATED_PASSWORD);
-        verify(userDao).save(user);
+        verify(userDao).saveProfile(user);
 
         assertThat(result).isEqualTo(user);
     }

@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessor;
 import com.github.saphyra.apphub.service.platform.event_gateway.dao.EventProcessorDao;
 import com.github.saphyra.apphub.service.platform.event_gateway.service.local_event.LocalEventProcessor;
-import com.github.saphyra.apphub.test.common.TestConstants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -53,7 +52,6 @@ public class SendEventTaskTest {
             .eventProcessorDao(eventProcessorDao)
             .eventSender(eventSender)
             .sendEventRequest(sendEventRequest)
-            .locale(TestConstants.DEFAULT_LOCALE)
             .executorServiceBean(executorServiceBean)
             .localEventProcessors(List.of(localEventProcessor))
             .errorReporterService(errorReporterService)
@@ -66,13 +64,13 @@ public class SendEventTaskTest {
     @Test
     public void run() {
         given(sendEventRequest.getEventName()).willReturn(EVENT_NAME);
-        given(eventProcessorDao.getByEventName(EVENT_NAME)).willReturn(Arrays.asList(eventProcessor));
+        given(eventProcessorDao.getByEventName(EVENT_NAME)).willReturn(List.of(eventProcessor));
 
         given(localEventProcessor.shouldProcess(EVENT_NAME)).willReturn(true);
 
         underTest.run();
 
-        verify(eventSender).sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
+        verify(eventSender).sendEvent(eventProcessor, sendEventRequest);
         verify(localEventProcessor).process(sendEventRequest);
     }
 
@@ -86,7 +84,7 @@ public class SendEventTaskTest {
 
         underTest.run();
 
-        verify(eventSender).sendEvent(eventProcessor, sendEventRequest, TestConstants.DEFAULT_LOCALE);
+        verify(eventSender).sendEvent(eventProcessor, sendEventRequest);
         verify(errorReporterService).report(anyString(), any());
     }
 }

@@ -18,10 +18,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 @RequiredArgsConstructor
@@ -29,6 +32,26 @@ import java.util.HashMap;
 class ErrorHandlerAdvice {
     private final ErrorResponseFactory errorResponseFactory;
     private final ErrorReporterService errorReporterService;
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ResponseEntity<?> httpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .errorCode(ErrorCode.INVALID_PARAM)
+            .params(Map.of("error", ex.getMessage()))
+            .build();
+        errorReporterService.report(ex.getMessage(), ex);
+        return new ResponseEntity<>(errorResponse, getHeaders(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    ResponseEntity<?> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+            .errorCode(ErrorCode.INVALID_PARAM)
+            .params(Map.of(ex.getParameter().getParameterName(), ex.getMessage()))
+            .build();
+        errorReporterService.report(ex.getMessage(), ex);
+        return new ResponseEntity<>(errorResponse, getHeaders(), HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(FeignException.class)
     ResponseEntity<?> feignException(FeignException exception) {

@@ -1,0 +1,7 @@
+aws:
+  dynamoDb:
+    accessKeyId: dynamodbaccesskeyid
+    secretKey: dynamodbsecretkey
+    url: http://dynamodb:8000
+    user:
+      tableName: apphub-minikube-user

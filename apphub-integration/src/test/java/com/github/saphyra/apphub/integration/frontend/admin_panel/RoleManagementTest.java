@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
@@ -56,7 +56,7 @@ public class RoleManagementTest extends SeleniumTest {
             }))
             .forEach(future -> future.get(30, TimeUnit.SECONDS));
 
-        DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(adminDriver, getServerPort());
         ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.ROLE_MANAGEMENT);
 
@@ -122,7 +122,7 @@ public class RoleManagementTest extends SeleniumTest {
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
-        DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(adminUserData.getEmail());
         SleepUtil.sleep(3000);
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
@@ -195,7 +195,7 @@ public class RoleManagementTest extends SeleniumTest {
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
-        DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(adminUserData.getEmail());
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.create(10, 1)

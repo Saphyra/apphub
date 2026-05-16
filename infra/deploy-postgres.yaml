@@ -22,7 +22,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               subPath: postgres
-              name: postgredb
+              name: postgresdb
           env:
             - name: POSTGRES_DB
               value: postgresdb
@@ -34,9 +34,12 @@ spec:
             - "-c"
             - max_connections=1000
       volumes:
-        - name: postgredb
-          persistentVolumeClaim:
-            claimName: data-disk
+        - name: postgresdb
+          emptyDir:
+            medium: Memory
+        #- name: postgredb
+        #  persistentVolumeClaim:
+        #    claimName: data-disk
 ---
 apiVersion: v1
 kind: Service

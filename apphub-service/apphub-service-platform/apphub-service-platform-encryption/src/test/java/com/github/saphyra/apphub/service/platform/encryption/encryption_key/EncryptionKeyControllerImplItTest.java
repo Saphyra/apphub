@@ -2,15 +2,14 @@ package com.github.saphyra.apphub.service.platform.encryption.encryption_key;
 
 import com.github.saphyra.apphub.api.platform.encryption.model.AccessMode;
 import com.github.saphyra.apphub.api.platform.encryption.model.DataType;
+import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionEndpoints;
 import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionKey;
 import com.github.saphyra.apphub.api.platform.encryption.model.SharedData;
-import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
-import com.github.saphyra.apphub.api.platform.encryption.model.EncryptionEndpoints;
 import com.github.saphyra.apphub.service.platform.encryption.encryption_key.dao.EncryptionKeyDao;
 import com.github.saphyra.apphub.service.platform.encryption.shared_data.dao.SharedDataDao;
 import com.github.saphyra.apphub.test.rest_assured.ErrorResponseValidator;
@@ -19,12 +18,10 @@ import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.http.HttpStatus;
@@ -36,8 +33,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -45,7 +40,6 @@ import static org.mockito.BDDMockito.given;
 @Slf4j
 public class EncryptionKeyControllerImplItTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final UUID EXTERNAL_ID = UUID.randomUUID();
     private static final AccessToken ACCESS_TOKEN_HEADER = AccessToken.builder()
         .userId(USER_ID)
@@ -61,19 +55,11 @@ public class EncryptionKeyControllerImplItTest {
     @Autowired
     private AccessTokenHeaderConverter accessTokenHeaderConverter;
 
-    @MockBean
-    private LocalizationClient localizationClient;
-
     @Autowired
     private SharedDataDao sharedDataDao;
 
     @Autowired
     private EncryptionKeyDao encryptionKeyDao;
-
-    @BeforeEach
-    public void setUp() {
-        given(localizationClient.translate(any(), any())).willReturn(LOCALIZED_MESSAGE);
-    }
 
     @AfterEach
     public void clear() {

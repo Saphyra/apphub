@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.AccountActions;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
@@ -47,7 +47,7 @@ public class DeleteAccountTest extends BackEndTest {
         Response accountLockedResponse = AccountActions.getDeleteAccountResponse(getServerPort(), accessToken, new OneParamRequest<>(DataConstants.INCORRECT_PASSWORD));
         verifyErrorResponse(accountLockedResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
-        DatabaseUtil.unlockUserByEmail(userData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();

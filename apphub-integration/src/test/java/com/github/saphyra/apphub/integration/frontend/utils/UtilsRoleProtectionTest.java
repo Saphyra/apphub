@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -22,7 +22,7 @@ public class UtilsRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), role);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, GenericEndpoints.UTILS_BASE64_PAGE);

@@ -1,14 +1,11 @@
 package com.github.saphyra.apphub.service.platform.event_gateway;
 
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.event.processor.EventProcessorAutoConfiguration;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
-import com.github.saphyra.apphub.lib.web_utils.RequestContextProvider;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -34,18 +31,6 @@ class EventGatewayBeanConfiguration {
     @ConditionalOnMissingBean(SleepService.class)
     SleepService sleepService() {
         return new SleepService();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(LocaleProvider.class)
-    LocaleProvider localeProvider(RequestContextProvider requestContextProvider, CommonConfigProperties commonConfigProperties) {
-        return new LocaleProvider(requestContextProvider, commonConfigProperties);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(RequestContextProvider.class)
-    RequestContextProvider requestContextProvider() {
-        return new RequestContextProvider();
     }
 
     @Bean

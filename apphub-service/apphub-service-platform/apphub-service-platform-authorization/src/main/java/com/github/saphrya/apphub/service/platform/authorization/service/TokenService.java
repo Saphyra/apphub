@@ -3,6 +3,7 @@ package com.github.saphrya.apphub.service.platform.authorization.service;
 import com.github.saphrya.apphub.service.platform.authorization.config.AuthorizationProperties;
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
@@ -93,7 +94,7 @@ class TokenService {
             .build();
     }
 
-    public AccessTokenDto createAccessToken(UUID userId, UUID refreshTokenId, List<String> roles) {
+    public AccessTokenDto createAccessToken(UUID userId, UUID refreshTokenId, List<Role> roles) {
         UUID accessTokenId = idGenerator.randomUuid();
 
         LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();

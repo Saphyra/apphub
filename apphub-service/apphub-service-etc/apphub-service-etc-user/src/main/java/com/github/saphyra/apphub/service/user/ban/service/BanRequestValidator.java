@@ -15,7 +15,7 @@ import java.time.temporal.ChronoUnit;
 class BanRequestValidator {
     public void validate(BanRequest request) {
         ValidationUtil.notNull(request.getBannedUserId(), "bannedUserId");
-        ValidationUtil.notBlank(request.getBannedRole(), "bannedRole");
+        ValidationUtil.notNull(request.getBannedRole(), "bannedRole");
         ValidationUtil.notNull(request.getPermanent(), "permanent");
         ValidationUtil.notBlank(request.getReason(), "reason");
         ValidationUtil.notBlank(request.getPassword(), "password");

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.service.creatio
 
 import com.github.saphyra.apphub.api.feature.skyxplore.lobby.client.SkyXploreLobbyApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.common.GameDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.Game;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.domain.chat.Chat;
@@ -39,7 +38,6 @@ class GameLoaderTest {
     private static final UUID HOST = UUID.randomUUID();
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
     private static final Integer UNIVERSE_SIZE = 324;
-    private static final String LOCALE = "locale";
 
     @Mock
     private GameDao gameDao;
@@ -67,9 +65,6 @@ class GameLoaderTest {
 
     @Mock
     private TickSchedulerLauncher tickSchedulerLauncher;
-
-    @Mock
-    private CommonConfigProperties commonConfigProperties;
 
     @InjectMocks
     private GameLoader underTest;
@@ -107,7 +102,6 @@ class GameLoaderTest {
         given(gameModel.getMarkedForDeletion()).willReturn(false);
         given(gameModel.getMarkedForDeletionAt()).willReturn(null);
         given(gameModel.getLastPlayed()).willReturn(CURRENT_TIME);
-        given(commonConfigProperties.getDefaultLocale()).willReturn(LOCALE);
 
         underTest.loadGame(gameModel, List.of(USER_ID));
 
@@ -129,6 +123,6 @@ class GameLoaderTest {
         verify(processLoader).loadProcesses(game);
         verify(tickSchedulerLauncher).launch(game);
 
-        then(lobbyClient).should().gameLoaded(GAME_ID, LOCALE);
+        then(lobbyClient).should().gameLoaded(GAME_ID);
     }
 }

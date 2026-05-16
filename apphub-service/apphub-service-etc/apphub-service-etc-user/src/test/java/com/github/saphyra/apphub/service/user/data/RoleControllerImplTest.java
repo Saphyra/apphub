@@ -3,21 +3,22 @@ package com.github.saphyra.apphub.service.user.data;
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.api.etc.user.model.role.UserRoleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.user.data.service.role.AddRoleToAllProperties;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleAdditionService;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleQueryService;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleRemovalService;
-import com.github.saphyra.apphub.service.user.data.service.role.RoleToAllService;
+import com.github.saphyra.apphub.lib.common_domain.Role;
+import com.github.saphyra.apphub.service.user.config.properties.AddRoleToAllProperties;
+import com.github.saphyra.apphub.service.user.data.dao.user.User;
+import com.github.saphyra.apphub.service.user.data.service.RoleAdditionService;
+import com.github.saphyra.apphub.service.user.data.service.RoleRemovalService;
+import com.github.saphyra.apphub.service.user.data.service.RoleToAllService;
+import com.github.saphyra.apphub.service.user.data.service.UserQueryService;
+import com.github.saphyra.apphub.service.user.data.service.mapper.UserRoleResponseMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,13 +32,12 @@ public class RoleControllerImplTest {
     private static final String ROLE = "role";
     private static final String PASSWORD = "password";
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID TARGET_USER_ID = UUID.randomUUID();
 
     @Mock
     private RoleAdditionService roleAdditionService;
 
     @Mock
-    private RoleQueryService roleQueryService;
+    private UserQueryService userQueryService;
 
     @Mock
     private RoleRemovalService roleRemovalService;
@@ -48,11 +48,14 @@ public class RoleControllerImplTest {
     @Mock
     private AddRoleToAllProperties addRoleToAllProperties;
 
+    @Mock
+    private UserRoleResponseMapper userRoleResponseMapper;
+
     @InjectMocks
     private RoleControllerImpl underTest;
 
     @Mock
-    private UserRoleResponse userRoleResponse;
+    private User user;
 
     @Mock
     private RoleRequest roleRequest;
@@ -60,9 +63,13 @@ public class RoleControllerImplTest {
     @Mock
     private AccessToken accessToken;
 
+    @Mock
+    private UserRoleResponse userRoleResponse;
+
     @Test
     public void getRoles() {
-        given(roleQueryService.getRoles(QUERY_STRING)).willReturn(Arrays.asList(userRoleResponse));
+        given(userQueryService.getUsers(QUERY_STRING)).willReturn(List.of(user));
+        given(userRoleResponseMapper.map(List.of(user))).willReturn(List.of(userRoleResponse));
 
         List<UserRoleResponse> result = underTest.getRoles(new OneParamRequest<>(QUERY_STRING));
 
@@ -72,23 +79,19 @@ public class RoleControllerImplTest {
     @Test
     public void addRole() {
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(roleRequest.getUserId()).willReturn(TARGET_USER_ID);
-        given(roleQueryService.getRoles(TARGET_USER_ID)).willReturn(userRoleResponse);
+        given(roleAdditionService.addRole(USER_ID, roleRequest)).willReturn(user);
+        given(userRoleResponseMapper.map(user)).willReturn(userRoleResponse);
 
         assertThat(underTest.addRole(roleRequest, accessToken)).isEqualTo(userRoleResponse);
-
-        verify(roleAdditionService).addRole(USER_ID, roleRequest);
     }
 
     @Test
     public void removeRole() {
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(roleRequest.getUserId()).willReturn(TARGET_USER_ID);
-        given(roleQueryService.getRoles(TARGET_USER_ID)).willReturn(userRoleResponse);
+        given(roleRemovalService.removeRole(USER_ID, roleRequest)).willReturn(user);
+        given(userRoleResponseMapper.map(user)).willReturn(userRoleResponse);
 
         assertThat(underTest.removeRole(roleRequest, accessToken)).isEqualTo(userRoleResponse);
-
-        verify(roleRemovalService).removeRole(USER_ID, roleRequest);
     }
 
     @Test
@@ -121,7 +124,7 @@ public class RoleControllerImplTest {
     @Test
     void isUserAdmin() {
         given(accessToken.getRoles())
-            .willReturn(List.of(Constants.ROLE_ADMIN))
+            .willReturn(List.of(Role.ADMIN))
             .willReturn(List.of());
 
         assertThat(underTest.isUserAdmin(accessToken)).returns(true, OneParamResponse::getValue);

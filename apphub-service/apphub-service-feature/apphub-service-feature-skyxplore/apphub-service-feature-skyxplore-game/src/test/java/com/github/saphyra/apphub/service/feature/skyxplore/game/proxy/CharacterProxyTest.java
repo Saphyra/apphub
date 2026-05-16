@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.game.proxy;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,12 +15,8 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class CharacterProxyTest {
-    private static final String LOCALE = "locale";
     private static final String NAME = "name";
     private static final UUID USER_ID = UUID.randomUUID();
-
-    @Mock
-    private LocaleProvider localeProvider;
 
     @Mock
     private SkyXploreCharacterDataApiClient client;
@@ -34,9 +29,8 @@ class CharacterProxyTest {
 
     @Test
     void getCharacterName() {
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(characterModel.getName()).willReturn(NAME);
-        given(client.internalGetCharacterByUserId(USER_ID, LOCALE)).willReturn(characterModel);
+        given(client.internalGetCharacterByUserId(USER_ID)).willReturn(characterModel);
 
         assertThat(underTest.getCharacterName(USER_ID)).isEqualTo(NAME);
     }

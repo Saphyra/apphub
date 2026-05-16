@@ -16,7 +16,7 @@ spring:
           routes:
             #FRONTEND
             - id: frontend
-              uri: http://frontend:3000
+              uri: http://${serviceHosts.frontend}
               predicates:
                 - "Path=\
                 /,\
@@ -45,117 +45,109 @@ spring:
                 /web/utils/json-formatter,\
                 /web/elite-base,\
                 /web/elite-base/*,\
-                /web/util/direction,\
+                /web/utils/direction,\
                 /web/calendar,\
                 /web/calendar/**,\
                 /web/user/account"
               filters:
-                - StripPrefix=10
+                - StripPrefix=${stripPrefix.web}
             - id: frontend-resources
-              uri: http://frontend:3000
+              uri: http://${serviceHosts.frontend}
               predicates:
                 - Path=/web/static/**
               filters:
-                - StripPrefix=1
+                - StripPrefix=${stripPrefix.static}
             #RESOURCES
-            - id: common-resources
-              uri: http://web-content:8080
-              predicates:
-                - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/utils/**, /res/user/**
             - id: training-resources
-              uri: http://training:8080
+              uri: http://${serviceHosts.training}
               predicates:
                 - Path=/res/training/**
 
             #PAGES
-            - id: common-pages
-              uri: http://web-content:8080
-              predicates:
-                - Path=/web/community
             - id: training-pages
-              uri: http://training:8080
+              uri: http://${serviceHosts.training}
               predicates:
                 - Path=/web/training/**
 
             #MODULES
             - id: user
-              uri: http://user:8080
+              uri: http://${serviceHosts.user}
               predicates:
                 - Path=/api/user/**
             - id: authorization
-              uri: http://authorization:8080
+              uri: http://${serviceHosts.authorization}
               predicates:
                 - Path=/api/authorization/**
             - id: notebook
-              uri: http://notebook:8080
+              uri: http://${serviceHosts.notebook}
               predicates:
                 - Path=/api/notebook/**
             - id: admin-panel
-              uri: http://admin-panel:8080
+              uri: http://${serviceHosts.adminPanel}
               predicates:
                 - Path=/api/admin-panel/**
             - id: modules
-              uri: http://modules:8080
+              uri: http://${serviceHosts.modules}
               predicates:
                 - Path=/api/modules/**
-            - id: utils
-              uri: http://utils:8080
-              predicates:
-                - Path=/api/utils/**
             - id: skyxplore-data
-              uri: http://skyxplore-data:8080
+              uri: http://${serviceHosts.skyxploreData}
               predicates:
                 - Path=/api/skyxplore/data/**
             - id: skyxplore-lobby
-              uri: http://skyxplore-lobby:8080
+              uri: http://${serviceHosts.skyxploreLobby}
               predicates:
                 - Path=/api/skyxplore/lobby/**
             - id: skyxplore-game
-              uri: http://skyxplore-game:8080
+              uri: http://${serviceHosts.skyxploreGame}
               predicates:
                 - Path=/api/skyxplore/game/**
             - id: training
-              uri: http://training:8080
+              uri: http://${serviceHosts.training}
               predicates:
                 - Path=/api/training/**
             - id: community
-              uri: http://community:8080
+              uri: http://${serviceHosts.community}
               predicates:
                 - Path=/api/community/**
             - id: calendar
-              uri: http://calendar:8080
+              uri: http://${serviceHosts.calendar}
               predicates:
                 - Path=/api/calendar/**
             - id: storage
-              uri: http://storage:8080
+              uri: http://${serviceHosts.storage}
               predicates:
                 - Path=/api/storage/**
             - id: elite-base
-              uri: http://elite-base:8080
+              uri: http://${serviceHosts.eliteBase}
               predicates:
                 - Path=/api/elite-base/**
             - id: monitoring
-              uri: http://monitoring:8080
+              uri: http://${serviceHosts.monitoring}
               predicates:
                 - Path=/api/monitoring/**
 
             #WS
             - id: web-socket-admin-panel
-              uri: ws://admin-panel:8080
+              uri: ws://${serviceHosts.adminPanel}
               predicates:
                 - Path=/api/ws/admin-panel/**
             - id: web-socket-skyxplore-lobby
-              uri: ws://skyxplore-lobby:8080
+              uri: ws://${serviceHosts.skyxploreLobby}
               predicates:
                 - Path=/api/ws/skyxplore-lobby/**
             - id: web-socket-skyxplore-data
-              uri: ws://skyxplore-data:8080
+              uri: ws://${serviceHosts.skyxploreData}
               predicates:
                 - Path=/api/ws/skyxplore-data/**
             - id: web-socket-skyxplore-game
-              uri: ws://skyxplore-game:8080
+              uri: ws://${serviceHosts.skyxploreGame}
               predicates:
                 - Path=/api/ws/skyxplore-game/**
+
+stripPrefix:
+  web: 10
+  static: 1
 
 authorization:
   publicKey: ${PUBLIC_KEY}
@@ -337,14 +329,6 @@ role:
     - pattern: /web/utils/**
       methods:
         - GET
-      requiredRoles:
-        - UTILS
-    - pattern: /api/utils/**
-      methods:
-        - GET
-        - DELETE
-        - POST
-        - PUT
       requiredRoles:
         - UTILS
     #Community

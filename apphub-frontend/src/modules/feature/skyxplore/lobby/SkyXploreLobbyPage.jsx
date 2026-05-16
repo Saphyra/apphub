@@ -9,7 +9,6 @@ import NotificationService from "common/js/notification/NotificationService";
 import useLoader from "common/hook/Loader";
 import Redirection from "../Redirection";
 import WebSocketEventName from "common/hook/ws/WebSocketEventName";
-import Constants from "common/js/Constants";
 import Button from "common/component/input/Button";
 import Header from "common/component/Header";
 import Chat from "./lobby_page/Chat";
@@ -25,6 +24,7 @@ import "../skyxplore.css";
 import { SKYXPLORE_LOBBY_EXIT, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS, SKYXPLORE_LOBBY_GET_ALLIANCES, SKYXPLORE_LOBBY_GET_SETTINGS, SKYXPLORE_LOBBY_START_GAME, SKYXPLORE_LOBBY_VIEW_FOR_PAGE } from "./SkyXploreLobbyEndpoints";
 import { SKYXPLORE_MAIN_MENU_PAGE } from "../main_menu/SkyXploreMainMenuEndpoints";
 import { SKYXPLORE_GAME_PAGE } from "../game/SkyXploreGameEndpoints";
+import { SKYXPLORE_LOBBY_TYPE_NEW } from "./SkyXploreLobbyConstants";
 
 const SkyXploreLobbyPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -151,7 +151,7 @@ const SkyXploreLobbyPage = () => {
 
     //Operations
     const startGame = async () => {
-        if (lobbyData.lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW) {
+        if (lobbyData.lobbyType === SKYXPLORE_LOBBY_TYPE_NEW) {
             sendStartGameRequest();
             return;
         }
@@ -232,7 +232,7 @@ const SkyXploreLobbyPage = () => {
                     />
 
                     <div id="skyxplore-lobby-middle-bar">
-                        {lobbyData.lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW &&
+                        {lobbyData.lobbyType === SKYXPLORE_LOBBY_TYPE_NEW &&
                             <Settings
                                 localizationHandler={localizationHandler}
                                 isHost={lobbyData.host}

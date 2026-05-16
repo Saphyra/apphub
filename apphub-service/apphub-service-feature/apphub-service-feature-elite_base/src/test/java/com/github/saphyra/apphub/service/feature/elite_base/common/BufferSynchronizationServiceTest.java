@@ -4,8 +4,9 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractBuffer;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,7 +63,7 @@ class BufferSynchronizationServiceTest {
     void setUp() {
         underTest = BufferSynchronizationService.builder()
             .scheduledExecutorServiceBean(scheduledExecutorServiceBean)
-            .executorServiceBean(executorServiceBean)
+            .executorServiceBeanFactory(ExecutorServiceBeenTestUtils.createFactory(mock(ErrorReporterService.class)))
             .properties(properties)
             .buffers(List.of(buffer))
             .dateTimeUtil(dateTimeUtil)
@@ -77,10 +78,6 @@ class BufferSynchronizationServiceTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
-        given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
-        });
         given(cacheProperties.getBufferSynchronizationInterval()).willReturn(BUFFER_SYNCHRONIZATION_INTERVAL);
         given(cacheProperties.getMaxBufferSize()).willReturn(MAX_BUFFER_SIZE);
         given(buffer.getSize()).willReturn(MAX_BUFFER_SIZE - 1);
@@ -99,10 +96,6 @@ class BufferSynchronizationServiceTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
-        given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
-        });
         given(cacheProperties.getMaxBufferSize()).willReturn(MAX_BUFFER_SIZE);
         given(buffer.getSize()).willReturn(MAX_BUFFER_SIZE + 1);
         given(buffer.getLastSynchronized()).willReturn(CURRENT_TIME.minus(BUFFER_SYNCHRONIZATION_INTERVAL).plusSeconds(1));
@@ -119,10 +112,6 @@ class BufferSynchronizationServiceTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
-        given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
-        });
         given(cacheProperties.getBufferSynchronizationInterval()).willReturn(BUFFER_SYNCHRONIZATION_INTERVAL);
         given(cacheProperties.getMaxBufferSize()).willReturn(MAX_BUFFER_SIZE);
         given(buffer.getSize()).willReturn(MAX_BUFFER_SIZE - 1);
@@ -140,10 +129,6 @@ class BufferSynchronizationServiceTest {
             invocation.getArgument(0, Runnable.class).run();
             return null;
         }).when(monitoringInstruments).wrap(any(Runnable.class), any(), any());
-        given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return new FutureWrapper<>(CompletableFuture.completedFuture(executionResult));
-        });
 
         underTest.synchronizeAll();
 

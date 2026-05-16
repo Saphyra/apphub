@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.Migratio
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.admin_panel.MigrationTasksResponse;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -40,7 +41,7 @@ public class MigrationTasksTest extends BackEndTest {
     public void migrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
@@ -66,7 +67,7 @@ public class MigrationTasksTest extends BackEndTest {
     public void repeatableMigrationTasksTest() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();

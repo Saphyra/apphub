@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import "./ai/ai.css"
-import Constants from "common/js/Constants";
 import Stream from "common/js/collection/Stream";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import { SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI, SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_REMOVE_AI } from "../../SkyXploreLobbyEndpoints";
+import { SKYXPLORE_LOBBY_TYPE_LOAD } from "../../SkyXploreLobbyConstants";
 
 const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -40,7 +40,7 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
     const getAllianceSelectMenu = () => {
         return (
             <select
-                disabled={!isHost || lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_LOAD}
+                disabled={!isHost || lobbyType === SKYXPLORE_LOBBY_TYPE_LOAD}
                 value={ai.allianceId || ""}
                 onChange={setAlliance}
             >

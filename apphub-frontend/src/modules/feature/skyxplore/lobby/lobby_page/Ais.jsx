@@ -4,12 +4,12 @@ import PanelTitle from "./PanelTitle";
 import { useEffect, useState } from "react";
 import ValidatedField from "common/js/validation/ValidatedField";
 import Stream from "common/js/collection/Stream";
-import Constants from "common/js/Constants";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import ValidatedInputField from "common/component/input/ValidatedInputField";
 import InputField from "common/component/input/InputField";
 import validate from "common/js/validation/Validator";
 import { SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_GET_AIS } from "../SkyXploreLobbyEndpoints";
+import { SKYXPLORE_LOBBY_TYPE_NEW } from "../SkyXploreLobbyConstants";
 
 const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType }) => {
     const [aiName, setAiName] = useState("");
@@ -66,7 +66,7 @@ const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType })
             <PanelTitle label={localizationHandler.get("ais")} />
             <div className="skyxplore-lobby-panel-content">
                 {getAis()}
-                {ais.length < 10 && lobbyType === Constants.SKYXPLORE_LOBBY_TYPE_NEW && isHost &&
+                {ais.length < 10 && lobbyType === SKYXPLORE_LOBBY_TYPE_NEW && isHost &&
                     <div id="skyxplore-lobby-create-ai" >
                         <h4 className="skyxplore-lobby-player-name">{localizationHandler.get("create-ai")}</h4>
 

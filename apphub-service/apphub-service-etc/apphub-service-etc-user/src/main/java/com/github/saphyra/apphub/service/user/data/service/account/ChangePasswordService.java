@@ -32,7 +32,7 @@ public class ChangePasswordService {
         User user = checkPasswordService.checkPassword(userId, request.getPassword());
 
         user.setPassword(passwordService.hashPassword(request.getNewPassword(), userId));
-        userDao.save(user);
+        userDao.saveProfile(user);
 
         if (request.getDeactivateAllSessions()) {
             authorizationClient.invalidateAllRefreshTokens(userId);

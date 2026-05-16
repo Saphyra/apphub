@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
@@ -51,7 +52,7 @@ public class BanCrudTest extends SeleniumTest {
         int serverPort = getServerPort();
         RegistrationUtils.registerUsers(serverPort, List.of(new BiWrapper<>(adminDriver, adminUserData), new BiWrapper<>(testDriver, testUserData)));
 
-        DatabaseUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(adminDriver, getServerPort());
 
         ModulesPageActions.openModule(serverPort, adminDriver, ModuleLocation.BAN);
@@ -77,7 +78,7 @@ public class BanCrudTest extends SeleniumTest {
             1
         );
 
-        DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))
@@ -116,7 +117,7 @@ public class BanCrudTest extends SeleniumTest {
             1
         );
 
-        DatabaseUtil.unlockUserByEmail(adminUserData.getEmail());
+        DynamoDbUtil.unlockUserByEmail(adminUserData.getEmail());
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
             .until(() -> BanActions.isUserDetailsPageOpened(adminDriver))

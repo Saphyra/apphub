@@ -10,6 +10,8 @@ import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.Optional;
 
+import static java.util.Objects.isNull;
+
 @Component
 public class DateTimeUtil {
     private static final String DATE_FORMAT = "%s-%s-%s";
@@ -83,6 +85,14 @@ public class DateTimeUtil {
     }
 
     public LocalDateTime fromEpochSecond(Long epochSecond) {
+        if (isNull(epochSecond)) {
+            return null;
+        }
+
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(epochSecond), ZoneOffset.UTC);
+    }
+
+    public long getCurrentTimeEpochSeconds() {
+        return toEpochSecond(getCurrentDateTime());
     }
 }

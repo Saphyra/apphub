@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.api.feature.skyxplore.response.game.GameViewFor
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_util.converter.AccessTokenHeaderConverter;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,21 +21,13 @@ public class SkyXploreDataProxy {
     private final SkyXploreDataFriendApiClient dataFriendClient;
     private final AccessTokenHeaderConverter accessTokenHeaderConverter;
     private final AccessTokenProvider accessTokenProvider;
-    private final LocaleProvider localeProvider;
     private final SkyXploreSavedGameClient savedGameClient;
 
     public List<FriendshipResponse> getFriends(AccessToken accessToken) {
-        return dataFriendClient.getFriends(
-            accessTokenHeaderConverter.convertDomain(accessToken),
-            localeProvider.getOrDefault()
-        );
+        return dataFriendClient.getFriends(accessTokenHeaderConverter.convertDomain(accessToken));
     }
 
     public GameViewForLobbyCreation getGameForLobbyCreation(UUID gameId) {
-        return savedGameClient.getGameForLobbyCreation(
-            gameId,
-            accessTokenProvider.getAsString(),
-            localeProvider.getOrDefault()
-        );
+        return savedGameClient.getGameForLobbyCreation(gameId, accessTokenProvider.getAsString());
     }
 }

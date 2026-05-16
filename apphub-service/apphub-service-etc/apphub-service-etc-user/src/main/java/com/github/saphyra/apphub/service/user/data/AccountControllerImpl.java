@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.user.data;
 
+import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeEmailRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangePasswordRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.ChangeUsernameRequest;
 import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
-import com.github.saphyra.apphub.api.etc.user.model.account.AccountResponse;
 import com.github.saphyra.apphub.api.etc.user.server.AccountController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -14,11 +14,11 @@ import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
+import com.github.saphyra.apphub.service.user.data.service.RegistrationService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeEmailService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangePasswordService;
 import com.github.saphyra.apphub.service.user.data.service.account.ChangeUsernameService;
 import com.github.saphyra.apphub.service.user.data.service.account.DeleteAccountService;
-import com.github.saphyra.apphub.service.user.data.service.register.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -76,7 +76,7 @@ public class AccountControllerImpl implements AccountController {
     @Override
     public OneParamResponse<String> getUsernameByUserId(AccessToken accessToken) {
         log.info("Querying name of user {}", accessToken.getUserId());
-        String username = userDao.findByIdValidated(accessToken.getUserId())
+        String username = userDao.findByUserIdValidated(accessToken.getUserId())
             .getUsername();
         return new OneParamResponse<>(username);
     }
@@ -87,7 +87,7 @@ public class AccountControllerImpl implements AccountController {
         log.info("{} wants to query users by {}", accessToken.getUserId(), searchText);
         ValidationUtil.minLength(searchText, 3, "value");
 
-        return userDao.getByUsernameOrEmailContainingIgnoreCase(searchText)
+        return userDao.findByUserIdentifier(searchText)
             .stream()
             .filter(user -> includeSelf || !user.getUserId().equals(accessToken.getUserId()))
             .filter(user -> includeMarkedForDeletion || !user.isMarkedForDeletion())
@@ -106,19 +106,19 @@ public class AccountControllerImpl implements AccountController {
 
     @Override
     public AccountResponse getAccountInternal(UUID userId) {
-        return userDao.findById(userId)
+        return userDao.findByUserId(userId)
             .map(this::convert)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.USER_NOT_FOUND, "User not found with id " + userId));
     }
 
     @Override
     public AccountResponse getAccount(AccessToken accessToken) {
-        return convert(userDao.findByIdValidated(accessToken.getUserId()));
+        return convert(userDao.findByUserIdValidated(accessToken.getUserId()));
     }
 
     @Override
     public boolean userExists(UUID userId) {
-        return userDao.findById(userId)
+        return userDao.findByUserId(userId)
             .filter(user -> !user.isMarkedForDeletion())
             .isPresent();
     }

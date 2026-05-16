@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanSearchResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
@@ -24,7 +25,7 @@ public class BanSearchService {
     public List<BanSearchResponse> search(String query) {
         ValidationUtil.minLength(query, 3, "query");
 
-        return userDao.getByUsernameOrEmailContainingIgnoreCase(query)
+        return userDao.findByUserIdentifier(query)
             .stream()
             .map(this::convert)
             .collect(Collectors.toList());
@@ -40,7 +41,7 @@ public class BanSearchService {
             .build();
     }
 
-    private List<String> getBannedRoles(UUID userId) {
+    private List<Role> getBannedRoles(UUID userId) {
         return banDao.getByUserId(userId)
             .stream()
             .map(Ban::getBannedRole)

@@ -9,7 +9,11 @@ public class Navigation {
         String url = UrlFactory.create(serverPort, GenericEndpoints.INDEX_PAGE);
         toUrl(driver, url);
 
-        AwaitilityWrapper.retry(() -> driver.findElement(By.cssSelector(".language.en")).click());
+        try {
+            AwaitilityWrapper.retry(() -> driver.findElement(By.cssSelector(".language.en")).click());
+        } catch (Exception e) {
+            throw e;
+        }
 
         return url;
     }

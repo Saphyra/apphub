@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.skyxplore.lobby.proxy;
 import com.github.saphyra.apphub.api.feature.skyxplore.data.client.SkyXploreCharacterDataApiClient;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class CharacterProxy {
-    private final LocaleProvider localeProvider;
     private final SkyXploreCharacterDataApiClient characterClient;
     private final AccessTokenProvider accessTokenProvider;
 
@@ -23,9 +21,6 @@ public class CharacterProxy {
     }
 
     public SkyXploreCharacterModel getCharacter(UUID userId) {
-        return characterClient.internalGetCharacterByUserId(
-            userId,
-            localeProvider.getOrDefault()
-        );
+        return characterClient.internalGetCharacterByUserId(userId);
     }
 }

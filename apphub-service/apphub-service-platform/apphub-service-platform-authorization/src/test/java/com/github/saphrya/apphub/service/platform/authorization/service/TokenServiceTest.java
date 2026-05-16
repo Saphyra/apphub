@@ -3,6 +3,7 @@ package com.github.saphrya.apphub.service.platform.authorization.service;
 import com.github.saphrya.apphub.service.platform.authorization.config.AuthorizationProperties;
 import com.github.saphrya.apphub.service.platform.authorization.dao.refresh_token.RefreshToken;
 import com.github.saphrya.apphub.service.platform.authorization.etc.AccessTokenDto;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -46,7 +47,7 @@ class TokenServiceTest {
     private static final String ISSUER = "test-issuer";
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final LocalDateTime ISSUED_AT = CURRENT_TIME.minusHours(5).withNano(0);
-    private static final List<String> ROLES = List.of("ROLE_A");
+    private static final List<Role> ROLES = List.of(Role.TEST);
     private static final long ISSUED_AT_EPOCH = 1000000L;
     private static final long EXPIRATION_EPOCH = 2000000L;
     private static final LocalDateTime EXPIRATION_TIME = CURRENT_TIME.plusHours(1).withNano(0);

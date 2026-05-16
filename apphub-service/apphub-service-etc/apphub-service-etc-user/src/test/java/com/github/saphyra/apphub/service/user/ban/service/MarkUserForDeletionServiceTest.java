@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
-import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.api.etc.user.model.ban.MarkUserForDeletionRequest;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -64,7 +64,6 @@ public class MarkUserForDeletionServiceTest {
 
     @Test
     public void nullMarkedForDeletionAt() {
-        given(checkPasswordService.checkPassword(USER_ID, PASSWORD)).willReturn(user);
         MarkUserForDeletionRequest request = MarkUserForDeletionRequest.builder()
             .markForDeletionAt(null)
             .password(PASSWORD)
@@ -97,12 +96,11 @@ public class MarkUserForDeletionServiceTest {
             .build();
 
         given(banResponseQueryService.getBans(DELETED_USER_ID)).willReturn(banResponse);
-        given(userDao.findByIdValidated(DELETED_USER_ID)).willReturn(deletedUser);
+        given(userDao.findByUserIdValidated(DELETED_USER_ID)).willReturn(deletedUser);
 
         BanResponse result = underTest.markUserForDeletion(DELETED_USER_ID, request, USER_ID);
-        verify(deletedUser).setMarkedForDeletion(true);
         verify(deletedUser).setMarkedForDeletionAt(LocalDateTime.of(LocalDate.of(2024, 5, 6), LocalTime.of(11, 39, 0)));
-        verify(userDao).save(deletedUser);
+        verify(userDao).updateMarkedForDeletion(deletedUser);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
 
         assertThat(result).isEqualTo(banResponse);

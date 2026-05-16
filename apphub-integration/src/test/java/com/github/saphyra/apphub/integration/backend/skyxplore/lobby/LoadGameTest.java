@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.integration.backend.skyxplore.lobby;
 
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreSavedGameActions;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.InvitationMessage;
@@ -35,19 +35,19 @@ public class LoadGameTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
-        UUID userId2 = DatabaseUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel3 = SkyXploreCharacterModel.valid();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, characterModel3);
-        UUID userId3 = DatabaseUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
 
         SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1), new Player(accessToken2, userId2))
             .values()

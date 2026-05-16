@@ -3,6 +3,7 @@ package com.github.saphrya.apphub.service.platform.authorization.etc;
 import com.github.saphyra.apphub.api.etc.user.client.AuthorizationClient;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,10 +43,10 @@ class AuthorizationClientProxyTest {
 
     @Test
     void getRoles() {
-        List<String> roles = List.of("ROLE_A", "ROLE_B");
+        List<Role> roles = List.of(Role.TEST);
         given(authorizationClient.getRoles(USER_ID)).willReturn(roles);
 
-        List<String> result = underTest.getRoles(USER_ID);
+        List<Role> result = underTest.getRoles(USER_ID);
 
         assertThat(result).isEqualTo(roles);
     }

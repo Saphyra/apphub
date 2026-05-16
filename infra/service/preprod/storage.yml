@@ -17,57 +17,77 @@ spec:
         name: storage
     spec:
       containers:
-      - name: storage
-        image: saphyra/apphub-service-platform-storage:latest
-        env:
-        - name: FTP_CLIENT_USERNAME
-          value: ftp_dev
-        - name: SPRING_ACTIVE_PROFILE
-          value: server,preprod
-        - name: S3_ENABLED
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_ENABLED
-        - name: S3_ACCESS_KEY_ID
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_ACCESS_KEY_ID
-        - name: S3_SECRET_KEY
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_SECRET_KEY
-        - name: S3_BUCKET_NAME
-          valueFrom:
-            secretKeyRef:
-              name: s3-configuration
-              key: S3_BUCKET_NAME
-        ports:
-        - containerPort: 8080
-        imagePullPolicy: Never
-        startupProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 3600
-        livenessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        readinessProbe:
-          httpGet:
-            path: /platform/health
-            port: 8080
-          periodSeconds: 5
-          failureThreshold: 1
-        resources:
-          limits:
-            memory: 500Mi
+        - name: storage
+          image: saphyra/apphub-service-platform-storage:latest
+          env:
+            - name: FTP_CLIENT_USERNAME
+              value: ftp_dev
+            - name: SPRING_ACTIVE_PROFILE
+              value: server,preprod
+            - name: S3_ENABLED
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_ENABLED
+            - name: S3_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_ACCESS_KEY_ID
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_SECRET_KEY
+            - name: S3_BUCKET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: s3-configuration
+                  key: S3_BUCKET_NAME
+            - name: PSQL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: psql-host
+                  key: PSQL_HOST
+            - name: FTP_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: ftp-host
+                  key: FTP_HOST
+            - name: DYNAMO_DB_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_ACCESS_KEY_ID
+            - name: DYNAMO_DB_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: dynamo-db-configuration
+                  key: DYNAMO_DB_SECRET_KEY
+          ports:
+            - containerPort: 8080
+          imagePullPolicy: Never
+          startupProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 3600
+          livenessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /platform/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 1
+          resources:
+            limits:
+              memory: 500Mi
 ---
 apiVersion: v1
 kind: Service
@@ -78,6 +98,6 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-  - port: 8080
+    - port: 8080
   selector:
     name: storage

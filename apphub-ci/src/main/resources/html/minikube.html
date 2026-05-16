@@ -28,7 +28,12 @@
             - Comma-separated list of test group names to run
         </form>
     </li>
-    <li><a href="/minikube/port-forward">Port forward</a> - Forwards the main-gateway to the host's <span th:text="${minikube_port}"></span> port</li>
+    <li>
+        <a href="/minikube/port-forward">Port forward</a>
+        - Forwards the main-gateway to the host's <span th:text="${minikube_port}"></span> port,
+        PostgreSQL to the host's <span th:text="${postgres_port}"></span>
+        and DynamoDB to the host's <span th:text="${dynamodb_port}"></span>
+    </li>
     <li><a href="/minikube/scale">Scale down</a></li>
     <li>
         <form action="/minikube/delete-namespace" method="GET">

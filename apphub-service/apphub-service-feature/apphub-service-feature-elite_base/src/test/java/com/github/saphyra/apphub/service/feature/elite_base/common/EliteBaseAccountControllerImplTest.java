@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.common;
 
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,7 +23,7 @@ class EliteBaseAccountControllerImplTest {
 
     @Test
     void isAdmin_admin() {
-        given(accessToken.getRoles()).willReturn(List.of(EliteBaseConstants.ROLE_ELITE_BASE_ADMIN));
+        given(accessToken.getRoles()).willReturn(List.of(Role.ELITE_BASE_ADMIN));
 
         assertThat(underTest.isAdmin(accessToken)).isTrue();
     }

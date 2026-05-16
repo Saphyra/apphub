@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.data;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.platform.web_content.client.LocalizationClient;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
@@ -11,17 +10,14 @@ import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.friendshi
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.friendship.dao.FriendshipDao;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.request.dao.FriendRequest;
 import com.github.saphyra.apphub.service.feature.skyxplore.data.friend.request.dao.FriendRequestDao;
-import com.github.saphyra.apphub.test.common.TestConstants;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
@@ -32,23 +28,16 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class SkyXploreDataEventControllerImplIt_deleteAccountEventTest {
+class SkyXploreDataEventControllerImplIt_deleteAccountEventTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String LOCALIZED_MESSAGE = "localized-message";
     private static final String CHARACTER_NAME = "character-name";
 
     @LocalServerPort
     private int serverPort;
-
-    @MockBean
-    private LocalizationClient localizationClient;
 
     @Autowired
     private CharacterDao characterDao;
@@ -62,18 +51,13 @@ public class SkyXploreDataEventControllerImplIt_deleteAccountEventTest {
     @Autowired
     private List<AbstractDao<?, ?, ?, ?>> daos;
 
-    @BeforeEach
-    public void setUp() {
-        given(localizationClient.translate(anyString(), eq(TestConstants.DEFAULT_LOCALE))).willReturn(LOCALIZED_MESSAGE);
-    }
-
     @AfterEach
-    public void clear() {
+    void clear() {
         daos.forEach(AbstractDao::deleteAll);
     }
 
     @Test
-    public void deleteAccountEvent() {
+    void deleteAccountEvent() {
         FriendRequest friendRequest1 = FriendRequest.builder()
             .friendRequestId(UUID.randomUUID())
             .friendId(USER_ID)

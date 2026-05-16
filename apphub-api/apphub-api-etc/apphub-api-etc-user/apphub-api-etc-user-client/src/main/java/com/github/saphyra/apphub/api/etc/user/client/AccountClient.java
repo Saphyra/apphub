@@ -16,17 +16,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "user-account", url = "${serviceUrls.user}")
+@FeignClient(name = "user-account", url = "${serviceHosts.user}")
 public interface AccountClient {
     @RequestMapping(method = RequestMethod.GET, value = UserEndpoints.USER_DATA_INTERNAL_GET_USER_LANGUAGE)
-    String getLanguage(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    String getLanguage(@PathVariable("userId") UUID userId);
 
     @GetMapping(UserEndpoints.USER_DATA_INTERNAL_GET_ACCOUNT)
-    AccountResponse getAccountInternal(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    AccountResponse getAccountInternal(@PathVariable("userId") UUID userId);
 
     @PostMapping(UserEndpoints.USER_DATA_SEARCH_ACCOUNT)
-    List<AccountResponse> searchAccount(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    List<AccountResponse> searchAccount(@RequestBody OneParamRequest<String> search, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) String accessTokenHeader);
 
     @GetMapping(UserEndpoints.USER_DATA_INTERNAL_USER_EXISTS)
-    boolean userExists(@PathVariable("userId") UUID userId, @RequestHeader(Constants.LOCALE_HEADER) String locale);
+    boolean userExists(@PathVariable("userId") UUID userId);
 }

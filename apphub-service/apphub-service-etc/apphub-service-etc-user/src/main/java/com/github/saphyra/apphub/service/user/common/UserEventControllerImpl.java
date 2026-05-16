@@ -1,15 +1,13 @@
 package com.github.saphyra.apphub.service.user.common;
 
+import com.github.saphyra.apphub.api.etc.user.server.UserEventController;
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.api.etc.user.server.UserEventController;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.user.ban.service.RevokeBanService;
-import com.github.saphyra.apphub.service.user.config.UserProperties;
-import com.github.saphyra.apphub.service.user.data.dao.user.User;
+import com.github.saphyra.apphub.service.user.config.properties.UserProperties;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.UUID;
 
-import static java.util.Objects.isNull;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -29,7 +25,6 @@ import static java.util.Objects.isNull;
 class UserEventControllerImpl implements UserEventController {
     private final UserDao userDao;
     private final EventGatewayApiClient eventGatewayClient;
-    private final LocaleProvider localeProvider;
     private final RevokeBanService revokeBanService;
     private final DateTimeUtil dateTimeUtil;
     private final List<DeleteByUserIdDao> deleteByUserIdDaos;
@@ -38,7 +33,7 @@ class UserEventControllerImpl implements UserEventController {
     @Override
     @Transactional
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
-        log.info("Processing event {}", request.getEventName());
+        log.info("Processing event {} for userId {}", request.getEventName(), request.getPayload());
         log.debug("Request: {}", request);
         UUID userId = request.getPayload().getUserId();
         deleteByUserIdDaos.forEach(deleteByUserIdDao -> deleteByUserIdDao.deleteByUserId(userId));
@@ -46,11 +41,9 @@ class UserEventControllerImpl implements UserEventController {
 
     @Override
     public void triggerAccountDeletion() {
-        userDao.getUsersMarkedToDelete()
+        userDao.getUsersMarkedForDeletion()
             .stream()
-            .filter(user -> isNull(user.getMarkedForDeletionAt()) || user.getMarkedForDeletionAt().isBefore(dateTimeUtil.getCurrentDateTime()))
             .limit(userProperties.getDeleteAccountBatchCount())
-            .map(User::getUserId)
             .forEach(this::deleteAccount);
     }
 
@@ -66,6 +59,6 @@ class UserEventControllerImpl implements UserEventController {
             .build()
             .blockingRequest(false);
 
-        eventGatewayClient.sendEvent(event, localeProvider.getOrDefault());
+        eventGatewayClient.sendEvent(event);
     }
 }

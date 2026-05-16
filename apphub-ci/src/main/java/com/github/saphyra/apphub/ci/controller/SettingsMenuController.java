@@ -19,6 +19,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static com.github.saphyra.apphub.ci.value.Constants.FTP_HOST;
+import static com.github.saphyra.apphub.ci.value.Constants.PSQL_HOST;
 import static java.util.Objects.nonNull;
 
 @Controller
@@ -37,6 +39,19 @@ class SettingsMenuController {
         modelAndView.addObject("browser_startup_limit", propertyDao.getBrowserStartupLimit());
         modelAndView.addObject("gui_enabled", propertyDao.isGuiEnabled());
         modelAndView.addObject("environments", Arrays.stream(Environment.values()).map(Environment::name).toList());
+
+        EnvironmentSpecificProperties psqlConfig = propertyDao.getEnvironmentSpecificProperties(PropertyName.PSQL_HOST);
+        modelAndView.addObject("PSQL_LOCAL", psqlConfig.getForEnvironmentOrDefault(Environment.LOCAL, PSQL_HOST, ""));
+        modelAndView.addObject("PSQL_MINIKUBE", psqlConfig.getForEnvironmentOrDefault(Environment.MINIKUBE, PSQL_HOST, ""));
+        modelAndView.addObject("PSQL_PREPROD", psqlConfig.getForEnvironmentOrDefault(Environment.PREPROD, PSQL_HOST, ""));
+        modelAndView.addObject("PSQL_PRODUCTION", psqlConfig.getForEnvironmentOrDefault(Environment.PRODUCTION, PSQL_HOST, ""));
+
+        EnvironmentSpecificProperties ftpConfig = propertyDao.getEnvironmentSpecificProperties(PropertyName.FTP_HOST);
+        modelAndView.addObject("FTP_LOCAL", ftpConfig.getForEnvironmentOrDefault(Environment.LOCAL, FTP_HOST, ""));
+        modelAndView.addObject("FTP_MINIKUBE", ftpConfig.getForEnvironmentOrDefault(Environment.MINIKUBE, FTP_HOST, ""));
+        modelAndView.addObject("FTP_PREPROD", ftpConfig.getForEnvironmentOrDefault(Environment.PREPROD, FTP_HOST, ""));
+        modelAndView.addObject("FTP_PRODUCTION", ftpConfig.getForEnvironmentOrDefault(Environment.PRODUCTION, FTP_HOST, ""));
+
 
         if (nonNull(success)) {
             modelAndView.addObject("success", success);
@@ -77,5 +92,33 @@ class SettingsMenuController {
         propertyDao.save(PropertyName.AUTHORIZATION_CERTIFICATE, certStore);
 
         return "redirect:/settings?success=production_authorization_certificate_recreated";
+    }
+
+    @PostMapping("/psql-host")
+    String savePsqlHost(HttpServletRequest request) {
+        EnvironmentSpecificProperties properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.PSQL_HOST);
+
+        properties.put(Environment.LOCAL, Map.of(PSQL_HOST, request.getParameter(Environment.LOCAL.name())));
+        properties.put(Environment.MINIKUBE, Map.of(PSQL_HOST, request.getParameter(Environment.MINIKUBE.name())));
+        properties.put(Environment.PREPROD, Map.of(PSQL_HOST, request.getParameter(Environment.PREPROD.name())));
+        properties.put(Environment.PRODUCTION, Map.of(PSQL_HOST, request.getParameter(Environment.PRODUCTION.name())));
+
+        propertyDao.save(PropertyName.PSQL_HOST, properties);
+
+        return "redirect:/settings?success=psql_host_saved";
+    }
+
+    @PostMapping("/ftp-host")
+    String saveFtpHost(HttpServletRequest request) {
+        EnvironmentSpecificProperties properties = propertyDao.getEnvironmentSpecificProperties(PropertyName.FTP_HOST);
+
+        properties.put(Environment.LOCAL, Map.of(FTP_HOST, request.getParameter(Environment.LOCAL.name())));
+        properties.put(Environment.MINIKUBE, Map.of(FTP_HOST, request.getParameter(Environment.MINIKUBE.name())));
+        properties.put(Environment.PREPROD, Map.of(FTP_HOST, request.getParameter(Environment.PREPROD.name())));
+        properties.put(Environment.PRODUCTION, Map.of(FTP_HOST, request.getParameter(Environment.PRODUCTION.name())));
+
+        propertyDao.save(PropertyName.FTP_HOST, properties);
+
+        return "redirect:/settings?success=ftp_host_saved";
     }
 }

@@ -20,10 +20,13 @@ spec:
       - name: monitoring
         image: saphyra/apphub-service-platform-monitoring:release
         env:
-        - name: FTP_CLIENT_USERNAME
-          value: ftp_prod
         - name: SPRING_ACTIVE_PROFILE
           value: server,production
+        - name: PSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: psql-host
+              key: PSQL_HOST
         ports:
         - containerPort: 8080
         imagePullPolicy: Never

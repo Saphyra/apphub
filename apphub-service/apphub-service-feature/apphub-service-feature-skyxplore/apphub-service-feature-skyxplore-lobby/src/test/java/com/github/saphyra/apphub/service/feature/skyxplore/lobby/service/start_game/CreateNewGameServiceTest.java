@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.feature.skyxplore.request.game_creation.Sky
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEvent;
 import com.github.saphyra.apphub.lib.common_domain.WebSocketEventName;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Alliance;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.Lobby;
 import com.github.saphyra.apphub.service.feature.skyxplore.lobby.dao.LobbyPlayer;
@@ -18,13 +17,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
@@ -34,7 +32,6 @@ public class CreateNewGameServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID ALLIANCE_ID = UUID.randomUUID();
     private static final String ALLIANCE_NAME = "alliance-name";
-    private static final String LOCALE = "locale";
     private static final String GAME_NAME = "game-name";
     private static final UUID GAME_ID = UUID.randomUUID();
 
@@ -43,9 +40,6 @@ public class CreateNewGameServiceTest {
 
     @Mock
     private SkyXploreGameCreationApiClient gameCreationClient;
-
-    @Mock
-    private LocaleProvider localeProvider;
 
     @Mock
     private AllianceSetupValidator allianceSetupValidator;
@@ -71,19 +65,18 @@ public class CreateNewGameServiceTest {
         given(lobby.getPlayers()).willReturn(players);
         given(lobby.getHost()).willReturn(USER_ID);
         given(lobbyPlayer.getAllianceId()).willReturn(ALLIANCE_ID);
-        given(lobby.getAlliances()).willReturn(Arrays.asList(alliance));
+        given(lobby.getAlliances()).willReturn(List.of(alliance));
         given(alliance.getAllianceName()).willReturn(ALLIANCE_NAME);
         given(alliance.getAllianceId()).willReturn(ALLIANCE_ID);
         given(lobby.getSettings()).willReturn(settings);
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
         given(lobby.getLobbyName()).willReturn(GAME_NAME);
         given(lobbyPlayer.getUserId()).willReturn(USER_ID);
-        given(gameCreationClient.createGame(any(SkyXploreGameCreationRequest.class), eq(LOCALE))).willReturn(GAME_ID);
+        given(gameCreationClient.createGame(any(SkyXploreGameCreationRequest.class))).willReturn(GAME_ID);
 
         underTest.createNewGame(lobby);
 
         ArgumentCaptor<SkyXploreGameCreationRequest> gameCreationRequestArgumentCaptor = ArgumentCaptor.forClass(SkyXploreGameCreationRequest.class);
-        verify(gameCreationClient).createGame(gameCreationRequestArgumentCaptor.capture(), eq(LOCALE));
+        verify(gameCreationClient).createGame(gameCreationRequestArgumentCaptor.capture());
         SkyXploreGameCreationRequest gameCreationRequest = gameCreationRequestArgumentCaptor.getValue();
         assertThat(gameCreationRequest.getHost()).isEqualTo(USER_ID);
         assertThat(gameCreationRequest.getPlayers()).containsEntry(USER_ID, ALLIANCE_ID);

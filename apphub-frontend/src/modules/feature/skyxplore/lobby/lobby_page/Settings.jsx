@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import PanelTitle from "./PanelTitle";
 import Setting from "./settings/Setting";
-import Constants from "common/js/Constants";
 import NumberInputField from "common/component/input/NumberInputField";
 import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import { SKYXPLORE_LOBBY_EDIT_SETTINGS } from "../SkyXploreLobbyEndpoints";
+import { ADDITIONAL_SOLAR_SYSTEMS_MAX, ADDITIONAL_SOLAR_SYSTEMS_MIN, MAX_PLAYERS_PER_SOLAR_SYSTEM, MIN_PLAYERS_PER_SOLAR_SYSTEM, PLANET_SIZE_MAX, PLANET_SIZE_MIN, PLANETS_PER_SOLAR_SYSTEM_MAX, PLANETS_PER_SOLAR_SYSTEM_MIN } from "../SkyXploreLobbyConstants";
 
 const Settings = ({ localizationHandler, isHost, settings }) => {
     const [maxPlayersPerSolarSystem, setMaxPlayersPerSolarSystem] = useState(0);
@@ -33,12 +33,12 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updateMaxPlayersPerSolarSystem = (event) => {
         let value = Number(event.target.value);
 
-        if (value > Constants.MAX_PLAYERS_PER_SOLAR_SYSTEM) {
-            value = Constants.MAX_PLAYERS_PER_SOLAR_SYSTEM;
+        if (value > MAX_PLAYERS_PER_SOLAR_SYSTEM) {
+            value = MAX_PLAYERS_PER_SOLAR_SYSTEM;
         }
 
-        if (value < Constants.MIN_PLAYERS_PER_SOLAR_SYSTEM) {
-            value = Constants.MIN_PLAYERS_PER_SOLAR_SYSTEM;
+        if (value < MIN_PLAYERS_PER_SOLAR_SYSTEM) {
+            value = MIN_PLAYERS_PER_SOLAR_SYSTEM;
         }
         setMaxPlayersPerSolarSystem(value);
         setShouldSendToServer(true);
@@ -47,8 +47,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updateAdditionalSolarSystemsMin = (event) => {
         let value = Number(event.target.value);
 
-        if (value < Constants.ADDITIONAL_SOLAR_SYSTEMS_MIN) {
-            value = Constants.ADDITIONAL_SOLAR_SYSTEMS_MIN;
+        if (value < ADDITIONAL_SOLAR_SYSTEMS_MIN) {
+            value = ADDITIONAL_SOLAR_SYSTEMS_MIN;
         }
 
         if (value > additionalSolarSystemsMax) {
@@ -62,8 +62,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updateAdditionalSolarSystemsMax = (event) => {
         let value = Number(event.target.value);
 
-        if (value > Constants.ADDITIONAL_SOLAR_SYSTEMS_MAX) {
-            value = Constants.ADDITIONAL_SOLAR_SYSTEMS_MAX;
+        if (value > ADDITIONAL_SOLAR_SYSTEMS_MAX) {
+            value = ADDITIONAL_SOLAR_SYSTEMS_MAX;
         }
 
         if (value < additionalSolarSystemsMin) {
@@ -77,8 +77,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updatePlanetsPerSolarSystemMin = (event) => {
         let value = Number(event.target.value);
 
-        if (value < Constants.PLANETS_PER_SOLAR_SYSTEM_MIN) {
-            value = Constants.PLANETS_PER_SOLAR_SYSTEM_MIN;
+        if (value < PLANETS_PER_SOLAR_SYSTEM_MIN) {
+            value = PLANETS_PER_SOLAR_SYSTEM_MIN;
         }
 
         if (value > planetsPerSolarSystemMax) {
@@ -92,8 +92,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updatePlanetsPerSolarSystemMax = (event) => {
         let value = Number(event.target.value);
 
-        if (value > Constants.PLANETS_PER_SOLAR_SYSTEM_MAX) {
-            value = Constants.PLANETS_PER_SOLAR_SYSTEM_MAX;
+        if (value > PLANETS_PER_SOLAR_SYSTEM_MAX) {
+            value = PLANETS_PER_SOLAR_SYSTEM_MAX;
         }
 
         if (value < planetsPerSolarSystemMin) {
@@ -107,8 +107,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updatePlanetSizeMin = (event) => {
         let value = Number(event.target.value);
 
-        if (value < Constants.PLANET_SIZE_MIN) {
-            value = Constants.PLANET_SIZE_MIN;
+        if (value < PLANET_SIZE_MIN) {
+            value = PLANET_SIZE_MIN;
         }
 
         if (value > planetSizeMax) {
@@ -122,8 +122,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
     const updatePlanetSizeMax = (event) => {
         let value = Number(event.target.value);
 
-        if (value > Constants.PLANET_SIZE_MAX) {
-            value = Constants.PLANET_SIZE_MAX;
+        if (value > PLANET_SIZE_MAX) {
+            value = PLANET_SIZE_MAX;
         }
 
         if (value < planetSizeMin) {
@@ -172,8 +172,8 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                             id="skyxplore-lobby-max-players-per-solar-system"
                             className="skyxplore-lobby-settings-input"
                             value={maxPlayersPerSolarSystem}
-                            min={Constants.MIN_PLAYERS_PER_SOLAR_SYSTEM}
-                            max={Constants.MAX_PLAYERS_PER_SOLAR_SYSTEM}
+                            min={MIN_PLAYERS_PER_SOLAR_SYSTEM}
+                            max={MAX_PLAYERS_PER_SOLAR_SYSTEM}
                             onchange={updateMaxPlayersPerSolarSystem}
                             disabled={!isHost}
                         />
@@ -191,7 +191,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                                     id="skyxplore-lobby-additional-solar-systems-min"
                                     className="skyxplore-lobby-settings-input"
                                     value={additionalSolarSystemsMin}
-                                    min={Constants.ADDITIONAL_SOLAR_SYSTEMS_MIN}
+                                    min={ADDITIONAL_SOLAR_SYSTEMS_MIN}
                                     max={additionalSolarSystemsMax}
                                     onchange={updateAdditionalSolarSystemsMin}
                                     disabled={!isHost}
@@ -207,7 +207,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                                     className="skyxplore-lobby-settings-input"
                                     value={additionalSolarSystemsMax}
                                     min={additionalSolarSystemsMin}
-                                    max={Constants.ADDITIONAL_SOLAR_SYSTEMS_MAX}
+                                    max={ADDITIONAL_SOLAR_SYSTEMS_MAX}
                                     onchange={updateAdditionalSolarSystemsMax}
                                     disabled={!isHost}
                                 />
@@ -227,7 +227,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                                     id="skyxplore-lobby-planets-per-solar-system-min"
                                     className="skyxplore-lobby-settings-input"
                                     value={planetsPerSolarSystemMin}
-                                    min={Constants.PLANETS_PER_SOLAR_SYSTEM_MIN}
+                                    min={PLANETS_PER_SOLAR_SYSTEM_MIN}
                                     max={planetsPerSolarSystemMax}
                                     onchange={updatePlanetsPerSolarSystemMin}
                                     disabled={!isHost}
@@ -243,7 +243,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                                     className="skyxplore-lobby-settings-input"
                                     value={planetsPerSolarSystemMax}
                                     min={planetsPerSolarSystemMin}
-                                    max={Constants.PLANETS_PER_SOLAR_SYSTEM_MAX}
+                                    max={PLANETS_PER_SOLAR_SYSTEM_MAX}
                                     onchange={updatePlanetsPerSolarSystemMax}
                                     disabled={!isHost}
                                 />
@@ -263,7 +263,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                                     id="skyxplore-lobby-planet-size-min"
                                     className="skyxplore-lobby-settings-input"
                                     value={planetSizeMin}
-                                    min={Constants.PLANET_SIZE_MIN}
+                                    min={PLANET_SIZE_MIN}
                                     max={planetSizeMax}
                                     onchange={updatePlanetSizeMin}
                                     disabled={!isHost}
@@ -279,7 +279,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
                                     className="skyxplore-lobby-settings-input"
                                     value={planetSizeMax}
                                     min={planetSizeMin}
-                                    max={Constants.PLANET_SIZE_MAX}
+                                    max={PLANET_SIZE_MAX}
                                     onchange={updatePlanetSizeMax}
                                     disabled={!isHost}
                                 />

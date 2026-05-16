@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.RoleRequest;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -28,17 +28,17 @@ public class AddRoleTest extends BackEndTest {
     public void addRole() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
-        UUID userId = DatabaseUtil.getUserIdByEmail(testUser.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(testUser.getEmail());
 
         nullUserId(accessToken);
-        blankRole(accessToken);
+        nullRole(accessToken, userData);
         nullPassword(accessToken, userId);
         userNotFound(accessToken, userData);
         incorrectPassword(accessToken, userId);
@@ -49,7 +49,7 @@ public class AddRoleTest extends BackEndTest {
     private void incorrectPassword(String accessToken, UUID userId) {
         RoleRequest roleAlreadyExistsRequest = RoleRequest.builder()
             .userId(userId)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_TEST)
             .password(DataConstants.INCORRECT_PASSWORD)
             .build();
         Response response = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, roleAlreadyExistsRequest);
@@ -59,7 +59,7 @@ public class AddRoleTest extends BackEndTest {
     private void nullPassword(String accessToken, UUID userId) {
         RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(userId)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_TEST)
             .password(null)
             .build();
         Response response = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, nullUserIdRequest);
@@ -69,25 +69,26 @@ public class AddRoleTest extends BackEndTest {
     private static void nullUserId(String accessToken) {
         RoleRequest nullUserIdRequest = RoleRequest.builder()
             .userId(null)
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_TEST)
             .build();
         Response nullUserIdResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, nullUserIdRequest);
         verifyInvalidParam(nullUserIdResponse, "userId", "must not be null");
     }
 
-    private static void blankRole(String accessToken) {
+    private static void nullRole(String accessToken, RegistrationParameters userData) {
         RoleRequest blankRoleRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
-            .role(" ")
+            .role(null)
+            .password(userData.getPassword())
             .build();
         Response blankRoleResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, blankRoleRequest);
-        verifyInvalidParam(blankRoleResponse, "role", "must not be null or blank");
+        verifyInvalidParam(blankRoleResponse, "role", "must not be null");
     }
 
     private static void userNotFound(String accessToken, RegistrationParameters userData) {
         RoleRequest userNotFoundRequest = RoleRequest.builder()
             .userId(UUID.randomUUID())
-            .role(Constants.ROLE_ADMIN)
+            .role(Constants.ROLE_TEST)
             .password(userData.getPassword())
             .build();
         Response userNotFoundResponse = RoleManagementActions.getAddRoleResponse(getServerPort(), accessToken, userNotFoundRequest);

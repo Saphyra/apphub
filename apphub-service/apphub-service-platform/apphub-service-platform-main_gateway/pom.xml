@@ -82,12 +82,6 @@
             <artifactId>spring-cloud-starter-gateway-server-webflux</artifactId>
             <version>${versions.spring-cloud-gateway}</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.saphyra</groupId>
-            <artifactId>apphub-api-platform-web_content-client</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
     <build>

@@ -4,14 +4,14 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePopulationActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -33,7 +33,7 @@ public class MoraleRecoveryTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken = IndexPageActions.registerAndLogin(serverPort, userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         ApphubWsClient gameWsClient = SkyXploreFlow.startGame(serverPort, Constants.DEFAULT_GAME_NAME, new Player(accessToken, userId1))
             .get(accessToken);

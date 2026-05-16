@@ -2,10 +2,7 @@ spring:
   datasource:
     username: postgres
     password: postgres
-    url: jdbc:postgresql://${hostIp}:5432/${databaseName}?ApplicationName=${spring.application.name}
-
-hostIp: 192.168.0.198
-databaseName: apphub_production
+    url: jdbc:postgresql://${postgreSqlHost}:5432/apphub_production?ApplicationName=${spring.application.name}
 
 authorization:
   issuer: apphub-prod

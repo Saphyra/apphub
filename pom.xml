@@ -59,8 +59,8 @@
         <versions.jsonwebetoken>0.13.0</versions.jsonwebetoken>
 
         <!-- AWS -->
-        <versions.dynamodb>2.44.0</versions.dynamodb>
-        <versions.s3>2.42.41</versions.s3>
+        <versions.dynamodb>2.44.5</versions.dynamodb>
+        <versions.s3>2.44.5</versions.s3>
 
         <!-- Plugin Versions -->
         <versions.maven-compiler-plugin>3.14.1</versions.maven-compiler-plugin>

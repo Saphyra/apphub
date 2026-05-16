@@ -7,9 +7,9 @@ import com.github.saphyra.apphub.ci.process.minikube.MinikubeStartProcess;
 import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalDeployProcess;
+import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalStopProcess;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeNamespaceDeletionProcess;
-import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -57,6 +56,8 @@ class MinikubeMenuController {
         modelAndView.addObject("latest_services", String.join(",", propertyDao.getLatestServices()));
         modelAndView.addObject("latest_test_groups", propertyDao.getLatestTestGroups());
         modelAndView.addObject("minikube_port", platformProperties.getMinikubeDevServerPort());
+        modelAndView.addObject("postgres_port", platformProperties.getMinikubeDatabasePort());
+        modelAndView.addObject("dynamodb_port", platformProperties.getMinikubeDynamoDbPort());
 
         if (nonNull(error)) {
             modelAndView.addObject("error", error);
@@ -83,7 +84,7 @@ class MinikubeMenuController {
     }
 
     @PostMapping("/deploy-services")
-    String deployServices(@RequestAttribute("value") String input) {
+    String deployServices(@RequestParam("value") String input) {
         List<String> serviceNames = Arrays.asList(input.split(","));
         List<String> availableServiceNames = services.getServices()
             .stream()
@@ -107,7 +108,7 @@ class MinikubeMenuController {
     }
 
     @PostMapping("/run-test-groups")
-    String runTestGroups(@RequestAttribute("value") String input) {
+    String runTestGroups(@RequestParam("value") String input) {
         propertyDao.save(PropertyName.LATEST_TEST_GROUPS, input);
 
         taskQueue.add(() -> minikubeLocalRunTestsProcess.runTests(input));
@@ -122,6 +123,7 @@ class MinikubeMenuController {
 
             portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
             portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+            portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
         });
 
         return "redirect:/minikube?success=port_forwarding_started";

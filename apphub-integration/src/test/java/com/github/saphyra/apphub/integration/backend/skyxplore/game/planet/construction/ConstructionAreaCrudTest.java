@@ -3,15 +3,15 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.game.planet.cons
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreConstructionAreaActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXplorePlanetActions;
+import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -34,7 +34,7 @@ public class ConstructionAreaCrudTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         SkyXploreFlow.startGame(getServerPort(), Constants.DEFAULT_GAME_NAME, new Player(accessToken, userId1));
 

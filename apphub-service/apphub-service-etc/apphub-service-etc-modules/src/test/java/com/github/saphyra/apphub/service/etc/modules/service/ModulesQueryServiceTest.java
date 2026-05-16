@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.etc.modules.service;
 
 import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.etc.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
@@ -34,8 +35,6 @@ public class ModulesQueryServiceTest {
     private static final String MODULE_3 = "module-3";
     private static final String MODULE_4 = "module-4";
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String ROLE_1 = "role-1";
-    private static final String ROLE_2 = "role-2";
 
     @Mock
     private AccessTokenProvider accessTokenProvider;
@@ -51,7 +50,7 @@ public class ModulesQueryServiceTest {
 
     @Test
     public void getModules() {
-        given(accessTokenProvider.get()).willReturn(AccessToken.builder().userId(USER_ID).accessTokenId(UUID.randomUUID()).roles(Arrays.asList(ROLE_1)).build());
+        given(accessTokenProvider.get()).willReturn(AccessToken.builder().userId(USER_ID).accessTokenId(UUID.randomUUID()).roles(List.of(Role.TEST)).build());
 
         given(favoriteService.getByUserId(USER_ID)).willReturn(Arrays.asList(
             Favorite.builder().userId(USER_ID).module(MODULE_1).favorite(true).build(),
@@ -63,12 +62,12 @@ public class ModulesQueryServiceTest {
             createModule(MODULE_1),
             createModule(MODULE_2)
         ));
-        modules.put(CATEGORY_2, Arrays.asList(
+        modules.put(CATEGORY_2, Collections.singletonList(
             createModule(MODULE_1).toBuilder().mobileAllowed(false).build()
         ));
         modules.put(CATEGORY_3, Arrays.asList(
-            createModule(MODULE_3, ROLE_1),
-            createModule(MODULE_4, ROLE_2)
+            createModule(MODULE_3, Role.TEST),
+            createModule(MODULE_4, Role.NOTEBOOK)
         ));
         given(modulesProperties.getModules()).willReturn(modules);
 
@@ -88,11 +87,11 @@ public class ModulesQueryServiceTest {
         return createModule(module, null);
     }
 
-    private Module createModule(String moduleName, String role) {
+    private Module createModule(String moduleName, Role role) {
         return Module.builder()
             .name(moduleName)
             .mobileAllowed(true)
-            .roles(isNull(role) ? Collections.emptyList() : Arrays.asList(role))
+            .roles(isNull(role) ? Collections.emptyList() : List.of(role))
             .build();
     }
 }

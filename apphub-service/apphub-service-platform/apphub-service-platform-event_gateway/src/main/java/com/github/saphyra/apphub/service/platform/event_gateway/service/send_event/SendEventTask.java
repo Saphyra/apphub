@@ -33,9 +33,6 @@ public class SendEventTask implements Runnable {
     private final SendEventRequest<?> sendEventRequest;
 
     @NonNull
-    private final String locale;
-
-    @NonNull
     private final ExecutorServiceBean executorServiceBean;
 
     @NonNull
@@ -48,7 +45,7 @@ public class SendEventTask implements Runnable {
             .forEach(this::processLocal);
 
         List<EventProcessor> eventProcessors = eventProcessorDao.getByEventName(sendEventRequest.getEventName());
-        executorServiceBean.forEach(eventProcessors, eventProcessor -> eventSender.sendEvent(eventProcessor, sendEventRequest, locale));
+        executorServiceBean.forEach(eventProcessors, eventProcessor -> eventSender.sendEvent(eventProcessor, sendEventRequest));
 
         log.info("Event with name {} is sent to the processors.", sendEventRequest.getEventName());
     }

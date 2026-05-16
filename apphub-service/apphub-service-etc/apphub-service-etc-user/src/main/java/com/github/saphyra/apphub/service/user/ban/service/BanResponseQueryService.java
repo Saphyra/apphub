@@ -25,7 +25,7 @@ public class BanResponseQueryService {
     private final DateTimeUtil dateTimeUtil;
 
     public BanResponse getBans(UUID bannedUserId) {
-        User bannedUser = userDao.findByIdValidated(bannedUserId);
+        User bannedUser = userDao.findByUserIdValidated(bannedUserId);
 
         List<BanDetailsResponse> bans = banDao.getByUserId(bannedUserId)
             .stream()
@@ -43,7 +43,7 @@ public class BanResponseQueryService {
     }
 
     private BanDetailsResponse map(Ban ban) {
-        User bannedByUser = userDao.findByIdValidated(ban.getBannedBy());
+        User bannedByUser = userDao.findByUserIdValidated(ban.getBannedBy());
 
         return BanDetailsResponse.builder()
             .id(ban.getId())

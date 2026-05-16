@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanDetailsResponse;
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
@@ -25,7 +26,6 @@ public class BanResponseQueryServiceTest {
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
     private static final UUID BANNED_BY_ID = UUID.randomUUID();
     private static final UUID BAN_ID = UUID.randomUUID();
-    private static final String BANNED_ROLE = "banned-role";
     private static final LocalDateTime EXPIRATION = LocalDateTime.now();
     private static final String REASON = "reason";
     private static final String BANNED_USER_EMAIL = "banned-user-email";
@@ -59,15 +59,15 @@ public class BanResponseQueryServiceTest {
         Ban ban = Ban.builder()
             .id(BAN_ID)
             .userId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .expiration(EXPIRATION)
             .permanent(true)
             .reason(REASON)
             .bannedBy(BANNED_BY_ID)
             .build();
         given(banDao.getByUserId(BANNED_USER_ID)).willReturn(List.of(ban));
-        given(userDao.findByIdValidated(BANNED_USER_ID)).willReturn(bannedUser);
-        given(userDao.findByIdValidated(BANNED_BY_ID)).willReturn(bannedByUser);
+        given(userDao.findByUserIdValidated(BANNED_USER_ID)).willReturn(bannedUser);
+        given(userDao.findByUserIdValidated(BANNED_BY_ID)).willReturn(bannedByUser);
         given(bannedUser.getEmail()).willReturn(BANNED_USER_EMAIL);
         given(bannedUser.getUsername()).willReturn(BANNED_USER_USERNAME);
         given(bannedByUser.getEmail()).willReturn(BANNED_BY_USER_EMAIL);
@@ -86,9 +86,9 @@ public class BanResponseQueryServiceTest {
         assertThat(result.getMarkedForDeletionAt()).isEqualTo(FORMATTED_MARKED_FOR_DELETION_AT);
 
         assertThat(result.getBans()).hasSize(1);
-        BanDetailsResponse response = result.getBans().get(0);
+        BanDetailsResponse response = result.getBans().getFirst();
         assertThat(response.getId()).isEqualTo(BAN_ID);
-        assertThat(response.getBannedRole()).isEqualTo(BANNED_ROLE);
+        assertThat(response.getBannedRole()).isEqualTo(Role.TEST);
         assertThat(response.getExpiration()).isEqualTo(FORMATTED_EXPIRATION);
         assertThat(response.getPermanent()).isTrue();
         assertThat(response.getReason()).isEqualTo(REASON);
@@ -102,15 +102,15 @@ public class BanResponseQueryServiceTest {
         Ban ban = Ban.builder()
             .id(BAN_ID)
             .userId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .expiration(EXPIRATION)
             .permanent(true)
             .reason(REASON)
             .bannedBy(BANNED_BY_ID)
             .build();
         given(banDao.getByUserId(BANNED_USER_ID)).willReturn(List.of(ban));
-        given(userDao.findByIdValidated(BANNED_USER_ID)).willReturn(bannedUser);
-        given(userDao.findByIdValidated(BANNED_BY_ID)).willReturn(bannedByUser);
+        given(userDao.findByUserIdValidated(BANNED_USER_ID)).willReturn(bannedUser);
+        given(userDao.findByUserIdValidated(BANNED_BY_ID)).willReturn(bannedByUser);
         given(bannedUser.getEmail()).willReturn(BANNED_USER_EMAIL);
         given(bannedUser.getUsername()).willReturn(BANNED_USER_USERNAME);
         given(bannedByUser.getEmail()).willReturn(BANNED_BY_USER_EMAIL);
@@ -128,9 +128,9 @@ public class BanResponseQueryServiceTest {
         assertThat(result.getMarkedForDeletionAt()).isNull();
 
         assertThat(result.getBans()).hasSize(1);
-        BanDetailsResponse response = result.getBans().get(0);
+        BanDetailsResponse response = result.getBans().getFirst();
         assertThat(response.getId()).isEqualTo(BAN_ID);
-        assertThat(response.getBannedRole()).isEqualTo(BANNED_ROLE);
+        assertThat(response.getBannedRole()).isEqualTo(Role.TEST);
         assertThat(response.getExpiration()).isEqualTo(FORMATTED_EXPIRATION);
         assertThat(response.getPermanent()).isTrue();
         assertThat(response.getReason()).isEqualTo(REASON);

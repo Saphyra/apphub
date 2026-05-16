@@ -22,9 +22,9 @@ public class SkyXploreCharacterActions {
             .post(UrlFactory.create(serverPort, SkyXploreDataEndpoints.SKYXPLORE_CREATE_OR_UPDATE_CHARACTER));
     }
 
-    public static String getCharacterName(String email) {
-        return DatabaseUtil.findSkyXploreCharacterByEmail(email)
-            .orElseThrow(() -> new RuntimeException("SkyXploreCharacter not found for email " + email));
+    public static String getCharacterName(UUID userId) {
+        return DatabaseUtil.findSkyXploreCharacterByUserId(userId)
+            .orElseThrow(() -> new RuntimeException("SkyXploreCharacter not found for email " + userId));
     }
 
     public static Response getCharacterNameResponse(int serverPort, String accessToken) {

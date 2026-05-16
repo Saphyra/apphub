@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.platform.scheduler.schedulers;
 
 import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
 import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
-import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 class BanRevokeScheduler {
-    private final CommonConfigProperties commonConfigProperties;
     private final EventGatewayApiClient eventGatewayApi;
 
     @Scheduled(initialDelayString = "${initialDelay}", fixedRateString = "${interval.user.revoke-ban}")
@@ -23,8 +21,7 @@ class BanRevokeScheduler {
         eventGatewayApi.sendEvent(
             SendEventRequest.builder()
                 .eventName(eventName)
-                .build(),
-            commonConfigProperties.getDefaultLocale()
+                .build()
         );
     }
 }

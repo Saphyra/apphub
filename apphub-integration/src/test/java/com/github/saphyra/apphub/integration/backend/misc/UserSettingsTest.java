@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.UserSettingsActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
@@ -23,7 +23,7 @@ public class UserSettingsTest extends BackEndTest {
     public void userSettingsRoleProtection() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();

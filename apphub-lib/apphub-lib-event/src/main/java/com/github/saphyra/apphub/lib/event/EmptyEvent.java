@@ -8,8 +8,6 @@ public class EmptyEvent {
     public static final String WEB_SOCKET_CONNECTION_CLEANUP_EVENT = "web-socket-connection-cleanup";
     public static final String TRIGGER_ACCOUNT_DELETION = "user-data-trigger-deletion";
     public static final String TRIGGER_REVOKE_EXPIRED_BANS = "user-data-trigger-revoke-expired-bans";
-    public static final String STORAGE_CLEAN_UP_STORED_FILES = "storage-clean-up-stored-files";
-    public static final String STORAGE_FILE_CLEANUP = "storage-file-cleanup";
     public static final String ELITE_BASE_PROCESS_MESSAGES = "elite-base-process-messages";
     public static final String ELITE_BASE_RESET_UNHANDLED_MESSAGES = "elite-base-reset-unhandled-messages";
     public static final String ELITE_BASE_DELETE_EXPIRED_MESSAGES = "elite-base-delete-expired-messages";

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.platform.storage.event;
 
-import com.github.saphyra.apphub.service.platform.storage.dao.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
 import com.github.saphyra.apphub.service.platform.storage.service.DeleteFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

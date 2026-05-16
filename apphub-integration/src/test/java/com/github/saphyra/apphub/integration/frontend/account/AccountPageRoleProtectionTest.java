@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
@@ -26,7 +26,7 @@ public class AccountPageRoleProtectionTest extends SeleniumTest {
 
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MANAGE_ACCOUNT);
 
-        DatabaseUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         driver.navigate().to(UrlFactory.create(getServerPort(), UserEndpoints.ACCOUNT_PAGE));

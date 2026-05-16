@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.game.SurfaceConstructionAreaResponse;
@@ -32,7 +32,7 @@ public class DeconstructConstructionAreaWithBuildingModulesTest extends BackEndT
         int serverPort = getServerPort();
         String accessToken = IndexPageActions.registerAndLogin(serverPort, userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(serverPort, accessToken, characterModel1);
-        UUID userId1 = DatabaseUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
 
         SkyXploreFlow.startGame(serverPort, Constants.DEFAULT_GAME_NAME, new Player(accessToken, userId1));
 

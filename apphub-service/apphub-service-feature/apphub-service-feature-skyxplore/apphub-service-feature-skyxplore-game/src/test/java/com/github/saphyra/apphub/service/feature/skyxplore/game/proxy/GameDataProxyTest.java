@@ -5,16 +5,13 @@ import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItem;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameItemType;
 import com.github.saphyra.apphub.api.feature.skyxplore.model.game.GameModel;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.web_utils.LocaleProvider;
 import com.github.saphyra.apphub.service.feature.skyxplore.game.config.properties.GameProperties;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,15 +21,11 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class GameDataProxyTest {
-    private static final String LOCALE = "locale";
     private static final UUID ID = UUID.randomUUID();
     private static final UUID GAME_ID = UUID.randomUUID();
 
     @Mock
     private SkyXploreSavedGameClient dataGameClient;
-
-    @Mock
-    private LocaleProvider localeProvider;
 
     @Mock
     private GameProperties gameProperties;
@@ -46,37 +39,32 @@ public class GameDataProxyTest {
     @Mock
     private GameModel gameModel;
 
-    @BeforeEach
-    public void setUp() {
-        given(localeProvider.getOrDefault()).willReturn(LOCALE);
-    }
-
     @Test
     public void saveGameData() {
         given(gameProperties.getItemSaverMaxChunkSize()).willReturn(1);
 
         underTest.saveItem(gameItem);
 
-        verify(dataGameClient).saveGameData(Arrays.asList(gameItem), LOCALE);
+        verify(dataGameClient).saveGameData(List.of(gameItem));
     }
 
     @Test
     public void deleteItem() {
         underTest.deleteItem(ID, GameItemType.PLAYER);
 
-        verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.PLAYER)), LOCALE);
+        verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.PLAYER)));
     }
 
     @Test
     public void deleteItems() {
         underTest.deleteItems(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)));
 
-        verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)), LOCALE);
+        verify(dataGameClient).deleteGameItem(List.of(new BiWrapper<>(ID, GameItemType.ALLIANCE)));
     }
 
     @Test
     void getGameModel() {
-        given(dataGameClient.getGameModel(GAME_ID, LOCALE)).willReturn(gameModel);
+        given(dataGameClient.getGameModel(GAME_ID)).willReturn(gameModel);
 
         assertThat(underTest.getGameModel(GAME_ID)).isEqualTo(gameModel);
     }

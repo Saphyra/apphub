@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BanRequest;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,6 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 @ExtendWith(MockitoExtension.class)
 public class BanRequestValidatorTest {
     private static final UUID BANNED_USER_ID = UUID.randomUUID();
-    private static final String BANNED_ROLE = "banned-role";
     private static final String REASON = "reason";
     private static final String PASSWORD = "password";
 
@@ -26,7 +26,7 @@ public class BanRequestValidatorTest {
     public void valid_permanent() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(true)
             .duration(null)
             .chronoUnit(null)
@@ -41,7 +41,7 @@ public class BanRequestValidatorTest {
     public void valid_temporary() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(false)
             .duration(1)
             .chronoUnit(ChronoUnit.DAYS.name())
@@ -56,7 +56,7 @@ public class BanRequestValidatorTest {
     public void nullBannedUserId() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(null)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(true)
             .duration(null)
             .chronoUnit(null)
@@ -70,10 +70,10 @@ public class BanRequestValidatorTest {
     }
 
     @Test
-    public void blankBannedRole() {
+    public void nullBannedRole() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(" ")
+            .bannedRole(null)
             .permanent(true)
             .duration(null)
             .chronoUnit(null)
@@ -83,14 +83,14 @@ public class BanRequestValidatorTest {
 
         Throwable ex = catchThrowable(() -> underTest.validate(request));
 
-        ExceptionValidator.validateInvalidParam(ex, "bannedRole", "must not be null or blank");
+        ExceptionValidator.validateInvalidParam(ex, "bannedRole", "must not be null");
     }
 
     @Test
     public void nullPermanent() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(null)
             .duration(null)
             .chronoUnit(null)
@@ -107,7 +107,7 @@ public class BanRequestValidatorTest {
     public void blankReason() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(true)
             .duration(null)
             .chronoUnit(null)
@@ -124,7 +124,7 @@ public class BanRequestValidatorTest {
     public void blankPassword() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(true)
             .duration(null)
             .chronoUnit(null)
@@ -141,7 +141,7 @@ public class BanRequestValidatorTest {
     public void nullDurationWhenTemporary() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(false)
             .duration(null)
             .chronoUnit(ChronoUnit.DAYS.name())
@@ -158,7 +158,7 @@ public class BanRequestValidatorTest {
     public void durationTooLowWhenTemporary() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(false)
             .duration(0)
             .chronoUnit(ChronoUnit.DAYS.name())
@@ -175,7 +175,7 @@ public class BanRequestValidatorTest {
     public void nullChronoUnitWhenTemporary() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(false)
             .duration(1)
             .chronoUnit(null)
@@ -192,7 +192,7 @@ public class BanRequestValidatorTest {
     public void invalidValueForChronoUnitWhenTemporary() {
         BanRequest request = BanRequest.builder()
             .bannedUserId(BANNED_USER_ID)
-            .bannedRole(BANNED_ROLE)
+            .bannedRole(Role.TEST)
             .permanent(false)
             .duration(1)
             .chronoUnit("asd")

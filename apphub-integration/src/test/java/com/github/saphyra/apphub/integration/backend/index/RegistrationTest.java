@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.integration.backend.index;
 
-import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
+import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationRequest;
@@ -113,7 +113,7 @@ public class RegistrationTest extends BackEndTest {
             .toRegistrationRequest();
         Response response = IndexPageActions.getRegistrationResponse(getServerPort(), registrationRequest);
         assertThat(response.getStatusCode()).isEqualTo(200);
-        List<String> roles = DatabaseUtil.getRolesByUserId(DatabaseUtil.getUserIdByEmail(registrationRequest.getEmail()));
+        List<String> roles = DynamoDbUtil.getRolesByEmail(registrationRequest.getEmail());
         assertThat(roles).containsExactlyInAnyOrder(
             Constants.ROLE_NOTEBOOK,
             Constants.ROLE_SKYXPLORE,

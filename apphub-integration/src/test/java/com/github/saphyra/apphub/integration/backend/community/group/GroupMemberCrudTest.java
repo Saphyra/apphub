@@ -4,8 +4,9 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.CommunityActions;
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.core.TestBase;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.CustomAssertions;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
@@ -16,7 +17,7 @@ import com.github.saphyra.apphub.integration.structure.api.community.SearchResul
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,19 +29,19 @@ public class GroupMemberCrudTest extends BackEndTest {
     public void groupMemberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DatabaseUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters friendData1 = RegistrationParameters.validParameters();
         String friendAccessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), friendData1);
-        UUID friendUserId1 = DatabaseUtil.getUserIdByEmail(friendData1.getEmail());
+        UUID friendUserId1 = DynamoDbUtil.getUserIdByEmail(friendData1.getEmail());
 
         RegistrationParameters friendData2 = RegistrationParameters.validParameters();
         String friendAccessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), friendData2);
-        UUID friendUserId2 = DatabaseUtil.getUserIdByEmail(friendData2.getEmail());
+        UUID friendUserId2 = DynamoDbUtil.getUserIdByEmail(friendData2.getEmail());
 
         RegistrationParameters friendOfFriendData = RegistrationParameters.validParameters();
         String friendOfFriendAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), friendOfFriendData);
-        UUID friendOfFriendUserId = DatabaseUtil.getUserIdByEmail(friendOfFriendData.getEmail());
+        UUID friendOfFriendUserId = DynamoDbUtil.getUserIdByEmail(friendOfFriendData.getEmail());
 
         CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId1, friendUserId1);
         CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId2, friendUserId2);
@@ -48,13 +49,20 @@ public class GroupMemberCrudTest extends BackEndTest {
 
         GroupListResponse group = GroupActions.createGroup(getServerPort(), accessToken, GROUP_NAME);
 
-        search_friendsOnly_noMembers(accessToken, friendUserId1, friendUserId2, group);
+        search_friendsOnly_noMembers(
+            accessToken,
+            Map.of(
+                friendUserId1, friendData1.getUsername(),
+                friendUserId2, friendData2.getUsername()
+            ),
+            group
+        );
         create_nullMemberUserId(accessToken, group);
         create_cannotBeAdded(accessToken, friendOfFriendUserId, group);
         GroupMemberResponse groupMember = create(accessToken, friendData1, friendUserId1, group);
         create_alreadyMember(accessToken, friendUserId1, group);
-        search_memberNotInList(accessToken, friendUserId2, group);
-        search_friendOfFriendShouldAppear(accessToken, friendUserId2, friendOfFriendUserId, group);
+        search_memberNotInList(accessToken, friendData1.getUsername(), new BiWrapper<>(friendUserId2, friendData2.getUsername()), group);
+        search_friendOfFriendShouldAppear(accessToken, friendOfFriendUserId, friendOfFriendData.getUsername(), group);
         create_noRole(friendAccessTokenId1, friendOfFriendUserId, group);
         modifyRoles_nullCanInvite(accessToken, group, groupMember);
         modifyRoles_nullCanKick(accessToken, group, groupMember);
@@ -81,10 +89,12 @@ public class GroupMemberCrudTest extends BackEndTest {
         return groupMember;
     }
 
-    private static void search_friendsOnly_noMembers(String accessToken, UUID friendUserId1, UUID friendUserId2, GroupListResponse group) {
-        List<SearchResultItem> searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
-
-        assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId1, friendUserId2);
+    private static void search_friendsOnly_noMembers(String accessToken, Map<UUID, String> users, GroupListResponse group) {
+        users.forEach((userId, username) -> {
+            CustomAssertions.singleListAssertThat(GroupActions.search(getServerPort(), accessToken, group.getGroupId(), username))
+                .extracting(SearchResultItem::getUserId)
+                .isEqualTo(userId);
+        });
     }
 
     private static void create_nullMemberUserId(String accessToken, GroupListResponse group) {
@@ -114,20 +124,19 @@ public class GroupMemberCrudTest extends BackEndTest {
         );
     }
 
-    private static void search_memberNotInList(String accessToken, UUID friendUserId2, GroupListResponse group) {
-        List<SearchResultItem> searchResult;
-        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
-
-        assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId2);
+    private static void search_memberNotInList(String accessToken, String usernameNotInList, BiWrapper<UUID, String> userInList, GroupListResponse group) {
+        assertThat(GroupActions.search(getServerPort(), accessToken, group.getGroupId(), usernameNotInList)).isEmpty();
+        CustomAssertions.singleListAssertThat(GroupActions.search(getServerPort(), accessToken, group.getGroupId(), userInList.getEntity2()))
+            .extracting(SearchResultItem::getUserId)
+            .isEqualTo(userInList.getEntity1());
     }
 
-    private static void search_friendOfFriendShouldAppear(String accessToken, UUID friendUserId2, UUID friendOfFriendUserId, GroupListResponse group) {
-        List<SearchResultItem> searchResult;
+    private static void search_friendOfFriendShouldAppear(String accessToken, UUID friendOfFriendUserId, String friendOfFriendUsername, GroupListResponse group) {
         GroupActions.changeInvitationType(getServerPort(), accessToken, group.getGroupId(), GroupInvitationType.FRIENDS_OF_FRIENDS);
 
-        searchResult = GroupActions.search(getServerPort(), accessToken, group.getGroupId(), TestBase.getEmailDomain());
-
-        assertThat(searchResult.stream().map(SearchResultItem::getUserId)).containsExactlyInAnyOrder(friendUserId2, friendOfFriendUserId);
+        CustomAssertions.singleListAssertThat(GroupActions.search(getServerPort(), accessToken, group.getGroupId(), friendOfFriendUsername))
+            .extracting(SearchResultItem::getUserId)
+            .isEqualTo(friendOfFriendUserId);
     }
 
     private static void create_noRole(String friendAccessTokenId1, UUID friendOfFriendUserId, GroupListResponse group) {

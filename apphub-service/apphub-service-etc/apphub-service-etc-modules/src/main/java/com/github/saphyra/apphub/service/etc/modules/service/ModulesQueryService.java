@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.etc.modules.service;
 
 import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.etc.modules.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -62,9 +64,9 @@ public class ModulesQueryService {
         return result;
     }
 
-    private boolean userHasRole(List<String> roles) {
+    private boolean userHasRole(List<Role> roles) {
         AccessToken accessToken = accessTokenProvider.get();
-        boolean result = accessToken.getRoles()
+        boolean result = new HashSet<>(accessToken.getRoles())
             .containsAll(roles);
         log.info("User {} has all the roles {}: {}. (Granted roles are: {})", accessToken.getUserId(), roles, result, accessToken.getRoles());
         return result;

@@ -90,10 +90,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * ### storage
   * Responsible for file upload, storage, and download
   * Acts as a proxy / adapter between the platform and an external FTP server
-* ### web-content
-  * Contains localization
-  * Servers frontend
-  * Deprecated, will be removed once all the features are migrated to React
 * ### skyxplore-data
   * Responsible for user data storage, like games, friendships, and static game files
 * ### skyxplore-game

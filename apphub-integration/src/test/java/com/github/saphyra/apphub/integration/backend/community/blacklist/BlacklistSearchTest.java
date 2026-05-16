@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import org.testng.annotations.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,14 +20,14 @@ public class BlacklistSearchTest extends BackEndTest {
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), testUserData);
 
-        List<SearchResultItem> searchResult = BlacklistActions.search(getServerPort(), accessToken, getEmailDomain());
+        List<SearchResultItem> searchResult = BlacklistActions.search(getServerPort(), accessToken, testUserData.getUsername());
 
         assertThat(searchResult).hasSize(1);
-        assertThat(searchResult.get(0).getUsername()).isEqualTo(testUserData.getUsername());
-        assertThat(searchResult.get(0).getEmail()).isEqualTo(testUserData.getEmail());
+        assertThat(searchResult.getFirst().getUsername()).isEqualTo(testUserData.getUsername());
+        assertThat(searchResult.getFirst().getEmail()).isEqualTo(testUserData.getEmail());
 
         BlacklistActions.createBlacklist(getServerPort(), accessToken, searchResult.get(0).getUserId());
 
-        assertThat(BlacklistActions.search(getServerPort(), accessToken, getEmailDomain())).isEmpty();
+        assertThat(BlacklistActions.search(getServerPort(), accessToken, getTestMethodName())).isEmpty();
     }
 }

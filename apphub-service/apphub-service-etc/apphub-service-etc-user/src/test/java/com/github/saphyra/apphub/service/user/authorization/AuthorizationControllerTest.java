@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.user.authorization;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationRequest;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResponse;
 import com.github.saphyra.apphub.api.etc.user.model.authorization.AuthorizationResult;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
@@ -10,8 +11,6 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.user.ban.service.BanService;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
-import com.github.saphyra.apphub.service.user.data.dao.role.Role;
-import com.github.saphyra.apphub.service.user.data.dao.role.RoleDao;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -40,7 +39,6 @@ class AuthorizationControllerTest {
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String PASSWORD = "password";
-    private static final String ROLE = "role";
 
     @Mock
     private UserDao userDao;
@@ -55,9 +53,6 @@ class AuthorizationControllerTest {
     private CheckPasswordService checkPasswordService;
 
     @Mock
-    private RoleDao roleDao;
-
-    @Mock
     private BanService banService;
 
     @InjectMocks
@@ -66,15 +61,12 @@ class AuthorizationControllerTest {
     @Mock
     private User user;
 
-    @Mock
-    private Role role;
-
     @Test
     void authorize_userNotFound() {
         AuthorizationRequest request = AuthorizationRequest.builder()
             .userIdentifier(USER_IDENTIFIER)
             .build();
-        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.empty());
+        given(userDao.findByUserIdentifier(USER_IDENTIFIER)).willReturn(Optional.empty());
 
         assertThat(underTest.authorize(request))
             .returns(AuthorizationResult.USER_NOT_FOUND, AuthorizationResponse::getAuthorizationResult);
@@ -85,7 +77,7 @@ class AuthorizationControllerTest {
         AuthorizationRequest request = AuthorizationRequest.builder()
             .userIdentifier(USER_IDENTIFIER)
             .build();
-        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
+        given(userDao.findByUserIdentifier(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(true);
 
         assertThat(underTest.authorize(request))
@@ -97,7 +89,7 @@ class AuthorizationControllerTest {
         AuthorizationRequest request = AuthorizationRequest.builder()
             .userIdentifier(USER_IDENTIFIER)
             .build();
-        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
+        given(userDao.findByUserIdentifier(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(false);
         given(user.getLockedUntil()).willReturn(CURRENT_TIME.plusSeconds(1));
         given(user.getUserId()).willReturn(USER_ID);
@@ -114,7 +106,7 @@ class AuthorizationControllerTest {
             .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .build();
-        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
+        given(userDao.findByUserIdentifier(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(false);
         given(user.getLockedUntil()).willReturn(CURRENT_TIME.minusSeconds(1));
         given(user.getUserId()).willReturn(USER_ID);
@@ -137,20 +129,19 @@ class AuthorizationControllerTest {
             .userIdentifier(USER_IDENTIFIER)
             .password(PASSWORD)
             .build();
-        given(userDao.findByUsernameOrEmail(USER_IDENTIFIER)).willReturn(Optional.of(user));
+        given(userDao.findByUserIdentifier(USER_IDENTIFIER)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(false);
         given(user.getLockedUntil()).willReturn(CURRENT_TIME.minusSeconds(1));
         given(user.getUserId()).willReturn(USER_ID);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
-        given(userDao.findById(USER_ID)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID)).willReturn(Optional.of(user));
         given(banService.getActivelyBannedRolesOf(USER_ID)).willReturn(List.of());
-        given(roleDao.getByUserId(USER_ID)).willReturn(List.of(role));
-        given(role.getRole()).willReturn(ROLE);
+        given(user.getRoles()).willReturn(List.of(Role.TEST));
 
         assertThat(underTest.authorize(request))
             .returns(AuthorizationResult.AUTHORIZED, AuthorizationResponse::getAuthorizationResult)
             .returns(USER_ID, AuthorizationResponse::getUserId)
-            .returns(List.of(ROLE), AuthorizationResponse::getRoles);
+            .returns(List.of(Role.TEST), AuthorizationResponse::getRoles);
 
         then(checkPasswordService).should().checkPassword(USER_ID, PASSWORD);
         then(accessTokenProvider).should().set(AccessToken.builder().userId(USER_ID).build());
@@ -159,7 +150,7 @@ class AuthorizationControllerTest {
 
     @Test
     void getRoles_userNotFound() {
-        given(userDao.findById(USER_ID)).willReturn(Optional.empty());
+        given(userDao.findByUserId(USER_ID)).willReturn(Optional.empty());
 
         Throwable ex = catchThrowable(() -> underTest.getRoles(USER_ID));
 
@@ -168,7 +159,7 @@ class AuthorizationControllerTest {
 
     @Test
     void getRoles_userMarkedForDeletion() {
-        given(userDao.findById(USER_ID)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(true);
 
         Throwable ex = catchThrowable(() -> underTest.getRoles(USER_ID));
@@ -178,27 +169,25 @@ class AuthorizationControllerTest {
 
     @Test
     void getRoles_roleBanned() {
-        given(userDao.findById(USER_ID)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(false);
-        given(banService.getActivelyBannedRolesOf(USER_ID)).willReturn(List.of(ROLE));
-        given(roleDao.getByUserId(USER_ID)).willReturn(List.of(role));
-        given(role.getRole()).willReturn(ROLE);
+        given(banService.getActivelyBannedRolesOf(USER_ID)).willReturn(List.of(Role.TEST));
+        given(user.getRoles()).willReturn(List.of(Role.TEST));
 
-        List<String> result = underTest.getRoles(USER_ID);
+        List<Role> result = underTest.getRoles(USER_ID);
 
         assertThat(result).isEmpty();
     }
 
     @Test
     void getRoles() {
-        given(userDao.findById(USER_ID)).willReturn(Optional.of(user));
+        given(userDao.findByUserId(USER_ID)).willReturn(Optional.of(user));
         given(user.isMarkedForDeletion()).willReturn(false);
         given(banService.getActivelyBannedRolesOf(USER_ID)).willReturn(List.of());
-        given(roleDao.getByUserId(USER_ID)).willReturn(List.of(role));
-        given(role.getRole()).willReturn(ROLE);
+        given(user.getRoles()).willReturn(List.of(Role.TEST));
 
-        List<String> result = underTest.getRoles(USER_ID);
+        List<Role> result = underTest.getRoles(USER_ID);
 
-        assertThat(result).containsExactly(ROLE);
+        assertThat(result).containsExactly(Role.TEST);
     }
 }

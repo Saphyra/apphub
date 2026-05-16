@@ -36,15 +36,14 @@ public class UnmarkUserForDeletionServiceTest {
 
     @Test
     public void unmarkUserForDeletion() {
-        given(userDao.findByIdValidated(USER_ID)).willReturn(user);
+        given(userDao.findByUserIdValidated(USER_ID)).willReturn(user);
         given(banResponseQueryService.getBans(USER_ID)).willReturn(banResponse);
 
         BanResponse result = underTest.unmarkUserForDeletion(USER_ID);
 
-        verify(user).setMarkedForDeletion(false);
         verify(user).setMarkedForDeletionAt(null);
 
-        verify(userDao).save(user);
+        verify(userDao).updateMarkedForDeletion(user);
 
         assertThat(result).isEqualTo(banResponse);
     }

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.ban.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.ban.BannedDetailsResponse;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.service.user.ban.dao.Ban;
 import com.github.saphyra.apphub.service.user.ban.dao.BanDao;
 import org.junit.jupiter.api.Test;
@@ -20,8 +21,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class BannedDetailsQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String REQUIRED_ROLE = "required-role";
-    private static final String IRRELEVANT_ROLE = "irrelevant-role";
     private static final LocalDateTime EXPIRATION_1 = LocalDateTime.now();
     private static final LocalDateTime EXPIRATION_2 = EXPIRATION_1.plusDays(1);
 
@@ -40,9 +39,9 @@ class BannedDetailsQueryServiceTest {
     @Test
     void noBans() {
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(irrelevantBan));
-        given(irrelevantBan.getBannedRole()).willReturn(IRRELEVANT_ROLE);
+        given(irrelevantBan.getBannedRole()).willReturn(Role.ADMIN);
 
-        assertThat(underTest.getBannedDetails(USER_ID, List.of(REQUIRED_ROLE)))
+        assertThat(underTest.getBannedDetails(USER_ID, List.of(Role.TEST)))
             .returns(null, BannedDetailsResponse::getBannedUntil)
             .returns(null, BannedDetailsResponse::getPermanent);
     }
@@ -50,11 +49,11 @@ class BannedDetailsQueryServiceTest {
     @Test
     void permanentBan() {
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban, irrelevantBan));
-        given(irrelevantBan.getBannedRole()).willReturn(IRRELEVANT_ROLE);
-        given(ban.getBannedRole()).willReturn(REQUIRED_ROLE);
+        given(irrelevantBan.getBannedRole()).willReturn(Role.ADMIN);
+        given(ban.getBannedRole()).willReturn(Role.TEST);
         given(ban.isPermanent()).willReturn(true);
 
-        assertThat(underTest.getBannedDetails(USER_ID, List.of(REQUIRED_ROLE)))
+        assertThat(underTest.getBannedDetails(USER_ID, List.of(Role.TEST)))
             .returns(null, BannedDetailsResponse::getBannedUntil)
             .returns(true, BannedDetailsResponse::getPermanent);
     }
@@ -62,14 +61,14 @@ class BannedDetailsQueryServiceTest {
     @Test
     void temporaryBan() {
         given(banDao.getByUserId(USER_ID)).willReturn(List.of(ban, ban, irrelevantBan));
-        given(irrelevantBan.getBannedRole()).willReturn(IRRELEVANT_ROLE);
-        given(ban.getBannedRole()).willReturn(REQUIRED_ROLE);
+        given(irrelevantBan.getBannedRole()).willReturn(Role.ADMIN);
+        given(ban.getBannedRole()).willReturn(Role.TEST);
         given(ban.isPermanent()).willReturn(false);
         given(ban.getExpiration())
             .willReturn(EXPIRATION_1)
             .willReturn(EXPIRATION_2);
 
-        assertThat(underTest.getBannedDetails(USER_ID, List.of(REQUIRED_ROLE)))
+        assertThat(underTest.getBannedDetails(USER_ID, List.of(Role.TEST)))
             .returns(EXPIRATION_2.toEpochSecond(ZoneOffset.UTC), BannedDetailsResponse::getBannedUntil)
             .returns(false, BannedDetailsResponse::getPermanent);
     }
