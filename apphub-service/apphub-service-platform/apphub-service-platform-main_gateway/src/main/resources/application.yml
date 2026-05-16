@@ -45,7 +45,7 @@ spring:
                 /web/utils/json-formatter,\
                 /web/elite-base,\
                 /web/elite-base/*,\
-                /web/util/direction,\
+                /web/utils/direction,\
                 /web/calendar,\
                 /web/calendar/**,\
                 /web/user/account"
@@ -58,20 +58,12 @@ spring:
               filters:
                 - StripPrefix=${stripPrefix.static}
             #RESOURCES
-            - id: common-resources
-              uri: http://${serviceHosts.webContent}
-              predicates:
-                - Path=/res/common/**, /res/admin-panel/**, /res/community/**, /res/utils/**, /res/user/**
             - id: training-resources
               uri: http://${serviceHosts.training}
               predicates:
                 - Path=/res/training/**
 
             #PAGES
-            - id: common-pages
-              uri: http://${serviceHosts.webContent}
-              predicates:
-                - Path=/web/community
             - id: training-pages
               uri: http://${serviceHosts.training}
               predicates:

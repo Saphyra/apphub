@@ -31,7 +31,6 @@ serviceHosts:
   skyxploreLobby: n-a:8093
   storage: n-a:8099
   user: n-a:8085
-  webContent: n-a:8083
   monitoring: n-a:8084
   authorization: n-a:8084
   mainGateway: n-a:8080

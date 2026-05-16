@@ -12,7 +12,6 @@ serviceHosts:
   skyxploreLobby: localhost:8093
   storage: localhost:8099
   user: localhost:8085
-  webContent: localhost:8083
   monitoring: localhost:8084
   authorization: localhost:8092
   community: localhost:8096
