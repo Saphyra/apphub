@@ -1,4 +1,6 @@
 ===FEATURES===
+    ApphubCI
+        Run integration tests by name
 
 ===BUGFIXES===
 

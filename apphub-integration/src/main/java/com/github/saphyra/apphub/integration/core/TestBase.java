@@ -38,6 +38,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+import static com.github.saphyra.apphub.integration.core.TestConfiguration.ENABLED_TEST_GROUPS;
 import static java.util.Objects.isNull;
 
 @Slf4j
@@ -71,7 +72,7 @@ public abstract class TestBase {
     public void setUpSuite() {
         log.info("Thread count: {}", TestConfiguration.AVAILABLE_PERMITS);
         log.info("Disabled test groups: {}", TestConfiguration.DISABLED_TEST_GROUPS);
-        log.info("Enabled test groups: {}", TestConfiguration.ENABLED_TEST_GROUPS);
+        log.info("Enabled test groups: {}", ENABLED_TEST_GROUPS);
         log.info("ServerPort: {}", TestConfiguration.SERVER_PORT);
         log.info("DatabasePort: {}", TestConfiguration.DATABASE_PORT);
         log.info("DatabaseName: {}", TestConfiguration.DATABASE_NAME);
@@ -116,9 +117,14 @@ public abstract class TestBase {
     public static boolean isEnabled(ITestNGMethod method) {
         List<String> groups = Arrays.asList(method.getGroups());
 
+        String methodName = method.getMethodName();
+        if(ENABLED_TEST_GROUPS.contains(methodName)){
+            return true;
+        }
+
         return TestConfiguration.DISABLED_TEST_GROUPS.stream()
             .noneMatch(groups::contains)
-            && TestConfiguration.ENABLED_TEST_GROUPS.stream()
+            && ENABLED_TEST_GROUPS.stream()
             .anyMatch(groups::contains);
     }
 
