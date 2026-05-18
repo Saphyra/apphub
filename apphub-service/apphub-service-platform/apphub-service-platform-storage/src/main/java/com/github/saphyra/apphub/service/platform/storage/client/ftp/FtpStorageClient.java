@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @FtpClientEnabled
-class FtpStorageClient implements StorageClient {
+public class FtpStorageClient implements StorageClient {
     private final FtpClientFactory ftpClientFactory;
     private final UuidConverter uuidConverter;
     private final ErrorReporterService errorReporterService;

@@ -61,7 +61,7 @@ supportedLocales:
 - en
 defaultLocale: en
 fileUpload:
-  maxFileSize: 104_857_600 #100MB
+  maxFileSize: 209_715_200 #200MB
 webSocketSession:
   expirationSeconds: 30
 authorization:
