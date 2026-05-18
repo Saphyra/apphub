@@ -130,7 +130,7 @@ export const getLabels = (displayedTimestamp, entryMap, colors) => {
  */
 export const getPropertyLines = (entries, properties, colors, hiddenProperties) => {
     const maxValue = new Stream(entries)
-        .flatMap(entry => new Stream(Object.values(entry.properties)))
+        .flatMap(entry => new MapStream(entry.properties).filter((property, value) => !hiddenProperties.includes(property)).toListStream((property, value) => value))
         .max()
         .orElseThrow("IllegalArgument", "No properties found for any entry");
 

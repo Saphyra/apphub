@@ -1,6 +1,8 @@
 ===FEATURES===
     ApphubCI
         Run integration tests by name
+    Monitoring
+        Hidden property does not count when calculating max value
 
 ===BUGFIXES===
 
