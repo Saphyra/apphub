@@ -5,6 +5,8 @@
         Hidden property does not count when calculating max value
 
 ===BUGFIXES===
+    Integration
+        Fix exceptionally high network usage when starting WebDrivers
 
 ===PLATFORM CHANGES===
 
