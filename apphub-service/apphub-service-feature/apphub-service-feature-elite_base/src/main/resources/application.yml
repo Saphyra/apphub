@@ -11,9 +11,9 @@ liquibase:
 elite-base:
   cache:
     expireAfterAccess: PT1H
-    bufferSynchronizationInterval: PT5M
+    bufferSynchronizationInterval: PT1M
     bufferSynchronizationCheckInterval: PT10S
-    maxBufferSize: 100000
+    maxBufferSize: 1000
     cacheReadTimeout: PT5S
     loadRetryDelay: PT5S
   messageExpiration: P30D

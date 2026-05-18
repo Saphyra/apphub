@@ -11,6 +11,8 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    EliteBase
+        Decrease Buffer lifecycle time for smaller batches
 
 ===ETC===
 
