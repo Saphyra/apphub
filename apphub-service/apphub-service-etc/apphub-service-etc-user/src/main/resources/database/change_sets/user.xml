@@ -82,4 +82,12 @@
             <column name="locked_until" type="datetime"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-table-user" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="apphub_user" schemaName="apphub_user"/>
+        </preConditions>
+
+        <dropTable tableName="apphub_user" schemaName="apphub_user"/>
+    </changeSet>
 </databaseChangeLog>

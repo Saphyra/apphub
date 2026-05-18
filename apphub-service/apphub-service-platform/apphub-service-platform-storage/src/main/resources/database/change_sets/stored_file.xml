@@ -46,4 +46,12 @@
             <column name="storage" value="FTP"/>
         </update>
     </changeSet>
+
+    <changeSet id="drop-table-stored_file" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="stored_file" schemaName="storage"/>
+        </preConditions>
+
+        <dropTable tableName="stored_file" schemaName="storage"/>
+    </changeSet>
 </databaseChangeLog>

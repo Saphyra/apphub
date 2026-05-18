@@ -21,4 +21,10 @@
 
         <addPrimaryKey schemaName="apphub_user" tableName="apphub_role" columnNames="role_id" constraintName="apphub_role-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-role" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="apphub_user" tableName="apphub_role"/>
+        </preConditions>
+    </changeSet>
 </databaseChangeLog>
