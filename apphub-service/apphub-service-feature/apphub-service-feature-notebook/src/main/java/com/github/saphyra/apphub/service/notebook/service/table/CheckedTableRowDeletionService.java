@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableRowDeletionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

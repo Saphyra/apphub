@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,10 +54,10 @@ class ChecklistCloneServiceTest {
     private ChecklistCloneService underTest;
 
     @Mock
-    private ListItem originalListItem;
+    private DeprecatedListItem originalListItem;
 
     @Mock
-    private ListItem listItemClone;
+    private DeprecatedListItem listItemClone;
 
     @Mock
     private Dimension originalRow;

@@ -2,7 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.query;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemModelQueryService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistResponseFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +30,7 @@ class ChecklistResponseFactoryTest {
     private ChecklistResponseFactory underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private ChecklistItemModel model;

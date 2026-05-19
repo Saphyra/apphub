@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDto;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableColumnDeletionService;
@@ -46,7 +46,7 @@ class EditTableColumnEditerTest {
     private TableFileUploadResponse fileUploadResponse;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private TableColumnModel model;

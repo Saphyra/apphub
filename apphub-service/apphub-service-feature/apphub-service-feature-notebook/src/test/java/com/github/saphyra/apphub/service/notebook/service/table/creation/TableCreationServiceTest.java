@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableReq
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.TableCreationRequestValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,10 +33,10 @@ class TableCreationServiceTest {
     private TableCreationRequestValidator tableCreationRequestValidator;
 
     @Mock
-    private ListItemFactory listItemFactory;
+    private DeprecatedListItemFactory listItemFactory;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private TableRowCreationService tableRowCreationService;
@@ -54,7 +54,7 @@ class TableCreationServiceTest {
     private TableRowModel rowModel;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private TableFileUploadResponse fileUploadResponse;

@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -14,43 +14,92 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class ListItemDao extends AbstractDao<ListItemEntity, ListItem, String, ListItemRepository> implements DeleteByUserIdDao {
-    private final UuidConverter uuidConverter;
-    private final ListItemConverter converter;
+@RequiredArgsConstructor
+@Slf4j
+//TODO unit test
+public class ListItemDao {
+    public void save(ListItem listItem) {
 
-    public ListItemDao(ListItemConverter converter, ListItemRepository repository, UuidConverter uuidConverter) {
-        super(converter, repository);
-        this.uuidConverter = uuidConverter;
-        this.converter = converter;
     }
 
-    public List<ListItem> getByUserIdAndType(UUID userId, ListItemType type) {
-        return converter.convertEntity(repository.getByUserIdAndType(uuidConverter.convertDomain(userId), type));
+    public List<ListItem> getByUserIdAndParent(UUID userId, UUID parent) {
+        return null;
     }
 
-    public Optional<ListItem> findById(UUID listItemId) {
-        return findById(uuidConverter.convertDomain(listItemId));
+    public List<ListItem> getByUserIdAndType(UUID userId, ListItemType listItemType) {
+        return null;
     }
 
-    public ListItem findByIdValidated(UUID listItemId) {
-        return findById(listItemId)
+    public Optional<ListItem> findById(UUID userId, UUID listItemId) {
+        return null;
+    }
+
+    public ListItem findByIdValidated(UUID userId, UUID listItemId) {
+        return findById(userId, listItemId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.LIST_ITEM_NOT_FOUND, "ListItem not found with id " + listItemId));
     }
 
-    //UserId is necessary because of the root's children, since parent is null for multiple users' records
-    public List<ListItem> getByUserIdAndParent(UUID userId, UUID parent) {
-        return converter.convertEntity(repository.getByUserIdAndParent(
-            uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(parent)
-        ));
-    }
-
-    @Override
-    public void deleteByUserId(UUID userId) {
-        repository.deleteByUserId(uuidConverter.convertDomain(userId));
-    }
-
     public List<ListItem> getByUserId(UUID userId) {
-        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+        return null;
+    }
+
+    public List<Content> getContentsByUserId(UUID userId) {
+        return null;
+    }
+
+    public List<ListItem> getByIds(UUID userId, List<UUID> listItemIds) {
+        return null;
+    }
+
+    public ChecklistItem findChecklistItemValidated(UUID userId, UUID listItemId, UUID checklistItemId) {
+        return null;
+    }
+
+    public void saveChecklist(ListItem listItem, List<ChecklistItem> checklistItems, List<Content> contents) {
+
+    }
+
+    public void deleteChecklist(UUID userId, UUID listItemId) {
+
+    }
+
+    public List<Content> getContents(UUID userId, UUID listItemId, ParentType parentType) {
+        return null;
+    }
+
+    public void save(ChecklistItem checklistItem, List<Content> contents) {
+
+    }
+
+    public void saveContent(UUID userId, UUID listItemId, List<Content> contents) {
+
+    }
+
+    public void deleteChecklistItem(UUID userId, UUID listItemId, UUID checklistItemId) {
+        //TODO delete Content too
+    }
+
+    public TriWrapper<ListItem, List<ChecklistItem>, List<Content>> findChecklistValidated(UUID userId, UUID listItemId) {
+        return null;
+    }
+
+    public void saveChecklistItem(ChecklistItem checklistItem) {
+
+    }
+
+    public List<ChecklistItem> getChecklistItems(UUID userId, UUID listItemId) {
+        return null;
+    }
+
+    public void deleteChecklistItems(List<ChecklistItem> checklistItems) {
+        //TODO delete Content too
+    }
+
+    public void editChecklist(ListItem listItem, List<ChecklistItem> deletedChecklistItems, List<ChecklistItem> newChecklistItems, List<ChecklistItem> modifiedChecklistItems, List<Content> contents) {
+
+    }
+
+    public void saveChecklistItems(List<ChecklistItem> modifiedItems) {
+
     }
 }

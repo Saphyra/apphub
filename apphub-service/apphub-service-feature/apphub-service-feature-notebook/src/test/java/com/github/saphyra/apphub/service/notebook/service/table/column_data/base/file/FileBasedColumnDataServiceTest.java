@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import lombok.Builder;
@@ -62,7 +62,7 @@ class FileBasedColumnDataServiceTest {
     private Dimension column;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private FileMetadata fileMetadata;

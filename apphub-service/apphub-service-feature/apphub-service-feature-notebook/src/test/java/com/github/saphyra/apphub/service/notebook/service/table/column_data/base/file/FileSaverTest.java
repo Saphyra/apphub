@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import org.junit.jupiter.api.Test;

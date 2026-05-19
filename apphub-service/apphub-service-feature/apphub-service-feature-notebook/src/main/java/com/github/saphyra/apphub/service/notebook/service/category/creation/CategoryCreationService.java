@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.category.creation;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateCategoryRequest;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class CategoryCreationService {
     public UUID createCategory(UUID userId, CreateCategoryRequest request) {
         createCategoryRequestValidator.validate(request);
 
-        ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.CATEGORY);
+        ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.CATEGORY);
         listItemDao.save(listItem);
         return listItem.getListItemId();
     }

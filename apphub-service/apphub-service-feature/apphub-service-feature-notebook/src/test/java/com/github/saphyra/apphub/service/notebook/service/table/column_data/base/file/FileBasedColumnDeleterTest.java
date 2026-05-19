@@ -1,9 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data.base.file;
 
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.service.FileDeletionService;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

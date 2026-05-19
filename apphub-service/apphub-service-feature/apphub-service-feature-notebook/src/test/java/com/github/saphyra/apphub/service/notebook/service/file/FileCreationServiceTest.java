@@ -2,14 +2,14 @@ package com.github.saphyra.apphub.service.notebook.service.file;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.validator.CreateFileRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,10 +37,10 @@ public class FileCreationServiceTest {
     private CreateFileRequestValidator createFileRequestValidator;
 
     @Mock
-    private ListItemFactory listItemFactory;
+    private DeprecatedListItemFactory listItemFactory;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private FileFactory fileFactory;
@@ -58,7 +58,7 @@ public class FileCreationServiceTest {
     private CreateFileRequest request;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private File file;

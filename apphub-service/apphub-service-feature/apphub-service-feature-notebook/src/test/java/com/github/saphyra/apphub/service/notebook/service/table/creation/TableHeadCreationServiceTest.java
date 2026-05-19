@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +54,7 @@ class TableHeadCreationServiceTest {
     private TableHead tableHead;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private Content content;

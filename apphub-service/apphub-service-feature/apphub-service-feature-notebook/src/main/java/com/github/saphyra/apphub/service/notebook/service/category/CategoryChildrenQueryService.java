@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.category;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class CategoryChildrenQueryService {
             .collect(Collectors.toList());
 
         Optional<ListItem> category = Optional.ofNullable(categoryId)
-            .flatMap(listItemDao::findById);
+            .flatMap(_ -> listItemDao.findById(userId, categoryId));
         return ChildrenOfCategoryResponse.builder()
             .parent(category.map(ListItem::getParent).orElse(null))
             .title(category.map(ListItem::getTitle).orElse(null))

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +30,7 @@ public class EditTextServiceTest {
     private TitleValidator titleValidator;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private ContentDao contentDao;
@@ -39,7 +39,7 @@ public class EditTextServiceTest {
     private EditTextService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private Content content;

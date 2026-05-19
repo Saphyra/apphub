@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,13 +20,13 @@ public class ArchiveServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @InjectMocks
     private ArchiveService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Test
     public void nullValue() {

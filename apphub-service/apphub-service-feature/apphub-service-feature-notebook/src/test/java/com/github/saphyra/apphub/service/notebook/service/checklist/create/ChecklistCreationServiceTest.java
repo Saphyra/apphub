@@ -3,9 +3,11 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.create;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistCreationService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.CreateChecklistRequestValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,10 +32,10 @@ class ChecklistCreationServiceTest {
     private CreateChecklistRequestValidator createChecklistRequestValidator;
 
     @Mock
-    private ListItemFactory listItemFactory;
+    private DeprecatedListItemFactory listItemFactory;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private ChecklistItemCreationService checklistItemCreationService;
@@ -45,7 +47,7 @@ class ChecklistCreationServiceTest {
     private CreateChecklistRequest request;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private ChecklistItemModel model;

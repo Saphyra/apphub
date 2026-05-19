@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.clone.table;
 
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,10 +45,10 @@ class TableHeadCloneServiceTest {
     private TableHeadCloneService underTest;
 
     @Mock
-    private ListItem originalListItem;
+    private DeprecatedListItem originalListItem;
 
     @Mock
-    private ListItem listItemClone;
+    private DeprecatedListItem listItemClone;
 
     @Mock
     private TableHead originalTableHead;

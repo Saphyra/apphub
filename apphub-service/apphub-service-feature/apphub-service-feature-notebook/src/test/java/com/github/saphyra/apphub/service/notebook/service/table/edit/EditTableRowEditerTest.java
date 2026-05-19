@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -51,7 +51,7 @@ class EditTableRowEditerTest {
     private EditTableRowEditer underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private TableRowModel rowModel;

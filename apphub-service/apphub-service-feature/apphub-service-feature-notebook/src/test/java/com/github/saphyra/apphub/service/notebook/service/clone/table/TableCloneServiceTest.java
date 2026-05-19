@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.clone.table;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,10 +21,10 @@ class TableCloneServiceTest {
     private TableCloneService underTest;
 
     @Mock
-    private ListItem original;
+    private DeprecatedListItem original;
 
     @Mock
-    private ListItem clone;
+    private DeprecatedListItem clone;
 
     @Test
     void cloneTable() {

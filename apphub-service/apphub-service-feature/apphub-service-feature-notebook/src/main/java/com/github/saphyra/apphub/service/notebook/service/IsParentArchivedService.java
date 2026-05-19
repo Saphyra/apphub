@@ -18,17 +18,17 @@ class IsParentArchivedService {
     private final ListItemDao listItemDao;
 
     @RequestScopedCacheable(cacheNames = "isArchived")
-    boolean isAnyOfParentsArchived(UUID parentId) {
+    boolean isAnyOfParentsArchived(UUID userId, UUID parentId) {
         if (isNull(parentId)) {
             return false;
         }
 
-        ListItem listItem = listItemDao.findByIdValidated(parentId);
+        ListItem listItem = listItemDao.findByIdValidated(userId, parentId);
 
         if (listItem.isArchived()) {
             return true;
         }
 
-        return isAnyOfParentsArchived(listItem.getParent());
+        return isAnyOfParentsArchived(userId, listItem.getParent());
     }
 }

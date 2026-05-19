@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,9 +18,9 @@ public interface ColumnDataService {
 
     void delete(Dimension column);
 
-    Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model);
+    Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model);
 
-    void clone(ListItem clone, UUID rowId, Dimension originalColumn);
+    void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn);
 
     void validateData(Object data);
 }

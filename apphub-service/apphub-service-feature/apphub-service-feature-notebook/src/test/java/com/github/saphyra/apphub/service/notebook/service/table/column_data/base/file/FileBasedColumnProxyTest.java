@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -48,7 +48,7 @@ class FileBasedColumnProxyTest {
     private Dimension column;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Test
     void save() {

@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.clone.table.TableCloneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +18,8 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class ListItemCloneService {
-    private final ListItemDao listItemDao;
-    private final ListItemFactory listItemFactory;
+    private final DeprecatedListItemDao listItemDao;
+    private final DeprecatedListItemFactory listItemFactory;
     private final TableCloneService tableCloneService;
     private final TextAndLinkCloneService textAndLinkCloneService;
     private final ChecklistCloneService checklistCloneService;
@@ -27,12 +27,12 @@ public class ListItemCloneService {
 
     @Transactional
     public void clone(UUID listItemId) {
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        DeprecatedListItem listItem = listItemDao.findByIdValidated(listItemId);
         clone(listItem.getParent(), listItem, listItem.getTitle());
     }
 
-    private void clone(UUID parent, ListItem toClone, String title) {
-        ListItem listItemClone = listItemFactory.create(toClone.getUserId(), title, parent, toClone.getType(), toClone.isPinned(), toClone.isArchived());
+    private void clone(UUID parent, DeprecatedListItem toClone, String title) {
+        DeprecatedListItem listItemClone = listItemFactory.create(toClone.getUserId(), title, parent, toClone.getType(), toClone.isPinned(), toClone.isArchived());
         listItemDao.save(listItemClone);
 
         switch (toClone.getType()) {

@@ -3,9 +3,13 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.edit;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist.query.ChecklistQueryService;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.checklist.EditChecklistRequestValidator;
+import com.github.saphyra.apphub.service.notebook.service.checklist.EditChecklistRowDeleter;
+import com.github.saphyra.apphub.service.notebook.service.checklist.EditChecklistRowSaver;
+import com.github.saphyra.apphub.service.notebook.service.checklist.EditChecklistService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,7 +42,7 @@ class EditChecklistServiceTest {
     private EditChecklistRowSaver editChecklistRowSaver;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @InjectMocks
     private EditChecklistService underTest;
@@ -50,7 +54,7 @@ class EditChecklistServiceTest {
     private EditChecklistRequest request;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private ChecklistItemModel model;

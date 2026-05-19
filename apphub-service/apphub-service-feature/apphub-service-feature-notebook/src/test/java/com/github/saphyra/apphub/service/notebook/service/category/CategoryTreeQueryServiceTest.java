@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.category;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,21 +26,21 @@ public class CategoryTreeQueryServiceTest {
     private static final String TITLE_2 = "title-2";
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @InjectMocks
     private CategoryTreeQueryService underTest;
 
     @Test
     public void getCategoryTree() {
-        ListItem parent = ListItem.builder()
+        DeprecatedListItem parent = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .archived(true)
             .build();
-        ListItem child = ListItem.builder()
+        DeprecatedListItem child = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID_2)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)

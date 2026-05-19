@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDto;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

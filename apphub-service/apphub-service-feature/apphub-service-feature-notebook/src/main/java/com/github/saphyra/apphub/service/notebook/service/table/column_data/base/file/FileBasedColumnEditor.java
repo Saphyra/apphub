@@ -3,10 +3,9 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.service.FileDeletionService;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +25,7 @@ class FileBasedColumnEditor {
     private final FileDeletionService fileDeletionService;
     private final FileSaver fileSaver;
 
-    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model) {
         Dimension column = dimensionDao.findByIdValidated(model.getColumnId());
         column.setIndex(model.getColumnIndex());
         dimensionDao.save(column);

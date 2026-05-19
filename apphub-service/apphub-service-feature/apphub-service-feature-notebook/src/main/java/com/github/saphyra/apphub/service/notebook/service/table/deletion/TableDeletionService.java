@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.deletion;
 
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ public class TableDeletionService {
     private final DimensionDao dimensionDao;
     private final TableRowDeletionService tableRowDeletionService;
 
-    public void delete(ListItem listItem) {
+    public void delete(DeprecatedListItem listItem) {
         dimensionDao.getByExternalReference(listItem.getListItemId())
             .forEach(tableRowDeletionService::deleteRow);
     }

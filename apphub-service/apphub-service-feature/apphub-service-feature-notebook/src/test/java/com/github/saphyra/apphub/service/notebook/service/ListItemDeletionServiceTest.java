@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableDeletionService;
@@ -26,7 +26,7 @@ public class ListItemDeletionServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private ContentDao contentDao;
@@ -47,10 +47,10 @@ public class ListItemDeletionServiceTest {
     private ListItemDeletionService underTest;
 
     @Mock
-    private ListItem deleted;
+    private DeprecatedListItem deleted;
 
     @Mock
-    private ListItem child;
+    private DeprecatedListItem child;
 
     @Test
     public void deleteCategory() {

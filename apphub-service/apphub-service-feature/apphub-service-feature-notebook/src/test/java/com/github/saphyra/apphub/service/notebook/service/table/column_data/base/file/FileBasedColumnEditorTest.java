@@ -2,10 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.service.FileDeletionService;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,7 +42,7 @@ class FileBasedColumnEditorTest {
     private FileBasedColumnEditor underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private TableColumnModel model;

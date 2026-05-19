@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +46,7 @@ class ContentBasedColumnDataServiceTest {
     private Dimension column;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @BeforeEach
     void setUp() {

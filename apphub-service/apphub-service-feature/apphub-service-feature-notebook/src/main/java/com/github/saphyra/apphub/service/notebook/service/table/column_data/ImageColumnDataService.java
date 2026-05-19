@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.file.FileBasedColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.file.FileBasedColumnProxy;
 import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;

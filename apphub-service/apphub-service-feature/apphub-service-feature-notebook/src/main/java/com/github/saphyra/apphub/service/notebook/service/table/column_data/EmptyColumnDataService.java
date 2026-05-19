@@ -3,13 +3,13 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeFactory;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDto;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,7 +55,7 @@ class EmptyColumnDataService implements ColumnDataService {
     }
 
     @Override
-    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel columnModel) {
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel columnModel) {
         Dimension column = dimensionDao.findByIdValidated(columnModel.getColumnId());
         column.setIndex(columnModel.getColumnIndex());
         dimensionDao.save(column);
@@ -64,7 +64,7 @@ class EmptyColumnDataService implements ColumnDataService {
     }
 
     @Override
-    public void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
+    public void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn) {
         Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
         dimensionDao.save(clonedColumn);
 

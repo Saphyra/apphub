@@ -31,7 +31,7 @@ class ListItemControllerIImpl implements ListItemController {
 
     @Override
     public NotebookView findListItem(UUID listItemId, AccessToken accessToken) {
-        return listItemQueryService.findListItem(listItemId);
+        return listItemQueryService.findListItem(accessToken.getUserId(), listItemId);
     }
 
     @Override
@@ -41,9 +41,9 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    public void editListItem(EditListItemRequest request, UUID listItemId) {
-        log.info("Editing listItem {}", listItemId);
-        listItemEditionService.edit(listItemId, request);
+    public void editListItem(EditListItemRequest request, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to edit listItem {}", accessToken.getUserId(), listItemId);
+        listItemEditionService.edit(accessToken.getUserId(), listItemId, request);
     }
 
     @Override
@@ -67,6 +67,6 @@ class ListItemControllerIImpl implements ListItemController {
     @Override
     public void archive(OneParamRequest<Boolean> archived, UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to archive an item.", accessToken.getUserId());
-        archiveService.archive(listItemId, archived.getValue());
+        archiveService.archive(accessToken.getUserId(), listItemId, archived.getValue());
     }
 }

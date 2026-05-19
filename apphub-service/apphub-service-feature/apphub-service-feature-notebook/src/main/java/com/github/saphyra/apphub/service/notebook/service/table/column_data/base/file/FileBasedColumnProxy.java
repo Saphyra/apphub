@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,11 +29,11 @@ public class FileBasedColumnProxy {
         fileBasedColumnDeleter.delete(column);
     }
 
-    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model) {
         return fileBasedColumnEditor.edit(listItem, rowId, model);
     }
 
-    public void clone(ListItem clone, UUID rowId, Dimension originalColumn, ColumnType columnType) {
+    public void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn, ColumnType columnType) {
         fileBasedColumnCloner.clone(clone, rowId, originalColumn, columnType);
     }
 }

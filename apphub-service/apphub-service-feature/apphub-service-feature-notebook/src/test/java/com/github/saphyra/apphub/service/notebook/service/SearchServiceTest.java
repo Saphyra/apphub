@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ public class SearchServiceTest {
     private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private ContentDao contentDao;
@@ -48,13 +48,13 @@ public class SearchServiceTest {
     private SearchService underTest;
 
     @Mock
-    private ListItem listItem1;
+    private DeprecatedListItem listItem1;
 
     @Mock
-    private ListItem listItem2;
+    private DeprecatedListItem listItem2;
 
     @Mock
-    private ListItem listItem3;
+    private DeprecatedListItem listItem3;
 
     @Mock
     private Content content1;

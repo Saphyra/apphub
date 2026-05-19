@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class EditTextService {
     private final ContentValidator contentValidator;
     private final TitleValidator titleValidator;
-    private final ListItemDao listItemDao;
+    private final DeprecatedListItemDao listItemDao;
     private final ContentDao contentDao;
 
     @Transactional
@@ -28,7 +28,7 @@ public class EditTextService {
         titleValidator.validate(request.getTitle());
         contentValidator.validate(request.getContent(), "content");
 
-        ListItem listItem = listItemDao.findByIdValidated(textId);
+        DeprecatedListItem listItem = listItemDao.findByIdValidated(textId);
         Content content = contentDao.findByParentValidated(textId);
 
         listItem.setTitle(request.getTitle());

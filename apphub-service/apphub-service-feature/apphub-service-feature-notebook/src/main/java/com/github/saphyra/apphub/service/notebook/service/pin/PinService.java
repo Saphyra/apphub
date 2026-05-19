@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -23,7 +23,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class PinService {
-    private final ListItemDao listItemDao;
+    private final DeprecatedListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
     private final PinMappingDao pinMappingDao;
 
@@ -32,7 +32,7 @@ public class PinService {
             throw ExceptionFactory.invalidParam("pinned", "must not be null");
         }
 
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        DeprecatedListItem listItem = listItemDao.findByIdValidated(listItemId);
 
         listItem.setPinned(pinned);
 
@@ -49,7 +49,7 @@ public class PinService {
 
         return listItemDao.getByUserId(userId)
             .stream()
-            .filter(ListItem::isPinned)
+            .filter(DeprecatedListItem::isPinned)
             .filter(listItem -> isNull(pinGroupId) || groupMembers.contains(listItem.getListItemId()))
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());

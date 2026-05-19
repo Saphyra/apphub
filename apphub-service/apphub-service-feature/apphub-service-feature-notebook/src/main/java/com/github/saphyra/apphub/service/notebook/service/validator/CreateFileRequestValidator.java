@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -12,8 +14,8 @@ public class CreateFileRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
     private final FileMetadataValidator fileMetadataValidator;
 
-    public void validate(CreateFileRequest request) {
-        listItemRequestValidator.validate(request.getTitle(), request.getParent());
+    public void validate(UUID userId, CreateFileRequest request) {
+        listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
 
         fileMetadataValidator.validate(request.getMetadata());
     }

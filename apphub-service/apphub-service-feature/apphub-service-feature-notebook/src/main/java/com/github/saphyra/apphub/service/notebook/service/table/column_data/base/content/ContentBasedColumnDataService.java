@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data.bas
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,14 +48,14 @@ public abstract class ContentBasedColumnDataService implements ColumnDataService
     }
 
     @Override
-    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model) {
         proxy.edit(model.getColumnId(), model.getColumnIndex(), stringifyContent(model.getData()));
 
         return Optional.empty();
     }
 
     @Override
-    public void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
+    public void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn) {
         proxy.clone(clone.getUserId(), clone.getListItemId(), rowId, originalColumn.getDimensionId(), originalColumn.getIndex(), columnType);
     }
 }

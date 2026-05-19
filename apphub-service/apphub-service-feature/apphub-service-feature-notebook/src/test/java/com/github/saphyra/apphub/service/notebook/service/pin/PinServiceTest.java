@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -31,7 +31,7 @@ public class PinServiceTest {
     private static final UUID PIN_GROUP_ID = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private PinMappingDao pinMappingDao;
@@ -43,7 +43,7 @@ public class PinServiceTest {
     private PinService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private NotebookView notebookView;

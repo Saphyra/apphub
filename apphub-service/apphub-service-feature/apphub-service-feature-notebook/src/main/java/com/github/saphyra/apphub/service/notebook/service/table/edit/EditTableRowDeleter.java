@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableRowDeletionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

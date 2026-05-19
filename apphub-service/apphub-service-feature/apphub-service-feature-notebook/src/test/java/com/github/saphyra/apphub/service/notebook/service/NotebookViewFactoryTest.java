@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +37,7 @@ public class NotebookViewFactoryTest {
     private ContentDao contentDao;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private FileDao fileDao;
@@ -58,7 +58,7 @@ public class NotebookViewFactoryTest {
     private Content content;
 
     @Mock
-    private ListItem parentListItem;
+    private DeprecatedListItem parentListItem;
 
     @Mock
     private File file;
@@ -68,7 +68,7 @@ public class NotebookViewFactoryTest {
 
     @Test
     public void create_hasParent() {
-        ListItem listItem = ListItem.builder()
+        DeprecatedListItem listItem = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
             .parent(PARENT)
@@ -98,7 +98,7 @@ public class NotebookViewFactoryTest {
 
     @Test
     public void create_noParent() {
-        ListItem listItem = ListItem.builder()
+        DeprecatedListItem listItem = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
             .parent(null)
@@ -124,7 +124,7 @@ public class NotebookViewFactoryTest {
 
     @Test
     public void fillValueForLink() {
-        ListItem listItem = ListItem.builder()
+        DeprecatedListItem listItem = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
             .parent(PARENT)
@@ -152,7 +152,7 @@ public class NotebookViewFactoryTest {
 
     @Test
     public void fillFieldsForImage() {
-        ListItem listItem = ListItem.builder()
+        DeprecatedListItem listItem = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
             .parent(PARENT)
@@ -180,7 +180,7 @@ public class NotebookViewFactoryTest {
 
     @Test
     public void fillFieldsForFile() {
-        ListItem listItem = ListItem.builder()
+        DeprecatedListItem listItem = DeprecatedListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
             .parent(PARENT)

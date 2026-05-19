@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

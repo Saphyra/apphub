@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableDeletionService;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class ListItemDeletionService {
-    private final ListItemDao listItemDao;
+    private final DeprecatedListItemDao listItemDao;
     private final ContentDao contentDao;
     private final TableDeletionService tableDeletionService;
     private final FileDeletionService fileDeletionService;
@@ -28,11 +28,11 @@ public class ListItemDeletionService {
 
     @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        DeprecatedListItem listItem = listItemDao.findByIdValidated(listItemId);
         deleteChild(listItem, userId);
     }
 
-    private void deleteChild(ListItem listItem, UUID userId) {
+    private void deleteChild(DeprecatedListItem listItem, UUID userId) {
         switch (listItem.getType()) {
             case CATEGORY -> deleteChildren(listItem, userId);
             case CHECKLIST -> checklistDeletionService.delete(listItem.getListItemId());
@@ -47,7 +47,7 @@ public class ListItemDeletionService {
         pinMappingDao.deleteByListItemId(listItem.getListItemId());
     }
 
-    private void deleteChildren(ListItem category, UUID userId) {
+    private void deleteChildren(DeprecatedListItem category, UUID userId) {
         listItemDao.getByUserIdAndParent(userId, category.getListItemId())
             .forEach(listItem -> deleteChild(listItem, userId));
     }

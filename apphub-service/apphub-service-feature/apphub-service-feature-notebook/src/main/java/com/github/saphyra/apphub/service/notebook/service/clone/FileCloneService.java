@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ public class FileCloneService {
     private final FileDao fileDao;
     private final FileFactory fileFactory;
 
-    void cloneFile(ListItem toClone, ListItem listItemClone) {
+    void cloneFile(DeprecatedListItem toClone, DeprecatedListItem listItemClone) {
         File fileToClone = fileDao.findByParentValidated(toClone.getListItemId());
 
         cloneFile(toClone.getUserId(), listItemClone.getListItemId(), fileToClone);

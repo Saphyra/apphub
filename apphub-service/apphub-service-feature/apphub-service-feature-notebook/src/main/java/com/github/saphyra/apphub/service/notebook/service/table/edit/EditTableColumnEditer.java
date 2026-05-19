@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableColumnDeletionService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ class EditTableColumnEditer {
     private final ColumnTypeDao columnTypeDao;
     private final ColumnDataServiceFetcher columnDataServiceFetcher;
 
-    List<TableFileUploadResponse> editTableColumn(ListItem listItem, UUID rowId, TableColumnModel columnModel) {
+    List<TableFileUploadResponse> editTableColumn(DeprecatedListItem listItem, UUID rowId, TableColumnModel columnModel) {
         if (columnModel.getItemType() == ItemType.EXISTING) {
             ColumnType originalColumnType = getColumnType(columnModel.getColumnId());
             if (columnModel.getColumnType() == originalColumnType) {

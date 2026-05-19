@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +28,7 @@ class EditTableHeadServiceTest {
     private EditTableHeadService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private TableHeadModel model;

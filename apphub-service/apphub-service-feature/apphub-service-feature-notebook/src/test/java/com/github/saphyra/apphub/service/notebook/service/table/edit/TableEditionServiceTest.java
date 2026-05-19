@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploa
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class TableEditionServiceTest {
     private EditTableRequestValidator editTableRequestValidator;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private TableQueryService tableQueryService;
@@ -50,7 +50,7 @@ class TableEditionServiceTest {
     private EditTableRequest editTableRequest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private TableHeadModel tableHeadModel;

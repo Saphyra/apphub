@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.edit;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
 import jakarta.transaction.Transactional;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Slf4j
 public class TableEditionService {
     private final EditTableRequestValidator editTableRequestValidator;
-    private final ListItemDao listItemDao;
+    private final DeprecatedListItemDao listItemDao;
     private final TableQueryService tableQueryService;
     private final EditTableHeadService editTableHeadService;
     private final EditTableRowService editTableRowService;
@@ -29,7 +29,7 @@ public class TableEditionService {
     public EditTableResponse editTable(UUID listItemId, EditTableRequest request) {
         editTableRequestValidator.validate(listItemId, request);
 
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        DeprecatedListItem listItem = listItemDao.findByIdValidated(listItemId);
         listItem.setTitle(request.getTitle());
         listItemDao.save(listItem);
 

@@ -15,10 +15,10 @@ import java.util.UUID;
 public class ArchiveService {
     private final ListItemDao listItemDao;
 
-    public void archive(UUID listItemId, Boolean archived) {
+    public void archive(UUID userId, UUID listItemId, Boolean archived) {
         ValidationUtil.notNull(archived, "archived");
 
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
         listItem.setArchived(archived);
         listItemDao.save(listItem);
     }

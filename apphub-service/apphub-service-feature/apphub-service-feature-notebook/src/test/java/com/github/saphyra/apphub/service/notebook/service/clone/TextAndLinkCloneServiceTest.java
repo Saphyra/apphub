@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,7 +36,7 @@ public class TextAndLinkCloneServiceTest {
     private Content clonedContent;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Test
     public void cloneTest() {

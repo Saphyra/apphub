@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

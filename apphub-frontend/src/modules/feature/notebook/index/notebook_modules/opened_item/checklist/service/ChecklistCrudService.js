@@ -6,7 +6,7 @@ import UpdateType from "modules/feature/notebook/common/checklist_item/UpdateTyp
 import MoveDirection from "modules/feature/notebook/common/MoveDirection";
 import { NOTEBOOK_DELETE_CHECKLIST_ITEM, NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT, NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS } from "modules/feature/notebook/NotebookEndpoints";
 
-export const updateItem = (item, updateType, editingEnabled, items, setItems, setDisplaySpinner) => {
+export const updateItem = (listItemId, item, updateType, editingEnabled, items, setItems, setDisplaySpinner) => {
     if (!editingEnabled) {
         switch (updateType) {
             case UpdateType.TOGGLE_CHECKED:
@@ -14,7 +14,7 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems, se
                     .send(setDisplaySpinner);
                 break;
             case UpdateType.CONTENT_MODIFIED:
-                NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { checklistItemId: item.checklistItemId })
+                NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { listItemId: listItemId, checklistItemId: item.checklistItemId })
                     .send(setDisplaySpinner);
                 break;
             default:
@@ -25,7 +25,7 @@ export const updateItem = (item, updateType, editingEnabled, items, setItems, se
     copyAndSet(items, setItems);
 }
 
-export const removeItem = async (item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler, setDisplaySpinner) => {
+export const removeItem = async (listItemId, item, items, setItems, editingEnabled, setConfirmationDialogData, localizationHandler, setDisplaySpinner) => {
     const doRemoveItem = (item) => {
         const copy = new Stream(items)
             .remove(i => i === item)
@@ -44,7 +44,7 @@ export const removeItem = async (item, items, setItems, editingEnabled, setConfi
                     id="notebook-content-checklist-item-deletion-confirm-button"
                     label={localizationHandler.get("delete")}
                     onclick={async () => {
-                        await NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { checklistItemId: item.checklistItemId })
+                        await NOTEBOOK_DELETE_CHECKLIST_ITEM.createRequest(null, { listItemId: listItemId, checklistItemId: item.checklistItemId })
                             .send(setDisplaySpinner);
                         setConfirmationDialogData(null);
                         doRemoveItem(item);

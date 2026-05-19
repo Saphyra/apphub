@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.notebook.service.text.creation;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateTextRequest;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,8 +21,8 @@ import java.util.UUID;
 @Slf4j
 public class TextCreationService {
     private final CreateTextRequestValidator createTextRequestValidator;
-    private final ListItemDao listItemDao;
-    private final ListItemFactory listItemFactory;
+    private final DeprecatedListItemDao listItemDao;
+    private final DeprecatedListItemFactory listItemFactory;
     private final ContentDao contentDao;
     private final ContentFactory contentFactory;
 
@@ -30,7 +30,7 @@ public class TextCreationService {
     public UUID create(CreateTextRequest request, UUID userId) {
         createTextRequestValidator.validate(request);
 
-        ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.TEXT);
+        DeprecatedListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), ListItemType.TEXT);
         Content content = contentFactory.create(listItem, request.getContent());
 
         listItemDao.save(listItem);

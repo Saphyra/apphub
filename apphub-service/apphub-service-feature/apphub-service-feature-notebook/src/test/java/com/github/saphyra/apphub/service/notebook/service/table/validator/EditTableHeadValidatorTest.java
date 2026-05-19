@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

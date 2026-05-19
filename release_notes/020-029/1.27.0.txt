@@ -9,6 +9,8 @@
         Fix exceptionally high network usage when starting WebDrivers
 
 ===PLATFORM CHANGES===
+    Notebook
+        PostgreSQL to DynamoDB migration
 
 ===TECHNICAL DEBTS===
     EliteBase

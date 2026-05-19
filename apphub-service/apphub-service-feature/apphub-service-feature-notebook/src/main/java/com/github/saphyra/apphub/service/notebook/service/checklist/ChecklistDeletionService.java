@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,11 +11,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ChecklistDeletionService {
-    private final DimensionDao dimensionDao;
-    private final ChecklistItemDeletionService checklistItemDeletionService;
+    private final ListItemDao listItemDao;
 
-    public void delete(UUID listItemId) {
-        dimensionDao.getByExternalReference(listItemId)
-            .forEach(checklistItemDeletionService::deleteChecklistItem);
+    public void delete(UUID userId, UUID listItemId) {
+        listItemDao.deleteChecklist(userId, listItemId);
     }
 }

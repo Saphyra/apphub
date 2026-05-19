@@ -7,20 +7,20 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDto;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDto;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import io.restassured.response.Response;
@@ -54,7 +54,7 @@ public class NotebookEventControllerImplItTest {
     private int serverPort;
 
     @Autowired
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Autowired
     private ContentDao contentDao;
@@ -90,7 +90,7 @@ public class NotebookEventControllerImplItTest {
 
     @Test
     public void deleteAccountEvent() {
-        ListItem listItem = ListItem.builder()
+        DeprecatedListItem listItem = DeprecatedListItem.builder()
             .listItemId(UUID.randomUUID())
             .title(TITLE)
             .type(ListItemType.TEXT)

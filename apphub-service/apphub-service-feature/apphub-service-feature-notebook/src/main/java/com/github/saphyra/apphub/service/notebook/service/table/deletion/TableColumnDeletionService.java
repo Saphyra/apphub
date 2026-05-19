@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.table.deletion;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.service.notebook.dao.column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import lombok.RequiredArgsConstructor;

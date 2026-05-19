@@ -127,7 +127,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
                 {addButton(IndexRange.MIN, "notebook-content-checklist-add-item-to-start")}
 
                 <div>
-                    {getItems(items, searchText, localizationHandler, editingEnabled, setItems, setConfirmationDialogData, setDisplaySpinner)}
+                    {getItems(openedListItem.id, items, searchText, localizationHandler, editingEnabled, setItems, setConfirmationDialogData, setDisplaySpinner)}
                 </div>
 
                 {addButton(IndexRange.MAX, "notebook-content-checklist-add-item-to-end")}

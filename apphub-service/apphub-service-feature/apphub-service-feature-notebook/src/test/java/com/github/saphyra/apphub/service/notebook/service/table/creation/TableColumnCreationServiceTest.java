@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
 import org.junit.jupiter.api.Test;

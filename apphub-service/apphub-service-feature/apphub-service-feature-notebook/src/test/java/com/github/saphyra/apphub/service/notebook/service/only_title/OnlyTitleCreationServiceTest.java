@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.only_title;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateOnlyTitleRequest;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,16 +28,16 @@ public class OnlyTitleCreationServiceTest {
     private CreateOnlyTitleRequestValidator createOnlyTitleRequestValidator;
 
     @Mock
-    private ListItemFactory listItemFactory;
+    private DeprecatedListItemFactory listItemFactory;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @InjectMocks
     private OnlyTitleCreationService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Test
     public void create() {

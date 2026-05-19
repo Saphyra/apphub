@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.clone.table;
 
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +20,12 @@ class TableHeadCloneService {
     private final TableHeadDao tableHeadDao;
     private final TableHeadFactory tableHeadFactory;
 
-    void cloneTableHeads(ListItem original, ListItem clone) {
+    void cloneTableHeads(DeprecatedListItem original, DeprecatedListItem clone) {
         tableHeadDao.getByParent(original.getListItemId())
             .forEach(tableHead -> cloneTableHead(clone, tableHead));
     }
 
-    private void cloneTableHead(ListItem clone, TableHead tableHead) {
+    private void cloneTableHead(DeprecatedListItem clone, TableHead tableHead) {
         TableHead tableHeadClone = tableHeadFactory.create(clone.getUserId(), clone.getListItemId(), tableHead.getColumnIndex());
         tableHeadDao.save(tableHeadClone);
 

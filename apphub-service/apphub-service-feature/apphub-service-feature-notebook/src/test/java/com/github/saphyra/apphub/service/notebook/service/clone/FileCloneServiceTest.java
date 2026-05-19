@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import org.junit.jupiter.api.Test;
@@ -36,10 +36,10 @@ public class FileCloneServiceTest {
     private FileCloneService underTest;
 
     @Mock
-    private ListItem toClone;
+    private DeprecatedListItem toClone;
 
     @Mock
-    private ListItem listItemClone;
+    private DeprecatedListItem listItemClone;
 
     @Mock
     private File file;

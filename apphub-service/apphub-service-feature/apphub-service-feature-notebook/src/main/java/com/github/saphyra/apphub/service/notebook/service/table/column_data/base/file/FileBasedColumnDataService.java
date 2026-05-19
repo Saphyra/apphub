@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
 import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +51,12 @@ public abstract class FileBasedColumnDataService implements ColumnDataService {
     }
 
     @Override
-    public Optional<TableFileUploadResponse> edit(ListItem listItem, UUID rowId, TableColumnModel model) {
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model) {
         return proxy.edit(listItem, rowId, model);
     }
 
     @Override
-    public void clone(ListItem clone, UUID rowId, Dimension originalColumn) {
+    public void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn) {
         proxy.clone(clone, rowId, originalColumn, columnType);
     }
 

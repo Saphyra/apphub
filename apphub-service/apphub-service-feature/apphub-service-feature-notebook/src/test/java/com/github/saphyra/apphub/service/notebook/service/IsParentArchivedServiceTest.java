@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,16 +19,16 @@ class IsParentArchivedServiceTest {
     private static final UUID PARENT_ID_2 = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @InjectMocks
     private IsParentArchivedService underTest;
 
     @Mock
-    private ListItem listItem1;
+    private DeprecatedListItem listItem1;
 
     @Mock
-    private ListItem listItem2;
+    private DeprecatedListItem listItem2;
 
     @Test
     void nullParentId() {

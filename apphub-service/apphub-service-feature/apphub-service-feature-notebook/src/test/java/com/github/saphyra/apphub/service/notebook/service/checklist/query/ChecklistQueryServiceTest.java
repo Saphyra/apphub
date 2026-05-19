@@ -3,8 +3,10 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.query;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistQueryService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistResponseFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +26,7 @@ class ChecklistQueryServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private ChecklistResponseFactory checklistResponseFactory;
@@ -33,7 +35,7 @@ class ChecklistQueryServiceTest {
     private ChecklistQueryService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private ChecklistResponse checklistResponse;

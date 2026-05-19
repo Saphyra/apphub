@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.table.creation;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.TableCreationRequestValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import java.util.UUID;
 @Slf4j
 public class TableCreationService {
     private final TableCreationRequestValidator tableCreationRequestValidator;
-    private final ListItemFactory listItemFactory;
-    private final ListItemDao listItemDao;
+    private final DeprecatedListItemFactory listItemFactory;
+    private final DeprecatedListItemDao listItemDao;
     private final TableRowCreationService tableRowCreationService;
     private final TableHeadCreationService tableHeadCreationService;
 
@@ -28,7 +28,7 @@ public class TableCreationService {
     public List<TableFileUploadResponse> create(UUID userId, CreateTableRequest request) {
         tableCreationRequestValidator.validate(request);
 
-        ListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), request.getListItemType());
+        DeprecatedListItem listItem = listItemFactory.create(userId, request.getTitle(), request.getParent(), request.getListItemType());
         listItemDao.save(listItem);
 
         tableHeadCreationService.saveTableHeads(userId, request, listItem);

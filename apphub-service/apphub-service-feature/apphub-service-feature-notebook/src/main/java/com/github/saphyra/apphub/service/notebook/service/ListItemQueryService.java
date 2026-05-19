@@ -18,8 +18,8 @@ public class ListItemQueryService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
 
-    public NotebookView findListItem(UUID listItemId) {
-        return listItemDao.findById(listItemId)
+    public NotebookView findListItem(UUID userId, UUID listItemId) {
+        return listItemDao.findById(userId, listItemId)
             .map(notebookViewFactory::create)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ListItem not found by listItemId " + listItemId));
     }

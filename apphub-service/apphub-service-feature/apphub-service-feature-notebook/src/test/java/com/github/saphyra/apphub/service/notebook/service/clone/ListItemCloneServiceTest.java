@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.clone.table.TableCloneService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,10 +49,10 @@ public class ListItemCloneServiceTest {
     private static final String CUSTOM_TABLE_TITLE = "custom-table-title";
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
-    private ListItemFactory listItemFactory;
+    private DeprecatedListItemFactory listItemFactory;
 
     @Mock
     private TableCloneService tableCloneService;
@@ -69,60 +69,60 @@ public class ListItemCloneServiceTest {
     @InjectMocks
     private ListItemCloneService underTest;
 
-    private final ListItem parentListItem = createListItem(PARENT_LIST_ITEM_ID, PARENT_LIST_ITEM_TITLE, ListItemType.CATEGORY, PARENT_OF_PARENT);
+    private final DeprecatedListItem parentListItem = createListItem(PARENT_LIST_ITEM_ID, PARENT_LIST_ITEM_TITLE, ListItemType.CATEGORY, PARENT_OF_PARENT);
 
     @Mock
-    private ListItem parentListItemClone;
+    private DeprecatedListItem parentListItemClone;
 
-    private final ListItem categoryListItem = createListItem(CATEGORY_LIST_ITEM_ID, CATEGORY_LIST_ITEM_TITLE, ListItemType.CATEGORY, PARENT_LIST_ITEM_ID);
-
-    @Mock
-    private ListItem categoryListItemClone;
-
-    private final ListItem linkListItem = createListItem(LINK_LIST_ITEM_ID, LINK_LIST_ITEM_TITLE, ListItemType.LINK, PARENT_LIST_ITEM_ID);
+    private final DeprecatedListItem categoryListItem = createListItem(CATEGORY_LIST_ITEM_ID, CATEGORY_LIST_ITEM_TITLE, ListItemType.CATEGORY, PARENT_LIST_ITEM_ID);
 
     @Mock
-    private ListItem linkListItemClone;
+    private DeprecatedListItem categoryListItemClone;
 
-    private final ListItem textListItem = createListItem(TEXT_LIST_ITEM_ID, TEXT_LIST_ITEM_TITLE, ListItemType.TEXT, PARENT_LIST_ITEM_ID);
-
-    @Mock
-    private ListItem textListItemClone;
-
-    private final ListItem checklistListItem = createListItem(CHECKLIST_LIST_ITEM_ID, CHECKLIST_LIST_ITEM_TITLE, ListItemType.CHECKLIST, PARENT_LIST_ITEM_ID);
+    private final DeprecatedListItem linkListItem = createListItem(LINK_LIST_ITEM_ID, LINK_LIST_ITEM_TITLE, ListItemType.LINK, PARENT_LIST_ITEM_ID);
 
     @Mock
-    private ListItem checklistListItemClone;
+    private DeprecatedListItem linkListItemClone;
 
-    private final ListItem tableListItem = createListItem(TABLE_LIST_ITEM_ID, TABLE_LIST_ITEM_TITLE, ListItemType.TABLE, PARENT_LIST_ITEM_ID);
-
-    @Mock
-    private ListItem tableListItemClone;
-
-    private final ListItem checklistTableListItem = createListItem(CHECKLIST_TABLE_LIST_ITEM_ID, CHECKLIST_TABLE_ITEM_TITLE, ListItemType.CHECKLIST_TABLE, PARENT_OF_PARENT);
+    private final DeprecatedListItem textListItem = createListItem(TEXT_LIST_ITEM_ID, TEXT_LIST_ITEM_TITLE, ListItemType.TEXT, PARENT_LIST_ITEM_ID);
 
     @Mock
-    private ListItem checklistTableListItemClone;
+    private DeprecatedListItem textListItemClone;
 
-    private final ListItem onlyTitleListItem = createListItem(ONLY_TITLE_LIST_ITEM_ID, ONLY_TITLE_TITLE, ListItemType.ONLY_TITLE, PARENT_OF_PARENT);
-
-    @Mock
-    private ListItem onlyTitleListItemClone;
-
-    private final ListItem imageListItem = createListItem(IMAGE_LIST_ITEM_ID, IMAGE_TITLE, ListItemType.IMAGE, PARENT_OF_PARENT);
+    private final DeprecatedListItem checklistListItem = createListItem(CHECKLIST_LIST_ITEM_ID, CHECKLIST_LIST_ITEM_TITLE, ListItemType.CHECKLIST, PARENT_LIST_ITEM_ID);
 
     @Mock
-    private ListItem imageListItemClone;
+    private DeprecatedListItem checklistListItemClone;
 
-    private final ListItem fileListItem = createListItem(FILE_LIST_ITEM_ID, FILE_TITLE, ListItemType.FILE, PARENT_OF_PARENT);
-
-    @Mock
-    private ListItem fileListItemClone;
+    private final DeprecatedListItem tableListItem = createListItem(TABLE_LIST_ITEM_ID, TABLE_LIST_ITEM_TITLE, ListItemType.TABLE, PARENT_LIST_ITEM_ID);
 
     @Mock
-    private ListItem customTableListItemClone;
+    private DeprecatedListItem tableListItemClone;
 
-    private final ListItem customTableListItem = createListItem(CUSTOM_TABLE_LIST_ITEM_ID, CUSTOM_TABLE_TITLE, ListItemType.CUSTOM_TABLE, PARENT_OF_PARENT);
+    private final DeprecatedListItem checklistTableListItem = createListItem(CHECKLIST_TABLE_LIST_ITEM_ID, CHECKLIST_TABLE_ITEM_TITLE, ListItemType.CHECKLIST_TABLE, PARENT_OF_PARENT);
+
+    @Mock
+    private DeprecatedListItem checklistTableListItemClone;
+
+    private final DeprecatedListItem onlyTitleListItem = createListItem(ONLY_TITLE_LIST_ITEM_ID, ONLY_TITLE_TITLE, ListItemType.ONLY_TITLE, PARENT_OF_PARENT);
+
+    @Mock
+    private DeprecatedListItem onlyTitleListItemClone;
+
+    private final DeprecatedListItem imageListItem = createListItem(IMAGE_LIST_ITEM_ID, IMAGE_TITLE, ListItemType.IMAGE, PARENT_OF_PARENT);
+
+    @Mock
+    private DeprecatedListItem imageListItemClone;
+
+    private final DeprecatedListItem fileListItem = createListItem(FILE_LIST_ITEM_ID, FILE_TITLE, ListItemType.FILE, PARENT_OF_PARENT);
+
+    @Mock
+    private DeprecatedListItem fileListItemClone;
+
+    @Mock
+    private DeprecatedListItem customTableListItemClone;
+
+    private final DeprecatedListItem customTableListItem = createListItem(CUSTOM_TABLE_LIST_ITEM_ID, CUSTOM_TABLE_TITLE, ListItemType.CUSTOM_TABLE, PARENT_OF_PARENT);
 
     @Test
     public void cloneTest() {
@@ -180,8 +180,8 @@ public class ListItemCloneServiceTest {
         verify(listItemDao).save(customTableListItemClone);
     }
 
-    private ListItem createListItem(UUID listItemId, String title, ListItemType type, UUID parent) {
-        return ListItem.builder()
+    private DeprecatedListItem createListItem(UUID listItemId, String title, ListItemType type, UUID parent) {
+        return DeprecatedListItem.builder()
             .listItemId(listItemId)
             .userId(USER_ID)
             .title(title)

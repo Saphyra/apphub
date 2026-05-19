@@ -1,0 +1,86 @@
+CATEGORY
+ONLY_TITLE
+    ListItem
+LINK
+    ListItem
+TEXT
+    ListItem
+    Content URL/Text
+CHECKLIST
+    ListItem
+    ChecklistItem for each entry (individual access)
+    Content ChecklistItem text
+IMAGE
+FILE
+    ListItem
+        storedFileId
+TABLE
+CHECKLIST_TABLE
+CUSTOM_TABLE
+    ListItem
+    TableHead
+    TableRow for each row
+        Columns
+    Content TableHeads and Column data
+
+ListItem
+pk: USER_ID#userId
+sk: USER_ID#userId|LIST_ITEM#listItemId
+parent: LIST_ITEM#listItemId
+type: ListItemType
+title: listItemTitle
+pinned: boolean
+archived: boolean
+data: storedFileId/url
+
+GSI_PARENT (Get children of a parent)
+pk: USER_ID#userId
+sk: PARENT#parentId
+
+Content
+pk: USER_ID#userId
+sk: CONTENT#ContentType|LIST_ITEM#listItemId|batchIndex
+content: Map<contentId, encryptedText>
+
+Lookup content: Query all, filter by contentId
+Save content:
+    New: batchId null, split to batches if size too large
+    Extend: add batchId=null items to existing batches, create new batches if needed
+    Edit: delete text from existing batch, and handle it as extend. Mark original content as modified, so by re-save old value is deleted
+    Delete: delete text from existing batch, and mark it as modified
+
+ChecklistItem (Direct access)
+pk: USER_ID#userId
+sk: LIST_ITEM#listItemId|CHECKLIST_ITEM#checklistItemId
+index: number
+checked: boolean
+
+TableHead
+pk: USER_ID#userId
+sk: LIST_ITEM#listItemId|TABLE_HEAD#tableHeadId
+index: number
+content: contentId
+
+TableRow
+pk: USER_ID#userId
+sk: LIST_ITEM#listItemId|TABLE_ROW#tableRowId
+index: number
+checked: boolean (for checklist table)
+columns: List<Column>
+    index: number
+    type: ColumnType
+    data:
+        NUMBER: object
+            step: contentId
+            value: contentId
+        TEXT, COLOR, DATE, TIME, DATE_TIME, MONTH: contentId
+        IMAGE, FILE: storedFileId
+        CHECKBOX: boolean
+        RANGE: object
+            min: contentId
+            max: contentId
+            step: contentId
+            value: contentId
+        LINK: object
+            url: contentId
+            text: contentId

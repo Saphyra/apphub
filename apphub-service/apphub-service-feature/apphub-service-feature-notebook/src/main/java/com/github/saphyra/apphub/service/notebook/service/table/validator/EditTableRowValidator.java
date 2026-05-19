@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class EditTableRowValidator {
-    private final ListItemDao listItemDao;
+    private final DeprecatedListItemDao listItemDao;
     private final DimensionDao dimensionDao;
     private final EditTableColumnValidator editTableColumnValidator;
 
@@ -31,7 +31,7 @@ class EditTableRowValidator {
     }
 
     private void validateRow(UUID listItemId, TableRowModel model) {
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        DeprecatedListItem listItem = listItemDao.findByIdValidated(listItemId);
 
         ValidationUtil.notNull(model.getRowIndex(), "row.rowIndex");
         if (listItem.getType() == ListItemType.CHECKLIST_TABLE) {

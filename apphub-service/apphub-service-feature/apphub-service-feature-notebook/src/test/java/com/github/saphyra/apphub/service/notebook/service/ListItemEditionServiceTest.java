@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditListItemRequest;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
@@ -41,7 +41,7 @@ public class ListItemEditionServiceTest {
     private ContentValidator contentValidator;
 
     @Mock
-    private ListItemDao listItemDao;
+    private DeprecatedListItemDao listItemDao;
 
     @Mock
     private ListItemRequestValidator listItemRequestValidator;
@@ -50,16 +50,16 @@ public class ListItemEditionServiceTest {
     private ListItemEditionService underTest;
 
     @Mock
-    private ListItem listItem;
+    private DeprecatedListItem listItem;
 
     @Mock
     private Content content;
 
     @Mock
-    private ListItem child1;
+    private DeprecatedListItem child1;
 
     @Mock
-    private ListItem child2;
+    private DeprecatedListItem child2;
 
     @BeforeEach
     public void setUp() {

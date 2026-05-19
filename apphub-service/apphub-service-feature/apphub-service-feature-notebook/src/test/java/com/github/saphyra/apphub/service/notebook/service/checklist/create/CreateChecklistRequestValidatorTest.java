@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.checklist.create;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemModelValidator;
+import com.github.saphyra.apphub.service.notebook.service.checklist.CreateChecklistRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
