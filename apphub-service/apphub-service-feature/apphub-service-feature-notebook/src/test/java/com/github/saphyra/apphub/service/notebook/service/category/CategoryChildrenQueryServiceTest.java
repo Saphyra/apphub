@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.category;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
-import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class CategoryChildrenQueryServiceTest {
     private static final UUID LIST_ITEM_ID_3 = UUID.randomUUID();
 
     @Mock
-    private DeprecatedListItemDao listItemDao;
+    private ListItemDao listItemDao;
 
     @Mock
     private NotebookViewFactory notebookViewFactory;
@@ -53,13 +54,13 @@ public class CategoryChildrenQueryServiceTest {
 
     @Test
     public void emptyType() {
-        DeprecatedListItem listItem = DeprecatedListItem.builder()
+        ListItem listItem = ListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
             .type(ListItemType.CHECKLIST)
             .title(TITLE_1)
             .build();
-        given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem));
+        given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Collections.singletonList(listItem));
         given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "", null);
@@ -73,13 +74,13 @@ public class CategoryChildrenQueryServiceTest {
 
     @Test
     public void getRoot() {
-        DeprecatedListItem listItem1 = DeprecatedListItem.builder()
+        ListItem listItem1 = ListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
             .type(ListItemType.CHECKLIST)
             .title(TITLE_1)
             .build();
-        DeprecatedListItem listItem2 = DeprecatedListItem.builder()
+        ListItem listItem2 = ListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
@@ -94,24 +95,24 @@ public class CategoryChildrenQueryServiceTest {
         assertThat(result.getTitle()).isNull();
         assertThat(result.getChildren()).hasSize(1);
         assertThat(result.getListItemType()).isEqualTo(ListItemType.CATEGORY);
-        assertThat(result.getChildren().get(0)).isEqualTo(notebookView);
+        assertThat(result.getChildren().getFirst()).isEqualTo(notebookView);
     }
 
     @Test
     public void getChildrenOfCategory() {
-        DeprecatedListItem listItem1 = DeprecatedListItem.builder()
+        ListItem listItem1 = ListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
             .type(ListItemType.CHECKLIST)
             .title(TITLE_1)
             .build();
-        DeprecatedListItem listItem2 = DeprecatedListItem.builder()
+        ListItem listItem2 = ListItem.builder()
             .listItemId(LIST_ITEM_ID_2)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .build();
-        DeprecatedListItem listItem3 = DeprecatedListItem.builder()
+        ListItem listItem3 = ListItem.builder()
             .listItemId(LIST_ITEM_ID_3)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
@@ -119,14 +120,14 @@ public class CategoryChildrenQueryServiceTest {
             .build();
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Arrays.asList(listItem1, listItem2, listItem3));
 
-        DeprecatedListItem parent = DeprecatedListItem.builder()
+        ListItem parent = ListItem.builder()
             .listItemId(CATEGORY_ID)
             .userId(USER_ID)
             .type(ListItemType.CHECKLIST)
             .parent(PARENT)
             .title(TITLE_2)
             .build();
-        given(listItemDao.findById(CATEGORY_ID)).willReturn(Optional.of(parent));
+        given(listItemDao.findById(USER_ID, CATEGORY_ID)).willReturn(Optional.of(parent));
         given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, ListItemType.CATEGORY.name(), LIST_ITEM_ID_3);

@@ -31,7 +31,7 @@ public interface ListItemController {
     void moveListItem(@RequestBody OneParamRequest<UUID> parent, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.POST, path = NotebookEndpoints.NOTEBOOK_CLONE_LIST_ITEM)
-    void cloneListItem(@PathVariable("listItemId") UUID listItemId);
+    void cloneListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_SEARCH)
     List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

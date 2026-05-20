@@ -18,6 +18,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class FileCreationService {
     private final ListItemFactory listItemFactory;
     private final ListItemDao listItemDao;
@@ -33,7 +34,7 @@ public class FileCreationService {
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), listItemType, uuidConverter.convertDomain(storedFileId));
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
 
         return storedFileId;
     }

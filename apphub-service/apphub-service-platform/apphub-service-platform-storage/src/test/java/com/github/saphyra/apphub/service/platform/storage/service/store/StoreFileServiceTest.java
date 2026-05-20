@@ -7,6 +7,8 @@ import com.github.saphyra.apphub.service.platform.storage.client.StorageClientPr
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileFactory;
+import com.github.saphyra.apphub.service.platform.storage.service.StoreFileService;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

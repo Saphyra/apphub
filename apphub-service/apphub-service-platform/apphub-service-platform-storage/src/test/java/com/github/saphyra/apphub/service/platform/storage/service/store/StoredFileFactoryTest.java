@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.service.platform.storage.config.StorageProperti
 import com.github.saphyra.apphub.service.platform.storage.config.StoredFileProperties;
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

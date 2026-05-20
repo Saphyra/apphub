@@ -53,9 +53,9 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    public void cloneListItem(UUID listItemId) {
-        log.info("Cloning listItem {}", listItemId);
-        listItemCloneService.clone(listItemId);
+    public void cloneListItem(UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to clone ListItem {}", accessToken.getUserId(), listItemId);
+        listItemCloneService.clone(accessToken.getUserId(), listItemId);
     }
 
     @Override

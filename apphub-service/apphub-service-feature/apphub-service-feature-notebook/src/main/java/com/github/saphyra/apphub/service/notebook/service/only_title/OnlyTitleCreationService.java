@@ -24,7 +24,7 @@ public class OnlyTitleCreationService {
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.ONLY_TITLE);
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
 
         return listItem.getListItemId();
     }

@@ -1,13 +1,13 @@
-package com.github.saphyra.apphub.service.platform.storage.service.store;
+package com.github.saphyra.apphub.service.platform.storage.service;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClientProvider;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFile;
 import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileDao;
-import jakarta.transaction.Transactional;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.StoredFileFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,13 +19,13 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class StoreFileService {
+class StoreFileService {
     private final StoredFileFactory storedFileFactory;
     private final StoredFileDao storedFileDao;
     private final CommonConfigProperties properties;
     private final StorageClientProvider storageClientProvider;
 
-    public UUID createFile(UUID userId, String fileName, Long size) {
+    UUID createFile(UUID userId, String fileName, Long size) {
         ValidationUtil.notNull(fileName, "fileName");
         ValidationUtil.atLeast(size, 0, "size");
         ValidationUtil.maximum(size, properties.getMaxUploadedFileSize(), "size");
@@ -37,8 +37,7 @@ public class StoreFileService {
         return storedFile.getStoredFileId();
     }
 
-    @Transactional
-    public void uploadFile(UUID userId, UUID storedFileId, InputStream file, Long size) {
+    void uploadFile(UUID userId, UUID storedFileId, InputStream file, Long size) {
         ValidationUtil.maximum(size, properties.getMaxUploadedFileSize(), "size");
 
         StoredFile storedFile = storedFileDao.findByIdValidated(userId, storedFileId);

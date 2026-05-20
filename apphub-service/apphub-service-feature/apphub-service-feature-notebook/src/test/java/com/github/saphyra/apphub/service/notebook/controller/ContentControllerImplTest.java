@@ -61,17 +61,19 @@ public class ContentControllerImplTest {
 
     @Test
     public void getText() {
-        given(textQueryService.getTextResponse(LIST_ITEM_ID)).willReturn(textResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(textQueryService.getTextResponse(USER_ID, LIST_ITEM_ID)).willReturn(textResponse);
 
-        TextResponse result = underTest.getText(LIST_ITEM_ID);
+        TextResponse result = underTest.getText(LIST_ITEM_ID, accessToken);
 
         assertThat(result).isEqualTo(textResponse);
     }
 
     @Test
     public void editText() {
-        underTest.editText(editTextRequest, LIST_ITEM_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        underTest.editText(editTextRequest, LIST_ITEM_ID, accessToken);
 
-        verify(editTextService).editText(LIST_ITEM_ID, editTextRequest);
+        verify(editTextService).editText(USER_ID, LIST_ITEM_ID, editTextRequest);
     }
 }

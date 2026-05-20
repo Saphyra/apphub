@@ -17,9 +17,8 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ListItemDao {
-    public void save(ListItem listItem) {
+    public void saveListItem(ListItem listItem) {
 
     }
 
@@ -68,11 +67,7 @@ public class ListItemDao {
         return null;
     }
 
-    public void save(ChecklistItem checklistItem, List<Content> contents) {
-
-    }
-
-    public void saveContent(UUID userId, UUID listItemId, List<Content> contents) {
+    public void saveContents(UUID userId, UUID listItemId, List<Content> contents) {
 
     }
 
@@ -112,14 +107,14 @@ public class ListItemDao {
         return null;
     }
 
-    public void save(UUID userId, UUID listItemId, List<TableHead> tableHeads) {
+    public void saveTableHeads(UUID userId, UUID listItemId, List<TableHead> tableHeads) {
 
     }
 
     public void deleteTableRow(UUID userId, UUID listItemId, UUID tableRowId) {
     }
 
-    public void save(TableRow tableRow) {
+    public void saveTableRow(TableRow tableRow) {
 
     }
 
@@ -141,5 +136,9 @@ public class ListItemDao {
 
     public List<ListItem> getPinnedByUserId(UUID userId) {
         return null;
+    }
+
+    public void saveTableRows(UUID userId, UUID listItemId, List<TableRow> clonedTableRows) {
+
     }
 }

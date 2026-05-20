@@ -36,7 +36,7 @@ public class PinService {
 
         listItem.setPinned(pinned);
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
     }
 
     public List<NotebookView> getPinnedItems(UUID userId, UUID pinGroupId) {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class TableHeadCloneService {
     private final ContentDao contentDao;
     private final ContentFactory contentFactory;

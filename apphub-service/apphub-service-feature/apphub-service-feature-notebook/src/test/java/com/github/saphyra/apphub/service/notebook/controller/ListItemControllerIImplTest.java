@@ -15,7 +15,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,22 +67,26 @@ public class ListItemControllerIImplTest {
 
     @Test
     public void editListItem() {
-        underTest.editListItem(editListItemRequest, LIST_ITEM_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        verify(listItemEditionService).edit(LIST_ITEM_ID, editListItemRequest);
+        underTest.editListItem(editListItemRequest, LIST_ITEM_ID, accessToken);
+
+        verify(listItemEditionService).edit(USER_ID, LIST_ITEM_ID, editListItemRequest);
     }
 
     @Test
     public void cloneListItem() {
-        underTest.cloneListItem(LIST_ITEM_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        verify(listItemCloneService).clone(LIST_ITEM_ID);
+        underTest.cloneListItem(LIST_ITEM_ID, accessToken);
+
+        verify(listItemCloneService).clone(USER_ID, LIST_ITEM_ID);
     }
 
     @Test
     public void search() {
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(searchService.search(USER_ID, SEARCH_TEXT)).willReturn(Arrays.asList(notebookView));
+        given(searchService.search(USER_ID, SEARCH_TEXT)).willReturn(List.of(notebookView));
 
         List<NotebookView> result = underTest.search(new OneParamRequest<>(SEARCH_TEXT), accessToken);
 
@@ -96,13 +99,15 @@ public class ListItemControllerIImplTest {
 
         underTest.archive(new OneParamRequest<>(true), LIST_ITEM_ID, accessToken);
 
-        verify(archiveService).archive(LIST_ITEM_ID, true);
+        verify(archiveService).archive(USER_ID, LIST_ITEM_ID, true);
     }
 
     @Test
     public void moveListItem() {
-        underTest.moveListItem(new OneParamRequest<>(PARENT), LIST_ITEM_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        verify(listItemEditionService).moveListItem(LIST_ITEM_ID, PARENT);
+        underTest.moveListItem(new OneParamRequest<>(PARENT), LIST_ITEM_ID, accessToken);
+
+        verify(listItemEditionService).moveListItem(USER_ID, LIST_ITEM_ID, PARENT);
     }
 }

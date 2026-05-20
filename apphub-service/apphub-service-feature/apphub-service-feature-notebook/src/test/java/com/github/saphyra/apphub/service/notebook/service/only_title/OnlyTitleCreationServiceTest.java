@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.only_title;
 
-import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateOnlyTitleRequest;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateOnlyTitleRequest;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,16 +28,16 @@ public class OnlyTitleCreationServiceTest {
     private CreateOnlyTitleRequestValidator createOnlyTitleRequestValidator;
 
     @Mock
-    private DeprecatedListItemFactory listItemFactory;
+    private ListItemFactory listItemFactory;
 
     @Mock
-    private DeprecatedListItemDao listItemDao;
+    private ListItemDao listItemDao;
 
     @InjectMocks
     private OnlyTitleCreationService underTest;
 
     @Mock
-    private DeprecatedListItem listItem;
+    private ListItem listItem;
 
     @Test
     public void create() {
@@ -46,13 +46,13 @@ public class OnlyTitleCreationServiceTest {
             .parent(PARENT)
             .build();
 
-        given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.ONLY_TITLE)).willReturn(listItem);
+        given(listItemFactory.create(USER_ID, PARENT, TITLE, ListItemType.ONLY_TITLE)).willReturn(listItem);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
         UUID result = underTest.create(request, USER_ID);
 
-        verify(createOnlyTitleRequestValidator).validate(request);
-        verify(listItemDao).save(listItem);
+        verify(createOnlyTitleRequestValidator).validate(USER_ID, request);
+        verify(listItemDao).saveListItem(listItem);
 
         assertThat(result).isEqualTo(LIST_ITEM_ID);
     }

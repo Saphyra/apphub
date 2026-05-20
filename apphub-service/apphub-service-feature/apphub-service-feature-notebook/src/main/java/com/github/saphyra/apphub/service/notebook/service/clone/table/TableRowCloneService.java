@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class TableRowCloneService {
     private final DimensionFactory dimensionFactory;
     private final CheckedItemDao checkedItemDao;

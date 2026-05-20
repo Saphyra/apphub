@@ -16,6 +16,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class TextCreationService {
     private final TextValidator textValidator;
     private final ListItemDao listItemDao;
@@ -27,7 +28,7 @@ public class TextCreationService {
 
         ListItem listItem = listItemFactory.create(userId,  request.getParent(), request.getTitle(),ListItemType.TEXT, request.getContent());
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
 
         return listItem.getListItemId();
     }

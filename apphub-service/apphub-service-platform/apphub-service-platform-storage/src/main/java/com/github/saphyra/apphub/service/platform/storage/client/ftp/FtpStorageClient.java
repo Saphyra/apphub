@@ -54,4 +54,9 @@ public class FtpStorageClient implements StorageClient {
             errorReporterService.report("Failed deleting FTP file " + storedFileId, e);
         }
     }
+
+    @Override
+    public void clone(UUID source, UUID target) {
+        throw new UnsupportedOperationException("Files stored in FTP cannot be cloned.");
+    }
 }

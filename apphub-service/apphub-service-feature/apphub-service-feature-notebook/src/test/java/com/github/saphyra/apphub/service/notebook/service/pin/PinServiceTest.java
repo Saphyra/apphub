@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -31,7 +31,7 @@ public class PinServiceTest {
     private static final UUID PIN_GROUP_ID = UUID.randomUUID();
 
     @Mock
-    private DeprecatedListItemDao listItemDao;
+    private ListItemDao listItemDao;
 
     @Mock
     private PinMappingDao pinMappingDao;
@@ -43,7 +43,7 @@ public class PinServiceTest {
     private PinService underTest;
 
     @Mock
-    private DeprecatedListItem listItem;
+    private ListItem listItem;
 
     @Mock
     private NotebookView notebookView;
@@ -53,19 +53,19 @@ public class PinServiceTest {
 
     @Test
     public void nullPinned() {
-        Throwable ex = catchThrowable(() -> underTest.pinListItem(LIST_ITEM_ID, null));
+        Throwable ex = catchThrowable(() -> underTest.pinListItem(USER_ID, LIST_ITEM_ID, null));
 
         ExceptionValidator.validateInvalidParam(ex, "pinned", "must not be null");
     }
 
     @Test
     public void pinListItem() {
-        given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
+        given(listItemDao.findByIdValidated(USER_ID, LIST_ITEM_ID)).willReturn(listItem);
 
-        underTest.pinListItem(LIST_ITEM_ID, true);
+        underTest.pinListItem(USER_ID, LIST_ITEM_ID, true);
 
         verify(listItem).setPinned(true);
-        verify(listItemDao).save(listItem);
+        verify(listItemDao).saveListItem(listItem);
     }
 
     @Test

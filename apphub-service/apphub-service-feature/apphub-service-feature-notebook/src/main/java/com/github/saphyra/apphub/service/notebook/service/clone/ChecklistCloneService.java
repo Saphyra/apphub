@@ -1,45 +1,56 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ChecklistItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ParentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class ChecklistCloneService {
-    private final DimensionDao dimensionDao;
-    private final DimensionFactory dimensionFactory;
-    private final CheckedItemDao checkedItemDao;
-    private final CheckedItemFactory checkedItemFactory;
-    private final ContentDao contentDao;
+    private final ListItemDao listItemDao;
+    private final ListItemFactory listItemFactory;
+    private final ChecklistItemFactory checklistItemFactory;
+    private final UuidConverter uuidConverter;
     private final ContentFactory contentFactory;
 
-    void clone(DeprecatedListItem original, DeprecatedListItem clone) {
-        dimensionDao.getByExternalReference(original.getListItemId())
-            .forEach(dimension -> clone(clone, dimension));
-    }
+    void clone(UUID parent, ListItem toClone) {
+        ListItem clone = listItemFactory.clone(parent, toClone);
+        List<ChecklistItem> items = listItemDao.getChecklistItems(toClone.getUserId(), toClone.getListItemId());
+        List<com.github.saphyra.apphub.service.notebook.dao.list_item.Content> contents = listItemDao.getContents(toClone.getUserId(), toClone.getListItemId(), ParentType.CHECKLIST_ITEM);
+        List<com.github.saphyra.apphub.service.notebook.dao.list_item.Content> clonedContents = new ArrayList<>();
+        List<ChecklistItem> clonedItems = items.stream()
+            .map(item -> {
+                ChecklistItem clonedItem = checklistItemFactory.clone(clone.getListItemId(), item);
 
-    private void clone(DeprecatedListItem clone, Dimension originalItem) {
-        Dimension clonedItem = dimensionFactory.create(clone.getUserId(), clone.getListItemId(), originalItem.getIndex());
-        dimensionDao.save(clonedItem);
+                String key = uuidConverter.convertDomain(item.getChecklistItemId());
+                com.github.saphyra.apphub.service.notebook.dao.list_item.Content content = contents.stream()
+                    .filter(c -> c.contains(key))
+                    .findAny()
+                    .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.DATA_NOT_FOUND, "Content not found by checklistItemId " + item.getChecklistItemId()));
 
-        CheckedItem originalCheckedItem = checkedItemDao.findByIdValidated(originalItem.getDimensionId());
-        CheckedItem clonedCheckedItem = checkedItemFactory.create(clone.getUserId(), clonedItem.getDimensionId(), originalCheckedItem.getChecked());
-        checkedItemDao.save(clonedCheckedItem);
+                com.github.saphyra.apphub.service.notebook.dao.list_item.Content clonedContent = contentFactory.create(clone.getUserId(), clone.getListItemId(), ParentType.CHECKLIST_ITEM, clonedItem.getChecklistItemId(), content.get(key));
+                clonedContents.add(clonedContent);
 
-        Content originalContent = contentDao.findByParentValidated(originalItem.getDimensionId());
-        Content clonedContent = contentFactory.create(clone.getListItemId(), clonedItem.getDimensionId(), clone.getUserId(), originalContent.getContent());
-        contentDao.save(clonedContent);
+                return clonedItem;
+            })
+            .toList();
+        listItemDao.saveChecklist(clone, clonedItems, clonedContents);
     }
 }

@@ -19,15 +19,27 @@ public class ListItemFactory {
         return create(userId, parent, title, listItemType, null);
     }
 
+    public ListItem clone(UUID parent, ListItem listItem) {
+        return create(listItem.getUserId(), parent, listItem.getTitle(), listItem.getType(), listItem.getData(), listItem.isPinned(), listItem.isArchived());
+    }
+
+    public ListItem clone(UUID parent, ListItem listItem, String data) {
+        return create(listItem.getUserId(), parent, listItem.getTitle(), listItem.getType(), data, listItem.isPinned(), listItem.isArchived());
+    }
+
     public ListItem create(UUID userId, UUID parent, String title, ListItemType listItemType, String data) {
+        return create(userId, parent, title, listItemType, data, false, false);
+    }
+
+    public ListItem create(UUID userId, UUID parent, String title, ListItemType listItemType, String data, boolean pinned, boolean archived) {
         return ListItem.builder()
             .listItemId(idGenerator.randomUuid())
             .userId(userId)
             .parent(parent)
             .type(listItemType)
             .title(title)
-            .pinned(false)
-            .archived(false)
+            .pinned(pinned)
+            .archived(archived)
             .data(data)
             .build();
     }

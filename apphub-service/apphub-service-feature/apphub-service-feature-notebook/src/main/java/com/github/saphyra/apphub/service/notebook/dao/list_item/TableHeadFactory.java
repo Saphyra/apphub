@@ -14,6 +14,10 @@ import java.util.UUID;
 public class TableHeadFactory {
     private final IdGenerator idGenerator;
 
+    public TableHead clone(UUID listItemId, TableHead tableHead) {
+        return create(tableHead.getUserId(), listItemId, tableHead.getIndex());
+    }
+
     public TableHead create(UUID userId, UUID listItemId, int columnIndex) {
         return TableHead.builder()
             .userId(userId)

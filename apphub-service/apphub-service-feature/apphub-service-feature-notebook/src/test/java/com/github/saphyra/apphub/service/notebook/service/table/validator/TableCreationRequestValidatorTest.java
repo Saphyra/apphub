@@ -26,6 +26,7 @@ import static org.mockito.BDDMockito.then;
 class TableCreationRequestValidatorTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private ListItemRequestValidator listItemRequestValidator;
@@ -61,11 +62,11 @@ class TableCreationRequestValidatorTest {
             .rows(List.of(rowModel))
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.validate(request));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, request));
 
         ExceptionValidator.validateInvalidParam(ex, "listItemType", "must not be null");
 
-        then(listItemRequestValidator).should().validate(TITLE, PARENT);
+        then(listItemRequestValidator).should().validate(USER_ID, TITLE, PARENT);
         then(createTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
     }
 
@@ -80,11 +81,11 @@ class TableCreationRequestValidatorTest {
             .rows(List.of(rowModel))
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.validate(request));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, request));
 
         ExceptionValidator.validateInvalidParam(ex, "listItemType", "must be one of [TABLE, CHECKLIST_TABLE, CUSTOM_TABLE]");
 
-        then(listItemRequestValidator).should().validate(TITLE, PARENT);
+        then(listItemRequestValidator).should().validate(USER_ID, TITLE, PARENT);
         then(createTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
     }
 
@@ -98,9 +99,9 @@ class TableCreationRequestValidatorTest {
             .rows(List.of(rowModel))
             .build();
 
-        underTest.validate(request);
+        underTest.validate(USER_ID, request);
 
-        then(listItemRequestValidator).should().validate(TITLE, PARENT);
+        then(listItemRequestValidator).should().validate(USER_ID, TITLE, PARENT);
         then(createTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
         then(tableCreationRowValidator).should().validateRows(ListItemType.TABLE, List.of(rowModel));
         then(columnNumberAmountValidator).should().validateColumnNumbersMatches(List.of(tableHeadModel), List.of(rowModel));

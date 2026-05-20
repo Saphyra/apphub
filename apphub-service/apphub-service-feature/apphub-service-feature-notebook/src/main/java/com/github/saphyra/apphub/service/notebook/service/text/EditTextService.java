@@ -14,6 +14,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class EditTextService {
     private final TextValidator textValidator;
     private final TitleValidator titleValidator;
@@ -28,6 +29,6 @@ public class EditTextService {
         listItem.setTitle(request.getTitle());
         listItem.setData(request.getContent());
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
     }
 }

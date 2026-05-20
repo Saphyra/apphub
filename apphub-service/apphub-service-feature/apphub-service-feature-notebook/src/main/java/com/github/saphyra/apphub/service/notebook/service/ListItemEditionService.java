@@ -18,6 +18,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+//TODO unit test
 public class ListItemEditionService {
     private final TextValidator textValidator;
     private final ListItemDao listItemDao;
@@ -34,7 +35,7 @@ public class ListItemEditionService {
         }
         listItem.setTitle(request.getTitle());
         moveListItem(listItem, request.getParent());
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
     }
 
     public void moveListItem(UUID userId, UUID listItemId, UUID parent) {
@@ -46,7 +47,7 @@ public class ListItemEditionService {
 
         listItem.setParent(parent);
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
     }
 
     private void validateNotOwnChild(UUID listItemId, UUID newParent, UUID userId) {

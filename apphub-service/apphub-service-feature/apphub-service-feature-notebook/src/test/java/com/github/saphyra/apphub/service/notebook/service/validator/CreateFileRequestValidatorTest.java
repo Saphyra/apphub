@@ -17,6 +17,7 @@ import static org.mockito.BDDMockito.then;
 class CreateFileRequestValidatorTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private ListItemRequestValidator listItemRequestValidator;
@@ -39,9 +40,9 @@ class CreateFileRequestValidatorTest {
         given(createFileRequest.getParent()).willReturn(PARENT);
         given(createFileRequest.getMetadata()).willReturn(fileMetadata);
 
-        underTest.validate(createFileRequest);
+        underTest.validate(USER_ID, createFileRequest);
 
-        then(listItemRequestValidator).should().validate(TITLE, PARENT);
+        then(listItemRequestValidator).should().validate(USER_ID, TITLE, PARENT);
         then(fileMetadataValidator).should().validate(fileMetadata);
     }
 }

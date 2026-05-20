@@ -24,7 +24,7 @@ public class LinkCreationService {
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.LINK, request.getUrl());
 
-        listItemDao.save(listItem);
+        listItemDao.saveListItem(listItem);
 
         return listItem.getListItemId();
     }

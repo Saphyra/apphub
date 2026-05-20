@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,30 +18,31 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public class ArchiveServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private DeprecatedListItemDao listItemDao;
+    private ListItemDao listItemDao;
 
     @InjectMocks
     private ArchiveService underTest;
 
     @Mock
-    private DeprecatedListItem listItem;
+    private ListItem listItem;
 
     @Test
     public void nullValue() {
-        Throwable ex = catchThrowable(() -> underTest.archive(LIST_ITEM_ID, null));
+        Throwable ex = catchThrowable(() -> underTest.archive(USER_ID, LIST_ITEM_ID, null));
 
         ExceptionValidator.validateInvalidParam(ex, "archived", "must not be null");
     }
 
     @Test
     public void archive() {
-        given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
+        given(listItemDao.findByIdValidated(USER_ID, LIST_ITEM_ID)).willReturn(listItem);
 
-        underTest.archive(LIST_ITEM_ID, true);
+        underTest.archive(USER_ID, LIST_ITEM_ID, true);
 
         verify(listItem).setArchived(true);
-        verify(listItemDao).save(listItem);
+        verify(listItemDao).saveListItem(listItem);
     }
 }

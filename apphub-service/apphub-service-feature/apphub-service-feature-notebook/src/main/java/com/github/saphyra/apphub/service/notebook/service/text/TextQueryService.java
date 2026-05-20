@@ -12,6 +12,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Component
+//TODO unit test
 public class TextQueryService {
     private final ListItemDao listItemDao;
 

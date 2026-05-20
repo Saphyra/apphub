@@ -9,10 +9,10 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableEditionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
-import com.github.saphyra.apphub.service.notebook.service.table.deprecated_edit.DeprecatedTableEditionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ class TableControllerImplTest {
     private CheckedTableRowDeletionService checkedTableRowDeletionService;
 
     @Mock
-    private DeprecatedTableEditionService tableEditionService;
+    private TableEditionService tableEditionService;
 
     @Mock
     private CheckboxColumnStatusUpdateService checkboxColumnStatusUpdateService;
@@ -82,14 +82,18 @@ class TableControllerImplTest {
 
     @Test
     void editTable() {
-        given(tableEditionService.editTable(LIST_ITEM_ID, editTableRequest)).willReturn(editTableResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(tableEditionService.editTable(USER_ID, LIST_ITEM_ID, editTableRequest)).willReturn(List.of(fileUploadResponse));
+        given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
         assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessToken)).isEqualTo(editTableResponse);
     }
 
     @Test
     void getTable() {
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
+        given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
         assertThat(underTest.getTable(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
     }
@@ -103,7 +107,8 @@ class TableControllerImplTest {
 
     @Test
     void deleteCheckedRows() {
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
         assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
 

@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class ChecklistQueryService {
     private final ListItemDao listItemDao;
     private final UuidConverter uuidConverter;

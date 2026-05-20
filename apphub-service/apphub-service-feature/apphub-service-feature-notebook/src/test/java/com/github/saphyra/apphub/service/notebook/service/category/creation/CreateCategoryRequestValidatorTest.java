@@ -16,6 +16,7 @@ import static org.mockito.Mockito.verify;
 public class CreateCategoryRequestValidatorTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private ListItemRequestValidator listItemRequestValidator;
@@ -30,8 +31,8 @@ public class CreateCategoryRequestValidatorTest {
             .parent(PARENT)
             .build();
 
-        underTest.validate(request);
+        underTest.validate(USER_ID, request);
 
-        verify(listItemRequestValidator).validate(TITLE, PARENT);
+        verify(listItemRequestValidator).validate(USER_ID, TITLE, PARENT);
     }
 }

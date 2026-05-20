@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class EditChecklistService {
     private final ChecklistValidator checklistValidator;
     private final ChecklistQueryService checklistQueryService;
@@ -59,7 +60,7 @@ public class EditChecklistService {
         List<ChecklistItem> modifiedItems = processModified(userId, listItemId, checklistItems, request.getItems(), contents);
 
         if (!listItem.getTitle().equals(originalListItemTitle)) {
-            listItemDao.save(listItem);
+            listItemDao.saveListItem(listItem);
         }
 
         listItemDao.editChecklist(listItem, deletedChecklistItems, newChecklistItems, modifiedItems, contents);

@@ -64,7 +64,7 @@ public class TableEditionService {
         processListItem(request, listItem);
         processTableHeads(userId, listItemId, request.getTableHeads(), tableHeads, contents);
         List<TableFileUploadResponse> fileUploads = processTableRows(userId, listItemId, request.getRows(), tableRows, contents);
-        listItemDao.saveContent(userId, listItemId, contents);
+        listItemDao.saveContents(userId, listItemId, contents);
 
         return fileUploads;
     }
@@ -109,7 +109,7 @@ public class TableEditionService {
             tableRow.setColumns(columns);
 
             if (rowModified || columnsModified) {
-                listItemDao.save(tableRow);
+                listItemDao.saveTableRow(tableRow);
             }
         }
     }
@@ -305,7 +305,7 @@ public class TableEditionService {
             ))
             .forEach(tableRow -> {
                 tableRows.add(tableRow);
-                listItemDao.save(tableRow);
+                listItemDao.saveTableRow(tableRow);
             });
     }
 
@@ -378,7 +378,7 @@ public class TableEditionService {
         boolean tableHeadsModified = processTableHeadModification(userId, listItemId, models, tableHeads, contents);
 
         if (tableHeadsDeleted || tableHeadsAdded || tableHeadsModified) {
-            listItemDao.save(userId, listItemId, tableHeads);
+            listItemDao.saveTableHeads(userId, listItemId, tableHeads);
         }
     }
 
@@ -447,7 +447,7 @@ public class TableEditionService {
     private void processListItem(EditTableRequest request, ListItem listItem) {
         if (!listItem.getTitle().equals(request.getTitle())) {
             listItem.setTitle(request.getTitle());
-            listItemDao.save(listItem);
+            listItemDao.saveListItem(listItem);
         }
     }
 

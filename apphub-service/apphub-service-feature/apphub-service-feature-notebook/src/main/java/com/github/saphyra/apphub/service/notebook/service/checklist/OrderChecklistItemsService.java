@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class OrderChecklistItemsService {
     private final ChecklistQueryService checklistQueryService;
     private final ListItemDao listItemDao;

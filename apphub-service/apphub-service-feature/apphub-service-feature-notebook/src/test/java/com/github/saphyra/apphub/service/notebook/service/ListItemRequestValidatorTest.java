@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -26,9 +26,10 @@ import static org.mockito.Mockito.verify;
 public class ListItemRequestValidatorTest {
     private static final String TITLE = "title";
     private static final UUID PARENT = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private DeprecatedListItemDao listItemDao;
+    private ListItemDao listItemDao;
 
     @Mock
     private TitleValidator titleValidator;
@@ -37,7 +38,7 @@ public class ListItemRequestValidatorTest {
     private ListItemRequestValidator underTest;
 
     @Mock
-    private DeprecatedListItem listItem;
+    private ListItem listItem;
 
     @AfterEach
     public void ver() {
@@ -46,35 +47,35 @@ public class ListItemRequestValidatorTest {
 
     @Test
     public void nullParent() {
-        underTest.validate(TITLE, null);
+        underTest.validate(USER_ID, TITLE, null);
 
         //No exception thrown
     }
 
     @Test
     public void parentNotFound() {
-        given(listItemDao.findById(PARENT)).willReturn(Optional.empty());
+        given(listItemDao.findById(USER_ID, PARENT)).willReturn(Optional.empty());
 
-        Throwable ex = catchThrowable(() -> underTest.validate(TITLE, PARENT));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, TITLE, PARENT));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
     @Test
     public void parentNotCategory() {
-        given(listItemDao.findById(PARENT)).willReturn(Optional.of(listItem));
+        given(listItemDao.findById(USER_ID, PARENT)).willReturn(Optional.of(listItem));
         given(listItem.getType()).willReturn(ListItemType.CHECKLIST);
 
-        Throwable ex = catchThrowable(() -> underTest.validate(TITLE, PARENT));
+        Throwable ex = catchThrowable(() -> underTest.validate(USER_ID, TITLE, PARENT));
 
         ExceptionValidator.validateInvalidType(ex);
     }
 
     @Test
     public void valid() {
-        given(listItemDao.findById(PARENT)).willReturn(Optional.of(listItem));
+        given(listItemDao.findById(USER_ID, PARENT)).willReturn(Optional.of(listItem));
         given(listItem.getType()).willReturn(ListItemType.CATEGORY);
 
-        underTest.validate(TITLE, PARENT);
+        underTest.validate(USER_ID, TITLE, PARENT);
     }
 }

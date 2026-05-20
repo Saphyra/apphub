@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimen
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.File;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.service.clone.FileCloneService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,7 @@ class FileBasedColumnCloner {
     private final ColumnTypeFactory columnTypeFactory;
     private final ColumnTypeDao columnTypeDao;
     private final FileDao fileDao;
-    private final FileCloneService fileCloneService;
+    //private final FileCloneService fileCloneService;
 
     void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn, ColumnType columnType) {
         Dimension clonedColumn = dimensionFactory.create(clone.getUserId(), rowId, originalColumn.getIndex());
@@ -37,6 +36,6 @@ class FileBasedColumnCloner {
         columnTypeDao.save(columnTypeDto);
 
         File toClone = fileDao.findByParentValidated(originalColumn.getDimensionId());
-        fileCloneService.cloneFile(clone.getUserId(), clonedColumn.getDimensionId(), toClone);
+        //fileCloneService.cloneFile(clone.getUserId(), clonedColumn.getDimensionId(), toClone);
     }
 }

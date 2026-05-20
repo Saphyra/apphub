@@ -20,6 +20,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class ChecklistItemCrudService {
     private final ListItemDao listItemDao;
     private final ChecklistItemFactory checklistItemFactory;
@@ -36,7 +37,7 @@ public class ChecklistItemCrudService {
         ChecklistItem checklistItem = checklistItemFactory.create(userId, listItemId, false, request.getIndex());
         contents.add(contentFactory.create(userId, listItemId, ParentType.CHECKLIST_ITEM, checklistItem.getChecklistItemId(), request.getContent()));
 
-        listItemDao.save(checklistItem, contents);
+        listItemDao.saveContents(checklistItem.getUserId(), checklistItem.getListItemId(), contents);
     }
 
 
@@ -51,7 +52,7 @@ public class ChecklistItemCrudService {
 
         content.add(uuidConverter.convertDomain(checklistItemId), contentString);
 
-        listItemDao.saveContent(userId, listItemId, contents);
+        listItemDao.saveContents(userId, listItemId, contents);
     }
 
     public void deleteChecklistItem(UUID userId, UUID listItemId, UUID checklistItemId) {

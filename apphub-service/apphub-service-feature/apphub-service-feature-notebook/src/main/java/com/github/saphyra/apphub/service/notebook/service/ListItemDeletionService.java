@@ -18,6 +18,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
+//TODO unit test
 public class ListItemDeletionService {
     private final ListItemDao listItemDao;
     private final TableDeletionService tableDeletionService;
