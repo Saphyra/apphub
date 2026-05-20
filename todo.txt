@@ -1,11 +1,8 @@
 CATEGORY
 ONLY_TITLE
-    ListItem
 LINK
-    ListItem
 TEXT
     ListItem
-    Content URL/Text
 CHECKLIST
     ListItem
     ChecklistItem for each entry (individual access)
@@ -35,7 +32,11 @@ data: storedFileId/url
 
 GSI_PARENT (Get children of a parent)
 pk: USER_ID#userId
-sk: PARENT#parentId
+sk: parent
+
+GSI_PINNED (Get pinned items)
+pk: USER_ID#userId
+sk: pinned
 
 Content
 pk: USER_ID#userId
@@ -57,9 +58,9 @@ checked: boolean
 
 TableHead
 pk: USER_ID#userId
-sk: LIST_ITEM#listItemId|TABLE_HEAD#tableHeadId
-index: number
-content: contentId
+sk: LIST_ITEM#listItemId|TABLE_HEAD
+data
+    tableHeadId = index
 
 TableRow
 pk: USER_ID#userId

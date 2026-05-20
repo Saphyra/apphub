@@ -25,13 +25,13 @@ public class FileCreationService {
     private final CreateFileRequestValidator createFileRequestValidator;
     private final UuidConverter uuidConverter;
 
-    public UUID createFile(UUID userId, CreateFileRequest request) {
+    public UUID create(UUID userId, CreateFileRequest request, ListItemType listItemType) {
         createFileRequestValidator.validate(userId, request);
 
         FileMetadata metadata = request.getMetadata();
         UUID storedFileId = storageProxy.createFile(metadata.getFileName(), metadata.getSize());
 
-        ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.FILE, uuidConverter.convertDomain(storedFileId));
+        ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), listItemType, uuidConverter.convertDomain(storedFileId));
 
         listItemDao.save(listItem);
 

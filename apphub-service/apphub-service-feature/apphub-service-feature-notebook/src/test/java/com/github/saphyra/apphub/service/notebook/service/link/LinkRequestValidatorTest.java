@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.link;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.LinkRequest;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
-import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

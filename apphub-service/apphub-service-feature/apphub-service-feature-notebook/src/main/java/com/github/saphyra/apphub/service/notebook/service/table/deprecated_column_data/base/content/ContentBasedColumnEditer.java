@@ -1,0 +1,30 @@
+package com.github.saphyra.apphub.service.notebook.service.table.deprecated_column_data.base.content;
+
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+@Deprecated(forRemoval = true)
+class ContentBasedColumnEditer {
+    private final DimensionDao dimensionDao;
+    private final ContentDao contentDao;
+
+    void edit(UUID columnId, Integer columnIndex, String contentValue) {
+        Dimension column = dimensionDao.findByIdValidated(columnId);
+        column.setIndex(columnIndex);
+        dimensionDao.save(column);
+
+        Content content = contentDao.findByParentValidated(columnId);
+        content.setContent(contentValue);
+        contentDao.save(content);
+    }
+}

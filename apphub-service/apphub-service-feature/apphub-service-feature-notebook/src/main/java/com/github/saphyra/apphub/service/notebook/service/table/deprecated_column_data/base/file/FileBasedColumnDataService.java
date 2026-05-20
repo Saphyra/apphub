@@ -1,0 +1,73 @@
+package com.github.saphyra.apphub.service.notebook.service.table.deprecated_column_data.base.file;
+
+import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_file.FileDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.service.table.deprecated_column_data.base.DeprecatedColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.validator.FileMetadataValidator;
+import lombok.RequiredArgsConstructor;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static java.util.Objects.isNull;
+
+@Deprecated(forRemoval = true)
+@RequiredArgsConstructor
+public abstract class FileBasedColumnDataService implements DeprecatedColumnDataService {
+    protected final ColumnType columnType;
+    private final FileBasedColumnProxy proxy;
+    private final FileDao fileDao;
+    private final ObjectMapper objectMapper;
+    private final FileMetadataValidator fileMetadataValidator;
+
+    @Override
+    public boolean canProcess(ColumnType columnType) {
+        return columnType == this.columnType;
+    }
+
+    @Override
+    public Optional<TableFileUploadResponse> save(UUID userId, UUID listItemId, UUID rowId, TableColumnModel model) {
+        return proxy.save(userId, rowId, model, columnType);
+    }
+
+    @Override
+    public Object getData(UUID columnId) {
+        UUID storedFileId = fileDao.findByParentValidated(columnId)
+            .getStoredFileId();
+        return FileMetadata.builder()
+            .storedFileId(storedFileId)
+            .build();
+    }
+
+    @Override
+    public void delete(Dimension column) {
+        proxy.delete(column);
+    }
+
+    @Override
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model) {
+        return proxy.edit(listItem, rowId, model);
+    }
+
+    @Override
+    public void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn) {
+        proxy.clone(clone, rowId, originalColumn, columnType);
+    }
+
+    @Override
+    public void validateData(Object data) {
+        if (isNull(data)) {
+            return;
+        }
+        FileMetadata request = ValidationUtil.parse(data, (d) -> objectMapper.convertValue(d, FileMetadata.class), "fileMetadata");
+
+        fileMetadataValidator.validate(request);
+    }
+}

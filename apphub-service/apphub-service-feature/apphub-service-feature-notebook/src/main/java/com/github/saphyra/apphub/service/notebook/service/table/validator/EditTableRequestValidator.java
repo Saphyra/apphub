@@ -17,11 +17,11 @@ public class EditTableRequestValidator {
     private final EditTableRowValidator editTableRowValidator;
     private final ColumnNumberAmountValidator columnNumberAmountValidator;
 
-    public void validate(UUID listItemId, EditTableRequest request) {
+    public void validate(UUID userId, UUID listItemId, EditTableRequest request) {
         titleValidator.validate(request.getTitle());
 
         editTableHeadValidator.validateTableHeads(listItemId, request.getTableHeads());
         columnNumberAmountValidator.validateColumnNumbersMatches(request.getTableHeads(), request.getRows());
-        editTableRowValidator.validateTableRows(listItemId, request.getRows());
+        editTableRowValidator.validateTableRows(userId, listItemId, request.getRows());
     }
 }

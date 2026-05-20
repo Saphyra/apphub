@@ -80,7 +80,7 @@ public class FileCreationServiceTest {
         given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.FILE)).willReturn(listItem);
         given(fileFactory.create(USER_ID, LIST_ITEM_ID, FILE_ID)).willReturn(file);
 
-        UUID result = underTest.createFile(USER_ID, request);
+        UUID result = underTest.create(USER_ID, request);
 
         verify(createFileRequestValidator).validate(request);
         verify(listItemDao).save(listItem);

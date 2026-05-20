@@ -1,0 +1,51 @@
+package com.github.saphyra.apphub.service.notebook.service.table.deprecated_edit;
+
+import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.service.table.deprecated_column_data.base.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.deprecated_deletion.TableColumnDeletionService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+@Deprecated(forRemoval = true)
+class EditTableColumnEditer {
+    private final TableColumnDeletionService tableColumnDeletionService;
+    private final ColumnTypeDao columnTypeDao;
+    private final ColumnDataServiceFetcher columnDataServiceFetcher;
+
+    List<TableFileUploadResponse> editTableColumn(DeprecatedListItem listItem, UUID rowId, TableColumnModel columnModel) {
+        if (columnModel.getItemType() == ItemType.EXISTING) {
+            ColumnType originalColumnType = getColumnType(columnModel.getColumnId());
+            if (columnModel.getColumnType() == originalColumnType) {
+                return columnDataServiceFetcher.findColumnDataService(originalColumnType)
+                    .edit(listItem, rowId, columnModel)
+                    .stream()
+                    .toList();
+            } else {
+                tableColumnDeletionService.deleteColumn(columnModel.getColumnId());
+                //Jump out of if, and continue with new creation
+            }
+        }
+
+        return columnDataServiceFetcher.findColumnDataService(columnModel.getColumnType())
+            .save(listItem.getUserId(), listItem.getListItemId(), rowId, columnModel)
+            .stream()
+            .toList();
+    }
+
+    private ColumnType getColumnType(UUID columnId) {
+        return columnTypeDao.findByIdValidated(columnId)
+            .getType();
+    }
+}

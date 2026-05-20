@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -23,16 +23,16 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class PinService {
-    private final DeprecatedListItemDao listItemDao;
+    private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
     private final PinMappingDao pinMappingDao;
 
-    public void pinListItem(UUID listItemId, Boolean pinned) {
+    public void pinListItem(UUID userId, UUID listItemId, Boolean pinned) {
         if (isNull(pinned)) {
             throw ExceptionFactory.invalidParam("pinned", "must not be null");
         }
 
-        DeprecatedListItem listItem = listItemDao.findByIdValidated(listItemId);
+        ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
 
         listItem.setPinned(pinned);
 
@@ -47,9 +47,8 @@ public class PinService {
             .map(PinMapping::getListItemId)
             .toList();
 
-        return listItemDao.getByUserId(userId)
+        return listItemDao.getPinnedByUserId(userId)
             .stream()
-            .filter(DeprecatedListItem::isPinned)
             .filter(listItem -> isNull(pinGroupId) || groupMembers.contains(listItem.getListItemId()))
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());

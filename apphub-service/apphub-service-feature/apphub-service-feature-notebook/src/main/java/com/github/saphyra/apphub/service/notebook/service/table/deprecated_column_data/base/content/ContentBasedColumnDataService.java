@@ -1,0 +1,62 @@
+package com.github.saphyra.apphub.service.notebook.service.table.deprecated_column_data.base.content;
+
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
+import com.github.saphyra.apphub.service.notebook.service.table.deprecated_column_data.base.DeprecatedColumnDataService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
+import java.util.UUID;
+
+@RequiredArgsConstructor
+@Slf4j
+@Deprecated(forRemoval = true)
+public abstract class ContentBasedColumnDataService implements DeprecatedColumnDataService {
+    protected final ColumnType columnType;
+    protected final ContentDao contentDao;
+    private final ContentBasedColumnProxy proxy;
+
+    @Override
+    public boolean canProcess(ColumnType columnType) {
+        return columnType == this.columnType;
+    }
+
+    @Override
+    public Optional<TableFileUploadResponse> save(UUID userId, UUID listItemId, UUID rowId, TableColumnModel model) {
+        proxy.save(userId, listItemId, rowId, model.getColumnIndex(), stringifyContent(model.getData()), columnType);
+
+        return Optional.empty();
+    }
+
+    protected String stringifyContent(Object data) {
+        return data.toString();
+    }
+
+    @Override
+    public Object getData(UUID columnId) {
+        return contentDao.findByParentValidated(columnId)
+            .getContent();
+    }
+
+    @Override
+    public void delete(Dimension column) {
+        proxy.delete(column);
+    }
+
+    @Override
+    public Optional<TableFileUploadResponse> edit(DeprecatedListItem listItem, UUID rowId, TableColumnModel model) {
+        proxy.edit(model.getColumnId(), model.getColumnIndex(), stringifyContent(model.getData()));
+
+        return Optional.empty();
+    }
+
+    @Override
+    public void clone(DeprecatedListItem clone, UUID rowId, Dimension originalColumn) {
+        proxy.clone(clone.getUserId(), clone.getListItemId(), rowId, originalColumn.getDimensionId(), originalColumn.getIndex(), columnType);
+    }
+}

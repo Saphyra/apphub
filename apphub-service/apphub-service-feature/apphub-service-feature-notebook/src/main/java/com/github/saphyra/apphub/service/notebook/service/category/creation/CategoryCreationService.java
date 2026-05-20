@@ -20,7 +20,7 @@ public class CategoryCreationService {
     private final ListItemDao listItemDao;
 
     public UUID createCategory(UUID userId, CreateCategoryRequest request) {
-        createCategoryRequestValidator.validate(request);
+        createCategoryRequestValidator.validate(userId, request);
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.CATEGORY);
         listItemDao.save(listItem);

@@ -8,6 +8,8 @@ import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.text.TextCreationService;
+import com.github.saphyra.apphub.service.notebook.service.validator.TextValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +31,7 @@ public class TextCreationServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
-    private CreateTextRequestValidator createTextRequestValidator;
+    private TextValidator textValidator;
 
     @Mock
     private DeprecatedListItemDao listItemDao;
@@ -68,7 +70,7 @@ public class TextCreationServiceTest {
 
         assertThat(result).isEqualTo(LIST_ITEM_ID);
 
-        verify(createTextRequestValidator).validate(request);
+        verify(textValidator).validate(request);
         verify(listItemDao).save(listItem);
         verify(contentDao).save(content);
     }

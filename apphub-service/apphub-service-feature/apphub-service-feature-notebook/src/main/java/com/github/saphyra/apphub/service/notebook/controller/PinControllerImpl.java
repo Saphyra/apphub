@@ -34,7 +34,7 @@ public class PinControllerImpl implements PinController {
     @Override
     public void pinListItem(UUID listItemId, OneParamRequest<Boolean> pinned, AccessToken accessToken) {
         log.info("{} wants to change pin status of list item {}", accessToken.getUserId(), listItemId);
-        pinService.pinListItem(listItemId, pinned.getValue());
+        pinService.pinListItem(accessToken.getUserId(), listItemId, pinned.getValue());
     }
 
     @Override

@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.feature.notebook.model.request.EditListItem
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.text.ContentValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
+import com.github.saphyra.apphub.service.notebook.service.validator.TextValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,17 +19,17 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class ListItemEditionService {
-    private final ContentValidator contentValidator;
+    private final TextValidator textValidator;
     private final ListItemDao listItemDao;
     private final ListItemRequestValidator listItemRequestValidator;
 
     @Transactional
     public void edit(UUID userId, UUID listItemId, EditListItemRequest request) {
-        listItemRequestValidator.validate(request.getTitle(), request.getParent());
+        listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
 
         ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
         if (listItem.getType() == ListItemType.LINK) {
-            contentValidator.validate(request.getValue(), "value");
+            textValidator.validate(request.getValue(), "value");
             listItem.setData(request.getValue());
         }
         listItem.setTitle(request.getTitle());

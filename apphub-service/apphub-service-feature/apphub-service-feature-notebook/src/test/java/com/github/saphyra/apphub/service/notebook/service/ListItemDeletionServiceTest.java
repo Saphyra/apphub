@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.Depre
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

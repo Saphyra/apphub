@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
@@ -101,5 +102,44 @@ public class ListItemDao {
 
     public void saveChecklistItems(List<ChecklistItem> modifiedItems) {
 
+    }
+
+    public void saveTable(ListItem listItem, List<TableHead> tableHeads, List<TableRow> rows, List<Content> contents) {
+
+    }
+
+    public QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> findTableValidated(UUID userId, UUID listItemId) {
+        return null;
+    }
+
+    public void save(UUID userId, UUID listItemId, List<TableHead> tableHeads) {
+
+    }
+
+    public void deleteTableRow(UUID userId, UUID listItemId, UUID tableRowId) {
+    }
+
+    public void save(TableRow tableRow) {
+
+    }
+
+    public void delete(ListItem listItem) {
+
+    }
+
+    public void deleteTableHeads(UUID userId, UUID listItemId, List<TableHead> tableHeads) {
+
+    }
+
+    public void deleteTableRows(UUID userId, UUID listItemId, List<TableRow> tableRows) {
+
+    }
+
+    public void deleteContents(UUID userId, UUID listItemId, List<Content> contents) {
+
+    }
+
+    public List<ListItem> getPinnedByUserId(UUID userId) {
+        return null;
     }
 }

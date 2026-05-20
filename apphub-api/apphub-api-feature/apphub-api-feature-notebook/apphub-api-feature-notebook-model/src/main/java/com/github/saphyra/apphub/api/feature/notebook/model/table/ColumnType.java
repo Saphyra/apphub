@@ -13,5 +13,9 @@ public enum ColumnType {
     MONTH,
     RANGE,
     LINK,
-    EMPTY
+    EMPTY;
+
+    public boolean isFile() {
+        return this == FILE || this == IMAGE;
+    }
 }

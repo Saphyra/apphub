@@ -20,7 +20,7 @@ public class OnlyTitleCreationService {
     private final ListItemDao listItemDao;
 
     public UUID create(CreateOnlyTitleRequest request, UUID userId) {
-        createOnlyTitleRequestValidator.validate(request);
+        createOnlyTitleRequestValidator.validate(userId, request);
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.ONLY_TITLE);
 

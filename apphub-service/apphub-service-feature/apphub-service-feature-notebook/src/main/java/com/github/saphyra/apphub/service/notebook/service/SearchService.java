@@ -29,13 +29,13 @@ public class SearchService {
 
         String searchValueLower = searchValue.toLowerCase();
 
-        return Stream.concat(searchByTitle(userId, searchValueLower), searchByContent(userId, searchValueLower))
+        return Stream.concat(searchByTitleAndData(userId, searchValueLower), searchByContent(userId, searchValueLower))
             .distinct()
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());
     }
 
-    private Stream<ListItem> searchByTitle(UUID userId, String searchValueLower) {
+    private Stream<ListItem> searchByTitleAndData(UUID userId, String searchValueLower) {
         return listItemDao.getByUserId(userId)
             .stream()
             .filter(listItem -> listItem.getTitle().toLowerCase().contains(searchValueLower) || Optional.ofNullable(listItem.getData()).map(String::toLowerCase).orElse("").contains(searchValueLower));

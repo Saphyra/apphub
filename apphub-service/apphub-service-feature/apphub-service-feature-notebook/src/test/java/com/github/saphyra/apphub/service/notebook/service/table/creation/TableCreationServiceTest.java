@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.DeprecatedListItemFactory;
+import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.TableCreationRequestValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

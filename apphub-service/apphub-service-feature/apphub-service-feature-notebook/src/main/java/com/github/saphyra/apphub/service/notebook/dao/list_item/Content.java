@@ -11,6 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static java.util.Objects.nonNull;
+
+/**
+ * New: batchId null, repository assign it to an existing batch if fits or new one if not
+ * Delete: delete text from existing batch, and mark it as modified
+ * Edit: delete and add new
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
@@ -36,10 +43,18 @@ public class Content {
     }
 
     public Content remove(String key) {
-        content.remove(key);
-
-        modified = true;
+        if(nonNull(content.remove(key))){
+            modified = true;
+        }
 
         return this;
+    }
+
+    public String get(String key) {
+        return content.get(key);
+    }
+
+    public boolean contains(String key) {
+        return content.containsKey(key);
     }
 }

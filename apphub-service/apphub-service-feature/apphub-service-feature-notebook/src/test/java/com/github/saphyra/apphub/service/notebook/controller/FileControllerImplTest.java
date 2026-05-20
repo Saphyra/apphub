@@ -40,7 +40,7 @@ public class FileControllerImplTest {
 
     @Test
     public void createImage() {
-        given(fileCreationService.createFile(USER_ID, createFileRequest)).willReturn(STORED_FILE_ID);
+        given(fileCreationService.create(USER_ID, createFileRequest)).willReturn(STORED_FILE_ID);
 
         OneParamResponse<UUID> result = underTest.createFile(createFileRequest, accessToken);
 

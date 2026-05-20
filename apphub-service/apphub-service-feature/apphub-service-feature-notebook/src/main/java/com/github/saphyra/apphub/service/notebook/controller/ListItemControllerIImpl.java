@@ -47,9 +47,9 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    public void moveListItem(OneParamRequest<UUID> parent, UUID listItemId) {
-        log.info("Moving listItem {} to parent {}", listItemId, parent);
-        listItemEditionService.moveListItem(listItemId, parent.getValue());
+    public void moveListItem(OneParamRequest<UUID> parent, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to move listItem with id {} to parent {}", accessToken.getUserId(), listItemId, parent);
+        listItemEditionService.moveListItem(accessToken.getUserId(), listItemId, parent.getValue());
     }
 
     @Override

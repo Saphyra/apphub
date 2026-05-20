@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_checked_item.CheckedItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.service.table.deletion.TableRowDeletionService;
+import com.github.saphyra.apphub.service.notebook.service.table.deprecated_deletion.TableRowDeletionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

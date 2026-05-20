@@ -9,10 +9,10 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
-import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
+import com.github.saphyra.apphub.service.notebook.service.table.deprecated_edit.DeprecatedTableEditionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -46,7 +46,7 @@ class TableControllerImplTest {
     private CheckedTableRowDeletionService checkedTableRowDeletionService;
 
     @Mock
-    private TableEditionService tableEditionService;
+    private DeprecatedTableEditionService tableEditionService;
 
     @Mock
     private CheckboxColumnStatusUpdateService checkboxColumnStatusUpdateService;

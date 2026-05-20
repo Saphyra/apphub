@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.TextResponse;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,18 +13,16 @@ import java.util.UUID;
 @Slf4j
 @Component
 public class TextQueryService {
-    private final DeprecatedListItemDao listItemDao;
-    private final ContentDao contentDao;
+    private final ListItemDao listItemDao;
 
-    public TextResponse getTextResponse(UUID textId) {
-        DeprecatedListItem listItem = listItemDao.findByIdValidated(textId);
-        Content content = contentDao.findByParentValidated(textId);
+    public TextResponse getTextResponse(UUID userId, UUID listItemId) {
+        ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
 
         return TextResponse.builder()
-            .textId(textId)
+            .textId(listItemId)
             .parent(listItem.getParent())
             .title(listItem.getTitle())
-            .content(content.getContent())
+            .content(listItem.getData())
             .build();
     }
 }

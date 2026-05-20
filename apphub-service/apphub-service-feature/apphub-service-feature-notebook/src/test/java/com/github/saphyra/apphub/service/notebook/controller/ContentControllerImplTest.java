@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.text.EditTextService;
 import com.github.saphyra.apphub.service.notebook.service.text.TextQueryService;
-import com.github.saphyra.apphub.service.notebook.service.text.creation.TextCreationService;
+import com.github.saphyra.apphub.service.notebook.service.text.TextCreationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

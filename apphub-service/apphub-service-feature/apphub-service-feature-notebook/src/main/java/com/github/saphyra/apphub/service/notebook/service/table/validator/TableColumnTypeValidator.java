@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnMod
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class TableColumnTypeValidator {
-    private final ColumnDataServiceFetcher columnDataServiceFetcher;
+    private final ColumnDataServiceProvider columnDataServiceProvider;
 
     void validateColumnType(CreateTableRequest request) {
         switch (request.getListItemType()) {
@@ -40,7 +40,7 @@ class TableColumnTypeValidator {
     }
 
     private void validateColumnType(TableColumnModel columnModel) {
-        columnDataServiceFetcher.findColumnDataService(columnModel.getColumnType())
+        columnDataServiceProvider.getForType(columnModel.getColumnType())
             .validateData(columnModel.getData());
     }
 
