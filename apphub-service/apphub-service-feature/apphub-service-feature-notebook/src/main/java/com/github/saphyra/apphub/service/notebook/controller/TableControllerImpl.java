@@ -57,21 +57,21 @@ class TableControllerImpl implements TableController {
     }
 
     @Override
-    public void setRowStatus(UUID rowId, OneParamRequest<Boolean> status, AccessToken accessToken) {
+    public void setRowStatus(UUID listItemId, UUID rowId, OneParamRequest<Boolean> status, AccessToken accessToken) {
         log.info("{} wants to modify status of table row {}", accessToken.getUserId(), rowId);
-        tableRowStatusUpdateService.setRowStatus(rowId, status.getValue());
+        tableRowStatusUpdateService.setRowStatus(accessToken.getUserId(), listItemId, rowId, status.getValue());
     }
 
     @Override
     public TableResponse deleteCheckedRows(UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to delete checked rows of table {}", accessToken.getUserId(), listItemId);
-        checkedTableRowDeletionService.deleteCheckedRows(listItemId);
+        checkedTableRowDeletionService.deleteCheckedRows(accessToken.getUserId(), listItemId);
         return getTable(listItemId, accessToken);
     }
 
     @Override
-    public void setCheckboxColumnStatus(UUID columnId, OneParamRequest<Boolean> status, AccessToken accessToken) {
+    public void setCheckboxColumnStatus(UUID listItemId, UUID rowId, UUID columnId, OneParamRequest<Boolean> status, AccessToken accessToken) {
         log.info("{} wants to change the status of checked column {}", accessToken.getUserId(), columnId);
-        checkboxColumnStatusUpdateService.updateColumnStatus(columnId, status.getValue());
+        checkboxColumnStatusUpdateService.updateColumnStatus(accessToken.getUserId(), listItemId, rowId, columnId, status.getValue());
     }
 }

@@ -11,16 +11,20 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ParentType;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumnFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
@@ -51,11 +55,15 @@ public class TableEditionService {
     private final TableRowFactory tableRowFactory;
     private final TableColumnFactory tableColumnFactory;
     private final StorageProxy storageProxy;
+    private final ContentDao contentDao;
+    private final CommonListItemDao commonListItemDao;
+    private final TableHeadDao tableHeadDao;
+    private final TableRowDao tableRowDao;
 
     public List<TableFileUploadResponse> editTable(UUID userId, UUID listItemId, EditTableRequest request) {
         editTableRequestValidator.validate(userId, listItemId, request);
 
-        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = listItemDao.findTableValidated(userId, listItemId);
+        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(userId, listItemId);
         ListItem listItem = table.getEntity1();
         List<TableHead> tableHeads = new ArrayList<>(table.getEntity2());
         List<TableRow> tableRows = new ArrayList<>(table.getEntity3());
@@ -64,7 +72,7 @@ public class TableEditionService {
         processListItem(request, listItem);
         processTableHeads(userId, listItemId, request.getTableHeads(), tableHeads, contents);
         List<TableFileUploadResponse> fileUploads = processTableRows(userId, listItemId, request.getRows(), tableRows, contents);
-        listItemDao.saveContents(userId, listItemId, contents);
+        contentDao.save(userId, listItemId, contents);
 
         return fileUploads;
     }
@@ -109,7 +117,7 @@ public class TableEditionService {
             tableRow.setColumns(columns);
 
             if (rowModified || columnsModified) {
-                listItemDao.saveTableRow(tableRow);
+                tableRowDao.save(tableRow);
             }
         }
     }
@@ -305,7 +313,7 @@ public class TableEditionService {
             ))
             .forEach(tableRow -> {
                 tableRows.add(tableRow);
-                listItemDao.saveTableRow(tableRow);
+                tableRowDao.save(tableRow);
             });
     }
 
@@ -368,7 +376,7 @@ public class TableEditionService {
                 });
 
             tableRows.remove(tableRow);
-            listItemDao.deleteTableRow(userId, listItemId, tableRow.getTableRowId());
+            tableRowDao.delete(userId, listItemId, tableRow.getTableRowId());
         });
     }
 
@@ -378,7 +386,7 @@ public class TableEditionService {
         boolean tableHeadsModified = processTableHeadModification(userId, listItemId, models, tableHeads, contents);
 
         if (tableHeadsDeleted || tableHeadsAdded || tableHeadsModified) {
-            listItemDao.saveTableHeads(userId, listItemId, tableHeads);
+            tableHeadDao.save(userId, listItemId, tableHeads);
         }
     }
 

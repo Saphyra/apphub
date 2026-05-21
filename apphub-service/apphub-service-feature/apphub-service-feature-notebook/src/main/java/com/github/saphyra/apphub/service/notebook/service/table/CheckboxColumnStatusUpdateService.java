@@ -2,32 +2,64 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_column_type.ColumnTypeDao;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class CheckboxColumnStatusUpdateService {
-    private final ColumnTypeDao columnTypeDao;
+    private final ColumnDataServiceProvider columnDataServiceProvider;
+    private final UuidConverter uuidConverter;
+    private final ContentFactory contentFactory;
     private final ContentDao contentDao;
+    private final TableRowDao tableRowDao;
 
-    public void updateColumnStatus(UUID columnId, Boolean status) {
+    public void updateColumnStatus(UUID userId, UUID listItemId, UUID rowId, UUID columnId, Boolean status) {
         ValidationUtil.notNull(status, "status");
 
-        if (columnTypeDao.findByIdValidated(columnId).getType() != ColumnType.CHECKBOX) {
+        TableRow row = tableRowDao.findByIdValidated(userId, listItemId, rowId);
+
+        TableColumn column = row.getColumns()
+            .stream()
+            .filter(tableColumn -> tableColumn.getColumnId().equals(columnId))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.notFound("TableColumn not found by id " + columnId + " in TableRow " + rowId + " in ListItem " + listItemId));
+
+        if (column.getType() != ColumnType.CHECKBOX) {
             throw ExceptionFactory.invalidParam("columnId", "not a " + ColumnType.CHECKBOX);
         }
 
-        Content content = contentDao.findByParentValidated(columnId);
-        content.setContent(status.toString());
-        contentDao.save(content);
+        String data = columnDataServiceProvider.getForType(ColumnType.CHECKBOX)
+            .serialize(status)
+            .orElseThrow();
+        List<Content> contents = new ArrayList<>(contentDao.getByListItemIdAndType(userId, listItemId, ParentType.TABLE_COLUMN));
+        String key = uuidConverter.convertDomain(columnId);
+        Content content = contents.stream()
+            .filter(c -> c.contains(key))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.notFound("Content not found for columnId " + columnId + " in ListItem " + listItemId));
+        content.remove(key);
+
+        Content newContent = contentFactory.create(userId, listItemId, ParentType.TABLE_COLUMN, columnId, data);
+        contents.add(newContent);
+
+        contentDao.save(userId, listItemId, contents);
     }
 }

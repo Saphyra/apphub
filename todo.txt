@@ -22,7 +22,7 @@ CUSTOM_TABLE
 
 ListItem
 pk: USER_ID#userId
-sk: USER_ID#userId|LIST_ITEM#listItemId
+sk: LIST_ITEM#listItemId
 parent: LIST_ITEM#listItemId
 type: ListItemType
 title: listItemTitle
@@ -33,10 +33,6 @@ data: storedFileId/url
 GSI_PARENT (Get children of a parent)
 pk: USER_ID#userId
 sk: parent
-
-GSI_PINNED (Get pinned items)
-pk: USER_ID#userId
-sk: pinned
 
 Content
 pk: USER_ID#userId

@@ -102,9 +102,11 @@ class TableControllerImplTest {
 
     @Test
     void setRowStatus() {
-        underTest.setRowStatus(ROW_ID, new OneParamRequest<>(true), accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(tableRowStatusUpdateService).should().setRowStatus(ROW_ID, true);
+        underTest.setRowStatus(LIST_ITEM_ID, ROW_ID, new OneParamRequest<>(true), accessToken);
+
+        then(tableRowStatusUpdateService).should().setRowStatus(USER_ID, LIST_ITEM_ID, ROW_ID, true);
     }
 
     @Test
@@ -114,13 +116,15 @@ class TableControllerImplTest {
 
         assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
 
-        then(checkedTableRowDeletionService).should().deleteCheckedRows(LIST_ITEM_ID);
+        then(checkedTableRowDeletionService).should().deleteCheckedRows(USER_ID, LIST_ITEM_ID);
     }
 
     @Test
     void setCheckboxColumnStatus(){
-        underTest.setCheckboxColumnStatus(COLUMN_ID, new OneParamRequest<>(true), accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(COLUMN_ID, true);
+        underTest.setCheckboxColumnStatus(LIST_ITEM_ID, ROW_ID, COLUMN_ID, new OneParamRequest<>(true), accessToken);
+
+        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(USER_ID, LIST_ITEM_ID, ROW_ID, COLUMN_ID, true);
     }
 }

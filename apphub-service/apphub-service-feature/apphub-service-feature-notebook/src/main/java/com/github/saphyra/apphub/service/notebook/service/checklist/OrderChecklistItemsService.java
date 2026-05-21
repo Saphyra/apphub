@@ -3,10 +3,11 @@ package com.github.saphyra.apphub.service.notebook.service.checklist;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ChecklistItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,11 +24,12 @@ import java.util.stream.Collectors;
 //TODO unit test
 public class OrderChecklistItemsService {
     private final ChecklistQueryService checklistQueryService;
-    private final ListItemDao listItemDao;
     private final UuidConverter uuidConverter;
+    private final CommonListItemDao commonListItemDao;
+    private final ChecklistItemDao checklistItemDao;
 
     public ChecklistResponse orderItems(UUID userId, UUID listItemId) {
-        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = listItemDao.findChecklistValidated(userId, listItemId);
+        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = commonListItemDao.findChecklistValidated(userId, listItemId);
         Map<UUID, ChecklistItem> checklistItems = checklist.getEntity2()
             .stream()
             .collect(Collectors.toMap(ChecklistItem::getChecklistItemId, item -> item));
@@ -45,7 +47,7 @@ public class OrderChecklistItemsService {
             }
         }
 
-        listItemDao.saveChecklistItems(modifiedItems);
+        checklistItemDao.save(modifiedItems);
 
         return checklistQueryService.getChecklistResponse(userId, listItemId);
     }

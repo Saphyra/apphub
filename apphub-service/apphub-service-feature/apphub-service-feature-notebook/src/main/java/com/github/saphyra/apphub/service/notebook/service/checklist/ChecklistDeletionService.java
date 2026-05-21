@@ -1,20 +1,22 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
 public class ChecklistDeletionService {
-    private final ListItemDao listItemDao;
+    private final CommonListItemDao commonListItemDao;
 
-    public void delete(UUID userId, UUID listItemId) {
-        listItemDao.deleteChecklist(userId, listItemId);
+    public void delete(ListItem listItem) {
+        commonListItemDao.delete(listItem, List.of(ParentType.CHECKLIST_ITEM));
     }
 }

@@ -3,17 +3,21 @@ package com.github.saphyra.apphub.service.notebook.service.clone;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ParentType;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumnFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +44,16 @@ class TableCloneService {
     private final TableRowFactory tableRowFactory;
     private final TableColumnFactory tableColumnFactory;
     private final StorageProxy storageProxy;
+    private final ContentDao contentDao;
+    private final CommonListItemDao commonListItemDao;
+    private final TableHeadDao tableHeadDao;
+    private final TableRowDao tableRowDao;
 
     void cloneTable(UUID parent, ListItem toClone) {
         ListItem clone = listItemFactory.clone(parent, toClone);
         listItemDao.saveListItem(clone);
 
-        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = listItemDao.findTableValidated(toClone.getUserId(), toClone.getListItemId());
+        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(toClone.getUserId(), toClone.getListItemId());
         Map<UUID, String> contentMap = table.getEntity4()
             .stream()
             .flatMap(c -> c.getContent().entrySet().stream())
@@ -56,7 +64,7 @@ class TableCloneService {
         cloneTableHeads(clone.getUserId(), clone.getListItemId(), table.getEntity2(), contentMap, clonedContents);
         cloneTableRows(clone.getUserId(), clone.getListItemId(), table.getEntity3(), contentMap, clonedContents);
 
-        listItemDao.saveContents(clone.getUserId(), clone.getListItemId(), clonedContents);
+        contentDao.save(clone.getUserId(), clone.getListItemId(), clonedContents);
     }
 
     private void cloneTableRows(UUID userId, UUID listItemId, List<TableRow> rows, Map<UUID, String> contentMap, List<Content> clonedContents) {
@@ -70,7 +78,7 @@ class TableCloneService {
             ))
             .toList();
 
-        listItemDao.saveTableRows(userId, listItemId, clonedTableRows);
+        tableRowDao.save(userId, listItemId, clonedTableRows);
     }
 
     private List<TableColumn> cloneColumns(UUID userId, UUID listItemId, List<TableColumn> columns, Map<UUID, String> contentMap, List<Content> clonedContents) {
@@ -109,6 +117,6 @@ class TableCloneService {
             })
             .toList();
 
-        listItemDao.saveTableHeads(userId, listItemId, clonedTableHeads);
+        tableHeadDao.save(userId, listItemId, clonedTableHeads);
     }
 }

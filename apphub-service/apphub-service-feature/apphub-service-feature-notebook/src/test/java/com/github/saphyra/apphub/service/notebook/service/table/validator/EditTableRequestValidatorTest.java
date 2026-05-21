@@ -55,7 +55,7 @@ class EditTableRequestValidatorTest {
         underTest.validate(USER_ID, LIST_ITEM_ID, request);
 
         then(titleValidator).should().validate(TITLE);
-        then(editTableHeadValidator).should().validateTableHeads(LIST_ITEM_ID, List.of(tableHeadModel));
+        then(editTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
         then(columnNumberAmountValidator).should().validateColumnNumbersMatches(List.of(tableHeadModel), List.of(rowModel));
         then(editTableRowValidator).should().validateTableRows(USER_ID, LIST_ITEM_ID, List.of(rowModel));
     }

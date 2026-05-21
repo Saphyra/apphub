@@ -40,9 +40,9 @@ public class NotebookEndpoints {
     public static final String NOTEBOOK_CREATE_TABLE = "/api/notebook/table";
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";
     public static final String NOTEBOOK_GET_TABLE = "/api/notebook/table/{listItemId}";
-    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/row/{rowId}/status";
+    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/{listItemId}/row/{rowId}/status"; //TODO fill listItemId
     public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
-    public static final String NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS = "/api/notebook/table/column/{columnId}/status";
+    public static final String NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS = "/api/notebook/table/{listItemId}/row/{rowId}/column/{columnId}/status"; //TODO updated url, fill listItemId and rowId
 
     //Etc
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";

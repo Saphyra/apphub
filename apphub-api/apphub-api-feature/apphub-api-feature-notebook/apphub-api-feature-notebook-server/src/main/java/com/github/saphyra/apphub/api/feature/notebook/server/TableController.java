@@ -31,11 +31,17 @@ public interface TableController {
     TableResponse getTable(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(path = NotebookEndpoints.NOTEBOOK_TABLE_SET_ROW_STATUS)
-    void setRowStatus(@PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    void setRowStatus(@PathVariable("listItemId") UUID listItemId, @PathVariable("rowId") UUID rowId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(NotebookEndpoints.NOTEBOOK_TABLE_DELETE_CHECKED)
     TableResponse deleteCheckedRows(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS)
-    void setCheckboxColumnStatus(@PathVariable("columnId") UUID columnId, @RequestBody OneParamRequest<Boolean> status, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    void setCheckboxColumnStatus(
+        @PathVariable("listItemId") UUID listItemId,
+        @PathVariable("rowId") UUID rowId,
+        @PathVariable("columnId") UUID columnId,
+        @RequestBody OneParamRequest<Boolean> status,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
+    );
 }

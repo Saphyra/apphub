@@ -20,7 +20,7 @@ public class EditTableRequestValidator {
     public void validate(UUID userId, UUID listItemId, EditTableRequest request) {
         titleValidator.validate(request.getTitle());
 
-        editTableHeadValidator.validateTableHeads(listItemId, request.getTableHeads());
+        editTableHeadValidator.validateTableHeads(request.getTableHeads());
         columnNumberAmountValidator.validateColumnNumbersMatches(request.getTableHeads(), request.getRows());
         editTableRowValidator.validateTableRows(userId, listItemId, request.getRows());
     }

@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -22,6 +22,7 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 public class PinService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
@@ -47,8 +48,9 @@ public class PinService {
             .map(PinMapping::getListItemId)
             .toList();
 
-        return listItemDao.getPinnedByUserId(userId)
+        return listItemDao.getByUserId(userId)
             .stream()
+            .filter(ListItem::isPinned)
             .filter(listItem -> isNull(pinGroupId) || groupMembers.contains(listItem.getListItemId()))
             .map(notebookViewFactory::create)
             .collect(Collectors.toList());

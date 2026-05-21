@@ -9,9 +9,9 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
@@ -30,12 +30,12 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 public class TableQueryService {
-    private final ListItemDao listItemDao;
     private final UuidConverter uuidConverter;
     private final ColumnDataServiceProvider columnDataServiceProvider;
+    private final CommonListItemDao commonListItemDao;
 
     public TableResponse getTable(UUID userId, UUID listItemId) {
-        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = listItemDao.findTableValidated(userId, listItemId);
+        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(userId, listItemId);
         ListItem listItem = table.getEntity1();
         List<TableHead> tableHeads = table.getEntity2();
         List<TableRow> tableRows = table.getEntity3();

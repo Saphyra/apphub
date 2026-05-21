@@ -7,12 +7,13 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ParentType;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumnFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
@@ -44,6 +45,7 @@ public class TableCreationService {
     private final TableColumnFactory tableColumnFactory;
     private final ColumnDataServiceProvider columnDataServiceProvider;
     private final UuidConverter uuidConverter;
+    private final CommonListItemDao commonListItemDao;
 
     @Transactional
     public List<TableFileUploadResponse> create(UUID userId, CreateTableRequest request) {
@@ -55,7 +57,7 @@ public class TableCreationService {
         List<TableHead> tableHeads = getTableHeads(userId, listItem.getListItemId(), request.getTableHeads(), contents);
         List<TableRow> rows = createRows(userId, listItem.getListItemId(), request.getRows(), contents);
 
-        listItemDao.saveTable(listItem, tableHeads, rows, contents);
+        commonListItemDao.saveTable(listItem, tableHeads, rows, contents);
 
         return collectFilesToUpload(rows, contents);
     }

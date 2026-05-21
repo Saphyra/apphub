@@ -5,10 +5,11 @@ import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistI
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ChecklistItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,9 +26,10 @@ import java.util.stream.Collectors;
 public class ChecklistQueryService {
     private final ListItemDao listItemDao;
     private final UuidConverter uuidConverter;
+    private final CommonListItemDao commonListItemDao;
 
     public ChecklistResponse getChecklistResponse(UUID userId, UUID listItemId) {
-        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = listItemDao.findChecklistValidated(userId, listItemId);
+        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = commonListItemDao.findChecklistValidated(userId, listItemId);
         ListItem listItem = checklist.getEntity1();
         List<ChecklistItem> checklistItems = checklist.getEntity2();
         List<Content> contents = checklist.getEntity3();

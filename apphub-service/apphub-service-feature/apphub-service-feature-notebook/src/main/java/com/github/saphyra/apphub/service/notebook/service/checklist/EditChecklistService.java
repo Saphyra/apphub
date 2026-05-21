@@ -8,13 +8,14 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ChecklistItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ChecklistItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ParentType;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +40,13 @@ public class EditChecklistService {
     private final ChecklistItemFactory checklistItemFactory;
     private final ContentFactory contentFactory;
     private final UuidConverter uuidConverter;
+    private final CommonListItemDao commonListItemDao;
 
     @Transactional
     public ChecklistResponse edit(UUID userId, UUID listItemId, EditChecklistRequest request) {
         checklistValidator.validate(userId, listItemId, request);
 
-        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = listItemDao.findChecklistValidated(userId, listItemId);
+        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = commonListItemDao.findChecklistValidated(userId, listItemId);
 
         ListItem listItem = checklist.getEntity1();
         Map<UUID, ChecklistItem> checklistItems = checklist.getEntity2()
@@ -63,7 +65,7 @@ public class EditChecklistService {
             listItemDao.saveListItem(listItem);
         }
 
-        listItemDao.editChecklist(listItem, deletedChecklistItems, newChecklistItems, modifiedItems, contents);
+        commonListItemDao.editChecklist(listItem, deletedChecklistItems, newChecklistItems, modifiedItems, contents);
 
         return checklistQueryService.getChecklistResponse(userId, listItemId);
     }

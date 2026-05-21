@@ -52,7 +52,7 @@ public class DefaultEncryptor {
             byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
             return encoder.encode(encrypted);
         } catch (InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-            log.error("Error encryping value.", e);
+            log.error("Error encrypting value.", e);
             throw new RuntimeException(e);
         }
 

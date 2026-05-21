@@ -2,12 +2,16 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +27,13 @@ public class TableDeletionService {
     private final ListItemDao listItemDao;
     private final UuidConverter uuidConverter;
     private final StorageProxy storageProxy;
+    private final CommonListItemDao commonListItemDao;
+    private final TableHeadDao tableHeadDao;
+    private final TableRowDao tableRowDao;
+    private final ContentDao contentDao;
 
     public void delete(ListItem listItem) {
-        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = listItemDao.findTableValidated(listItem.getUserId(), listItem.getListItemId());
+        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(listItem.getUserId(), listItem.getListItemId());
 
         table.getEntity3()
             .stream()
@@ -43,8 +51,8 @@ public class TableDeletionService {
             .forEach(storageProxy::deleteFile);
 
         listItemDao.delete(table.getEntity1());
-        listItemDao.deleteTableHeads(listItem.getUserId(), listItem.getListItemId(), table.getEntity2());
-        listItemDao.deleteTableRows(listItem.getUserId(), listItem.getListItemId(), table.getEntity3());
-        listItemDao.deleteContents(listItem.getUserId(), listItem.getListItemId(), table.getEntity4());
+        tableHeadDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity2());
+        tableRowDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity3());
+        contentDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity4());
     }
 }

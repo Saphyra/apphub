@@ -2,9 +2,10 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ import java.util.stream.Stream;
 public class SearchService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
+    private final ContentDao contentDao;
 
     public List<NotebookView> search(UUID userId, String searchValue) {
         if (searchValue.length() < 3) {
@@ -43,7 +45,7 @@ public class SearchService {
     }
 
     private Stream<ListItem> searchByContent(UUID userId, String searchValueLower) {
-        List<UUID> listItemIds = listItemDao.getContentsByUserId(userId)
+        List<UUID> listItemIds = contentDao.getContentsByUserId(userId)
             .stream()
             .filter(content -> hasMatchingContent(content, searchValueLower))
             .map(Content::getListItemId)

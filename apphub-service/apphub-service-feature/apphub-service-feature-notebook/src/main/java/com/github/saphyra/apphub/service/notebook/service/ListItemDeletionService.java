@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.file.FileDeletionService;
@@ -38,7 +38,7 @@ public class ListItemDeletionService {
                 deleteChildren(listItem, userId);
                 listItemDao.delete(listItem);
             }
-            case CHECKLIST -> checklistDeletionService.delete(listItem.getUserId(), listItem.getListItemId());
+            case CHECKLIST -> checklistDeletionService.delete(listItem);
             case TEXT, LINK, ONLY_TITLE -> listItemDao.delete(listItem);
             case IMAGE, FILE -> fileDeletionService.deleteFile(listItem);
             case TABLE, CHECKLIST_TABLE, CUSTOM_TABLE -> tableDeletionService.delete(listItem);
