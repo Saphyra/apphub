@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @Deprecated(forRemoval = true)
-class EmptyColumnDataService implements DeprecatedColumnDataService {
+class DeprecatedEmptyColumnDataService implements DeprecatedColumnDataService {
     private final DimensionFactory dimensionFactory;
     private final DimensionDao dimensionDao;
     private final ColumnTypeFactory columnTypeFactory;

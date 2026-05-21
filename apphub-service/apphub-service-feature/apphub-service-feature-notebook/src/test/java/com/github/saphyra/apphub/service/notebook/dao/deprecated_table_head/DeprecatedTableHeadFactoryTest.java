@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class TableHeadFactoryTest {
+class DeprecatedTableHeadFactoryTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID PARENT = UUID.randomUUID();
     private static final Integer COLUMN_INDEX = 34;
@@ -23,7 +23,7 @@ class TableHeadFactoryTest {
     private IdGenerator idGenerator;
 
     @InjectMocks
-    private TableHeadFactory underTest;
+    private DeprecatedTableHeadFactory underTest;
 
     @Test
     void create() {

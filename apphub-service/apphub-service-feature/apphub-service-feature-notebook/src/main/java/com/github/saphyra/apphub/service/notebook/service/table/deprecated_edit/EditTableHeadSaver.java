@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.TableHeadFactory;
-import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head.DeprecatedTableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedContentFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,9 +21,9 @@ import java.util.List;
 @Deprecated(forRemoval = true)
 class EditTableHeadSaver {
     private final TableHeadDao tableHeadDao;
-    private final TableHeadFactory tableHeadFactory;
+    private final DeprecatedTableHeadFactory tableHeadFactory;
     private final ContentDao contentDao;
-    private final ContentFactory contentFactory;
+    private final DeprecatedContentFactory contentFactory;
 
     void saveTableHeads(DeprecatedListItem listItem, List<TableHeadModel> tableHeads) {
         tableHeads.forEach(tableHeadModel -> saveTableHead(listItem, tableHeadModel));

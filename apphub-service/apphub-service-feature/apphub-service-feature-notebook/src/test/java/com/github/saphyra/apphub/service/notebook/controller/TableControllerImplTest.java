@@ -86,7 +86,9 @@ class TableControllerImplTest {
         given(tableEditionService.editTable(USER_ID, LIST_ITEM_ID, editTableRequest)).willReturn(List.of(fileUploadResponse));
         given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
-        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessToken)).isEqualTo(editTableResponse);
+        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessToken))
+            .returns(List.of(fileUploadResponse), EditTableResponse::getFileUpload)
+            .returns(tableResponse, EditTableResponse::getTableResponse);
     }
 
     @Test

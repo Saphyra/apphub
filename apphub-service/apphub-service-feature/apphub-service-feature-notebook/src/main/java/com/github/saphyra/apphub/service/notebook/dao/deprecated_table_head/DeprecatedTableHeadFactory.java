@@ -10,7 +10,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TableHeadFactory {
+public class DeprecatedTableHeadFactory {
     private final IdGenerator idGenerator;
 
     public TableHead create(UUID userId, UUID parent, Integer columnIndex) {

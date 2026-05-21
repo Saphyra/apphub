@@ -11,7 +11,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Deprecated(forRemoval = true)
-public class ContentFactory {
+public class DeprecatedContentFactory {
     private final IdGenerator idGenerator;
 
     public Content create(DeprecatedListItem listItem, String content) {

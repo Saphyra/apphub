@@ -15,10 +15,10 @@ import java.util.UUID;
 @Component
 @Slf4j
 @Deprecated(forRemoval = true)
-class LinkColumnDataService extends ContentBasedColumnDataService {
+class DeprecatedLinkColumnDataService extends ContentBasedColumnDataService {
     private final ObjectMapper objectMapper;
 
-    public LinkColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapper objectMapper) {
+    public DeprecatedLinkColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapper objectMapper) {
         super(ColumnType.LINK, contentDao, proxy);
         this.objectMapper = objectMapper;
     }

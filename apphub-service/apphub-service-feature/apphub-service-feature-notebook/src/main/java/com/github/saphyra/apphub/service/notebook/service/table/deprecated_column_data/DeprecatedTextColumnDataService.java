@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @Deprecated(forRemoval = true)
-class TextColumnDataService extends ContentBasedColumnDataService {
-    public TextColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy) {
+class DeprecatedTextColumnDataService extends ContentBasedColumnDataService {
+    public DeprecatedTextColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy) {
         super(ColumnType.TEXT, contentDao, proxy);
     }
 

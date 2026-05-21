@@ -112,6 +112,7 @@ class ChecklistControllerImplTest {
 
     @Test
     void deleteCheckedItems() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(checklistQueryService.getChecklistResponse(USER_ID, LIST_ITEM_ID)).willReturn(checklistResponse);
 
         assertThat(underTest.deleteCheckedItems(LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);

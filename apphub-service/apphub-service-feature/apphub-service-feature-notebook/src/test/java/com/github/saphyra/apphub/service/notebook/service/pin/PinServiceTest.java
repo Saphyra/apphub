@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -70,9 +69,7 @@ public class PinServiceTest {
 
     @Test
     public void getPinnedItems() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem, listItem));
-        given(listItem.isPinned()).willReturn(true)
-            .willReturn(false);
+        given(listItemDao.getPinnedByUserId(USER_ID)).willReturn(List.of(listItem));
         given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, null);
@@ -83,9 +80,7 @@ public class PinServiceTest {
 
     @Test
     public void getPinnedItems_notInGroup() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem, listItem));
-        given(listItem.isPinned()).willReturn(true)
-            .willReturn(false);
+        given(listItemDao.getPinnedByUserId(USER_ID)).willReturn(List.of(listItem));
         given(pinMappingDao.getByPinGroupId(PIN_GROUP_ID)).willReturn(Collections.emptyList());
 
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, PIN_GROUP_ID);
@@ -95,9 +90,7 @@ public class PinServiceTest {
 
     @Test
     public void getPinnedItems_inGroup() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem, listItem));
-        given(listItem.isPinned()).willReturn(true)
-            .willReturn(false);
+        given(listItemDao.getPinnedByUserId(USER_ID)).willReturn(List.of(listItem));
         given(notebookViewFactory.create(listItem)).willReturn(notebookView);
         given(pinMappingDao.getByPinGroupId(PIN_GROUP_ID)).willReturn(List.of(pinMapping));
         given(pinMapping.getListItemId()).willReturn(LIST_ITEM_ID);

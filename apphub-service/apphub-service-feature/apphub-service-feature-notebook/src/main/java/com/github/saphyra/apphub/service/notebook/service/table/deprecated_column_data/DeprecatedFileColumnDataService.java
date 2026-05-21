@@ -12,8 +12,8 @@ import tools.jackson.databind.ObjectMapper;
 @Component
 @Slf4j
 @Deprecated(forRemoval = true)
-class FileColumnDataService extends FileBasedColumnDataService {
-    FileColumnDataService(FileBasedColumnProxy proxy, FileDao fileDao, ObjectMapper objectMapper, FileMetadataValidator fileMetadataValidator) {
+class DeprecatedFileColumnDataService extends FileBasedColumnDataService {
+    DeprecatedFileColumnDataService(FileBasedColumnProxy proxy, FileDao fileDao, ObjectMapper objectMapper, FileMetadataValidator fileMetadataValidator) {
         super(ColumnType.FILE, proxy, fileDao, objectMapper, fileMetadataValidator);
     }
 }

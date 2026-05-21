@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.category;
 
-import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItem;
-import com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item.DeprecatedListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,21 +26,21 @@ public class CategoryTreeQueryServiceTest {
     private static final String TITLE_2 = "title-2";
 
     @Mock
-    private DeprecatedListItemDao listItemDao;
+    private ListItemDao listItemDao;
 
     @InjectMocks
     private CategoryTreeQueryService underTest;
 
     @Test
     public void getCategoryTree() {
-        DeprecatedListItem parent = DeprecatedListItem.builder()
+        ListItem parent = ListItem.builder()
             .listItemId(LIST_ITEM_ID_1)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
             .title(TITLE_1)
             .archived(true)
             .build();
-        DeprecatedListItem child = DeprecatedListItem.builder()
+        ListItem child = ListItem.builder()
             .listItemId(LIST_ITEM_ID_2)
             .userId(USER_ID)
             .type(ListItemType.CATEGORY)
@@ -53,13 +53,13 @@ public class CategoryTreeQueryServiceTest {
         List<CategoryTreeView> result = underTest.getCategoryTree(USER_ID);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getCategoryId()).isEqualTo(LIST_ITEM_ID_1);
-        assertThat(result.get(0).getTitle()).isEqualTo(TITLE_1);
-        assertThat(result.get(0).getChildren()).hasSize(1);
-        assertThat(result.get(0).isArchived()).isTrue();
-        assertThat(result.get(0).getChildren().get(0).getCategoryId()).isEqualTo(LIST_ITEM_ID_2);
-        assertThat(result.get(0).getChildren().get(0).getTitle()).isEqualTo(TITLE_2);
-        assertThat(result.get(0).getChildren().get(0).getChildren()).isEmpty();
-        assertThat(result.get(0).getChildren().get(0).isArchived()).isFalse();
+        assertThat(result.getFirst().getCategoryId()).isEqualTo(LIST_ITEM_ID_1);
+        assertThat(result.getFirst().getTitle()).isEqualTo(TITLE_1);
+        assertThat(result.getFirst().getChildren()).hasSize(1);
+        assertThat(result.getFirst().isArchived()).isTrue();
+        assertThat(result.getFirst().getChildren().getFirst().getCategoryId()).isEqualTo(LIST_ITEM_ID_2);
+        assertThat(result.getFirst().getChildren().getFirst().getTitle()).isEqualTo(TITLE_2);
+        assertThat(result.getFirst().getChildren().getFirst().getChildren()).isEmpty();
+        assertThat(result.getFirst().getChildren().getFirst().isArchived()).isFalse();
     }
 }

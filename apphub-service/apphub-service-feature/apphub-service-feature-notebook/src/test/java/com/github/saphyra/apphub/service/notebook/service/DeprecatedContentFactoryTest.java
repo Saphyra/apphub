@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-public class ContentFactoryTest {
+public class DeprecatedContentFactoryTest {
     private static final String CONTENT = "content";
     private static final UUID CONTENT_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
@@ -25,7 +25,7 @@ public class ContentFactoryTest {
     private IdGenerator idGenerator;
 
     @InjectMocks
-    private ContentFactory underTest;
+    private DeprecatedContentFactory underTest;
 
     @Mock
     private DeprecatedListItem listItem;

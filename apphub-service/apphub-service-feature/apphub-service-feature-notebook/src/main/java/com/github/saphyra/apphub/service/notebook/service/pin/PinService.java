@@ -41,7 +41,7 @@ public class PinService {
 
     public List<NotebookView> getPinnedItems(UUID userId, UUID pinGroupId) {
         List<UUID> groupMembers = Optional.ofNullable(pinGroupId)
-            .map(uuid -> pinMappingDao.getByPinGroupId(pinGroupId))
+            .map(_ -> pinMappingDao.getByPinGroupId(pinGroupId))
             .orElse(Collections.emptyList())
             .stream()
             .map(PinMapping::getListItemId)

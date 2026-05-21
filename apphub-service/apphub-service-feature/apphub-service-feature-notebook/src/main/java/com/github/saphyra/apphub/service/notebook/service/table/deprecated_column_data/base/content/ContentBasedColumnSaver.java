@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.notebook.dao.deprecated_content.Content
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.Dimension;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionDao;
 import com.github.saphyra.apphub.service.notebook.dao.deprecated_dimension.DimensionFactory;
-import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.service.DeprecatedContentFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @Deprecated(forRemoval = true)
 class ContentBasedColumnSaver {
     private final DimensionFactory dimensionFactory;
-    private final ContentFactory contentFactory;
+    private final DeprecatedContentFactory contentFactory;
     private final ColumnTypeFactory columnTypeFactory;
     private final DimensionDao dimensionDao;
     private final ContentDao contentDao;
