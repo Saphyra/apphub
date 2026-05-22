@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.list_item;
+package com.github.saphyra.apphub.service.notebook.dao.list_item.table.row;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;

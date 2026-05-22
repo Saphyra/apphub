@@ -34,7 +34,7 @@ public class FileCreationService {
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), listItemType, uuidConverter.convertDomain(storedFileId));
 
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
 
         return storedFileId;
     }

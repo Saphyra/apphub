@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class TableHeadConverter extends ConverterBase<TableHeadEntity, TableHead> {
+@Deprecated(forRemoval = true)
+public class DeprecatedTableHeadConverter extends ConverterBase<TableHeadEntity, TableHead> {
     private final UuidConverter uuidConverter;
 
     @Override

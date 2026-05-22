@@ -29,9 +29,9 @@ class ContentRepository {
     private final ContentMapper mapper;
     private final String tableName;
 
-    ContentRepository(DynamoDbClient dynamoDbClient, ContentMapper listItemMapper, NotebookDynamoDbConfiguration configuration) {
+    ContentRepository(DynamoDbClient dynamoDbClient, ContentMapper mapper, NotebookDynamoDbConfiguration configuration) {
         this.client = dynamoDbClient;
-        this.mapper = listItemMapper;
+        this.mapper = mapper;
         this.tableName = configuration.getTableName();
     }
 

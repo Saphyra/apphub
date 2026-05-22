@@ -20,6 +20,6 @@ public class ArchiveService {
 
         ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
         listItem.setArchived(archived);
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
     }
 }

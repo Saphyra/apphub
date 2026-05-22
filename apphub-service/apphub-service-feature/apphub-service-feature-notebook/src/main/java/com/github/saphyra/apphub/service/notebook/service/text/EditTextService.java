@@ -29,6 +29,6 @@ public class EditTextService {
         listItem.setTitle(request.getTitle());
         listItem.setData(request.getContent());
 
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
     }
 }

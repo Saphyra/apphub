@@ -32,7 +32,7 @@ public class ListItemCloneService {
         switch (toClone.getType()) {
             case CATEGORY -> {
                 ListItem listItemClone = listItemFactory.clone(parent, toClone);
-                listItemDao.saveListItem(listItemClone);
+                listItemDao.save(listItemClone);
 
                 listItemDao.getByUserIdAndParent(toClone.getUserId(), toClone.getListItemId())
                     .forEach(listItem -> clone(listItemClone.getListItemId(), listItem));

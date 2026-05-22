@@ -4,7 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
-interface TableHeadRepository extends CrudRepository<TableHeadEntity, String> {
+@Deprecated(forRemoval = true)
+interface DeprecatedTableHeadRepository extends CrudRepository<TableHeadEntity, String> {
     void deleteByUserId(String userId);
 
     List<TableHeadEntity> getByParent(String parent);

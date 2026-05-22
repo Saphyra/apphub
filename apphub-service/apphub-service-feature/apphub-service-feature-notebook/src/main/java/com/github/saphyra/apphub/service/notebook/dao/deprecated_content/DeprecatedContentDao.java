@@ -14,10 +14,10 @@ import java.util.UUID;
 
 @Component
 @Deprecated(forRemoval = true)
-public class ContentDao extends AbstractDao<ContentEntity, Content, String, ContentRepository> implements DeleteByUserIdDao {
+public class DeprecatedContentDao extends AbstractDao<ContentEntity, Content, String, DeprecatedContentRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public ContentDao(ContentConverter converter, ContentRepository repository, UuidConverter uuidConverter) {
+    public DeprecatedContentDao(DeprecatedContentConverter converter, DeprecatedContentRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

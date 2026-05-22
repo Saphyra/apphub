@@ -15,10 +15,11 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-public class TableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String, TableHeadRepository> implements DeleteByUserIdDao {
+@Deprecated(forRemoval = true)
+public class DeprecatedTableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String, DeprecatedTableHeadRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public TableHeadDao(TableHeadConverter converter, TableHeadRepository repository, UuidConverter uuidConverter) {
+    public DeprecatedTableHeadDao(DeprecatedTableHeadConverter converter, DeprecatedTableHeadRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

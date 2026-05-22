@@ -26,6 +26,6 @@ class FileCloneService {
         UUID clonedStoredFileId = storageProxy.cloneFile(originalStoredFileId);
 
         ListItem clone = listItemFactory.clone(parent, toClone, uuidConverter.convertDomain(clonedStoredFileId));
-        listItemDao.saveListItem(clone);
+        listItemDao.save(clone);
     }
 }

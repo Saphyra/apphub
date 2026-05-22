@@ -35,7 +35,7 @@ public class ListItemEditionService {
         }
         listItem.setTitle(request.getTitle());
         moveListItem(listItem, request.getParent());
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
     }
 
     public void moveListItem(UUID userId, UUID listItemId, UUID parent) {
@@ -47,7 +47,7 @@ public class ListItemEditionService {
 
         listItem.setParent(parent);
 
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
     }
 
     private void validateNotOwnChild(UUID listItemId, UUID newParent, UUID userId) {

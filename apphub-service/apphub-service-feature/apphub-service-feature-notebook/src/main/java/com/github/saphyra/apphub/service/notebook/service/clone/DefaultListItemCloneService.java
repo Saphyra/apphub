@@ -22,6 +22,6 @@ class DefaultListItemCloneService {
 
     void clone(UUID parent, ListItem toClone) {
         ListItem clone = listItemFactory.clone(parent, toClone);
-        listItemDao.saveListItem(clone);
+        listItemDao.save(clone);
     }
 }

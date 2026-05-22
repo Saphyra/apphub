@@ -43,6 +43,6 @@ public class ArchiveServiceTest {
         underTest.archive(USER_ID, LIST_ITEM_ID, true);
 
         verify(listItem).setArchived(true);
-        verify(listItemDao).saveListItem(listItem);
+        verify(listItemDao).save(listItem);
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 @Deprecated(forRemoval = true)
-interface ListItemRepository extends CrudRepository<ListItemEntity, String> {
+interface DeprecatedListItemRepository extends CrudRepository<ListItemEntity, String> {
     List<ListItemEntity> getByUserIdAndType(String userId, ListItemType type);
 
     List<ListItemEntity> getByUserIdAndParent(String userId, String parent);

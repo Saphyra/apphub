@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Deprecated(forRemoval = true)
-public class ContentConverter extends ConverterBase<ContentEntity, Content> {
+public class DeprecatedContentConverter extends ConverterBase<ContentEntity, Content> {
     static final String COLUMN_CONTENT = "content";
 
     private final AccessTokenProvider accessTokenProvider;

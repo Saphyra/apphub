@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDa
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import jakarta.transaction.Transactional;

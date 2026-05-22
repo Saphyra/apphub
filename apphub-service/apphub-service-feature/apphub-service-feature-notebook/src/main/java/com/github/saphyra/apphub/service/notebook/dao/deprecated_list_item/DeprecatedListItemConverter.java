@@ -15,7 +15,7 @@ import java.util.Optional;
 @Component
 @Slf4j
 @Deprecated(forRemoval = true)
-class ListItemConverter extends ConverterBase<ListItemEntity, DeprecatedListItem> {
+class DeprecatedListItemConverter extends ConverterBase<ListItemEntity, DeprecatedListItem> {
     static final String COLUMN_TITLE = "title";
     static final String COLUMN_PINNED = "pinned";
     static final String COLUMN_ARCHIVED = "archived";

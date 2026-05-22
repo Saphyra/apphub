@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @Component
 @Deprecated(forRemoval = true)
-public class DeprecatedListItemDao extends AbstractDao<ListItemEntity, DeprecatedListItem, String, ListItemRepository> implements DeleteByUserIdDao {
+public class DeprecatedListItemDao extends AbstractDao<ListItemEntity, DeprecatedListItem, String, DeprecatedListItemRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
-    private final ListItemConverter converter;
+    private final DeprecatedListItemConverter converter;
 
-    public DeprecatedListItemDao(ListItemConverter converter, ListItemRepository repository, UuidConverter uuidConverter) {
+    public DeprecatedListItemDao(DeprecatedListItemConverter converter, DeprecatedListItemRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
         this.converter = converter;

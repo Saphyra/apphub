@@ -23,7 +23,7 @@ public class CategoryCreationService {
         createCategoryRequestValidator.validate(userId, request);
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.CATEGORY);
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
         return listItem.getListItemId();
     }
 }

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Deprecated(forRemoval = true)
-interface ContentRepository extends CrudRepository<ContentEntity, String> {
+interface DeprecatedContentRepository extends CrudRepository<ContentEntity, String> {
     void deleteByParent(String parent);
 
     Optional<ContentEntity> findByParent(String parent);

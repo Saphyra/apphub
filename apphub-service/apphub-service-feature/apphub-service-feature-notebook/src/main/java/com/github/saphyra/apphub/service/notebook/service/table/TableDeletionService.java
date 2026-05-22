@@ -7,11 +7,11 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +51,7 @@ public class TableDeletionService {
             .forEach(storageProxy::deleteFile);
 
         listItemDao.delete(table.getEntity1());
-        tableHeadDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity2());
+        tableHeadDao.delete(listItem.getUserId(), listItem.getListItemId());
         tableRowDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity3());
         contentDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity4());
     }

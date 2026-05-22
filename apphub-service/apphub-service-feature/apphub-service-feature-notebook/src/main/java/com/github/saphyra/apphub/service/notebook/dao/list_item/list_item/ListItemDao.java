@@ -25,7 +25,7 @@ public class ListItemDao {
     private final ListItemRepository repository;
     private final UuidConverter uuidConverter;
 
-    public void saveListItem(ListItem listItem) {
+    public void save(ListItem listItem) {
         repository.save(converter.convertDomain(listItem));
     }
 

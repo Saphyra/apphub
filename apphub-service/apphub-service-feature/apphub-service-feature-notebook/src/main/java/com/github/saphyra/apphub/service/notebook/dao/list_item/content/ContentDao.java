@@ -34,6 +34,7 @@ public class ContentDao {
     }
 
     public void save(UUID userId, UUID listItemId, List<Content> contents) {
+        //TODO think about deleting empty contents
         List<Content> toSave = contentAggregator.aggregate(userId, listItemId, contents);
 
         Lists.partition(toSave, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
@@ -90,5 +91,13 @@ public class ContentDao {
 
         Lists.partition(ids, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
             .forEach(i -> repository.delete(userIdString, listItemIdString, i));
+    }
+
+    public void delete(UUID userId, UUID listItemId, ParentType parentType) {
+        delete(
+            userId,
+            listItemId,
+            getByListItemIdAndType(userId, listItemId, parentType)
+        );
     }
 }

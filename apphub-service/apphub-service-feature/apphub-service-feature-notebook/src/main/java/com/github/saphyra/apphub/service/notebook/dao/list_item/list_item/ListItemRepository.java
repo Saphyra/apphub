@@ -34,9 +34,9 @@ class ListItemRepository {
     private final ListItemMapper mapper;
     private final String tableName;
 
-    ListItemRepository(DynamoDbClient dynamoDbClient, ListItemMapper listItemMapper, NotebookDynamoDbConfiguration configuration) {
+    ListItemRepository(DynamoDbClient dynamoDbClient, ListItemMapper mapper, NotebookDynamoDbConfiguration configuration) {
         this.client = dynamoDbClient;
-        this.mapper = listItemMapper;
+        this.mapper = mapper;
         this.tableName = configuration.getTableName();
     }
 

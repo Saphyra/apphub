@@ -18,14 +18,14 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentF
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumnFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumnFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHeadDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
@@ -427,7 +427,7 @@ public class TableEditionService {
             .toList();
 
         toAdd.forEach(tableHeadModel -> {
-            TableHead tableHead = tableHeadFactory.create(userId, listItemId, tableHeadModel.getColumnIndex());
+            TableHead tableHead = tableHeadFactory.create(tableHeadModel.getColumnIndex());
             Content content = contentFactory.create(userId, listItemId, ParentType.TABLE_HEAD, tableHead.getTableHeadId(), tableHeadModel.getContent());
             tableHeads.add(tableHead);
             contents.add(content);
@@ -455,7 +455,7 @@ public class TableEditionService {
     private void processListItem(EditTableRequest request, ListItem listItem) {
         if (!listItem.getTitle().equals(request.getTitle())) {
             listItem.setTitle(request.getTitle());
-            listItemDao.saveListItem(listItem);
+            listItemDao.save(listItem);
         }
     }
 

@@ -49,7 +49,7 @@ public class CategoryCreationServiceTest {
         UUID result = underTest.createCategory(USER_ID, request);
 
         verify(createCategoryRequestValidator).validate(USER_ID, request);
-        verify(listItemDao).saveListItem(listItem);
+        verify(listItemDao).save(listItem);
         assertThat(result).isEqualTo(CATEGORY_ID);
     }
 }

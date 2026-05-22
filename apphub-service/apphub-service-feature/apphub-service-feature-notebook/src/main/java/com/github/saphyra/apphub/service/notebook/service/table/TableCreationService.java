@@ -14,12 +14,12 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListIt
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumn;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableColumnFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableHeadFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRow;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.TableRowFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumnFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.TableCreationRequestValidator;
 import jakarta.transaction.Transactional;
@@ -65,7 +65,7 @@ public class TableCreationService {
     private List<TableHead> getTableHeads(UUID userId, UUID listItemId, List<TableHeadModel> tableHeads, List<Content> contents) {
         return tableHeads.stream()
             .map(model -> {
-                TableHead tableHead = tableHeadFactory.create(userId, listItemId, model.getColumnIndex());
+                TableHead tableHead = tableHeadFactory.create(model.getColumnIndex());
 
                 Content content = contentFactory.create(userId, listItemId, ParentType.TABLE_HEAD, tableHead.getTableHeadId(), model.getContent());
                 contents.add(content);

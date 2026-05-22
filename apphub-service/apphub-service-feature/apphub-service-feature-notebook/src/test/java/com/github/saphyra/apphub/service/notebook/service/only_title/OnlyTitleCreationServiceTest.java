@@ -52,7 +52,7 @@ public class OnlyTitleCreationServiceTest {
         UUID result = underTest.create(request, USER_ID);
 
         verify(createOnlyTitleRequestValidator).validate(USER_ID, request);
-        verify(listItemDao).saveListItem(listItem);
+        verify(listItemDao).save(listItem);
 
         assertThat(result).isEqualTo(LIST_ITEM_ID);
     }

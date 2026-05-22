@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.list_item;
+package com.github.saphyra.apphub.service.notebook.dao.list_item.table.row;
 
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;

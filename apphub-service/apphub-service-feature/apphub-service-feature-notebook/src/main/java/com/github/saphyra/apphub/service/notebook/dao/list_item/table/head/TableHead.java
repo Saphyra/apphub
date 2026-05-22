@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.notebook.dao.list_item;
+package com.github.saphyra.apphub.service.notebook.dao.list_item.table.head;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -12,12 +12,6 @@ import java.util.UUID;
 @Data
 @Builder
 public class TableHead {
-    //TODO maybe unnecessary
-    @NonNull
-    private final UUID userId;
-    //TODO maybe unnecessary
-    @NonNull
-    private final UUID listItemId;
     @NonNull
     private final UUID tableHeadId;
     private int index;

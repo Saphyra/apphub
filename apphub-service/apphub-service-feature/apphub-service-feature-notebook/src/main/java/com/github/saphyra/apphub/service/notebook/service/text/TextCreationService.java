@@ -28,7 +28,7 @@ public class TextCreationService {
 
         ListItem listItem = listItemFactory.create(userId,  request.getParent(), request.getTitle(),ListItemType.TEXT, request.getContent());
 
-        listItemDao.saveListItem(listItem);
+        listItemDao.save(listItem);
 
         return listItem.getListItemId();
     }

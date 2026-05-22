@@ -62,7 +62,7 @@ public class EditChecklistService {
         List<ChecklistItem> modifiedItems = processModified(userId, listItemId, checklistItems, request.getItems(), contents);
 
         if (!listItem.getTitle().equals(originalListItemTitle)) {
-            listItemDao.saveListItem(listItem);
+            listItemDao.save(listItem);
         }
 
         commonListItemDao.editChecklist(listItem, deletedChecklistItems, newChecklistItems, modifiedItems, contents);

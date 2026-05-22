@@ -35,9 +35,9 @@ class ChecklistItemRepository {
     private final ChecklistItemMapper mapper;
     private final String tableName;
 
-    ChecklistItemRepository(DynamoDbClient dynamoDbClient, ChecklistItemMapper listItemMapper, NotebookDynamoDbConfiguration configuration) {
+    ChecklistItemRepository(DynamoDbClient dynamoDbClient, ChecklistItemMapper mapper, NotebookDynamoDbConfiguration configuration) {
         this.client = dynamoDbClient;
-        this.mapper = listItemMapper;
+        this.mapper = mapper;
         this.tableName = configuration.getTableName();
     }
 
