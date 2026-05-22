@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.github.saphyra.apphub.lib.common_domain.Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE;
 
 @Component
 @RequiredArgsConstructor
@@ -57,16 +54,6 @@ public class ListItemDao {
 
     public List<ListItem> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
-    }
-
-    public List<ListItem> getByIds(UUID userId, List<UUID> listItemIds) {
-        String userIdString = uuidConverter.convertDomain(userId);
-
-        return Lists.partition(uuidConverter.convertDomain(listItemIds), DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
-            .stream()
-            .flatMap(partition -> repository.getByIds(userIdString, partition).stream())
-            .map(converter::convertEntity)
-            .toList();
     }
 
     public void delete(ListItem listItem) {

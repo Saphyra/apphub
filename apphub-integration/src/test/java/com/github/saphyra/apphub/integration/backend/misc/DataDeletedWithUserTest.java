@@ -11,24 +11,17 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.EventReques
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
-import com.github.saphyra.apphub.integration.action.backend.notebook.ChecklistActions;
-import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
-import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.*;
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.CollectionUtils;
+import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
-import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ItemType;
-import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
-import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.ChecklistItemModel;
-import com.github.saphyra.apphub.integration.structure.api.notebook.checklist.CreateChecklistRequest;
-import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableColumnModel;
-import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableHeadModel;
-import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableRowModel;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -54,14 +47,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         new BiWrapper<>("apphub_user", "apphub_user"),
         new BiWrapper<>("apphub_user", "settings"),
         new BiWrapper<>("modules", "favorite"),
-        new BiWrapper<>("notebook", "checked_item"),
-        new BiWrapper<>("notebook", "column_type"),
-        new BiWrapper<>("notebook", "content"),
-        new BiWrapper<>("notebook", "dimension"),
-        new BiWrapper<>("notebook", "list_item"),
-        new BiWrapper<>("notebook", "pin_group"),
-        new BiWrapper<>("notebook", "pin_mapping"),
-        new BiWrapper<>("notebook", "table_head"),
         new BiWrapper<>("calendar", "event"),
         new BiWrapper<>("calendar", "label"),
         new BiWrapper<>("calendar", "occurrence"),
@@ -177,7 +162,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
     private void createRecords(String accessToken, UUID userId, RegistrationParameters adminUserData, String adminAccessToken) {
         calendarTables(accessToken);
         modulesTables(accessToken);
-        notebookTables(accessToken);
         apphubUserTables(accessToken, userId, adminUserData, adminAccessToken);
     }
 
@@ -187,62 +171,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
 
         //skyxplore.friendship
         SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken, accessToken3, userId3);
-    }
-
-    private static void notebookTables(String accessToken) {
-        //notebook.checked_item
-        //notebook.list_item
-        //notebook.content
-        CreateChecklistRequest createChecklistRequest = CreateChecklistRequest.builder()
-            .title(TITLE)
-            .items(List.of(
-                ChecklistItemModel.builder()
-                    .index(0)
-                    .checked(true)
-                    .content(CONTENT)
-                    .type(ItemType.NEW)
-                    .build()
-            ))
-            .build();
-        UUID listItemId = ChecklistActions.createChecklist(getServerPort(), accessToken, createChecklistRequest);
-
-        //notebook.column_type
-        //notebook.dimension
-        //notebook.table_head
-        CreateTableRequest createTableRequest = CreateTableRequest.builder()
-            .title(createChecklistRequest.getTitle())
-            .listItemType(ListItemType.TABLE)
-            .tableHeads(List.of(
-                TableHeadModel.builder()
-                    .columnIndex(0)
-                    .content(CONTENT)
-                    .type(ItemType.NEW)
-                    .build()
-            ))
-            .rows(List.of(
-                TableRowModel.builder()
-                    .rowIndex(0)
-                    .itemType(ItemType.NEW)
-                    .columns(List.of(
-                        TableColumnModel.builder()
-                            .columnIndex(0)
-                            .columnType(ColumnType.TEXT)
-                            .itemType(ItemType.NEW)
-                            .data(CONTENT)
-                            .build()
-                    ))
-                    .build()
-            ))
-            .build();
-        TableActions.createTable(getServerPort(), accessToken, createTableRequest);
-
-        //notebook.pin_group
-        UUID pinGroupId = PinActions.createPinGroup(getServerPort(), accessToken, TITLE)
-            .getFirst()
-            .getPinGroupId();
-
-        //notebook.pin_mapping
-        PinActions.addItemToPinGroup(getServerPort(), accessToken, pinGroupId, listItemId);
     }
 
     private static void modulesTables(String accessToken) {

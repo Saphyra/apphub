@@ -41,18 +41,18 @@ public class TableDeletionService {
             .filter(tableColumn -> tableColumn.getType().isFile())
             .map(TableColumn::getColumnId)
             .flatMap(columnId -> {
-                    String key = uuidConverter.convertDomain(columnId);
-                    return table.getEntity4()
-                        .stream()
-                        .filter(content -> content.contains(key))
-                        .map(content -> content.get(key));
-                })
+                String key = uuidConverter.convertDomain(columnId);
+                return table.getEntity4()
+                    .stream()
+                    .filter(content -> content.contains(key))
+                    .map(content -> content.get(key));
+            })
             .map(uuidConverter::convertEntity)
             .forEach(storageProxy::deleteFile);
 
         listItemDao.delete(table.getEntity1());
-        tableHeadDao.delete(listItem.getUserId(), listItem.getListItemId());
-        tableRowDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity3());
-        contentDao.delete(listItem.getUserId(), listItem.getListItemId(), table.getEntity4());
+        tableHeadDao.delete(listItem.getListItemId());
+        tableRowDao.delete(listItem.getListItemId(), table.getEntity3());
+        contentDao.delete(listItem.getListItemId(), table.getEntity4());
     }
 }

@@ -106,7 +106,7 @@ const Table = ({
                             />
                         }
 
-                        {getTableRows(rows, checklist, editingEnabled, setRows, custom, addFile, setDisplaySpinner)}
+                        {getTableRows(openedListItem, rows, checklist, editingEnabled, setRows, custom, addFile, setDisplaySpinner)}
 
                         {editingEnabled &&
                             <AddRowButton

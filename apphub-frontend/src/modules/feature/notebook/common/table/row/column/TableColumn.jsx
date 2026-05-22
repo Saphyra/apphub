@@ -20,7 +20,7 @@ import FileColumn from "./type/FileColumn";
 import ImageColumn from "./type/ImageColumn";
 import { throwException } from "common/js/Utils";
 
-const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom = false, addFileToColum }) => {
+const TableColumn = ({ openedItem, rowId, columnData, updateColumn, editingEnabled = true, custom = false, addFileToColum }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [displayColumnTypeSelector, setDisplayColumnTypeSelector] = useState(false);
@@ -70,6 +70,8 @@ const TableColumn = ({ columnData, updateColumn, editingEnabled = true, custom =
             />
         case ColumnType.CHECKBOX:
             return <CheckboxColumn
+                openedItem={openedItem}
+                rowId={rowId}
                 columnData={columnData}
                 updateColumn={updateColumn}
                 editingEnabled={editingEnabled}

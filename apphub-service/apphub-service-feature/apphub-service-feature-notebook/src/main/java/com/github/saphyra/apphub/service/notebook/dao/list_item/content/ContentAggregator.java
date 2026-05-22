@@ -30,7 +30,7 @@ class ContentAggregator {
      *     <li>Put into existing record until it fits in SOFT_CAP</li>
      * </ol>
      */
-    List<Content> aggregate(UUID userId, UUID listItemId, List<Content> contents) {
+    List<Content> aggregate(UUID listItemId, List<Content> contents) {
         List<Content> toPlace = contents.stream()
             .filter(content -> isNull(content.getBatchIndex()))
             .collect(Collectors.toCollection(ArrayList::new));
@@ -46,23 +46,20 @@ class ContentAggregator {
                 .filter(content -> !content.isModified())
                 .collect(Collectors.toCollection(ArrayList::new));
 
-            toPlace.forEach(content -> {
-                ParentType parentType = content.getParentType();
-                content.getContent()
-                    .forEach((key, value) -> place(userId, listItemId, parentType, key, value, modified, unmodified));
-            });
+            toPlace.forEach(content -> content.getContent()
+                .forEach((key, value) -> place(listItemId, key, value, modified, unmodified)));
         }
 
         return modified;
     }
 
-    private void place(UUID userId, UUID listItemId, ParentType parentType, String key, String value, List<Content> modified, List<Content> unmodified) {
-        Content container = findContainer(userId, listItemId, parentType, value, modified, unmodified);
+    private void place(UUID listItemId, String key, String value, List<Content> modified, List<Content> unmodified) {
+        Content container = findContainer(listItemId, value, modified, unmodified);
 
         container.add(key, value);
     }
 
-    private Content findContainer(UUID userId, UUID listItemId, ParentType parentType, String value, List<Content> modified, List<Content> unmodified) {
+    private Content findContainer(UUID listItemId, String value, List<Content> modified, List<Content> unmodified) {
         return findContainer(value, modified)
             .or(() -> {
                 Optional<Content> c = findContainer(value, unmodified);
@@ -73,17 +70,16 @@ class ContentAggregator {
                 return c;
             })
             .orElseGet(() -> {
-                Content content = createContainer(userId, listItemId, parentType, modified, unmodified);
+                Content content = createContainer(listItemId, modified, unmodified);
                 modified.add(content);
                 return content;
             });
     }
 
-    private Content createContainer(UUID userId, UUID listItemId, ParentType parentType, List<Content> modified, List<Content> unmodified) {
+    private Content createContainer(UUID listItemId, List<Content> modified, List<Content> unmodified) {
         int batchIndex = getBatchIndex(modified, unmodified);
 
-
-        return contentFactory.create(userId, listItemId, parentType, batchIndex);
+        return contentFactory.create(listItemId, batchIndex);
     }
 
     private int getBatchIndex(List<Content> modified, List<Content> unmodified) {

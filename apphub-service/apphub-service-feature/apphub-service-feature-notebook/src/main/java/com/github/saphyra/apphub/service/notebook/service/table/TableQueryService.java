@@ -5,24 +5,23 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnMod
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -67,7 +66,11 @@ public class TableQueryService {
                 .columnId(tableColumn.getColumnId())
                 .columnIndex(tableColumn.getIndex())
                 .columnType(tableColumn.getType())
-                .data(columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(getContent(tableColumn.getColumnId(), contents)))
+                .data(
+                    getContent(tableColumn.getColumnId(), contents)
+                        .map(data -> columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(data))
+                        .orElse(null)
+                )
                 .itemType(ItemType.EXISTING)
                 .build())
             .toList();
@@ -78,20 +81,19 @@ public class TableQueryService {
             .map(tableHead -> TableHeadModel.builder()
                 .tableHeadId(tableHead.getTableHeadId())
                 .columnIndex(tableHead.getIndex())
-                .content(getContent(tableHead.getTableHeadId(), contents))
+                .content(getContent(tableHead.getTableHeadId(), contents).orElseThrow(() -> ExceptionFactory.notFound("Content not found by id " + tableHead.getTableHeadId())))
                 .type(ItemType.EXISTING)
                 .build())
             .toList();
     }
 
-    private String getContent(UUID id, List<Content> contents) {
+    private Optional<String> getContent(UUID id, List<Content> contents) {
         String key = uuidConverter.convertDomain(id);
 
         return contents.stream()
             .flatMap(content -> content.getContent().entrySet().stream())
             .filter(entry -> entry.getKey().equals(key))
             .findFirst()
-            .map(Map.Entry::getValue)
-            .orElseThrow(() -> ExceptionFactory.reportedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.DATA_NOT_FOUND, "Content not found by id " + id));
+            .map(Map.Entry::getValue);
     }
 }

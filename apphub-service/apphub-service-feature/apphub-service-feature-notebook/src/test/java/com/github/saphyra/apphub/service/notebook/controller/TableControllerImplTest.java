@@ -64,9 +64,6 @@ class TableControllerImplTest {
     private TableFileUploadResponse fileUploadResponse;
 
     @Mock
-    private EditTableResponse editTableResponse;
-
-    @Mock
     private EditTableRequest editTableRequest;
 
     @Mock
@@ -106,7 +103,7 @@ class TableControllerImplTest {
 
         underTest.setRowStatus(LIST_ITEM_ID, ROW_ID, new OneParamRequest<>(true), accessToken);
 
-        then(tableRowStatusUpdateService).should().setRowStatus(USER_ID, LIST_ITEM_ID, ROW_ID, true);
+        then(tableRowStatusUpdateService).should().setRowStatus(LIST_ITEM_ID, ROW_ID, true);
     }
 
     @Test
@@ -125,6 +122,6 @@ class TableControllerImplTest {
 
         underTest.setCheckboxColumnStatus(LIST_ITEM_ID, ROW_ID, COLUMN_ID, new OneParamRequest<>(true), accessToken);
 
-        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(USER_ID, LIST_ITEM_ID, ROW_ID, COLUMN_ID, true);
+        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(LIST_ITEM_ID, ROW_ID, COLUMN_ID, true);
     }
 }

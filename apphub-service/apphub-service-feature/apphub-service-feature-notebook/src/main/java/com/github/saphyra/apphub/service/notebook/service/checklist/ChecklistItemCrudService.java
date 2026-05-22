@@ -11,7 +11,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -37,18 +36,18 @@ public class ChecklistItemCrudService {
 
         listItemDao.findByIdValidated(userId, listItemId);
 
-        List<Content> contents = contentDao.getByListItemIdAndType(userId, listItemId, ParentType.CHECKLIST_ITEM);
-        ChecklistItem checklistItem = checklistItemFactory.create(userId, listItemId, false, request.getIndex());
-        contents.add(contentFactory.create(userId, listItemId, ParentType.CHECKLIST_ITEM, checklistItem.getChecklistItemId(), request.getContent()));
+        List<Content> contents = contentDao.getByListItemId(listItemId);
+        ChecklistItem checklistItem = checklistItemFactory.create(listItemId, false, request.getIndex());
+        contents.add(contentFactory.create(listItemId, checklistItem.getChecklistItemId(), request.getContent()));
 
-        contentDao.save(checklistItem.getUserId(), checklistItem.getListItemId(), contents);
+        contentDao.save(checklistItem.getListItemId(), contents);
+        checklistItemDao.save(checklistItem);
     }
 
-
-    public void updateContent(UUID userId, UUID listItemId, UUID checklistItemId, String contentString) {
+    public void updateContent(UUID listItemId, UUID checklistItemId, String contentString) {
         ValidationUtil.notNull(contentString, "content");
 
-        List<Content> contents = contentDao.getByListItemIdAndType(userId, listItemId, ParentType.CHECKLIST_ITEM);
+        List<Content> contents = contentDao.getByListItemId(listItemId);
         Content content = contents.stream()
             .filter(c -> c.getContent().containsKey(uuidConverter.convertDomain(checklistItemId)))
             .findAny()
@@ -56,38 +55,36 @@ public class ChecklistItemCrudService {
 
         content.add(uuidConverter.convertDomain(checklistItemId), contentString);
 
-        contentDao.save(userId, listItemId, contents);
+        contentDao.save(listItemId, contents);
     }
 
     public void deleteChecklistItem(UUID userId, UUID listItemId, UUID checklistItemId) {
         listItemDao.findByIdValidated(userId, listItemId);
 
-        checklistItemDao.delete(userId, listItemId, checklistItemId);
-        contentDao.delete(userId, listItemId, checklistItemId, ParentType.CHECKLIST_ITEM);
+        checklistItemDao.delete(listItemId, checklistItemId);
+        contentDao.delete(listItemId, checklistItemId);
     }
 
-    public void updateStatus(UUID userId, UUID listItemId, UUID checklistItemId, Boolean status) {
+    public void updateStatus(UUID listItemId, UUID checklistItemId, Boolean status) {
         ValidationUtil.notNull(status, "status");
 
-        ChecklistItem checklistItem = checklistItemDao.findByIdValidated(userId, listItemId, checklistItemId);
+        ChecklistItem checklistItem = checklistItemDao.findByIdValidated(listItemId, checklistItemId);
 
         checklistItem.setChecked(status);
 
         checklistItemDao.save(checklistItem);
     }
 
-    public void deleteCheckedItems(UUID userId, UUID listItemId) {
-        List<ChecklistItem> toDelete = checklistItemDao.getByListItemId(userId, listItemId)
+    public void deleteCheckedItems(UUID listItemId) {
+        List<ChecklistItem> toDelete = checklistItemDao.getByListItemId(listItemId)
             .stream()
             .filter(ChecklistItem::isChecked)
             .toList();
 
         checklistItemDao.delete(toDelete);
-        contentDao.delete(
-            userId,
+        contentDao.deleteKeys(
             listItemId,
-            toDelete.stream().map(ChecklistItem::getChecklistItemId).toList(),
-            ParentType.CHECKLIST_ITEM
+            toDelete.stream().map(ChecklistItem::getChecklistItemId).toList()
         );
     }
 }

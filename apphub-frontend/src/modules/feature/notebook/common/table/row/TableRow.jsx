@@ -5,7 +5,7 @@ import Button from "common/component/input/Button";
 import MoveDirection from "../../MoveDirection";
 import "./table_row.css";
 
-const TableRow = ({ rowData, updateRow, updateChecked, removeRow, moveRow, editingEnabled = true, checklist = false, custom = false, addFile }) => {
+const TableRow = ({ openedItem, rowData, updateRow, updateChecked, removeRow, moveRow, editingEnabled = true, checklist = false, custom = false, addFile }) => {
     const addFileToColum = (columnIndex, file) => {
         addFile(rowData.rowIndex, columnIndex, file);
     }
@@ -16,6 +16,8 @@ const TableRow = ({ rowData, updateRow, updateChecked, removeRow, moveRow, editi
             .map(column =>
                 <TableColumn
                     key={column.columnId}
+                    openedItem={openedItem}
+                    rowId={rowData.rowId}
                     columnData={column}
                     updateColumn={updateRow}
                     editingEnabled={editingEnabled}

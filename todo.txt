@@ -21,7 +21,7 @@ CUSTOM_TABLE
     Content TableHeads and Column data
 
 ListItem
-pk: USER_ID#userId
+pk: USER#userId
 sk: LIST_ITEM#listItemId
 parent: LIST_ITEM#listItemId
 type: ListItemType
@@ -31,13 +31,13 @@ archived: boolean
 data: storedFileId/url
 
 GSI_PARENT (Get children of a parent)
-pk: USER_ID#userId
+pk: USER#userId
 sk: parent
 
 Content
-pk: USER_ID#userId
-sk: CONTENT#ContentType|LIST_ITEM#listItemId|batchIndex
-content: Map<contentId, encryptedText>
+pk: LIST_ITEM#listItemId
+sk: CONTENT#batchIndex
+content: Map<contentId, text> //Serialised to JSON string and encrypted
 
 Lookup content: Query all, filter by contentId
 Save content:
@@ -47,20 +47,20 @@ Save content:
     Delete: delete text from existing batch, and mark it as modified
 
 ChecklistItem (Direct access)
-pk: USER_ID#userId
-sk: LIST_ITEM#listItemId|CHECKLIST_ITEM#checklistItemId
+pk: LIST_ITEM#listItemId
+sk: CHECKLIST_ITEM#checklistItemId
 index: number
 checked: boolean
 
 TableHead
-pk: USER_ID#userId
-sk: LIST_ITEM#listItemId|TABLE_HEAD
+pk: LIST_ITEM#listItemId
+sk: TABLE_HEAD
 data
     tableHeadId = index
 
 TableRow
-pk: USER_ID#userId
-sk: LIST_ITEM#listItemId|TABLE_ROW#tableRowId
+pk: LIST_ITEM#listItemId
+sk: TABLE_ROW#tableRowId
 index: number
 checked: boolean (for checklist table)
 columns: List<Column>

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.content;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import org.springframework.stereotype.Component;
@@ -16,12 +15,10 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_BATCH;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_CONTENT;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
 @Component
 class ContentRepository {
@@ -33,48 +30,6 @@ class ContentRepository {
         this.client = dynamoDbClient;
         this.mapper = mapper;
         this.tableName = configuration.getTableName();
-    }
-
-    List<ContentEntity> getByUserId(String userId) {
-        QueryRequest request = QueryRequest.builder()
-            .tableName(tableName)
-            .keyConditionExpression("#userId = :userId AND begins_with(#sk, :content)")
-            .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
-                "#sk", COLUMN_SK
-            ))
-            .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":content", AttributeValue.builder().s(PREFIX_CONTENT).build()
-            ))
-            .build();
-
-        return client.query(request)
-            .items()
-            .stream()
-            .map(mapper::convertEntity)
-            .toList();
-    }
-
-    List<ContentEntity> getByListItemIdAndType(String userId, String listItemId, String type) {
-        QueryRequest request = QueryRequest.builder()
-            .tableName(tableName)
-            .keyConditionExpression("#userId = :userId AND begins_with(#sk, :content)")
-            .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
-                "#sk", COLUMN_SK
-            ))
-            .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":content", AttributeValue.builder().s(PREFIX_CONTENT + type + "|" + PREFIX_LIST_ITEM + listItemId).build()
-            ))
-            .build();
-
-        return client.query(request)
-            .items()
-            .stream()
-            .map(mapper::convertEntity)
-            .toList();
     }
 
     public void save(List<ContentEntity> contents) {
@@ -99,15 +54,15 @@ class ContentRepository {
         }
     }
 
-    public void delete(String userId, String listItemId, List<BiWrapper<String, Integer>> ids) {
-        if (ids.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
+    public void delete(String listItemId, List<Integer> batchIndexes) {
+        if (batchIndexes.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch size must be less than " + Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE);
         }
 
-        List<WriteRequest> requests = ids.stream()
-            .map(id -> Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_CONTENT + id.getEntity1() + "|" + PREFIX_LIST_ITEM + listItemId + "|" + PREFIX_BATCH + id.getEntity2()).build()
+        List<WriteRequest> requests = batchIndexes.stream()
+            .map(batchIndex -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_CONTENT + batchIndex).build()
             ))
             .map(key -> DeleteRequest.builder().key(key).build())
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
@@ -122,5 +77,26 @@ class ContentRepository {
         if (response.hasUnprocessedItems()) {
             //TODO handle
         }
+    }
+
+    public List<ContentEntity> getByListItemId(String listItemId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(tableName)
+            .keyConditionExpression("#pk = :listItemId AND begins_with(#sk, :content)")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
+            .expressionAttributeValues(Map.of(
+                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                ":content", AttributeValue.builder().s(PREFIX_CONTENT).build()
+            ))
+            .build();
+
+        return client.query(request)
+            .items()
+            .stream()
+            .map(mapper::convertEntity)
+            .toList();
     }
 }

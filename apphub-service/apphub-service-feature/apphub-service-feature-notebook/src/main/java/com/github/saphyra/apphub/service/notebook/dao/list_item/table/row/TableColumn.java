@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.UUID;
@@ -12,9 +13,10 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
+@NoArgsConstructor
 public class TableColumn {
     @NonNull
-    private final UUID columnId;
+    private UUID columnId;
     private int index;
     @NonNull
     private ColumnType type;

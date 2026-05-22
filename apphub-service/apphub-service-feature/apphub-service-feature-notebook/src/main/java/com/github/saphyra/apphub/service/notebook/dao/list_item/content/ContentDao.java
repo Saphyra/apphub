@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.content;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.google.common.collect.Lists;
@@ -21,21 +20,13 @@ public class ContentDao {
     private final UuidConverter uuidConverter;
     private final ContentAggregator contentAggregator;
 
-    public List<Content> getContentsByUserId(UUID userId) {
-        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    public List<Content> getByListItemId(UUID listItemId) {
+        return converter.convertEntity(repository.getByListItemId(uuidConverter.convertDomain(listItemId)));
     }
 
-    public List<Content> getByListItemIdAndType(UUID userId, UUID listItemId, ParentType parentType) {
-        return converter.convertEntity(repository.getByListItemIdAndType(
-            uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(listItemId),
-            parentType.name()
-        ));
-    }
-
-    public void save(UUID userId, UUID listItemId, List<Content> contents) {
+    public void save(UUID listItemId, List<Content> contents) {
         //TODO think about deleting empty contents
-        List<Content> toSave = contentAggregator.aggregate(userId, listItemId, contents);
+        List<Content> toSave = contentAggregator.aggregate(listItemId, contents);
 
         Lists.partition(toSave, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
             .stream()
@@ -48,8 +39,8 @@ public class ContentDao {
      * <p>
      * If the content does not have any more entries left, delete the record itself
      */
-    public void delete(UUID userId, UUID listItemId, UUID key, ParentType parentType) {
-        delete(userId, listItemId, List.of(key), parentType);
+    public void delete(UUID listItemId, UUID key) {
+        deleteKeys(listItemId, List.of(key));
     }
 
     /**
@@ -57,10 +48,10 @@ public class ContentDao {
      * <p>
      * If a content does not have any more entries left, delete the record itself
      */
-    public void delete(UUID userId, UUID listItemId, List<UUID> keys, ParentType parentType) {
+    public void deleteKeys(UUID listItemId, List<UUID> keys) {
         List<String> keysString = uuidConverter.convertDomain(keys);
 
-        List<Content> modified = getByListItemIdAndType(userId, listItemId, parentType)
+        List<Content> modified = getByListItemId(listItemId)
             .stream()
             .filter(c -> c.containsAny(keysString))
             .peek(content -> content.removeAll(keysString))
@@ -74,30 +65,28 @@ public class ContentDao {
             .filter(content -> content.getContent().isEmpty())
             .toList();
 
-        save(userId, listItemId, toSave);
-        delete(userId, listItemId, toDelete);
+        save(listItemId, toSave);
+        delete(listItemId, toDelete);
     }
 
     /**
      * Delete the provided content records
      */
-    public void delete(UUID userId, UUID listItemId, List<Content> contents) {
-        List<BiWrapper<String, Integer>> ids = contents.stream()
-            .map(content -> new BiWrapper<>(content.getParentType().name(), content.getBatchIndex()))
+    public void delete(UUID listItemId, List<Content> contents) {
+        List<Integer> batchIndexes = contents.stream()
+            .map(Content::getBatchIndex)
             .toList();
 
-        String userIdString = uuidConverter.convertDomain(userId);
         String listItemIdString = uuidConverter.convertDomain(listItemId);
 
-        Lists.partition(ids, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
-            .forEach(i -> repository.delete(userIdString, listItemIdString, i));
+        Lists.partition(batchIndexes, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+            .forEach(i -> repository.delete(listItemIdString, i));
     }
 
-    public void delete(UUID userId, UUID listItemId, ParentType parentType) {
+    public void delete(UUID listItemId) {
         delete(
-            userId,
             listItemId,
-            getByListItemIdAndType(userId, listItemId, parentType)
+            getByListItemId(listItemId)
         );
     }
 }

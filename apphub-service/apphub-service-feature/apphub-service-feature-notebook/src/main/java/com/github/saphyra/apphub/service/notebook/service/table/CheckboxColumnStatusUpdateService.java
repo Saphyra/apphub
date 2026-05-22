@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
@@ -31,10 +30,10 @@ public class CheckboxColumnStatusUpdateService {
     private final ContentDao contentDao;
     private final TableRowDao tableRowDao;
 
-    public void updateColumnStatus(UUID userId, UUID listItemId, UUID rowId, UUID columnId, Boolean status) {
+    public void updateColumnStatus(UUID listItemId, UUID rowId, UUID columnId, Boolean status) {
         ValidationUtil.notNull(status, "status");
 
-        TableRow row = tableRowDao.findByIdValidated(userId, listItemId, rowId);
+        TableRow row = tableRowDao.findByIdValidated(listItemId, rowId);
 
         TableColumn column = row.getColumns()
             .stream()
@@ -49,7 +48,7 @@ public class CheckboxColumnStatusUpdateService {
         String data = columnDataServiceProvider.getForType(ColumnType.CHECKBOX)
             .serialize(status)
             .orElseThrow();
-        List<Content> contents = new ArrayList<>(contentDao.getByListItemIdAndType(userId, listItemId, ParentType.TABLE_COLUMN));
+        List<Content> contents = new ArrayList<>(contentDao.getByListItemId(listItemId));
         String key = uuidConverter.convertDomain(columnId);
         Content content = contents.stream()
             .filter(c -> c.contains(key))
@@ -57,9 +56,9 @@ public class CheckboxColumnStatusUpdateService {
             .orElseThrow(() -> ExceptionFactory.notFound("Content not found for columnId " + columnId + " in ListItem " + listItemId));
         content.remove(key);
 
-        Content newContent = contentFactory.create(userId, listItemId, ParentType.TABLE_COLUMN, columnId, data);
+        Content newContent = contentFactory.create(listItemId, columnId, data);
         contents.add(newContent);
 
-        contentDao.save(userId, listItemId, contents);
+        contentDao.save(listItemId, contents);
     }
 }

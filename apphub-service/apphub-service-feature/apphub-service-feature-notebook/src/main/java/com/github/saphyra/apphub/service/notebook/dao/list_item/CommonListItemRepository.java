@@ -30,13 +30,12 @@ import java.util.List;
 import java.util.Map;
 
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PARENT;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_TYPE;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_USER_ID_PARENT;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_USER_ID_TYPE;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_PK_PARENT;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_PK_TYPE;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
 @Component
 @Profile("!test")
@@ -50,25 +49,19 @@ class CommonListItemRepository {
         this.tableName = configuration.getTableName();
     }
 
-    void deleteByListItemId(String userId, String listItemId) {
+    void deleteByListItemId(String listItemId) {
         QueryRequest queryRequest = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#userId = :userId AND begins_with(#sk, :listItemId)")
-            .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
-                "#sk", COLUMN_SK
-            ))
-            .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()
-            ))
+            .keyConditionExpression("#pk = :listItemId")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()))
             .build();
 
         List<BiWrapper<String, String>> items = client.query(queryRequest)
             .items()
             .stream()
             .map(map -> new BiWrapper<>(
-                map.get(COLUMN_USER_ID).s(),
+                map.get(COLUMN_PK).s(),
                 map.get(COLUMN_SK).s()
             ))
             .toList();
@@ -77,7 +70,7 @@ class CommonListItemRepository {
             .forEach(batch -> {
                 List<WriteRequest> requests = batch.stream()
                     .map(item -> Map.of(
-                        COLUMN_USER_ID, AttributeValue.builder().s(item.getEntity1()).build(),
+                        COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
                         COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
                     ))
                     .map(key -> DeleteRequest.builder().key(key).build())
@@ -95,7 +88,6 @@ class CommonListItemRepository {
                 }
             });
     }
-
     @PostConstruct
     void createListItemTable() {
         try {
@@ -108,7 +100,7 @@ class CommonListItemRepository {
                 .tableName(tableName)
                 .attributeDefinitions(
                     AttributeDefinition.builder()
-                        .attributeName(COLUMN_USER_ID)
+                        .attributeName(COLUMN_PK)
                         .attributeType(ScalarAttributeType.S)
                         .build(),
                     AttributeDefinition.builder()
@@ -126,7 +118,7 @@ class CommonListItemRepository {
                 )
                 .keySchema(
                     KeySchemaElement.builder()
-                        .attributeName(COLUMN_USER_ID)
+                        .attributeName(COLUMN_PK)
                         .keyType(KeyType.HASH)
                         .build(),
                     KeySchemaElement.builder()
@@ -136,10 +128,10 @@ class CommonListItemRepository {
                 )
                 .globalSecondaryIndexes(
                     GlobalSecondaryIndex.builder()
-                        .indexName(GSI_USER_ID_PARENT)
+                        .indexName(GSI_PK_PARENT)
                         .keySchema(
                             KeySchemaElement.builder()
-                                .attributeName(COLUMN_USER_ID)
+                                .attributeName(COLUMN_PK)
                                 .keyType(KeyType.HASH)
                                 .build(),
                             KeySchemaElement.builder()
@@ -150,10 +142,10 @@ class CommonListItemRepository {
                         .projection(Projection.builder().projectionType(ProjectionType.ALL).build())
                         .build(),
                     GlobalSecondaryIndex.builder()
-                        .indexName(GSI_USER_ID_TYPE)
+                        .indexName(GSI_PK_TYPE)
                         .keySchema(
                             KeySchemaElement.builder()
-                                .attributeName(COLUMN_USER_ID)
+                                .attributeName(COLUMN_PK)
                                 .keyType(KeyType.HASH)
                                 .build(),
                             KeySchemaElement.builder()

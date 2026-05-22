@@ -59,7 +59,7 @@ class TableControllerImpl implements TableController {
     @Override
     public void setRowStatus(UUID listItemId, UUID rowId, OneParamRequest<Boolean> status, AccessToken accessToken) {
         log.info("{} wants to modify status of table row {}", accessToken.getUserId(), rowId);
-        tableRowStatusUpdateService.setRowStatus(accessToken.getUserId(), listItemId, rowId, status.getValue());
+        tableRowStatusUpdateService.setRowStatus(listItemId, rowId, status.getValue());
     }
 
     @Override
@@ -72,6 +72,6 @@ class TableControllerImpl implements TableController {
     @Override
     public void setCheckboxColumnStatus(UUID listItemId, UUID rowId, UUID columnId, OneParamRequest<Boolean> status, AccessToken accessToken) {
         log.info("{} wants to change the status of checked column {}", accessToken.getUserId(), columnId);
-        checkboxColumnStatusUpdateService.updateColumnStatus(accessToken.getUserId(), listItemId, rowId, columnId, status.getValue());
+        checkboxColumnStatusUpdateService.updateColumnStatus(listItemId, rowId, columnId, status.getValue());
     }
 }

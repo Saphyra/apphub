@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentF
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumnFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
@@ -61,27 +60,26 @@ class TableCloneService {
 
         List<Content> clonedContents = new ArrayList<>();
 
-        cloneTableHeads(clone.getUserId(), clone.getListItemId(), table.getEntity2(), contentMap, clonedContents);
-        cloneTableRows(clone.getUserId(), clone.getListItemId(), table.getEntity3(), contentMap, clonedContents);
+        cloneTableHeads(clone.getListItemId(), table.getEntity2(), contentMap, clonedContents);
+        cloneTableRows(clone.getListItemId(), table.getEntity3(), contentMap, clonedContents);
 
-        contentDao.save(clone.getUserId(), clone.getListItemId(), clonedContents);
+        contentDao.save(clone.getListItemId(), clonedContents);
     }
 
-    private void cloneTableRows(UUID userId, UUID listItemId, List<TableRow> rows, Map<UUID, String> contentMap, List<Content> clonedContents) {
+    private void cloneTableRows(UUID listItemId, List<TableRow> rows, Map<UUID, String> contentMap, List<Content> clonedContents) {
         List<TableRow> clonedTableRows = rows.stream()
             .map(tableRow -> tableRowFactory.create(
-                userId,
                 listItemId,
                 tableRow.getIndex(),
                 tableRow.getChecked(),
-                cloneColumns(userId, listItemId, tableRow.getColumns(), contentMap, clonedContents)
+                cloneColumns(listItemId, tableRow.getColumns(), contentMap, clonedContents)
             ))
             .toList();
 
         tableRowDao.save(clonedTableRows);
     }
 
-    private List<TableColumn> cloneColumns(UUID userId, UUID listItemId, List<TableColumn> columns, Map<UUID, String> contentMap, List<Content> clonedContents) {
+    private List<TableColumn> cloneColumns(UUID listItemId, List<TableColumn> columns, Map<UUID, String> contentMap, List<Content> clonedContents) {
         return columns.stream()
             .map(column -> {
                 TableColumn clonedColumn = tableColumnFactory.create(column.getIndex(), column.getType());
@@ -92,9 +90,9 @@ class TableCloneService {
                     if (clonedColumn.getType().isFile()) {
                         UUID storedFileId = uuidConverter.convertEntity(contentMap.get(column.getColumnId()));
                         UUID clonedFileId = storageProxy.cloneFile(storedFileId);
-                        clonedContent = contentFactory.create(userId, listItemId, ParentType.TABLE_COLUMN, clonedColumn.getColumnId(), uuidConverter.convertDomain(clonedFileId));
+                        clonedContent = contentFactory.create(listItemId, clonedColumn.getColumnId(), uuidConverter.convertDomain(clonedFileId));
                     } else {
-                        clonedContent = contentFactory.create(userId, listItemId, ParentType.TABLE_COLUMN, clonedColumn.getColumnId(), contentMap.get(column.getColumnId()));
+                        clonedContent = contentFactory.create(listItemId, clonedColumn.getColumnId(), contentMap.get(column.getColumnId()));
                     }
 
                     clonedContents.add(clonedContent);
@@ -105,11 +103,11 @@ class TableCloneService {
             .toList();
     }
 
-    private void cloneTableHeads(UUID userId, UUID listItemId, List<TableHead> tableHeads, Map<UUID, String> contentMap, List<Content> clonedContents) {
+    private void cloneTableHeads(UUID listItemId, List<TableHead> tableHeads, Map<UUID, String> contentMap, List<Content> clonedContents) {
         List<TableHead> clonedTableHeads = tableHeads.stream()
             .map(tableHead -> {
                 TableHead clonedTableHead = tableHeadFactory.clone(tableHead);
-                Content clonedContent = contentFactory.create(userId, listItemId, ParentType.TABLE_HEAD, clonedTableHead.getTableHeadId(), contentMap.get(tableHead.getTableHeadId()));
+                Content clonedContent = contentFactory.create(listItemId, clonedTableHead.getTableHeadId(), contentMap.get(tableHead.getTableHeadId()));
 
                 clonedContents.add(clonedContent);
 
@@ -117,6 +115,6 @@ class TableCloneService {
             })
             .toList();
 
-        tableHeadDao.save(userId, listItemId, clonedTableHeads);
+        tableHeadDao.save(listItemId, clonedTableHeads);
     }
 }

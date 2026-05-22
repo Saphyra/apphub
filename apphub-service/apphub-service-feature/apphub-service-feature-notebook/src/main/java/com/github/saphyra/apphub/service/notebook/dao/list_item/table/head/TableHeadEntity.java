@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 @Builder
 class TableHeadEntity {
-    private String userId;
     private String listItemId;
     private String data;
 }

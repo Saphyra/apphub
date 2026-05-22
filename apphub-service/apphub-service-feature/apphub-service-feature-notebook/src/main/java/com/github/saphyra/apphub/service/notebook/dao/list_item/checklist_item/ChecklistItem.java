@@ -13,8 +13,6 @@ import java.util.UUID;
 @Builder
 public class ChecklistItem {
     @NonNull
-    private final UUID userId;
-    @NonNull
     private final UUID listItemId;
     @NonNull
     private final UUID checklistItemId; //ContentId

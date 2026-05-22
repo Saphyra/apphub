@@ -14,20 +14,16 @@ import java.util.UUID;
 public class ContentFactory {
     private final UuidConverter uuidConverter;
 
-    public Content create(UUID userId, UUID listItemId, ParentType parentType, UUID key, String content) {
+    public Content create(UUID listItemId, UUID key, String content) {
         return Content.builder()
-            .userId(userId)
             .listItemId(listItemId)
-            .parentType(parentType)
             .build()
             .add(uuidConverter.convertDomain(key), content);
     }
 
-    public Content create(UUID userId, UUID listItemId, ParentType parentType, int batchIndex) {
+    public Content create(UUID listItemId, int batchIndex) {
         return Content.builder()
-            .userId(userId)
             .listItemId(listItemId)
-            .parentType(parentType)
             .batchIndex(batchIndex)
             .build();
     }

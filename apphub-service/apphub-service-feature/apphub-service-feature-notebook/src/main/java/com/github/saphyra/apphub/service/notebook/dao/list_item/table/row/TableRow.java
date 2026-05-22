@@ -15,8 +15,6 @@ import java.util.UUID;
 @Builder
 public class TableRow {
     @NonNull
-    private final UUID userId;
-    @NonNull
     private final UUID listItemId;
     @NonNull
     private final UUID tableRowId;

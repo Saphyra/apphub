@@ -26,13 +26,9 @@ import static java.util.Objects.nonNull;
 //TODO unit test
 public class Content {
     @NonNull
-    private UUID userId;
-    @NonNull
     private UUID listItemId;
     @Nullable //Null when new
     private Integer batchIndex;
-    @NonNull
-    private ParentType parentType;
     @Builder.Default
     private Map<String, String> content = new HashMap<>(); //TODO change key to UUID if no String stored
     private boolean modified;

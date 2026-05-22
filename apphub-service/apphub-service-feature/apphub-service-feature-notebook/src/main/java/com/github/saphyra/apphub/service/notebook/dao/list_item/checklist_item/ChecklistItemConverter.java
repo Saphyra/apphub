@@ -29,7 +29,6 @@ class ChecklistItemConverter extends ConverterBase<ChecklistItemEntity, Checklis
 
         return ChecklistItemEntity.builder()
             .listItemId(uuidConverter.convertDomain(domain.getListItemId()))
-            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .checklistItemId(checklistItemId)
             .checked(booleanEncryptor.encrypt(domain.isChecked(), userId, checklistItemId, COLUMN_CHECKED))
             .index(integerEncryptor.encrypt(domain.getIndex(), userId, checklistItemId, COLUMN_INDEX))
@@ -42,7 +41,6 @@ class ChecklistItemConverter extends ConverterBase<ChecklistItemEntity, Checklis
 
         return ChecklistItem.builder()
             .listItemId(uuidConverter.convertEntity(entity.getListItemId()))
-            .userId(uuidConverter.convertEntity(entity.getUserId()))
             .checklistItemId(uuidConverter.convertEntity(entity.getChecklistItemId()))
             .checked(Boolean.TRUE.equals(booleanEncryptor.decrypt(entity.getChecked(), userId, entity.getChecklistItemId(), COLUMN_CHECKED)))
             .index(integerEncryptor.decrypt(entity.getIndex(), userId, entity.getChecklistItemId(), COLUMN_INDEX))

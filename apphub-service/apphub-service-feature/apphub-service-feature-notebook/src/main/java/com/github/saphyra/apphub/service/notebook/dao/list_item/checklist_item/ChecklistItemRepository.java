@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,11 +22,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_CHECKLIST_ITEM;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
 @Component
 @Slf4j
@@ -41,12 +40,12 @@ class ChecklistItemRepository {
         this.tableName = configuration.getTableName();
     }
 
-    Optional<ChecklistItemEntity> findById(String userId, String listItemId, String checklistItemId) {
+    Optional<ChecklistItemEntity> findById(String listItemId, String checklistItemId) {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(assemblePartitionKey(userId)).build(),
-                COLUMN_SK, AttributeValue.builder().s(assembleSearchKey(listItemId, checklistItemId)).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_CHECKLIST_ITEM + checklistItemId).build()
             ))
             .build();
 
@@ -56,12 +55,12 @@ class ChecklistItemRepository {
             .map(mapper::convertEntity);
     }
 
-    void delete(String userId, String listItemId, String checklistItemId) {
+    void delete(String listItemId, String checklistItemId) {
         DeleteItemRequest request = DeleteItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(assemblePartitionKey(userId)).build(),
-                COLUMN_SK, AttributeValue.builder().s(assembleSearchKey(listItemId, checklistItemId)).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_CHECKLIST_ITEM + checklistItemId).build()
             ))
             .build();
 
@@ -77,17 +76,17 @@ class ChecklistItemRepository {
         client.putItem(request);
     }
 
-    List<ChecklistItemEntity> getByListItemId(String userId, String listItemId) {
+    List<ChecklistItemEntity> getByListItemId(String listItemId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#userId = :userId AND begins_with(#sk, :listItemId)")
+            .keyConditionExpression("#pk = :listItemId AND begins_with(#sk, :checklistItem)")
             .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
+                "#pk", COLUMN_PK,
                 "#sk", COLUMN_SK
             ))
             .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(assemblePartitionKey(userId)).build(),
-                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()
+                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                ":checklistItem", AttributeValue.builder().s(PREFIX_CHECKLIST_ITEM).build()
             ))
             .build();
 
@@ -99,17 +98,17 @@ class ChecklistItemRepository {
     }
 
     /**
-     * @param ids TriWrapper<UserId, ListItemId, ChecklistItemId>
+     * @param ids BiWrapper<ListItemId, ChecklistItemId>
      */
-    void delete(List<TriWrapper<String, String, String>> ids) {
+    void delete(List<BiWrapper<String, String>> ids) {
         if (ids.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE));
         }
 
         List<WriteRequest> requests = ids.stream()
             .map(item -> Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(assemblePartitionKey(item.getEntity1())).build(),
-                COLUMN_SK, AttributeValue.builder().s(assembleSearchKey(item.getEntity2(), item.getEntity3())).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + item.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_CHECKLIST_ITEM + item.getEntity2()).build()
             ))
             .map(key -> DeleteRequest.builder().key(key).build())
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
@@ -146,13 +145,5 @@ class ChecklistItemRepository {
         if (response.hasUnprocessedItems()) {
             //TODO handle
         }
-    }
-
-    private static String assemblePartitionKey(String userId) {
-        return PREFIX_USER + userId;
-    }
-
-    private String assembleSearchKey(String listItemId, String checklistItemId) {
-        return "%s%s|%s%s".formatted(PREFIX_LIST_ITEM, listItemId, PREFIX_CHECKLIST_ITEM, checklistItemId);
     }
 }

@@ -34,10 +34,10 @@ public class NotebookEndpoints {
     public static final String NOTEBOOK_CREATE_CHECKLIST = "/api/notebook/checklist";
     public static final String NOTEBOOK_EDIT_CHECKLIST = "/api/notebook/checklist/{listItemId}";
     public static final String NOTEBOOK_GET_CHECKLIST = "/api/notebook/checklist/{listItemId}";
-    public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/item/{checklistItemId}/status";
-    public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}/content";
+    public static final String NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS = "/api/notebook/checklist/{listItemId}/item/{checklistItemId}/status";
+    public static final String NOTEBOOK_EDIT_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}/item/{checklistItemId}/content";
     public static final String NOTEBOOK_ADD_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}/item";
-    public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/item/{checklistItemId}";
+    public static final String NOTEBOOK_DELETE_CHECKLIST_ITEM = "/api/notebook/checklist/{listItemId}/item/{checklistItemId}";
     public static final String NOTEBOOK_CHECKLIST_DELETE_CHECKED = "/api/notebook/checklist/{listItemId}/checked";
     public static final String NOTEBOOK_ORDER_CHECKLIST_ITEMS = "/api/notebook/checklist/{listItemId}/order";
 
@@ -45,9 +45,9 @@ public class NotebookEndpoints {
     public static final String NOTEBOOK_CREATE_TABLE = "/api/notebook/table";
     public static final String NOTEBOOK_EDIT_TABLE = "/api/notebook/table/{listItemId}";
     public static final String NOTEBOOK_GET_TABLE = "/api/notebook/table/{listItemId}";
-    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/row/{rowId}/status";
+    public static final String NOTEBOOK_TABLE_SET_ROW_STATUS = "/api/notebook/table/{listItemId}/row/{rowId}/status";
     public static final String NOTEBOOK_TABLE_DELETE_CHECKED = "/api/notebook/table/{listItemId}/checked";
-    public static final String NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS = "/api/notebook/table/column/{columnId}/status";
+    public static final String NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS = "/api/notebook/table/{listItemId}/row/{rowId}/column/{columnId}/status";
 
     //Etc
     public static final String NOTEBOOK_SEARCH = "/api/notebook/item/search";

@@ -6,14 +6,16 @@ import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 //TODO unit test
 class LinkRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
 
-    public void validate(LinkRequest request) {
-        listItemRequestValidator.validate(null, request.getTitle(), request.getParent());
+    public void validate(UUID userId, LinkRequest request) {
+        listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
         ValidationUtil.notNull(request.getUrl(), "url");
     }
 }

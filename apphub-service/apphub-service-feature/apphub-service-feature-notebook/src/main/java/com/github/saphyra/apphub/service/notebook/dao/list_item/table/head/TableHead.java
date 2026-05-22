@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.UUID;
@@ -11,8 +12,9 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
+@NoArgsConstructor
 public class TableHead {
     @NonNull
-    private final UUID tableHeadId;
+    private UUID tableHeadId;
     private int index;
 }

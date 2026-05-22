@@ -5,11 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
@@ -17,13 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.github.saphyra.apphub.lib.common_domain.Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PARENT;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_TYPE;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_USER_ID_PARENT;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_USER_ID_TYPE;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_PK_PARENT;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.GSI_PK_TYPE;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
@@ -41,26 +38,30 @@ class ListItemRepository {
     }
 
     void save(ListItemEntity listItem) {
+        Map<String, AttributeValue> item = mapper.convertDomain(listItem);
         PutItemRequest request = PutItemRequest.builder()
             .tableName(tableName)
-            .item(mapper.convertDomain(listItem))
+            .item(item)
             .build();
 
         client.putItem(request);
     }
 
     List<ListItemEntity> getByUserIdAndParent(String userId, String parent) {
+        String parentValue = Optional.ofNullable(parent)
+            .orElse("");
+
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .indexName(GSI_USER_ID_PARENT)
+            .indexName(GSI_PK_PARENT)
             .keyConditionExpression("#pk = :userId AND #parent = :parent")
             .expressionAttributeNames(Map.of(
-                "#pk", COLUMN_USER_ID,
+                "#pk", COLUMN_PK,
                 "#parent", COLUMN_PARENT
             ))
             .expressionAttributeValues(Map.of(
                 ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":parent", AttributeValue.builder().s(parent).build()
+                ":parent", AttributeValue.builder().s(PREFIX_LIST_ITEM + parentValue).build()
             ))
             .build();
 
@@ -74,10 +75,10 @@ class ListItemRepository {
     List<ListItemEntity> getByUserIdAndType(String userId, String type) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .indexName(GSI_USER_ID_TYPE)
-            .keyConditionExpression("#userId = :userId AND #type = :type")
+            .indexName(GSI_PK_TYPE)
+            .keyConditionExpression("#pk = :userId AND #type = :type")
             .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
+                "#pk", COLUMN_PK,
                 "#type", COLUMN_TYPE
             ))
             .expressionAttributeValues(Map.of(
@@ -97,7 +98,7 @@ class ListItemRepository {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()
             ))
             .build();
@@ -111,9 +112,15 @@ class ListItemRepository {
     List<ListItemEntity> getByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#userId = :userId")
-            .expressionAttributeNames(Map.of("#userId", COLUMN_USER_ID))
-            .expressionAttributeValues(Map.of(":userId", AttributeValue.builder().s(PREFIX_USER + userId).build()))
+            .keyConditionExpression("#pk = :userId AND begins_with(#sk, :listItem)")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
+            .expressionAttributeValues(Map.of(
+                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
+                ":listItem", AttributeValue.builder().s(PREFIX_LIST_ITEM).build()
+            ))
             .build();
 
         return client.query(request)
@@ -123,42 +130,11 @@ class ListItemRepository {
             .toList();
     }
 
-    List<ListItemEntity> getByIds(String userId, List<String> listItemIds) {
-        if (listItemIds.size() > DYNAMO_DB_QUERY_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Too many list item ids. Max batch size is " + DYNAMO_DB_QUERY_MAX_BATCH_SIZE);
-        }
-
-        List<Map<String, AttributeValue>> keys = listItemIds.stream()
-            .map(listItemId -> Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()
-            ))
-            .toList();
-
-
-        BatchGetItemRequest request = BatchGetItemRequest.builder()
-            .requestItems(Map.of(
-                tableName,
-                KeysAndAttributes.builder()
-                    .keys(keys)
-                    .build()
-            ))
-            .build();
-
-        return client.batchGetItem(request)
-            .responses()
-            .values()
-            .stream()
-            .flatMap(List::stream)
-            .map(mapper::convertEntity)
-            .toList();
-    }
-
     void delete(String userId, String listItemId) {
         DeleteItemRequest request = DeleteItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()
             ))
             .build();

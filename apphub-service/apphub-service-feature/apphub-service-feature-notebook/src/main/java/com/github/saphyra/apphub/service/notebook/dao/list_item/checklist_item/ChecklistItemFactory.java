@@ -15,12 +15,11 @@ public class ChecklistItemFactory {
     private final IdGenerator idGenerator;
 
     public ChecklistItem clone(UUID listItemId, ChecklistItem checklistItem) {
-        return create(checklistItem.getUserId(), listItemId, checklistItem.isChecked(), checklistItem.getIndex());
+        return create(listItemId, checklistItem.isChecked(), checklistItem.getIndex());
     }
 
-    public ChecklistItem create(UUID userId, UUID listItemId, boolean checked, int index) {
+    public ChecklistItem create(UUID listItemId, boolean checked, int index) {
         return ChecklistItem.builder()
-            .userId(userId)
             .listItemId(listItemId)
             .checklistItemId(idGenerator.randomUuid())
             .checked(checked)

@@ -10,7 +10,6 @@ import lombok.Data;
 @Builder
 class ChecklistItemEntity {
     private String listItemId;
-    private String userId;
     private String checklistItemId;
     private String checked;
     private String index;

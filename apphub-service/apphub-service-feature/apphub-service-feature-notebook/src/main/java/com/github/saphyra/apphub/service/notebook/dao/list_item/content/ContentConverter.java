@@ -31,9 +31,7 @@ class ContentConverter extends ConverterBase<ContentEntity, Content> {
         String data = objectMapper.writeValueAsString(domain.getContent());
 
         return ContentEntity.builder()
-            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .listItemId(listItemId)
-            .parentType(domain.getParentType().name())
             .batchIndex(domain.getBatchIndex())
             .content(stringEncryptor.encrypt(data, userId, listItemId, COLUMN_CONTENT))
             .build();
@@ -48,10 +46,8 @@ class ContentConverter extends ConverterBase<ContentEntity, Content> {
         });
 
         return Content.builder()
-            .userId(uuidConverter.convertEntity(entity.getUserId()))
             .listItemId(uuidConverter.convertEntity(listItemId))
             .batchIndex(entity.getBatchIndex())
-            .parentType(ParentType.valueOf(entity.getParentType()))
             .content(contentMap)
             .build();
     }

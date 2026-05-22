@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.C
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
@@ -47,29 +46,24 @@ public class CommonListItemDao implements DeleteByUserIdDao {
      *     <li>{@link ChecklistItem}s</li>
      *     <li>{@link TableHead}s</li>
      *     <li>{@link TableRow}s</li>
-     *     <li>Contents with given {@link ParentType}s</li>
      * </ul>
      */
-    public void delete(ListItem listItem, List<ParentType> parentTypes) {
-        repository.deleteByListItemId(
-            uuidConverter.convertDomain(listItem.getUserId()),
-            uuidConverter.convertDomain(listItem.getListItemId())
-        );
-
-        parentTypes.forEach(parentType -> contentDao.delete(listItem.getUserId(), listItem.getListItemId(), parentType));
+    public void delete(ListItem listItem) {
+        listItemDao.delete(listItem);
+        repository.deleteByListItemId(uuidConverter.convertDomain(listItem.getListItemId()));
     }
 
     public void saveChecklist(ListItem listItem, List<ChecklistItem> checklistItems, List<Content> contents) {
         listItemDao.save(listItem);
         checklistItemDao.save(checklistItems);
-        contentDao.save(listItem.getUserId(), listItem.getListItemId(), contents);
+        contentDao.save(listItem.getListItemId(), contents);
     }
 
     public TriWrapper<ListItem, List<ChecklistItem>, List<Content>> findChecklistValidated(UUID userId, UUID listItemId) {
         return new TriWrapper<>(
             listItemDao.findByIdValidated(userId, listItemId),
-            checklistItemDao.getByListItemId(userId, listItemId),
-            contentDao.getByListItemIdAndType(userId, listItemId, ParentType.CHECKLIST_ITEM)
+            checklistItemDao.getByListItemId(listItemId),
+            contentDao.getByListItemId(listItemId)
         );
     }
 
@@ -87,30 +81,28 @@ public class CommonListItemDao implements DeleteByUserIdDao {
         listItemDao.save(listItem);
         checklistItemDao.delete(deletedChecklistItems);
         checklistItemDao.save(Stream.concat(newChecklistItems.stream(), modifiedChecklistItems.stream()).toList());
-        contentDao.save(listItem.getUserId(), listItem.getListItemId(), contents);
+        contentDao.save(listItem.getListItemId(), contents);
     }
 
     public void saveTable(ListItem listItem, List<TableHead> tableHeads, List<TableRow> rows, List<Content> contents) {
         listItemDao.save(listItem);
-        tableHeadDao.save(listItem.getUserId(), listItem.getListItemId(), tableHeads);
+        tableHeadDao.save(listItem.getListItemId(), tableHeads);
         tableRowDao.save(rows);
-        contentDao.save(listItem.getUserId(), listItem.getListItemId(), contents);
+        contentDao.save(listItem.getListItemId(), contents);
     }
 
     public QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> findTableValidated(UUID userId, UUID listItemId) {
         return new QuadWrapper<>(
             listItemDao.findByIdValidated(userId, listItemId),
-            tableHeadDao.findByListItemIdValidated(userId, listItemId),
-            tableRowDao.getByListItemId(userId, listItemId),
-            Stream.concat(
-                contentDao.getByListItemIdAndType(userId, listItemId, ParentType.TABLE_HEAD).stream(),
-                contentDao.getByListItemIdAndType(userId, listItemId, ParentType.TABLE_COLUMN).stream()
-            ).toList()
+            tableHeadDao.findByListItemIdValidated(listItemId),
+            tableRowDao.getByListItemId(listItemId),
+            contentDao.getByListItemId(listItemId)
         );
     }
 
     @Override
     public void deleteByUserId(UUID userId) {
-
+        listItemDao.getByUserId(userId)
+            .forEach(this::delete);
     }
 }

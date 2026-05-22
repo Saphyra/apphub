@@ -15,9 +15,8 @@ import java.util.UUID;
 public class TableRowFactory {
     private final IdGenerator idGenerator;
 
-    public TableRow create(UUID userId, UUID listItemId, Integer index, Boolean checked, List<TableColumn> columns) {
+    public TableRow create(UUID listItemId, Integer index, Boolean checked, List<TableColumn> columns) {
         return TableRow.builder()
-            .userId(userId)
             .listItemId(listItemId)
             .tableRowId(idGenerator.randomUuid())
             .index(index)

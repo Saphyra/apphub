@@ -9,9 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 class ContentEntity {
-    private String userId;
     private String listItemId;
     private Integer batchIndex;
-    private String parentType;
     private String content;
 }

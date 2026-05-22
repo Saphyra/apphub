@@ -49,9 +49,9 @@ public class ChecklistControllerImpl implements ChecklistController {
     }
 
     @Override
-    public void updateStatus(OneParamRequest<Boolean> request,UUID listItemId, UUID checklistItemId, AccessToken accessToken) {
+    public void updateStatus(OneParamRequest<Boolean> request, UUID listItemId, UUID checklistItemId, AccessToken accessToken) {
         log.info("{} wants to change status of checklistItem {}", accessToken.getUserId(), checklistItemId);
-        checklistItemCrudService.updateStatus(accessToken.getUserId(), listItemId, checklistItemId, request.getValue());
+        checklistItemCrudService.updateStatus(listItemId, checklistItemId, request.getValue());
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     public ChecklistResponse deleteCheckedItems(UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to delete checked items of checklist {}", accessToken.getUserId(), listItemId);
 
-        checklistItemCrudService.deleteCheckedItems(accessToken.getUserId(), listItemId);
+        checklistItemCrudService.deleteCheckedItems(listItemId);
 
         return getChecklist(listItemId, accessToken);
     }
@@ -78,7 +78,7 @@ public class ChecklistControllerImpl implements ChecklistController {
     @Override
     public void editChecklistItem(OneParamRequest<String> content, UUID listItemId, UUID checklistItemId, AccessToken accessToken) {
         log.info("{} wants to modify checklist item {} of listItem {}", accessToken.getUserId(), checklistItemId, listItemId);
-        checklistItemCrudService.updateContent(accessToken.getUserId(), listItemId, checklistItemId, content.getValue());
+        checklistItemCrudService.updateContent(listItemId, checklistItemId, content.getValue());
     }
 
     @Override

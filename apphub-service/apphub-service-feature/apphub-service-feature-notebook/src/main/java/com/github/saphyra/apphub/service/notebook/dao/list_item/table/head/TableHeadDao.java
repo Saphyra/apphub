@@ -18,22 +18,19 @@ public class TableHeadDao {
     private final TableHeadRepository repository;
     private final UuidConverter uuidConverter;
 
-    public void save(UUID userId, UUID listItemId, List<TableHead> tableHeads) {
-        repository.save(converter.convertDomain(userId, listItemId, tableHeads));
+    public void save(UUID listItemId, List<TableHead> tableHeads) {
+        repository.save(converter.convertDomain(listItemId, tableHeads));
     }
 
     /**
      * Deletes all {@link TableHead}s of the given Table
      */
-    public void delete(UUID userId, UUID listItemId) {
-        repository.delete(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(listItemId));
+    public void delete(UUID listItemId) {
+        repository.delete(uuidConverter.convertDomain(listItemId));
     }
 
-    public List<TableHead> findByListItemIdValidated(UUID userId, UUID listItemId) {
-        TableHeadEntity entity = repository.findByListItemId(
-                uuidConverter.convertDomain(userId),
-                uuidConverter.convertDomain(listItemId)
-            )
+    public List<TableHead> findByListItemIdValidated(UUID listItemId) {
+        TableHeadEntity entity = repository.findByListItemId(uuidConverter.convertDomain(listItemId))
             .orElseThrow(() -> ExceptionFactory.notFound("TableHead not found for Table " + listItemId));
         return converter.convertEntity(entity);
     }

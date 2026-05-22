@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 @Builder
 class TableRowEntity {
-    private String userId;
     private String listItemId;
     private String tableRowId;
     private String index;

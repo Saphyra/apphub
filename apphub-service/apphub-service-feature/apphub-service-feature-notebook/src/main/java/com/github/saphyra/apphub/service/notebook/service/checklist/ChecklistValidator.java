@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistI
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.CreateChecklistRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.UUID;
 class ChecklistValidator {
     private final ListItemRequestValidator listItemRequestValidator;
     private final TitleValidator titleValidator;
-    private final ChecklistItemDao checklistItemDao;
 
     void validate(UUID userId, CreateChecklistRequest request) {
         listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
@@ -35,13 +33,13 @@ class ChecklistValidator {
         items.forEach(this::validateContent);
     }
 
-    public void validate(UUID userId, UUID listItemId, ChecklistItemModel model) {
+    public void validate(ChecklistItemModel model) {
         validateContent(model);
 
         ValidationUtil.notNull(model.getType(), "item.type");
 
         if (model.getType() == ItemType.EXISTING) {
-            checklistItemDao.findByIdValidated(userId, listItemId, model.getChecklistItemId()); //TODO think about it
+            ValidationUtil.notNull(model.getChecklistItemId(), "item.checklistItemId");
         }
     }
 
@@ -51,12 +49,12 @@ class ChecklistValidator {
         ValidationUtil.notNull(checklistItemModel.getIndex(), "item.index");
     }
 
-    void validate(UUID userId, UUID listItemId, EditChecklistRequest request) {
+    void validate(EditChecklistRequest request) {
         titleValidator.validate(request.getTitle());
 
         ValidationUtil.notNull(request.getItems(), "items");
 
         request.getItems()
-            .forEach(model -> validate(userId, listItemId, model));
+            .forEach(this::validate);
     }
 }

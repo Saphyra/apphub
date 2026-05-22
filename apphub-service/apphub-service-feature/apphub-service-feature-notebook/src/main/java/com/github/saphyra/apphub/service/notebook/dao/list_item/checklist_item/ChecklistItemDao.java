@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.collect.Lists;
@@ -21,18 +21,16 @@ public class ChecklistItemDao {
     private final ChecklistItemConverter converter;
     private final UuidConverter uuidConverter;
 
-    public ChecklistItem findByIdValidated(UUID userId, UUID listItemId, UUID checklistItemId) {
+    public ChecklistItem findByIdValidated(UUID listItemId, UUID checklistItemId) {
         return converter.convertEntity(repository.findById(
-                uuidConverter.convertDomain(userId),
                 uuidConverter.convertDomain(listItemId),
                 uuidConverter.convertDomain(checklistItemId)
             ))
             .orElseThrow(() -> ExceptionFactory.notFound("ChecklistItem not found by id " + checklistItemId + " in ListItem " + listItemId));
     }
 
-    public void delete(UUID userId, UUID listItemId, UUID checklistItemId) {
+    public void delete(UUID listItemId, UUID checklistItemId) {
         repository.delete(
-            uuidConverter.convertDomain(userId),
             uuidConverter.convertDomain(listItemId),
             uuidConverter.convertDomain(checklistItemId)
         );
@@ -42,17 +40,13 @@ public class ChecklistItemDao {
         repository.save(converter.convertDomain(checklistItem));
     }
 
-    public List<ChecklistItem> getByListItemId(UUID userId, UUID listItemId) {
-        return converter.convertEntity(repository.getByListItemId(
-            uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(listItemId)
-        ));
+    public List<ChecklistItem> getByListItemId(UUID listItemId) {
+        return converter.convertEntity(repository.getByListItemId(uuidConverter.convertDomain(listItemId)));
     }
 
     public void delete(List<ChecklistItem> checklistItems) {
-        List<TriWrapper<String, String, String>> ids = checklistItems.stream()
-            .map(checklistItem -> new TriWrapper<>(
-                uuidConverter.convertDomain(checklistItem.getUserId()),
+        List<BiWrapper<String, String>> ids = checklistItems.stream()
+            .map(checklistItem -> new BiWrapper<>(
                 uuidConverter.convertDomain(checklistItem.getListItemId()),
                 uuidConverter.convertDomain(checklistItem.getChecklistItemId())
             ))

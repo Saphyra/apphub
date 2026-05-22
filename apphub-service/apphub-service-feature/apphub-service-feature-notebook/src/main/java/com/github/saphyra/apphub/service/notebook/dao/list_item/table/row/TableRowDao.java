@@ -20,25 +20,19 @@ public class TableRowDao {
     private final TableRowRepository repository;
     private final TableRowConverter converter;
 
-    public void delete(UUID userId, UUID listItemId, UUID tableRowId) {
-        repository.delete(
-            uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(listItemId),
-            uuidConverter.convertDomain(tableRowId)
-        );
+    public void delete(UUID listItemId, UUID tableRowId) {
+        repository.delete(uuidConverter.convertDomain(listItemId), uuidConverter.convertDomain(tableRowId));
     }
 
     public void save(TableRow tableRow) {
         repository.save(converter.convertDomain(tableRow));
     }
 
-    public void delete(UUID userId, UUID listItemId, List<TableRow> tableRows) {
-        String userIdString = uuidConverter.convertDomain(userId);
+    public void delete(UUID listItemId, List<TableRow> tableRows) {
         String listItemIdString = uuidConverter.convertDomain(listItemId);
 
         Lists.partition(tableRows, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
             .forEach(rows -> repository.delete(
-                userIdString,
                 listItemIdString,
                 rows.stream().map(TableRow::getTableRowId).map(uuidConverter::convertDomain).toList()
             ));
@@ -51,19 +45,13 @@ public class TableRowDao {
             ));
     }
 
-    public TableRow findByIdValidated(UUID userId, UUID listItemId, UUID rowId) {
-        return converter.convertEntity(repository.findById(
-                uuidConverter.convertDomain(userId),
-                uuidConverter.convertDomain(listItemId),
-                uuidConverter.convertDomain(rowId)
+    public TableRow findByIdValidated(UUID listItemId, UUID rowId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(listItemId), uuidConverter.convertDomain(rowId)
             ))
             .orElseThrow(() -> ExceptionFactory.notFound("Row not found by id " + rowId + " for table " + listItemId));
     }
 
-    public List<TableRow> getByListItemId(UUID userId, UUID listItemId) {
-        return converter.convertEntity(repository.getByListItemId(
-            uuidConverter.convertDomain(userId),
-            uuidConverter.convertDomain(listItemId)
-        ));
+    public List<TableRow> getByListItemId(UUID listItemId) {
+        return converter.convertEntity(repository.getByListItemId(uuidConverter.convertDomain(listItemId)));
     }
 }

@@ -98,7 +98,7 @@ class ChecklistControllerImplTest {
 
         underTest.updateStatus(new OneParamRequest<>(true), LIST_ITEM_ID, CHECKLIST_ITEM_ID, accessToken);
 
-        then(checklistItemCrudService).should().updateStatus(USER_ID, LIST_ITEM_ID, CHECKLIST_ITEM_ID, true);
+        then(checklistItemCrudService).should().updateStatus(LIST_ITEM_ID, CHECKLIST_ITEM_ID, true);
     }
 
     @Test
@@ -117,7 +117,7 @@ class ChecklistControllerImplTest {
 
         assertThat(underTest.deleteCheckedItems(LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);
 
-        then(checklistItemCrudService).should().deleteCheckedItems(USER_ID, LIST_ITEM_ID);
+        then(checklistItemCrudService).should().deleteCheckedItems(LIST_ITEM_ID);
     }
 
     @Test
@@ -134,7 +134,7 @@ class ChecklistControllerImplTest {
 
         underTest.editChecklistItem(new OneParamRequest<>(CONTENT), LIST_ITEM_ID, CHECKLIST_ITEM_ID, accessToken);
 
-        then(checklistItemCrudService).should().updateContent(USER_ID, LIST_ITEM_ID, CHECKLIST_ITEM_ID, CONTENT);
+        then(checklistItemCrudService).should().updateContent(LIST_ITEM_ID, CHECKLIST_ITEM_ID, CONTENT);
     }
 
     @Test

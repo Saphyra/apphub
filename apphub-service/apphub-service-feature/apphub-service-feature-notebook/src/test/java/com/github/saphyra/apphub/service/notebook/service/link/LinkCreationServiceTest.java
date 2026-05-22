@@ -53,7 +53,7 @@ public class LinkCreationServiceTest {
 
         UUID result = underTest.create(request, USER_ID);
 
-        verify(linkRequestValidator).validate(request);
+        verify(linkRequestValidator).validate(USER_ID, request);
         verify(listItemDao).save(listItem);
         assertThat(result).isEqualTo(LIST_ITEM_ID);
     }

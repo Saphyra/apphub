@@ -10,11 +10,10 @@ import java.util.Map;
 
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_CHECKED;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_INDEX;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_CHECKLIST_ITEM;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
 @Component
 @RequiredArgsConstructor
@@ -24,8 +23,8 @@ class ChecklistItemMapper extends ConverterBase<Map<String, AttributeValue>, Che
     @Override
     protected Map<String, AttributeValue> processDomainConversion(ChecklistItemEntity domain) {
         return Map.of(
-            COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + domain.getUserId()).build(),
-            COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + domain.getListItemId() + "|" + PREFIX_CHECKLIST_ITEM + domain.getChecklistItemId()).build(),
+            COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + domain.getListItemId()).build(),
+            COLUMN_SK, AttributeValue.builder().s(PREFIX_CHECKLIST_ITEM + domain.getChecklistItemId()).build(),
             COLUMN_CHECKED, AttributeValue.builder().s(domain.getChecked()).build(),
             COLUMN_INDEX, AttributeValue.builder().s(domain.getIndex()).build()
         );
@@ -33,14 +32,9 @@ class ChecklistItemMapper extends ConverterBase<Map<String, AttributeValue>, Che
 
     @Override
     protected ChecklistItemEntity processEntityConversion(Map<String, AttributeValue> entity) {
-        String sk = entity.get(COLUMN_SK).s();
-        String listItemId = sk.substring(PREFIX_LIST_ITEM.length(), sk.indexOf("|"));
-        String checklistItemId = sk.substring(sk.indexOf(PREFIX_CHECKLIST_ITEM) + PREFIX_CHECKLIST_ITEM.length());
-
         return ChecklistItemEntity.builder()
-            .userId(entity.get(COLUMN_USER_ID).s().substring(PREFIX_USER.length()))
-            .listItemId(listItemId)
-            .checklistItemId(checklistItemId)
+            .listItemId(entity.get(COLUMN_PK).s().substring(PREFIX_LIST_ITEM.length()))
+            .checklistItemId(entity.get(COLUMN_SK).s().substring(PREFIX_CHECKLIST_ITEM.length()))
             .checked(entity.get(COLUMN_CHECKED).s())
             .index(entity.get(COLUMN_INDEX).s())
             .build();

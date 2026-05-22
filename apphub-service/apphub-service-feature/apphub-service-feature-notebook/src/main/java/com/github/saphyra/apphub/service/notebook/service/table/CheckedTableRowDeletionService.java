@@ -65,8 +65,8 @@ public class CheckedTableRowDeletionService {
             });
 
         deletedFiles.forEach(storageProxy::deleteFile);
-        contentDao.save(userId, listItemId, contents);
-        tableRowDao.delete(userId, listItemId, toDelete);
+        contentDao.save(listItemId, contents);
+        tableRowDao.delete(listItemId, toDelete);
     }
 
     private Optional<Content> findContent(String key, List<Content> contents) {

@@ -4,22 +4,19 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -44,7 +41,7 @@ public class EditChecklistService {
 
     @Transactional
     public ChecklistResponse edit(UUID userId, UUID listItemId, EditChecklistRequest request) {
-        checklistValidator.validate(userId, listItemId, request);
+        checklistValidator.validate(request);
 
         TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = commonListItemDao.findChecklistValidated(userId, listItemId);
 
@@ -57,9 +54,9 @@ public class EditChecklistService {
         String originalListItemTitle = listItem.getTitle();
         listItem.setTitle(request.getTitle());
 
-        List<ChecklistItem> deletedChecklistItems = collectDeleted(checklistItems.values(), request.getItems());
-        List<ChecklistItem> newChecklistItems = processNew(userId, listItemId, request.getItems(), contents);
-        List<ChecklistItem> modifiedItems = processModified(userId, listItemId, checklistItems, request.getItems(), contents);
+        List<ChecklistItem> deletedChecklistItems = collectDeleted(checklistItems.values(), request.getItems(), contents);
+        List<ChecklistItem> newChecklistItems = processNew(listItemId, request.getItems(), contents);
+        List<ChecklistItem> modifiedItems = processModified(listItemId, checklistItems, request.getItems(), contents);
 
         if (!listItem.getTitle().equals(originalListItemTitle)) {
             listItemDao.save(listItem);
@@ -70,7 +67,7 @@ public class EditChecklistService {
         return checklistQueryService.getChecklistResponse(userId, listItemId);
     }
 
-    private List<ChecklistItem> processModified(UUID userId, UUID listItemId, Map<UUID, ChecklistItem> checklistItems, List<ChecklistItemModel> items, List<Content> contents) {
+    private List<ChecklistItem> processModified(UUID listItemId, Map<UUID, ChecklistItem> checklistItems, List<ChecklistItemModel> items, List<Content> contents) {
         List<ChecklistItem> modifiedItems = new ArrayList<>();
         items.stream()
             .filter(model -> model.getType() == ItemType.EXISTING)
@@ -99,7 +96,7 @@ public class EditChecklistService {
                     .get(key);
                 if (!text.equals(model.getContent())) {
                     content.remove(key);
-                    contents.add(contentFactory.create(userId, listItemId, ParentType.CHECKLIST_ITEM, model.getChecklistItemId(), model.getContent()));
+                    contents.add(contentFactory.create(listItemId, model.getChecklistItemId(), model.getContent()));
                 }
             });
         return modifiedItems;
@@ -111,15 +108,15 @@ public class EditChecklistService {
         return contents.stream()
             .filter(content -> content.getContent().containsKey(key))
             .findAny()
-            .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.DATA_NOT_FOUND, "Content not found for checklistItemId " + checklistItemId));
+            .orElseThrow(() -> ExceptionFactory.notFound("Content not found for checklistItemId " + checklistItemId));
     }
 
-    private List<ChecklistItem> processNew(UUID userId, UUID listItemId, List<ChecklistItemModel> items, List<Content> contents) {
+    private List<ChecklistItem> processNew(UUID listItemId, List<ChecklistItemModel> items, List<Content> contents) {
         return items.stream()
             .filter(model -> model.getType() == ItemType.NEW)
             .map(model -> {
-                ChecklistItem checklistItem = checklistItemFactory.create(userId, listItemId, model.getChecked(), model.getIndex());
-                Content content = contentFactory.create(userId, listItemId, ParentType.CHECKLIST_ITEM, checklistItem.getChecklistItemId(), model.getContent());
+                ChecklistItem checklistItem = checklistItemFactory.create(listItemId, model.getChecked(), model.getIndex());
+                Content content = contentFactory.create(listItemId, checklistItem.getChecklistItemId(), model.getContent());
                 contents.add(content);
 
                 return checklistItem;
@@ -127,13 +124,19 @@ public class EditChecklistService {
             .toList();
     }
 
-    private List<ChecklistItem> collectDeleted(Collection<ChecklistItem> checklistItems, List<ChecklistItemModel> items) {
+    private List<ChecklistItem> collectDeleted(Collection<ChecklistItem> checklistItems, List<ChecklistItemModel> items, List<Content> contents) {
         List<UUID> toKeep = items.stream()
             .map(ChecklistItemModel::getChecklistItemId)
             .toList();
 
-        return checklistItems.stream()
+        List<ChecklistItem> deletedItems = checklistItems.stream()
             .filter(checklistItem -> !toKeep.contains(checklistItem.getChecklistItemId()))
             .toList();
+
+        deletedItems.stream()
+            .map(ChecklistItem::getChecklistItemId)
+            .forEach(listItemId -> contents.forEach(content -> content.remove(uuidConverter.convertDomain(listItemId))));
+
+        return deletedItems;
     }
 }

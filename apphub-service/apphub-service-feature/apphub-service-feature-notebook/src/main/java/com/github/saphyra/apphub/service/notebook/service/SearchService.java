@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
@@ -13,8 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -32,34 +29,26 @@ public class SearchService {
 
         String searchValueLower = searchValue.toLowerCase();
 
-        return Stream.concat(searchByTitleAndData(userId, searchValueLower), searchByContent(userId, searchValueLower))
-            .distinct()
-            .map(notebookViewFactory::create)
-            .collect(Collectors.toList());
-    }
-
-    private Stream<ListItem> searchByTitleAndData(UUID userId, String searchValueLower) {
         return listItemDao.getByUserId(userId)
             .stream()
-            .filter(listItem -> listItem.getTitle().toLowerCase().contains(searchValueLower) || Optional.ofNullable(listItem.getData()).map(String::toLowerCase).orElse("").contains(searchValueLower));
-    }
-
-    private Stream<ListItem> searchByContent(UUID userId, String searchValueLower) {
-        List<UUID> listItemIds = contentDao.getContentsByUserId(userId)
-            .stream()
-            .filter(content -> hasMatchingContent(content, searchValueLower))
-            .map(Content::getListItemId)
+            .filter(listItem -> isMatching(searchValueLower, listItem))
+            .map(notebookViewFactory::create)
             .toList();
-
-        return listItemDao.getByIds(userId, listItemIds)
-            .stream();
     }
 
-    private boolean hasMatchingContent(Content content, String searchValueLower) {
-        return  content.getContent()
-            .values()
+    private boolean isMatching(String searchValue, ListItem listItem) {
+        if (listItem.getTitle().toLowerCase().contains(searchValue)) {
+            return true;
+        }
+
+        if (Optional.ofNullable(listItem.getData()).map(String::toLowerCase).filter(v -> v.contains(searchValue)).isPresent()) {
+            return true;
+        }
+
+        return contentDao.getByListItemId(listItem.getListItemId())
             .stream()
+            .flatMap(content -> content.getContent().values().stream())
             .map(String::toLowerCase)
-            .anyMatch(value -> value.contains(searchValueLower));
+            .anyMatch(value -> value.contains(searchValue));
     }
 }

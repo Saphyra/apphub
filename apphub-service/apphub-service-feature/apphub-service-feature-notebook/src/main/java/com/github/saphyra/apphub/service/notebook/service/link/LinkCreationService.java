@@ -20,7 +20,7 @@ public class LinkCreationService {
     private final ListItemFactory listItemFactory;
 
     public UUID create(LinkRequest request, UUID userId) {
-        linkRequestValidator.validate(request);
+        linkRequestValidator.validate(userId, request);
 
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), ListItemType.LINK, request.getUrl());
 

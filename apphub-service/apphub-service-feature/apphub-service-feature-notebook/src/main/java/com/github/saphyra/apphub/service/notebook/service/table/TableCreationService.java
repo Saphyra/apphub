@@ -11,13 +11,11 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDa
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumnFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHeadFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumn;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableColumnFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
@@ -38,7 +36,6 @@ import java.util.UUID;
 public class TableCreationService {
     private final TableCreationRequestValidator tableCreationRequestValidator;
     private final ListItemFactory listItemFactory;
-    private final ListItemDao listItemDao;
     private final TableHeadFactory tableHeadFactory;
     private final ContentFactory contentFactory;
     private final TableRowFactory tableRowFactory;
@@ -54,20 +51,20 @@ public class TableCreationService {
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), request.getListItemType());
 
         List<Content> contents = new ArrayList<>();
-        List<TableHead> tableHeads = getTableHeads(userId, listItem.getListItemId(), request.getTableHeads(), contents);
-        List<TableRow> rows = createRows(userId, listItem.getListItemId(), request.getRows(), contents);
+        List<TableHead> tableHeads = getTableHeads(listItem.getListItemId(), request.getTableHeads(), contents);
+        List<TableRow> rows = createRows(listItem.getListItemId(), request.getRows(), contents);
 
         commonListItemDao.saveTable(listItem, tableHeads, rows, contents);
 
         return collectFilesToUpload(rows, contents);
     }
 
-    private List<TableHead> getTableHeads(UUID userId, UUID listItemId, List<TableHeadModel> tableHeads, List<Content> contents) {
+    private List<TableHead> getTableHeads(UUID listItemId, List<TableHeadModel> tableHeads, List<Content> contents) {
         return tableHeads.stream()
             .map(model -> {
                 TableHead tableHead = tableHeadFactory.create(model.getColumnIndex());
 
-                Content content = contentFactory.create(userId, listItemId, ParentType.TABLE_HEAD, tableHead.getTableHeadId(), model.getContent());
+                Content content = contentFactory.create(listItemId, tableHead.getTableHeadId(), model.getContent());
                 contents.add(content);
 
                 return tableHead;
@@ -75,21 +72,18 @@ public class TableCreationService {
             .toList();
     }
 
-    private List<TableRow> createRows(UUID userId, UUID listItemId, List<TableRowModel> rows, List<Content> contents) {
+    private List<TableRow> createRows(UUID listItemId, List<TableRowModel> rows, List<Content> contents) {
         return rows.stream()
-            .map(row -> {
-                return tableRowFactory.create(
-                    userId,
-                    listItemId,
-                    row.getRowIndex(),
-                    row.getChecked(),
-                    getColumns(userId, listItemId, row.getColumns(), contents)
-                );
-            })
+            .map(row -> tableRowFactory.create(
+                listItemId,
+                row.getRowIndex(),
+                row.getChecked(),
+                getColumns(listItemId, row.getColumns(), contents)
+            ))
             .toList();
     }
 
-    private List<TableColumn> getColumns(UUID userId, UUID listItemId, List<TableColumnModel> columns, List<Content> contents) {
+    private List<TableColumn> getColumns(UUID listItemId, List<TableColumnModel> columns, List<Content> contents) {
         return columns.stream()
             .map(model -> {
                 TableColumn column = tableColumnFactory.create(model.getColumnIndex(), model.getColumnType());
@@ -98,7 +92,7 @@ public class TableCreationService {
                 columnDataServiceProvider.getForType(model.getColumnType())
                     .serialize(model.getData())
                     .ifPresent(data -> {
-                        Content content = contentFactory.create(userId, listItemId, ParentType.TABLE_COLUMN, column.getColumnId(), data);
+                        Content content = contentFactory.create(listItemId, column.getColumnId(), data);
                         contents.add(content);
                     });
 

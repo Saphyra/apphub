@@ -13,8 +13,8 @@ import java.util.UUID;
 public class DeprecatedTableHeadFactory {
     private final IdGenerator idGenerator;
 
-    public TableHead create(UUID userId, UUID parent, Integer columnIndex) {
-        return TableHead.builder()
+    public DeprecatedTableHead create(UUID userId, UUID parent, Integer columnIndex) {
+        return DeprecatedTableHead.builder()
                 .tableHeadId(idGenerator.randomUuid())
                 .userId(userId)
                 .parent(parent)

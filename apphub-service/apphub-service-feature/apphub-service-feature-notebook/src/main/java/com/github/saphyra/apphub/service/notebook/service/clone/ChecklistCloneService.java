@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentD
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ParentType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,8 +36,8 @@ class ChecklistCloneService {
 
     void clone(UUID parent, ListItem toClone) {
         ListItem clone = listItemFactory.clone(parent, toClone);
-        List<ChecklistItem> items = checklistItemDao.getByListItemId(toClone.getUserId(), toClone.getListItemId());
-        List<Content> contents = contentDao.getByListItemIdAndType(toClone.getUserId(), toClone.getListItemId(), ParentType.CHECKLIST_ITEM);
+        List<ChecklistItem> items = checklistItemDao.getByListItemId(toClone.getListItemId());
+        List<Content> contents = contentDao.getByListItemId(toClone.getListItemId());
         List<Content> clonedContents = new ArrayList<>();
         List<ChecklistItem> clonedItems = items.stream()
             .map(item -> {
@@ -50,7 +49,7 @@ class ChecklistCloneService {
                     .findAny()
                     .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.DATA_NOT_FOUND, "Content not found by checklistItemId " + item.getChecklistItemId()));
 
-                Content clonedContent = contentFactory.create(clone.getUserId(), clone.getListItemId(), ParentType.CHECKLIST_ITEM, clonedItem.getChecklistItemId(), content.get(key));
+                Content clonedContent = contentFactory.create(clone.getListItemId(), clonedItem.getChecklistItemId(), content.get(key));
                 clonedContents.add(clonedContent);
 
                 return clonedItem;

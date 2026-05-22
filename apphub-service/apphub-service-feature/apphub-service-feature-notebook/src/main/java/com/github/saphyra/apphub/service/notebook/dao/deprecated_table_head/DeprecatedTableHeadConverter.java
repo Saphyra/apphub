@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Deprecated(forRemoval = true)
-public class DeprecatedTableHeadConverter extends ConverterBase<TableHeadEntity, TableHead> {
+public class DeprecatedTableHeadConverter extends ConverterBase<TableHeadEntity, DeprecatedTableHead> {
     private final UuidConverter uuidConverter;
 
     @Override
-    protected TableHead processEntityConversion(TableHeadEntity entity) {
-        return TableHead.builder()
+    protected DeprecatedTableHead processEntityConversion(TableHeadEntity entity) {
+        return DeprecatedTableHead.builder()
             .tableHeadId(uuidConverter.convertEntity(entity.getTableHeadId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .parent(uuidConverter.convertEntity(entity.getParent()))
@@ -22,7 +22,7 @@ public class DeprecatedTableHeadConverter extends ConverterBase<TableHeadEntity,
     }
 
     @Override
-    protected TableHeadEntity processDomainConversion(TableHead domain) {
+    protected TableHeadEntity processDomainConversion(DeprecatedTableHead domain) {
         return TableHeadEntity.builder()
             .tableHeadId(uuidConverter.convertDomain(domain.getTableHeadId()))
             .userId(uuidConverter.convertDomain(domain.getUserId()))

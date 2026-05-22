@@ -11,11 +11,10 @@ import java.util.Map;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_CHECKED;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_COLUMNS;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_INDEX;
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_TABLE_ROW;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
 @Component
 @Slf4j
@@ -24,8 +23,8 @@ class TableRowMapper extends ConverterBase<Map<String, AttributeValue>, TableRow
     @Override
     protected Map<String, AttributeValue> processDomainConversion(TableRowEntity domain) {
         Map<String, AttributeValue> item = new HashMap<>();
-        item.put(COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + domain.getUserId()).build());
-        item.put(COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + domain.getListItemId() + "|" + PREFIX_TABLE_ROW + domain.getTableRowId()).build());
+        item.put(COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + domain.getListItemId()).build());
+        item.put(COLUMN_SK, AttributeValue.builder().s(PREFIX_TABLE_ROW + domain.getTableRowId()).build());
         item.put(COLUMN_INDEX, AttributeValue.builder().s(domain.getIndex()).build());
         item.put(COLUMN_COLUMNS, AttributeValue.builder().s(domain.getColumns()).build());
         item.put(COLUMN_CHECKED, AttributeValue.builder().s(domain.getChecked()).build());
@@ -35,14 +34,9 @@ class TableRowMapper extends ConverterBase<Map<String, AttributeValue>, TableRow
 
     @Override
     protected TableRowEntity processEntityConversion(Map<String, AttributeValue> entity) {
-        String sk = entity.get(COLUMN_SK).s();
-        String listItemId = sk.substring(PREFIX_LIST_ITEM.length(), sk.indexOf("|"));
-        String tableRowId = sk.substring(sk.indexOf(PREFIX_TABLE_ROW) + PREFIX_TABLE_ROW.length());
-
         return TableRowEntity.builder()
-            .userId(entity.get(COLUMN_USER_ID).s().substring(PREFIX_USER.length()))
-            .listItemId(listItemId)
-            .tableRowId(tableRowId)
+            .listItemId(entity.get(COLUMN_PK).s().substring(PREFIX_LIST_ITEM.length()))
+            .tableRowId(entity.get(COLUMN_SK).s().substring(PREFIX_TABLE_ROW.length()))
             .index(entity.get(COLUMN_INDEX).s())
             .checked(entity.get(COLUMN_CHECKED).s())
             .columns(entity.get(COLUMN_COLUMNS).s())

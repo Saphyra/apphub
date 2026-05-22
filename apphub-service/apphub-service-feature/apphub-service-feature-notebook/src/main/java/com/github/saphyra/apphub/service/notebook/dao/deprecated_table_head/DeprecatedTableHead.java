@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.UUID;
@@ -10,15 +11,16 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class TableHead {
+@NoArgsConstructor
+public class DeprecatedTableHead {
     @NonNull
-    private final UUID tableHeadId;
+    private UUID tableHeadId;
 
     @NonNull
-    private final UUID userId;
+    private UUID userId;
 
     @NonNull
-    private final UUID parent;
+    private UUID parent;
 
     @NonNull
     private Integer columnIndex;

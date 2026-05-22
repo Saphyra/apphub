@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
+import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableRowModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -34,13 +35,13 @@ public class CustomTableCheckboxTest extends BackEndTest {
 
         UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
-            .get(0)
+            .getFirst()
             .getId();
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         edit(accessToken, listItemId, tableResponse);
 
-        setStatus_nullStatus(accessToken, tableResponse);
+        setStatus_nullStatus(accessToken, listItemId, tableResponse);
         setStatus(accessToken, listItemId, tableResponse);
         setStatus_notCheckboxColumn(accessToken, listItemId, tableResponse);
 
@@ -48,12 +49,12 @@ public class CustomTableCheckboxTest extends BackEndTest {
     }
 
     private void setStatus_notCheckboxColumn(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        UUID columnId = tableResponse.getRows().get(0).getColumns().get(0).getColumnId();
+        UUID columnId = tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId();
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
+            tableResponse.getRows().getFirst().getRowId(),
             columnId,
             ColumnType.EMPTY,
             null
@@ -62,21 +63,25 @@ public class CustomTableCheckboxTest extends BackEndTest {
         tableResponse = TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest)
             .getTableResponse();
 
-        Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
+        TableRowModel row = tableResponse.getRows().getFirst();
+        Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, listItemId, row.getRowId(), row.getColumns().getFirst().getColumnId(), false);
 
         ResponseValidator.verifyInvalidParam(response, "columnId", "not a " + ColumnType.CHECKBOX);
     }
 
     private void setStatus(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        TableActions.editCheckboxStatus(getServerPort(), accessToken, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), false);
+        TableRowModel row = tableResponse.getRows().getFirst();
+        TableActions.editCheckboxStatus(getServerPort(), accessToken,listItemId, row.getRowId(), row.getColumns().getFirst().getColumnId(), false);
 
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(String.valueOf(false));
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(String.valueOf(false));
     }
 
-    private void setStatus_nullStatus(String accessToken, TableResponse tableResponse) {
-        Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, tableResponse.getRows().get(0).getColumns().get(0).getColumnId(), null);
+    private void setStatus_nullStatus(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        TableRowModel row = tableResponse.getRows().getFirst();
+
+        Response response = TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, listItemId, row.getRowId(), row.getColumns().getFirst().getColumnId(), null);
 
         ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
     }
@@ -84,10 +89,10 @@ public class CustomTableCheckboxTest extends BackEndTest {
     private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.CHECKBOX,
             Boolean.TRUE
         );
@@ -97,8 +102,8 @@ public class CustomTableCheckboxTest extends BackEndTest {
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(Boolean.TRUE.toString());
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(NEW_COLUMN_TITLE);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(Boolean.TRUE.toString());
     }
 
     private void create(String accessToken) {
@@ -112,6 +117,6 @@ public class CustomTableCheckboxTest extends BackEndTest {
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "checked", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
     }
 }

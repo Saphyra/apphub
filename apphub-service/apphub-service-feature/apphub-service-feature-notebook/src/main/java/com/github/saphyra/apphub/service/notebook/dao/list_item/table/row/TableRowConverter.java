@@ -35,7 +35,6 @@ class TableRowConverter extends ConverterBase<TableRowEntity, TableRow> {
 
         return TableRowEntity.builder()
             .tableRowId(tableRowId)
-            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .listItemId(uuidConverter.convertDomain(domain.getListItemId()))
             .index(integerEncryptor.encrypt(domain.getIndex(), userId, tableRowId, COLUMN_INDEX))
             .checked(booleanEncryptor.encrypt(domain.getChecked(), userId, tableRowId, COLUMN_CHECKED))
@@ -54,7 +53,6 @@ class TableRowConverter extends ConverterBase<TableRowEntity, TableRow> {
 
         return TableRow.builder()
             .tableRowId(uuidConverter.convertEntity(tableRowId))
-            .userId(uuidConverter.convertEntity(entity.getUserId()))
             .listItemId(uuidConverter.convertEntity(entity.getListItemId()))
             .index(integerEncryptor.decrypt(entity.getIndex(), userId, tableRowId, COLUMN_INDEX))
             .checked(booleanEncryptor.decrypt(entity.getChecked(), userId, tableRowId, COLUMN_CHECKED))

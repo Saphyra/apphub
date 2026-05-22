@@ -80,23 +80,23 @@ public class ChecklistTableCrudTest extends BackEndTest {
         tableResponse = edit_columnAdded(accessToken, listItemId);
         tableResponse = edit_columnModified(accessToken, listItemId, tableResponse);
 
-        changeRowStatus_nullStatus(accessToken, tableResponse);
+        changeRowStatus_nullStatus(accessToken, listItemId, tableResponse);
         changeRowStatus(accessToken, listItemId, tableResponse);
 
         delete(accessToken, listItemId);
     }
 
     private void changeRowStatus(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        UUID rowId = tableResponse.getRows().get(0).getRowId();
-        TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, rowId, false);
+        UUID rowId = tableResponse.getRows().getFirst().getRowId();
+        TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, listItemId, rowId, false);
 
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
-        assertThat(tableResponse.getRows().get(0).getChecked()).isFalse();
+        assertThat(tableResponse.getRows().getFirst().getChecked()).isFalse();
     }
 
-    private void changeRowStatus_nullStatus(String accessToken, TableResponse tableResponse) {
-        Response response = TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, tableResponse.getRows().get(0).getRowId(), null);
+    private void changeRowStatus_nullStatus(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        Response response = TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, listItemId, tableResponse.getRows().getFirst().getRowId(), null);
 
         ResponseValidator.verifyInvalidParam(response, "status", "must not be null");
     }
@@ -332,7 +332,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
-        verifyInvalidParam(create_nullColumnValueResponse, "text", "must not be null");
+        verifyInvalidParam(create_nullColumnValueResponse, "data", "must not be null");
     }
 
     private static void create_nullColumnType(String accessToken) {
@@ -408,14 +408,14 @@ public class ChecklistTableCrudTest extends BackEndTest {
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TABLE_TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
-        assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(COLUMN_NAME);
+        assertThat(tableResponse.getTableHeads().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(COLUMN_NAME);
         assertThat(tableResponse.getRows()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getChecked()).isTrue();
-        assertThat(tableResponse.getRows().get(0).getColumns()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(COLUMN_VALUE);
+        assertThat(tableResponse.getRows().getFirst().getRowIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getChecked()).isTrue();
+        assertThat(tableResponse.getRows().getFirst().getColumns()).hasSize(1);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(COLUMN_VALUE);
 
         return new BiWrapper<>(tableResponse, listItemId);
     }
@@ -430,19 +430,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(" ")
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -460,19 +460,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(" ")
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -490,20 +490,20 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(
                     TableColumnModel.builder()
-                        .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                        .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                         .columnIndex(0)
                         .columnType(ColumnType.TEXT)
                         .itemType(ItemType.EXISTING)
@@ -528,20 +528,20 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(null)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(
                     TableColumnModel.builder()
-                        .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                        .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                         .columnIndex(0)
                         .columnType(ColumnType.TEXT)
                         .itemType(ItemType.EXISTING)
@@ -560,19 +560,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -582,7 +582,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             ))
             .build();
         Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
-        verifyInvalidParam(edit_nullColumnValueResponse, "text", "must not be null");
+        verifyInvalidParam(edit_nullColumnValueResponse, "data", "must not be null");
     }
 
     private static void edit_tableHeadNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -597,12 +597,12 @@ public class ChecklistTableCrudTest extends BackEndTest {
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -620,14 +620,14 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
@@ -650,19 +650,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -672,7 +672,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
             ))
             .build();
         Response edit_listItemNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, UUID.randomUUID(), edit_listItemNotFoundRequest);
-        ResponseValidator.verifyInvalidParam(edit_listItemNotFoundResponse, "tableHead.tableHeadId", "points to different table");
+        ResponseValidator.verifyErrorResponse(edit_listItemNotFoundResponse, 404, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
 
     private static void edit_columnDeleted(String accessToken, UUID listItemId) {
@@ -717,14 +717,14 @@ public class ChecklistTableCrudTest extends BackEndTest {
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TABLE_TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
-        assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(COLUMN_NAME);
+        assertThat(tableResponse.getTableHeads().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(COLUMN_NAME);
         assertThat(tableResponse.getRows()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getChecked()).isTrue();
-        assertThat(tableResponse.getRows().get(0).getColumns()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(COLUMN_VALUE);
+        assertThat(tableResponse.getRows().getFirst().getRowIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getChecked()).isTrue();
+        assertThat(tableResponse.getRows().getFirst().getColumns()).hasSize(1);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(COLUMN_VALUE);
         return tableResponse;
     }
 
@@ -733,19 +733,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .checked(true)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -756,10 +756,10 @@ public class ChecklistTableCrudTest extends BackEndTest {
             .build();
         tableResponse = TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest)
             .getTableResponse();
-        assertThat(tableResponse.getRows().get(0).getChecked()).isTrue();
+        assertThat(tableResponse.getRows().getFirst().getChecked()).isTrue();
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_NAME);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(NEW_COLUMN_VALUE);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(NEW_COLUMN_NAME);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(NEW_COLUMN_VALUE);
 
         return tableResponse;
     }

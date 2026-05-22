@@ -22,14 +22,13 @@ class TableHeadConverter {
     private final StringEncryptor stringEncryptor;
     private final ObjectMapper objectMapper;
 
-    TableHeadEntity convertDomain(UUID userId, UUID listItemId, List<TableHead> tableHeads) {
+    TableHeadEntity convertDomain(UUID listItemId, List<TableHead> tableHeads) {
         String userIdFromAccessToken = accessTokenProvider.getUserIdAsString();
         String data = objectMapper.writeValueAsString(tableHeads);
         String listItemIdString = uuidConverter.convertDomain(listItemId);
         String encryptedData = stringEncryptor.encrypt(data, userIdFromAccessToken, listItemIdString, COLUMN_DATA);
 
         return TableHeadEntity.builder()
-            .userId(uuidConverter.convertDomain(userId))
             .listItemId(listItemIdString)
             .data(encryptedData)
             .build();

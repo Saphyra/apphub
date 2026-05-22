@@ -20,11 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_TABLE_ROW;
-import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_USER;
 
 @Component
 class TableRowRepository {
@@ -38,11 +37,12 @@ class TableRowRepository {
         this.tableName = configuration.getTableName();
     }
 
-    void delete(String userId, String listItemId, String tableRowId) {
+    void delete(String listItemId, String tableRowId) {
         DeleteItemRequest request = DeleteItemRequest.builder()
+            .tableName(tableName)
             .key(Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId + "|" + PREFIX_TABLE_ROW + tableRowId).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_TABLE_ROW + tableRowId).build()
             ))
             .build();
 
@@ -58,15 +58,15 @@ class TableRowRepository {
         client.putItem(request);
     }
 
-    public void delete(String userId, String listItemId, List<String> rowIds) {
+    public void delete(String listItemId, List<String> rowIds) {
         if (rowIds.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch delete size cannot be greater than " + Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE);
         }
 
         List<WriteRequest> requests = rowIds.stream()
             .map(rowId -> Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId + "|" + PREFIX_TABLE_ROW + rowId).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_TABLE_ROW + rowId).build()
             ))
             .map(key -> DeleteRequest.builder().key(key).build())
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
@@ -105,11 +105,12 @@ class TableRowRepository {
         }
     }
 
-    public Optional<TableRowEntity> findById(String userId, String listItemId, String rowId) {
+    public Optional<TableRowEntity> findById(String listItemId, String rowId) {
         GetItemRequest request = GetItemRequest.builder()
+            .tableName(tableName)
             .key(Map.of(
-                COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId + "|" + PREFIX_TABLE_ROW + rowId).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_TABLE_ROW + rowId).build()
             ))
             .build();
 
@@ -119,17 +120,17 @@ class TableRowRepository {
             .map(mapper::convertEntity);
     }
 
-    public List<TableRowEntity> getByListItemId(String userId, String listItemId) {
+    public List<TableRowEntity> getByListItemId(String listItemId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#userId = :userId AND begins_with(#sk, :listItemId)")
+            .keyConditionExpression("#pk = :listItemId AND begins_with(#sk, :tableRow)")
             .expressionAttributeNames(Map.of(
-                "#userId", COLUMN_USER_ID,
+                "#pk", COLUMN_PK,
                 "#sk", COLUMN_SK
             ))
             .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId + "|" + PREFIX_TABLE_ROW).build()
+                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                ":tableRow", AttributeValue.builder().s(PREFIX_TABLE_ROW).build()
             ))
             .build();
 

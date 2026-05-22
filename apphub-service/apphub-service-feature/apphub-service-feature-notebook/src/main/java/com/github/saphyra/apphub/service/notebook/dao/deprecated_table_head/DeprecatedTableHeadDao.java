@@ -16,7 +16,7 @@ import java.util.UUID;
 @Component
 @Slf4j
 @Deprecated(forRemoval = true)
-public class DeprecatedTableHeadDao extends AbstractDao<TableHeadEntity, TableHead, String, DeprecatedTableHeadRepository> implements DeleteByUserIdDao {
+public class DeprecatedTableHeadDao extends AbstractDao<TableHeadEntity, DeprecatedTableHead, String, DeprecatedTableHeadRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public DeprecatedTableHeadDao(DeprecatedTableHeadConverter converter, DeprecatedTableHeadRepository repository, UuidConverter uuidConverter) {
@@ -33,7 +33,7 @@ public class DeprecatedTableHeadDao extends AbstractDao<TableHeadEntity, TableHe
         return repository.existsById(uuidConverter.convertDomain(tableHeadId));
     }
 
-    public List<TableHead> getByParent(UUID parent) {
+    public List<DeprecatedTableHead> getByParent(UUID parent) {
         return converter.convertEntity(repository.getByParent(uuidConverter.convertDomain(parent)));
     }
 
@@ -41,11 +41,11 @@ public class DeprecatedTableHeadDao extends AbstractDao<TableHeadEntity, TableHe
         deleteById(uuidConverter.convertDomain(tableHeadId));
     }
 
-    public Optional<TableHead> findById(UUID tableHeadId) {
+    public Optional<DeprecatedTableHead> findById(UUID tableHeadId) {
         return findById(uuidConverter.convertDomain(tableHeadId));
     }
 
-    public TableHead findByIdValidated(UUID tableHeadId) {
+    public DeprecatedTableHead findByIdValidated(UUID tableHeadId) {
         return findById(tableHeadId)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "TableHead not found with id " + tableHeadId));
     }

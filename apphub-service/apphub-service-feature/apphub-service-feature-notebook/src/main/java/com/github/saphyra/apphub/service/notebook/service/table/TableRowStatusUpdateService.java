@@ -16,10 +16,10 @@ import java.util.UUID;
 public class TableRowStatusUpdateService {
     private final TableRowDao tableRowDao;
 
-    public void setRowStatus(UUID userId, UUID listItemId, UUID rowId, Boolean status) {
+    public void setRowStatus(UUID listItemId, UUID rowId, Boolean status) {
         ValidationUtil.notNull(status, "status");
 
-        TableRow row = tableRowDao.findByIdValidated(userId, listItemId, rowId);
+        TableRow row = tableRowDao.findByIdValidated(listItemId, rowId);
 
         row.setChecked(status);
 
