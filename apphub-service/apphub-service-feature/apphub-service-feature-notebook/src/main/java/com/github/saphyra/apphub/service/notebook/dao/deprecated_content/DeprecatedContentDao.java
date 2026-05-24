@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Component
 @Deprecated(forRemoval = true)
-public class DeprecatedContentDao extends AbstractDao<ContentEntity, Content, String, DeprecatedContentRepository> implements DeleteByUserIdDao {
+public class DeprecatedContentDao extends AbstractDao<ContentEntity, DeprecatedContent, String, DeprecatedContentRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
     public DeprecatedContentDao(DeprecatedContentConverter converter, DeprecatedContentRepository repository, UuidConverter uuidConverter) {
@@ -26,12 +26,12 @@ public class DeprecatedContentDao extends AbstractDao<ContentEntity, Content, St
         repository.deleteByParent(uuidConverter.convertDomain(parent));
     }
 
-    public Content findByParentValidated(UUID parent) {
+    public DeprecatedContent findByParentValidated(UUID parent) {
         return findByParent(parent)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "Content not found by parent " + parent));
     }
 
-    public Optional<Content> findByParent(UUID parent) {
+    public Optional<DeprecatedContent> findByParent(UUID parent) {
         return converter.convertEntity(repository.findByParent(uuidConverter.convertDomain(parent)));
     }
 
@@ -40,7 +40,7 @@ public class DeprecatedContentDao extends AbstractDao<ContentEntity, Content, St
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
-    public List<Content> getByUserId(UUID userId) {
+    public List<DeprecatedContent> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 }

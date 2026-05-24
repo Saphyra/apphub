@@ -11,7 +11,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @Deprecated(forRemoval = true)
-public class Content {
+public class DeprecatedContent {
     @NonNull
     private final UUID contentId;
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Deprecated(forRemoval = true)
-public class DeprecatedContentConverter extends ConverterBase<ContentEntity, Content> {
+public class DeprecatedContentConverter extends ConverterBase<ContentEntity, DeprecatedContent> {
     static final String COLUMN_CONTENT = "content";
 
     private final AccessTokenProvider accessTokenProvider;
@@ -18,8 +18,8 @@ public class DeprecatedContentConverter extends ConverterBase<ContentEntity, Con
     private final UuidConverter uuidConverter;
 
     @Override
-    protected Content processEntityConversion(ContentEntity entity) {
-        return Content.builder()
+    protected DeprecatedContent processEntityConversion(ContentEntity entity) {
+        return DeprecatedContent.builder()
             .contentId(uuidConverter.convertEntity(entity.getContentId()))
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .parent(uuidConverter.convertEntity(entity.getParent()))
@@ -29,7 +29,7 @@ public class DeprecatedContentConverter extends ConverterBase<ContentEntity, Con
     }
 
     @Override
-    protected ContentEntity processDomainConversion(Content content) {
+    protected ContentEntity processDomainConversion(DeprecatedContent content) {
         String contentId = uuidConverter.convertDomain(content.getContentId());
         return ContentEntity.builder()
             .contentId(contentId)
