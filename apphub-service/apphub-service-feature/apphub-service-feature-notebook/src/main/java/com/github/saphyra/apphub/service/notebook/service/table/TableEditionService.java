@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploa
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
@@ -45,7 +44,6 @@ import java.util.UUID;
 public class TableEditionService {
     private final EditTableRequestValidator editTableRequestValidator;
     private final ListItemDao listItemDao;
-    private final UuidConverter uuidConverter;
     private final TableHeadFactory tableHeadFactory;
     private final ContentFactory contentFactory;
     private final ColumnDataServiceProvider columnDataServiceProvider;
@@ -163,8 +161,6 @@ public class TableEditionService {
                     .filter(tableColumn -> tableColumn.getColumnId().equals(model.getColumnId()))
                     .findAny()
                     .orElseThrow(() -> ExceptionFactory.notFound("TableColumn not found by id " + model.getColumnId()));
-                String key = uuidConverter.convertDomain(column.getColumnId());
-
                 if (column.getIndex() != model.getColumnIndex()) {
                     log.info("Updating index of TableColumn {}", column.getColumnId());
                     column.setIndex(model.getColumnIndex());
@@ -180,8 +176,8 @@ public class TableEditionService {
                         //Column type remained the same, without content
                     } else {
                         String newData = maybeData.orElseThrow();
-                        Content existingContent = getContentValidated(contents, key);
-                        String existingData = existingContent.get(key);
+                        Content existingContent = getContentValidated(contents, column.getColumnId());
+                        String existingData = existingContent.get(column.getColumnId());
 
                         //Same ColumnType with different value
                         if (!newData.equals(existingData)) {
@@ -202,17 +198,17 @@ public class TableEditionService {
                                 fileUploads.add(fileUpload);
                             }
 
-                            existingContent.remove(key);
+                            existingContent.remove(column.getColumnId());
                         }
                     }
                 } else { //Column type changed
                     //Delete existing data if present
-                    getContent(contents, key).ifPresent(content -> {
+                    getContent(contents, column.getColumnId()).ifPresent(content -> {
                         if (column.getType().isFile()) {
-                            UUID existingStoredFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(content.get(key), UUID.class);
+                            UUID existingStoredFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(content.get(column.getColumnId()), UUID.class);
                             deletedFiles.add(existingStoredFileId);
                         }
-                        content.remove(key);
+                        content.remove(column.getColumnId());
                     });
 
                     if (model.getColumnType() == ColumnType.EMPTY) {
@@ -222,7 +218,7 @@ public class TableEditionService {
                         contents.add(content);
 
                         if (column.getType().isFile()) {
-                            UUID storedFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(content.get(key), UUID.class);
+                            UUID storedFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(content.get(column.getColumnId()), UUID.class);
                             TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
                                 .rowIndex(rowIndex)
                                 .columnIndex(column.getIndex())
@@ -292,17 +288,15 @@ public class TableEditionService {
         log.info("{} TableColumns are deleted.", toDelete.size());
 
         toDelete.forEach(tableColumn -> {
-            String key = uuidConverter.convertDomain(tableColumn.getColumnId());
-
             if (tableColumn.getType().isFile()) {
-                Content content = getContent(contents, key)
+                Content content = getContent(contents, tableColumn.getColumnId())
                     .orElseThrow(() -> ExceptionFactory.notFound("Content not found for TableColumn with id " + tableColumn.getColumnId()));
 
-                UUID storedFileId = columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(content.get(key), UUID.class);
+                UUID storedFileId = columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(content.get(tableColumn.getColumnId()), UUID.class);
                 deletedFiles.add(storedFileId);
             }
 
-            contents.forEach(content -> content.remove(key));
+            contents.forEach(content -> content.remove(tableColumn.getColumnId()));
             columns.remove(tableColumn);
         });
 
@@ -373,14 +367,13 @@ public class TableEditionService {
         deleted.forEach(tableRow -> {
             tableRow.getColumns()
                 .forEach(tableColumn -> {
-                    String key = uuidConverter.convertDomain(tableColumn.getColumnId());
-                    Optional<Content> maybeContent = getContent(contents, key);
+                    Optional<Content> maybeContent = getContent(contents, tableColumn.getColumnId());
                     if (tableColumn.getType().isFile()) {
                         Content content = maybeContent.orElseThrow(() -> ExceptionFactory.notFound("Content not found for TableColumn with id " + tableColumn.getColumnId()));
-                        UUID storedFileId = columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(content.get(key), UUID.class);
+                        UUID storedFileId = columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(content.get(tableColumn.getColumnId()), UUID.class);
                         deletedFiles.add(storedFileId);
                     }
-                    maybeContent.ifPresent(content -> content.remove(key));
+                    maybeContent.ifPresent(content -> content.remove(tableColumn.getColumnId()));
                 });
 
             tableRows.remove(tableRow);
@@ -412,8 +405,7 @@ public class TableEditionService {
                 .filter(th -> th.getTableHeadId().equals(model.getTableHeadId()))
                 .findAny()
                 .orElseThrow(() -> ExceptionFactory.notFound("TableHead not found by id " + model.getTableHeadId()));
-            String key = uuidConverter.convertDomain(model.getTableHeadId());
-            Content content = getContent(contents, key)
+            Content content = getContent(contents, model.getTableHeadId())
                 .orElseThrow(() -> ExceptionFactory.notFound("Content not found for TableHead with id " + model.getTableHeadId()));
             if (tableHead.getIndex() != model.getColumnIndex()) {
                 log.info("Updating columnIndex of TableHead {}", tableHead.getTableHeadId());
@@ -421,9 +413,9 @@ public class TableEditionService {
 
                 modified = true;
             }
-            if (!content.get(key).equals(model.getContent())) {
+            if (!content.get(model.getTableHeadId()).equals(model.getContent())) {
                 log.info("Modifying content of TableHead {}", tableHead.getTableHeadId());
-                content.remove(key);
+                content.remove(model.getTableHeadId());
 
                 Content newContent = contentFactory.create(listItemId, model.getTableHeadId(), model.getContent());
                 contents.add(newContent);
@@ -464,8 +456,7 @@ public class TableEditionService {
         log.info("Deleting {} tableHeads...", deleted.size());
         deleted.forEach(tableHead -> {
             tableHeads.remove(tableHead);
-            String key = uuidConverter.convertDomain(tableHead.getTableHeadId());
-            contents.forEach(content -> content.remove(key));
+            contents.forEach(content -> content.remove(tableHead.getTableHeadId()));
         });
         return !deleted.isEmpty();
     }
@@ -478,12 +469,12 @@ public class TableEditionService {
         }
     }
 
-    private Content getContentValidated(List<Content> contents, String key) {
+    private Content getContentValidated(List<Content> contents, UUID key) {
         return getContent(contents, key)
             .orElseThrow(() -> ExceptionFactory.notFound("Content not found for key " + key));
     }
 
-    private static Optional<Content> getContent(List<Content> contents, String key) {
+    private static Optional<Content> getContent(List<Content> contents, UUID key) {
         return contents.stream()
             .filter(c -> c.getContent().containsKey(key))
             .findAny();

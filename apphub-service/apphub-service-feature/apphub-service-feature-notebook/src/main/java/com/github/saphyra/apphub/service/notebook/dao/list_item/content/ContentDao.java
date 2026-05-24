@@ -49,12 +49,10 @@ public class ContentDao {
      * If a content does not have any more entries left, delete the record itself
      */
     public void deleteKeys(UUID listItemId, List<UUID> keys) {
-        List<String> keysString = uuidConverter.convertDomain(keys);
-
         List<Content> modified = getByListItemId(listItemId)
             .stream()
-            .filter(c -> c.containsAny(keysString))
-            .peek(content -> content.removeAll(keysString))
+            .filter(c -> c.containsAny(keys))
+            .peek(content -> content.removeAll(keys))
             .filter(Content::isModified)
             .toList();
 

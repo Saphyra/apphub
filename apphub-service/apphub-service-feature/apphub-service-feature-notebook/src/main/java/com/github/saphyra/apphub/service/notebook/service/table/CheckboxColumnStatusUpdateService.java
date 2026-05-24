@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
@@ -25,7 +24,6 @@ import java.util.UUID;
 //TODO unit test
 public class CheckboxColumnStatusUpdateService {
     private final ColumnDataServiceProvider columnDataServiceProvider;
-    private final UuidConverter uuidConverter;
     private final ContentFactory contentFactory;
     private final ContentDao contentDao;
     private final TableRowDao tableRowDao;
@@ -49,12 +47,11 @@ public class CheckboxColumnStatusUpdateService {
             .serialize(status)
             .orElseThrow();
         List<Content> contents = new ArrayList<>(contentDao.getByListItemId(listItemId));
-        String key = uuidConverter.convertDomain(columnId);
         Content content = contents.stream()
-            .filter(c -> c.contains(key))
+            .filter(c -> c.contains(columnId))
             .findAny()
             .orElseThrow(() -> ExceptionFactory.notFound("Content not found for columnId " + columnId + " in ListItem " + listItemId));
-        content.remove(key);
+        content.remove(columnId);
 
         Content newContent = contentFactory.create(listItemId, columnId, data);
         contents.add(newContent);

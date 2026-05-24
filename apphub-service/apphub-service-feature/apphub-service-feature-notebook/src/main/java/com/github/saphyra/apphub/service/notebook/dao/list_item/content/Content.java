@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.content;
 
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -30,10 +31,10 @@ public class Content {
     @Nullable //Null when new
     private Integer batchIndex;
     @Builder.Default
-    private Map<String, String> content = new HashMap<>(); //TODO change key to UUID if no String stored
+    private Map<UUID, String> content = new HashMap<>();
     private boolean modified;
 
-    public Content add(String key, String value) {
+    public Content add(UUID key, String value) {
         content.put(key, value);
 
         modified = true;
@@ -41,36 +42,34 @@ public class Content {
         return this;
     }
 
-    public Content remove(String key) {
+    public void remove(UUID key) {
         if (nonNull(content.remove(key))) {
             modified = true;
         }
-
-        return this;
     }
 
-    public String get(String key) {
+    public String get(UUID key) {
         return content.get(key);
     }
 
-    public boolean contains(String key) {
+    public boolean contains(UUID key) {
         return content.containsKey(key);
     }
 
     public int getSize() {
-        return content.entrySet()
+        return content.values()
             .stream()
-            .mapToInt(entry -> entry.getKey().length() + entry.getValue().length())
+            .mapToInt(s -> Constants.UUID_LENGTH + s.length())
             .sum();
     }
 
-    public boolean containsAny(List<String> keysString) {
+    public boolean containsAny(List<UUID> keysString) {
         return content.keySet()
             .stream()
             .anyMatch(keysString::contains);
     }
 
-    public void removeAll(List<String> keysString) {
+    public void removeAll(List<UUID> keysString) {
         boolean modified = !keysString.stream()
             .map(content::remove)
             .filter(Objects::nonNull)

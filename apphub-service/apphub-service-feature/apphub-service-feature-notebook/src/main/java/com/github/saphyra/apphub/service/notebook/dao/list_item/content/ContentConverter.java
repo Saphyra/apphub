@@ -11,6 +11,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
+import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_CONTENT;
 
@@ -42,7 +43,7 @@ class ContentConverter extends ConverterBase<ContentEntity, Content> {
         String userId = accessTokenProvider.getUserIdAsString();
         String listItemId = entity.getListItemId();
         String decryptedData = stringEncryptor.decrypt(entity.getContent(), userId, listItemId, COLUMN_CONTENT);
-        Map<String, String> contentMap = objectMapper.readValue(decryptedData, new TypeReference<>() {
+        Map<UUID, String> contentMap = objectMapper.readValue(decryptedData, new TypeReference<>() {
         });
 
         return Content.builder()

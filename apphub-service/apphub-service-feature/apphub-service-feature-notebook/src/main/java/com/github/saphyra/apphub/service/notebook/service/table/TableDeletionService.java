@@ -40,13 +40,10 @@ public class TableDeletionService {
             .flatMap(tableRow -> tableRow.getColumns().stream())
             .filter(tableColumn -> tableColumn.getType().isFile())
             .map(TableColumn::getColumnId)
-            .flatMap(columnId -> {
-                String key = uuidConverter.convertDomain(columnId);
-                return table.getEntity4()
-                    .stream()
-                    .filter(content -> content.contains(key))
-                    .map(content -> content.get(key));
-            })
+            .flatMap(columnId -> table.getEntity4()
+                .stream()
+                .filter(content -> content.contains(columnId))
+                .map(content -> content.get(columnId)))
             .map(uuidConverter::convertEntity)
             .forEach(storageProxy::deleteFile);
 

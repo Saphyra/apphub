@@ -1,12 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
@@ -28,7 +27,6 @@ import java.util.UUID;
 class ChecklistCloneService {
     private final ListItemFactory listItemFactory;
     private final ChecklistItemFactory checklistItemFactory;
-    private final UuidConverter uuidConverter;
     private final ContentFactory contentFactory;
     private final CommonListItemDao commonListItemDao;
     private final ContentDao contentDao;
@@ -43,13 +41,12 @@ class ChecklistCloneService {
             .map(item -> {
                 ChecklistItem clonedItem = checklistItemFactory.clone(clone.getListItemId(), item);
 
-                String key = uuidConverter.convertDomain(item.getChecklistItemId());
                 Content content = contents.stream()
-                    .filter(c -> c.contains(key))
+                    .filter(c -> c.contains(item.getChecklistItemId()))
                     .findAny()
                     .orElseThrow(() -> ExceptionFactory.loggedException(HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.DATA_NOT_FOUND, "Content not found by checklistItemId " + item.getChecklistItemId()));
 
-                Content clonedContent = contentFactory.create(clone.getListItemId(), clonedItem.getChecklistItemId(), content.get(key));
+                Content clonedContent = contentFactory.create(clone.getListItemId(), clonedItem.getChecklistItemId(), content.get(item.getChecklistItemId()));
                 clonedContents.add(clonedContent);
 
                 return clonedItem;

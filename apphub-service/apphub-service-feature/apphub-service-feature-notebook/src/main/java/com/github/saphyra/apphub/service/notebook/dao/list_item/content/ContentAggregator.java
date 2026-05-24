@@ -53,7 +53,7 @@ class ContentAggregator {
         return modified;
     }
 
-    private void place(UUID listItemId, String key, String value, List<Content> modified, List<Content> unmodified) {
+    private void place(UUID listItemId, UUID key, String value, List<Content> modified, List<Content> unmodified) {
         Content container = findContainer(listItemId, value, modified, unmodified);
 
         container.add(key, value);

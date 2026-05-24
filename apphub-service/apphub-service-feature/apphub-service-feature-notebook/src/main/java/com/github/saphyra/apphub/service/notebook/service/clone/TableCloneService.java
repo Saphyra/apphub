@@ -56,7 +56,7 @@ class TableCloneService {
         Map<UUID, String> contentMap = table.getEntity4()
             .stream()
             .flatMap(c -> c.getContent().entrySet().stream())
-            .collect(Collectors.toMap(entry -> uuidConverter.convertEntity(entry.getKey()), Map.Entry::getValue));
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         List<Content> clonedContents = new ArrayList<>();
 

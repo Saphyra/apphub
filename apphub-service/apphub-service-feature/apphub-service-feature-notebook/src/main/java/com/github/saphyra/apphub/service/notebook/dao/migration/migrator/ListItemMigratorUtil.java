@@ -34,7 +34,6 @@ import java.util.UUID;
 class ListItemMigratorUtil {
     private final CheckedItemDao checkedItemDao;
     private final DeprecatedContentDao contentDao;
-    private final UuidConverter uuidConverter;
     private final DeprecatedTableHeadDao deprecatedTableHeadDao;
     private final DimensionDao dimensionDao;
     private final ColumnTypeDao columnTypeDao;
@@ -77,7 +76,7 @@ class ListItemMigratorUtil {
             Content.builder()
                 .listItemId(listItem.getListItemId())
                 .build()
-                .add(uuidConverter.convertDomain(dimension.getDimensionId()), content.getContent())
+                .add(dimension.getDimensionId(), content.getContent())
         );
     }
 
@@ -113,7 +112,7 @@ class ListItemMigratorUtil {
                     Content content = Content.builder()
                         .listItemId(listItemId)
                         .build()
-                        .add(uuidConverter.convertDomain(column.getDimensionId()), contentDao.findByParentValidated(column.getDimensionId()).getContent());
+                        .add(column.getDimensionId(), contentDao.findByParentValidated(column.getDimensionId()).getContent());
 
                     contents.add(content);
                 }
@@ -135,7 +134,7 @@ class ListItemMigratorUtil {
                 Content content = Content.builder()
                     .listItemId(listItemId)
                     .build()
-                    .add(uuidConverter.convertDomain(deprecatedTableHead.getTableHeadId()), deprecatedContent.getContent());
+                    .add(deprecatedTableHead.getTableHeadId(), deprecatedContent.getContent());
                 contents.add(content);
 
                 return TableHead.builder()

@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistI
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditChecklistRequest;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
@@ -36,7 +35,6 @@ public class EditChecklistService {
     private final ListItemDao listItemDao;
     private final ChecklistItemFactory checklistItemFactory;
     private final ContentFactory contentFactory;
-    private final UuidConverter uuidConverter;
     private final CommonListItemDao commonListItemDao;
 
     @Transactional
@@ -91,11 +89,10 @@ public class EditChecklistService {
                     modifiedItems.add(checklistItem);
                 }
 
-                String key = uuidConverter.convertDomain(model.getChecklistItemId());
                 String text = content.getContent()
-                    .get(key);
+                    .get(model.getChecklistItemId());
                 if (!text.equals(model.getContent())) {
-                    content.remove(key);
+                    content.remove(model.getChecklistItemId());
                     contents.add(contentFactory.create(listItemId, model.getChecklistItemId(), model.getContent()));
                 }
             });
@@ -103,10 +100,8 @@ public class EditChecklistService {
     }
 
     private Content findContent(UUID checklistItemId, List<Content> contents) {
-        String key = uuidConverter.convertDomain(checklistItemId);
-
         return contents.stream()
-            .filter(content -> content.getContent().containsKey(key))
+            .filter(content -> content.getContent().containsKey(checklistItemId))
             .findAny()
             .orElseThrow(() -> ExceptionFactory.notFound("Content not found for checklistItemId " + checklistItemId));
     }
@@ -135,7 +130,7 @@ public class EditChecklistService {
 
         deletedItems.stream()
             .map(ChecklistItem::getChecklistItemId)
-            .forEach(listItemId -> contents.forEach(content -> content.remove(uuidConverter.convertDomain(listItemId))));
+            .forEach(listItemId -> contents.forEach(content -> content.remove(listItemId)));
 
         return deletedItems;
     }

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
@@ -28,7 +27,6 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Slf4j
 //TODO unit test
 public class CheckedTableRowDeletionService {
-    private final UuidConverter uuidConverter;
     private final ColumnDataServiceProvider columnDataServiceProvider;
     private final StorageProxy storageProxy;
     private final ContentDao contentDao;
@@ -50,17 +48,16 @@ public class CheckedTableRowDeletionService {
         toDelete.stream()
             .flatMap(tableRow -> tableRow.getColumns().stream())
             .forEach(column -> {
-                String key = uuidConverter.convertDomain(column.getColumnId());
-                findContent(key, table.getEntity4())
+                findContent(column.getColumnId(), table.getEntity4())
                     .ifPresent(content -> {
-                        String data = content.get(key);
+                        String data = content.get(column.getColumnId());
                         if (column.getType().isFile()) {
                             UUID storedFileId = columnDataServiceProvider.getForType(column.getType())
                                 .deserialize(data, UUID.class);
                             deletedFiles.add(storedFileId);
                         }
 
-                        content.remove(key);
+                        content.remove(column.getColumnId());
                     });
             });
 
@@ -69,7 +66,7 @@ public class CheckedTableRowDeletionService {
         tableRowDao.delete(listItemId, toDelete);
     }
 
-    private Optional<Content> findContent(String key, List<Content> contents) {
+    private Optional<Content> findContent(UUID key, List<Content> contents) {
         return contents.stream()
             .filter(content -> content.contains(key))
             .findAny();

@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.AddChecklistItemRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
@@ -26,7 +25,6 @@ public class ChecklistItemCrudService {
     private final ListItemDao listItemDao;
     private final ChecklistItemFactory checklistItemFactory;
     private final ContentFactory contentFactory;
-    private final UuidConverter uuidConverter;
     private final ChecklistItemDao checklistItemDao;
     private final ContentDao contentDao;
 
@@ -49,11 +47,11 @@ public class ChecklistItemCrudService {
 
         List<Content> contents = contentDao.getByListItemId(listItemId);
         Content content = contents.stream()
-            .filter(c -> c.getContent().containsKey(uuidConverter.convertDomain(checklistItemId)))
+            .filter(c -> c.contains(checklistItemId))
             .findAny()
             .orElseThrow(() -> ExceptionFactory.notFound("Content not found for checklistItemId " + checklistItemId));
 
-        content.add(uuidConverter.convertDomain(checklistItemId), contentString);
+        content.add(checklistItemId, contentString);
 
         contentDao.save(listItemId, contents);
     }

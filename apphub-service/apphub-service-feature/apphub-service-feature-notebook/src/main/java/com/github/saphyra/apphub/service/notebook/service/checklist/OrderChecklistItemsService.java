@@ -2,10 +2,9 @@ package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 //TODO unit test
 public class OrderChecklistItemsService {
     private final ChecklistQueryService checklistQueryService;
-    private final UuidConverter uuidConverter;
     private final CommonListItemDao commonListItemDao;
     private final ChecklistItemDao checklistItemDao;
 
@@ -56,7 +54,7 @@ public class OrderChecklistItemsService {
         return contents.stream()
             .flatMap(content -> content.getContent().entrySet().stream())
             .sorted(Map.Entry.comparingByValue())
-            .map(entry -> uuidConverter.convertEntity(entry.getKey()))
+            .map(Map.Entry::getKey)
             .toList();
     }
 }

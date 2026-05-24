@@ -4,12 +4,10 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistItemModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,8 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 //TODO unit test
 public class ChecklistQueryService {
-    private final ListItemDao listItemDao;
-    private final UuidConverter uuidConverter;
     private final CommonListItemDao commonListItemDao;
 
     public ChecklistResponse getChecklistResponse(UUID userId, UUID listItemId) {
@@ -44,7 +40,7 @@ public class ChecklistQueryService {
     private Map<UUID, String> mapContents(List<Content> contents) {
         return contents.stream()
             .flatMap(content -> content.getContent().entrySet().stream())
-            .collect(Collectors.toMap(entry -> uuidConverter.convertEntity(entry.getKey()), Map.Entry::getValue));
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private List<ChecklistItemModel> mapItems(List<ChecklistItem> checklistItems, Map<UUID, String> contents) {
