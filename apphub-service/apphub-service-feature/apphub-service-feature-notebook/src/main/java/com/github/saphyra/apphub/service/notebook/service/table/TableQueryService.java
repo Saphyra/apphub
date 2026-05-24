@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
@@ -29,7 +28,6 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 public class TableQueryService {
-    private final UuidConverter uuidConverter;
     private final ColumnDataServiceProvider columnDataServiceProvider;
     private final CommonListItemDao commonListItemDao;
 
@@ -88,11 +86,9 @@ public class TableQueryService {
     }
 
     private Optional<String> getContent(UUID id, List<Content> contents) {
-        String key = uuidConverter.convertDomain(id);
-
         return contents.stream()
             .flatMap(content -> content.getContent().entrySet().stream())
-            .filter(entry -> entry.getKey().equals(key))
+            .filter(entry -> entry.getKey().equals(id))
             .findFirst()
             .map(Map.Entry::getValue);
     }

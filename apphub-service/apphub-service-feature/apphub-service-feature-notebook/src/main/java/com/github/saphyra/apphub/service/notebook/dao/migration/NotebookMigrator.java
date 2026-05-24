@@ -38,6 +38,7 @@ class NotebookMigrator {
         log.info("Migrating ListItem {} for user {}", listItemId, userId);
         try (var _ = accessTokenProvider.set(AccessToken.builder().userId(userId).build())) {
             DeprecatedListItem listItem = deprecatedListItemDao.findByIdValidated(listItemId);
+            log.info("ListItemType: {}", listItem.getType());
 
             migratorProvider.getForType(listItem.getType())
                 .migrate(listItem);
