@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnMod
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
@@ -23,7 +24,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableC
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowFactory;
-import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,6 @@ public class TableEditionService {
     private final ColumnDataServiceProvider columnDataServiceProvider;
     private final TableRowFactory tableRowFactory;
     private final TableColumnFactory tableColumnFactory;
-    private final StorageProxy storageProxy;
     private final ContentDao contentDao;
     private final CommonListItemDao commonListItemDao;
     private final TableHeadDao tableHeadDao;
@@ -74,21 +73,18 @@ public class TableEditionService {
 
     private List<TableFileUploadResponse> processTableRows(UUID listItemId, List<TableRowModel> models, List<TableRow> tableRows, List<Content> contents) {
         log.info("Processing TableRows...");
-        List<UUID> deletedFiles = new ArrayList<>();
         List<TableFileUploadResponse> fileUploads = new ArrayList<>();
 
-        processTableRowDeletion(listItemId, models, tableRows, deletedFiles, contents);
+        processTableRowDeletion(listItemId, models, tableRows, contents);
         processTableRowAddition(listItemId, models, tableRows, fileUploads, contents);
-        processTableRowModification(listItemId, models, tableRows, fileUploads, deletedFiles, contents);
+        processTableRowModification(listItemId, models, tableRows, fileUploads, contents);
 
-        log.info("{} files were deleted.", deletedFiles.size());
-        deletedFiles.forEach(storageProxy::deleteFile);
         log.info("{} files have to be uploaded.", fileUploads.size());
 
         return fileUploads;
     }
 
-    private void processTableRowModification(UUID listItemId, List<TableRowModel> models, List<TableRow> tableRows, List<TableFileUploadResponse> fileUploads, List<UUID> deletedFiles, List<Content> contents) {
+    private void processTableRowModification(UUID listItemId, List<TableRowModel> models, List<TableRow> tableRows, List<TableFileUploadResponse> fileUploads, List<Content> contents) {
         log.info("Processing TableRowModification...");
         List<TableRowModel> existing = models.stream()
             .filter(model -> model.getItemType() == ItemType.EXISTING)
@@ -114,7 +110,7 @@ public class TableEditionService {
             }
 
             ArrayList<TableColumn> columns = new ArrayList<>(tableRow.getColumns());
-            boolean columnsModified = processTableColumnModification(listItemId, model.getColumns(), columns, contents, deletedFiles, fileUploads, tableRow.getIndex());
+            boolean columnsModified = processTableColumnModification(listItemId, model.getColumns(), columns, contents, fileUploads, tableRow.getIndex());
             tableRow.setColumns(columns);
 
             if (rowModified || columnsModified) {
@@ -129,14 +125,13 @@ public class TableEditionService {
         List<TableColumnModel> models,
         List<TableColumn> columns,
         List<Content> contents,
-        List<UUID> deletedFiles,
         List<TableFileUploadResponse> fileUploads,
         int rowIndex
     ) {
         log.info("Processing TableColumnModification...");
-        boolean columnDeleted = processTableColumnDeletion(models, columns, contents, deletedFiles);
+        boolean columnDeleted = processTableColumnDeletion(models, columns, contents);
         boolean columnAdded = processTableColumnAddition(listItemId, models, columns, contents, fileUploads);
-        boolean columnModified = processTableColumnEdition(listItemId, rowIndex, models, columns, contents, fileUploads, deletedFiles);
+        boolean columnModified = processTableColumnEdition(listItemId, rowIndex, models, columns, contents, fileUploads);
 
         return columnDeleted || columnAdded || columnModified;
     }
@@ -147,8 +142,7 @@ public class TableEditionService {
         List<TableColumnModel> models,
         List<TableColumn> columns,
         List<Content> contents,
-        List<TableFileUploadResponse> fileUploads,
-        List<UUID> deletedFiles
+        List<TableFileUploadResponse> fileUploads
     ) {
         log.info("Processing TableColumn modification...");
         boolean modified = false;
@@ -168,32 +162,31 @@ public class TableEditionService {
                     modified = true;
                 }
 
-                Optional<String> maybeData = columnDataServiceProvider.getForType(model.getColumnType()).serialize(model.getData());
+                Optional<BiWrapper<String, Optional<UUID>>> maybeData = columnDataServiceProvider.getForType(model.getColumnType()).serialize(model.getData());
                 //ColumnType did not change
                 if (model.getColumnType() == column.getType()) {
                     //Column must have data
                     if (model.getColumnType() == ColumnType.EMPTY) {
                         //Column type remained the same, without content
                     } else {
-                        String newData = maybeData.orElseThrow();
+                        BiWrapper<String, Optional<UUID>> newData = maybeData.orElseThrow();
                         Content existingContent = getContentValidated(contents, column.getColumnId());
                         String existingData = existingContent.get(column.getColumnId());
 
                         //Same ColumnType with different value
-                        if (!newData.equals(existingData)) {
-                            Content newContent = contentFactory.create(listItemId, column.getColumnId(), newData);
+                        if (!newData.getEntity1().equals(existingData)) {
+                            Content newContent = contentFactory.create(listItemId, column.getColumnId(), newData.getEntity1());
                             contents.add(newContent);
 
                             //Handle file replacement
                             if (column.getType().isFile()) {
-                                UUID existingStoredFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(existingData, UUID.class);
-                                deletedFiles.add(existingStoredFileId);
+                                columnDataServiceProvider.getForType(column.getType())
+                                    .deleteData(existingData);
 
-                                UUID newStoredFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(newData, UUID.class);
                                 TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
                                     .rowIndex(rowIndex)
                                     .columnIndex(column.getIndex())
-                                    .storedFileId(newStoredFileId)
+                                    .storedFileId(newData.getEntity2().orElseThrow())
                                     .build();
                                 fileUploads.add(fileUpload);
                             }
@@ -203,31 +196,27 @@ public class TableEditionService {
                     }
                 } else { //Column type changed
                     //Delete existing data if present
-                    getContent(contents, column.getColumnId()).ifPresent(content -> {
-                        if (column.getType().isFile()) {
-                            UUID existingStoredFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(content.get(column.getColumnId()), UUID.class);
-                            deletedFiles.add(existingStoredFileId);
-                        }
-                        content.remove(column.getColumnId());
-                    });
+                    getContent(contents, column.getColumnId())
+                        .ifPresent(content -> {
+                            columnDataServiceProvider.getForType(column.getType())
+                                .deleteData(content.get(column.getColumnId()));
+                            content.remove(column.getColumnId());
+                        });
 
-                    if (model.getColumnType() == ColumnType.EMPTY) {
-                        //No save needed
-                    } else {
-                        Content content = contentFactory.create(listItemId, column.getColumnId(), maybeData.orElseThrow());
+                    //Save new data
+                    maybeData.ifPresent(newData -> {
+                        Content content = contentFactory.create(listItemId, column.getColumnId(), newData.getEntity1());
                         contents.add(content);
-
-                        if (column.getType().isFile()) {
-                            UUID storedFileId = columnDataServiceProvider.getForType(column.getType()).deserialize(content.get(column.getColumnId()), UUID.class);
-                            TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
-                                .rowIndex(rowIndex)
-                                .columnIndex(column.getIndex())
-                                .storedFileId(storedFileId)
-                                .build();
-                            fileUploads.add(fileUpload);
-                        }
-                    }
-
+                        newData.getEntity2()
+                            .ifPresent(storedFileId -> {
+                                TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
+                                    .rowIndex(rowIndex)
+                                    .columnIndex(column.getIndex())
+                                    .storedFileId(storedFileId)
+                                    .build();
+                                fileUploads.add(fileUpload);
+                            });
+                    });
                     column.setType(model.getColumnType());
 
                     modified = true;
@@ -248,26 +237,25 @@ public class TableEditionService {
         toAdd.forEach(model -> {
             TableColumn tableColumn = tableColumnFactory.create(model.getColumnIndex(), model.getColumnType());
 
-            Optional<String> maybeData = columnDataServiceProvider.getForType(model.getColumnType()).serialize(model.getData());
+            Optional<BiWrapper<String, Optional<UUID>>> maybeData = columnDataServiceProvider.getForType(model.getColumnType())
+                .serialize(model.getData());
             maybeData.ifPresent(data -> {
                 Content content = contentFactory.create(
                     listItemId,
                     tableColumn.getColumnId(),
-                    data
+                    data.getEntity1()
                 );
                 contents.add(content);
-            });
 
-            if (model.getColumnType().isFile()) {
-                String data = maybeData.orElseThrow();
-                UUID storedFileId = columnDataServiceProvider.getForType(model.getColumnType())
-                    .deserialize(data, UUID.class);
-                TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
-                    .columnIndex(model.getColumnIndex())
-                    .storedFileId(storedFileId)
-                    .build();
-                fileUploads.add(fileUpload);
-            }
+                data.getEntity2()
+                    .ifPresent(storedFileId -> {
+                        TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
+                            .columnIndex(model.getColumnIndex())
+                            .storedFileId(storedFileId)
+                            .build();
+                        fileUploads.add(fileUpload);
+                    });
+            });
 
             columns.add(tableColumn);
         });
@@ -275,7 +263,7 @@ public class TableEditionService {
         return !toAdd.isEmpty();
     }
 
-    private boolean processTableColumnDeletion(List<TableColumnModel> models, List<TableColumn> columns, List<Content> contents, List<UUID> deletedFiles) {
+    private boolean processTableColumnDeletion(List<TableColumnModel> models, List<TableColumn> columns, List<Content> contents) {
         log.info("Processing TableColumn deletion... Original size: {}", columns.size());
         List<UUID> toKeepIds = models.stream()
             .map(TableColumnModel::getColumnId)
@@ -288,15 +276,14 @@ public class TableEditionService {
         log.info("{} TableColumns are deleted.", toDelete.size());
 
         toDelete.forEach(tableColumn -> {
-            if (tableColumn.getType().isFile()) {
-                Content content = getContent(contents, tableColumn.getColumnId())
-                    .orElseThrow(() -> ExceptionFactory.notFound("Content not found for TableColumn with id " + tableColumn.getColumnId()));
+            getContent(contents, tableColumn.getColumnId())
+                .ifPresent(content -> {
+                    columnDataServiceProvider.getForType(tableColumn.getType())
+                        .deleteData(content.get(tableColumn.getColumnId()));
 
-                UUID storedFileId = columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(content.get(tableColumn.getColumnId()), UUID.class);
-                deletedFiles.add(storedFileId);
-            }
+                    content.remove(tableColumn.getColumnId());
+                });
 
-            contents.forEach(content -> content.remove(tableColumn.getColumnId()));
             columns.remove(tableColumn);
         });
 
@@ -325,27 +312,26 @@ public class TableEditionService {
         for (TableColumnModel model : models) {
             TableColumn tableColumn = tableColumnFactory.create(model.getColumnIndex(), model.getColumnType());
 
-            Optional<String> maybeData = columnDataServiceProvider.getForType(model.getColumnType()).serialize(model.getData());
+            Optional<BiWrapper<String, Optional<UUID>>> maybeData = columnDataServiceProvider.getForType(model.getColumnType())
+                .serialize(model.getData());
             maybeData.ifPresent(data -> {
                 Content content = contentFactory.create(
                     listItemId,
                     tableColumn.getColumnId(),
-                    data
+                    data.getEntity1()
                 );
                 contents.add(content);
-            });
 
-            if (model.getColumnType().isFile()) {
-                String data = maybeData.orElseThrow();
-                UUID storedFileId = columnDataServiceProvider.getForType(model.getColumnType())
-                    .deserialize(data, UUID.class);
-                TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
-                    .rowIndex(rowIndex)
-                    .columnIndex(model.getColumnIndex())
-                    .storedFileId(storedFileId)
-                    .build();
-                fileUploads.add(fileUpload);
-            }
+                data.getEntity2()
+                    .ifPresent(storedFileId -> {
+                        TableFileUploadResponse fileUpload = TableFileUploadResponse.builder()
+                            .rowIndex(rowIndex)
+                            .columnIndex(model.getColumnIndex())
+                            .storedFileId(storedFileId)
+                            .build();
+                        fileUploads.add(fileUpload);
+                    });
+            });
 
             columns.add(tableColumn);
         }
@@ -353,7 +339,7 @@ public class TableEditionService {
         return columns;
     }
 
-    private void processTableRowDeletion(UUID listItemId, List<TableRowModel> models, List<TableRow> tableRows, List<UUID> deletedFiles, List<Content> contents) {
+    private void processTableRowDeletion(UUID listItemId, List<TableRowModel> models, List<TableRow> tableRows, List<Content> contents) {
         log.info("Processing Table Row Deletion. Original size: {}", tableRows.size());
         List<UUID> toKeepIds = models.stream()
             .map(TableRowModel::getRowId)
@@ -370,8 +356,8 @@ public class TableEditionService {
                     Optional<Content> maybeContent = getContent(contents, tableColumn.getColumnId());
                     if (tableColumn.getType().isFile()) {
                         Content content = maybeContent.orElseThrow(() -> ExceptionFactory.notFound("Content not found for TableColumn with id " + tableColumn.getColumnId()));
-                        UUID storedFileId = columnDataServiceProvider.getForType(tableColumn.getType()).deserialize(content.get(tableColumn.getColumnId()), UUID.class);
-                        deletedFiles.add(storedFileId);
+                        columnDataServiceProvider.getForType(tableColumn.getType())
+                            .deleteData(content.get(tableColumn.getColumnId()));
                     }
                     maybeContent.ifPresent(content -> content.remove(tableColumn.getColumnId()));
                 });

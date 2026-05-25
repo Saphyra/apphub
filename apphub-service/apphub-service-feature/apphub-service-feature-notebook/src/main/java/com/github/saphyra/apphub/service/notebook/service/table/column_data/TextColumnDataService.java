@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -31,22 +33,17 @@ class TextColumnDataService implements ColumnDataService {
     }
 
     @Override
-    public Optional<String> serialize(Object data) {
-        return Optional.of(data.toString());
+    public void validateData(Object data) {
+        ValidationUtil.notNull(data, "data");
+    }
+
+    @Override
+    public Optional<BiWrapper<String, Optional<UUID>>> serialize(Object data) {
+        return Optional.of(new BiWrapper<>(data.toString(), Optional.empty()));
     }
 
     @Override
     public Object deserialize(String data) {
         return data;
-    }
-
-    @Override
-    public <T> T deserialize(String data, Class<T> clazz) {
-        throw new UnsupportedOperationException("Text cannot be deserialized to class " + clazz.getName());
-    }
-
-    @Override
-    public void validateData(Object data) {
-        ValidationUtil.notNull(data, "data");
     }
 }

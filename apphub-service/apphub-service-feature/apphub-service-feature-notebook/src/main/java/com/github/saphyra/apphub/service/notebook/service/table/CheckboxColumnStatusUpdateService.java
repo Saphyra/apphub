@@ -45,7 +45,8 @@ public class CheckboxColumnStatusUpdateService {
 
         String data = columnDataServiceProvider.getForType(ColumnType.CHECKBOX)
             .serialize(status)
-            .orElseThrow();
+            .orElseThrow()
+            .getEntity1();
         List<Content> contents = new ArrayList<>(contentDao.getByListItemId(listItemId));
         Content content = contents.stream()
             .filter(c -> c.contains(columnId))

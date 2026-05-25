@@ -43,25 +43,17 @@ public class CheckedTableRowDeletionService {
             .toList();
 
         List<Content> contents = new ArrayList<>(table.getEntity4());
-        List<UUID> deletedFiles = new ArrayList<>();
 
         toDelete.stream()
             .flatMap(tableRow -> tableRow.getColumns().stream())
-            .forEach(column -> {
-                findContent(column.getColumnId(), table.getEntity4())
-                    .ifPresent(content -> {
-                        String data = content.get(column.getColumnId());
-                        if (column.getType().isFile()) {
-                            UUID storedFileId = columnDataServiceProvider.getForType(column.getType())
-                                .deserialize(data, UUID.class);
-                            deletedFiles.add(storedFileId);
-                        }
+            .forEach(column -> findContent(column.getColumnId(), table.getEntity4())
+                .ifPresent(content -> {
+                    columnDataServiceProvider.getForType(column.getType())
+                        .deleteData(content.get(column.getColumnId()));
 
-                        content.remove(column.getColumnId());
-                    });
-            });
+                    content.remove(column.getColumnId());
+                }));
 
-        deletedFiles.forEach(storageProxy::deleteFile);
         contentDao.save(listItemId, contents);
         tableRowDao.delete(listItemId, toDelete);
     }

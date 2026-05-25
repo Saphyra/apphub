@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploa
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
@@ -51,12 +50,13 @@ public class TableCreationService {
         ListItem listItem = listItemFactory.create(userId, request.getParent(), request.getTitle(), request.getListItemType());
 
         List<Content> contents = new ArrayList<>();
+        List<TableFileUploadResponse> fileUploads = new ArrayList<>();
         List<TableHead> tableHeads = getTableHeads(listItem.getListItemId(), request.getTableHeads(), contents);
-        List<TableRow> rows = createRows(listItem.getListItemId(), request.getRows(), contents);
+        List<TableRow> rows = createRows(listItem.getListItemId(), request.getRows(), contents, fileUploads);
 
         commonListItemDao.saveTable(listItem, tableHeads, rows, contents);
 
-        return collectFilesToUpload(rows, contents);
+        return fileUploads;
     }
 
     private List<TableHead> getTableHeads(UUID listItemId, List<TableHeadModel> tableHeads, List<Content> contents) {
@@ -72,59 +72,38 @@ public class TableCreationService {
             .toList();
     }
 
-    private List<TableRow> createRows(UUID listItemId, List<TableRowModel> rows, List<Content> contents) {
+    private List<TableRow> createRows(UUID listItemId, List<TableRowModel> rows, List<Content> contents, List<TableFileUploadResponse> fileUploads) {
         return rows.stream()
             .map(row -> tableRowFactory.create(
                 listItemId,
                 row.getRowIndex(),
                 row.getChecked(),
-                getColumns(listItemId, row.getColumns(), contents)
+                getColumns(listItemId, row.getRowIndex(), row.getColumns(), contents, fileUploads)
             ))
             .toList();
     }
 
-    private List<TableColumn> getColumns(UUID listItemId, List<TableColumnModel> columns, List<Content> contents) {
+    private List<TableColumn> getColumns(UUID listItemId, int rowIndex, List<TableColumnModel> columns, List<Content> contents, List<TableFileUploadResponse> fileUploads) {
         return columns.stream()
             .map(model -> {
                 TableColumn column = tableColumnFactory.create(model.getColumnIndex(), model.getColumnType());
 
-
                 columnDataServiceProvider.getForType(model.getColumnType())
                     .serialize(model.getData())
                     .ifPresent(data -> {
-                        Content content = contentFactory.create(listItemId, column.getColumnId(), data);
+                        Content content = contentFactory.create(listItemId, column.getColumnId(), data.getEntity1());
                         contents.add(content);
-                    });
 
+                        data.getEntity2()
+                            .ifPresent(storedFileId -> fileUploads.add(TableFileUploadResponse.builder()
+                                .rowIndex(rowIndex)
+                                .columnIndex(model.getColumnIndex())
+                                .storedFileId(storedFileId)
+                                .build()));
+                    });
 
                 return column;
             })
             .toList();
-    }
-
-    private List<TableFileUploadResponse> collectFilesToUpload(List<TableRow> rows, List<Content> contents) {
-        List<TableFileUploadResponse> result = new ArrayList<>();
-        rows.forEach(row -> row.getColumns().forEach(column -> {
-            if (column.getType().isFile()) {
-                TableFileUploadResponse response = TableFileUploadResponse.builder()
-                    .rowIndex(row.getIndex())
-                    .columnIndex(column.getIndex())
-                    .storedFileId(getStoredFileId(column.getColumnId(), contents))
-                    .build();
-                result.add(response);
-            }
-        }));
-
-        return result;
-    }
-
-    private UUID getStoredFileId(UUID columnId, List<Content> contents) {
-        String value = contents.stream()
-            .flatMap(content -> content.getContent().entrySet().stream())
-            .filter(entry -> entry.getKey().equals(uuidConverter.convertDomain(columnId)))
-            .findFirst()
-            .orElseThrow(() -> ExceptionFactory.reportedException("No content found for columnId " + columnId))
-            .getValue();
-        return uuidConverter.convertEntity(value);
     }
 }
