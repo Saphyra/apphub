@@ -118,22 +118,21 @@ class ListItemMigratorUtil {
                 ColumnType columnType = columnTypeDao.findByIdValidated(column.getDimensionId()).getType();
                 log.info("Migrating TableColumn {} with type {}", column.getDimensionId(), columnType);
                 if (columnType != ColumnType.EMPTY) {
-                    if(columnType.isFile()){
-                        Content content = Content.builder()
+                    Content content;
+                    if (columnType.isFile()) {
+                        content = Content.builder()
                             .listItemId(listItemId)
                             .build()
                             .add(column.getDimensionId(), uuidConverter.convertDomain(fileDao.findByParentValidated(column.getDimensionId()).getStoredFileId()));
 
-                        contents.add(content);
-                    }else{
-                        Content content = Content.builder()
+                    } else {
+                        content = Content.builder()
                             .listItemId(listItemId)
                             .build()
                             .add(column.getDimensionId(), contentDao.findByParentValidated(column.getDimensionId()).getContent());
 
-                        contents.add(content);
                     }
-
+                    contents.add(content);
                 }
 
                 return TableColumn.builder()

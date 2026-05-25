@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.util.UUID;
 //TODO unit test
 class FileColumnDataService implements ColumnDataService {
     private final ObjectMapper objectMapper;
+    private final UuidConverter uuidConverter;
 
     @Override
     public boolean canProcess(ColumnType type) {
@@ -35,7 +37,7 @@ class FileColumnDataService implements ColumnDataService {
     @Override
     public <T> T deserialize(String data, Class<T> clazz) {
         if(clazz.equals(UUID.class)) {
-            return (T) UUID.fromString(data);
+            return (T) uuidConverter.convertEntity(data);
         }
 
         throw new UnsupportedOperationException("StoredFileId cannot be deserialized to "  + clazz.getName());
