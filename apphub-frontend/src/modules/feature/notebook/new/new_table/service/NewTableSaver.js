@@ -1,5 +1,4 @@
 import Stream from "common/js/collection/Stream";
-import Constants from "common/js/Constants";
 import getDefaultErrorHandler from "common/js/dao/DefaultErrorHandler";
 import { STORAGE_UPLOAD_FILE } from "common/js/GenericEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
@@ -41,7 +40,7 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
         .send();
 
     if (fileUploadResponse.length > 0) {
-        uploadFiles(setDisplaySpinner, fileUploadResponse, files);
+        await uploadFiles(setDisplaySpinner, fileUploadResponse, files);
     }
 
     window.location.href = NOTEBOOK_PAGE;
@@ -50,16 +49,20 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
 const uploadFiles = async (setDisplaySpinner, fileUploadResponse, files) => {
     setDisplaySpinner(true);
 
-    new Stream(fileUploadResponse)
-        .forEach(fileUpload => uploadFile(fileUpload, files, setDisplaySpinner));
+    await Promise.all(
+        fileUploadResponse.map(fileUpload => uploadFile(fileUpload, files, setDisplaySpinner))
+    );
 }
 
 const uploadFile = async (fileUpload, files, setDisplaySpinner) => {
-    new Stream(files)
+    const file = new Stream(files)
         .filter(file => file.rowIndex == fileUpload.rowIndex && file.columnIndex == fileUpload.columnIndex)
         .map(file => file.file)
-        .findFirst()
-        .ifPresent((file) => doUpload(fileUpload, file, setDisplaySpinner));
+        .findFirst();
+
+    if (file.isPresent()) {
+        await doUpload(fileUpload, file.get(), setDisplaySpinner);
+    }
 }
 
 const doUpload = async (fileUpload, file, setDisplaySpinner) => {
