@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.migration.migrator;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.request.FileMetadata;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
@@ -23,6 +24,7 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableR
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ class ListItemMigratorUtil {
     private final ColumnTypeDao columnTypeDao;
     private final FileDao fileDao;
     private final UuidConverter uuidConverter;
+    private final ObjectMapper objectMapper;
 
     ListItem migrate(DeprecatedListItem original) {
         return migrate(original, null);
@@ -123,7 +126,14 @@ class ListItemMigratorUtil {
                         content = Content.builder()
                             .listItemId(listItemId)
                             .build()
-                            .add(column.getDimensionId(), uuidConverter.convertDomain(fileDao.findByParentValidated(column.getDimensionId()).getStoredFileId()));
+                            .add(
+                                column.getDimensionId(),
+                                objectMapper.writeValueAsString(
+                                    FileMetadata.builder()
+                                        .storedFileId(fileDao.findByParentValidated(column.getDimensionId()).getStoredFileId())
+                                        .build()
+                                )
+                            );
 
                     } else {
                         content = Content.builder()
