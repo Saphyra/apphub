@@ -18,7 +18,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ContentConverter extends ConverterBase<ContentEntity, Content> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

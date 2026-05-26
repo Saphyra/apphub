@@ -13,7 +13,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_TABLE_HEAD;
 
 @Component
-//TODO unit test
 class TableHeadMapper extends ConverterBase<Map<String, AttributeValue>, TableHeadEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(TableHeadEntity domain) {

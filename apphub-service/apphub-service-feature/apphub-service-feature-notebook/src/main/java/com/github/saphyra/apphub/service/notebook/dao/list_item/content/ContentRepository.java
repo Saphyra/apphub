@@ -1,7 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.content;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -25,11 +29,17 @@ class ContentRepository {
     private final DynamoDbClient client;
     private final ContentMapper mapper;
     private final String tableName;
+    private final SleepService sleepService;
+    private final int maxBatchRetryCount;
+    private final long batchRetryDelayMs;
 
-    ContentRepository(DynamoDbClient dynamoDbClient, ContentMapper mapper, NotebookDynamoDbConfiguration configuration) {
+    ContentRepository(DynamoDbClient dynamoDbClient, ContentMapper mapper, NotebookDynamoDbConfiguration configuration, SleepService sleepService) {
         this.client = dynamoDbClient;
         this.mapper = mapper;
         this.tableName = configuration.getTableName();
+        this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
+        this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
+        this.sleepService = sleepService;
     }
 
     public void save(List<ContentEntity> contents) {
@@ -43,15 +53,7 @@ class ContentRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
-            .requestItems(Map.of(tableName, requests))
-            .build();
-
-        BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
-
-        if (response.hasUnprocessedItems()) {
-            //TODO handle
-        }
+        batchWrite(0, requests);
     }
 
     public void delete(String listItemId, List<Integer> batchIndexes) {
@@ -68,6 +70,18 @@ class ContentRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
+        batchWrite(0, requests);
+    }
+
+    private void batchWrite(int tryCount, List<WriteRequest> requests) {
+        if (tryCount > maxBatchRetryCount) {
+            throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
+        }
+
+        if (tryCount > 0) {
+            sleepService.sleep(tryCount * batchRetryDelayMs);
+        }
+
         BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
             .requestItems(Map.of(tableName, requests))
             .build();
@@ -75,7 +89,9 @@ class ContentRepository {
         BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
 
         if (response.hasUnprocessedItems()) {
-            //TODO handle
+            response.unprocessedItems()
+                .values()
+                .forEach(writeRequests -> batchWrite(tryCount + 1, writeRequests));
         }
     }
 

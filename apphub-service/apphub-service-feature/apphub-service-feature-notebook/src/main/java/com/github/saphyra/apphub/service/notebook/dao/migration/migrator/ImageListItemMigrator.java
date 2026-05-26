@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TOOD unit test
 class ImageListItemMigrator implements ListItemMigrator {
     private final ListItemMigratorUtil listItemMigratorUtil;
     private final FileDao fileDao;

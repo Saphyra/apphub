@@ -40,6 +40,29 @@ public class StoredFileFactoryTest {
     @InjectMocks
     private StoredFileFactory underTest;
 
+    @Mock
+    private StoredFile source;
+
+    @Test
+    public void cloneStoredFile() {
+        given(idGenerator.randomUuid()).willReturn(STORED_FILE_ID);
+        given(source.getUserId()).willReturn(USER_ID);
+        given(source.getFileName()).willReturn(FILE_NAME);
+        given(source.getSize()).willReturn(SIZE);
+        given(source.getCreatedAt()).willReturn(CURRENT_TIME);
+        given(source.getStorage()).willReturn(Storage.S3);
+
+        StoredFile result = underTest.clone(source);
+
+        assertThat(result.getStoredFileId()).isEqualTo(STORED_FILE_ID);
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getFileName()).isEqualTo(FILE_NAME);
+        assertThat(result.getSize()).isEqualTo(SIZE);
+        assertThat(result.getCreatedAt()).isEqualTo(CURRENT_TIME);
+        assertThat(result.getExpiration()).isNull();
+        assertThat(result.getStorage()).isEqualTo(Storage.S3);
+    }
+
     @Test
     public void create() {
         given(idGenerator.randomUuid()).willReturn(STORED_FILE_ID);

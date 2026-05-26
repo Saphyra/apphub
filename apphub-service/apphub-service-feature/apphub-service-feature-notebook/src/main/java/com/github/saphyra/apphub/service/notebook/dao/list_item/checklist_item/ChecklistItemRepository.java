@@ -2,8 +2,12 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -33,11 +37,17 @@ class ChecklistItemRepository {
     private final DynamoDbClient client;
     private final ChecklistItemMapper mapper;
     private final String tableName;
+    private final SleepService sleepService;
+    private final int maxBatchRetryCount;
+    private final long batchRetryDelayMs;
 
-    ChecklistItemRepository(DynamoDbClient dynamoDbClient, ChecklistItemMapper mapper, NotebookDynamoDbConfiguration configuration) {
+    ChecklistItemRepository(DynamoDbClient dynamoDbClient, ChecklistItemMapper mapper, NotebookDynamoDbConfiguration configuration, SleepService sleepService) {
         this.client = dynamoDbClient;
         this.mapper = mapper;
         this.tableName = configuration.getTableName();
+        this.sleepService = sleepService;
+        this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
+        this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
     }
 
     Optional<ChecklistItemEntity> findById(String listItemId, String checklistItemId) {
@@ -114,15 +124,7 @@ class ChecklistItemRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
-            .requestItems(Map.of(tableName, requests))
-            .build();
-
-        BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
-
-        if (response.hasUnprocessedItems()) {
-            //TODO handle
-        }
+        batchWrite(0, requests);
     }
 
     void save(List<ChecklistItemEntity> items) {
@@ -136,6 +138,18 @@ class ChecklistItemRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
+        batchWrite(0, requests);
+    }
+
+    private void batchWrite(int tryCount, List<WriteRequest> requests) {
+        if (tryCount > maxBatchRetryCount) {
+            throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
+        }
+
+        if (tryCount > 0) {
+            sleepService.sleep(tryCount * batchRetryDelayMs);
+        }
+
         BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
             .requestItems(Map.of(tableName, requests))
             .build();
@@ -143,7 +157,9 @@ class ChecklistItemRepository {
         BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
 
         if (response.hasUnprocessedItems()) {
-            //TODO handle
+            response.unprocessedItems()
+                .values()
+                .forEach(writeRequests -> batchWrite(tryCount + 1, writeRequests));
         }
     }
 }

@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class ListItemViewQueryService {
     private final JdbcTemplate jdbcTemplate;
     private final UuidConverter uuidConverter;

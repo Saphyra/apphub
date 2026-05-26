@@ -16,9 +16,8 @@ import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class ContentAggregator {
-    private static final int SOFT_CAP = 100 * 1024;
+    static final int SOFT_CAP = 100 * 1024;
 
     private final ContentFactory contentFactory;
 

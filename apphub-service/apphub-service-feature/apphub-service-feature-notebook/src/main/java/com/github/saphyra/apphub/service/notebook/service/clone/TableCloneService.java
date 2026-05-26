@@ -32,8 +32,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-//TODO split
 class TableCloneService {
     private final ListItemDao listItemDao;
     private final ListItemFactory listItemFactory;

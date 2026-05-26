@@ -9,7 +9,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ContentFactory {
     public Content create(UUID listItemId, UUID key, String content) {
         return Content.builder()

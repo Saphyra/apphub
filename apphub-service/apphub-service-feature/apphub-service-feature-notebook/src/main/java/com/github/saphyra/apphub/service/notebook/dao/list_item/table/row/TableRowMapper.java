@@ -18,7 +18,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 @Slf4j
-//TODO unit test
 class TableRowMapper extends ConverterBase<Map<String, AttributeValue>, TableRowEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(TableRowEntity domain) {

@@ -23,7 +23,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ChecklistCloneService {
     private final ListItemFactory listItemFactory;
     private final ChecklistItemFactory checklistItemFactory;

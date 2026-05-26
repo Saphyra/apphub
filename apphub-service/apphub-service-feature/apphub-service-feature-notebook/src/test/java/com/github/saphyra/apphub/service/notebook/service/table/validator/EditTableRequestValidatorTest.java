@@ -52,11 +52,11 @@ class EditTableRequestValidatorTest {
         given(request.getTableHeads()).willReturn(List.of(tableHeadModel));
         given(request.getRows()).willReturn(List.of(rowModel));
 
-        underTest.validate(USER_ID, LIST_ITEM_ID, request);
+        underTest.validate(request);
 
         then(titleValidator).should().validate(TITLE);
         then(editTableHeadValidator).should().validateTableHeads(List.of(tableHeadModel));
         then(columnNumberAmountValidator).should().validateColumnNumbersMatches(List.of(tableHeadModel), List.of(rowModel));
-        then(editTableRowValidator).should().validateTableRows(USER_ID, LIST_ITEM_ID, List.of(rowModel));
+        then(editTableRowValidator).should().validateTableRows(List.of(rowModel));
     }
 }

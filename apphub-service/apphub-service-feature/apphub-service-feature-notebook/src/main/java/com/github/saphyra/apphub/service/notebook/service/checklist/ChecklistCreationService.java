@@ -20,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChecklistCreationService {
     private final ChecklistValidator checklistValidator;
     private final ListItemFactory listItemFactory;

@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDa
 import org.springframework.stereotype.Component;
 
 @Component
-//TODO unit test
 class ChecklistTableListItemMigrator extends AbstractTableMigrator {
     ChecklistTableListItemMigrator(ListItemMigratorUtil listItemMigratorUtil, CommonListItemDao commonListItemDao) {
         super(listItemMigratorUtil, commonListItemDao);

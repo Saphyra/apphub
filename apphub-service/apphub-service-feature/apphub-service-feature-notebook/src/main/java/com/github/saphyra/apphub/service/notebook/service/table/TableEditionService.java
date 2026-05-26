@@ -55,7 +55,7 @@ public class TableEditionService {
     private final TableRowDao tableRowDao;
 
     public List<TableFileUploadResponse> editTable(UUID userId, UUID listItemId, EditTableRequest request) {
-        editTableRequestValidator.validate(userId, listItemId, request);
+        editTableRequestValidator.validate(request);
 
         QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(userId, listItemId);
         ListItem listItem = table.getEntity1();
@@ -167,7 +167,7 @@ public class TableEditionService {
                 if (model.getColumnType() == column.getType()) {
                     //Column must have data
                     if (model.getColumnType() == ColumnType.EMPTY) {
-                        //Column type remained the same, without content
+                        log.debug("Column type remained the same, without content");
                     } else {
                         BiWrapper<String, Optional<UUID>> newData = maybeData.orElseThrow();
                         Content existingContent = getContentValidated(contents, column.getColumnId());

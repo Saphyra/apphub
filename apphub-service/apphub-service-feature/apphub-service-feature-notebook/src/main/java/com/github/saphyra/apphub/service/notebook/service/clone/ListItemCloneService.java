@@ -14,7 +14,6 @@ import java.util.UUID;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class ListItemCloneService {
     private final ListItemDao listItemDao;
     private final ListItemFactory listItemFactory;

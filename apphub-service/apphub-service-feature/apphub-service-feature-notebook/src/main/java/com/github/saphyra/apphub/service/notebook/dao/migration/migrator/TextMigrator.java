@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class TextMigrator implements ListItemMigrator {
     private final DeprecatedContentDao contentDao;
     private final ListItemMigratorUtil listItemMigratorUtil;

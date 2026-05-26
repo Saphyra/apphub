@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ import static java.util.Objects.nonNull;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
-//TODO unit test
+@ToString(exclude = "content")
 public class Content {
     @NonNull
     private UUID listItemId;
@@ -69,7 +70,7 @@ public class Content {
             .anyMatch(keysString::contains);
     }
 
-    public void removeAll(List<UUID> keysString) {
+    public boolean removeAll(List<UUID> keysString) {
         boolean modified = !keysString.stream()
             .map(content::remove)
             .filter(Objects::nonNull)
@@ -79,5 +80,7 @@ public class Content {
         if (modified) {
             this.modified = true;
         }
+
+        return modified;
     }
 }

@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CommonListItemDao implements DeleteByUserIdDao {
     private final ListItemDao listItemDao;
     private final ChecklistItemDao checklistItemDao;
@@ -77,11 +76,10 @@ public class CommonListItemDao implements DeleteByUserIdDao {
      *     <li>Aggregates and saves the {@link Content}s</li>
      * </ul>
      */
-    public void editChecklist(ListItem listItem, List<ChecklistItem> deletedChecklistItems, List<ChecklistItem> newChecklistItems, List<ChecklistItem> modifiedChecklistItems, List<Content> contents) {
-        listItemDao.save(listItem);
+    public void editChecklist(UUID listItemId, List<ChecklistItem> deletedChecklistItems, List<ChecklistItem> newChecklistItems, List<ChecklistItem> modifiedChecklistItems, List<Content> contents) {
         checklistItemDao.delete(deletedChecklistItems);
         checklistItemDao.save(Stream.concat(newChecklistItems.stream(), modifiedChecklistItems.stream()).toList());
-        contentDao.save(listItem.getListItemId(), contents);
+        contentDao.save(listItemId, contents);
     }
 
     public void saveTable(ListItem listItem, List<TableHead> tableHeads, List<TableRow> rows, List<Content> contents) {

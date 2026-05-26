@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-//TODO unit test
 @RequiredArgsConstructor
 abstract class AbstractTableMigrator implements ListItemMigrator {
     private final ListItemMigratorUtil listItemMigratorUtil;

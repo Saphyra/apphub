@@ -15,7 +15,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ChecklistItemConverter extends ConverterBase<ChecklistItemEntity, ChecklistItem> {
     private final BooleanEncryptor booleanEncryptor;
     private final IntegerEncryptor integerEncryptor;

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
@@ -22,16 +22,13 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class PinService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;
     private final PinMappingDao pinMappingDao;
 
     public void pinListItem(UUID userId, UUID listItemId, Boolean pinned) {
-        if (isNull(pinned)) {
-            throw ExceptionFactory.invalidParam("pinned", "must not be null");
-        }
+        ValidationUtil.notNull(pinned, "pinned");
 
         ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
 

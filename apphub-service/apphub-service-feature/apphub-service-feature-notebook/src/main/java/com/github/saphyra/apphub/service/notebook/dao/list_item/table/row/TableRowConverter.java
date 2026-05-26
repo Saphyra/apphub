@@ -15,7 +15,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class TableRowConverter extends ConverterBase<TableRowEntity, TableRow> {
     static final String COLUMN_INDEX = "index";
     static final String COLUMN_CHECKED = "checked";

@@ -20,7 +20,6 @@ public class StoredFileFactory {
     private final StorageProperties storageProperties;
     private final StoredFileProperties storedFileProperties;
 
-    //TODO unit test
     public StoredFile clone(StoredFile storedFile) {
         return create(storedFile.getUserId(), storedFile.getFileName(), storedFile.getSize(), storedFile.getCreatedAt(), null, storedFile.getStorage());
     }

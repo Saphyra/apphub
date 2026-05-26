@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class NotebookMigrator {
     private final ListItemViewQueryService listItemViewQueryService;
     private final AccessTokenProvider accessTokenProvider;

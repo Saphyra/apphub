@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ChecklistValidator {
     private final ListItemRequestValidator listItemRequestValidator;
     private final TitleValidator titleValidator;
@@ -27,13 +26,13 @@ class ChecklistValidator {
         validateNew(request.getItems());
     }
 
-    public void validateNew(List<ChecklistItemModel> items) {
+    void validateNew(List<ChecklistItemModel> items) {
         ValidationUtil.notNull(items, "items");
 
         items.forEach(this::validateContent);
     }
 
-    public void validate(ChecklistItemModel model) {
+    void validate(ChecklistItemModel model) {
         validateContent(model);
 
         ValidationUtil.notNull(model.getType(), "item.type");

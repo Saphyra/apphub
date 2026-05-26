@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FileDeletionService {
     private final ListItemDao listItemDao;
     private final UuidConverter uuidConverter;

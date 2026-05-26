@@ -25,7 +25,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ListItemMapper extends ConverterBase<Map<String, AttributeValue>, ListItemEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(ListItemEntity entity) {

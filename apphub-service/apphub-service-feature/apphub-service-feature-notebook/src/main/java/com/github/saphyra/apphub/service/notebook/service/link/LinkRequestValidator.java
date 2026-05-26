@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class LinkRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
 

@@ -16,7 +16,8 @@ import java.util.UUID;
 public class TableRowModel {
     private UUID rowId;
     private Integer rowIndex;
-    private Boolean checked;
+    @Builder.Default
+    private Boolean checked = false;
     private ItemType itemType;
     private List<TableColumnModel> columns;
 }

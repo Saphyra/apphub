@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
-//TODO unit test
 public class MigratorProvider {
     private final Map<ListItemType, ListItemMigrator> migrators;
 
@@ -25,7 +24,6 @@ public class MigratorProvider {
 
     @PostConstruct
     void verifyMigrators() {
-
         List<ListItemType> missingMigrators = Arrays.stream(ListItemType.values())
             .filter(listItemType -> !migrators.containsKey(listItemType))
             .toList();

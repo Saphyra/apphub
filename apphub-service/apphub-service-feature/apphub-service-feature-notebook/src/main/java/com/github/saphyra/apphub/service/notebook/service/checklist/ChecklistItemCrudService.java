@@ -14,13 +14,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ChecklistItemCrudService {
     private final ListItemDao listItemDao;
     private final ChecklistItemFactory checklistItemFactory;
@@ -34,7 +34,7 @@ public class ChecklistItemCrudService {
 
         listItemDao.findByIdValidated(userId, listItemId);
 
-        List<Content> contents = contentDao.getByListItemId(listItemId);
+        List<Content> contents = new ArrayList<>(contentDao.getByListItemId(listItemId));
         ChecklistItem checklistItem = checklistItemFactory.create(listItemId, false, request.getIndex());
         contents.add(contentFactory.create(listItemId, checklistItem.getChecklistItemId(), request.getContent()));
 

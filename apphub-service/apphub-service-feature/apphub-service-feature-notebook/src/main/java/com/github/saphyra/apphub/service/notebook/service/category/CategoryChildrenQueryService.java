@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class CategoryChildrenQueryService {
     private final ListItemDao listItemDao;
     private final NotebookViewFactory notebookViewFactory;

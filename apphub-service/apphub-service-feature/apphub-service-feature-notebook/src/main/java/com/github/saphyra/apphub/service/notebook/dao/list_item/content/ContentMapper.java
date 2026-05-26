@@ -15,7 +15,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 @Slf4j
-//TODO unit test
 class ContentMapper extends ConverterBase<Map<String, AttributeValue>, ContentEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(ContentEntity domain) {

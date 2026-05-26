@@ -15,7 +15,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class TableHeadConverter {
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;

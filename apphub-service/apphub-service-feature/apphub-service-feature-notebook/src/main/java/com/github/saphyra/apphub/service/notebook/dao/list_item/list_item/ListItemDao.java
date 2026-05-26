@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ListItemDao {
     private final ListItemConverter converter;
     private final ListItemRepository repository;

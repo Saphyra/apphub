@@ -14,7 +14,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class ChecklistListItemMigrator implements ListItemMigrator {
     private final ListItemMigratorUtil listItemMigratorUtil;
     private final CommonListItemDao commonListItemDao;

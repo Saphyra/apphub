@@ -18,7 +18,6 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class ChecklistItemMapper extends ConverterBase<Map<String, AttributeValue>, ChecklistItemEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(ChecklistItemEntity domain) {

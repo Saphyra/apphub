@@ -13,7 +13,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class ContentDao {
     private final ContentRepository repository;
     private final ContentConverter converter;
@@ -25,7 +24,6 @@ public class ContentDao {
     }
 
     public void save(UUID listItemId, List<Content> contents) {
-        //TODO think about deleting empty contents
         List<Content> toSave = contentAggregator.aggregate(listItemId, contents);
 
         Lists.partition(toSave, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
@@ -45,26 +43,14 @@ public class ContentDao {
 
     /**
      * Deletes the given entries from {@link Content}s.
-     * <p>
-     * If a content does not have any more entries left, delete the record itself
      */
     public void deleteKeys(UUID listItemId, List<UUID> keys) {
         List<Content> modified = getByListItemId(listItemId)
             .stream()
-            .filter(c -> c.containsAny(keys))
-            .peek(content -> content.removeAll(keys))
-            .filter(Content::isModified)
+            .filter(content -> content.removeAll(keys))
             .toList();
 
-        List<Content> toSave = modified.stream()
-            .filter(content -> !content.getContent().isEmpty())
-            .toList();
-        List<Content> toDelete = modified.stream()
-            .filter(content -> content.getContent().isEmpty())
-            .toList();
-
-        save(listItemId, toSave);
-        delete(listItemId, toDelete);
+        save(listItemId, modified);
     }
 
     /**

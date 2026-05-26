@@ -18,12 +18,20 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Configuration
 @Slf4j
+@Getter
 public class NotebookDynamoDbConfiguration {
-    @Getter
     private final String tableName;
+    private final int maxBatchRetryCount;
+    private final long batchRetryDelayMs;
 
-    NotebookDynamoDbConfiguration(@Value("${aws.dynamoDb.listItem.tableName}") String tableName) {
+    NotebookDynamoDbConfiguration(
+        @Value("${aws.dynamoDb.listItem.tableName}") String tableName,
+        @Value("${aws.dynamoDb.maxBatchRetryCount}") int maxBatchRetryCount,
+        @Value("${aws.dynamoDb.batchRetryDelayMs}") long batchRetryDelayMs
+    ) {
         this.tableName = tableName;
+        this.maxBatchRetryCount = maxBatchRetryCount;
+        this.batchRetryDelayMs = batchRetryDelayMs;
     }
 
     @Bean
