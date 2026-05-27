@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.category.creation;
 
-import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateCategoryRequest;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateCategoryRequest;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,14 +41,14 @@ public class CategoryCreationServiceTest {
 
     @Test
     public void createCategory() {
-        given(listItemFactory.create(USER_ID, TITLE, PARENT_ID, ListItemType.CATEGORY)).willReturn(listItem);
+        given(listItemFactory.create(USER_ID, PARENT_ID, TITLE, ListItemType.CATEGORY)).willReturn(listItem);
         given(listItem.getListItemId()).willReturn(CATEGORY_ID);
 
         CreateCategoryRequest request = CreateCategoryRequest.builder().title(TITLE).parent(PARENT_ID).build();
 
         UUID result = underTest.createCategory(USER_ID, request);
 
-        verify(createCategoryRequestValidator).validate(request);
+        verify(createCategoryRequestValidator).validate(USER_ID, request);
         verify(listItemDao).save(listItem);
         assertThat(result).isEqualTo(CATEGORY_ID);
     }

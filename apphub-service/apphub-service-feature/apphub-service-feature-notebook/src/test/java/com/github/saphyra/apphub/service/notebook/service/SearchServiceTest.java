@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,98 +13,109 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class SearchServiceTest {
+class SearchServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String SEARCH_TEXT = "search-text";
-    private static final UUID LIST_ITEM_ID_1 = UUID.randomUUID();
-    private static final UUID LIST_ITEM_ID_2 = UUID.randomUUID();
+    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID CONTENT_KEY = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
 
     @Mock
-    private ContentDao contentDao;
-
-    @Mock
     private NotebookViewFactory notebookViewFactory;
 
     @Mock
-    private ErrorReporterService errorReporterService;
+    private ContentDao contentDao;
 
     @InjectMocks
     private SearchService underTest;
 
     @Mock
-    private ListItem listItem1;
-
-    @Mock
-    private ListItem listItem2;
-
-    @Mock
-    private ListItem listItem3;
-
-    @Mock
-    private Content content1;
-
-    @Mock
-    private Content content2;
-
-    @Mock
-    private Content content3;
-
-    @Mock
-    private Content content4;
-
-    @Mock
-    private NotebookView notebookView1;
-
-    @Mock
-    private NotebookView notebookView2;
+    private NotebookView notebookView;
 
     @Test
-    public void searchTextTooShort() {
-        Throwable ex = catchThrowable(() -> underTest.search(USER_ID, "as"));
-
-        ExceptionValidator.validateInvalidParam(ex, "search", "too short");
+    void searchValueTooShort() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.search(USER_ID, "ab"), "search", "too short");
     }
 
     @Test
-    public void search() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem1, listItem2));
-        given(listItem1.getTitle()).willReturn("ASeArch-teXt1f");
-        given(listItem2.getTitle()).willReturn("asd");
+    void search_titleMatches() {
+        ListItem listItem = createListItem("AbCdEf", null);
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
+        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
-        given(contentDao.getByUserId(USER_ID)).willReturn(Arrays.asList(content1, content2, content3, content4));
+        List<NotebookView> result = underTest.search(USER_ID, "cde");
 
-        given(content1.getContent()).willReturn("ASeArch-teXt1f");
-        given(content2.getContent()).willReturn("ASeArch-teXt1f");
-        given(content3.getContent()).willReturn("ASeArch-teXt1f");
-        given(content4.getContent()).willReturn("bg-teXt1f");
+        assertThat(result).containsExactly(notebookView);
+        then(contentDao).shouldHaveNoInteractions();
+    }
 
-        given(content1.getListItemId()).willReturn(LIST_ITEM_ID_1);
-        given(content2.getListItemId()).willReturn(LIST_ITEM_ID_2);
+    @Test
+    void search_dataMatches() {
+        ListItem listItem = createListItem("title", "AaBbCc");
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
+        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
-        given(listItemDao.findById(LIST_ITEM_ID_1)).willReturn(Optional.of(listItem3));
+        List<NotebookView> result = underTest.search(USER_ID, "bbc");
 
-        given(notebookViewFactory.create(listItem1)).willReturn(notebookView1);
-        given(notebookViewFactory.create(listItem3)).willReturn(notebookView2);
+        assertThat(result).containsExactly(notebookView);
+        then(contentDao).shouldHaveNoInteractions();
+    }
 
-        List<NotebookView> result = underTest.search(USER_ID, SEARCH_TEXT);
+    @Test
+    void search_contentMatches() {
+        ListItem listItem = createListItem("title", "data");
+        Content content = Content.builder()
+            .listItemId(LIST_ITEM_ID)
+            .batchIndex(0)
+            .content(Map.of(CONTENT_KEY, "AbCdEf"))
+            .build();
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
+        given(contentDao.getByListItemId(LIST_ITEM_ID)).willReturn(List.of(content));
+        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
-        verify(errorReporterService, times(1)).report(anyString());
-        assertThat(result).containsExactlyInAnyOrder(notebookView1, notebookView2);
+        List<NotebookView> result = underTest.search(USER_ID, "cde");
+
+        assertThat(result).containsExactly(notebookView);
+        then(contentDao).should().getByListItemId(LIST_ITEM_ID);
+    }
+
+    @Test
+    void search_noMatch() {
+        ListItem listItem = createListItem("title", "data");
+        Content content = Content.builder()
+            .listItemId(LIST_ITEM_ID)
+            .batchIndex(0)
+            .content(Map.of(CONTENT_KEY, "other"))
+            .build();
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
+        given(contentDao.getByListItemId(LIST_ITEM_ID)).willReturn(List.of(content));
+
+        List<NotebookView> result = underTest.search(USER_ID, "match");
+
+        assertThat(result).isEmpty();
+        then(notebookViewFactory).shouldHaveNoInteractions();
+    }
+
+    private ListItem createListItem(String title, String data) {
+        return ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .parent(null)
+            .type(ListItemType.TEXT)
+            .title(title)
+            .pinned(false)
+            .archived(false)
+            .data(data)
+            .build();
     }
 }

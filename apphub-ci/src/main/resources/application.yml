@@ -205,6 +205,7 @@ services:
     optional: true
     properties:
       - PSQL_HOST
+      - DYNAMO_DB_CONFIGURATION
   - name: community
     port: 8096
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-community/target/application.jar"

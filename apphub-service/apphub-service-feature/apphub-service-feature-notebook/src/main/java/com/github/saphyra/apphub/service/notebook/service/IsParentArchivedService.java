@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.lib.common_util.cache.RequestScopedCacheable;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,17 +18,17 @@ class IsParentArchivedService {
     private final ListItemDao listItemDao;
 
     @RequestScopedCacheable(cacheNames = "isArchived")
-    boolean isAnyOfParentsArchived(UUID parentId) {
+    boolean isAnyOfParentsArchived(UUID userId, UUID parentId) {
         if (isNull(parentId)) {
             return false;
         }
 
-        ListItem listItem = listItemDao.findByIdValidated(parentId);
+        ListItem listItem = listItemDao.findByIdValidated(userId, parentId);
 
         if (listItem.isArchived()) {
             return true;
         }
 
-        return isAnyOfParentsArchived(listItem.getParent());
+        return isAnyOfParentsArchived(userId, listItem.getParent());
     }
 }

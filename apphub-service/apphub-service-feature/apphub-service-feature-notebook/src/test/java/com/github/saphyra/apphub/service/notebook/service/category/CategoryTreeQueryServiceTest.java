@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.category;
 
-import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import com.github.saphyra.apphub.api.feature.notebook.model.response.CategoryTreeView;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -53,13 +53,13 @@ public class CategoryTreeQueryServiceTest {
         List<CategoryTreeView> result = underTest.getCategoryTree(USER_ID);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getCategoryId()).isEqualTo(LIST_ITEM_ID_1);
-        assertThat(result.get(0).getTitle()).isEqualTo(TITLE_1);
-        assertThat(result.get(0).getChildren()).hasSize(1);
-        assertThat(result.get(0).isArchived()).isTrue();
-        assertThat(result.get(0).getChildren().get(0).getCategoryId()).isEqualTo(LIST_ITEM_ID_2);
-        assertThat(result.get(0).getChildren().get(0).getTitle()).isEqualTo(TITLE_2);
-        assertThat(result.get(0).getChildren().get(0).getChildren()).isEmpty();
-        assertThat(result.get(0).getChildren().get(0).isArchived()).isFalse();
+        assertThat(result.getFirst().getCategoryId()).isEqualTo(LIST_ITEM_ID_1);
+        assertThat(result.getFirst().getTitle()).isEqualTo(TITLE_1);
+        assertThat(result.getFirst().getChildren()).hasSize(1);
+        assertThat(result.getFirst().isArchived()).isTrue();
+        assertThat(result.getFirst().getChildren().getFirst().getCategoryId()).isEqualTo(LIST_ITEM_ID_2);
+        assertThat(result.getFirst().getChildren().getFirst().getTitle()).isEqualTo(TITLE_2);
+        assertThat(result.getFirst().getChildren().getFirst().getChildren()).isEmpty();
+        assertThat(result.getFirst().getChildren().getFirst().isArchived()).isFalse();
     }
 }

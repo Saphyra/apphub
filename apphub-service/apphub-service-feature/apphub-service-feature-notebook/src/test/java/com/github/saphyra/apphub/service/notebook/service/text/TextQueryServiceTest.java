@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.TextResponse;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,16 +16,14 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class TextQueryServiceTest {
-    private static final UUID TEXT_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID PARENT = UUID.randomUUID();
     private static final String TITLE = "title";
-    private static final String CONTENT = "content";
+    private static final String DATA = "text-data";
 
     @Mock
     private ListItemDao listItemDao;
-
-    @Mock
-    private ContentDao contentDao;
 
     @InjectMocks
     private TextQueryService underTest;
@@ -35,23 +31,19 @@ class TextQueryServiceTest {
     @Mock
     private ListItem listItem;
 
-    @Mock
-    private Content content;
-
     @Test
     void getTextResponse() {
-        given(listItemDao.findByIdValidated(TEXT_ID)).willReturn(listItem);
-        given(contentDao.findByParentValidated(TEXT_ID)).willReturn(content);
-
+        given(listItemDao.findByIdValidated(USER_ID, LIST_ITEM_ID)).willReturn(listItem);
         given(listItem.getParent()).willReturn(PARENT);
         given(listItem.getTitle()).willReturn(TITLE);
-        given(content.getContent()).willReturn(CONTENT);
+        given(listItem.getData()).willReturn(DATA);
 
-        TextResponse result = underTest.getTextResponse(TEXT_ID);
+        TextResponse result = underTest.getTextResponse(USER_ID, LIST_ITEM_ID);
 
-        assertThat(result.getTextId()).isEqualTo(TEXT_ID);
+        assertThat(result.getTextId()).isEqualTo(LIST_ITEM_ID);
         assertThat(result.getParent()).isEqualTo(PARENT);
         assertThat(result.getTitle()).isEqualTo(TITLE);
-        assertThat(result.getContent()).isEqualTo(CONTENT);
+        assertThat(result.getContent()).isEqualTo(DATA);
     }
 }
+

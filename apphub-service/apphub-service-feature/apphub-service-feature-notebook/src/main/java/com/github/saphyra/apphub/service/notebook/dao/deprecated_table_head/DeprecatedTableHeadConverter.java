@@ -1,0 +1,33 @@
+package com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head;
+
+import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+@Deprecated(forRemoval = true)
+public class DeprecatedTableHeadConverter extends ConverterBase<TableHeadEntity, DeprecatedTableHead> {
+    private final UuidConverter uuidConverter;
+
+    @Override
+    protected DeprecatedTableHead processEntityConversion(TableHeadEntity entity) {
+        return DeprecatedTableHead.builder()
+            .tableHeadId(uuidConverter.convertEntity(entity.getTableHeadId()))
+            .userId(uuidConverter.convertEntity(entity.getUserId()))
+            .parent(uuidConverter.convertEntity(entity.getParent()))
+            .columnIndex(entity.getColumnIndex())
+            .build();
+    }
+
+    @Override
+    protected TableHeadEntity processDomainConversion(DeprecatedTableHead domain) {
+        return TableHeadEntity.builder()
+            .tableHeadId(uuidConverter.convertDomain(domain.getTableHeadId()))
+            .userId(uuidConverter.convertDomain(domain.getUserId()))
+            .parent(uuidConverter.convertDomain(domain.getParent()))
+            .columnIndex(domain.getColumnIndex())
+            .build();
+    }
+}

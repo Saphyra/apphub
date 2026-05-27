@@ -15,6 +15,7 @@ public class NamespaceNameProvider {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 
-        return reader.readLine();
+        return reader.readLine()
+            .replace("_", "-");
     }
 }

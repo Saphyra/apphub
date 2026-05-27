@@ -81,7 +81,6 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
             .title(TITLE_2)
             .type(ListItemType.CATEGORY.name())
             .parentId(parentId)
-            .parentTitle(TITLE_1)
             .enabled(true)
             .build();
         NotebookView textView = NotebookView.builder()
@@ -89,7 +88,6 @@ public class GetChildrenOfCategoryTest extends BackEndTest {
             .title(TITLE_3)
             .type(ListItemType.TEXT.name())
             .parentId(parentId)
-            .parentTitle(TITLE_1)
             .enabled(true)
             .build();
 

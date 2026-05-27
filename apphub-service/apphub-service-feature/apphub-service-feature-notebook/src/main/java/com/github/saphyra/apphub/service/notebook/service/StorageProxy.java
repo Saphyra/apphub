@@ -45,4 +45,8 @@ public class StorageProxy {
             throw e;
         }
     }
+
+    public UUID cloneFile(UUID storedFileId) {
+        return storageClient.cloneFile(storedFileId, accessTokenProvider.getAsString());
+    }
 }

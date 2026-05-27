@@ -4,6 +4,8 @@ import { isTrue } from "common/js/Utils";
 import { NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS } from "modules/feature/notebook/NotebookEndpoints";
 
 const CheckboxColumn = ({
+    openedItem,
+    rowId,
     columnData,
     updateColumn,
     editingEnabled = true,
@@ -11,8 +13,8 @@ const CheckboxColumn = ({
     localizationHandler
 }) => {
     const updateData = (checked) => {
-        if(!editingEnabled){
-            NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS.createRequest({value: checked}, {columnId: columnData.columnId})
+        if (!editingEnabled) {
+            NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS.createRequest({ value: checked }, { listItemId: openedItem.id, rowId: rowId, columnId: columnData.columnId })
                 .send();
         }
 

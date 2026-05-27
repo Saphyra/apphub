@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Range;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -21,10 +22,6 @@ import static org.mockito.BDDMockito.given;
 class RangeColumnDataServiceTest {
     private static final Object DATA = "data";
     private static final String STRINGIFIED = "stringified";
-    private static final UUID COLUMN_ID = UUID.randomUUID();
-
-    @Mock
-    private ContentDao contentDao;
 
     @Mock
     private ObjectMapper objectMapper;
@@ -32,26 +29,14 @@ class RangeColumnDataServiceTest {
     @InjectMocks
     private RangeColumnDataService underTest;
 
-    @Mock
-    private Content content;
-
-    @Mock
-    private Range range;
-
     @Test
-    void stringifyContent() {
-        given(objectMapper.writeValueAsString(DATA)).willReturn(STRINGIFIED);
-
-        assertThat(underTest.stringifyContent(DATA)).isEqualTo(STRINGIFIED);
+    void canProcess() {
+        assertThat(underTest.canProcess(ColumnType.RANGE)).isTrue();
     }
 
     @Test
-    void getData() {
-        given(contentDao.findByParentValidated(COLUMN_ID)).willReturn(content);
-        given(content.getContent()).willReturn(STRINGIFIED);
-        given(objectMapper.readValue(STRINGIFIED, Range.class)).willReturn(range);
-
-        assertThat(underTest.getData(COLUMN_ID)).isEqualTo(range);
+    void canProcess_notRange() {
+        assertThat(underTest.canProcess(ColumnType.TEXT)).isFalse();
     }
 
     @Test
@@ -63,7 +48,7 @@ class RangeColumnDataServiceTest {
 
     @Test
     void validateData_parseError() {
-        given(objectMapper.convertValue(DATA, Range.class)).willThrow(new RuntimeException());
+        given(objectMapper.convertValue(DATA, Range.class)).willThrow(new RuntimeException("parse error"));
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -71,20 +56,9 @@ class RangeColumnDataServiceTest {
     }
 
     @Test
-    void validateData_nullValue() {
-        given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getValue()).willReturn(null);
-        given(range.getStep()).willReturn(2d);
-
-        Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
-
-        ExceptionValidator.validateInvalidParam(ex, "range.value", "must not be null");
-    }
-
-    @Test
     void validateData_nullStep() {
+        Range range = Range.builder().step(null).min(1d).max(10d).value(5d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getStep()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -93,8 +67,8 @@ class RangeColumnDataServiceTest {
 
     @Test
     void validateData_stepTooLow() {
+        Range range = Range.builder().step(0d).min(1d).max(10d).value(5d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getStep()).willReturn(0d);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -103,9 +77,8 @@ class RangeColumnDataServiceTest {
 
     @Test
     void validateData_nullMin() {
+        Range range = Range.builder().step(1d).min(null).max(10d).value(5d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getStep()).willReturn(7d);
-        given(range.getMin()).willReturn(null);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -113,23 +86,9 @@ class RangeColumnDataServiceTest {
     }
 
     @Test
-    void validateData_nullMax() {
-        given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getStep()).willReturn(7d);
-        given(range.getMin()).willReturn(23d);
-        given(range.getMax()).willReturn(null);
-
-        Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
-
-        ExceptionValidator.validateInvalidParam(ex, "range.max", "must not be null");
-    }
-
-    @Test
     void validateData_maxTooLow() {
+        Range range = Range.builder().step(1d).min(5d).max(4d).value(5d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getStep()).willReturn(7d);
-        given(range.getMin()).willReturn(23d);
-        given(range.getMax()).willReturn(22d);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -138,11 +97,8 @@ class RangeColumnDataServiceTest {
 
     @Test
     void validateData_valueTooLow() {
+        Range range = Range.builder().step(1d).min(1d).max(10d).value(0d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getValue()).willReturn(11D);
-        given(range.getStep()).willReturn(7d);
-        given(range.getMin()).willReturn(23d);
-        given(range.getMax()).willReturn(25d);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -151,11 +107,8 @@ class RangeColumnDataServiceTest {
 
     @Test
     void validateData_valueTooHigh() {
+        Range range = Range.builder().step(1d).min(1d).max(10d).value(11d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getValue()).willReturn(111D);
-        given(range.getStep()).willReturn(7d);
-        given(range.getMin()).willReturn(23d);
-        given(range.getMax()).willReturn(25d);
 
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
@@ -164,12 +117,31 @@ class RangeColumnDataServiceTest {
 
     @Test
     void validateData() {
+        Range range = Range.builder().step(1d).min(1d).max(10d).value(5d).build();
         given(objectMapper.convertValue(DATA, Range.class)).willReturn(range);
-        given(range.getValue()).willReturn(24d);
-        given(range.getStep()).willReturn(7d);
-        given(range.getMin()).willReturn(23d);
-        given(range.getMax()).willReturn(25d);
 
         underTest.validateData(DATA);
     }
+
+    @Test
+    void serialize() {
+        given(objectMapper.writeValueAsString(DATA)).willReturn(STRINGIFIED);
+
+        Optional<BiWrapper<String, Optional<UUID>>> result = underTest.serialize(DATA);
+
+        assertThat(result).isPresent();
+        assertThat(result.get().getEntity1()).isEqualTo(STRINGIFIED);
+        assertThat(result.get().getEntity2()).isEmpty();
+    }
+
+    @Test
+    void deserialize() {
+        Range range = Range.builder().step(1d).min(1d).max(10d).value(5d).build();
+        given(objectMapper.readValue(STRINGIFIED, Range.class)).willReturn(range);
+
+        Object result = underTest.deserialize(STRINGIFIED);
+
+        assertThat(result).isEqualTo(range);
+    }
 }
+

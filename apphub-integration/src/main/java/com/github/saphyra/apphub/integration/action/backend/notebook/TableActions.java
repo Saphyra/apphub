@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.integration.structure.api.notebook.table.EditTa
 import com.github.saphyra.apphub.integration.structure.api.notebook.table.TableResponse;
 import io.restassured.response.Response;
 
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,27 +55,42 @@ public class TableActions {
             .get(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_GET_TABLE, "listItemId", listItemId));
     }
 
-    public static void updateChecklistTableRowStatus(int serverPort, String accessToken, UUID rowId, Boolean status) {
-        Response response = getUpdateChecklistTableRowStatusResponse(serverPort, accessToken, rowId, status);
+    public static void updateChecklistTableRowStatus(int serverPort, String accessToken, UUID listItemId, UUID rowId, Boolean status) {
+        Response response = getUpdateChecklistTableRowStatusResponse(serverPort, accessToken, listItemId, rowId, status);
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getUpdateChecklistTableRowStatusResponse(int serverPort, String accessToken, UUID rowId, Boolean status) {
+    public static Response getUpdateChecklistTableRowStatusResponse(int serverPort, String accessToken, UUID listItemId, UUID rowId, Boolean status) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_TABLE_SET_ROW_STATUS, "rowId", rowId));
+            .post(UrlFactory.create(
+                serverPort,
+                NotebookEndpoints.NOTEBOOK_TABLE_SET_ROW_STATUS,
+                Map.of(
+                    "listItemId", listItemId,
+                    "rowId", rowId
+                )
+            ));
     }
 
-    public static void editCheckboxStatus(int serverPort, String accessToken, UUID columnId, Boolean status) {
-        Response response = getEditCheckboxStatusResponse(serverPort, accessToken, columnId, status);
+    public static void editCheckboxStatus(int serverPort, String accessToken, UUID listItemId, UUID rowId, UUID columnId, Boolean status) {
+        Response response = getEditCheckboxStatusResponse(serverPort, accessToken, listItemId, rowId, columnId, status);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static Response getEditCheckboxStatusResponse(int serverPort, String accessToken, UUID columnId, Boolean status) {
+    public static Response getEditCheckboxStatusResponse(int serverPort, String accessToken, UUID listItemId, UUID rowId, UUID columnId, Boolean status) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(serverPort, NotebookEndpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS, "columnId", columnId));
+            .post(UrlFactory.create(
+                serverPort,
+                NotebookEndpoints.NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS,
+                Map.of(
+                    "listItemId", listItemId,
+                    "rowId", rowId,
+                    "columnId", columnId
+                )
+            ));
     }
 
     public static Response getDeleteCheckedResponse(int serverPort, String accessToken, UUID listItemId) {

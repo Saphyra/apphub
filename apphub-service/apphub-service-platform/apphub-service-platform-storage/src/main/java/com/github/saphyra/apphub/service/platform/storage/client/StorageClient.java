@@ -13,4 +13,6 @@ public interface StorageClient {
     void upload(UUID storedFileId, InputStream file, long fileSize);
 
     void delete(UUID storedFileId);
+
+    void clone(UUID source, UUID target);
 }

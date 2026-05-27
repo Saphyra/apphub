@@ -1,13 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.link;
 
-import com.github.saphyra.apphub.api.feature.notebook.model.request.LinkRequest;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
-import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
-import com.github.saphyra.apphub.service.notebook.service.ListItemFactory;
+import com.github.saphyra.apphub.api.feature.notebook.model.request.LinkRequest;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,12 +26,6 @@ public class LinkCreationServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
 
     @Mock
-    private ContentDao contentDao;
-
-    @Mock
-    private ContentFactory contentFactory;
-
-    @Mock
     private LinkRequestValidator linkRequestValidator;
 
     @Mock
@@ -49,9 +40,6 @@ public class LinkCreationServiceTest {
     @Mock
     private ListItem listItem;
 
-    @Mock
-    private Content content;
-
     @Test
     public void create() {
         LinkRequest request = LinkRequest.builder()
@@ -60,15 +48,13 @@ public class LinkCreationServiceTest {
             .url(URL)
             .build();
 
-        given(listItemFactory.create(USER_ID, TITLE, PARENT, ListItemType.LINK)).willReturn(listItem);
-        given(contentFactory.create(listItem, URL)).willReturn(content);
+        given(listItemFactory.create(USER_ID, PARENT, TITLE, ListItemType.LINK, URL)).willReturn(listItem);
         given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
 
         UUID result = underTest.create(request, USER_ID);
 
-        verify(linkRequestValidator).validate(request);
+        verify(linkRequestValidator).validate(USER_ID, request);
         verify(listItemDao).save(listItem);
-        verify(contentDao).save(content);
         assertThat(result).isEqualTo(LIST_ITEM_ID);
     }
 }

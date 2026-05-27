@@ -4,14 +4,11 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,27 +17,17 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
-public class NotebookViewFactoryTest {
+class NotebookViewFactoryTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID PARENT = UUID.randomUUID();
-    private static final String TITLE = "title";
-    private static final String VALUE = "value";
-    private static final String PARENT_TITLE = "parent-title";
+    private static final UUID PARENT_ID = UUID.randomUUID();
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
-    private static final String STORED_FILE_ID_STRING = "stored-file-id";
-
-    @Mock
-    private ContentDao contentDao;
-
-    @Mock
-    private ListItemDao listItemDao;
-
-    @Mock
-    private FileDao fileDao;
+    private static final String TITLE = "title";
+    private static final String DATA = "data";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -54,155 +41,85 @@ public class NotebookViewFactoryTest {
     @InjectMocks
     private NotebookViewFactory underTest;
 
-    @Mock
-    private Content content;
-
-    @Mock
-    private ListItem parentListItem;
-
-    @Mock
-    private File file;
-
-    @Mock
-    private StoredFileResponse storedFileResponse;
-
     @Test
-    public void create_hasParent() {
-        ListItem listItem = ListItem.builder()
-            .listItemId(LIST_ITEM_ID)
-            .userId(USER_ID)
-            .parent(PARENT)
-            .type(ListItemType.CATEGORY)
-            .title(TITLE)
-            .pinned(true)
-            .archived(false)
-            .build();
-
-        given(listItemDao.findByIdValidated(PARENT)).willReturn(parentListItem);
-        given(parentListItem.getTitle()).willReturn(PARENT_TITLE);
-        given(isParentArchivedService.isAnyOfParentsArchived(PARENT)).willReturn(true);
+    void create_link() {
+        ListItem listItem = createListItem(ListItemType.LINK, false, PARENT_ID, DATA);
+        given(isParentArchivedService.isAnyOfParentsArchived(USER_ID, PARENT_ID)).willReturn(false);
 
         NotebookView result = underTest.create(listItem);
 
-        assertThat(result.getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getTitle()).isEqualTo(TITLE);
-        assertThat(result.getType()).isEqualTo(ListItemType.CATEGORY.name());
-        assertThat(result.getValue()).isNull();
-        assertThat(result.isPinned()).isTrue();
-        assertThat(result.isArchived()).isTrue();
-        assertThat(result.getParentId()).isEqualTo(PARENT);
-        assertThat(result.getParentTitle()).isEqualTo(PARENT_TITLE);
+        assertThat(result)
+            .returns(LIST_ITEM_ID, NotebookView::getId)
+            .returns(TITLE, NotebookView::getTitle)
+            .returns(ListItemType.LINK.name(), NotebookView::getType)
+            .returns(DATA, NotebookView::getValue)
+            .returns(PARENT_ID, NotebookView::getParentId)
+            .returns(true, NotebookView::isPinned)
+            .returns(false, NotebookView::isArchived)
+            .returns(true, NotebookView::isEnabled);
 
-        verifyNoInteractions(storageProxy);
+        then(storageProxy).shouldHaveNoInteractions();
     }
 
     @Test
-    public void create_noParent() {
-        ListItem listItem = ListItem.builder()
-            .listItemId(LIST_ITEM_ID)
-            .userId(USER_ID)
-            .parent(null)
-            .type(ListItemType.CATEGORY)
-            .title(TITLE)
-            .pinned(true)
-            .archived(true)
-            .build();
+    void create_archivedItem_skipsParentCheck() {
+        ListItem listItem = createListItem(ListItemType.TEXT, true, PARENT_ID, null);
 
         NotebookView result = underTest.create(listItem);
 
-        assertThat(result.getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getTitle()).isEqualTo(TITLE);
-        assertThat(result.getType()).isEqualTo(ListItemType.CATEGORY.name());
-        assertThat(result.getValue()).isNull();
-        assertThat(result.isPinned()).isTrue();
-        assertThat(result.isArchived()).isTrue();
-        assertThat(result.getParentId()).isNull();
-        assertThat(result.getParentTitle()).isNull();
+        assertThat(result)
+            .returns(true, NotebookView::isArchived)
+            .returns(null, NotebookView::getValue)
+            .returns(true, NotebookView::isEnabled);
 
-        verifyNoInteractions(storageProxy);
+        then(isParentArchivedService).should(never()).isAnyOfParentsArchived(USER_ID, PARENT_ID);
     }
 
     @Test
-    public void fillValueForLink() {
-        ListItem listItem = ListItem.builder()
-            .listItemId(LIST_ITEM_ID)
-            .userId(USER_ID)
-            .parent(PARENT)
-            .type(ListItemType.LINK)
-            .title(TITLE)
-            .pinned(true)
-            .archived(false)
-            .build();
-
-        given(contentDao.findByParentValidated(LIST_ITEM_ID)).willReturn(content);
-        given(content.getContent()).willReturn(VALUE);
-        given(isParentArchivedService.isAnyOfParentsArchived(PARENT)).willReturn(false);
+    void create_text() {
+        ListItem listItem = createListItem(ListItemType.TEXT, false, PARENT_ID, null);
+        given(isParentArchivedService.isAnyOfParentsArchived(USER_ID, PARENT_ID)).willReturn(true);
 
         NotebookView result = underTest.create(listItem);
 
-        assertThat(result.getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getTitle()).isEqualTo(TITLE);
-        assertThat(result.getType()).isEqualTo(ListItemType.LINK.name());
-        assertThat(result.getValue()).isEqualTo(VALUE);
-        assertThat(result.isPinned()).isTrue();
-        assertThat(result.isArchived()).isFalse();
+        assertThat(result)
+            .returns(null, NotebookView::getValue)
+            .returns(true, NotebookView::isArchived)
+            .returns(true, NotebookView::isEnabled);
 
-        verifyNoInteractions(storageProxy);
+        then(uuidConverter).shouldHaveNoInteractions();
+        then(storageProxy).shouldHaveNoInteractions();
     }
 
-    @Test
-    public void fillFieldsForImage() {
-        ListItem listItem = ListItem.builder()
-            .listItemId(LIST_ITEM_ID)
-            .userId(USER_ID)
-            .parent(PARENT)
-            .type(ListItemType.IMAGE)
-            .title(TITLE)
-            .pinned(true)
-            .archived(true)
-            .build();
-
-        given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);
-        given(file.getStoredFileId()).willReturn(STORED_FILE_ID);
-        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
-        given(storageProxy.getFileMetadata(STORED_FILE_ID)).willReturn(storedFileResponse);
-        given(storedFileResponse.getFileUploaded()).willReturn(true);
+    @ParameterizedTest
+    @EnumSource(value = ListItemType.class, names = {"FILE", "IMAGE"})
+    void create_fileOrImage(ListItemType type) {
+        ListItem listItem = createListItem(type, false, PARENT_ID, DATA);
+        given(isParentArchivedService.isAnyOfParentsArchived(USER_ID, PARENT_ID)).willReturn(false);
+        given(uuidConverter.convertEntity(DATA)).willReturn(STORED_FILE_ID);
+        given(storageProxy.getFileMetadata(STORED_FILE_ID)).willReturn(StoredFileResponse.builder().fileUploaded(false).build());
 
         NotebookView result = underTest.create(listItem);
 
-        assertThat(result.getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getTitle()).isEqualTo(TITLE);
-        assertThat(result.getType()).isEqualTo(ListItemType.IMAGE.name());
-        assertThat(result.getValue()).isEqualTo(STORED_FILE_ID_STRING);
-        assertThat(result.isPinned()).isTrue();
-        assertThat(result.isEnabled()).isTrue();
+        assertThat(result)
+            .returns(DATA, NotebookView::getValue)
+            .returns(false, NotebookView::isEnabled)
+            .returns(false, NotebookView::isArchived);
+
+        then(uuidConverter).should().convertEntity(DATA);
+        then(storageProxy).should().getFileMetadata(STORED_FILE_ID);
     }
 
-    @Test
-    public void fillFieldsForFile() {
-        ListItem listItem = ListItem.builder()
+    private ListItem createListItem(ListItemType type, boolean archived, UUID parentId, String data) {
+        return ListItem.builder()
             .listItemId(LIST_ITEM_ID)
             .userId(USER_ID)
-            .parent(PARENT)
-            .type(ListItemType.FILE)
+            .parent(parentId)
+            .type(type)
             .title(TITLE)
             .pinned(true)
-            .archived(true)
+            .archived(archived)
+            .data(data)
             .build();
-
-        given(fileDao.findByParentValidated(LIST_ITEM_ID)).willReturn(file);
-        given(file.getStoredFileId()).willReturn(STORED_FILE_ID);
-        given(uuidConverter.convertDomain(STORED_FILE_ID)).willReturn(STORED_FILE_ID_STRING);
-        given(storageProxy.getFileMetadata(STORED_FILE_ID)).willReturn(storedFileResponse);
-        given(storedFileResponse.getFileUploaded()).willReturn(true);
-
-        NotebookView result = underTest.create(listItem);
-
-        assertThat(result.getId()).isEqualTo(LIST_ITEM_ID);
-        assertThat(result.getTitle()).isEqualTo(TITLE);
-        assertThat(result.getType()).isEqualTo(ListItemType.FILE.name());
-        assertThat(result.getValue()).isEqualTo(STORED_FILE_ID_STRING);
-        assertThat(result.isPinned()).isTrue();
-        assertThat(result.isEnabled()).isTrue();
     }
 }

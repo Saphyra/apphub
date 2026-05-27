@@ -1,0 +1,4 @@
+aws:
+  dynamoDb:
+    listItem:
+      tableName: apphub-minikube-list_item

@@ -3,6 +3,8 @@ event:
   processor:
     enabled: true
 
+postgreSqlHost: localhost
+
 serviceHosts:
   frontend: localhost:3000
   adminPanel: localhost:8089

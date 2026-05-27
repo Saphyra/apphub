@@ -1,2 +1,10 @@
 server:
   port: 8090
+
+aws:
+  dynamoDb:
+    accessKeyId: dynamodbaccesskeyid
+    secretKey: dynamodbsecretkey
+    url: http://localhost:8000
+    listItem:
+      tableName: apphub-local-list_item

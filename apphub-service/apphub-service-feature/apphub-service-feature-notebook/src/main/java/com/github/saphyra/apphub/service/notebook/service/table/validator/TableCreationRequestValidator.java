@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -20,8 +21,8 @@ public class TableCreationRequestValidator {
     private final CreateTableHeadValidator createTableHeadValidator;
     private final ColumnNumberAmountValidator columnNumberAmountValidator;
 
-    public void validate(CreateTableRequest request) {
-        listItemRequestValidator.validate(request.getTitle(), request.getParent());
+    public void validate(UUID userId, CreateTableRequest request) {
+        listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
 
         createTableHeadValidator.validateTableHeads(request.getTableHeads());
 

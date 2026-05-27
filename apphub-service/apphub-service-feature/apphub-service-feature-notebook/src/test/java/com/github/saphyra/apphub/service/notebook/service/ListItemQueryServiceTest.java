@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class ListItemQueryServiceTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
@@ -40,18 +41,18 @@ class ListItemQueryServiceTest {
 
     @Test
     void listItemNotFound() {
-        given(listItemDao.findById(LIST_ITEM_ID)).willReturn(Optional.empty());
+        given(listItemDao.findById(USER_ID, LIST_ITEM_ID)).willReturn(Optional.empty());
 
-        Throwable ex = catchThrowable(() -> underTest.findListItem(LIST_ITEM_ID));
+        Throwable ex = catchThrowable(() -> underTest.findListItem(USER_ID, LIST_ITEM_ID));
 
         ExceptionValidator.validateNotLoggedException(ex, HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
     }
 
     @Test
     void findListItem() {
-        given(listItemDao.findById(LIST_ITEM_ID)).willReturn(Optional.of(listItem));
+        given(listItemDao.findById(USER_ID, LIST_ITEM_ID)).willReturn(Optional.of(listItem));
         given(notebookViewFactory.create(listItem)).willReturn(notebookView);
 
-        assertThat(underTest.findListItem(LIST_ITEM_ID)).isEqualTo(notebookView);
+        assertThat(underTest.findListItem(USER_ID, LIST_ITEM_ID)).isEqualTo(notebookView);
     }
 }

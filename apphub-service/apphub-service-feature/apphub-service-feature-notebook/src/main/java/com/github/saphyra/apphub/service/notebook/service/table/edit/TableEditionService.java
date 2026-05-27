@@ -1,17 +1,21 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableRequest;
-import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
+import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,24 +25,33 @@ import java.util.UUID;
 public class TableEditionService {
     private final EditTableRequestValidator editTableRequestValidator;
     private final ListItemDao listItemDao;
-    private final TableQueryService tableQueryService;
-    private final EditTableHeadService editTableHeadService;
-    private final EditTableRowService editTableRowService;
+    private final ContentDao contentDao;
+    private final CommonListItemDao commonListItemDao;
+    private final TableHeadEditionService tableHeadEditionService;
+    private final TableRowEditionService tableRowEditionService;
 
-    @Transactional
-    public EditTableResponse editTable(UUID listItemId, EditTableRequest request) {
-        editTableRequestValidator.validate(listItemId, request);
+    public List<TableFileUploadResponse> editTable(UUID userId, UUID listItemId, EditTableRequest request) {
+        editTableRequestValidator.validate(request);
 
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
-        listItem.setTitle(request.getTitle());
-        listItemDao.save(listItem);
+        QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(userId, listItemId);
+        ListItem listItem = table.getEntity1();
+        List<TableHead> tableHeads = new ArrayList<>(table.getEntity2());
+        List<TableRow> tableRows = new ArrayList<>(table.getEntity3());
+        List<Content> contents = new ArrayList<>(table.getEntity4());
 
-        editTableHeadService.editTableHeads(listItem, request.getTableHeads());
-        List<TableFileUploadResponse> fileUploads = editTableRowService.editTableRows(listItem, request.getRows());
+        processListItem(request, listItem);
+        tableHeadEditionService.processTableHeads(listItemId, request.getTableHeads(), tableHeads, contents);
+        List<TableFileUploadResponse> fileUploads = tableRowEditionService.processTableRows(listItemId, request.getRows(), tableRows, contents);
+        contentDao.save(listItemId, contents);
 
-        return EditTableResponse.builder()
-            .tableResponse(tableQueryService.getTable(listItemId))
-            .fileUpload(fileUploads)
-            .build();
+        return fileUploads;
+    }
+
+    private void processListItem(EditTableRequest request, ListItem listItem) {
+        if (!listItem.getTitle().equals(request.getTitle())) {
+            log.info("Updating ListITem title...");
+            listItem.setTitle(request.getTitle());
+            listItemDao.save(listItem);
+        }
     }
 }

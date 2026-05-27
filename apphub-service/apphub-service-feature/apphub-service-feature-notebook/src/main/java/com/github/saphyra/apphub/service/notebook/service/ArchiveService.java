@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,10 +15,10 @@ import java.util.UUID;
 public class ArchiveService {
     private final ListItemDao listItemDao;
 
-    public void archive(UUID listItemId, Boolean archived) {
+    public void archive(UUID userId, UUID listItemId, Boolean archived) {
         ValidationUtil.notNull(archived, "archived");
 
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
         listItem.setArchived(archived);
         listItemDao.save(listItem);
     }

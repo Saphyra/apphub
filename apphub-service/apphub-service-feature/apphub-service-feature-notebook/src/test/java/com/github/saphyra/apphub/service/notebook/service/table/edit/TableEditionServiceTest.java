@@ -1,14 +1,16 @@
 package com.github.saphyra.apphub.service.notebook.service.table.edit;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableRequest;
-import com.github.saphyra.apphub.api.feature.notebook.model.table.EditTableResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
-import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.api.feature.notebook.model.table.TableResponse;
-import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
+import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.EditTableRequestValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +27,8 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class TableEditionServiceTest {
+    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
-    private static final String TITLE = "title";
 
     @Mock
     private EditTableRequestValidator editTableRequestValidator;
@@ -35,52 +37,70 @@ class TableEditionServiceTest {
     private ListItemDao listItemDao;
 
     @Mock
-    private TableQueryService tableQueryService;
+    private ContentDao contentDao;
 
     @Mock
-    private EditTableHeadService editTableHeadService;
+    private CommonListItemDao commonListItemDao;
 
     @Mock
-    private EditTableRowService editTableRowService;
+    private TableHeadEditionService tableHeadEditionService;
+
+    @Mock
+    private TableRowEditionService tableRowEditionService;
 
     @InjectMocks
     private TableEditionService underTest;
 
-    @Mock
-    private EditTableRequest editTableRequest;
+    @Test
+    void editTable_titleChanged() {
+        ListItem listItem = ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .type(ListItemType.TABLE)
+            .title("old-title")
+            .build();
+        EditTableRequest request = EditTableRequest.builder()
+            .title("new-title")
+            .tableHeads(List.of())
+            .rows(List.of())
+            .build();
+        List<Content> contents = List.of(Content.builder().listItemId(LIST_ITEM_ID).build());
+        List<TableFileUploadResponse> fileUploads = List.of(TableFileUploadResponse.builder().rowIndex(1).build());
 
-    @Mock
-    private ListItem listItem;
+        given(commonListItemDao.findTableValidated(USER_ID, LIST_ITEM_ID)).willReturn(new QuadWrapper<>(listItem, List.<TableHead>of(), List.<TableRow>of(), contents));
+        given(tableRowEditionService.processTableRows(LIST_ITEM_ID, request.getRows(), List.of(), contents)).willReturn(fileUploads);
 
-    @Mock
-    private TableHeadModel tableHeadModel;
+        List<TableFileUploadResponse> result = underTest.editTable(USER_ID, LIST_ITEM_ID, request);
 
-    @Mock
-    private TableResponse tableResponse;
-
-    @Mock
-    private TableFileUploadResponse fileUploadResponse;
-
-    @Mock
-    private TableRowModel tableRowModel;
+        assertThat(result).isEqualTo(fileUploads);
+        assertThat(listItem.getTitle()).isEqualTo("new-title");
+        then(editTableRequestValidator).should().validate(request);
+        then(tableHeadEditionService).should().processTableHeads(LIST_ITEM_ID, request.getTableHeads(), List.of(), contents);
+        then(listItemDao).should().save(listItem);
+        then(contentDao).should().save(LIST_ITEM_ID, contents);
+    }
 
     @Test
-    void editTable() {
-        given(editTableRequest.getTitle()).willReturn(TITLE);
-        given(editTableRequest.getTableHeads()).willReturn(List.of(tableHeadModel));
-        given(editTableRequest.getRows()).willReturn(List.of(tableRowModel));
-        given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
-        given(editTableRowService.editTableRows(listItem, List.of(tableRowModel))).willReturn(List.of(fileUploadResponse));
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+    void editTable_titleNotChanged() {
+        ListItem listItem = ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .type(ListItemType.TABLE)
+            .title("title")
+            .build();
+        EditTableRequest request = EditTableRequest.builder()
+            .title("title")
+            .tableHeads(List.of())
+            .rows(List.of())
+            .build();
+        List<Content> contents = List.of(Content.builder().listItemId(LIST_ITEM_ID).build());
 
-        EditTableResponse result = underTest.editTable(LIST_ITEM_ID, editTableRequest);
+        given(commonListItemDao.findTableValidated(USER_ID, LIST_ITEM_ID)).willReturn(new QuadWrapper<>(listItem, List.<TableHead>of(), List.<TableRow>of(), contents));
+        given(tableRowEditionService.processTableRows(LIST_ITEM_ID, request.getRows(), List.of(), contents)).willReturn(List.of());
 
-        assertThat(result.getFileUpload()).containsExactly(fileUploadResponse);
-        assertThat(result.getTableResponse()).isEqualTo(tableResponse);
+        underTest.editTable(USER_ID, LIST_ITEM_ID, request);
 
-        then(editTableRequestValidator).should().validate(LIST_ITEM_ID, editTableRequest);
-        then(listItem).should().setTitle(TITLE);
-        then(listItemDao).should().save(listItem);
-        then(editTableHeadService).should().editTableHeads(listItem, List.of(tableHeadModel));
+        then(listItemDao).shouldHaveNoInteractions();
     }
 }
+

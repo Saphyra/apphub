@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -13,13 +13,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class TableRowStatusUpdateService {
-    private final CheckedItemDao checkedItemDao;
+    private final TableRowDao tableRowDao;
 
-    public void setRowStatus(UUID rowId, Boolean status) {
+    public void setRowStatus(UUID listItemId, UUID rowId, Boolean status) {
         ValidationUtil.notNull(status, "status");
 
-        CheckedItem checkedItem = checkedItemDao.findByIdValidated(rowId);
-        checkedItem.setChecked(status);
-        checkedItemDao.save(checkedItem);
+        TableRow row = tableRowDao.findByIdValidated(listItemId, rowId);
+
+        row.setChecked(status);
+
+        tableRowDao.save(row);
     }
 }

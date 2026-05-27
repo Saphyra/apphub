@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.notebook.service.text.EditTextService;
 import com.github.saphyra.apphub.service.notebook.service.text.TextQueryService;
-import com.github.saphyra.apphub.service.notebook.service.text.creation.TextCreationService;
+import com.github.saphyra.apphub.service.notebook.service.text.TextCreationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -61,17 +61,19 @@ public class ContentControllerImplTest {
 
     @Test
     public void getText() {
-        given(textQueryService.getTextResponse(LIST_ITEM_ID)).willReturn(textResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(textQueryService.getTextResponse(USER_ID, LIST_ITEM_ID)).willReturn(textResponse);
 
-        TextResponse result = underTest.getText(LIST_ITEM_ID);
+        TextResponse result = underTest.getText(LIST_ITEM_ID, accessToken);
 
         assertThat(result).isEqualTo(textResponse);
     }
 
     @Test
     public void editText() {
-        underTest.editText(editTextRequest, LIST_ITEM_ID);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        underTest.editText(editTextRequest, LIST_ITEM_ID, accessToken);
 
-        verify(editTextService).editText(LIST_ITEM_ID, editTextRequest);
+        verify(editTextService).editText(USER_ID, LIST_ITEM_ID, editTextRequest);
     }
 }
