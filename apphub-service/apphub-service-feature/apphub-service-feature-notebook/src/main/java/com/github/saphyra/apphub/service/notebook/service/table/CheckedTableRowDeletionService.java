@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListIt
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHead;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +24,8 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class CheckedTableRowDeletionService {
     private final ColumnDataServiceProvider columnDataServiceProvider;
-    private final StorageProxy storageProxy;
     private final ContentDao contentDao;
     private final CommonListItemDao commonListItemDao;
     private final TableRowDao tableRowDao;

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Component
-//TODO unit test
 public class TitleValidator {
     public void validate(String title) {
         if (isBlank(title)) {

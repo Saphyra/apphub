@@ -26,7 +26,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableQueryService {
     private final ColumnDataServiceProvider columnDataServiceProvider;
     private final CommonListItemDao commonListItemDao;

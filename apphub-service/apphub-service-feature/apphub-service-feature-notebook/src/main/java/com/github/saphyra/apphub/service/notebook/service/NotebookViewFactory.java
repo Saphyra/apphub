@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class NotebookViewFactory {
     private final UuidConverter uuidConverter;
     private final StorageProxy storageProxy;
@@ -49,11 +48,8 @@ public class NotebookViewFactory {
 
     private String extractValue(ListItem listItem) {
         switch (listItem.getType()) {
-            case LINK -> {
+            case LINK, IMAGE, FILE -> {
                 return listItem.getData();
-            }
-            case IMAGE, FILE -> {
-                return uuidConverter.convertDomain(uuidConverter.convertEntity(listItem.getData()));
             }
             default -> {
                 log.debug("No value for listItemType {}", listItem.getType());

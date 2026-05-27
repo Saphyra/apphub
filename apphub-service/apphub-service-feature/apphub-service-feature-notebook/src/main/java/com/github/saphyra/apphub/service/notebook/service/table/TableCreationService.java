@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnMod
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableFileUploadResponse;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
@@ -31,7 +30,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableCreationService {
     private final TableCreationRequestValidator tableCreationRequestValidator;
     private final ListItemFactory listItemFactory;
@@ -40,7 +38,6 @@ public class TableCreationService {
     private final TableRowFactory tableRowFactory;
     private final TableColumnFactory tableColumnFactory;
     private final ColumnDataServiceProvider columnDataServiceProvider;
-    private final UuidConverter uuidConverter;
     private final CommonListItemDao commonListItemDao;
 
     @Transactional

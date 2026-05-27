@@ -12,7 +12,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableRowStatusUpdateService {
     private final TableRowDao tableRowDao;
 

@@ -18,9 +18,7 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class EditTableRowValidatorTest {
-    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID ROW_ID = UUID.randomUUID();
-    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private EditTableColumnValidator editTableColumnValidator;

@@ -11,7 +11,7 @@ import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableEditionService;
+import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.table;
 
 import com.github.saphyra.apphub.lib.common_domain.QuadWrapper;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
@@ -11,7 +10,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.Table
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.TableHeadDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
-import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +20,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class TableDeletionService {
     private final ListItemDao listItemDao;
-    private final UuidConverter uuidConverter;
-    private final StorageProxy storageProxy;
     private final CommonListItemDao commonListItemDao;
     private final TableHeadDao tableHeadDao;
     private final TableRowDao tableRowDao;

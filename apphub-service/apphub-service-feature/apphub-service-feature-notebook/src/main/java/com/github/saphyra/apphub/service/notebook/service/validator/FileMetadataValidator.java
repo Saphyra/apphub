@@ -12,7 +12,6 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class FileMetadataValidator {
     private final CommonConfigProperties commonConfigProperties;
 

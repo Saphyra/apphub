@@ -13,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
-//TODO unit test
 public class ListItemEditionService {
     private final TextValidator textValidator;
     private final ListItemDao listItemDao;
@@ -43,11 +43,13 @@ public class ListItemEditionService {
     }
 
     private void moveListItem(ListItem listItem, UUID parent) {
-        validateNotOwnChild(listItem.getListItemId(), parent, listItem.getUserId());
+        if (!Objects.equals(listItem.getParent(), parent)) {
+            validateNotOwnChild(listItem.getListItemId(), parent, listItem.getUserId());
 
-        listItem.setParent(parent);
+            listItem.setParent(parent);
 
-        listItemDao.save(listItem);
+            listItemDao.save(listItem);
+        }
     }
 
     private void validateNotOwnChild(UUID listItemId, UUID newParent, UUID userId) {
