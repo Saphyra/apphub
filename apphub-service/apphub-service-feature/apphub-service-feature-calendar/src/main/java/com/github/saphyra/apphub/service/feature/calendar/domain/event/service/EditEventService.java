@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.UUID;
 @Builder
 public class EditEventService {
     private final EventRequestValidator eventRequestValidator;
-    private final EventDao eventDao;
+    private final DeprecatedEventDao eventDao;
     private final UpdateEventContextFactory updateEventContextFactory;
     private final List<EventFieldUpdater> eventFieldUpdaters;
 
@@ -28,13 +28,13 @@ public class EditEventService {
     public void edit(UUID eventId, EventRequest request) {
         eventRequestValidator.validateEdit(request);
 
-        Event event = eventDao.findByIdValidated(eventId);
+        DeprecatedEvent event = eventDao.findByIdValidated(eventId);
         event.setExpirationNotified(false);
         UpdateEventContext context = updateEventContextFactory.create(event);
 
-        log.info("Updating fields of Event {}", eventId);
+        log.info("Updating fields of DeprecatedEvent {}", eventId);
         eventFieldUpdaters.forEach(eventFieldUpdater -> eventFieldUpdater.update(context, request, event));
-        log.info("Updating fields of Event {} finished", eventId);
+        log.info("Updating fields of DeprecatedEvent {} finished", eventId);
 
         context.processChanges();
     }

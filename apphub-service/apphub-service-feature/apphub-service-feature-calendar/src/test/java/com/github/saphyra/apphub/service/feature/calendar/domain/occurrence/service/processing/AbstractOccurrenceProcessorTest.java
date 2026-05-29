@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.condition.RepetitionTypeCondition;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.condition.RepetitionTypeConditionSelector;
 import lombok.Builder;
@@ -47,10 +47,10 @@ class AbstractOccurrenceProcessorTest {
     private static final LocalDate EXISTING_OCCURRENCE_NOT_ON_DATE = CURRENT_DATE.minusDays(3);
 
     @Mock
-    private OccurrenceFactory occurrenceFactory;
+    private DeprecatedOccurrenceFactory occurrenceFactory;
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private DeprecatedOccurrenceDao occurrenceDao;
 
     @Mock
     private RepetitionTypeConditionSelector repetitionTypeConditionSelector;
@@ -62,7 +62,7 @@ class AbstractOccurrenceProcessorTest {
     private Function<EventRequest, LocalDate> requestToEndDateMapper;
 
     @Mock
-    private Function<Event, LocalDate> eventToEndDateMapper;
+    private Function<DeprecatedEvent, LocalDate> eventToEndDateMapper;
 
     private TestOccurrenceProcessor underTest;
 
@@ -73,31 +73,31 @@ class AbstractOccurrenceProcessorTest {
     private RepetitionTypeCondition repetitionTypeCondition;
 
     @Mock
-    private Occurrence occurrence;
+    private DeprecatedOccurrence occurrence;
 
     @Mock
     private UpdateEventContext updateEventContext;
 
     @Mock
-    private Occurrence existingExpiredOccurrence;
+    private DeprecatedOccurrence existingExpiredOccurrence;
 
     @Mock
-    private Occurrence existingDoneOccurrence;
+    private DeprecatedOccurrence existingDoneOccurrence;
 
     @Mock
-    private Occurrence existingFutureOccurrence;
+    private DeprecatedOccurrence existingFutureOccurrence;
 
     @Mock
-    private Occurrence existingOccurrenceNotOnDate;
+    private DeprecatedOccurrence existingOccurrenceNotOnDate;
 
     @Mock
-    private Occurrence existingExpiredOccurrenceNotOnDate;
+    private DeprecatedOccurrence existingExpiredOccurrenceNotOnDate;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Captor
-    private ArgumentCaptor<Predicate<Occurrence>> predicateArgumentCaptor;
+    private ArgumentCaptor<Predicate<DeprecatedOccurrence>> predicateArgumentCaptor;
 
     @BeforeEach
     void setUp(){
@@ -144,7 +144,7 @@ class AbstractOccurrenceProcessorTest {
     @Test
     void recreateOccurrences() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        List<Occurrence> existingOccurrences = List.of(existingDoneOccurrence, existingExpiredOccurrence, existingFutureOccurrence, existingOccurrenceNotOnDate, existingExpiredOccurrenceNotOnDate);
+        List<DeprecatedOccurrence> existingOccurrences = List.of(existingDoneOccurrence, existingExpiredOccurrence, existingFutureOccurrence, existingOccurrenceNotOnDate, existingExpiredOccurrenceNotOnDate);
         given(updateEventContext.getOccurrences()).willReturn(existingOccurrences);
         given(updateEventContext.getEvent()).willReturn(event);
 
@@ -178,23 +178,23 @@ class AbstractOccurrenceProcessorTest {
         assertThat(predicateArgumentCaptor.getValue().test(existingOccurrenceNotOnDate)).isTrue();
         assertThat(predicateArgumentCaptor.getValue().test(existingExpiredOccurrenceNotOnDate)).isTrue();
 
-        ArgumentCaptor<Occurrence> argumentCaptor = ArgumentCaptor.forClass(Occurrence.class);
+        ArgumentCaptor<DeprecatedOccurrence> argumentCaptor = ArgumentCaptor.forClass(DeprecatedOccurrence.class);
         then(updateEventContext).should().addOccurrence(argumentCaptor.capture());
         assertThat(argumentCaptor.getAllValues()).containsExactly(occurrence);
     }
 
     static class TestOccurrenceProcessor extends AbstractOccurrenceProcessor {
         private final Function<EventRequest, LocalDate> requestToEndDateMapper;
-        private final Function<Event, LocalDate> eventToEndDateMapper;
+        private final Function<DeprecatedEvent, LocalDate> eventToEndDateMapper;
 
         @Builder
         TestOccurrenceProcessor(
-            OccurrenceFactory occurrenceFactory,
-            OccurrenceDao occurrenceDao,
+            DeprecatedOccurrenceFactory occurrenceFactory,
+            DeprecatedOccurrenceDao occurrenceDao,
             RepetitionTypeConditionSelector repetitionTypeConditionSelector,
             DateTimeUtil dateTimeUtil,
             Function<EventRequest, LocalDate> requestToEndDateMapper,
-            Function<Event, LocalDate> eventToEndDateMapper
+            Function<DeprecatedEvent, LocalDate> eventToEndDateMapper
         ) {
             super(occurrenceFactory, occurrenceDao, repetitionTypeConditionSelector, dateTimeUtil);
             this.requestToEndDateMapper = requestToEndDateMapper;
@@ -212,7 +212,7 @@ class AbstractOccurrenceProcessorTest {
         }
 
         @Override
-        protected LocalDate getEndDate(Event event) {
+        protected LocalDate getEndDate(DeprecatedEvent event) {
             return eventToEndDateMapper.apply(event);
         }
     }

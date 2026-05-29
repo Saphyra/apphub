@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.context;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.RecreateOccurrenceService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +15,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class UpdateEventContextFactoryTest {
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private DeprecatedOccurrenceDao occurrenceDao;
 
     @Mock
     private RecreateOccurrenceService recreateOccurrenceService;
@@ -27,7 +27,7 @@ class UpdateEventContextFactoryTest {
     private UpdateEventContextFactory underTest;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Test
     void create() {

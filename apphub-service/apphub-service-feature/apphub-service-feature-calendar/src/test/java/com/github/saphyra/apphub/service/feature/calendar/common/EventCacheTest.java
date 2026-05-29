@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.common;
 
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,13 +22,13 @@ class EventCacheTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @InjectMocks
     private EventCache underTest;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Test
     void get() {

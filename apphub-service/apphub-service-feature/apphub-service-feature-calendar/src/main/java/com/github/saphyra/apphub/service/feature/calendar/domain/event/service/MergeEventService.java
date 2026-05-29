@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.lib.common_util.CommonUtils;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -19,12 +19,12 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Slf4j
 public class MergeEventService {
-    private final EventDao eventDao;
-    private final OccurrenceDao occurrenceDao;
+    private final DeprecatedEventDao eventDao;
+    private final DeprecatedOccurrenceDao occurrenceDao;
     private final DeleteEventService deleteEventService;
 
     public void merge(UUID eventId) {
-        Event parent = eventDao.findByIdValidated(eventId);
+        DeprecatedEvent parent = eventDao.findByIdValidated(eventId);
 
         if (parent.getRepetitionType() != RepetitionType.ONE_TIME) {
             throw ExceptionFactory.invalidParam("eventId", "invalid type");
@@ -38,12 +38,12 @@ public class MergeEventService {
             .forEach(event -> merge(parent, event));
     }
 
-    private void merge(Event parent, Event event) {
+    private void merge(DeprecatedEvent parent, DeprecatedEvent event) {
         occurrenceDao.getByEventId(event.getEventId())
             .forEach(occurrence -> merge(parent, event, occurrence));
     }
 
-    private void merge(Event parent, Event event, Occurrence occurrence) {
+    private void merge(DeprecatedEvent parent, DeprecatedEvent event, DeprecatedOccurrence occurrence) {
         occurrence.setEventId(parent.getEventId());
         occurrence.setNote(assembleNote(event.getContent(), occurrence.getNote()));
         occurrence.setTime(CommonUtils.firstNotNull(occurrence.getTime(), event.getTime()));

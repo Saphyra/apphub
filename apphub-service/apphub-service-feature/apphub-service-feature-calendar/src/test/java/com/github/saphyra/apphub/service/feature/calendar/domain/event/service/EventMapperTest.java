@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -38,17 +38,17 @@ class EventMapperTest {
     private ObjectMapper objectMapper;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private DeprecatedEventLabelMappingDao eventLabelMappingDao;
 
     @InjectMocks
     private EventMapper underTest;
 
     @Mock
-    private EventLabelMapping eventLabelMapping;
+    private DeprecatedEventLabelMapping eventLabelMapping;
 
     @Test
     void toResponse() {
-        Event event = Event.builder()
+        DeprecatedEvent event = DeprecatedEvent.builder()
             .eventId(EVENT_ID)
             .title(TITLE)
             .repetitionType(RepetitionType.EVERY_X_DAYS)

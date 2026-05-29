@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service.updater;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.EventFieldUpdater;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,13 @@ class StartDateUpdater implements EventFieldUpdater {
     }
 
     @Override
-    public Object getEventField(Event event) {
+    public Object getEventField(DeprecatedEvent event) {
         return event.getStartDate();
     }
 
     @Override
-    public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
-        log.info("Updating startDate of Event {}", event.getEventId());
+    public void doUpdate(UpdateEventContext context, EventRequest request, DeprecatedEvent event) {
+        log.info("Updating startDate of DeprecatedEvent {}", event.getEventId());
 
         event.setStartDate(request.getStartDate());
 

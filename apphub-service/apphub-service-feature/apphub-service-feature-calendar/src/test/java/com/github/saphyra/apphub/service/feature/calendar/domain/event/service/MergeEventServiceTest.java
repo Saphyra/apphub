@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,10 +31,10 @@ class MergeEventServiceTest {
     private static final Integer REMIND_ME_BEFORE_DAYS = 32;
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private DeprecatedOccurrenceDao occurrenceDao;
 
     @Mock
     private DeleteEventService deleteEventService;
@@ -43,13 +43,13 @@ class MergeEventServiceTest {
     private MergeEventService underTest;
 
     @Mock
-    private Event parent;
+    private DeprecatedEvent parent;
 
     @Mock
-    private Event child;
+    private DeprecatedEvent child;
 
     @Mock
-    private Occurrence occurrence;
+    private DeprecatedOccurrence occurrence;
 
     @Test
     void notOneTime() {

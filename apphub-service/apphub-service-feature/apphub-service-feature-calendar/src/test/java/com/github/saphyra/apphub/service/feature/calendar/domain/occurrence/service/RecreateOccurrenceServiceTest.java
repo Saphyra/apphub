@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ class RecreateOccurrenceServiceTest {
     private UpdateEventContext updateEventContext;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @BeforeEach
     void setUp() {

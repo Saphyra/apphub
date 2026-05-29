@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,10 +20,10 @@ import java.util.UUID;
 @Builder
 public class CreateOccurrenceService {
     private final List<OccurrenceCreator> occurrenceCreators;
-    private final OccurrenceDao occurrenceDao;
-    private final OccurrenceFactory occurrenceFactory;
+    private final DeprecatedOccurrenceDao occurrenceDao;
+    private final DeprecatedOccurrenceFactory occurrenceFactory;
     private final OccurrenceRequestValidator occurrenceRequestValidator;
-    private final EventDao eventDao;
+    private final DeprecatedEventDao eventDao;
 
     /**
      * Creates occurrences for the newly created event.
@@ -41,7 +41,7 @@ public class CreateOccurrenceService {
 
         eventDao.findByIdValidated(eventId); // Ensure the event exists and belongs to the user
 
-        Occurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
+        DeprecatedOccurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
         occurrenceDao.save(occurrence);
 
         return occurrence.getOccurrenceId();

@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
 
 import java.util.Objects;
 
 public interface EventFieldUpdater {
-    default void update(UpdateEventContext context, EventRequest request, Event event) {
+    default void update(UpdateEventContext context, EventRequest request, DeprecatedEvent event) {
         Object requestField = getRequestField(request);
         Object eventField = getEventField(event);
 
@@ -18,7 +18,7 @@ public interface EventFieldUpdater {
 
     Object getRequestField(EventRequest request);
 
-    Object getEventField(Event event);
+    Object getEventField(DeprecatedEvent event);
 
-    void doUpdate(UpdateEventContext context, EventRequest request, Event event);
+    void doUpdate(UpdateEventContext context, EventRequest request, DeprecatedEvent event);
 }

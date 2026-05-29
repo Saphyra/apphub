@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ class EventQueryServiceTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @Mock
     private EventLabelMappingService eventLabelMappingService;
@@ -35,7 +35,7 @@ class EventQueryServiceTest {
     private EventQueryService underTest;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Mock
     private EventResponse eventResponse;

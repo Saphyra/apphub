@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,16 +30,16 @@ class OccurrenceMapperTest {
     private static final Integer REMIND_ME_BEFORE_DAYS = 3;
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @InjectMocks
     private OccurrenceMapper underTest;
 
     @Mock
-    private Occurrence occurrence;
+    private DeprecatedOccurrence occurrence;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Test
     void getValuesFromOccurrence() {

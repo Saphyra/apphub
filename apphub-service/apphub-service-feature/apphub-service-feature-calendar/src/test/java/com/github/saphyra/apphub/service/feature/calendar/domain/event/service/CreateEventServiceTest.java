@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.CreateOccurrenceService;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class CreateEventServiceTest {
     private EventRequestValidator eventRequestValidator;
 
     @Mock
-    private EventFactory eventFactory;
+    private DeprecatedEventFactory eventFactory;
 
     @Mock
     private EventLabelMappingService eventLabelMappingService;
@@ -36,7 +36,7 @@ class CreateEventServiceTest {
     private CreateOccurrenceService createOccurrenceService;
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @InjectMocks
     private CreateEventService underTest;
@@ -45,7 +45,7 @@ class CreateEventServiceTest {
     private EventRequest request;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Test
     void create() {

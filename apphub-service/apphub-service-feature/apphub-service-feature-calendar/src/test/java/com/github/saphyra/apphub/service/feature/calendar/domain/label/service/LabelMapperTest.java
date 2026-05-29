@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,7 +21,7 @@ class LabelMapperTest {
 
     @Test
     void toResponse() {
-        Label label = Label.builder()
+        DeprecatedLabel label = DeprecatedLabel.builder()
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();

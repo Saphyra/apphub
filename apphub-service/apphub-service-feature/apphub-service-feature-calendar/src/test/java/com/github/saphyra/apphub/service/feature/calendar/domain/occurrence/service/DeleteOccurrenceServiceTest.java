@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,13 +19,13 @@ class DeleteOccurrenceServiceTest {
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private DeprecatedOccurrenceDao occurrenceDao;
 
     @InjectMocks
     private DeleteOccurrenceService underTest;
 
     @Mock
-    private Occurrence occurrence;
+    private DeprecatedOccurrence occurrence;
 
     @Test
     void deleteOccurrence() {

@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabel;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,10 +24,10 @@ class LabelQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private DeprecatedEventLabelMappingDao eventLabelMappingDao;
 
     @Mock
-    private LabelDao labelDao;
+    private DeprecatedLabelDao labelDao;
 
     @Mock
     private LabelMapper labelMapper;
@@ -36,10 +36,10 @@ class LabelQueryServiceTest {
     private LabelQueryService underTest;
 
     @Mock
-    private EventLabelMapping eventLabelMapping;
+    private DeprecatedEventLabelMapping eventLabelMapping;
 
     @Mock
-    private Label label;
+    private DeprecatedLabel label;
 
     @Mock
     private LabelResponse labelResponse;

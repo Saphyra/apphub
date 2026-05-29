@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +14,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class DeleteEventService {
-    private final EventDao eventDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
-    private final OccurrenceDao occurrenceDao;
+    private final DeprecatedEventDao eventDao;
+    private final DeprecatedEventLabelMappingDao eventLabelMappingDao;
+    private final DeprecatedOccurrenceDao occurrenceDao;
 
     @Transactional
     public void delete(UUID userId, UUID eventId) {

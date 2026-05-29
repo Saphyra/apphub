@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.context;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.RecreateOccurrenceService;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -22,23 +22,23 @@ import java.util.function.Predicate;
 @Slf4j
 public class UpdateEventContext {
     @Getter
-    private final Event event;
+    private final DeprecatedEvent event;
 
-    private final EventDao eventDao;
-    private final OccurrenceDao occurrenceDao;
+    private final DeprecatedEventDao eventDao;
+    private final DeprecatedOccurrenceDao occurrenceDao;
     private final RecreateOccurrenceService recreateOccurrenceService;
 
     private final Set<UUID> modifiedOccurrences = new HashSet<>();
     private final Set<UUID> deletedOccurrences = new HashSet<>();
 
     private boolean occurrenceRecreationNeeded;
-    private final LazyLoadedField<List<Occurrence>> occurrences;
+    private final LazyLoadedField<List<DeprecatedOccurrence>> occurrences;
 
     @Builder
     public UpdateEventContext(
-        @NonNull Event event,
-        @NonNull EventDao eventDao,
-        @NonNull OccurrenceDao occurrenceDao,
+        @NonNull DeprecatedEvent event,
+        @NonNull DeprecatedEventDao eventDao,
+        @NonNull DeprecatedOccurrenceDao occurrenceDao,
         @NonNull RecreateOccurrenceService recreateOccurrenceService
     ) {
         this.event = event;
@@ -48,7 +48,7 @@ public class UpdateEventContext {
         this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(occurrenceDao.getByEventId(event.getEventId())));
     }
 
-    public List<Occurrence> getOccurrences() {
+    public List<DeprecatedOccurrence> getOccurrences() {
         return occurrences.get();
     }
 
@@ -64,7 +64,7 @@ public class UpdateEventContext {
         log.info("Deleting {} occurrences for event {}", deletedOccurrences.size(), event.getEventId());
         occurrenceDao.deleteAllById(deletedOccurrences);
 
-        List<Occurrence> modifiedOccurrences = occurrences.get()
+        List<DeprecatedOccurrence> modifiedOccurrences = occurrences.get()
             .stream()
             .filter(occurrence -> this.modifiedOccurrences.contains(occurrence.getOccurrenceId()))
             .toList();
@@ -79,7 +79,7 @@ public class UpdateEventContext {
     /**
      * Deletes occurrences that match the given predicate.
      */
-    public void deleteOccurrences(Predicate<Occurrence> predicate) {
+    public void deleteOccurrences(Predicate<DeprecatedOccurrence> predicate) {
         occurrences.get()
             .stream()
             .filter(predicate)
@@ -88,7 +88,7 @@ public class UpdateEventContext {
             .removeIf(predicate);
     }
 
-    public void addOccurrence(Occurrence occurrence) {
+    public void addOccurrence(DeprecatedOccurrence occurrence) {
         occurrences.get().add(occurrence);
         modifiedOccurrences.add(occurrence.getOccurrenceId());
     }

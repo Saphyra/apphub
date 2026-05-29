@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,16 +37,16 @@ class CreateOccurrenceServiceTest {
     private OccurrenceCreator occurrenceCreator;
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private DeprecatedOccurrenceDao occurrenceDao;
 
     @Mock
-    private OccurrenceFactory occurrenceFactory;
+    private DeprecatedOccurrenceFactory occurrenceFactory;
 
     @Mock
     private OccurrenceRequestValidator occurrenceRequestValidator;
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     private CreateOccurrenceService underTest;
 
@@ -57,7 +57,7 @@ class CreateOccurrenceServiceTest {
     private OccurrenceRequest occurrenceRequest;
 
     @Mock
-    private Occurrence occurrence;
+    private DeprecatedOccurrence occurrence;
 
     @BeforeEach
     void setUp() {

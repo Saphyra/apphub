@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.calendar.common.EventCache;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,8 +18,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @Slf4j
 public class SearchEventService {
-    private final EventDao eventDao;
-    private final OccurrenceDao occurrenceDao;
+    private final DeprecatedEventDao eventDao;
+    private final DeprecatedOccurrenceDao occurrenceDao;
     private final EventMapper eventMapper;
 
     public List<EventResponse> search(UUID userId, String search) {
@@ -37,13 +37,13 @@ public class SearchEventService {
             .toList();
     }
 
-    private Stream<Event> getMatchingEvents(EventCache eventCache, String search) {
+    private Stream<DeprecatedEvent> getMatchingEvents(EventCache eventCache, String search) {
         return eventCache.getAll()
             .stream()
             .filter(event -> matches(search, event.getTitle()) || matches(search, event.getContent()));
     }
 
-    private Stream<Event> getMatchingOccurrences(UUID userId, EventCache eventCache, String search) {
+    private Stream<DeprecatedEvent> getMatchingOccurrences(UUID userId, EventCache eventCache, String search) {
         return occurrenceDao.getByUserId(userId)
             .stream()
             .filter(occurrence -> matches(search, occurrence.getNote()))

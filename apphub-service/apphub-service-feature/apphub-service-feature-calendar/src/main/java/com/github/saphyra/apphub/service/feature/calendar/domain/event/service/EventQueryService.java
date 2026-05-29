@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class EventQueryService {
-    private final EventDao eventDao;
+    private final DeprecatedEventDao eventDao;
     private final EventLabelMappingService eventLabelMappingService;
     private final EventMapper eventMapper;
 

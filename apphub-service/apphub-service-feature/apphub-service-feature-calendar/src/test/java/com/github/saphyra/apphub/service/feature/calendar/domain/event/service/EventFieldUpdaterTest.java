@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ class EventFieldUpdaterTest {
     private Function<EventRequest, Object> requestMapper;
 
     @Mock
-    private Function<Event, Object> eventMapper;
+    private Function<DeprecatedEvent, Object> eventMapper;
 
     @Mock
     private Updater updater;
@@ -36,7 +36,7 @@ class EventFieldUpdaterTest {
     private EventRequest request;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Mock
     private UpdateEventContext context;
@@ -74,7 +74,7 @@ class EventFieldUpdaterTest {
     @Builder
     static class TestEventFieldUpdater implements EventFieldUpdater {
         private final Function<EventRequest, Object> requestMapper;
-        private final Function<Event, Object> eventMapper;
+        private final Function<DeprecatedEvent, Object> eventMapper;
         private final Updater updater;
 
         @Override
@@ -83,17 +83,17 @@ class EventFieldUpdaterTest {
         }
 
         @Override
-        public Object getEventField(Event event) {
+        public Object getEventField(DeprecatedEvent event) {
             return eventMapper.apply(event);
         }
 
         @Override
-        public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
+        public void doUpdate(UpdateEventContext context, EventRequest request, DeprecatedEvent event) {
             updater.update(context, request, event);
         }
     }
 
     interface Updater {
-        void update(UpdateEventContext context, EventRequest request, Event event);
+        void update(UpdateEventContext context, EventRequest request, DeprecatedEvent event);
     }
 }

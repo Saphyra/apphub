@@ -6,10 +6,10 @@ import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,9 +23,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class ExpiredEventService {
-    private final EventDao eventDao;
+    private final DeprecatedEventDao eventDao;
     private final EventMapper eventMapper;
-    private final OccurrenceDao occurrenceDao;
+    private final DeprecatedOccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
     private final EventRequestValidator eventRequestValidator;
     private final UpdateEventContextFactory updateEventContextFactory;
@@ -38,7 +38,7 @@ public class ExpiredEventService {
             .toList();
     }
 
-    private boolean isExpired(Event event) {
+    private boolean isExpired(DeprecatedEvent event) {
         if (event.isExpirationNotified()) {
             return false;
         }
@@ -49,23 +49,23 @@ public class ExpiredEventService {
 
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
-        List<Occurrence> occurrences = occurrenceDao.getByEventId(event.getEventId());
+        List<DeprecatedOccurrence> occurrences = occurrenceDao.getByEventId(event.getEventId());
 
         if (occurrences.isEmpty()) {
             return false;
         }
 
         LocalDate lastOccurrenceDate = occurrences.stream()
-            .map(Occurrence::getDate)
+            .map(DeprecatedOccurrence::getDate)
             .max(LocalDate::compareTo)
             .orElseThrow();
 
-        //Event is expired is the last occurrence us today or in the past.
+        //DeprecatedEvent is expired is the last occurrence us today or in the past.
         return !currentDate.isBefore(lastOccurrenceDate);
     }
 
     public void hide(UUID eventId) {
-        Event event = eventDao.findByIdValidated(eventId);
+        DeprecatedEvent event = eventDao.findByIdValidated(eventId);
 
         event.setExpirationNotified(true);
 
@@ -78,7 +78,7 @@ public class ExpiredEventService {
 
         eventRequestValidator.validateDates(startDate, extendUntil);
 
-        Event event = eventDao.findByIdValidated(eventId);
+        DeprecatedEvent event = eventDao.findByIdValidated(eventId);
         if(event.getRepetitionType() == RepetitionType.ONE_TIME){
             throw ExceptionFactory.invalidParam("eventId", "must not be one-time event");
         }

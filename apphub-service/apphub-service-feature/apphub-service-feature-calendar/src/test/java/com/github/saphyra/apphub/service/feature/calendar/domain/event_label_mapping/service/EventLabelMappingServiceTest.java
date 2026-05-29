@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,10 +25,10 @@ class EventLabelMappingServiceTest {
     private static final UUID LABEL_ID_3 = UUID.randomUUID();
 
     @Mock
-    private  EventLabelMappingDao eventLabelMappingDao;
+    private  DeprecatedEventLabelMappingDao eventLabelMappingDao;
 
     @Mock
-    private  EventLabelMappingFactory eventLabelMappingFactory;
+    private  DeprecatedEventLabelMappingFactory eventLabelMappingFactory;
 
     @Mock
     private  LabelIdValidator labelIdValidator;
@@ -37,13 +37,13 @@ class EventLabelMappingServiceTest {
     private EventLabelMappingService underTest;
 
     @Mock
-    private EventLabelMapping eventLabelMapping;
+    private DeprecatedEventLabelMapping eventLabelMapping;
 
     @Mock
-    private EventLabelMapping existingEventLabelMapping;
+    private DeprecatedEventLabelMapping existingEventLabelMapping;
 
     @Mock
-    private EventLabelMapping obsoleteEventLabelMapping;
+    private DeprecatedEventLabelMapping obsoleteEventLabelMapping;
 
     @Test
     void addLabels(){

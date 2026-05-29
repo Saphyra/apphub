@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.config.CalendarParams;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ import static java.util.Objects.isNull;
 class EventRequestValidator {
     private final ObjectMapper objectMapper;
     private final CalendarParams calendarParams;
-    private final LabelDao labelDao;
+    private final DeprecatedLabelDao labelDao;
 
     public void validateEdit(EventRequest request) {
         validate(request);

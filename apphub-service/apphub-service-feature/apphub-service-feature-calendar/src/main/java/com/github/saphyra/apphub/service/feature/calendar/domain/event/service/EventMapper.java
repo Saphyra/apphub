@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,9 +18,9 @@ import java.util.UUID;
 @Slf4j
 class EventMapper {
     private final ObjectMapper objectMapper;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final DeprecatedEventLabelMappingDao eventLabelMappingDao;
 
-     EventResponse toResponse(Event event) {
+     EventResponse toResponse(DeprecatedEvent event) {
         return EventResponse.builder()
             .eventId(event.getEventId())
             .repetitionType(event.getRepetitionType())
@@ -40,7 +40,7 @@ class EventMapper {
     private List<UUID> getLabels(UUID eventId) {
         return eventLabelMappingDao.getByEventId(eventId)
             .stream()
-            .map(EventLabelMapping::getLabelId)
+            .map(DeprecatedEventLabelMapping::getLabelId)
             .toList();
     }
 }

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service;
 
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ class LabelIdValidatorTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
 
     @Mock
-    private LabelDao labelDao;
+    private DeprecatedLabelDao labelDao;
 
     @InjectMocks
     private LabelIdValidator underTest;
@@ -38,7 +38,7 @@ class LabelIdValidatorTest {
     void doesNotExist() {
         given(labelDao.existsById(LABEL_ID)).willReturn(false);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(LABEL_ID)), "field", "Label with id " + LABEL_ID + " does not exist");
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(List.of(LABEL_ID)), "field", "DeprecatedLabel with id " + LABEL_ID + " does not exist");
     }
 
     @Test

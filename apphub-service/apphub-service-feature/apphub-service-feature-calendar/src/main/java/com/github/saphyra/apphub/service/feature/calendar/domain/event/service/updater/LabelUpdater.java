@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service.updater;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.EventFieldUpdater;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
@@ -21,12 +21,12 @@ class LabelUpdater implements EventFieldUpdater {
     }
 
     @Override
-    public Object getEventField(Event event) {
+    public Object getEventField(DeprecatedEvent event) {
         return eventLabelMappingService.getLabelIds(event.getEventId());
     }
 
     @Override
-    public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
+    public void doUpdate(UpdateEventContext context, EventRequest request, DeprecatedEvent event) {
         log.info("Updating labels of event {}", event.getEventId());
         eventLabelMappingService.setLabels(event.getUserId(), event.getEventId(), request.getLabels());
     }

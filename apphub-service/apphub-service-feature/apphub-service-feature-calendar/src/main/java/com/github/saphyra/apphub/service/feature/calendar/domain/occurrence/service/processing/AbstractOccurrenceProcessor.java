@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.OccurrenceCreator;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.OccurrenceRecreator;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.condition.RepetitionTypeCondition;
@@ -28,8 +28,8 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
     private static final EnumSet<OccurrenceStatus> EXPIRED_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.EXPIRED);
     private static final EnumSet<OccurrenceStatus> FUTURE_OCCURRENCE_DELETE_STATUSES = EnumSet.of(OccurrenceStatus.PENDING, OccurrenceStatus.EXPIRED);
 
-    protected final OccurrenceFactory occurrenceFactory;
-    protected final OccurrenceDao occurrenceDao;
+    protected final DeprecatedOccurrenceFactory occurrenceFactory;
+    protected final DeprecatedOccurrenceDao occurrenceDao;
     protected final RepetitionTypeConditionSelector repetitionTypeConditionSelector;
     protected final DateTimeUtil dateTimeUtil;
 
@@ -39,7 +39,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
         List<LocalDate> dates = getConditions(request.getRepetitionData())
             .getOccurrences(request.getStartDate(), getEndDate(request), request.getRepeatForDays(), currentDate);
-        log.debug("Occurrence dates: {}", dates);
+        log.debug("DeprecatedOccurrence dates: {}", dates);
         if (dates.isEmpty()) {
             throw new IllegalStateException("Cannot create occurrences for event " + eventId + " because no occurrence dates were generated.");
         }
@@ -51,14 +51,14 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
 
     @Override
     public void recreateOccurrences(UpdateEventContext context) {
-        Event event = context.getEvent();
+        DeprecatedEvent event = context.getEvent();
         log.info("Recreating occurrences for event {}", event.getEventId());
 
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
-        Map<LocalDate, List<Occurrence>> occurrencesByDate = context.getOccurrences()
+        Map<LocalDate, List<DeprecatedOccurrence>> occurrencesByDate = context.getOccurrences()
             .stream()
-            .collect(Collectors.groupingBy(Occurrence::getDate));
+            .collect(Collectors.groupingBy(DeprecatedOccurrence::getDate));
 
         log.debug("Current occurrences: {}", occurrencesByDate);
 
@@ -75,7 +75,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         datesOfOccurrences.forEach(date -> {
             // If there is no occurrence for the date, create one
             if (!occurrencesByDate.containsKey(date)) {
-                Occurrence occurrence = occurrenceFactory.create(event.getUserId(), event.getEventId(), date, null, null); //Null parameters to use the event's values
+                DeprecatedOccurrence occurrence = occurrenceFactory.create(event.getUserId(), event.getEventId(), date, null, null); //Null parameters to use the event's values
                 context.addOccurrence(occurrence);
             }
         });
@@ -84,7 +84,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
     /**
      * @return true, if occurrence should be deleted
      */
-    private boolean shouldDelete(LocalDate currentDate, Occurrence occurrence, List<LocalDate> datesOfOccurrences) {
+    private boolean shouldDelete(LocalDate currentDate, DeprecatedOccurrence occurrence, List<LocalDate> datesOfOccurrences) {
         //Keep occurrences that are still in the new range (avoid unnecessary recreation)
         if (datesOfOccurrences.contains(occurrence.getDate())) {
             log.debug("{} should not be deleted, because it is still in the new range.", occurrence);
@@ -116,7 +116,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         return request.getEndDate();
     }
 
-    protected LocalDate getEndDate(Event event) {
+    protected LocalDate getEndDate(DeprecatedEvent event) {
         return event.getEndDate();
     }
 

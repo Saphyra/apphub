@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service.
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,7 +29,7 @@ class RepetitionDataUpdaterTest {
     private EventRequest request;
 
     @Mock
-    private Event event;
+    private DeprecatedEvent event;
 
     @Mock
     private UpdateEventContext context;

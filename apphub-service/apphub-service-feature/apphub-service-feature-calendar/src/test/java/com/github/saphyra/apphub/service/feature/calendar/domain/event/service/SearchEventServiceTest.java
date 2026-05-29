@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,10 +29,10 @@ class SearchEventServiceTest {
     private static final UUID EVENT_ID_4 = UUID.randomUUID();
 
     @Mock
-    private EventDao eventDao;
+    private DeprecatedEventDao eventDao;
 
     @Mock
-    private OccurrenceDao occurrenceDao;
+    private DeprecatedOccurrenceDao occurrenceDao;
 
     @Mock
     private EventMapper eventMapper;
@@ -41,22 +41,22 @@ class SearchEventServiceTest {
     private SearchEventService underTest;
 
     @Mock
-    private Event eventWithMatchingTitle;
+    private DeprecatedEvent eventWithMatchingTitle;
 
     @Mock
-    private Event eventWithMatchingContent;
+    private DeprecatedEvent eventWithMatchingContent;
 
     @Mock
-    private Event unmatchedEvent;
+    private DeprecatedEvent unmatchedEvent;
 
     @Mock
-    private Occurrence occurrenceWithMatchingNote;
+    private DeprecatedOccurrence occurrenceWithMatchingNote;
 
     @Mock
-    private Occurrence unmatchingOccurrence;
+    private DeprecatedOccurrence unmatchingOccurrence;
 
     @Mock
-    private Event occurrenceEvent;
+    private DeprecatedEvent occurrenceEvent;
 
     @Mock
     private EventResponse eventResponse;

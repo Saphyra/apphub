@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabel;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,15 +15,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class LabelService {
-    private final LabelDao labelDao;
-    private final LabelFactory labelFactory;
+    private final DeprecatedLabelDao labelDao;
+    private final DeprecatedLabelFactory labelFactory;
     private final LabelValidator labelValidator;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final DeprecatedEventLabelMappingDao eventLabelMappingDao;
 
     public UUID createLabel(UUID userId, String label) {
         labelValidator.validate(userId, label);
 
-        Label domain = labelFactory.create(userId, label);
+        DeprecatedLabel domain = labelFactory.create(userId, label);
         labelDao.save(domain);
 
         return domain.getLabelId();
@@ -38,7 +38,7 @@ public class LabelService {
     public void editLabel(UUID userId, UUID labelId, String label) {
         labelValidator.validate(userId, label);
 
-        Label l = labelDao.findByIdValidated(labelId);
+        DeprecatedLabel l = labelDao.findByIdValidated(labelId);
         l.setLabel(label);
 
         labelDao.save(l);

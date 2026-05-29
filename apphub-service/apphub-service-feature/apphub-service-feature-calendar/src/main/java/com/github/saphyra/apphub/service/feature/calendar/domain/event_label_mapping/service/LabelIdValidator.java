@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_ma
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class LabelIdValidator {
-    private final LabelDao labelDao;
+    private final DeprecatedLabelDao labelDao;
 
     void validate(List<UUID> labels) {
         ValidationUtil.notNull(labels, "labels");
@@ -22,7 +22,7 @@ class LabelIdValidator {
 
         labels.forEach(labelId -> {
             if (!labelDao.existsById(labelId)) {
-                throw ExceptionFactory.invalidParam("field", "Label with id " + labelId + " does not exist");
+                throw ExceptionFactory.invalidParam("field", "DeprecatedLabel with id " + labelId + " does not exist");
             }
         });
     }
