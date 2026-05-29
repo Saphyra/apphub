@@ -1,6 +1,6 @@
-# List Item Data Model
+# `apphub-${Environment}-list_item`
 
-## Categories
+## Structure by `ListItemType`
 
 - `CATEGORY`, `ONLY_TITLE`: Single ListItem record
 - `LINK`, `TEXT`: Single ListItem record, url and content is in `data`
