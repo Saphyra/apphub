@@ -1,53 +1,70 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
-import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
-import com.github.saphyra.apphub.service.feature.calendar.common.EventCache;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
+//TODO unit test
 class OccurrenceMapper {
-    private final DeprecatedEventDao eventDao;
+    private final EventDao eventDao;
 
-    OccurrenceResponse toResponse(EventCache eventCache, DeprecatedOccurrence occurrence) {
-        return toResponse(eventCache::get, occurrence);
+    public List<OccurrenceResponse> toResponse(UUID userId, List<Occurrence> occurrences) {
+        List<UUID> eventIds = occurrences.stream()
+            .map(Occurrence::getEventId)
+            .distinct()
+            .toList();
+
+        Map<UUID, Event> events = eventDao.getByIds(userId, eventIds)
+            .stream()
+            .collect(Collectors.toMap(Event::getEventId, event -> event));
+
+        return toResponse(events, occurrences);
     }
 
-    OccurrenceResponse toResponse(DeprecatedOccurrence occurrence) {
-        LazyLoadedField<DeprecatedEvent> event = new LazyLoadedField<>(() -> eventDao.findByIdValidated(occurrence.getEventId()));
-
-        return toResponse(_ -> event.get(), occurrence);
+    public List<OccurrenceResponse> toResponse(Map<UUID, Event> events, List<Occurrence> occurrences) {
+        return occurrences.stream()
+            .map(occurrence -> toResponse(events.get(occurrence.getEventId()), occurrence))
+            .toList();
     }
 
-    private OccurrenceResponse toResponse(Function<UUID, DeprecatedEvent> eventProvider, DeprecatedOccurrence occurrence) {
+    public OccurrenceResponse toResponse(UUID userId, Occurrence occurrence) {
+        Event event = eventDao.findByIdValidated(userId, occurrence.getEventId());
+
+        return toResponse(event, occurrence);
+    }
+
+    private OccurrenceResponse toResponse(Event event, Occurrence occurrence) {
         return OccurrenceResponse.builder()
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
             .date(occurrence.getDate())
-            .time(getFromEventIfNull(eventProvider, occurrence.getEventId(), occurrence.getTime(), DeprecatedEvent::getTime))
+            .time(getFromEventIfNull(event, occurrence.getTime(), Event::getTime))
             .status(occurrence.getStatus())
-            .title(eventProvider.apply(occurrence.getEventId()).getTitle())
-            .content(eventProvider.apply(occurrence.getEventId()).getContent())
-            .note(Optional.ofNullable(occurrence.getNote()).orElse(""))
-            .remindMeBeforeDays(getFromEventIfNull(eventProvider, occurrence.getEventId(), occurrence.getRemindMeBeforeDays(), DeprecatedEvent::getRemindMeBeforeDays))
-            .reminded(occurrence.getReminded())
-            .eventArchived(eventProvider.apply(occurrence.getEventId()).isArchived())
+            .title(event.getTitle())
+            .content(event.getContent())
+            .note(occurrence.getNote())
+            .remindMeBeforeDays(getFromEventIfNull(event, occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
+            .reminded(occurrence.isReminded())
+            .eventArchived(event.isArchived())
             .build();
     }
 
-    private <T> T getFromEventIfNull(Function<UUID, DeprecatedEvent> eventProvider, UUID eventId, T value, Function<DeprecatedEvent, T> mapper) {
+    private <T> T getFromEventIfNull(Event event, T value, Function<Event, T> mapper) {
         return Optional.ofNullable(value)
-            .orElseGet(() -> mapper.apply(eventProvider.apply(eventId)));
+            .orElseGet(() -> mapper.apply(event));
     }
 }

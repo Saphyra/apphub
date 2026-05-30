@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,19 +30,20 @@ class EditOccurrenceServiceTest {
     private static final LocalTime TIME = LocalTime.now();
     private static final String NOTE = "note";
     private static final Integer REMIND_ME_BEFORE_DAYS = 3;
+    private static final UUID USER_ID = UUID.randomUUID();
 
 
     @Mock
     private OccurrenceRequestValidator occurrenceRequestValidator;
 
     @Mock
-    private DeprecatedOccurrenceDao occurrenceDao;
+    private OccurrenceDao occurrenceDao;
 
     @Mock
     private OccurrenceMapper occurrenceMapper;
 
     @Mock
-    private DeprecatedEventDao eventDao;
+    private EventDao eventDao;
 
     @InjectMocks
     private EditOccurrenceService underTest;
@@ -51,19 +52,18 @@ class EditOccurrenceServiceTest {
     private OccurrenceRequest occurrenceRequest;
 
     @Mock
-    private DeprecatedEvent event;
+    private Event event;
 
     @Mock
-    private DeprecatedOccurrence occurrence;
+    private Occurrence occurrence;
 
     @Mock
     private OccurrenceResponse occurrenceResponse;
 
     @Test
     void editOccurrence_newValues() {
-        given(occurrenceDao.findByIdValidated(OCCURRENCE_ID)).willReturn(occurrence);
-        given(occurrence.getEventId()).willReturn(EVENT_ID);
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
         given(occurrenceRequest.getDate()).willReturn(DATE);
         given(occurrenceRequest.getTime()).willReturn(TIME);
@@ -74,7 +74,7 @@ class EditOccurrenceServiceTest {
         given(event.getTime()).willReturn(TIME.plusHours(1));
         given(event.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS + 1);
 
-        underTest.editOccurrence(OCCURRENCE_ID, occurrenceRequest);
+        underTest.editOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, occurrenceRequest);
 
         then(occurrence).should().setDate(DATE);
         then(occurrence).should().setTime(TIME);
@@ -82,15 +82,14 @@ class EditOccurrenceServiceTest {
         then(occurrence).should().setNote(NOTE);
         then(occurrence).should().setRemindMeBeforeDays(REMIND_ME_BEFORE_DAYS);
         then(occurrence).should().setReminded(true);
-        then(occurrenceDao).should().save(occurrence);
+        then(occurrenceDao).should().save(USER_ID, occurrence);
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
     }
 
     @Test
     void editOccurrence_inheritValues() {
-        given(occurrenceDao.findByIdValidated(OCCURRENCE_ID)).willReturn(occurrence);
-        given(occurrence.getEventId()).willReturn(EVENT_ID);
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
         given(occurrenceRequest.getDate()).willReturn(DATE);
         given(occurrenceRequest.getTime()).willReturn(TIME);
@@ -101,7 +100,7 @@ class EditOccurrenceServiceTest {
         given(event.getTime()).willReturn(TIME);
         given(event.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
 
-        underTest.editOccurrence(OCCURRENCE_ID, occurrenceRequest);
+        underTest.editOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, occurrenceRequest);
 
         then(occurrence).should().setDate(DATE);
         then(occurrence).should().setTime(null);
@@ -109,34 +108,34 @@ class EditOccurrenceServiceTest {
         then(occurrence).should().setNote(NOTE);
         then(occurrence).should().setRemindMeBeforeDays(null);
         then(occurrence).should().setReminded(true);
-        then(occurrenceDao).should().save(occurrence);
+        then(occurrenceDao).should().save(USER_ID, occurrence);
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
     }
 
     @Test
     void editOccurrenceStatus_nullStatus(){
-        ExceptionValidator.validateInvalidParam(() -> underTest.editOccurrenceStatus(OCCURRENCE_ID, null), "status", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, null), "status", "must not be null");
     }
 
     @Test
     void editOccurrenceStatus(){
-        given(occurrenceDao.findByIdValidated(OCCURRENCE_ID)).willReturn(occurrence);
-        given(occurrenceMapper.toResponse(occurrence)).willReturn(occurrenceResponse);
+        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(occurrenceMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
 
-        assertThat(underTest.editOccurrenceStatus(OCCURRENCE_ID, OccurrenceStatus.DONE)).isEqualTo(occurrenceResponse);
+        assertThat(underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, OccurrenceStatus.DONE)).isEqualTo(occurrenceResponse);
 
         then(occurrence).should().setStatus(OccurrenceStatus.DONE);
-        then(occurrenceDao).should().save(occurrence);
+        then(occurrenceDao).should().save(USER_ID, occurrence);
     }
 
     @Test
     void setReminded(){
-        given(occurrenceDao.findByIdValidated(OCCURRENCE_ID)).willReturn(occurrence);
-        given(occurrenceMapper.toResponse(occurrence)).willReturn(occurrenceResponse);
+        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(occurrenceMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
 
-        assertThat(underTest.setReminded(OCCURRENCE_ID)).isEqualTo(occurrenceResponse);
+        assertThat(underTest.setReminded(USER_ID, EVENT_ID, OCCURRENCE_ID)).isEqualTo(occurrenceResponse);
 
         then(occurrence).should().setReminded(true);
-        then(occurrenceDao).should().save(occurrence);
+        then(occurrenceDao).should().save(USER_ID, occurrence);
     }
 }

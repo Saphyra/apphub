@@ -4,10 +4,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,15 +20,15 @@ import java.util.UUID;
 @Slf4j
 public class EditOccurrenceService {
     private final OccurrenceRequestValidator occurrenceRequestValidator;
-    private final DeprecatedOccurrenceDao occurrenceDao;
+    private final OccurrenceDao occurrenceDao;
     private final OccurrenceMapper occurrenceMapper;
-    private final DeprecatedEventDao eventDao;
+    private final EventDao eventDao;
 
-    public void editOccurrence(UUID occurrenceId, OccurrenceRequest request) {
+    public void editOccurrence(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        DeprecatedOccurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
-        DeprecatedEvent event = eventDao.findByIdValidated(occurrence.getEventId());
+        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
+        Event event = eventDao.findByIdValidated(userId, eventId);
 
         occurrence.setDate(request.getDate());
         occurrence.setTime(nullIfEquals(request.getTime(), event.getTime()));
@@ -37,7 +37,7 @@ public class EditOccurrenceService {
         occurrence.setRemindMeBeforeDays(nullIfEquals(request.getRemindMeBeforeDays(), event.getRemindMeBeforeDays()));
         occurrence.setReminded(request.getReminded());
 
-        occurrenceDao.save(occurrence);
+        occurrenceDao.save(userId, occurrence);
     }
 
     /*
@@ -52,21 +52,21 @@ public class EditOccurrenceService {
         return fromRequest;
     }
 
-    public OccurrenceResponse editOccurrenceStatus(UUID occurrenceId, OccurrenceStatus status) {
+    public OccurrenceResponse editOccurrenceStatus(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
         ValidationUtil.notNull(status, "status");
 
-        DeprecatedOccurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
+        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
         occurrence.setStatus(status);
-        occurrenceDao.save(occurrence);
+        occurrenceDao.save(userId, occurrence);
 
-        return occurrenceMapper.toResponse(occurrence);
+        return occurrenceMapper.toResponse(userId, occurrence);
     }
 
-    public OccurrenceResponse setReminded(UUID occurrenceId) {
-        DeprecatedOccurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
+    public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
+        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
         occurrence.setReminded(true);
-        occurrenceDao.save(occurrence);
+        occurrenceDao.save(userId, occurrence);
 
-        return occurrenceMapper.toResponse(occurrence);
+        return occurrenceMapper.toResponse(userId, occurrence);
     }
 }

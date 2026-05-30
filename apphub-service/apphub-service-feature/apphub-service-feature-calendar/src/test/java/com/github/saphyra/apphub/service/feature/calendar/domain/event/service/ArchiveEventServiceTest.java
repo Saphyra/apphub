@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,26 +18,27 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class ArchiveEventServiceTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private DeprecatedEventDao eventDao;
+    private EventDao eventDao;
 
     @InjectMocks
     private ArchiveEventService underTest;
 
     @Mock
-    private DeprecatedEvent event;
+    private Event event;
 
     @Test
     void nullValue() {
-        ExceptionValidator.validateInvalidParam(catchThrowable(() -> underTest.archive(EVENT_ID, null)), "archived", "must not be null");
+        ExceptionValidator.validateInvalidParam(catchThrowable(() -> underTest.archive(USER_ID, EVENT_ID, null)), "archived", "must not be null");
     }
 
     @Test
     void archive() {
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
-        underTest.archive(EVENT_ID, true);
+        underTest.archive(USER_ID, EVENT_ID, true);
 
         then(event).should().setArchived(true);
         then(eventDao).should().save(event);

@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabel;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelFactory;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,32 +16,34 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class LabelService {
-    private final DeprecatedLabelDao labelDao;
-    private final DeprecatedLabelFactory labelFactory;
+    private final LabelDao labelDao;
+    private final LabelFactory labelFactory;
     private final LabelValidator labelValidator;
-    private final DeprecatedEventLabelMappingDao eventLabelMappingDao;
+    private final CommonCalendarDao commonCalendarDao;
 
     public UUID createLabel(UUID userId, String label) {
         labelValidator.validate(userId, label);
 
-        DeprecatedLabel domain = labelFactory.create(userId, label);
-        labelDao.save(domain);
+        Label domain = labelFactory.create(label);
+        labelDao.save(userId, domain);
 
         return domain.getLabelId();
     }
 
     @Transactional
     public void deleteLabel(UUID userId, UUID labelId) {
-        eventLabelMappingDao.deleteByUserIdAndLabelId(userId, labelId);
-        labelDao.deleteByUserIdAndLabelId(userId, labelId);
+        commonCalendarDao.deleteLabel(userId, labelId);
     }
 
     public void editLabel(UUID userId, UUID labelId, String label) {
-        labelValidator.validate(userId, label);
+        Label domain = labelValidator.validate(userId, label)
+            .stream()
+            .filter(l -> l.getLabelId().equals(labelId))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.notFound("Label not found by id " + labelId));
 
-        DeprecatedLabel l = labelDao.findByIdValidated(labelId);
-        l.setLabel(label);
+        domain.setLabel(label);
 
-        labelDao.save(l);
+        labelDao.save(userId, domain);
     }
 }

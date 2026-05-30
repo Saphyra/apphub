@@ -60,7 +60,8 @@ class LabelControllerImplTest {
 
     @Test
     void getLabel() {
-        given(labelQueryService.getLabel(LABEL_ID)).willReturn(labelResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(labelQueryService.getLabel(USER_ID, LABEL_ID)).willReturn(labelResponse);
 
         assertThat(underTest.getLabel(LABEL_ID, accessToken)).isEqualTo(labelResponse);
     }
@@ -87,7 +88,8 @@ class LabelControllerImplTest {
 
     @Test
     void getLabelsOfEvent() {
-        given(labelQueryService.getByEventId(EVENT_ID)).willReturn(List.of(labelResponse));
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(labelQueryService.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(labelResponse));
 
         assertThat(underTest.getLabelsOfEvent(EVENT_ID, accessToken)).containsExactly(labelResponse);
     }

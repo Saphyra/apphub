@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service.
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +33,7 @@ class LabelUpdaterTest {
     private EventRequest eventRequest;
 
     @Mock
-    private DeprecatedEvent event;
+    private Event event;
 
     @Mock
     private UpdateEventContext context;
@@ -48,7 +48,8 @@ class LabelUpdaterTest {
     @Test
     void getEventField() {
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(eventLabelMappingService.getLabelIds(EVENT_ID)).willReturn(List.of(LABEL_ID));
+        given(event.getUserId()).willReturn(USER_ID);
+        given(eventLabelMappingService.getLabelIds(USER_ID, EVENT_ID)).willReturn(List.of(LABEL_ID));
 
         assertThat(underTest.getEventField(event)).isEqualTo(List.of(LABEL_ID));
     }

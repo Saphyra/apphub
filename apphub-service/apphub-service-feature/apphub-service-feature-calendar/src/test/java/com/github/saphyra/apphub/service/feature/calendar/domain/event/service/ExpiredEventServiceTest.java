@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.response.EventRespon
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,13 +32,13 @@ class ExpiredEventServiceTest {
     private static final LocalDate EXTEND_UNTIL = CURRENT_DATE.plusWeeks(2);
 
     @Mock
-    private DeprecatedEventDao eventDao;
+    private EventDao eventDao;
 
     @Mock
     private EventMapper eventMapper;
 
     @Mock
-    private DeprecatedOccurrenceDao occurrenceDao;
+    private OccurrenceDao occurrenceDao;
 
     @Mock
     private DateTimeUtil dateTimeUtil;
@@ -53,10 +53,10 @@ class ExpiredEventServiceTest {
     private ExpiredEventService underTest;
 
     @Mock
-    private DeprecatedEvent event;
+    private Event event;
 
     @Mock
-    private DeprecatedOccurrence occurrence;
+    private Occurrence occurrence;
 
     @Mock
     private EventResponse eventResponse;
@@ -87,7 +87,8 @@ class ExpiredEventServiceTest {
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of());
+        given(event.getUserId()).willReturn(USER_ID);
+        given(occurrenceDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of());
 
         assertThat(underTest.getExpiredEvents(USER_ID)).isEmpty();
     }
@@ -98,8 +99,9 @@ class ExpiredEventServiceTest {
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
+        given(event.getUserId()).willReturn(USER_ID);
         given(occurrence.getDate()).willReturn(CURRENT_DATE.plusDays(1));
 
         assertThat(underTest.getExpiredEvents(USER_ID)).isEmpty();
@@ -111,9 +113,10 @@ class ExpiredEventServiceTest {
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE);
+        given(event.getUserId()).willReturn(USER_ID);
         given(eventMapper.toResponse(event)).willReturn(eventResponse);
 
         assertThat(underTest.getExpiredEvents(USER_ID)).containsExactly(eventResponse);
@@ -121,9 +124,9 @@ class ExpiredEventServiceTest {
 
     @Test
     void hide() {
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
-        underTest.hide(EVENT_ID);
+        underTest.hide(USER_ID, EVENT_ID);
 
         then(event).should().setExpirationNotified(true);
         then(eventDao).should().save(event);
@@ -132,10 +135,10 @@ class ExpiredEventServiceTest {
     @Test
     void extend_oneTimeEvent() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(event.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.extend(EVENT_ID, EXTEND_UNTIL), "eventId", "must not be one-time event");
+        ExceptionValidator.validateInvalidParam(() -> underTest.extend(USER_ID, EVENT_ID, EXTEND_UNTIL), "eventId", "must not be one-time event");
 
         then(eventRequestValidator).should().validateDates(CURRENT_DATE, EXTEND_UNTIL);
     }
@@ -143,11 +146,11 @@ class ExpiredEventServiceTest {
     @Test
     void extend() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(updateEventContextFactory.create(event)).willReturn(updateEventContext);
 
-        underTest.extend(EVENT_ID, EXTEND_UNTIL);
+        underTest.extend(USER_ID, EVENT_ID, EXTEND_UNTIL);
 
         then(eventRequestValidator).should().validateDates(CURRENT_DATE, EXTEND_UNTIL);
         then(event).should().setStartDate(CURRENT_DATE);

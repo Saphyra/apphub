@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,12 +21,13 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class EditEventServiceTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private EventRequestValidator eventRequestValidator;
 
     @Mock
-    private DeprecatedEventDao eventDao;
+    private EventDao eventDao;
 
     @Mock
     private UpdateEventContextFactory updateEventContextFactory;
@@ -41,7 +42,7 @@ class EditEventServiceTest {
     private EventRequest request;
 
     @Mock
-    private DeprecatedEvent event;
+    private Event event;
 
     @Mock
     private UpdateEventContext context;
@@ -58,13 +59,13 @@ class EditEventServiceTest {
 
     @Test
     void edit() {
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(updateEventContextFactory.create(event)).willReturn(context);
 
-        underTest.edit(EVENT_ID, request);
+        underTest.edit(USER_ID, EVENT_ID, request);
 
         then(event).should().setExpirationNotified(false);
-        then(eventRequestValidator).should().validateEdit(request);
+        then(eventRequestValidator).should().validateEdit(USER_ID, request);
         then(eventFieldUpdater).should().update(context, request, event);
         then(context).should().processChanges();
     }

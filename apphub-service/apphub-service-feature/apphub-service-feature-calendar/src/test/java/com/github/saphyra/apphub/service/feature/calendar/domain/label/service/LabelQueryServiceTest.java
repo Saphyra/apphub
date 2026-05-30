@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMapping;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabel;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,10 +23,10 @@ class LabelQueryServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
-    private DeprecatedEventLabelMappingDao eventLabelMappingDao;
+    private EventLabelMappingDao eventLabelMappingDao;
 
     @Mock
-    private DeprecatedLabelDao labelDao;
+    private LabelDao labelDao;
 
     @Mock
     private LabelMapper labelMapper;
@@ -36,22 +35,18 @@ class LabelQueryServiceTest {
     private LabelQueryService underTest;
 
     @Mock
-    private DeprecatedEventLabelMapping eventLabelMapping;
-
-    @Mock
-    private DeprecatedLabel label;
+    private Label label;
 
     @Mock
     private LabelResponse labelResponse;
 
     @Test
     void getByEventId() {
-        given(eventLabelMappingDao.getByEventId(EVENT_ID)).willReturn(List.of(eventLabelMapping));
-        given(eventLabelMapping.getLabelId()).willReturn(LABEL_ID);
-        given(labelDao.findByIdValidated(LABEL_ID)).willReturn(label);
-        given(labelMapper.toResponse(label)).willReturn(labelResponse);
+        given(eventLabelMappingDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(LABEL_ID));
+        given(labelDao.getByLabelIds(USER_ID, List.of(LABEL_ID))).willReturn(List.of(label));
+        given(labelMapper.toResponse(List.of(label))).willReturn(List.of(labelResponse));
 
-        assertThat(underTest.getByEventId(EVENT_ID)).containsExactly(labelResponse);
+        assertThat(underTest.getByEventId(USER_ID, EVENT_ID)).containsExactly(labelResponse);
     }
 
     @Test
@@ -64,9 +59,9 @@ class LabelQueryServiceTest {
 
     @Test
     void getLabel() {
-        given(labelDao.findByIdValidated(LABEL_ID)).willReturn(label);
+        given(labelDao.findByIdValidated(USER_ID, LABEL_ID)).willReturn(label);
         given(labelMapper.toResponse(label)).willReturn(labelResponse);
 
-        assertThat(underTest.getLabel(LABEL_ID)).isEqualTo(labelResponse);
+        assertThat(underTest.getLabel(USER_ID, LABEL_ID)).isEqualTo(labelResponse);
     }
 }

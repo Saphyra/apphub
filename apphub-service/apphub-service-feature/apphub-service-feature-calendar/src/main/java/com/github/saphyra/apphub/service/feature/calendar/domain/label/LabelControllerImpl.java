@@ -47,7 +47,7 @@ class LabelControllerImpl implements LabelController {
     public LabelResponse getLabel(UUID labelId, AccessToken accessToken) {
         log.info("{} wants to get label {}.", accessToken.getUserId(), labelId);
 
-        LabelResponse response = labelQueryService.getLabel(labelId);
+        LabelResponse response = labelQueryService.getLabel(accessToken.getUserId(), labelId);
         log.debug("Response: {}", response);
 
         return response;
@@ -76,6 +76,6 @@ class LabelControllerImpl implements LabelController {
     public List<LabelResponse> getLabelsOfEvent(UUID eventId, AccessToken accessToken) {
         log.info("{} wants to get labels of event {}.", accessToken.getUserId(), eventId);
 
-        return labelQueryService.getByEventId(eventId);
+        return labelQueryService.getByEventId(accessToken.getUserId(), eventId);
     }
 }

@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMapping;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.deprecated_dao.DeprecatedEventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,16 +15,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class LabelQueryService {
-    private final DeprecatedEventLabelMappingDao eventLabelMappingDao;
-    private final DeprecatedLabelDao labelDao;
+    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelDao labelDao;
     private final LabelMapper labelMapper;
 
-    public List<LabelResponse> getByEventId(UUID eventId) {
-        return eventLabelMappingDao.getByEventId(eventId)
+    public List<LabelResponse> getByEventId(UUID userId, UUID eventId) {
+        List<UUID> labelIds = eventLabelMappingDao.getByEventId(userId, eventId)
             .stream()
-            .map(DeprecatedEventLabelMapping::getLabelId)
-            .map(this::getLabel)
             .toList();
+        List<Label> labels = labelDao.getByLabelIds(userId, labelIds);
+        return labelMapper.toResponse(labels);
     }
 
     public List<LabelResponse> getByUserId(UUID userId) {
@@ -34,7 +34,7 @@ public class LabelQueryService {
             .toList();
     }
 
-    public LabelResponse getLabel(UUID labelId) {
-        return labelMapper.toResponse(labelDao.findByIdValidated(labelId));
+    public LabelResponse getLabel(UUID userId, UUID labelId) {
+        return labelMapper.toResponse(labelDao.findByIdValidated(userId, labelId));
     }
 }

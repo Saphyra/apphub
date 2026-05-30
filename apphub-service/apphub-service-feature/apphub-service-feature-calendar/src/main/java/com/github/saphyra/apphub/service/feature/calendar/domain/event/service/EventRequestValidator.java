@@ -5,7 +5,8 @@ import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.config.CalendarParams;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static java.util.Objects.isNull;
 
@@ -27,15 +29,15 @@ import static java.util.Objects.isNull;
 class EventRequestValidator {
     private final ObjectMapper objectMapper;
     private final CalendarParams calendarParams;
-    private final DeprecatedLabelDao labelDao;
+    private final LabelDao labelDao;
 
-    public void validateEdit(EventRequest request) {
-        validate(request);
+    public void validateEdit(UUID userId, EventRequest request) {
+        validate(userId, request);
 
         ValidationUtil.notNull(request.getArchived(), "archived");
     }
 
-    void validate(EventRequest request) {
+    void validate(UUID userId, EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
         validateRepetitionData(request.getRepetitionType(), request.getRepetitionData());
 
@@ -52,14 +54,9 @@ class EventRequestValidator {
         ValidationUtil.notBlank(request.getTitle(), "title");
         ValidationUtil.notNull(request.getContent(), "content");
         ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
-        ValidationUtil.doesNotContainNull(request.getLabels(), "labels");
 
-        request.getLabels()
-            .forEach(labelId -> {
-                if (!labelDao.existsById(labelId)) {
-                    throw ExceptionFactory.invalidParam("labelId", "does not exist");
-                }
-            });
+        ValidationUtil.doesNotContainNull(request.getLabels(), "labels");
+        ValidationUtil.containsAll(request.getLabels(), labelDao.getByLabelIds(userId, request.getLabels()).stream().map(Label::getLabelId).toList(), "labels");
     }
 
     public void validateDates(LocalDate startDate, LocalDate endDate) {

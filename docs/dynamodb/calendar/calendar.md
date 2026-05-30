@@ -16,14 +16,19 @@
 
 # Occurrence
 
-- `pk`: `USER#userId|MONTH#YYYY-MM`
+- `pk`: `USER#userId`
 - `sk`: `EVENT#eventId|OCCURRENCE#occurrenceId`
 - `date`: `LocalDate` (encrypted)
+- `dateBucket`: `YYYY-MM`
 - `time`: `LocalTime` (encrypted)
 - `status`: `OccurrenceStatus` (encrypted)
 - `note`: `string` (encrypted)
 - `remindMeBeforeDays`: `number` (encrypted)
 - `reminded`: `boolean` (encrypted)
+
+### GSI-pk-date_bucket - Query occurrences of month
+- pk: `USER#userId`
+- sk: `dateBucket`
 
 # Label
 
@@ -36,7 +41,9 @@
 Double-mapping for bi-directional query (Query events of label and label of events)
 
 - `pk`: `USER#userId`
-- `sk`: `EVENT_LABEL_MAPPING|EVENT#eventId|LABEL#labelId`
+- `sk`: `EVENT_LABEL_MAPPING|EVENT#eventId`
+- `labelIds`: `uuid[]`
 
 - `pk`: `USER#userId`
-- `sk`: `EVENT_LABEL_MAPPING|LABEL#labelId|EVENT#eventId`
+- `sk`: `EVENT_LABEL_MAPPING|LABEL#labelId|`
+- `eventIds`: `uuid[]`

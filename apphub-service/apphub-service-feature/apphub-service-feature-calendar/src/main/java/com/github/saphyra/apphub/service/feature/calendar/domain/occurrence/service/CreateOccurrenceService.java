@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,16 +20,16 @@ import java.util.UUID;
 @Builder
 public class CreateOccurrenceService {
     private final List<OccurrenceCreator> occurrenceCreators;
-    private final DeprecatedOccurrenceDao occurrenceDao;
-    private final DeprecatedOccurrenceFactory occurrenceFactory;
     private final OccurrenceRequestValidator occurrenceRequestValidator;
-    private final DeprecatedEventDao eventDao;
+    private final EventDao eventDao;
+    private final OccurrenceFactory occurrenceFactory;
+    private final OccurrenceDao occurrenceDao;
 
     /**
      * Creates occurrences for the newly created event.
      */
-    public void createOccurrences(UUID userId, UUID eventId, EventRequest request) {
-        occurrenceCreators.stream()
+    public List<Occurrence> createOccurrences(UUID userId, UUID eventId, EventRequest request) {
+        return occurrenceCreators.stream()
             .filter(occurrenceCreator -> occurrenceCreator.getRepetitionType() == request.getRepetitionType())
             .findFirst()
             .orElseThrow(() -> new UnsupportedOperationException("Repetition type not supported: " + request.getRepetitionType()))
@@ -39,10 +39,10 @@ public class CreateOccurrenceService {
     public UUID createOccurrence(UUID userId, UUID eventId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        eventDao.findByIdValidated(eventId); // Ensure the event exists and belongs to the user
+        eventDao.findByIdValidated(userId, eventId); // Ensure the event exists and belongs to the user
 
-        DeprecatedOccurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
-        occurrenceDao.save(occurrence);
+        Occurrence occurrence = occurrenceFactory.create(eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
+        occurrenceDao.save(userId, occurrence);
 
         return occurrence.getOccurrenceId();
     }

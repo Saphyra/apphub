@@ -200,4 +200,15 @@ public class ValidationUtil {
             throw ExceptionFactory.invalidParam(field, "must not contain null values");
         }
     }
+
+    //TODO unit test
+    public static <T> void containsAll(List<T> values, List<T> list, String field) {
+        List<T> missing = values.stream()
+            .filter(value -> !list.contains(value))
+            .toList();
+
+        if (!missing.isEmpty()) {
+            throw ExceptionFactory.invalidParam(field, "Unsupported values: " + missing);
+        }
+    }
 }

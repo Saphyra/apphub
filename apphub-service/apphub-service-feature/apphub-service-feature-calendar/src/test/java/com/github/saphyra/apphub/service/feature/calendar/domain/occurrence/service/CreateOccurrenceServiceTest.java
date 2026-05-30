@@ -3,10 +3,10 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,16 +37,16 @@ class CreateOccurrenceServiceTest {
     private OccurrenceCreator occurrenceCreator;
 
     @Mock
-    private DeprecatedOccurrenceDao occurrenceDao;
+    private OccurrenceDao occurrenceDao;
 
     @Mock
-    private DeprecatedOccurrenceFactory occurrenceFactory;
+    private OccurrenceFactory occurrenceFactory;
 
     @Mock
     private OccurrenceRequestValidator occurrenceRequestValidator;
 
     @Mock
-    private DeprecatedEventDao eventDao;
+    private EventDao eventDao;
 
     private CreateOccurrenceService underTest;
 
@@ -57,7 +57,7 @@ class CreateOccurrenceServiceTest {
     private OccurrenceRequest occurrenceRequest;
 
     @Mock
-    private DeprecatedOccurrence occurrence;
+    private Occurrence occurrence;
 
     @BeforeEach
     void setUp() {
@@ -95,13 +95,13 @@ class CreateOccurrenceServiceTest {
         given(occurrenceRequest.getTime()).willReturn(TIME);
         given(occurrenceRequest.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
         given(occurrenceRequest.getNote()).willReturn(NOTE);
-        given(occurrenceFactory.create(USER_ID, EVENT_ID, DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE)).willReturn(occurrence);
+        given(occurrenceFactory.create(EVENT_ID, DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE)).willReturn(occurrence);
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
 
         assertThat(underTest.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest)).isEqualTo(OCCURRENCE_ID);
 
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
-        then(eventDao).should().findByIdValidated(EVENT_ID);
-        then(occurrenceDao).should().save(occurrence);
+        then(eventDao).should().findByIdValidated(USER_ID, EVENT_ID);
+        then(occurrenceDao).should().save(USER_ID, occurrence);
     }
 }

@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.deprecated_dao.DeprecatedEvent;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.condition.RepetitionTypeConditionSelector;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Component
 @Slf4j
 class OneTimeEventOccurrenceProcessor extends AbstractOccurrenceProcessor {
-    OneTimeEventOccurrenceProcessor(DeprecatedOccurrenceFactory occurrenceFactory, DeprecatedOccurrenceDao occurrenceDao, RepetitionTypeConditionSelector repetitionTypeConditionSelector, DateTimeUtil dateTimeUtil) {
+    OneTimeEventOccurrenceProcessor(OccurrenceFactory occurrenceFactory, OccurrenceDao occurrenceDao, RepetitionTypeConditionSelector repetitionTypeConditionSelector, DateTimeUtil dateTimeUtil) {
         super(occurrenceFactory, occurrenceDao, repetitionTypeConditionSelector, dateTimeUtil);
     }
 
@@ -30,7 +30,7 @@ class OneTimeEventOccurrenceProcessor extends AbstractOccurrenceProcessor {
     }
 
     @Override
-    protected LocalDate getEndDate(DeprecatedEvent event) {
+    protected LocalDate getEndDate(Event event) {
         return event.getStartDate();
     }
 }
