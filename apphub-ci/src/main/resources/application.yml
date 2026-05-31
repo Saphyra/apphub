@@ -222,6 +222,7 @@ services:
     optional: true
     properties:
       - PSQL_HOST
+      - DYNAMO_DB_CONFIGURATION
   - name: elite-base
     port: 8087
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/target/application.jar"

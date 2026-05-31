@@ -31,7 +31,7 @@ public class OccurrenceQueryService {
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
     private final EventLabelMappingDao eventLabelMappingDao;
-    private final OccurrenceMapper occurrenceMapper;
+    private final OccurrenceResponseMapper occurrenceResponseMapper;
     private final EventDao eventDao;
 
     public List<OccurrenceResponse> getOccurrences(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
@@ -43,7 +43,7 @@ public class OccurrenceQueryService {
         Map<UUID, Event> events = eventDao.getByIds(userId, occurrenceMapping.keySet())
             .stream()
             .collect(Collectors.toMap(Event::getEventId, event -> event));
-        Map<UUID, List<UUID>> labels = eventLabelMappingDao.getByEventIds(userId, events.keySet());
+        Map<UUID, List<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet());
 
         List<Occurrence> occurrences = occurrenceMapping.entrySet()
             .stream()
@@ -51,7 +51,7 @@ public class OccurrenceQueryService {
             .flatMap(entry -> getOccurrences(events.get(entry.getKey()), entry.getValue(), currentDate, startDate, endDate).stream())
             .toList();
 
-        return occurrenceMapper.toResponse(events, occurrences);
+        return occurrenceResponseMapper.toResponse(events, occurrences);
     }
 
     private List<Occurrence> getOccurrencesBetween(UUID userId, LocalDate startDate, LocalDate endDate) {
@@ -135,11 +135,11 @@ public class OccurrenceQueryService {
     public List<OccurrenceResponse> getOccurrencesOfEvent(UUID userId, UUID eventId) {
         List<Occurrence> occurrences = occurrenceDao.getByEventId(userId, eventId);
 
-        return occurrenceMapper.toResponse(userId, occurrences);
+        return occurrenceResponseMapper.toResponse(userId, occurrences);
     }
 
     public OccurrenceResponse getOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
         Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
-        return occurrenceMapper.toResponse(userId, occurrence);
+        return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 }

@@ -19,6 +19,6 @@ public class DeleteEventService {
     }
 
     public void delete(UUID userId, List<UUID> deletedEventIds) {
-        commonCalendarDao.deleteEvent(userId, deletedEventIds);
+        commonCalendarDao.deleteEvents(userId, deletedEventIds);
     }
 }

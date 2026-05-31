@@ -20,7 +20,7 @@ public class LabelQueryService {
     private final LabelMapper labelMapper;
 
     public List<LabelResponse> getByEventId(UUID userId, UUID eventId) {
-        List<UUID> labelIds = eventLabelMappingDao.getByEventId(userId, eventId)
+        List<UUID> labelIds = eventLabelMappingDao.getLabelsOfEvent(userId, eventId)
             .stream()
             .toList();
         List<Label> labels = labelDao.getByLabelIds(userId, labelIds);

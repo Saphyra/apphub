@@ -26,6 +26,6 @@ class DeleteEventServiceTest {
     void delete() {
         underTest.delete(USER_ID, EVENT_ID);
 
-        then(commonCalendarDao).should().deleteEvent(USER_ID, List.of(EVENT_ID));
+        then(commonCalendarDao).should().deleteEvents(USER_ID, List.of(EVENT_ID));
     }
 }

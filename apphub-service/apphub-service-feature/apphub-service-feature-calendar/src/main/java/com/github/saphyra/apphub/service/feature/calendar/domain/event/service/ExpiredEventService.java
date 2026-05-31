@@ -24,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class ExpiredEventService {
     private final EventDao eventDao;
-    private final EventMapper eventMapper;
+    private final EventResponseMapper eventResponseMapper;
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
     private final EventRequestValidator eventRequestValidator;
@@ -34,7 +34,7 @@ public class ExpiredEventService {
         return eventDao.getByUserId(userId)
             .stream()
             .filter(this::isExpired)
-            .map(eventMapper::toResponse)
+            .map(eventResponseMapper::toResponse)
             .toList();
     }
 

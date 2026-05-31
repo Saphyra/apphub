@@ -17,7 +17,7 @@ public class EventLabelMappingService {
     private final LabelIdValidator labelIdValidator;
 
     public List<UUID> getLabelIds(UUID userId, UUID eventId) {
-        return eventLabelMappingDao.getByEventId(userId, eventId);
+        return eventLabelMappingDao.getLabelsOfEvent(userId, eventId);
     }
 
     public void setLabels(UUID userId, UUID eventId, List<UUID> labels) {

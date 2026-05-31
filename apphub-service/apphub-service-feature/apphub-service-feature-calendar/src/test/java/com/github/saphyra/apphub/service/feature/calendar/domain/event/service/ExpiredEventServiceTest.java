@@ -35,7 +35,7 @@ class ExpiredEventServiceTest {
     private EventDao eventDao;
 
     @Mock
-    private EventMapper eventMapper;
+    private EventResponseMapper eventResponseMapper;
 
     @Mock
     private OccurrenceDao occurrenceDao;
@@ -117,7 +117,7 @@ class ExpiredEventServiceTest {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE);
         given(event.getUserId()).willReturn(USER_ID);
-        given(eventMapper.toResponse(event)).willReturn(eventResponse);
+        given(eventResponseMapper.toResponse(event)).willReturn(eventResponse);
 
         assertThat(underTest.getExpiredEvents(USER_ID)).containsExactly(eventResponse);
     }

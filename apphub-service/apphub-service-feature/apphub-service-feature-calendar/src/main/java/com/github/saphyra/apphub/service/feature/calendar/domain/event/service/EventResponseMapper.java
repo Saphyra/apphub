@@ -17,7 +17,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class EventMapper {
+class EventResponseMapper {
     private final ObjectMapper objectMapper;
     private final EventLabelMappingDao eventLabelMappingDao;
 
@@ -26,7 +26,7 @@ class EventMapper {
             .map(Event::getEventId)
             .toList();
 
-        Map<UUID, List<UUID>> labelMapping = eventLabelMappingDao.getByEventIds(userId, eventIds);
+        Map<UUID, List<UUID>> labelMapping = eventLabelMappingDao.getLabelsOfEvents(userId, eventIds);
 
         return events.stream()
             .map(event -> toResponse(event, labelMapping.get(event.getEventId())))
@@ -34,7 +34,7 @@ class EventMapper {
     }
 
     EventResponse toResponse(Event event) {
-        return toResponse(event, eventLabelMappingDao.getByEventId(event.getUserId(), event.getEventId()));
+        return toResponse(event, eventLabelMappingDao.getLabelsOfEvent(event.getUserId(), event.getEventId()));
     }
 
     EventResponse toResponse(Event event, List<UUID> labels) {

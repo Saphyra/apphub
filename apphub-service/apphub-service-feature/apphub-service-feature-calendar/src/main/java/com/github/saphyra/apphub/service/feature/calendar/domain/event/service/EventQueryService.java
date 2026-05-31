@@ -21,7 +21,7 @@ import static java.util.Objects.isNull;
 public class EventQueryService {
     private final EventDao eventDao;
     private final EventLabelMappingDao eventLabelMappingDao;
-    private final EventMapper eventMapper;
+    private final EventResponseMapper eventResponseMapper;
 
     public List<EventResponse> getEvents(UUID userId, UUID labelId) {
         List<Event> events;
@@ -32,11 +32,11 @@ public class EventQueryService {
             events = eventDao.getByIds(userId, eventIds);
         }
 
-        return eventMapper.toResponse(userId, events);
+        return eventResponseMapper.toResponse(userId, events);
     }
 
     public List<EventResponse> getLabellessEvents(UUID userId) {
-        List<UUID> eventIds =  eventLabelMappingDao.getLabelsOfEventByUserId(userId)
+        List<UUID> eventIds =  eventLabelMappingDao.getLabelsOfEventsByUserId(userId)
             .entrySet()
             .stream()
             .filter(entry -> entry.getValue().isEmpty())
@@ -45,11 +45,11 @@ public class EventQueryService {
 
         return eventDao.getByIds(userId, eventIds)
             .stream()
-            .map(event -> eventMapper.toResponse(event, List.of()))
+            .map(event -> eventResponseMapper.toResponse(event, List.of()))
             .toList();
     }
 
     public EventResponse getEvent(UUID userId, UUID eventId) {
-        return eventMapper.toResponse(eventDao.findByIdValidated(userId, eventId));
+        return eventResponseMapper.toResponse(eventDao.findByIdValidated(userId, eventId));
     }
 }

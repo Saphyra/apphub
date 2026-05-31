@@ -20,7 +20,7 @@ import java.util.UUID;
 public class SearchEventService {
     private final EventDao eventDao;
     private final OccurrenceDao occurrenceDao;
-    private final EventMapper eventMapper;
+    private final EventResponseMapper eventResponseMapper;
 
     public List<EventResponse> search(UUID userId, String search) {
         ValidationUtil.minLength(search, 3, "searchText");
@@ -30,7 +30,7 @@ public class SearchEventService {
             .filter(event -> eventMatches(event, search) || occurrenceMatches(userId, event.getEventId(), search))
             .toList();
 
-        return eventMapper.toResponse(userId, events);
+        return eventResponseMapper.toResponse(userId, events);
     }
 
     private boolean occurrenceMatches(UUID userId,  UUID eventId, String search) {

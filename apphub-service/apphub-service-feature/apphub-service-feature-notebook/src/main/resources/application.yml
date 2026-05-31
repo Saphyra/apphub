@@ -4,8 +4,3 @@ spring:
 
 liquibase:
   schema: notebook
-
-aws:
-  dynamoDb:
-    maxBatchRetryCount: 10
-    batchRetryDelayMs: 50

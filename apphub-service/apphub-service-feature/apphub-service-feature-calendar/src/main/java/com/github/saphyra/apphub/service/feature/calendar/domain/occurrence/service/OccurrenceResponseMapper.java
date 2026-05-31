@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class OccurrenceMapper {
+class OccurrenceResponseMapper {
     private final EventDao eventDao;
 
     public List<OccurrenceResponse> toResponse(UUID userId, List<Occurrence> occurrences) {

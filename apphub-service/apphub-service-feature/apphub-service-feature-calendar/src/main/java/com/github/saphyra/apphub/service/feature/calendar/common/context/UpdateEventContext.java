@@ -63,7 +63,7 @@ public class UpdateEventContext {
         eventDao.save(event);
 
         log.info("Deleting {} occurrences for event {}", deletedOccurrences.size(), event.getEventId());
-        occurrenceDao.delete(event.getUserId(), deletedOccurrences);
+        occurrenceDao.delete(event.getUserId(), event.getEventId(),  deletedOccurrences);
 
         List<Occurrence> modifiedOccurrences = occurrences.get()
             .stream()

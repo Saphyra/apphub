@@ -40,7 +40,7 @@ class EditOccurrenceServiceTest {
     private OccurrenceDao occurrenceDao;
 
     @Mock
-    private OccurrenceMapper occurrenceMapper;
+    private OccurrenceResponseMapper occurrenceResponseMapper;
 
     @Mock
     private EventDao eventDao;
@@ -120,7 +120,7 @@ class EditOccurrenceServiceTest {
     @Test
     void editOccurrenceStatus(){
         given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
-        given(occurrenceMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
+        given(occurrenceResponseMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
 
         assertThat(underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, OccurrenceStatus.DONE)).isEqualTo(occurrenceResponse);
 
@@ -131,7 +131,7 @@ class EditOccurrenceServiceTest {
     @Test
     void setReminded(){
         given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
-        given(occurrenceMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
+        given(occurrenceResponseMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
 
         assertThat(underTest.setReminded(USER_ID, EVENT_ID, OCCURRENCE_ID)).isEqualTo(occurrenceResponse);
 

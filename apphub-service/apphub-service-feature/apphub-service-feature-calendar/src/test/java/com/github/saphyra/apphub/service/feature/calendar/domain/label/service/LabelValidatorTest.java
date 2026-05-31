@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabel;
-import com.github.saphyra.apphub.service.feature.calendar.domain.label.deprecated_dao.DeprecatedLabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,13 +20,13 @@ class LabelValidatorTest {
     private static final String LABEL = "label";
 
     @Mock
-    private DeprecatedLabelDao labelDao;
+    private LabelDao labelDao;
 
     @InjectMocks
     private LabelValidator underTest;
 
     @Mock
-    private DeprecatedLabel label;
+    private Label label;
 
     @Test
     void blankLabel() {

@@ -42,7 +42,7 @@ class LabelQueryServiceTest {
 
     @Test
     void getByEventId() {
-        given(eventLabelMappingDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(LABEL_ID));
+        given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID)).willReturn(List.of(LABEL_ID));
         given(labelDao.getByLabelIds(USER_ID, List.of(LABEL_ID))).willReturn(List.of(label));
         given(labelMapper.toResponse(List.of(label))).willReturn(List.of(labelResponse));
 

@@ -38,7 +38,7 @@
 
 # Event-Label mapping
 
-Double-mapping for bi-directional query (Query events of label and label of events)
+Double-mapping for bidirectional query (Query events of label and label of events)
 
 - `pk`: `USER#userId`
 - `sk`: `EVENT_LABEL_MAPPING|EVENT#eventId`

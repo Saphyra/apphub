@@ -21,7 +21,7 @@ import java.util.UUID;
 public class EditOccurrenceService {
     private final OccurrenceRequestValidator occurrenceRequestValidator;
     private final OccurrenceDao occurrenceDao;
-    private final OccurrenceMapper occurrenceMapper;
+    private final OccurrenceResponseMapper occurrenceResponseMapper;
     private final EventDao eventDao;
 
     public void editOccurrence(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
@@ -59,7 +59,7 @@ public class EditOccurrenceService {
         occurrence.setStatus(status);
         occurrenceDao.save(userId, occurrence);
 
-        return occurrenceMapper.toResponse(userId, occurrence);
+        return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 
     public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
@@ -67,6 +67,6 @@ public class EditOccurrenceService {
         occurrence.setReminded(true);
         occurrenceDao.save(userId, occurrence);
 
-        return occurrenceMapper.toResponse(userId, occurrence);
+        return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 }
