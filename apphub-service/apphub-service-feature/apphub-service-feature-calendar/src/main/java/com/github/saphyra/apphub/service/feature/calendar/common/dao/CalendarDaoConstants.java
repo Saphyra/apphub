@@ -17,13 +17,12 @@ public class CalendarDaoConstants {
     public static final String COLUMN_EVENT_IDS = "event_ids";
     public static final String COLUMN_LABEL_IDS = "label_ids";
     public static final String COLUMN_LABEL = "label";
-    public static final String COLUMN_EVENT_ID = "event_id";
-    public static final String COLUMN_OCCURRENCE_ID = "occurrence_id";
     public static final String COLUMN_DATE_BUCKET = "date_bucket";
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_STATUS = "status";
     public static final String COLUMN_NOTE = "note";
     public static final String COLUMN_REMINDED = "reminded";
+    public static final String COLUMN_USER_ID = "user_id";
 
     public static final String PREFIX_USER = "USER#";
     public static final String PREFIX_EVENT = "EVENT#";
@@ -32,5 +31,5 @@ public class CalendarDaoConstants {
     public static final String PREFIX_LABEL = "LABEL#";
     public static final String PREFIX_OCCURRENCE = "OCCURRENCE#";
 
-    public static final String GSI_PK_DATE_BUCKET = "GSI-pk-date_bucket";
+    public static final String GSI_USER_ID_DATE_BUCKET = "GSI-user_id-date_bucket";
 }

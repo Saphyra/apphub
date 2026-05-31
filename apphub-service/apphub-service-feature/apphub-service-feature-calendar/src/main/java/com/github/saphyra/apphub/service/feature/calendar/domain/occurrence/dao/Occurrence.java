@@ -17,9 +17,12 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 public class Occurrence {
     @NonNull
+    private final UUID userId;
+    @NonNull
     private UUID eventId;
     @NonNull
     private final UUID occurrenceId;
+    @NonNull
     private LocalDate date;
     @Nullable
     private LocalTime time;

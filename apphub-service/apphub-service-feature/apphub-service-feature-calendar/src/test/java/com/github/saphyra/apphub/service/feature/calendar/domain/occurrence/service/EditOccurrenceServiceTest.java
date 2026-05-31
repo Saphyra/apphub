@@ -62,7 +62,7 @@ class EditOccurrenceServiceTest {
 
     @Test
     void editOccurrence_newValues() {
-        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
         given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
         given(occurrenceRequest.getDate()).willReturn(DATE);
@@ -82,13 +82,13 @@ class EditOccurrenceServiceTest {
         then(occurrence).should().setNote(NOTE);
         then(occurrence).should().setRemindMeBeforeDays(REMIND_ME_BEFORE_DAYS);
         then(occurrence).should().setReminded(true);
-        then(occurrenceDao).should().save(USER_ID, occurrence);
+        then(occurrenceDao).should().save(occurrence);
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
     }
 
     @Test
     void editOccurrence_inheritValues() {
-        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
         given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
         given(occurrenceRequest.getDate()).willReturn(DATE);
@@ -108,34 +108,34 @@ class EditOccurrenceServiceTest {
         then(occurrence).should().setNote(NOTE);
         then(occurrence).should().setRemindMeBeforeDays(null);
         then(occurrence).should().setReminded(true);
-        then(occurrenceDao).should().save(USER_ID, occurrence);
+        then(occurrenceDao).should().save(occurrence);
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
     }
 
     @Test
-    void editOccurrenceStatus_nullStatus(){
+    void editOccurrenceStatus_nullStatus() {
         ExceptionValidator.validateInvalidParam(() -> underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, null), "status", "must not be null");
     }
 
     @Test
-    void editOccurrenceStatus(){
-        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+    void editOccurrenceStatus() {
+        given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
         given(occurrenceResponseMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
 
         assertThat(underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, OccurrenceStatus.DONE)).isEqualTo(occurrenceResponse);
 
         then(occurrence).should().setStatus(OccurrenceStatus.DONE);
-        then(occurrenceDao).should().save(USER_ID, occurrence);
+        then(occurrenceDao).should().save(occurrence);
     }
 
     @Test
-    void setReminded(){
-        given(occurrenceDao.findByIdValidated(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+    void setReminded() {
+        given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
         given(occurrenceResponseMapper.toResponse(USER_ID, occurrence)).willReturn(occurrenceResponse);
 
         assertThat(underTest.setReminded(USER_ID, EVENT_ID, OCCURRENCE_ID)).isEqualTo(occurrenceResponse);
 
         then(occurrence).should().setReminded(true);
-        then(occurrenceDao).should().save(USER_ID, occurrence);
+        then(occurrenceDao).should().save(occurrence);
     }
 }

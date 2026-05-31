@@ -27,14 +27,14 @@ public class SearchEventService {
 
         List<Event> events =  eventDao.getByUserId(userId)
             .stream()
-            .filter(event -> eventMatches(event, search) || occurrenceMatches(userId, event.getEventId(), search))
+            .filter(event -> eventMatches(event, search) || occurrenceMatches(event.getEventId(), search))
             .toList();
 
         return eventResponseMapper.toResponse(userId, events);
     }
 
-    private boolean occurrenceMatches(UUID userId,  UUID eventId, String search) {
-        return occurrenceDao.getByEventId(userId, eventId)
+    private boolean occurrenceMatches( UUID eventId, String search) {
+        return occurrenceDao.getByEventId(eventId)
             .stream()
             .anyMatch(occurrence -> occurrenceMatches(occurrence, search));
     }

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import org.junit.jupiter.api.Test;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
@@ -9,15 +8,14 @@ import java.util.Map;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EVENT_ID;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_OCCURRENCE_ID;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMINDED;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMIND_ME_BEFORE_DAYS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_STATUS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_TIME;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_EVENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_OCCURRENCE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
@@ -51,12 +49,10 @@ class OccurrenceResponseMapperTest {
             .reminded(REMINDED)
             .build();
 
-        Map<String, AttributeValue> result = underTest.convertDomain(new BiWrapper<>(USER_ID, occurrence));
+        Map<String, AttributeValue> result = underTest.convertDomain(occurrence);
 
-        assertThat(result.get(COLUMN_PK).s()).isEqualTo(PREFIX_USER + USER_ID);
-        assertThat(result.get(COLUMN_SK).s()).isEqualTo(PREFIX_EVENT + EVENT_ID + "|" + PREFIX_OCCURRENCE + OCCURRENCE_ID);
-        assertThat(result.get(COLUMN_EVENT_ID).s()).isEqualTo(EVENT_ID);
-        assertThat(result.get(COLUMN_OCCURRENCE_ID).s()).isEqualTo(OCCURRENCE_ID);
+        assertThat(result.get(COLUMN_PK).s()).isEqualTo(PREFIX_EVENT + EVENT_ID);
+        assertThat(result.get(COLUMN_SK).s()).isEqualTo( PREFIX_OCCURRENCE + OCCURRENCE_ID);
         assertThat(result.get(COLUMN_DATE_BUCKET).s()).isEqualTo(DATE_BUCKET);
         assertThat(result.get(COLUMN_DATE).s()).isEqualTo(DATE);
         assertThat(result.get(COLUMN_TIME).s()).isEqualTo(TIME);
@@ -69,10 +65,9 @@ class OccurrenceResponseMapperTest {
     @Test
     void convertEntity() {
         Map<String, AttributeValue> entity = new HashMap<>();
-        entity.put(COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + USER_ID).build());
-        entity.put(COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT + EVENT_ID + "|" + PREFIX_OCCURRENCE + OCCURRENCE_ID).build());
-        entity.put(COLUMN_EVENT_ID, AttributeValue.builder().s(EVENT_ID).build());
-        entity.put(COLUMN_OCCURRENCE_ID, AttributeValue.builder().s(OCCURRENCE_ID).build());
+        entity.put(COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + EVENT_ID).build());
+        entity.put(COLUMN_SK, AttributeValue.builder().s(  PREFIX_OCCURRENCE + OCCURRENCE_ID).build());
+        entity.put(COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + USER_ID).build());
         entity.put(COLUMN_DATE_BUCKET, AttributeValue.builder().s(DATE_BUCKET).build());
         entity.put(COLUMN_DATE, AttributeValue.builder().s(DATE).build());
         entity.put(COLUMN_TIME, AttributeValue.builder().s(TIME).build());
@@ -81,18 +76,18 @@ class OccurrenceResponseMapperTest {
         entity.put(COLUMN_REMIND_ME_BEFORE_DAYS, AttributeValue.builder().s(REMIND_ME_BEFORE_DAYS).build());
         entity.put(COLUMN_REMINDED, AttributeValue.builder().s(REMINDED).build());
 
-        BiWrapper<String, OccurrenceEntity> result = underTest.convertEntity(entity);
+        OccurrenceEntity result = underTest.convertEntity(entity);
 
-        assertThat(result.getEntity1()).isEqualTo(USER_ID);
-        assertThat(result.getEntity2().getEventId()).isEqualTo(EVENT_ID);
-        assertThat(result.getEntity2().getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
-        assertThat(result.getEntity2().getDateBucket()).isEqualTo(DATE_BUCKET);
-        assertThat(result.getEntity2().getDate()).isEqualTo(DATE);
-        assertThat(result.getEntity2().getTime()).isEqualTo(TIME);
-        assertThat(result.getEntity2().getStatus()).isEqualTo(STATUS);
-        assertThat(result.getEntity2().getNote()).isEqualTo(NOTE);
-        assertThat(result.getEntity2().getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
-        assertThat(result.getEntity2().getReminded()).isEqualTo(REMINDED);
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getEventId()).isEqualTo(EVENT_ID);
+        assertThat(result.getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
+        assertThat(result.getDateBucket()).isEqualTo(DATE_BUCKET);
+        assertThat(result.getDate()).isEqualTo(DATE);
+        assertThat(result.getTime()).isEqualTo(TIME);
+        assertThat(result.getStatus()).isEqualTo(STATUS);
+        assertThat(result.getNote()).isEqualTo(NOTE);
+        assertThat(result.getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
+        assertThat(result.getReminded()).isEqualTo(REMINDED);
     }
 }
 

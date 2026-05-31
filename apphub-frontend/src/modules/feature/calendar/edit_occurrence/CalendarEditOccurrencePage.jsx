@@ -34,7 +34,7 @@ import Stream from "common/js/collection/Stream";
 import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "../CalendarEndpoints";
 
 const CalendarEditOccurrencePage = () => {
-    const { occurrenceId } = useParams();
+    const { eventId, occurrenceId } = useParams();
     const queryParams = useQueryParams();
 
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -62,7 +62,7 @@ const CalendarEditOccurrencePage = () => {
 
     useLoader(
         {
-            request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
+            request: CALENDAR_GET_OCCURRENCE.createRequest(null, {eventId: eventId, occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
             listener: [occurrenceId, refreshCounter]
@@ -191,6 +191,7 @@ const CalendarEditOccurrencePage = () => {
                         onclick={() => save({
                             localizationHandler: localizationHandler,
                             occurrenceId: occurrenceId,
+                            eventId: eventId,
                             date: new Optional(date).map(d => d.toString()).orElse(null),
                             time: new Optional(time).map(d => d.formatWithoutSeconds()).orElse(null),
                             status: status,

@@ -42,13 +42,13 @@ public class MergeEventService {
             .filter(event -> !event.getEventId().equals(eventId))
             .filter(event -> event.getRepetitionType() == RepetitionType.ONE_TIME)
             .filter(event -> titlesMatch(event.getTitle(), parent.getTitle()))
-            .forEach(originalEvent -> merge(userId, originalEvent, parent.getEventId(), modifiedOccurrences, occurrencesToDelete, deletedEventIds));
+            .forEach(originalEvent -> merge(originalEvent, parent.getEventId(), modifiedOccurrences, occurrencesToDelete, deletedEventIds));
 
         deleteEventService.delete(userId, deletedEventIds);
     }
 
-    private void merge(UUID userId, Event originalEvent, UUID newEventId, List<Occurrence> modifiedOccurrences, List<BiWrapper<UUID, UUID>> occurrencesToDelete, List<UUID> deletedEventIds) {
-        occurrenceDao.getByEventId(userId, originalEvent.getEventId())
+    private void merge(Event originalEvent, UUID newEventId, List<Occurrence> modifiedOccurrences, List<BiWrapper<UUID, UUID>> occurrencesToDelete, List<UUID> deletedEventIds) {
+        occurrenceDao.getByEventId(originalEvent.getEventId())
             .forEach(occurrence -> merge(originalEvent, newEventId, occurrence, modifiedOccurrences, occurrencesToDelete));
 
         deletedEventIds.add(originalEvent.getEventId());

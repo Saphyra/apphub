@@ -84,7 +84,8 @@ class LabelRepository {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + labelId).build()
             ))
             .build();
 

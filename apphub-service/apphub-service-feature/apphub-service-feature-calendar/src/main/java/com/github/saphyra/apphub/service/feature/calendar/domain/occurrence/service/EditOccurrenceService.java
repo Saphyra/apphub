@@ -27,7 +27,7 @@ public class EditOccurrenceService {
     public void editOccurrence(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         Event event = eventDao.findByIdValidated(userId, eventId);
 
         occurrence.setDate(request.getDate());
@@ -37,7 +37,7 @@ public class EditOccurrenceService {
         occurrence.setRemindMeBeforeDays(nullIfEquals(request.getRemindMeBeforeDays(), event.getRemindMeBeforeDays()));
         occurrence.setReminded(request.getReminded());
 
-        occurrenceDao.save(userId, occurrence);
+        occurrenceDao.save(occurrence);
     }
 
     /*
@@ -55,17 +55,17 @@ public class EditOccurrenceService {
     public OccurrenceResponse editOccurrenceStatus(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
         ValidationUtil.notNull(status, "status");
 
-        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         occurrence.setStatus(status);
-        occurrenceDao.save(userId, occurrence);
+        occurrenceDao.save(occurrence);
 
         return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 
     public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
-        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         occurrence.setReminded(true);
-        occurrenceDao.save(userId, occurrence);
+        occurrenceDao.save(occurrence);
 
         return occurrenceResponseMapper.toResponse(userId, occurrence);
     }

@@ -11,6 +11,7 @@ import { CALENDAR_GET_LABELS_OF_EVENT, CALENDAR_GET_OCCURRENCE } from "modules/f
 import ResponseStatus from "common/js/dao/ResponseStatus";
 
 const SelectedOccurrenceContent = ({
+    eventId,
     occurrenceId,
     setDisplaySpinner,
     setSelectedOccurrence,
@@ -22,7 +23,7 @@ const SelectedOccurrenceContent = ({
     const [labels, setLabels] = useState([]);
 
     useLoader({
-        request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
+        request: CALENDAR_GET_OCCURRENCE.createRequest(null, {eventId: eventId, occurrenceId: occurrenceId }),
         mapper: setOccurrence,
         listener: [occurrenceId],
         setDisplaySpinner: setDisplaySpinner,

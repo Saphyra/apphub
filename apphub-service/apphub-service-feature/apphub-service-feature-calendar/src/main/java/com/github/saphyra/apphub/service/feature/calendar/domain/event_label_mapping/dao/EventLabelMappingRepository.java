@@ -22,6 +22,8 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
@@ -42,13 +44,15 @@ class EventLabelMappingRepository {
     private final SleepService sleepService;
     private final int maxBatchRetryCount;
     private final long batchRetryDelayMs;
+    private final ObjectMapper objectMapper;
 
-    EventLabelMappingRepository(DynamoDbClient client, CalendarDynamoDbConfiguration configuration, SleepService sleepService) {
+    EventLabelMappingRepository(DynamoDbClient client, CalendarDynamoDbConfiguration configuration, SleepService sleepService, ObjectMapper objectMapper) {
         this.client = client;
         this.tableName = configuration.getTableName();
         this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
         this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
         this.sleepService = sleepService;
+        this.objectMapper = objectMapper;
     }
 
     List<String> getEventsOfLabel(String userId, String labelId) {
@@ -63,7 +67,8 @@ class EventLabelMappingRepository {
         return Optional.of(client.getItem(request))
             .filter(GetItemResponse::hasItem)
             .map(GetItemResponse::item)
-            .map(item -> item.get(COLUMN_EVENT_IDS).ss())
+            .map(item -> item.get(COLUMN_EVENT_IDS).s())
+            .map(s -> objectMapper.readValue(objectMapper.writeValueAsString(s), List.class))
             .orElse(List.of());
     }
 
@@ -96,7 +101,8 @@ class EventLabelMappingRepository {
             .flatMap(List::stream)
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_EVENT_LABEL_MAPPING.length()),
-                item.get(COLUMN_LABEL_IDS).ss()
+                objectMapper.readValue(item.get(COLUMN_LABEL_IDS).s(), new TypeReference<List<String>>() {
+                })
             ))
             .toList();
     }
@@ -120,7 +126,8 @@ class EventLabelMappingRepository {
             .stream()
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_EVENT_LABEL_MAPPING.length()),
-                item.get(COLUMN_LABEL_IDS).ss()
+                objectMapper.readValue(item.get(COLUMN_LABEL_IDS).s(), new TypeReference<List<String>>() {
+                })
             ))
             .toList();
     }
@@ -131,7 +138,7 @@ class EventLabelMappingRepository {
             .item(Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING + eventId).build(),
-                COLUMN_LABEL_IDS, AttributeValue.builder().ss(labelIds).build()
+                COLUMN_LABEL_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(labelIds)).build()
             ))
             .build();
 
@@ -167,7 +174,8 @@ class EventLabelMappingRepository {
             .flatMap(List::stream)
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_LABEL_EVENT_MAPPING.length()),
-                item.get(COLUMN_EVENT_IDS).ss()
+                objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), new TypeReference<List<String>>() {
+                })
             ))
             .toList();
     }
@@ -241,7 +249,8 @@ class EventLabelMappingRepository {
             .stream()
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_LABEL_EVENT_MAPPING.length()),
-                item.get(COLUMN_EVENT_IDS).ss()
+                objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), new TypeReference<List<String>>() {
+                })
             ))
             .toList();
     }

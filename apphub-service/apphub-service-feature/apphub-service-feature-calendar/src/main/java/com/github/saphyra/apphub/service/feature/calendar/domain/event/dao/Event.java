@@ -28,7 +28,7 @@ public class Event {
     private Integer repeatForDays;
     @NonNull
     private LocalDate startDate;
-    @NonNull
+    @Nullable //One-time event has no end date
     private LocalDate endDate;
     @Nullable
     private LocalTime time;

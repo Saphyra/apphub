@@ -27,7 +27,8 @@ import java.util.Optional;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.GSI_PK_DATE_BUCKET;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.GSI_USER_ID_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_EVENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_OCCURRENCE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
@@ -50,45 +51,45 @@ class OccurrenceRepository {
         this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
     }
 
-    void save(String userId, OccurrenceEntity occurrence) {
+    void save(OccurrenceEntity occurrence) {
         PutItemRequest request = PutItemRequest.builder()
             .tableName(tableName)
-            .item(mapper.convertDomain(new BiWrapper<>(userId, occurrence)))
+            .item(mapper.convertDomain(occurrence))
             .build();
 
         client.putItem(request);
     }
 
-    List<OccurrenceEntity> getByEventId(String userId, String eventId) {
+    List<OccurrenceEntity> getByEventId(String eventId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#pk = :userId AND begins_with(#sk, :eventId)")
+            .keyConditionExpression("#pk = :eventId AND begins_with(#sk, :prefix)")
             .expressionAttributeNames(Map.of(
                 "#pk", COLUMN_PK,
                 "#sk", COLUMN_SK
             ))
             .expressionAttributeValues(Map.of(
-                ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                ":eventId", AttributeValue.builder().s(PREFIX_EVENT + eventId).build()
+                ":eventId", AttributeValue.builder().s(PREFIX_EVENT + eventId).build(),
+                ":prefix", AttributeValue.builder().s(PREFIX_OCCURRENCE).build()
             ))
             .build();
 
         return client.query(request)
             .items()
             .stream()
-            .map(item -> mapper.convertEntity(item).getEntity2())
+            .map(mapper::convertEntity)
             .toList();
     }
 
-    void delete(String userId, String eventId, List<String> occurrenceIds) {
+    void delete(String eventId, List<String> occurrenceIds) {
         if (occurrenceIds.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE));
         }
 
         List<WriteRequest> requests = occurrenceIds.stream()
             .map(item -> Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT + eventId + "|" + PREFIX_OCCURRENCE + item).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + eventId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_OCCURRENCE + item).build()
             ))
             .map(key -> DeleteRequest.builder().key(key).build())
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
@@ -97,13 +98,13 @@ class OccurrenceRepository {
         batchWrite(0, requests);
     }
 
-    void save(String userId, List<OccurrenceEntity> occurrences) {
+    void save(List<OccurrenceEntity> occurrences) {
         if (occurrences.size() > Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE));
         }
 
         List<WriteRequest> requests = occurrences.stream()
-            .map(occurrence -> mapper.convertDomain(new BiWrapper<>(userId, occurrence)))
+            .map(mapper::convertDomain)
             .map(item -> PutRequest.builder().item(item).build())
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
@@ -111,29 +112,28 @@ class OccurrenceRepository {
         batchWrite(0, requests);
     }
 
-    Optional<OccurrenceEntity> findById(String userId, String eventId, String occurrenceId) {
+    Optional<OccurrenceEntity> findById(String eventId, String occurrenceId) {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT + eventId + "|" + PREFIX_OCCURRENCE + occurrenceId).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + eventId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_OCCURRENCE + occurrenceId).build()
             ))
             .build();
 
         return Optional.of(client.getItem(request))
             .filter(GetItemResponse::hasItem)
             .map(GetItemResponse::item)
-            .map(mapper::convertEntity)
-            .map(BiWrapper::getEntity2);
+            .map(mapper::convertEntity);
     }
 
     public List<OccurrenceEntity> getByBucket(String userId, String bucket) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .indexName(GSI_PK_DATE_BUCKET)
-            .keyConditionExpression("#pk = :userId AND #dateBucket = :bucket")
+            .indexName(GSI_USER_ID_DATE_BUCKET)
+            .keyConditionExpression("#userId = :userId AND #dateBucket = :bucket")
             .expressionAttributeNames(Map.of(
-                "#pk", COLUMN_PK,
+                "#userId", COLUMN_USER_ID,
                 "#dateBucket", COLUMN_DATE_BUCKET
             ))
             .expressionAttributeValues(Map.of(
@@ -145,22 +145,22 @@ class OccurrenceRepository {
         return client.query(request)
             .items()
             .stream()
-            .map(item -> mapper.convertEntity(item).getEntity2())
+            .map(mapper::convertEntity)
             .toList();
     }
 
     /**
      * @param occurrences List<BiWrapper<EventId, OccurrenceId>>
      */
-    void delete(String userId, List<BiWrapper<String, String>> occurrences) {
+    void delete(List<BiWrapper<String, String>> occurrences) {
         if (occurrences.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE));
         }
 
         List<WriteRequest> requests = occurrences.stream()
             .map(item -> Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT + item.getEntity1() + "|" + PREFIX_OCCURRENCE + item.getEntity2()).build()
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + item.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_OCCURRENCE + item.getEntity2()).build()
             ))
             .map(key -> DeleteRequest.builder().key(key).build())
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())

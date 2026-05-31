@@ -12,7 +12,7 @@ const Occurrence = ({ occurrence, setSelectedOccurrence }) => {
             }
             onClick={(e) => {
                 e.stopPropagation();
-                setSelectedOccurrence(occurrence.occurrenceId)
+                setSelectedOccurrence({event: occurrence.eventId, occurrence: occurrence.occurrenceId});
             }}
         >
             {getTime()}

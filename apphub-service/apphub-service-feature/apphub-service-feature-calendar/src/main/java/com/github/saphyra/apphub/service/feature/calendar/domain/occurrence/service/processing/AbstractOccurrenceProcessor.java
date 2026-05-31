@@ -45,7 +45,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         }
 
         return dates.stream()
-            .map(date -> occurrenceFactory.create(eventId, date, null, null)) //Null parameters to use the event's values
+            .map(date -> occurrenceFactory.create(userId, eventId, date, null, null)) //Null parameters to use the event's values
             .toList();
     }
 
@@ -75,7 +75,7 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
         datesOfOccurrences.forEach(date -> {
             // If there is no occurrence for the date, create one
             if (!occurrencesByDate.containsKey(date)) {
-                Occurrence occurrence = occurrenceFactory.create(event.getEventId(), date, null, null); //Null parameters to use the event's values
+                Occurrence occurrence = occurrenceFactory.create(event.getUserId(), event.getEventId(), date, null, null); //Null parameters to use the event's values
                 context.addOccurrence(occurrence);
             }
         });

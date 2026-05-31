@@ -41,6 +41,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
         String occurrenceId = uuidConverter.convertDomain(domain.getOccurrenceId());
 
         return OccurrenceEntity.builder()
+            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .eventId(uuidConverter.convertDomain(domain.getEventId()))
             .occurrenceId(occurrenceId)
             .dateBucket(toDateBucket(domain.getDate()))
@@ -58,6 +59,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
         String userId = accessTokenProvider.getUserIdAsString();
 
         return Occurrence.builder()
+            .userId(uuidConverter.convertEntity(entity.getUserId()))
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .occurrenceId(uuidConverter.convertEntity(entity.getOccurrenceId()))
             .date(localDateEncryptor.decrypt(entity.getDate(), userId, entity.getOccurrenceId(), COLUMN_DATE))

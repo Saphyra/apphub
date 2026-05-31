@@ -62,7 +62,7 @@ function getChoices(args) {
     choices.push(<Button
         key="edit-occurrence"
         id="calendar-selected-occurrence-edit-button"
-        onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId }, { backUrl: CALENDAR_PAGE })}
+        onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId }, { backUrl: CALENDAR_PAGE })}
         label={localizationHandler.get("edit-occurrence")}
     />);
 
@@ -111,7 +111,7 @@ function getChoices(args) {
     return choices;
 
     async function editStatus(newStatus) {
-        const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, { occurrenceId: occurrence.occurrenceId })
+        const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, {eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId })
             .send();
 
         setOccurrence(response);
@@ -119,7 +119,7 @@ function getChoices(args) {
     }
 
     async function setReminded() {
-        const response = await CALENDAR_OCCURRENCE_REMINDED.createRequest(null, { occurrenceId: occurrence.occurrenceId })
+        const response = await CALENDAR_OCCURRENCE_REMINDED.createRequest(null, {eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId })
             .send();
 
         setOccurrence(response);

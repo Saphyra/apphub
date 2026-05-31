@@ -46,7 +46,7 @@ public class UpdateEventContext {
         this.eventDao = eventDao;
         this.occurrenceDao = occurrenceDao;
         this.recreateOccurrenceService = recreateOccurrenceService;
-        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(occurrenceDao.getByEventId(event.getUserId(), event.getEventId())));
+        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(occurrenceDao.getByEventId(event.getEventId())));
     }
 
     public List<Occurrence> getOccurrences() {
@@ -63,14 +63,14 @@ public class UpdateEventContext {
         eventDao.save(event);
 
         log.info("Deleting {} occurrences for event {}", deletedOccurrences.size(), event.getEventId());
-        occurrenceDao.delete(event.getUserId(), event.getEventId(),  deletedOccurrences);
+        occurrenceDao.delete(event.getEventId(), deletedOccurrences);
 
         List<Occurrence> modifiedOccurrences = occurrences.get()
             .stream()
             .filter(occurrence -> this.modifiedOccurrences.contains(occurrence.getOccurrenceId()))
             .toList();
         log.info("Saving {} modified occurrences for event {}", modifiedOccurrences.size(), event.getEventId());
-        occurrenceDao.save(event.getUserId(), modifiedOccurrences);
+        occurrenceDao.save(modifiedOccurrences);
     }
 
     public void occurrenceRecreationNeeded() {

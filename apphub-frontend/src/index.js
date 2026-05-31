@@ -343,7 +343,8 @@ const router = createBrowserRouter([
     element: <CalendarEditOccurrencePage />,
     loader: ({ params }) => {
       return {
-        occurrenceId: params.occurrenceId
+        eventId: params.eventId,
+        occurrenceId: params.occurrenceId,
       }
     }
   },

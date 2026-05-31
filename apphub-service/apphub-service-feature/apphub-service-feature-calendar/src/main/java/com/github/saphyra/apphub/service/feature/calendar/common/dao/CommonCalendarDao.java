@@ -27,6 +27,13 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
 
     @Override
     public void deleteByUserId(UUID userId) {
+        List<UUID> eventIds = eventDao.getByUserId(userId)
+            .stream()
+            .map(Event::getEventId)
+            .toList();
+        eventIds.forEach(occurrenceDao::deleteByEventId);
+        eventDao.delete(userId, eventIds);
+
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
     }
 
@@ -39,7 +46,7 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
      */
     public void saveNewEvent(Event event, List<Occurrence> occurrences, List<UUID> labelIds) {
         eventDao.save(event);
-        occurrenceDao.save(event.getUserId(), occurrences);
+        occurrenceDao.save(occurrences);
 
         eventLabelMappingDao.saveLabelsOfEvent(event.getUserId(), event.getEventId(), labelIds);
     }
@@ -56,9 +63,9 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
         eventDao.delete(userId, eventIds);
 
         List<Occurrence> occurrencesToDelete = eventIds.stream()
-            .flatMap(eventId -> occurrenceDao.getByEventId(userId, eventId).stream())
+            .flatMap(eventId -> occurrenceDao.getByEventId(eventId).stream())
             .toList();
-        occurrenceDao.delete(userId, occurrencesToDelete);
+        occurrenceDao.delete(occurrencesToDelete);
 
         eventLabelMappingDao.deleteByEventId(userId, eventIds);
     }

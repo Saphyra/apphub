@@ -73,7 +73,7 @@ class EventRepository {
             ))
             .expressionAttributeValues(Map.of(
                 ":userId", AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                "#eventPrefix", AttributeValue.builder().s(PREFIX_EVENT).build()
+                ":eventPrefix", AttributeValue.builder().s(PREFIX_EVENT).build()
             ))
             .build();
 

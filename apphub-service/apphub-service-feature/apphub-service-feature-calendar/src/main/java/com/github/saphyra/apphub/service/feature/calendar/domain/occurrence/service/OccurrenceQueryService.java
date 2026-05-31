@@ -133,13 +133,13 @@ public class OccurrenceQueryService {
     }
 
     public List<OccurrenceResponse> getOccurrencesOfEvent(UUID userId, UUID eventId) {
-        List<Occurrence> occurrences = occurrenceDao.getByEventId(userId, eventId);
+        List<Occurrence> occurrences = occurrenceDao.getByEventId(eventId);
 
         return occurrenceResponseMapper.toResponse(userId, occurrences);
     }
 
     public OccurrenceResponse getOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
-        Occurrence occurrence = occurrenceDao.findByIdValidated(userId, eventId, occurrenceId);
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 }

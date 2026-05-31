@@ -134,7 +134,7 @@ class AbstractOccurrenceProcessorTest {
         given(eventRequest.getStartDate()).willReturn(START_DATE);
         given(requestToEndDateMapper.apply(eventRequest)).willReturn(END_DATE);
         given(eventRequest.getRepeatForDays()).willReturn(REPEAT_FOR_DAYS);
-        given(occurrenceFactory.create(EVENT_ID, OCCURRENCE_DATE, null, null)).willReturn(occurrence);
+        given(occurrenceFactory.create(USER_ID, EVENT_ID, OCCURRENCE_DATE, null, null)).willReturn(occurrence);
 
         assertThat(underTest.createOccurrences(USER_ID, EVENT_ID, eventRequest)).containsExactly(occurrence);
 
@@ -165,7 +165,8 @@ class AbstractOccurrenceProcessorTest {
             .willReturn(List.of(OCCURRENCE_DATE, EXISTING_DONE_OCCURRENCE_DATE, EXISTING_EXPIRED_OCCURRENCE_DATE, EXISTING_FUTURE_OCCURRENCE_DATE));
 
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceFactory.create(EVENT_ID, OCCURRENCE_DATE, null, null)).willReturn(occurrence);
+        given(event.getUserId()).willReturn(USER_ID);
+        given(occurrenceFactory.create(USER_ID, EVENT_ID, OCCURRENCE_DATE, null, null)).willReturn(occurrence);
 
         underTest.recreateOccurrences(updateEventContext);
 

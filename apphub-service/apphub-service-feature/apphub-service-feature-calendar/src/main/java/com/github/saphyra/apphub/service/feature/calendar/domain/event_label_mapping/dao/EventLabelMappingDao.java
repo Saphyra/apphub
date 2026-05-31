@@ -64,15 +64,17 @@ public class EventLabelMappingDao {
 
         repository.saveLabelsOfEvent(userIdString, eventIdString, labelIdsString);
 
-        List<BiWrapper<String, List<String>>> modifiedMappings = Lists.partition(repository.getEventsOfLabels(userIdString, labelIdsString), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
-            .stream()
-            .flatMap(List::stream)
-            .filter(bw -> !bw.getEntity2().contains(eventIdString))
-            .map(bw -> new BiWrapper<>(bw.getEntity1(), Stream.concat(bw.getEntity2().stream(), Stream.of(eventIdString)).toList()))
-            .toList();
+        if(!labelIds.isEmpty()){
+            List<BiWrapper<String, List<String>>> modifiedMappings = Lists.partition(repository.getEventsOfLabels(userIdString, labelIdsString), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
+                .stream()
+                .flatMap(List::stream)
+                .filter(bw -> !bw.getEntity2().contains(eventIdString))
+                .map(bw -> new BiWrapper<>(bw.getEntity1(), Stream.concat(bw.getEntity2().stream(), Stream.of(eventIdString)).toList()))
+                .toList();
 
-        Lists.partition(modifiedMappings, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
-            .forEach(batch -> repository.saveEventsOfLabels(userIdString, batch));
+            Lists.partition(modifiedMappings, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
+                .forEach(batch -> repository.saveEventsOfLabels(userIdString, batch));
+        }
     }
 
     /**

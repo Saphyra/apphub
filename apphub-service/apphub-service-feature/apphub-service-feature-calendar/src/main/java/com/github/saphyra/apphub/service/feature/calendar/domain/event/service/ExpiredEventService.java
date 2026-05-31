@@ -49,7 +49,7 @@ public class ExpiredEventService {
 
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
-        List<Occurrence> occurrences = occurrenceDao.getByEventId(event.getUserId(), event.getEventId());
+        List<Occurrence> occurrences = occurrenceDao.getByEventId(event.getEventId());
 
         if (occurrences.isEmpty()) {
             return false;

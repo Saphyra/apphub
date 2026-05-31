@@ -17,12 +17,13 @@ public class OccurrenceFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;
 
-    public Occurrence create(UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays) {
-        return create(eventId, date, time, remindMeBeforeDays, "");
+    public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays) {
+        return create(userId, eventId, date, time, remindMeBeforeDays, "");
     }
 
-    public Occurrence create(UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays, String note) {
+    public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays, String note) {
         return Occurrence.builder()
+            .userId(userId)
             .eventId(eventId)
             .occurrenceId(idGenerator.randomUuid())
             .status(date.isBefore(dateTimeUtil.getCurrentDate()) ? OccurrenceStatus.EXPIRED : OccurrenceStatus.PENDING)

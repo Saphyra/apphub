@@ -16,8 +16,9 @@
 
 # Occurrence
 
-- `pk`: `USER#userId`
-- `sk`: `EVENT#eventId|OCCURRENCE#occurrenceId`
+- `pk`: `EVENT#eventId`
+- `sk`: `OCCURRENCE#occurrenceId`
+- `userId`: `uuid`
 - `date`: `LocalDate` (encrypted)
 - `dateBucket`: `YYYY-MM`
 - `time`: `LocalTime` (encrypted)

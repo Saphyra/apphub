@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true)
 class OccurrenceEntity {
+    private String userId;
     private String eventId;
     private String occurrenceId;
     private String dateBucket;

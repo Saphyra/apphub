@@ -41,8 +41,8 @@ public class CreateOccurrenceService {
 
         eventDao.findByIdValidated(userId, eventId); // Ensure the event exists and belongs to the user
 
-        Occurrence occurrence = occurrenceFactory.create(eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
-        occurrenceDao.save(userId, occurrence);
+        Occurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
+        occurrenceDao.save(occurrence);
 
         return occurrence.getOccurrenceId();
     }

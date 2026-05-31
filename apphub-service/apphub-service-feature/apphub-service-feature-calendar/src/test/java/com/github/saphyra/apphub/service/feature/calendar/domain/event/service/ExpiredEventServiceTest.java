@@ -87,8 +87,7 @@ class ExpiredEventServiceTest {
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(event.getUserId()).willReturn(USER_ID);
-        given(occurrenceDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of());
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of());
 
         assertThat(underTest.getExpiredEvents(USER_ID)).isEmpty();
     }
@@ -99,9 +98,8 @@ class ExpiredEventServiceTest {
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(event.getUserId()).willReturn(USER_ID);
         given(occurrence.getDate()).willReturn(CURRENT_DATE.plusDays(1));
 
         assertThat(underTest.getExpiredEvents(USER_ID)).isEmpty();
@@ -113,10 +111,9 @@ class ExpiredEventServiceTest {
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(USER_ID, EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE);
-        given(event.getUserId()).willReturn(USER_ID);
         given(eventResponseMapper.toResponse(event)).willReturn(eventResponse);
 
         assertThat(underTest.getExpiredEvents(USER_ID)).containsExactly(eventResponse);

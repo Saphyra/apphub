@@ -35,7 +35,8 @@ import java.util.Map;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.GSI_PK_DATE_BUCKET;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.GSI_USER_ID_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
@@ -130,6 +131,10 @@ class CommonCalendarRepository {
                         .attributeType(ScalarAttributeType.S)
                         .build(),
                     AttributeDefinition.builder()
+                        .attributeName(COLUMN_USER_ID)
+                        .attributeType(ScalarAttributeType.S)
+                        .build(),
+                    AttributeDefinition.builder()
                         .attributeName(COLUMN_DATE_BUCKET)
                         .attributeType(ScalarAttributeType.S)
                         .build()
@@ -146,10 +151,10 @@ class CommonCalendarRepository {
                 )
                 .globalSecondaryIndexes(
                     GlobalSecondaryIndex.builder()
-                        .indexName(GSI_PK_DATE_BUCKET)
+                        .indexName(GSI_USER_ID_DATE_BUCKET)
                         .keySchema(
                             KeySchemaElement.builder()
-                                .attributeName(COLUMN_PK)
+                                .attributeName(COLUMN_USER_ID)
                                 .keyType(KeyType.HASH)
                                 .build(),
                             KeySchemaElement.builder()
