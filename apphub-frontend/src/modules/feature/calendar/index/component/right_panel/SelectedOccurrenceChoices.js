@@ -78,6 +78,7 @@ function getChoices(args) {
         id="calendar-selected-occurrence-delete-button"
         onclick={() => confirmOccurrenceDeletion(
             setConfirmationDialogData,
+            occurrence.eventId,
             occurrence.occurrenceId,
             occurrence.title,
             occurrence.date,

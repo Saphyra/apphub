@@ -61,7 +61,7 @@ class LabelRepository {
             .stream()
             .flatMap(List::stream)
             .map(item -> LabelEntity.builder()
-                .label(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
+                .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
                 .label(item.get(COLUMN_LABEL).s())
                 .build())
             .toList();
@@ -72,7 +72,7 @@ class LabelRepository {
             .tableName(tableName)
             .item(Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + label.getLabel()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + label.getLabelId()).build(),
                 COLUMN_LABEL, AttributeValue.builder().s(label.getLabel()).build()
             ))
             .build();
@@ -126,6 +126,7 @@ class LabelRepository {
 
     void delete(String userId, String labelId) {
         DeleteItemRequest request = DeleteItemRequest.builder()
+            .tableName(tableName)
             .key(Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + labelId).build()

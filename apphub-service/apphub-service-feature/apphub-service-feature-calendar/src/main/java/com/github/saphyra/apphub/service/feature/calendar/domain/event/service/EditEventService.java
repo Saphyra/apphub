@@ -36,6 +36,6 @@ public class EditEventService {
         eventFieldUpdaters.forEach(eventFieldUpdater -> eventFieldUpdater.update(context, request, event));
         log.info("Updating fields of DeprecatedEvent {} finished", eventId);
 
-        context.processChanges();
+        context.processChanges(request.getLabels());
     }
 }

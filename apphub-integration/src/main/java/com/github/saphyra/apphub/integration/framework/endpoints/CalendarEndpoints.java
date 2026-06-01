@@ -20,7 +20,7 @@ public class CalendarEndpoints {
     public static final String CALENDAR_GET_OCCURRENCES_OF_EVENT = "/api/calendar/events/{eventId}/occurrences";
     public static final String CALENDAR_GET_OCCURRENCE = "/api/calendar/{eventId}/occurrences/{occurrenceId}";
     public static final String CALENDAR_EDIT_OCCURRENCE_STATUS = "/api/calendar/{eventId}/occurrences/{occurrenceId}/status";
-    public static final String CALENDAR_DELETE_OCCURRENCE = "/api/calendar/occurrences/{occurrenceId}";
+    public static final String CALENDAR_DELETE_OCCURRENCE = "/api/calendar/{eventId}/occurrences/{occurrenceId}";
     public static final String CALENDAR_OCCURRENCE_REMINDED = "/api/calendar/{eventId}/occurrences/{occurrenceId}/reminded";
     public static final String CALENDAR_GET_LABELS_OF_EVENT = "/api/calendar/events/{eventId}/labels";
     public static final String CALENDAR_GET_EXPIRED_EVENTS = "/api/calendar/events/expired";

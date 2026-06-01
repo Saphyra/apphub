@@ -343,12 +343,13 @@ public class CalendarEventValidationTest extends BackEndTest {
     }
 
     private void edit_labelDoesNotExist(String accessToken, UUID eventId, RepetitionType repetitionType) {
+        UUID labelId = UUID.randomUUID();
         EventRequest request = EventRequestFactory.validRequest(repetitionType)
             .toBuilder()
-            .labels(List.of(UUID.randomUUID()))
+            .labels(List.of(labelId))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labelId", "does not exist");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", "Unsupported values: " + List.of(labelId));
     }
 
     private void edit_labelsContainNull(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -450,12 +451,13 @@ public class CalendarEventValidationTest extends BackEndTest {
     }
 
     private void create_labelDoesNotExist(String accessToken, RepetitionType repetitionType) {
+        UUID labelId = UUID.randomUUID();
         EventRequest request = EventRequestFactory.validRequest(repetitionType)
             .toBuilder()
-            .labels(List.of(UUID.randomUUID()))
+            .labels(List.of(labelId))
             .build();
 
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labelId", "does not exist");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", "Unsupported values: " + List.of(labelId));
     }
 
     private void create_labelsContainNull(String accessToken, RepetitionType repetitionType) {

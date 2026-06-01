@@ -55,10 +55,10 @@ class OccurrenceControllerImpl implements OccurrenceController {
     }
 
     @Override
-    public void deleteOccurrence(UUID occurrenceId, AccessToken accessToken) {
+    public void deleteOccurrence(UUID eventId, UUID occurrenceId, AccessToken accessToken) {
         log.info("{} wants to delete Occurrence {}", accessToken.getUserId(), occurrenceId);
 
-        deleteOccurrenceService.deleteOccurrence(occurrenceId);
+        deleteOccurrenceService.deleteOccurrence(eventId, occurrenceId);
 
         log.debug("Response: {}", HttpStatus.OK);
     }

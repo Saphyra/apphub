@@ -52,6 +52,9 @@ public class EventLabelMappingDao {
     }
 
     /**
+     * DOES NOT DELETE LABELS FROM EXISTING LABEL-EVENT MAPPINGS!
+     * <p>
+     * For that use editLabelsOfEvent in {@link com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao}
      * <ul>
      *     <li>Save the list of labels for the given event</li>
      *     <li>Adds eventId to the event list of each label</li>
@@ -64,7 +67,7 @@ public class EventLabelMappingDao {
 
         repository.saveLabelsOfEvent(userIdString, eventIdString, labelIdsString);
 
-        if(!labelIds.isEmpty()){
+        if (!labelIds.isEmpty()) {
             List<BiWrapper<String, List<String>>> modifiedMappings = Lists.partition(repository.getEventsOfLabels(userIdString, labelIdsString), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
                 .stream()
                 .flatMap(List::stream)
@@ -94,7 +97,9 @@ public class EventLabelMappingDao {
             .stream()
             .filter(bw -> bw.getEntity2().removeIf(eventIdsString::contains))
             .toList();
-        repository.saveEventsOfLabels(userIdString, modifiedMappings);
+        if (!modifiedMappings.isEmpty()) {
+            repository.saveEventsOfLabels(userIdString, modifiedMappings);
+        }
     }
 
     public void deleteByLabelId(UUID userId, UUID labelId) {
@@ -107,6 +112,32 @@ public class EventLabelMappingDao {
             .stream()
             .filter(bw -> bw.getEntity2().removeIf(l -> l.equals(labelIdString)))
             .toList();
-        repository.saveEventsOfLabels(userIdString, modifiedMappings);
+        if (!modifiedMappings.isEmpty()) {
+            repository.saveEventsOfLabels(userIdString, modifiedMappings);
+        }
+    }
+
+    public void saveEventsOfLabel(UUID userId, UUID labelId, List<UUID> eventIds) {
+        repository.saveEventsOfLabels(
+            uuidConverter.convertDomain(userId),
+            uuidConverter.convertDomain(labelId),
+            uuidConverter.convertDomain(eventIds)
+        );
+    }
+
+    public List<BiWrapper<UUID, List<UUID>>> getEventsOfLabels(UUID userId, List<UUID> labelIds) {
+        return repository.getEventsOfLabels(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelIds))
+            .stream()
+            .map(bw -> new BiWrapper<>(uuidConverter.convertEntity(bw.getEntity1()), uuidConverter.convertEntity(bw.getEntity2())))
+            .toList();
+    }
+
+    public void saveEventsOfLabels(UUID userId, List<BiWrapper<UUID, List<UUID>>> mappings) {
+        repository.saveEventsOfLabels(
+            uuidConverter.convertDomain(userId),
+            mappings.stream()
+                .map(bw -> new BiWrapper<>(uuidConverter.convertDomain(bw.getEntity1()), uuidConverter.convertDomain(bw.getEntity2())))
+                .toList()
+        );
     }
 }

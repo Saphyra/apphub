@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.context;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.RecreateOccurrenceService;
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -25,8 +24,7 @@ public class UpdateEventContext {
     @Getter
     private final Event event;
 
-    private final EventDao eventDao;
-    private final OccurrenceDao occurrenceDao;
+    private final CommonCalendarDao commonCalendarDao;
     private final RecreateOccurrenceService recreateOccurrenceService;
 
     private final Set<UUID> modifiedOccurrences = new HashSet<>();
@@ -37,16 +35,13 @@ public class UpdateEventContext {
 
     @Builder
     public UpdateEventContext(
-        @NonNull Event event,
-        @NonNull EventDao eventDao,
-        @NonNull OccurrenceDao occurrenceDao,
+        @NonNull Event event, CommonCalendarDao commonCalendarDao,
         @NonNull RecreateOccurrenceService recreateOccurrenceService
     ) {
         this.event = event;
-        this.eventDao = eventDao;
-        this.occurrenceDao = occurrenceDao;
+        this.commonCalendarDao = commonCalendarDao;
         this.recreateOccurrenceService = recreateOccurrenceService;
-        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(occurrenceDao.getByEventId(event.getEventId())));
+        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(commonCalendarDao.getOccurrenceDao().getByEventId(event.getEventId())));
     }
 
     public List<Occurrence> getOccurrences() {
@@ -60,17 +55,20 @@ public class UpdateEventContext {
         }
 
         log.info("Saving event {}", event.getEventId());
-        eventDao.save(event);
+        commonCalendarDao.getEventDao()
+            .save(event);
 
         log.info("Deleting {} occurrences for event {}", deletedOccurrences.size(), event.getEventId());
-        occurrenceDao.delete(event.getEventId(), deletedOccurrences);
+        commonCalendarDao.getOccurrenceDao()
+            .delete(event.getEventId(), deletedOccurrences);
 
         List<Occurrence> modifiedOccurrences = occurrences.get()
             .stream()
             .filter(occurrence -> this.modifiedOccurrences.contains(occurrence.getOccurrenceId()))
             .toList();
         log.info("Saving {} modified occurrences for event {}", modifiedOccurrences.size(), event.getEventId());
-        occurrenceDao.save(modifiedOccurrences);
+        commonCalendarDao.getOccurrenceDao()
+            .save(modifiedOccurrences);
     }
 
     public void occurrenceRecreationNeeded() {
@@ -92,5 +90,11 @@ public class UpdateEventContext {
     public void addOccurrence(Occurrence occurrence) {
         occurrences.get().add(occurrence);
         modifiedOccurrences.add(occurrence.getOccurrenceId());
+    }
+
+    public void processChanges(List<UUID> labels) {
+        processChanges();
+
+        commonCalendarDao.editLabelsOfEvent(event.getUserId(), event.getEventId(), labels);
     }
 }

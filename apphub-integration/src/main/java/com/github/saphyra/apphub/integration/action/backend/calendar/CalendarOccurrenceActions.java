@@ -24,15 +24,29 @@ public class CalendarOccurrenceActions {
             .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_CREATE_OCCURRENCE, "eventId", eventId));
     }
 
-    public static Response getEditOccurrenceResponse(int serverPort, String accessToken, UUID occurrenceId, OccurrenceRequest request) {
+    public static Response getEditOccurrenceResponse(int serverPort, String accessToken, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .body(request)
-            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(
+                serverPort,
+                CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE,
+                Map.of(
+                    "eventId", eventId,
+                    "occurrenceId", occurrenceId
+                )
+            ));
     }
 
-    public static Response getDeleteOccurrenceResponse(int serverPort, String accessToken, UUID occurrenceId) {
+    public static Response getDeleteOccurrenceResponse(int serverPort, String accessToken, UUID eventId, UUID occurrenceId) {
         return RequestFactory.createAuthorizedRequest(accessToken)
-            .delete(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_DELETE_OCCURRENCE, "occurrenceId", occurrenceId));
+            .delete(UrlFactory.create(
+                serverPort,
+                CalendarEndpoints.CALENDAR_DELETE_OCCURRENCE,
+                Map.of(
+                    "eventId", eventId,
+                    "occurrenceId", occurrenceId
+                )
+            ));
     }
 
     public static Response getGetOccurrencesResponse(int serverPort, String accessToken, LocalDate startDate, LocalDate endDate) {
@@ -48,9 +62,16 @@ public class CalendarOccurrenceActions {
             ));
     }
 
-    public static Response getGetOccurrenceResponse(int serverPort, String accessToken, UUID occurrenceId) {
+    public static Response getGetOccurrenceResponse(int serverPort, String accessToken,UUID eventId, UUID occurrenceId) {
         return RequestFactory.createAuthorizedRequest(accessToken)
-            .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_OCCURRENCE, "occurrenceId", occurrenceId));
+            .get(UrlFactory.create(
+                serverPort,
+                CalendarEndpoints.CALENDAR_GET_OCCURRENCE,
+                Map.of(
+                    "eventId", eventId,
+                    "occurrenceId", occurrenceId
+                )
+            ));
     }
 
     public static Response getGetOccurrencesOfEventResponse(int serverPort, String accessToken, UUID eventId) {
@@ -58,15 +79,29 @@ public class CalendarOccurrenceActions {
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_OCCURRENCES_OF_EVENT, "eventId", eventId));
     }
 
-    public static Response getEditOccurrenceStatusResponse(int serverPort, String accessToken, UUID occurrenceId, OccurrenceStatus status) {
+    public static Response getEditOccurrenceStatusResponse(int serverPort, String accessToken, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .body(new OneParamRequest<>(status))
-            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE_STATUS, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(
+                serverPort,
+                CalendarEndpoints.CALENDAR_EDIT_OCCURRENCE_STATUS,
+                Map.of(
+                    "eventId", eventId,
+                    "occurrenceId", occurrenceId
+                )
+            ));
     }
 
-    public static Response getSetRemindedResponse(int serverPort, String accessToken, UUID occurrenceId) {
+    public static Response getSetRemindedResponse(int serverPort, String accessToken, UUID eventId, UUID occurrenceId) {
         return RequestFactory.createAuthorizedRequest(accessToken)
-            .post(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_OCCURRENCE_REMINDED, "occurrenceId", occurrenceId));
+            .post(UrlFactory.create(
+                serverPort,
+                CalendarEndpoints.CALENDAR_OCCURRENCE_REMINDED,
+                Map.of(
+                    "eventId", eventId,
+                    "occurrenceId", occurrenceId
+                )
+            ));
     }
 
     public static List<OccurrenceResponse> getOccurrencesOfEvent(int serverPort, String accessToken, UUID eventId) {
@@ -93,22 +128,22 @@ public class CalendarOccurrenceActions {
         return response.body().jsonPath().getObject("value", UUID.class);
     }
 
-    public static void editOccurrence(int serverPort, String accessToken, UUID occurrenceId, OccurrenceRequest request) {
-        Response response = getEditOccurrenceResponse(serverPort, accessToken, occurrenceId, request);
+    public static void editOccurrence(int serverPort, String accessToken, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
+        Response response = getEditOccurrenceResponse(serverPort, accessToken, eventId, occurrenceId, request);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static OccurrenceResponse editOccurrenceStatus(int serverPort, String accessToken, UUID occurrenceId, OccurrenceStatus status) {
-        Response response = getEditOccurrenceStatusResponse(serverPort, accessToken, occurrenceId, status);
+    public static OccurrenceResponse editOccurrenceStatus(int serverPort, String accessToken, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
+        Response response = getEditOccurrenceStatusResponse(serverPort, accessToken, eventId, occurrenceId, status);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return response.getBody().as(OccurrenceResponse.class);
     }
 
-    public static OccurrenceResponse setReminded(int serverPort, String accessToken, UUID occurrenceId) {
-        Response response = getSetRemindedResponse(serverPort, accessToken, occurrenceId);
+    public static OccurrenceResponse setReminded(int serverPort, String accessToken, UUID eventId, UUID occurrenceId) {
+        Response response = getSetRemindedResponse(serverPort, accessToken, eventId, occurrenceId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 

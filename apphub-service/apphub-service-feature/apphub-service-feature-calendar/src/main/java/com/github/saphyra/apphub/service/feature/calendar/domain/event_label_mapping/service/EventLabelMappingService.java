@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service;
 
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Slf4j
 //TODO unit test
 public class EventLabelMappingService {
+    private final CommonCalendarDao commonCalendarDao;
     private final EventLabelMappingDao eventLabelMappingDao;
     private final LabelIdValidator labelIdValidator;
 
@@ -23,6 +25,6 @@ public class EventLabelMappingService {
     public void setLabels(UUID userId, UUID eventId, List<UUID> labels) {
         labelIdValidator.validate(userId, labels);
 
-        eventLabelMappingDao.saveLabelsOfEvent(userId, eventId, labels);
+        commonCalendarDao.editLabelsOfEvent(userId, eventId, labels);
     }
 }

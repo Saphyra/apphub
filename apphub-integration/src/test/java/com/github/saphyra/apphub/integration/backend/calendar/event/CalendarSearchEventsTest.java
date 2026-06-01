@@ -67,7 +67,7 @@ public class CalendarSearchEventsTest extends BackEndTest {
             .getFirst()
             .getOccurrenceId();
 
-        CalendarOccurrenceActions.editOccurrence(getServerPort(), accessToken, occurrenceId, occurrenceRequest);
+        CalendarOccurrenceActions.editOccurrence(getServerPort(), accessToken, eventId, occurrenceId, occurrenceRequest);
 
         return eventId;
     }

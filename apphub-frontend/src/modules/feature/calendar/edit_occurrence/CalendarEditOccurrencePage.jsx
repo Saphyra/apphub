@@ -174,6 +174,7 @@ const CalendarEditOccurrencePage = () => {
                         label={localizationHandler.get("delete")}
                         onclick={() => confirmOccurrenceDeletion(
                             setConfirmationDialogData,
+                            occurrence.eventId,
                             occurrenceId,
                             occurrence.title,
                             occurrence.date,

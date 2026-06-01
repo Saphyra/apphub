@@ -29,7 +29,7 @@ public interface OccurrenceController {
     void editOccurrence(@RequestBody OccurrenceRequest request, @PathVariable("eventId") UUID eventId, @PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_OCCURRENCE)
-    void deleteOccurrence(@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    void deleteOccurrence(@PathVariable("eventId") UUID eventId,@PathVariable("occurrenceId") UUID occurrenceId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     /**
      * Returns all occurrences between startDate and endDate (inclusive). Filters for events with the given label if labelId is specified.

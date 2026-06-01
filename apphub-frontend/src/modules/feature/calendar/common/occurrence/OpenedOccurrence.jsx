@@ -103,6 +103,7 @@ const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, se
                 <Button
                     onclick={() => confirmOccurrenceDeletion(
                         setConfirmationDialogData,
+                        occurrence.eventId,
                         occurrence.occurrenceId,
                         occurrence.title,
                         occurrence.date,

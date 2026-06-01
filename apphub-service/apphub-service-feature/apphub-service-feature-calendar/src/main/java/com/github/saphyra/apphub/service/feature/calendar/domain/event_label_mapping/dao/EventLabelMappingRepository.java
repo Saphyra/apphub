@@ -68,7 +68,8 @@ class EventLabelMappingRepository {
             .filter(GetItemResponse::hasItem)
             .map(GetItemResponse::item)
             .map(item -> item.get(COLUMN_EVENT_IDS).s())
-            .map(s -> objectMapper.readValue(objectMapper.writeValueAsString(s), List.class))
+            .map(s -> objectMapper.readValue(s, new TypeReference<List<String>>() {
+            }))
             .orElse(List.of());
     }
 
@@ -192,7 +193,7 @@ class EventLabelMappingRepository {
             .map(mapping -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING + mapping.getEntity1()).build(),
-                COLUMN_EVENT_IDS, AttributeValue.builder().ss(mapping.getEntity2()).build()
+                COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(mapping.getEntity2())).build()
             ))
             .map(item -> PutRequest.builder().item(item).build())
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
@@ -253,6 +254,19 @@ class EventLabelMappingRepository {
                 })
             ))
             .toList();
+    }
+
+    public void saveEventsOfLabels(String userId, String labelId, List<String> eventIds) {
+        PutItemRequest request = PutItemRequest.builder()
+            .tableName(tableName)
+            .item(Map.of(
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING + labelId).build(),
+                COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(eventIds)).build()
+            ))
+            .build();
+
+        client.putItem(request);
     }
 
     private void batchWrite(int tryCount, List<WriteRequest> requests) {

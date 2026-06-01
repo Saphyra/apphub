@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.CommonUtils;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
@@ -34,7 +33,7 @@ public class MergeEventService {
             throw ExceptionFactory.invalidParam("eventId", "invalid type");
         }
 
-        List<BiWrapper<UUID, UUID>> occurrencesToDelete = new ArrayList<>(); //List<EventId, OccurrenceId>
+        List<Occurrence> occurrencesToDelete = new ArrayList<>();
         List<Occurrence> modifiedOccurrences = new ArrayList<>();
         List<UUID> deletedEventIds = new ArrayList<>();
         eventDao.getByUserId(parent.getUserId())
@@ -45,24 +44,28 @@ public class MergeEventService {
             .forEach(originalEvent -> merge(originalEvent, parent.getEventId(), modifiedOccurrences, occurrencesToDelete, deletedEventIds));
 
         deleteEventService.delete(userId, deletedEventIds);
+        occurrenceDao.delete(occurrencesToDelete);
+        occurrenceDao.save(modifiedOccurrences);
     }
 
-    private void merge(Event originalEvent, UUID newEventId, List<Occurrence> modifiedOccurrences, List<BiWrapper<UUID, UUID>> occurrencesToDelete, List<UUID> deletedEventIds) {
+    private void merge(Event originalEvent, UUID newEventId, List<Occurrence> modifiedOccurrences, List<Occurrence> occurrencesToDelete, List<UUID> deletedEventIds) {
         occurrenceDao.getByEventId(originalEvent.getEventId())
             .forEach(occurrence -> merge(originalEvent, newEventId, occurrence, modifiedOccurrences, occurrencesToDelete));
 
         deletedEventIds.add(originalEvent.getEventId());
     }
 
-    private void merge(Event originalEvent, UUID newEventId, Occurrence occurrence, List<Occurrence> modifiedOccurrences, List<BiWrapper<UUID, UUID>> occurrencesToDelete) {
-        occurrencesToDelete.add(new BiWrapper<>(originalEvent.getEventId(), occurrence.getOccurrenceId()));
+    private void merge(Event originalEvent, UUID newEventId, Occurrence occurrence, List<Occurrence> modifiedOccurrences, List<Occurrence> occurrencesToDelete) {
+        occurrencesToDelete.add(occurrence);
 
-        occurrence.setEventId(newEventId);
-        occurrence.setNote(assembleNote(originalEvent.getContent(), occurrence.getNote()));
-        occurrence.setTime(CommonUtils.firstNotNull(occurrence.getTime(), originalEvent.getTime()));
-        occurrence.setRemindMeBeforeDays(CommonUtils.firstNotNull(occurrence.getRemindMeBeforeDays(), originalEvent.getRemindMeBeforeDays()));
+        Occurrence cloned = occurrence.toBuilder()
+            .eventId(newEventId)
+            .note(assembleNote(originalEvent.getContent(), occurrence.getNote()))
+            .time(CommonUtils.firstNotNull(occurrence.getTime(), originalEvent.getTime()))
+            .remindMeBeforeDays(CommonUtils.firstNotNull(occurrence.getRemindMeBeforeDays(), originalEvent.getRemindMeBeforeDays()))
+            .build();
 
-        modifiedOccurrences.add(occurrence);
+        modifiedOccurrences.add(cloned);
     }
 
     private String assembleNote(String content, String note) {

@@ -7,11 +7,11 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.E
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated(forRemoval = true)
 class LabelUpdater implements EventFieldUpdater {
     private final EventLabelMappingService eventLabelMappingService;
 

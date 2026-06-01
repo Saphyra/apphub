@@ -25,7 +25,7 @@ public class LabelService {
         labelValidator.validate(userId, label);
 
         Label domain = labelFactory.create(label);
-        labelDao.save(userId, domain);
+        commonCalendarDao.saveLabel(userId, domain);
 
         return domain.getLabelId();
     }

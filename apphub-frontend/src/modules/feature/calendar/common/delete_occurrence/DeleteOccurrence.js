@@ -8,6 +8,7 @@ const localizationHandler = new LocalizationHandler(localizationData);
 
 function confirmOccurrenceDeletion(
     setConfirmationDialogData,
+    eventId,
     occurrenceId, 
     eventTitle,
     occurrenceDate,
@@ -36,7 +37,7 @@ function confirmOccurrenceDeletion(
     ));
 
     async function deleteOccurrence() {
-        await CALENDAR_DELETE_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId })
+        await CALENDAR_DELETE_OCCURRENCE.createRequest(null, { eventId: eventId, occurrenceId: occurrenceId })
             .send(setDisplaySpinner);
 
         setConfirmationDialogData(null);

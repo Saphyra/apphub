@@ -48,7 +48,7 @@ class LabelServiceTest {
         assertThat(underTest.createLabel(USER_ID, LABEL)).isEqualTo(LABEL_ID);
 
         then(labelValidator).should().validate(USER_ID, LABEL);
-        then(labelDao).should().save(USER_ID, label);
+        then(commonCalendarDao).should().saveLabel(USER_ID, label);
     }
 
     @Test

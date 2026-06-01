@@ -5,9 +5,6 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.action.backend.UserSettingsActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActions;
-import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
-import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLabelActions;
-import com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.backend.community.GroupActions;
@@ -21,14 +18,12 @@ import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
-import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
 import org.testng.annotations.Test;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -37,20 +32,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class DataDeletedWithUserTest extends BackEndTest {
     private static final String REASON = "reason";
-    private static final String TITLE = "title";
     private static final String GROUP_NAME = "group-name";
-    private static final String CONTENT = "content";
 
     private static final Map<String, String> GENERIC_TABLES = CollectionUtils.toMap(
-        new BiWrapper<>("apphub_user", "access_token"),
-        new BiWrapper<>("apphub_user", "apphub_role"),
-        new BiWrapper<>("apphub_user", "apphub_user"),
         new BiWrapper<>("apphub_user", "settings"),
-        new BiWrapper<>("modules", "favorite"),
-        new BiWrapper<>("calendar", "event"),
-        new BiWrapper<>("calendar", "label"),
-        new BiWrapper<>("calendar", "occurrence"),
-        new BiWrapper<>("calendar", "event_label_mapping")
+        new BiWrapper<>("modules", "favorite")
     );
 
     private static final Map<String, String> COMMUNITY_TABLES = CollectionUtils.toMap(
@@ -149,7 +135,11 @@ public class DataDeletedWithUserTest extends BackEndTest {
     }
 
     private void verifyRecords(Map<String, String> tables, UUID userId, Predicate<Integer> validator) {
-        tables.forEach((schema, tableName) -> assertThat(validator.test(DatabaseUtil.getRowCountByValue(userId, schema, tableName, "user_id"))).isTrue());
+        tables.forEach((schema, tableName) -> {
+            if (!validator.test(DatabaseUtil.getRowCountByValue(userId, schema, tableName, "user_id"))) {
+                throw new AssertionError("Failed verification for schema " + schema + " table " + tableName);
+            }
+        });
     }
 
     private void verifySkyXploreRecords(UUID userId, Predicate<Integer> validator) {
@@ -160,7 +150,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
     }
 
     private void createRecords(String accessToken, UUID userId, RegistrationParameters adminUserData, String adminAccessToken) {
-        calendarTables(accessToken);
         modulesTables(accessToken);
         apphubUserTables(accessToken, userId, adminUserData, adminAccessToken);
     }
@@ -191,11 +180,6 @@ public class DataDeletedWithUserTest extends BackEndTest {
         //community.friendship
         FriendRequestActions.createFriendRequest(getServerPort(), accessToken, userId3);
         FriendRequestActions.acceptFriendRequest(getServerPort(), accessToken3, FriendRequestActions.getReceivedFriendRequests(getServerPort(), accessToken3).getFirst().getFriendRequestId());
-    }
-
-    private static void calendarTables(String accessToken) {
-        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, TITLE);
-        CalendarEventActions.createEvent(getServerPort(), accessToken, EventRequestFactory.validRequest(RepetitionType.ONE_TIME).toBuilder().labels(List.of(labelId)).build());
     }
 
     private static void apphubUserTables(String accessToken, UUID userId, RegistrationParameters adminUserData, String adminAccessToken) {

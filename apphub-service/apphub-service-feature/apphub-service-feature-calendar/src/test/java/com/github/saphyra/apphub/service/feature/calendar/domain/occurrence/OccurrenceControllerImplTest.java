@@ -76,9 +76,9 @@ class OccurrenceControllerImplTest {
 
     @Test
     void deleteOccurrence() {
-        underTest.deleteOccurrence(OCCURRENCE_ID, accessToken);
+        underTest.deleteOccurrence(EVENT_ID, OCCURRENCE_ID, accessToken);
 
-        then(deleteOccurrenceService).should().deleteOccurrence(OCCURRENCE_ID);
+        then(deleteOccurrenceService).should().deleteOccurrence(EVENT_ID, OCCURRENCE_ID);
     }
 
     @Test

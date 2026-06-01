@@ -45,7 +45,7 @@ const CalendarPage = () => {
     const [referenceDate, setReferenceDate] = useState(cachedOrDefault(CACHE_KEY_REFERENCE_DATE, LocalDate.now(), v => LocalDate.parse(v)));
     const [activeLabel, setActiveLabel] = useState(cachedOrDefault(CACHE_KEY_ACTIVE_LABEL, null));
     const [selectedDate, setSelectedDate] = useState(cachedOrDefault(CACHE_KEY_SELECTED_DATE, LocalDate.now(), v => LocalDate.parse(v)));
-    const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null));
+    const [selectedOccurrence, setSelectedOccurrence] = useState(cachedOrDefault(CACHE_KEY_SELECTED_OCCURRENCE, null, v => JSON.parse(v)));
 
     const [currentDate, setCurrentDate] = useState(LocalDate.now());
     const [showArchived, setShowArchived] = useState(true);
@@ -109,7 +109,7 @@ const CalendarPage = () => {
                             referenceDate={referenceDate}
                             selectedDate={selectedDate}
                             setSelectedDate={v => cacheAndUpdate(CACHE_KEY_SELECTED_DATE, v, setSelectedDate, v => LocalDate.parse(v))}
-                            setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                            setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence, v => JSON.stringify(v))}
                             refreshCounter={refreshCounter}
                         />
                     </div>
@@ -121,7 +121,7 @@ const CalendarPage = () => {
                     showArchived={showArchived}
                     setDisplaySpinner={updateDisplaySpinner}
                     selectedOccurrence={selectedOccurrence}
-                    setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence)}
+                    setSelectedOccurrence={v => cacheAndUpdate(CACHE_KEY_SELECTED_OCCURRENCE, v, setSelectedOccurrence, v => JSON.stringify(v))}
                     refreshCounter={refreshCounter}
                     refresh={refresh}
                     setConfirmationDialogData={setConfirmationDialogData}
