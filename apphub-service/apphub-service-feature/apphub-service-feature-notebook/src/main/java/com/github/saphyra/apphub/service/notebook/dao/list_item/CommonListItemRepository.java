@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import com.google.common.collect.Lists;
@@ -44,7 +45,7 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Component
 @Profile("!test")
 @Slf4j
-class CommonListItemRepository {
+class CommonListItemRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final String tableName;
     private final SleepService sleepService;
@@ -67,6 +68,7 @@ class CommonListItemRepository {
             .expressionAttributeValues(Map.of(":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()))
             .build();
 
+        //TODO handle lastEvaluatedKey
         List<BiWrapper<String, String>> items = client.query(queryRequest)
             .items()
             .stream()

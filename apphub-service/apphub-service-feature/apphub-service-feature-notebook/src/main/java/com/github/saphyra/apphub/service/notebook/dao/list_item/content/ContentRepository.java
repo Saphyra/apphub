@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item.content;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
 
 @Component
-class ContentRepository {
+class ContentRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final ContentMapper mapper;
     private final String tableName;
@@ -73,6 +74,28 @@ class ContentRepository {
         batchWrite(0, requests);
     }
 
+    //TODO handle lastEvaluatedKey
+    public List<ContentEntity> getByListItemId(String listItemId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(tableName)
+            .keyConditionExpression("#pk = :listItemId AND begins_with(#sk, :content)")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
+            .expressionAttributeValues(Map.of(
+                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
+                ":content", AttributeValue.builder().s(PREFIX_CONTENT).build()
+            ))
+            .build();
+
+        return client.query(request)
+            .items()
+            .stream()
+            .map(mapper::convertEntity)
+            .toList();
+    }
+
     private void batchWrite(int tryCount, List<WriteRequest> requests) {
         if (tryCount > maxBatchRetryCount) {
             throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
@@ -93,26 +116,5 @@ class ContentRepository {
                 .values()
                 .forEach(writeRequests -> batchWrite(tryCount + 1, writeRequests));
         }
-    }
-
-    public List<ContentEntity> getByListItemId(String listItemId) {
-        QueryRequest request = QueryRequest.builder()
-            .tableName(tableName)
-            .keyConditionExpression("#pk = :listItemId AND begins_with(#sk, :content)")
-            .expressionAttributeNames(Map.of(
-                "#pk", COLUMN_PK,
-                "#sk", COLUMN_SK
-            ))
-            .expressionAttributeValues(Map.of(
-                ":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build(),
-                ":content", AttributeValue.builder().s(PREFIX_CONTENT).build()
-            ))
-            .build();
-
-        return client.query(request)
-            .items()
-            .stream()
-            .map(mapper::convertEntity)
-            .toList();
     }
 }

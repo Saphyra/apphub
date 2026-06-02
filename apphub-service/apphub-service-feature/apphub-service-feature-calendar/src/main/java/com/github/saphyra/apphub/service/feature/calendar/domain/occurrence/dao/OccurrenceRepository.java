@@ -4,8 +4,10 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -18,8 +20,10 @@ import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
+import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,7 +38,8 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
-class OccurrenceRepository {
+@Slf4j
+class OccurrenceRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final String tableName;
     private final OccurrenceMapper mapper;
@@ -61,24 +66,36 @@ class OccurrenceRepository {
     }
 
     List<OccurrenceEntity> getByEventId(String eventId) {
-        QueryRequest request = QueryRequest.builder()
-            .tableName(tableName)
-            .keyConditionExpression("#pk = :eventId AND begins_with(#sk, :prefix)")
-            .expressionAttributeNames(Map.of(
-                "#pk", COLUMN_PK,
-                "#sk", COLUMN_SK
-            ))
-            .expressionAttributeValues(Map.of(
-                ":eventId", AttributeValue.builder().s(PREFIX_EVENT + eventId).build(),
-                ":prefix", AttributeValue.builder().s(PREFIX_OCCURRENCE).build()
-            ))
-            .build();
+        List<OccurrenceEntity> result = new ArrayList<>();
+        Map<String, AttributeValue> lastKey;
 
-        return client.query(request)
-            .items()
-            .stream()
-            .map(mapper::convertEntity)
-            .toList();
+        do {
+            QueryRequest request = QueryRequest.builder()
+                .tableName(tableName)
+                .keyConditionExpression("#pk = :eventId AND begins_with(#sk, :prefix)")
+                .expressionAttributeNames(Map.of(
+                    "#pk", COLUMN_PK,
+                    "#sk", COLUMN_SK
+                ))
+                .expressionAttributeValues(Map.of(
+                    ":eventId", AttributeValue.builder().s(PREFIX_EVENT + eventId).build(),
+                    ":prefix", AttributeValue.builder().s(PREFIX_OCCURRENCE).build()
+                ))
+                .build();
+
+            QueryResponse response = client.query(request);
+
+            log.info("Returned {} Occurrences. lastKey: {}", response.items().size(), response.lastEvaluatedKey());
+
+            response.items()
+                .stream()
+                .map(mapper::convertEntity)
+                .forEach(result::add);
+
+            lastKey = response.lastEvaluatedKey();
+        } while (lastKey != null && !lastKey.isEmpty());
+
+        return result;
     }
 
     void delete(String eventId, List<String> occurrenceIds) {
@@ -127,6 +144,7 @@ class OccurrenceRepository {
             .map(mapper::convertEntity);
     }
 
+    //TODO handle lastEvaluatedKey
     public List<OccurrenceEntity> getByBucket(String userId, String bucket) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)

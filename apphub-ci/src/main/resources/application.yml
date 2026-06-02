@@ -94,21 +94,6 @@ services:
     group: 0
     properties:
       - PSQL_HOST
-
-  #Platform
-  - name: main-gateway
-    port: 8080
-    location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
-    moduleName: apphub-service-platform-main_gateway
-    group: 2
-    properties:
-      - AUTHORIZATION_CERTIFICATE
-      - DYNAMO_DB_CONFIGURATION
-  - name: scheduler
-    port: 8082
-    location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
-    moduleName: apphub-service-platform-scheduler
-    group: 2
   - name: admin-panel
     port: 8089
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-admin_panel/target/application.jar"
@@ -116,18 +101,33 @@ services:
     group: 1
     properties:
       - PSQL_HOST
+
+  #Platform
+  - name: main-gateway
+    port: 8080
+    location: "./apphub-service/apphub-service-platform/apphub-service-platform-main_gateway/target/application.jar"
+    moduleName: apphub-service-platform-main_gateway
+    group: 3
+    properties:
+      - AUTHORIZATION_CERTIFICATE
+      - DYNAMO_DB_CONFIGURATION
+  - name: scheduler
+    port: 8082
+    location: "./apphub-service/apphub-service-platform/apphub-service-platform-scheduler/target/application.jar"
+    moduleName: apphub-service-platform-scheduler
+    group: 3
   - name: monitoring
     port: 8084
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-monitoring/target/application.jar"
     moduleName: apphub-service-platform-monitoring
-    group: 1
+    group: 2
     properties:
       - PSQL_HOST
   - name: user
     port: 8085
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-user/target/application.jar"
     moduleName: apphub-service-etc-user
-    group: 1
+    group: 2
     properties:
       - PSQL_HOST
       - DYNAMO_DB_CONFIGURATION
@@ -135,7 +135,7 @@ services:
     port: 8092
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-authorization/target/application.jar"
     moduleName: apphub-service-platform-authorization
-    group: 1
+    group: 2
     properties:
       - AUTHORIZATION_CERTIFICATE
 
@@ -144,7 +144,7 @@ services:
     port: 8099
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-storage/target/application.jar"
     moduleName: apphub-service-platform-storage
-    group: 1
+    group: 2
     optional: true
     properties:
       - S3_CONFIGURATION
@@ -155,7 +155,7 @@ services:
     port: 8098
     location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
     moduleName: apphub-service-platform-encryption
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -163,7 +163,7 @@ services:
     port: 8088
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-modules/target/application.jar"
     moduleName: apphub-service-etc-modules
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -173,7 +173,7 @@ services:
     port: 8091
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-data/target/application.jar"
     moduleName: apphub-service-feature-skyxplore-data
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -181,13 +181,13 @@ services:
     port: 8095
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-game/target/application.jar"
     moduleName: apphub-service-feature-skyxplore-game
-    group: 1
+    group: 2
     optional: true
   - name: skyxplore-lobby
     port: 8093
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-skyxplore/apphub-service-feature-skyxplore-lobby/target/application.jar"
     moduleName: apphub-service-feature-skyxplore-lobby
-    group: 1
+    group: 2
     optional: true
 
   #Feature
@@ -195,13 +195,13 @@ services:
     port: 8086
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-training/target/application.jar"
     moduleName: apphub-service-feature-training
-    group: 1
+    group: 2
     optional: true
   - name: notebook
     port: 8090
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-notebook/target/application.jar"
     moduleName: apphub-service-feature-notebook
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -210,7 +210,7 @@ services:
     port: 8096
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-community/target/application.jar"
     moduleName: apphub-service-feature-community
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -218,7 +218,7 @@ services:
     port: 8097
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-calendar/target/application.jar"
     moduleName: apphub-service-feature-calendar
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST
@@ -227,7 +227,7 @@ services:
     port: 8087
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-elite_base/target/application.jar"
     moduleName: apphub-service-feature-elite_base
-    group: 1
+    group: 2
     optional: true
     properties:
       - PSQL_HOST

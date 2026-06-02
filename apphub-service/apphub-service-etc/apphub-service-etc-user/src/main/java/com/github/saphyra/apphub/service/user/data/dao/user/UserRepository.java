@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,7 +51,7 @@ import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConsta
 @Component
 @Slf4j
 @Profile("!test")
-class UserRepository {
+class UserRepository extends DynamoDbRepository {
     private final DynamoDbClient dynamoDbClient;
     private final String tableName;
 

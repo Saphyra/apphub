@@ -68,6 +68,6 @@ public class OccurrenceDao {
         String eventIdString = uuidConverter.convertDomain(eventId);
         List<OccurrenceEntity> occurrences = repository.getByEventId(eventIdString);
         Lists.partition(occurrences, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
-            .forEach(batch -> repository.delete(eventIdString, occurrences.stream().map(OccurrenceEntity::getOccurrenceId).toList()));
+            .forEach(batch -> repository.delete(eventIdString, batch.stream().map(OccurrenceEntity::getOccurrenceId).toList()));
     }
 }

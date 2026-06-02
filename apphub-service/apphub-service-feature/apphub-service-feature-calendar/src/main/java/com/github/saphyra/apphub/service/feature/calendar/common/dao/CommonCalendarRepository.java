@@ -65,6 +65,7 @@ class CommonCalendarRepository {
             .expressionAttributeValues(Map.of(":userId", AttributeValue.builder().s(PREFIX_USER + userId).build()))
             .build();
 
+        //TODO handle lastEvaluatedKey
         List<BiWrapper<String, String>> items = client.query(queryRequest)
             .items()
             .stream()

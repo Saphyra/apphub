@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.list_item;
 
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,7 +27,7 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 @Slf4j
-class ListItemRepository {
+class ListItemRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final ListItemMapper mapper;
     private final String tableName;
@@ -47,6 +48,7 @@ class ListItemRepository {
         client.putItem(request);
     }
 
+    //TODO handle lastEvaluatedKey
     List<ListItemEntity> getByUserIdAndParent(String userId, String parent) {
         String parentValue = Optional.ofNullable(parent)
             .orElse("");
@@ -72,6 +74,7 @@ class ListItemRepository {
             .toList();
     }
 
+    //TODO handle lastEvaluatedKey
     List<ListItemEntity> getByUserIdAndType(String userId, String type) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
@@ -109,6 +112,7 @@ class ListItemRepository {
             .map(mapper::convertEntity);
     }
 
+    //TODO handle lastEvaluatedKey
     List<ListItemEntity> getByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)

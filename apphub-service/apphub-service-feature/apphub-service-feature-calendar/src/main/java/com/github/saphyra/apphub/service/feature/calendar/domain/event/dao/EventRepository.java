@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
-class EventRepository {
+class EventRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final EventMapper mapper;
     private final String tableName;
@@ -63,6 +64,7 @@ class EventRepository {
             .map(mapper::convertEntity);
     }
 
+    //TODO handle lastEvaluatedKey
     List<EventEntity> getByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)

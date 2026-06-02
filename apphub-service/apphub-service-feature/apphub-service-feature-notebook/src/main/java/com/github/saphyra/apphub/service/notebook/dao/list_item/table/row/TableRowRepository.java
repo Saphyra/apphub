@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item.table.row;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import org.springframework.http.HttpStatus;
@@ -30,7 +31,7 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_TABLE_ROW;
 
 @Component
-class TableRowRepository {
+class TableRowRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final TableRowMapper mapper;
     private final String tableName;
@@ -136,6 +137,7 @@ class TableRowRepository {
             .map(mapper::convertEntity);
     }
 
+    //TODO handle lastEvaluatedKey
     public List<TableRowEntity> getByListItemId(String listItemId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)

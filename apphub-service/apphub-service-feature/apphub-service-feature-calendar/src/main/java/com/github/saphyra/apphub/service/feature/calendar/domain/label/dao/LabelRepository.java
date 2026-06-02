@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -24,7 +25,7 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
-class LabelRepository {
+class LabelRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final String tableName;
 
@@ -100,6 +101,7 @@ class LabelRepository {
             );
     }
 
+    //TODO handle lastEvaluatedKey
     List<LabelEntity> getByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)

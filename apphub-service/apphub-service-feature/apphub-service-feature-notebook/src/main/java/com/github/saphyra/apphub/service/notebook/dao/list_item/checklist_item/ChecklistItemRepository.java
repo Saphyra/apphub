@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 @Slf4j
-class ChecklistItemRepository {
+class ChecklistItemRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final ChecklistItemMapper mapper;
     private final String tableName;
@@ -86,6 +87,7 @@ class ChecklistItemRepository {
         client.putItem(request);
     }
 
+    //TODO handle lastEvaluatedKey
     List<ChecklistItemEntity> getByListItemId(String listItemId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)

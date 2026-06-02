@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
-class EventLabelMappingRepository {
+class EventLabelMappingRepository extends DynamoDbRepository {
     private final DynamoDbClient client;
     private final String tableName;
     private final SleepService sleepService;
@@ -108,6 +109,7 @@ class EventLabelMappingRepository {
             .toList();
     }
 
+    //TODO handle lastEvaluatedKey
     List<BiWrapper<String, List<String>>> getLabelsOfEventsByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
@@ -231,6 +233,7 @@ class EventLabelMappingRepository {
         client.deleteItem(request);
     }
 
+    //TODO handle lastEvaluatedKey
     List<BiWrapper<String, List<String>>> getEventsOfLabelsByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
