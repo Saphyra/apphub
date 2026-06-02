@@ -11,6 +11,8 @@
 ===PLATFORM CHANGES===
     Notebook
         PostgreSQL to DynamoDB migration
+    Calendar
+        PostgreSQL to DynamoDB migration
 
 ===TECHNICAL DEBTS===
     EliteBase
@@ -20,3 +22,5 @@
 
 ===Manual Release Steps===
     Restart ApphubCI
+    Export Notebook schema for quick rollback
+    Export Calendar schema for quick rollback

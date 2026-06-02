@@ -72,10 +72,11 @@ class DeprecatedOccurrenceConverter extends ConverterBase<DeprecatedOccurrenceEn
             .status(syncStatus(entity, userIdFromAccessToken, occurrenceDate))
             .note(Optional.ofNullable(stringEncryptor.decrypt(entity.getNote(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_NOTE)).orElse(Constants.EMPTY_STRING))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMIND_ME_BEFORE_DAYS))
-            .reminded(booleanEncryptor.decrypt(entity.getReminded(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMINDED))
+            .reminded(Optional.ofNullable(booleanEncryptor.decrypt(entity.getReminded(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_REMINDED)).orElse(false))
             .build();
     }
 
+    //TODO move to new converter
     private OccurrenceStatus syncStatus(DeprecatedOccurrenceEntity entity, String userIdFromAccessToken, LocalDate occurrenceDate) {
         OccurrenceStatus savedStatus = OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_STATUS));
 
