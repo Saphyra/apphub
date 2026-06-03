@@ -201,10 +201,12 @@ public class ValidationUtil {
         }
     }
 
-    //TODO unit test
-    public static <T> void containsAll(List<T> values, List<T> list, String field) {
+    public static <T> void containsAll(List<T> values, Supplier<List<T>> allowedItemsSupplier, String field) {
+        doesNotContainNull(values, field);
+
+        List<T> allowedItems = allowedItemsSupplier.get();
         List<T> missing = values.stream()
-            .filter(value -> !list.contains(value))
+            .filter(value -> !allowedItems.contains(value))
             .toList();
 
         if (!missing.isEmpty()) {

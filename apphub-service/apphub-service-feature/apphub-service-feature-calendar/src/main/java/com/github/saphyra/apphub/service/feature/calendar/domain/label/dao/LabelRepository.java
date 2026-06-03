@@ -1,16 +1,13 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
@@ -26,19 +23,11 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 class LabelRepository extends DynamoDbRepository {
-    private final DynamoDbClient client;
-    private final String tableName;
-
-    LabelRepository(DynamoDbClient client, CalendarDynamoDbConfiguration configuration) {
-        this.client = client;
-        this.tableName = configuration.getTableName();
+    LabelRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
+        super(configuration.getTableName(), context);
     }
 
     List<LabelEntity> getByLabelIds(String userId, List<String> labelIds) {
-        if (labelIds.size() > Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Batch size cannot be greater than " + Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE);
-        }
-
         List<Map<String, AttributeValue>> keys = labelIds.stream()
             .map(id -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
@@ -46,21 +35,8 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        BatchGetItemRequest request = BatchGetItemRequest.builder()
-            .requestItems(Map.of(
-                tableName,
-                KeysAndAttributes.builder()
-                    .keys(keys)
-                    .build()
-            ))
-            .build();
-
-        //TODO handle unprocessed keys
-        return client.batchGetItem(request)
-            .responses()
-            .values()
+        return batchGetItem(keys)
             .stream()
-            .flatMap(List::stream)
             .map(item -> LabelEntity.builder()
                 .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
                 .label(item.get(COLUMN_LABEL).s())
@@ -101,7 +77,6 @@ class LabelRepository extends DynamoDbRepository {
             );
     }
 
-    //TODO handle lastEvaluatedKey
     List<LabelEntity> getByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
@@ -116,8 +91,7 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return client.query(request)
-            .items()
+        return query(request)
             .stream()
             .map(item -> LabelEntity.builder()
                 .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))

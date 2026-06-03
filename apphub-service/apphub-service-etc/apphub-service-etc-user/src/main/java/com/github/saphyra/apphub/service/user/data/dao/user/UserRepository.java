@@ -2,12 +2,12 @@ package com.github.saphyra.apphub.service.user.data.dao.user;
 
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
+import com.github.saphyra.apphub.service.user.config.UserDynamoDbConfiguration;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.BillingMode;
@@ -24,7 +24,6 @@ import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
-import software.amazon.awssdk.services.dynamodb.model.ScanResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,15 +51,8 @@ import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConsta
 @Slf4j
 @Profile("!test")
 class UserRepository extends DynamoDbRepository {
-    private final DynamoDbClient dynamoDbClient;
-    private final String tableName;
-
-    UserRepository(
-        DynamoDbClient dynamoDbClient,
-        @Value("${aws.dynamoDb.user.tableName}") String tableName
-    ) {
-        this.dynamoDbClient = dynamoDbClient;
-        this.tableName = tableName;
+    UserRepository(UserDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
+        super(configuration.getTableName(), context);
     }
 
     public void deleteProfile(String userId) {
@@ -72,7 +64,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.deleteItem(request);
+        client.deleteItem(request);
     }
 
     List<String> getUserIdsMarkedForDeletion(long currentTimeEpochSeconds) {
@@ -90,9 +82,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        QueryResponse response = dynamoDbClient.query(request);
-
-        return response.items()
+        return query(request)
             .stream()
             .map(record -> record.get(COLUMN_PK).s().split("#")[1])
             .toList();
@@ -110,7 +100,7 @@ class UserRepository extends DynamoDbRepository {
             .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
             .build();
 
-        dynamoDbClient.putItem(request);
+        client.putItem(request);
     }
 
     void deleteCredential(String credential) {
@@ -122,7 +112,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.deleteItem(request);
+        client.deleteItem(request);
     }
 
     void save(ProfileEntity profile) {
@@ -140,7 +130,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.putItem(request);
+        client.putItem(request);
     }
 
     void addRole(String userId, String role) {
@@ -152,7 +142,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.putItem(request);
+        client.putItem(request);
     }
 
     void markForDeletion(String userId, long markedForDeletionAtEpochSeconds) {
@@ -165,7 +155,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.putItem(request);
+        client.putItem(request);
     }
 
     void unmarkForDeletion(String userId) {
@@ -177,7 +167,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.deleteItem(request);
+        client.deleteItem(request);
     }
 
     void deleteRole(String userId, String role) {
@@ -189,7 +179,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        dynamoDbClient.deleteItem(request);
+        client.deleteItem(request);
     }
 
     List<String> getAllUserIds() {
@@ -200,9 +190,7 @@ class UserRepository extends DynamoDbRepository {
             .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(TYPE_PROFILE).build()))
             .build();
 
-        ScanResponse scanResponse = dynamoDbClient.scan(scanRequest);
-
-        return scanResponse.items()
+        return scan(scanRequest)
             .stream()
             .map(record -> record.get(COLUMN_PK).s().split("#")[1])
             .toList();
@@ -216,7 +204,7 @@ class UserRepository extends DynamoDbRepository {
             .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(String.join("#", TYPE_CREDENTIAL, query)).build()))
             .build();
 
-        QueryResponse queryResponse = dynamoDbClient.query(queryRequest);
+        QueryResponse queryResponse = client.query(queryRequest);
 
         if (queryResponse.items().size() > 1) {
             throw new IllegalStateException("Multiple credentials found for query " + query);
@@ -239,7 +227,7 @@ class UserRepository extends DynamoDbRepository {
             .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId)).build()))
             .build();
 
-        QueryResponse queryResponse = dynamoDbClient.query(queryRequest);
+        QueryResponse queryResponse = client.query(queryRequest);
 
         if (queryResponse.items().isEmpty()) {
             return Optional.empty();
@@ -279,7 +267,7 @@ class UserRepository extends DynamoDbRepository {
     @PostConstruct
     void createTable() {
         try {
-            dynamoDbClient.describeTable(builder -> builder.tableName(tableName));
+            client.describeTable(builder -> builder.tableName(tableName));
             log.info("DynamoDb table '{}' already exists", tableName);
         } catch (ResourceNotFoundException e) {
             log.info("Creating DynamoDb table '{}'", tableName);
@@ -329,9 +317,9 @@ class UserRepository extends DynamoDbRepository {
                 .billingMode(BillingMode.PAY_PER_REQUEST)
                 .build();
 
-            dynamoDbClient.createTable(createTableRequest);
+            client.createTable(createTableRequest);
 
-            dynamoDbClient.waiter()
+            client.waiter()
                 .waitUntilTableExists(builder -> builder.tableName(tableName));
         }
     }

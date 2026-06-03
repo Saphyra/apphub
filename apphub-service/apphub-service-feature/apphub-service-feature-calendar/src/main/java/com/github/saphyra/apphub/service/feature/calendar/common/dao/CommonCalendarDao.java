@@ -23,7 +23,6 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class CommonCalendarDao implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
     private final CommonCalendarRepository repository;
@@ -115,16 +114,23 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
         List<BiWrapper<UUID, List<UUID>>> modifiedMappings = Lists.partition(labelsOfUser, Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
             .stream()
             .flatMap(batch -> eventLabelMappingDao.getEventsOfLabels(userId, batch).stream())
-            .map(bw -> {
-                if (labelIds.contains(bw.getEntity1()) && !bw.getEntity2().contains(eventId)) {
-                    //Add event to label
-
-                    return Optional.of(new BiWrapper<>(bw.getEntity1(), Stream.concat(bw.getEntity2().stream(), Stream.of(eventId)).toList()));
+            .map(mapping -> { //BiWrapper<LabelId, List<EventId>
+                UUID labelId = mapping.getEntity1();
+                List<UUID> eventIds = mapping.getEntity2();
+                if (labelIds.contains(labelId) && !eventIds.contains(eventId)) {
+                    return Optional.of(new BiWrapper<>(
+                        labelId,
+                        Stream.concat(eventIds.stream(), Stream.of(eventId)) //Add event to existing list
+                            .toList()
+                    ));
                 }
 
-                if (!labelIds.contains(bw.getEntity1()) && bw.getEntity2().contains(eventId)) {
-                    //Remove event from label
-                    return Optional.of(new BiWrapper<>(bw.getEntity1(), bw.getEntity2().stream().filter(e -> !e.equals(eventId)).toList()));
+                if (!labelIds.contains(labelId) && eventIds.contains(eventId)) { //Label is not in new label list of event, but eventId is in the event list of label
+                    return Optional.of(new BiWrapper<>(
+                        labelId,
+                        eventIds.stream().filter(e -> !e.equals(eventId)) //Remove the label
+                            .toList()
+                    ));
                 }
 
                 //No modification needed

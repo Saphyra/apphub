@@ -29,12 +29,12 @@ public class OccurrenceDao {
     }
 
     public void delete(UUID eventId, Collection<UUID> occurrences) {
-        Lists.partition(uuidConverter.convertDomain(occurrences), Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(uuidConverter.convertDomain(occurrences), Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(batch -> repository.delete(uuidConverter.convertDomain(eventId), batch));
     }
 
     public void save(List<Occurrence> occurrences) {
-        Lists.partition(converter.convertDomain(occurrences), Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
+        Lists.partition(converter.convertDomain(occurrences), Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(repository::save);
     }
 
@@ -60,14 +60,14 @@ public class OccurrenceDao {
             ))
             .toList();
 
-        Lists.partition(ids, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(ids, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(repository::delete);
     }
 
     public void deleteByEventId(UUID eventId) {
         String eventIdString = uuidConverter.convertDomain(eventId);
         List<OccurrenceEntity> occurrences = repository.getByEventId(eventIdString);
-        Lists.partition(occurrences, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(occurrences, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(batch -> repository.delete(eventIdString, batch.stream().map(OccurrenceEntity::getOccurrenceId).toList()));
     }
 }

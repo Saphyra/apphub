@@ -21,6 +21,6 @@ class LabelIdValidator {
         ValidationUtil.doesNotContainNull(labels, "labels");
 
         ValidationUtil.notNull(labels, "labels");
-        ValidationUtil.containsAll(labels, labelDao.getByLabelIds(userId, labels).stream().map(Label::getLabelId).toList(), "labels");
+        ValidationUtil.containsAll(labels, () -> labelDao.getByLabelIds(userId, labels).stream().map(Label::getLabelId).toList(), "labels");
     }
 }

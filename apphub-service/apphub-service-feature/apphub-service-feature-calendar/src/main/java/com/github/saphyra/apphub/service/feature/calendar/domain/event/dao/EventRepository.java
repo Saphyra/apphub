@@ -2,22 +2,14 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
@@ -33,20 +25,11 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 class EventRepository extends DynamoDbRepository {
-    private final DynamoDbClient client;
     private final EventMapper mapper;
-    private final String tableName;
-    private final SleepService sleepService;
-    private final int maxBatchRetryCount;
-    private final long batchRetryDelayMs;
 
-    EventRepository(DynamoDbClient dynamoDbClient, EventMapper mapper, CalendarDynamoDbConfiguration configuration, SleepService sleepService) {
-        this.client = dynamoDbClient;
+    EventRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, EventMapper mapper) {
+        super(configuration.getTableName(), context);
         this.mapper = mapper;
-        this.tableName = configuration.getTableName();
-        this.sleepService = sleepService;
-        this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
-        this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
     }
 
     Optional<EventEntity> findById(String userId, String eventId) {
@@ -64,7 +47,6 @@ class EventRepository extends DynamoDbRepository {
             .map(mapper::convertEntity);
     }
 
-    //TODO handle lastEvaluatedKey
     List<EventEntity> getByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
@@ -79,8 +61,7 @@ class EventRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return client.query(request)
-            .items()
+        return query(request)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -98,21 +79,8 @@ class EventRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        BatchGetItemRequest request = BatchGetItemRequest.builder()
-            .requestItems(Map.of(
-                tableName,
-                KeysAndAttributes.builder()
-                    .keys(keys)
-                    .build()
-            ))
-            .build();
-
-        //TODO handle unprocessed keys
-        return client.batchGetItem(request)
-            .responses()
-            .values()
+        return batchGetItem(keys)
             .stream()
-            .flatMap(List::stream)
             .map(mapper::convertEntity)
             .toList();
     }
@@ -127,8 +95,8 @@ class EventRepository extends DynamoDbRepository {
     }
 
     void delete(String userId, List<String> eventIds) {
-        if (eventIds.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE));
+        if (eventIds.size() > Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE) {
+            throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE));
         }
 
         List<WriteRequest> requests = eventIds.stream()
@@ -140,28 +108,6 @@ class EventRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(0, requests);
-    }
-
-    private void batchWrite(int tryCount, List<WriteRequest> requests) {
-        if (tryCount > maxBatchRetryCount) {
-            throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
-        }
-
-        if (tryCount > 0) {
-            sleepService.sleep(tryCount * batchRetryDelayMs);
-        }
-
-        BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
-            .requestItems(Map.of(tableName, requests))
-            .build();
-
-        BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
-
-        if (response.hasUnprocessedItems()) {
-            response.unprocessedItems()
-                .values()
-                .forEach(writeRequests -> batchWrite(tryCount + 1, writeRequests));
-        }
+        batchWrite(requests);
     }
 }

@@ -1,19 +1,12 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
@@ -35,20 +28,11 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Component
 @Slf4j
 class ChecklistItemRepository extends DynamoDbRepository {
-    private final DynamoDbClient client;
     private final ChecklistItemMapper mapper;
-    private final String tableName;
-    private final SleepService sleepService;
-    private final int maxBatchRetryCount;
-    private final long batchRetryDelayMs;
 
-    ChecklistItemRepository(DynamoDbClient dynamoDbClient, ChecklistItemMapper mapper, NotebookDynamoDbConfiguration configuration, SleepService sleepService) {
-        this.client = dynamoDbClient;
+    ChecklistItemRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ChecklistItemMapper mapper) {
+        super(configuration.getTableName(), context);
         this.mapper = mapper;
-        this.tableName = configuration.getTableName();
-        this.sleepService = sleepService;
-        this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
-        this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
     }
 
     Optional<ChecklistItemEntity> findById(String listItemId, String checklistItemId) {
@@ -87,7 +71,6 @@ class ChecklistItemRepository extends DynamoDbRepository {
         client.putItem(request);
     }
 
-    //TODO handle lastEvaluatedKey
     List<ChecklistItemEntity> getByListItemId(String listItemId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
@@ -102,8 +85,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return client.query(request)
-            .items()
+        return query(request)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -113,10 +95,6 @@ class ChecklistItemRepository extends DynamoDbRepository {
      * @param ids BiWrapper<ListItemId, ChecklistItemId>
      */
     void delete(List<BiWrapper<String, String>> ids) {
-        if (ids.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE));
-        }
-
         List<WriteRequest> requests = ids.stream()
             .map(item -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_LIST_ITEM + item.getEntity1()).build(),
@@ -126,42 +104,16 @@ class ChecklistItemRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(0, requests);
+        batchWrite(requests);
     }
 
     void save(List<ChecklistItemEntity> items) {
-        if (items.size() > Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE));
-        }
-
         List<WriteRequest> requests = items.stream()
             .map(mapper::convertDomain)
             .map(item -> PutRequest.builder().item(item).build())
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        batchWrite(0, requests);
-    }
-
-    private void batchWrite(int tryCount, List<WriteRequest> requests) {
-        if (tryCount > maxBatchRetryCount) {
-            throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
-        }
-
-        if (tryCount > 0) {
-            sleepService.sleep(tryCount * batchRetryDelayMs);
-        }
-
-        BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
-            .requestItems(Map.of(tableName, requests))
-            .build();
-
-        BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
-
-        if (response.hasUnprocessedItems()) {
-            response.unprocessedItems()
-                .values()
-                .forEach(writeRequests -> batchWrite(tryCount + 1, writeRequests));
-        }
+        batchWrite(requests);
     }
 }

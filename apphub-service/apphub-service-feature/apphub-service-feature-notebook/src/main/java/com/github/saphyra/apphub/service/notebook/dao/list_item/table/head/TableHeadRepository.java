@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.table.head;
 
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
@@ -20,14 +20,11 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 class TableHeadRepository extends DynamoDbRepository {
-    private final DynamoDbClient client;
     private final TableHeadMapper mapper;
-    private final String tableName;
 
-    TableHeadRepository(DynamoDbClient dynamoDbClient, TableHeadMapper tableHeadMapper, NotebookDynamoDbConfiguration configuration) {
-        this.client = dynamoDbClient;
-        this.mapper = tableHeadMapper;
-        this.tableName = configuration.getTableName();
+    TableHeadRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, TableHeadMapper mapper) {
+        super(configuration.getTableName(), context);
+        this.mapper = mapper;
     }
 
     void save(TableHeadEntity tableHead) {

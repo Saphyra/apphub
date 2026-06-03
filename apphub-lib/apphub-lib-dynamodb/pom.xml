@@ -16,5 +16,11 @@
             <artifactId>dynamodb</artifactId>
             <version>${versions.dynamodb}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-error_handler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

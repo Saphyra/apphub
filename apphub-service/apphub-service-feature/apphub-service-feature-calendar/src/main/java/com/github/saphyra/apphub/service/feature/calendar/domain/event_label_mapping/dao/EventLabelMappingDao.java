@@ -75,7 +75,7 @@ public class EventLabelMappingDao {
                 .map(bw -> new BiWrapper<>(bw.getEntity1(), Stream.concat(bw.getEntity2().stream(), Stream.of(eventIdString)).toList()))
                 .toList();
 
-            Lists.partition(modifiedMappings, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
+            Lists.partition(modifiedMappings, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
                 .forEach(batch -> repository.saveEventsOfLabels(userIdString, batch));
         }
     }
@@ -90,7 +90,7 @@ public class EventLabelMappingDao {
         String userIdString = uuidConverter.convertDomain(userId);
         List<String> eventIdsString = uuidConverter.convertDomain(eventIds);
 
-        Lists.partition(eventIds, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(eventIds, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(batch -> repository.deleteLabelsOfEvents(userIdString, uuidConverter.convertDomain(batch)));
 
         List<BiWrapper<String, List<String>>> modifiedMappings = repository.getEventsOfLabelsByUserId(userIdString)

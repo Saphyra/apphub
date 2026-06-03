@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 @Slf4j
-//TODO unit test
 public class UpdateEventContext {
     @Getter
     private final Event event;
@@ -35,7 +34,8 @@ public class UpdateEventContext {
 
     @Builder
     public UpdateEventContext(
-        @NonNull Event event, CommonCalendarDao commonCalendarDao,
+        @NonNull Event event,
+        @NonNull CommonCalendarDao commonCalendarDao,
         @NonNull RecreateOccurrenceService recreateOccurrenceService
     ) {
         this.event = event;
