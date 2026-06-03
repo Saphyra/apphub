@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
@@ -14,18 +14,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMIND_ME_BEFORE_DAYS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMINDED;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMIND_ME_BEFORE_DAYS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_STATUS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_TIME;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private final UuidConverter uuidConverter;
     private final LocalDateEncryptor localDateEncryptor;
@@ -34,6 +32,8 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private final IntegerEncryptor integerEncryptor;
     private final BooleanEncryptor booleanEncryptor;
     private final AccessTokenProvider accessTokenProvider;
+    private final DateTimeUtil dateTimeUtil;
+    private final OccurrenceRepository occurrenceRepository;
 
     @Override
     protected OccurrenceEntity processDomainConversion(Occurrence domain) {
@@ -58,17 +58,32 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     protected Occurrence processEntityConversion(OccurrenceEntity entity) {
         String userId = accessTokenProvider.getUserIdAsString();
 
+
+        LocalDate date = localDateEncryptor.decrypt(entity.getDate(), userId, entity.getOccurrenceId(), COLUMN_DATE);
         return Occurrence.builder()
             .userId(uuidConverter.convertEntity(entity.getUserId()))
             .eventId(uuidConverter.convertEntity(entity.getEventId()))
             .occurrenceId(uuidConverter.convertEntity(entity.getOccurrenceId()))
-            .date(localDateEncryptor.decrypt(entity.getDate(), userId, entity.getOccurrenceId(), COLUMN_DATE))
+            .date(date)
             .time(localTimeEncryptor.decrypt(entity.getTime(), userId, entity.getOccurrenceId(), COLUMN_TIME))
-            .status(OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userId, entity.getOccurrenceId(), COLUMN_STATUS)))
-            .note(Optional.ofNullable(stringEncryptor.decrypt(entity.getNote(), userId, entity.getOccurrenceId(), COLUMN_NOTE)).orElse(Constants.EMPTY_STRING))
+            .status(syncStatus(entity, userId, date))
+            .note(stringEncryptor.decrypt(entity.getNote(), userId, entity.getOccurrenceId(), COLUMN_NOTE))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userId, entity.getOccurrenceId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.decrypt(entity.getReminded(), userId, entity.getOccurrenceId(), COLUMN_REMINDED))
             .build();
+    }
+
+    private OccurrenceStatus syncStatus(OccurrenceEntity entity, String userId, LocalDate date) {
+        OccurrenceStatus savedStatus = OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userId, entity.getOccurrenceId(), COLUMN_STATUS));
+
+        if (savedStatus == OccurrenceStatus.PENDING && dateTimeUtil.getCurrentDate().isAfter(date)) {
+            String encryptedStatus = stringEncryptor.encrypt(OccurrenceStatus.EXPIRED.name(), userId, entity.getOccurrenceId(), COLUMN_STATUS);
+            entity.setStatus(encryptedStatus);
+            occurrenceRepository.save(entity);
+            return OccurrenceStatus.EXPIRED;
+        }
+
+        return savedStatus;
     }
 
     private static String toDateBucket(LocalDate date) {

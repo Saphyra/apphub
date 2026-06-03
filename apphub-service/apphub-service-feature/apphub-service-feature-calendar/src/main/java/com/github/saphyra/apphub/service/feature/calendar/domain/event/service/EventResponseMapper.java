@@ -16,7 +16,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventResponseMapper {
     private final ObjectMapper objectMapper;
     private final EventLabelMappingDao eventLabelMappingDao;

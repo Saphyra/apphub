@@ -12,11 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class EventLabelMappingDao {
     private final UuidConverter uuidConverter;
     private final EventLabelMappingRepository repository;
@@ -31,7 +29,7 @@ public class EventLabelMappingDao {
     public Map<UUID, List<UUID>> getLabelsOfEvents(UUID userId, Collection<UUID> eventIds) {
         String userIdString = uuidConverter.convertDomain(userId);
 
-        return Lists.partition(eventIds.stream().map(uuidConverter::convertDomain).toList(), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
+        return Lists.partition(uuidConverter.convertDomain(eventIds), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
             .stream()
             .flatMap(eventIdsStrings -> repository.getLabelsOfEvents(userIdString, eventIdsStrings).stream())
             .collect(Collectors.toMap(bw -> uuidConverter.convertEntity(bw.getEntity1()), bw -> uuidConverter.convertEntity(bw.getEntity2())));
@@ -51,33 +49,12 @@ public class EventLabelMappingDao {
             .collect(Collectors.toMap(bw -> uuidConverter.convertEntity(bw.getEntity1()), bw -> uuidConverter.convertEntity(bw.getEntity2())));
     }
 
-    /**
-     * DOES NOT DELETE LABELS FROM EXISTING LABEL-EVENT MAPPINGS!
-     * <p>
-     * For that use editLabelsOfEvent in {@link com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao}
-     * <ul>
-     *     <li>Save the list of labels for the given event</li>
-     *     <li>Adds eventId to the event list of each label</li>
-     * </ul>
-     */
     public void saveLabelsOfEvent(UUID userId, UUID eventId, List<UUID> labelIds) {
-        String userIdString = uuidConverter.convertDomain(userId);
-        List<String> labelIdsString = uuidConverter.convertDomain(labelIds);
-        String eventIdString = uuidConverter.convertDomain(eventId);
-
-        repository.saveLabelsOfEvent(userIdString, eventIdString, labelIdsString);
-
-        if (!labelIds.isEmpty()) {
-            List<BiWrapper<String, List<String>>> modifiedMappings = Lists.partition(repository.getEventsOfLabels(userIdString, labelIdsString), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
-                .stream()
-                .flatMap(List::stream)
-                .filter(bw -> !bw.getEntity2().contains(eventIdString))
-                .map(bw -> new BiWrapper<>(bw.getEntity1(), Stream.concat(bw.getEntity2().stream(), Stream.of(eventIdString)).toList()))
-                .toList();
-
-            Lists.partition(modifiedMappings, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-                .forEach(batch -> repository.saveEventsOfLabels(userIdString, batch));
-        }
+        repository.saveLabelsOfEvent(
+            uuidConverter.convertDomain(userId),
+            uuidConverter.convertDomain(eventId),
+            uuidConverter.convertDomain(labelIds)
+        );
     }
 
     /**
@@ -132,6 +109,10 @@ public class EventLabelMappingDao {
             .toList();
     }
 
+    /**
+     *
+     * @param mappings List<BiWrapper<LabelId, List<EventId>>>
+     */
     public void saveEventsOfLabels(UUID userId, List<BiWrapper<UUID, List<UUID>>> mappings) {
         repository.saveEventsOfLabels(
             uuidConverter.convertDomain(userId),

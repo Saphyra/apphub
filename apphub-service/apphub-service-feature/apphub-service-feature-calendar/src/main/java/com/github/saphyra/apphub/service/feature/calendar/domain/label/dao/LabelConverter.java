@@ -11,7 +11,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class LabelConverter extends ConverterBase<LabelEntity, Label> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;

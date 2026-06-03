@@ -20,7 +20,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class MergeEventService {
     private final EventDao eventDao;
     private final OccurrenceDao occurrenceDao;

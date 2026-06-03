@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class EventFactory {
     private final IdGenerator idGenerator;
     private final ObjectMapper objectMapper;

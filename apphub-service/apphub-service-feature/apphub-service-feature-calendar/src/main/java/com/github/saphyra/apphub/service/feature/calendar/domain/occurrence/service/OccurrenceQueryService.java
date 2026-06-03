@@ -26,7 +26,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class OccurrenceQueryService {
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;

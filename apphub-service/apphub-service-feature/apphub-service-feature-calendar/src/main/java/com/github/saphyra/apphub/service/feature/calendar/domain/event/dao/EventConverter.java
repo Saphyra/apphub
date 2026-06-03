@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.BooleanEncryptor;
@@ -12,8 +11,6 @@ import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_ARCHIVED;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_CONTENT;
@@ -29,7 +26,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class EventConverter extends ConverterBase<EventEntity, Event> {
     private final UuidConverter uuidConverter;
     private final StringEncryptor stringEncryptor;
@@ -75,7 +71,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .endDate(localDateEncryptor.decrypt(entity.getEndDate(), userId, entity.getEventId(), COLUMN_END_DATE))
             .time(localTimeEncryptor.decrypt(entity.getTime(), userId, entity.getEventId(), COLUMN_TIME))
             .title(stringEncryptor.decrypt(entity.getTitle(), userId, entity.getEventId(), COLUMN_TITLE))
-            .content(Optional.ofNullable(stringEncryptor.decrypt(entity.getContent(), userId, entity.getEventId(), COLUMN_CONTENT)).orElse(Constants.EMPTY_STRING))
+            .content(stringEncryptor.decrypt(entity.getContent(), userId, entity.getEventId(), COLUMN_CONTENT))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userId, entity.getEventId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .expirationNotified(booleanEncryptor.decrypt(entity.getExpirationNotified(), userId, entity.getEventId(), COLUMN_EXPIRATION_NOTIFIED))
             .archived(booleanEncryptor.decrypt(entity.getArchived(), userId, entity.getEventId(), COLUMN_ARCHIVED))

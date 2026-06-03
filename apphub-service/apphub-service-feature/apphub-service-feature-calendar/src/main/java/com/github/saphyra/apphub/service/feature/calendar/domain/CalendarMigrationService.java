@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.deprecated_dao.DeprecatedOccurrenceDao;
 import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,7 +27,7 @@ import java.util.UUID;
 
 @Component
 @Slf4j
-//TODO unit test
+@RequiredArgsConstructor
 class CalendarMigrationService {
     private final JdbcTemplate jdbcTemplate;
     private final DeprecatedLabelDao deprecatedLabelDao;
@@ -37,28 +38,6 @@ class CalendarMigrationService {
     private final DeprecatedOccurrenceDao deprecatedOccurrenceDao;
     private final DeprecatedEventLabelMappingDao deprecatedEventLabelMappingDao;
     private final CommonCalendarDao commonCalendarDao;
-
-    CalendarMigrationService(
-        JdbcTemplate jdbcTemplate,
-        DeprecatedLabelDao deprecatedLabelDao,
-        LabelDao labelDao,
-        AccessTokenProvider accessTokenProvider,
-        UuidConverter uuidConverter,
-        DeprecatedEventDao deprecatedEventDao,
-        DeprecatedOccurrenceDao deprecatedOccurrenceDao,
-        DeprecatedEventLabelMappingDao deprecatedEventLabelMappingDao,
-        CommonCalendarDao commonCalendarDao
-    ) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.deprecatedLabelDao = deprecatedLabelDao;
-        this.labelDao = labelDao;
-        this.accessTokenProvider = accessTokenProvider;
-        this.uuidConverter = uuidConverter;
-        this.deprecatedEventDao = deprecatedEventDao;
-        this.deprecatedOccurrenceDao = deprecatedOccurrenceDao;
-        this.deprecatedEventLabelMappingDao = deprecatedEventLabelMappingDao;
-        this.commonCalendarDao = commonCalendarDao;
-    }
 
     @PostConstruct
     @Transactional
@@ -113,7 +92,7 @@ class CalendarMigrationService {
     }
 
     private List<Occurrence> getOccurrences(Event event) {
-        return deprecatedOccurrenceDao.getByUserId(event.getUserId())
+        return deprecatedOccurrenceDao.getByEventId(event.getEventId())
             .stream()
             .map(oldOccurrence -> Occurrence.builder()
                 .userId(oldOccurrence.getUserId())

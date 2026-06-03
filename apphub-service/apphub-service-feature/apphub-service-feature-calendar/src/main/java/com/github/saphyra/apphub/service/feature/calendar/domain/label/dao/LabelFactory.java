@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class LabelFactory {
     private final IdGenerator idGenerator;
 

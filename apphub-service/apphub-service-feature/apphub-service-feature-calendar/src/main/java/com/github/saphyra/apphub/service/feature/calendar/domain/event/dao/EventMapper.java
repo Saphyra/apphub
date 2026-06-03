@@ -25,7 +25,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
-//TODO unit test
 class EventMapper extends ConverterBase<Map<String, AttributeValue>, EventEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(EventEntity domain) {

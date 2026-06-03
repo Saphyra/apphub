@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceResponseMapper {
     private final EventDao eventDao;
 

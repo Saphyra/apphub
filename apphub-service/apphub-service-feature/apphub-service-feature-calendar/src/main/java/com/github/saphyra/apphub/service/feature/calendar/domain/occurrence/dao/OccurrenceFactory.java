@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class OccurrenceFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;

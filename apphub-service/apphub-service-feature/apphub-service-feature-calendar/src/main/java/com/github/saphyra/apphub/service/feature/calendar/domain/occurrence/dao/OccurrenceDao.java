@@ -14,7 +14,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class OccurrenceDao {
     private final UuidConverter uuidConverter;
     private final OccurrenceConverter converter;

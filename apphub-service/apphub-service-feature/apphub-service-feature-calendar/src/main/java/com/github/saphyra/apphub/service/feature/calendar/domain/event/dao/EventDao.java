@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class EventDao {
     private final EventRepository repository;
     private final EventConverter converter;

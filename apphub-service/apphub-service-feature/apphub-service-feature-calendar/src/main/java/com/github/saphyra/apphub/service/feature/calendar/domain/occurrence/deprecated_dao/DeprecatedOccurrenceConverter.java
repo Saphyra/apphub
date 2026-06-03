@@ -76,7 +76,6 @@ class DeprecatedOccurrenceConverter extends ConverterBase<DeprecatedOccurrenceEn
             .build();
     }
 
-    //TODO move to new converter
     private OccurrenceStatus syncStatus(DeprecatedOccurrenceEntity entity, String userIdFromAccessToken, LocalDate occurrenceDate) {
         OccurrenceStatus savedStatus = OccurrenceStatus.valueOf(stringEncryptor.decrypt(entity.getStatus(), userIdFromAccessToken, entity.getOccurrenceId(), COLUMN_STATUS));
 
