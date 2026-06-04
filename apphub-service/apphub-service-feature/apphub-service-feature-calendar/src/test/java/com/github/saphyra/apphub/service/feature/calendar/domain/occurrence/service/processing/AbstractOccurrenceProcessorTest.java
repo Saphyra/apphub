@@ -100,7 +100,7 @@ class AbstractOccurrenceProcessorTest {
     private ArgumentCaptor<Predicate<Occurrence>> predicateArgumentCaptor;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         underTest = TestOccurrenceProcessor.builder()
             .occurrenceFactory(occurrenceFactory)
             .occurrenceDao(occurrenceDao)
@@ -136,9 +136,8 @@ class AbstractOccurrenceProcessorTest {
         given(eventRequest.getRepeatForDays()).willReturn(REPEAT_FOR_DAYS);
         given(occurrenceFactory.create(USER_ID, EVENT_ID, OCCURRENCE_DATE, null, null)).willReturn(occurrence);
 
-        underTest.createOccurrences(USER_ID, EVENT_ID, eventRequest);
+        assertThat(underTest.createOccurrences(USER_ID, EVENT_ID, eventRequest)).containsExactly(occurrence);
 
-        then(occurrenceDao).should().save(occurrence);
     }
 
     @Test
@@ -165,8 +164,8 @@ class AbstractOccurrenceProcessorTest {
         given(repetitionTypeCondition.getOccurrences(START_DATE, END_DATE, REPEAT_FOR_DAYS, CURRENT_DATE))
             .willReturn(List.of(OCCURRENCE_DATE, EXISTING_DONE_OCCURRENCE_DATE, EXISTING_EXPIRED_OCCURRENCE_DATE, EXISTING_FUTURE_OCCURRENCE_DATE));
 
-        given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
+        given(event.getUserId()).willReturn(USER_ID);
         given(occurrenceFactory.create(USER_ID, EVENT_ID, OCCURRENCE_DATE, null, null)).willReturn(occurrence);
 
         underTest.recreateOccurrences(updateEventContext);

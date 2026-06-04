@@ -30,7 +30,8 @@ const RightPanel = ({
 
             {hasValue(selectedOccurrence) &&
                 <SelectedOccurrenceContent
-                    occurrenceId={selectedOccurrence}
+                    eventId={selectedOccurrence.eventId}
+                    occurrenceId={selectedOccurrence.occurrenceId}
                     setDisplaySpinner={setDisplaySpinner}
                     setSelectedOccurrence={setSelectedOccurrence}
                     localizationHandler={localizationHandler}

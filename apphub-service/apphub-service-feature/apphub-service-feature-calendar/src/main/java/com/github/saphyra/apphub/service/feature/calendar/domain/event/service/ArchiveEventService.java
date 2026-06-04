@@ -15,10 +15,10 @@ import java.util.UUID;
 public class ArchiveEventService {
     private final EventDao eventDao;
 
-    public void archive(UUID eventId, Boolean archived) {
+    public void archive(UUID userId, UUID eventId, Boolean archived) {
         ValidationUtil.notNull(archived, "archived");
 
-        Event event = eventDao.findByIdValidated(eventId);
+        Event event = eventDao.findByIdValidated(userId, eventId);
 
         event.setArchived(archived);
 

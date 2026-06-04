@@ -3,14 +3,11 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.common.EventCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -33,33 +30,52 @@ public class OccurrenceQueryService {
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
     private final EventLabelMappingDao eventLabelMappingDao;
-    private final OccurrenceMapper occurrenceMapper;
+    private final OccurrenceResponseMapper occurrenceResponseMapper;
     private final EventDao eventDao;
 
     public List<OccurrenceResponse> getOccurrences(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
-        LazyLoadedField<List<UUID>> eventsOfLabel = new LazyLoadedField<>(() -> getEventsOfLabel(userId, labelId));
-        EventCache eventCache = new EventCache(eventDao);
-        Map<UUID, List<Occurrence>> occurrencesForEvents = occurrenceDao.getByUserId(userId)
-            .stream()
-            .filter(occurrence -> isNull(labelId) || eventsOfLabel.get().contains(occurrence.getEventId()))
-            .collect(Collectors.groupingBy(Occurrence::getEventId));
 
-        return occurrencesForEvents.entrySet()
+        Map<UUID, List<Occurrence>> occurrenceMapping = getOccurrencesBetween(userId, startDate, endDate)
             .stream()
-            .flatMap(entry -> getOccurrencesForEvent(eventCache, entry.getKey(), entry.getValue(), currentDate, startDate, endDate).stream())
-            .map(occurrence -> occurrenceMapper.toResponse(eventCache, occurrence))
+            .collect(Collectors.groupingBy(Occurrence::getEventId));
+        Map<UUID, Event> events = eventDao.getByIds(userId, occurrenceMapping.keySet())
+            .stream()
+            .collect(Collectors.toMap(Event::getEventId, event -> event));
+        Map<UUID, List<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet());
+
+        List<Occurrence> occurrences = occurrenceMapping.entrySet()
+            .stream()
+            .filter(entry -> isNull(labelId) || labels.get(entry.getKey()).contains(labelId)) //Filter for occurrences of events with given label
+            .flatMap(entry -> getOccurrences(events.get(entry.getKey()), entry.getValue(), currentDate, startDate, endDate).stream())
+            .toList();
+
+        return occurrenceResponseMapper.toResponse(events, occurrences);
+    }
+
+    private List<Occurrence> getOccurrencesBetween(UUID userId, LocalDate startDate, LocalDate endDate) {
+        List<String> buckets = getBuckets(startDate, endDate);
+
+        return occurrenceDao.getByBuckets(userId, buckets)
+            .stream()
+            .filter(occurrence -> !occurrence.getDate().isBefore(startDate) && !occurrence.getDate().isAfter(endDate))
             .toList();
     }
 
-    private List<Occurrence> getOccurrencesForEvent(EventCache eventCache, UUID eventId, List<Occurrence> occurrences, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
-        List<Occurrence> result = new ArrayList<>();
+    private List<String> getBuckets(LocalDate startDate, LocalDate endDate) {
+        List<String> buckets = new ArrayList<>();
+        LocalDate date = startDate.withDayOfMonth(1);
+        while (!date.isAfter(endDate)) {
+            buckets.add(date.getYear() + "-" + date.getMonthValue());
+            date = date.plusMonths(1);
+        }
+        return buckets;
+    }
 
-        occurrences.stream()
-            .flatMap(occurrence -> getOccurrencesToAdd(eventCache.get(eventId), occurrence, currentDate, startDate, endDate).stream())
-            .forEach(result::add);
-
-        return result;
+    private List<Occurrence> getOccurrences(Event event, List<Occurrence> occurrences, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
+        return occurrences.stream()
+            .flatMap(occurrence -> getOccurrencesToAdd(event, occurrence, currentDate, startDate, endDate).stream())
+            .toList();
     }
 
     private List<Occurrence> getOccurrencesToAdd(Event event, Occurrence occurrence, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
@@ -105,34 +121,24 @@ public class OccurrenceQueryService {
     }
 
     private boolean needReminder(Event event, Occurrence occurrence) {
-        boolean defaultReminder = nonNull(event.getRemindMeBeforeDays()) && event.getRemindMeBeforeDays() > 0;
+        boolean defaultReminder = event.getRemindMeBeforeDays() > 0;
         boolean occurrenceReminder = nonNull(occurrence.getRemindMeBeforeDays()) && occurrence.getRemindMeBeforeDays() > 0;
 
-        return (defaultReminder || occurrenceReminder) && !occurrence.getReminded();
+        return (defaultReminder || occurrenceReminder) && !occurrence.isReminded();
     }
 
     private static boolean isBetween(LocalDate date, LocalDate startDate, LocalDate endDate) {
         return !date.isBefore(startDate) && !date.isAfter(endDate);
     }
 
-    private List<UUID> getEventsOfLabel(UUID userId, UUID labelId) {
-        return eventLabelMappingDao.getByUserIdAndLabelId(userId, labelId)
-            .stream()
-            .map(EventLabelMapping::getEventId)
-            .collect(Collectors.toList());
+    public List<OccurrenceResponse> getOccurrencesOfEvent(UUID userId, UUID eventId) {
+        List<Occurrence> occurrences = occurrenceDao.getByEventId(eventId);
+
+        return occurrenceResponseMapper.toResponse(userId, occurrences);
     }
 
-    public List<OccurrenceResponse> getOccurrencesOfEvent(UUID eventId) {
-        EventCache eventCache = new EventCache(eventDao);
-
-        return occurrenceDao.getByEventId(eventId)
-            .stream()
-            .map(occurrence -> occurrenceMapper.toResponse(eventCache, occurrence))
-            .toList();
-    }
-
-    public OccurrenceResponse getOccurrence(UUID occurrenceId) {
-        Occurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
-        return occurrenceMapper.toResponse(occurrence);
+    public OccurrenceResponse getOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
+        return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 }

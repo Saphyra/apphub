@@ -54,13 +54,13 @@ public class CalendarRoleProtectionTest extends BackEndTest {
 
         //Occurrences
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getCreateOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID(), OccurrenceRequest.builder().build()));
-        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID(), OccurrenceRequest.builder().build()));
-        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getDeleteOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), OccurrenceRequest.builder().build()));
+        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getDeleteOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getGetOccurrencesResponse(getServerPort(), accessToken, LocalDate.now(), LocalDate.now()));
-        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getGetOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getGetOccurrenceResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getGetOccurrencesOfEventResponse(getServerPort(), accessToken, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getEditOccurrenceStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), OccurrenceStatus.DONE));
-        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getSetRemindedResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getEditOccurrenceStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), OccurrenceStatus.DONE));
+        CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getSetRemindedResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

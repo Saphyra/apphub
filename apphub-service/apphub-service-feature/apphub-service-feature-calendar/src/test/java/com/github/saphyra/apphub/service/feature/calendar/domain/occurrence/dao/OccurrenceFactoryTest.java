@@ -20,11 +20,13 @@ import static org.mockito.BDDMockito.given;
 class OccurrenceFactoryTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID EVENT_ID = UUID.randomUUID();
-    private static final LocalDate CURRENT_DATE = LocalDate.now();
-    private static final LocalTime TIME = LocalTime.now();
-    private static final Integer REMIND_ME_BEFORE_DAYS = 3;
-    private static final String NOTE = "note";
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
+    private static final LocalDate CURRENT_DATE = LocalDate.of(2026, 6, 3);
+    private static final LocalDate OCCURRENCE_DATE = CURRENT_DATE;
+    private static final LocalDate EXPIRED_DATE = CURRENT_DATE.minusDays(1);
+    private static final LocalTime TIME = LocalTime.of(12, 30);
+    private static final Integer REMIND_ME_BEFORE_DAYS = 4;
+    private static final String NOTE = "note";
 
     @Mock
     private IdGenerator idGenerator;
@@ -36,36 +38,36 @@ class OccurrenceFactoryTest {
     private OccurrenceFactory underTest;
 
     @Test
-    void create_pending() {
+    void create_defaultsNoteAndCreatesPendingOccurrence() {
         given(idGenerator.randomUuid()).willReturn(OCCURRENCE_ID);
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
-        assertThat(underTest.create(USER_ID, EVENT_ID, CURRENT_DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE))
-            .returns(OCCURRENCE_ID, Occurrence::getOccurrenceId)
+        assertThat(underTest.create(USER_ID, EVENT_ID, OCCURRENCE_DATE, TIME, REMIND_ME_BEFORE_DAYS))
             .returns(USER_ID, Occurrence::getUserId)
             .returns(EVENT_ID, Occurrence::getEventId)
+            .returns(OCCURRENCE_ID, Occurrence::getOccurrenceId)
             .returns(OccurrenceStatus.PENDING, Occurrence::getStatus)
-            .returns(CURRENT_DATE, Occurrence::getDate)
+            .returns(OCCURRENCE_DATE, Occurrence::getDate)
             .returns(TIME, Occurrence::getTime)
-            .returns(NOTE, Occurrence::getNote)
+            .returns("", Occurrence::getNote)
             .returns(REMIND_ME_BEFORE_DAYS, Occurrence::getRemindMeBeforeDays)
-            .returns(false, Occurrence::getReminded);
+            .returns(false, Occurrence::isReminded);
     }
 
     @Test
-    void create_expired() {
+    void create_withNoteCreatesExpiredOccurrenceWhenDateIsInThePast() {
         given(idGenerator.randomUuid()).willReturn(OCCURRENCE_ID);
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
-        assertThat(underTest.create(USER_ID, EVENT_ID, CURRENT_DATE.minusDays(1), TIME, REMIND_ME_BEFORE_DAYS, NOTE))
-            .returns(OCCURRENCE_ID, Occurrence::getOccurrenceId)
+        assertThat(underTest.create(USER_ID, EVENT_ID, EXPIRED_DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE))
             .returns(USER_ID, Occurrence::getUserId)
             .returns(EVENT_ID, Occurrence::getEventId)
+            .returns(OCCURRENCE_ID, Occurrence::getOccurrenceId)
             .returns(OccurrenceStatus.EXPIRED, Occurrence::getStatus)
-            .returns(CURRENT_DATE.minusDays(1), Occurrence::getDate)
+            .returns(EXPIRED_DATE, Occurrence::getDate)
             .returns(TIME, Occurrence::getTime)
             .returns(NOTE, Occurrence::getNote)
             .returns(REMIND_ME_BEFORE_DAYS, Occurrence::getRemindMeBeforeDays)
-            .returns(false, Occurrence::getReminded);
+            .returns(false, Occurrence::isReminded);
     }
 }

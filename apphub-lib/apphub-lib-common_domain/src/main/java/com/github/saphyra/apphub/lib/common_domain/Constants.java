@@ -18,8 +18,7 @@ public class Constants {
     public static final String EMPTY_STRING = "";
 
     //DynamoDB
-    public static final int DYNAMO_DB_DELETE_MAX_BATCH_SIZE = 25;
-    public static final int DYNAMO_DB_INSERT_MAX_BATCH_SIZE = 25;
+    public static final int DYNAMO_DB_WRITE_MAX_BATCH_SIZE = 25;
     public static final int DYNAMO_DB_QUERY_MAX_BATCH_SIZE = 100;
     public static final int UUID_LENGTH = 32;
 }

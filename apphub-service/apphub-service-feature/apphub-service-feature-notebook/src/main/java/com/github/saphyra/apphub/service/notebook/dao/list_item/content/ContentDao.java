@@ -26,7 +26,7 @@ public class ContentDao {
     public void save(UUID listItemId, List<Content> contents) {
         List<Content> toSave = contentAggregator.aggregate(listItemId, contents);
 
-        Lists.partition(toSave, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
+        Lists.partition(toSave, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .stream()
             .map(converter::convertDomain)
             .forEach(repository::save);
@@ -63,7 +63,7 @@ public class ContentDao {
 
         String listItemIdString = uuidConverter.convertDomain(listItemId);
 
-        Lists.partition(batchIndexes, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(batchIndexes, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(i -> repository.delete(listItemIdString, i));
     }
 

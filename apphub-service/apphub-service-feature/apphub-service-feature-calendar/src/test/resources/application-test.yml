@@ -1,0 +1,4 @@
+aws:
+  dynamoDb:
+    calendar:
+      tableName: apphub-minikube-calendar

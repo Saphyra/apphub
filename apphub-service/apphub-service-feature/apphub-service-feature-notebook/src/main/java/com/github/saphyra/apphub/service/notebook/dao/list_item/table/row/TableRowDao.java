@@ -30,7 +30,7 @@ public class TableRowDao {
     public void delete(UUID listItemId, List<TableRow> tableRows) {
         String listItemIdString = uuidConverter.convertDomain(listItemId);
 
-        Lists.partition(tableRows, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(tableRows, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(rows -> repository.delete(
                 listItemIdString,
                 rows.stream().map(TableRow::getTableRowId).map(uuidConverter::convertDomain).toList()
@@ -38,7 +38,7 @@ public class TableRowDao {
     }
 
     public void save(List<TableRow> rows) {
-        Lists.partition(rows, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
+        Lists.partition(rows, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(tableRows -> repository.save(
                 converter.convertDomain(tableRows)
             ));

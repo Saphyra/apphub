@@ -30,7 +30,7 @@ public interface EventController {
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
-    @GetMapping(CalendarEndpoints.CALENDAR_LABELLESS_GET_EVENTS)
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELLESS_EVENTS)
     List<EventResponse> getLabellessEvents(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_EVENT)

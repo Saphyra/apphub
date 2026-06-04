@@ -34,19 +34,19 @@ abstract class AbstractOccurrenceProcessor implements OccurrenceCreator, Occurre
     protected final DateTimeUtil dateTimeUtil;
 
     @Override
-    public void createOccurrences(UUID userId, UUID eventId, EventRequest request) {
+    public List<Occurrence> createOccurrences(UUID userId, UUID eventId, EventRequest request) {
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
         List<LocalDate> dates = getConditions(request.getRepetitionData())
             .getOccurrences(request.getStartDate(), getEndDate(request), request.getRepeatForDays(), currentDate);
-        log.debug("Occurrence dates: {}", dates);
+        log.debug("DeprecatedOccurrence dates: {}", dates);
         if (dates.isEmpty()) {
             throw new IllegalStateException("Cannot create occurrences for event " + eventId + " because no occurrence dates were generated.");
         }
 
-        dates.stream()
+        return dates.stream()
             .map(date -> occurrenceFactory.create(userId, eventId, date, null, null)) //Null parameters to use the event's values
-            .forEach(occurrenceDao::save);
+            .toList();
     }
 
     @Override

@@ -24,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class ExpiredEventService {
     private final EventDao eventDao;
-    private final EventMapper eventMapper;
+    private final EventResponseMapper eventResponseMapper;
     private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
     private final EventRequestValidator eventRequestValidator;
@@ -34,7 +34,7 @@ public class ExpiredEventService {
         return eventDao.getByUserId(userId)
             .stream()
             .filter(this::isExpired)
-            .map(eventMapper::toResponse)
+            .map(eventResponseMapper::toResponse)
             .toList();
     }
 
@@ -60,12 +60,12 @@ public class ExpiredEventService {
             .max(LocalDate::compareTo)
             .orElseThrow();
 
-        //Event is expired is the last occurrence us today or in the past.
+        //DeprecatedEvent is expired is the last occurrence us today or in the past.
         return !currentDate.isBefore(lastOccurrenceDate);
     }
 
-    public void hide(UUID eventId) {
-        Event event = eventDao.findByIdValidated(eventId);
+    public void hide(UUID userId, UUID eventId) {
+        Event event = eventDao.findByIdValidated(userId, eventId);
 
         event.setExpirationNotified(true);
 
@@ -73,12 +73,12 @@ public class ExpiredEventService {
     }
 
     @Transactional
-    public void extend(UUID eventId, LocalDate extendUntil) {
+    public void extend(UUID userId, UUID eventId, LocalDate extendUntil) {
         LocalDate startDate = dateTimeUtil.getCurrentDate();
 
         eventRequestValidator.validateDates(startDate, extendUntil);
 
-        Event event = eventDao.findByIdValidated(eventId);
+        Event event = eventDao.findByIdValidated(userId, eventId);
         if(event.getRepetitionType() == RepetitionType.ONE_TIME){
             throw ExceptionFactory.invalidParam("eventId", "must not be one-time event");
         }

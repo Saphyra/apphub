@@ -61,7 +61,7 @@ class EventControllerImpl implements EventController {
     public EventResponse getEvent(UUID eventId, AccessToken accessToken) {
         log.info("{} wants to get event {}", accessToken.getUserId(), eventId);
 
-        EventResponse response = eventQueryService.getEvent(eventId);
+        EventResponse response = eventQueryService.getEvent(accessToken.getUserId(), eventId);
         log.debug("Response: {}", response);
 
         return response;
@@ -78,7 +78,7 @@ class EventControllerImpl implements EventController {
     public void editEvent(EventRequest request, UUID eventId, AccessToken accessToken) {
         log.info("{} wants to edit event {}", accessToken.getUserId(), eventId);
 
-        editEventService.edit(eventId, request);
+        editEventService.edit(accessToken.getUserId(), eventId, request);
     }
 
     @Override
@@ -92,21 +92,21 @@ class EventControllerImpl implements EventController {
     public void hideExpiredEvent(UUID eventId, AccessToken accessToken) {
         log.info("{} wants to snooze expired event {}", accessToken.getUserId(), eventId);
 
-        expiredEventService.hide(eventId);
+        expiredEventService.hide(accessToken.getUserId(), eventId);
     }
 
     @Override
     public void extendExpiredEvent(OneParamRequest<LocalDate> extendUntil, UUID eventId, AccessToken accessToken) {
         log.info("{} wants to extend expired event {}", accessToken.getUserId(), eventId);
 
-        expiredEventService.extend(eventId, extendUntil.getValue());
+        expiredEventService.extend(accessToken.getUserId(), eventId, extendUntil.getValue());
     }
 
     @Override
     public void mergeEvents(UUID eventId, AccessToken accessToken) {
         log.info("{} wants to merge event {}", accessToken.getUserId(), eventId);
 
-        mergeEventService.merge(eventId);
+        mergeEventService.merge(accessToken.getUserId(), eventId);
     }
 
     @Override
@@ -120,6 +120,6 @@ class EventControllerImpl implements EventController {
     public void archiveEvent(OneParamRequest<Boolean> archive, UUID eventId, AccessToken accessToken) {
         log.info("{} wants to archive event {}", accessToken.getUserId(), eventId);
 
-        archiveEventService.archive(eventId, archive.getValue());
+        archiveEventService.archive(accessToken.getUserId(), eventId, archive.getValue());
     }
 }

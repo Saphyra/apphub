@@ -1,14 +1,13 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.then;
@@ -19,14 +18,7 @@ class DeleteEventServiceTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
 
     @Mock
-    private EventDao eventDao;
-
-    @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
-
-    @Mock
-    private OccurrenceDao occurrenceDao;
-
+    private CommonCalendarDao commonCalendarDao;
     @InjectMocks
     private DeleteEventService underTest;
 
@@ -34,8 +26,6 @@ class DeleteEventServiceTest {
     void delete() {
         underTest.delete(USER_ID, EVENT_ID);
 
-        then(eventDao).should().deleteByUserIdAndEventId(USER_ID, EVENT_ID);
-        then(eventLabelMappingDao).should().deleteByUserIdAndEventId(USER_ID, EVENT_ID);
-        then(occurrenceDao).should().deleteByUserIdAndEventId(USER_ID, EVENT_ID);
+        then(commonCalendarDao).should().deleteEvents(USER_ID, List.of(EVENT_ID));
     }
 }

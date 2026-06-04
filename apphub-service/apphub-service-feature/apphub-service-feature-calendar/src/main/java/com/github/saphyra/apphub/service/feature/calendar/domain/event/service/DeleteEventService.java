@@ -1,27 +1,24 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import jakarta.transaction.Transactional;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class DeleteEventService {
-    private final EventDao eventDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
-    private final OccurrenceDao occurrenceDao;
+    private final CommonCalendarDao commonCalendarDao;
 
-    @Transactional
     public void delete(UUID userId, UUID eventId) {
-        eventDao.deleteByUserIdAndEventId(userId, eventId);
-        eventLabelMappingDao.deleteByUserIdAndEventId(userId, eventId);
-        occurrenceDao.deleteByUserIdAndEventId(userId, eventId);
+        delete(userId, List.of(eventId));
+    }
+
+    public void delete(UUID userId, List<UUID> deletedEventIds) {
+        commonCalendarDao.deleteEvents(userId, deletedEventIds);
     }
 }

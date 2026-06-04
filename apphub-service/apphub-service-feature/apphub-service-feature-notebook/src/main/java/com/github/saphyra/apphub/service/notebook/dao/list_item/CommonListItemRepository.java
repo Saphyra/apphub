@@ -2,21 +2,16 @@ package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import com.google.common.collect.Lists;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.BillingMode;
 import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
@@ -44,31 +39,20 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Component
 @Profile("!test")
 @Slf4j
-class CommonListItemRepository {
-    private final DynamoDbClient client;
-    private final String tableName;
-    private final SleepService sleepService;
-    private final int maxBatchRetryCount;
-    private final long batchRetryDelayMs;
-
-    CommonListItemRepository(DynamoDbClient dynamoDbClient, NotebookDynamoDbConfiguration configuration, SleepService sleepService) {
-        this.client = dynamoDbClient;
-        this.tableName = configuration.getTableName();
-        this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
-        this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
-        this.sleepService = sleepService;
+class CommonListItemRepository extends DynamoDbRepository {
+    CommonListItemRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
+        super(configuration.getTableName(), context);
     }
 
     void deleteByListItemId(String listItemId) {
-        QueryRequest queryRequest = QueryRequest.builder()
+        QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :listItemId")
             .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
             .expressionAttributeValues(Map.of(":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()))
             .build();
 
-        List<BiWrapper<String, String>> items = client.query(queryRequest)
-            .items()
+        List<BiWrapper<String, String>> items = query(request)
             .stream()
             .map(map -> new BiWrapper<>(
                 map.get(COLUMN_PK).s(),
@@ -76,7 +60,7 @@ class CommonListItemRepository {
             ))
             .toList();
 
-        Lists.partition(items, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(items, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(batch -> {
                 List<WriteRequest> requests = batch.stream()
                     .map(item -> Map.of(
@@ -87,30 +71,8 @@ class CommonListItemRepository {
                     .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
                     .toList();
 
-                batchWrite(0, requests);
+                batchWrite(requests);
             });
-    }
-
-    private void batchWrite(int tryCount, List<WriteRequest> requests) {
-        if (tryCount > maxBatchRetryCount) {
-            throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
-        }
-
-        if (tryCount > 0) {
-            sleepService.sleep(tryCount * batchRetryDelayMs);
-        }
-
-        BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
-            .requestItems(Map.of(tableName, requests))
-            .build();
-
-        BatchWriteItemResponse response = client.batchWriteItem(batchRequest);
-
-        if (response.hasUnprocessedItems()) {
-            response.unprocessedItems()
-                .values()
-                .forEach(writeRequests -> batchWrite(tryCount + 1, writeRequests));
-        }
     }
 
     @PostConstruct

@@ -35,7 +35,7 @@ class ExpiredEventServiceTest {
     private EventDao eventDao;
 
     @Mock
-    private EventMapper eventMapper;
+    private EventResponseMapper eventResponseMapper;
 
     @Mock
     private OccurrenceDao occurrenceDao;
@@ -114,16 +114,16 @@ class ExpiredEventServiceTest {
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE);
-        given(eventMapper.toResponse(event)).willReturn(eventResponse);
+        given(eventResponseMapper.toResponse(event)).willReturn(eventResponse);
 
         assertThat(underTest.getExpiredEvents(USER_ID)).containsExactly(eventResponse);
     }
 
     @Test
     void hide() {
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
 
-        underTest.hide(EVENT_ID);
+        underTest.hide(USER_ID, EVENT_ID);
 
         then(event).should().setExpirationNotified(true);
         then(eventDao).should().save(event);
@@ -132,10 +132,10 @@ class ExpiredEventServiceTest {
     @Test
     void extend_oneTimeEvent() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(event.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.extend(EVENT_ID, EXTEND_UNTIL), "eventId", "must not be one-time event");
+        ExceptionValidator.validateInvalidParam(() -> underTest.extend(USER_ID, EVENT_ID, EXTEND_UNTIL), "eventId", "must not be one-time event");
 
         then(eventRequestValidator).should().validateDates(CURRENT_DATE, EXTEND_UNTIL);
     }
@@ -143,11 +143,11 @@ class ExpiredEventServiceTest {
     @Test
     void extend() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(updateEventContextFactory.create(event)).willReturn(updateEventContext);
 
-        underTest.extend(EVENT_ID, EXTEND_UNTIL);
+        underTest.extend(USER_ID, EVENT_ID, EXTEND_UNTIL);
 
         then(eventRequestValidator).should().validateDates(CURRENT_DATE, EXTEND_UNTIL);
         then(event).should().setStartDate(CURRENT_DATE);

@@ -91,6 +91,7 @@ const CalendarLabelsPage = () => {
 
                 {hasValue(selectedOccurrence) &&
                     <OpenedOccurrence
+                        eventId={selectedEvent}
                         occurrenceId={selectedOccurrence}
                         localizationHandler={localizationHandler}
                         setConfirmationDialogData={setConfirmationDialogData}

@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,61 +36,70 @@ class LabelDaoTest {
     private LabelDao underTest;
 
     @Mock
-    private Label domain;
-
-    @Mock
     private LabelEntity entity;
 
+    @Mock
+    private Label domain;
+
     @Test
-    void deleteByUserId(){
+    void getByLabelIds() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertDomain(List.of(LABEL_ID))).willReturn(List.of(LABEL_ID_STRING));
+        given(repository.getByLabelIds(USER_ID_STRING, List.of(LABEL_ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(entity)).willReturn(domain);
 
-        underTest.deleteByUserId(USER_ID);
+        List<Label> result = underTest.getByLabelIds(USER_ID, List.of(LABEL_ID));
 
-        then(repository).should().deleteByUserId(USER_ID_STRING);
+        assertThat(result).containsExactly(domain);
     }
 
     @Test
-    void existsById(){
+    void save() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(converter.convertDomain(domain)).willReturn(entity);
+
+        underTest.save(USER_ID, domain);
+
+        then(repository).should().save(USER_ID_STRING, entity);
+    }
+
+    @Test
+    void findByIdValidated_notFound() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
-        given(repository.existsById(LABEL_ID_STRING)).willReturn(true);
+        given(repository.findById(USER_ID_STRING, LABEL_ID_STRING)).willReturn(Optional.empty());
+        given(converter.convertEntity(Optional.empty())).willReturn(Optional.empty());
 
-        assertThat(underTest.existsById(LABEL_ID)).isTrue();
+        ExceptionValidator.validateNotFoundException(() -> underTest.findByIdValidated(USER_ID, LABEL_ID));
     }
 
     @Test
-    void getByUserId(){
+    void findByIdValidated() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(repository.getByUserId(USER_ID_STRING)).willReturn(java.util.List.of(entity));
-        given(converter.convertEntity(java.util.List.of(entity))).willReturn(java.util.List.of(domain));
+        given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
+        given(repository.findById(USER_ID_STRING, LABEL_ID_STRING)).willReturn(Optional.of(entity));
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+
+        assertThat(underTest.findByIdValidated(USER_ID, LABEL_ID)).isEqualTo(domain);
+    }
+
+    @Test
+    void getByUserId() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(repository.getByUserId(USER_ID_STRING)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         assertThat(underTest.getByUserId(USER_ID)).containsExactly(domain);
     }
 
     @Test
-    void deleteByUserIdAndLabelId(){
+    void delete() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
 
-        underTest.deleteByUserIdAndLabelId(USER_ID, LABEL_ID);
+        underTest.delete(USER_ID, LABEL_ID);
 
-        then(repository).should().deleteByUserIdAndLabelId(USER_ID_STRING, LABEL_ID_STRING);
-    }
-
-    @Test
-    void findByIdValidated_notFound(){
-        given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
-        given(repository.findById(LABEL_ID_STRING)).willReturn(Optional.empty());
-
-        ExceptionValidator.validateNotFoundException(() -> underTest.findByIdValidated(LABEL_ID));
-    }
-
-    @Test
-    void findByIdValidated(){
-        given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
-        given(repository.findById(LABEL_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
-
-        assertThat(underTest.findByIdValidated(LABEL_ID)).isEqualTo(domain);
+        then(repository).should().delete(USER_ID_STRING, LABEL_ID_STRING);
     }
 }
+

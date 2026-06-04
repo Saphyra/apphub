@@ -13,14 +13,14 @@ import confirmOccurrenceDeletion from "../delete_occurrence/DeleteOccurrence";
 import NotificationService from "common/js/notification/NotificationService";
 import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE } from "../../CalendarEndpoints";
 
-const OpenedOccurrence = ({ occurrenceId, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh, backUrl }) => {
+const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh, backUrl }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [occurrence, setOccurrence] = useState(null);
 
     useLoader(
         {
-            request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
+            request: CALENDAR_GET_OCCURRENCE.createRequest(null, { eventId: eventId, occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
             listener: [occurrenceId, refreshCounter],
@@ -96,13 +96,14 @@ const OpenedOccurrence = ({ occurrenceId, setConfirmationDialogData, setDisplayS
                 }
 
                 <Button
-                    onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ occurrenceId: occurrence.occurrenceId }, { backUrl: backUrl })}
+                    onclick={() => window.location.href = CALENDAR_EDIT_OCCURRENCE_PAGE.assembleUrl({ eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId }, { backUrl: backUrl })}
                     label={localizationHandler.get("edit-occurrence")}
                 />
 
                 <Button
                     onclick={() => confirmOccurrenceDeletion(
                         setConfirmationDialogData,
+                        occurrence.eventId,
                         occurrence.occurrenceId,
                         occurrence.title,
                         occurrence.date,
@@ -119,7 +120,7 @@ const OpenedOccurrence = ({ occurrenceId, setConfirmationDialogData, setDisplayS
         );
 
         async function editStatus(newStatus) {
-            const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, { occurrenceId: occurrence.occurrenceId })
+            const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, { eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId })
                 .send();
 
             setOccurrence(response);

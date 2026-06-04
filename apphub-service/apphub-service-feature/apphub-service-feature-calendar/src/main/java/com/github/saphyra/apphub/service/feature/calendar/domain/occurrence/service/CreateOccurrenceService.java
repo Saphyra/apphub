@@ -20,16 +20,16 @@ import java.util.UUID;
 @Builder
 public class CreateOccurrenceService {
     private final List<OccurrenceCreator> occurrenceCreators;
-    private final OccurrenceDao occurrenceDao;
-    private final OccurrenceFactory occurrenceFactory;
     private final OccurrenceRequestValidator occurrenceRequestValidator;
     private final EventDao eventDao;
+    private final OccurrenceFactory occurrenceFactory;
+    private final OccurrenceDao occurrenceDao;
 
     /**
      * Creates occurrences for the newly created event.
      */
-    public void createOccurrences(UUID userId, UUID eventId, EventRequest request) {
-        occurrenceCreators.stream()
+    public List<Occurrence> createOccurrences(UUID userId, UUID eventId, EventRequest request) {
+        return occurrenceCreators.stream()
             .filter(occurrenceCreator -> occurrenceCreator.getRepetitionType() == request.getRepetitionType())
             .findFirst()
             .orElseThrow(() -> new UnsupportedOperationException("Repetition type not supported: " + request.getRepetitionType()))
@@ -39,7 +39,7 @@ public class CreateOccurrenceService {
     public UUID createOccurrence(UUID userId, UUID eventId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        eventDao.findByIdValidated(eventId); // Ensure the event exists and belongs to the user
+        eventDao.findByIdValidated(userId, eventId); // Ensure the event exists and belongs to the user
 
         Occurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote());
         occurrenceDao.save(occurrence);

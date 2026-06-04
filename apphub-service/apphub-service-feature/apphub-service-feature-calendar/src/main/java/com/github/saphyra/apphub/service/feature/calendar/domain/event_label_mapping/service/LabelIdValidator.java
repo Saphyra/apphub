@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service;
 
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +16,11 @@ import java.util.UUID;
 class LabelIdValidator {
     private final LabelDao labelDao;
 
-    void validate(List<UUID> labels) {
+    void validate(UUID userId, List<UUID> labels) {
         ValidationUtil.notNull(labels, "labels");
         ValidationUtil.doesNotContainNull(labels, "labels");
 
-        labels.forEach(labelId -> {
-            if (!labelDao.existsById(labelId)) {
-                throw ExceptionFactory.invalidParam("field", "Label with id " + labelId + " does not exist");
-            }
-        });
+        ValidationUtil.notNull(labels, "labels");
+        ValidationUtil.containsAll(labels, () -> labelDao.getByLabelIds(userId, labels).stream().map(Label::getLabelId).toList(), "labels");
     }
 }

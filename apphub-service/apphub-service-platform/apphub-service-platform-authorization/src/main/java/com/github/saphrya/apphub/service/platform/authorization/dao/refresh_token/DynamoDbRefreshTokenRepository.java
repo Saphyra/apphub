@@ -76,7 +76,7 @@ class DynamoDbRefreshTokenRepository implements RefreshTokenRepository {
 
     @Override
     public void delete(List<RefreshTokenEntity> entities) {
-        if (entities.size() > Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE) {
+        if (entities.size() > Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE) {
             throw new IllegalArgumentException("Batch write can only handle 25 items at once. Input size: " + entities.size());
         }
 

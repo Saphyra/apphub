@@ -1,43 +1,53 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class EventDao extends AbstractDao<EventEntity, Event, String, EventRepository> implements DeleteByUserIdDao {
+@RequiredArgsConstructor
+public class EventDao {
+    private final EventRepository repository;
+    private final EventConverter converter;
     private final UuidConverter uuidConverter;
 
-    EventDao(EventConverter converter, EventRepository repository, UuidConverter uuidConverter) {
-        super(converter, repository);
-        this.uuidConverter = uuidConverter;
-    }
-
-    @Override
-    public void deleteByUserId(UUID userId) {
-        repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    public Event findByIdValidated(UUID userId, UUID eventId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId)))
+            .orElseThrow(() -> ExceptionFactory.notFound("Event not found by id " + eventId));
     }
 
     public List<Event> getByUserId(UUID userId) {
         return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
     }
 
-    public void deleteByUserIdAndEventId(UUID userId, UUID eventId) {
-        repository.deleteByUserIdAndEventId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId));
+    public List<Event> getByIds(UUID userId, Collection<UUID> eventIds) {
+        String userIdString = uuidConverter.convertDomain(userId);
+
+        return Lists.partition(new ArrayList<>(eventIds), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
+            .stream()
+            .map(batch -> batch.stream().map(eventId -> new BiWrapper<>(userIdString, uuidConverter.convertDomain(eventId))).toList())
+            .flatMap(batch -> repository.getByIds(batch).stream())
+            .map(converter::convertEntity)
+            .toList();
     }
 
-    public Event findByIdValidated(UUID eventId) {
-        return findById(eventId)
-            .orElseThrow(() -> ExceptionFactory.notFound("Event not found by eventId " + eventId));
+    public void save(Event event) {
+        repository.save(converter.convertDomain(event));
     }
 
-    private Optional<Event> findById(UUID eventId) {
-        return findById(uuidConverter.convertDomain(eventId));
+    public void delete(UUID userId, List<UUID> eventId) {
+        String userIdString = uuidConverter.convertDomain(userId);
+
+        Lists.partition(eventId, Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
+            .forEach(batch -> repository.delete(userIdString, batch.stream().map(uuidConverter::convertDomain).toList()));
     }
 }

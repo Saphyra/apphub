@@ -101,7 +101,7 @@ class CreateOccurrenceServiceTest {
         assertThat(underTest.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest)).isEqualTo(OCCURRENCE_ID);
 
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
-        then(eventDao).should().findByIdValidated(EVENT_ID);
+        then(eventDao).should().findByIdValidated(USER_ID, EVENT_ID);
         then(occurrenceDao).should().save(occurrence);
     }
 }

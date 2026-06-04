@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.list_item;
 
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
@@ -26,15 +27,12 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 
 @Component
 @Slf4j
-class ListItemRepository {
-    private final DynamoDbClient client;
+class ListItemRepository extends DynamoDbRepository {
     private final ListItemMapper mapper;
-    private final String tableName;
 
-    ListItemRepository(DynamoDbClient dynamoDbClient, ListItemMapper mapper, NotebookDynamoDbConfiguration configuration) {
-        this.client = dynamoDbClient;
+    ListItemRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ListItemMapper mapper) {
+        super(configuration.getTableName(), context);
         this.mapper = mapper;
-        this.tableName = configuration.getTableName();
     }
 
     void save(ListItemEntity listItem) {
@@ -65,8 +63,7 @@ class ListItemRepository {
             ))
             .build();
 
-        return client.query(request)
-            .items()
+        return query(request)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -87,8 +84,7 @@ class ListItemRepository {
             ))
             .build();
 
-        return client.query(request)
-            .items()
+        return query(request)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -123,8 +119,7 @@ class ListItemRepository {
             ))
             .build();
 
-        return client.query(request)
-            .items()
+        return query(request)
             .stream()
             .map(mapper::convertEntity)
             .toList();

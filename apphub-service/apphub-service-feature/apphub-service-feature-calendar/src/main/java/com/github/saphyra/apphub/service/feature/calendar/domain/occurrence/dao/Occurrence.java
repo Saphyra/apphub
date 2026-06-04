@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,17 +15,22 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder(toBuilder = true)
-@EqualsAndHashCode(exclude = "occurrenceId")
 public class Occurrence {
-    private final UUID occurrenceId;
+    @NonNull
     private final UUID userId;
+    @NonNull
     private UUID eventId;
+    @NonNull
+    private final UUID occurrenceId;
+    @NonNull
     private LocalDate date;
     @Nullable
     private LocalTime time;
+    @NonNull
     private OccurrenceStatus status;
+    @NonNull
     private String note;
     @Nullable
     private Integer remindMeBeforeDays;
-    private Boolean reminded;
+    private boolean reminded;
 }

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
@@ -8,27 +9,29 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class MergeEventServiceTest {
-    private static final UUID PARENT_EVENT_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String TITLE = "title";
-    private static final UUID CHILD_EVENT_ID = UUID.randomUUID();
-    private static final String CONTENT = "content";
-    private static final String NOTE = "note";
-    private static final LocalTime TIME = LocalTime.now();
-    private static final Integer REMIND_ME_BEFORE_DAYS = 32;
+    private static final UUID PARENT_EVENT_ID = UUID.randomUUID();
+    private static final UUID MATCHING_EVENT_ID_1 = UUID.randomUUID();
+    private static final UUID MATCHING_EVENT_ID_2 = UUID.randomUUID();
+    private static final UUID DIFFERENT_TITLE_EVENT_ID = UUID.randomUUID();
+    private static final UUID DIFFERENT_TYPE_EVENT_ID = UUID.randomUUID();
 
     @Mock
     private EventDao eventDao;
@@ -42,96 +45,92 @@ class MergeEventServiceTest {
     @InjectMocks
     private MergeEventService underTest;
 
-    @Mock
-    private Event parent;
-
-    @Mock
-    private Event child;
-
-    @Mock
-    private Occurrence occurrence;
-
     @Test
-    void notOneTime() {
-        given(eventDao.findByIdValidated(PARENT_EVENT_ID)).willReturn(parent);
-        given(parent.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
+    void merge_invalidRepetitionType_throwsException() {
+        Event parent = event(PARENT_EVENT_ID, "Parent", RepetitionType.EVERY_X_DAYS, "content", LocalTime.NOON, 2);
+        given(eventDao.findByIdValidated(USER_ID, PARENT_EVENT_ID)).willReturn(parent);
 
-        ExceptionValidator.validateInvalidParam(() -> underTest.merge(PARENT_EVENT_ID), "eventId", "invalid type");
-    }
-
-    @Test
-    void sameEvent() {
-        given(eventDao.findByIdValidated(PARENT_EVENT_ID)).willReturn(parent);
-        given(parent.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
-        given(parent.getUserId()).willReturn(USER_ID);
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(parent));
-        given(parent.getEventId()).willReturn(PARENT_EVENT_ID);
-
-        underTest.merge(PARENT_EVENT_ID);
-
-        then(occurrenceDao).shouldHaveNoInteractions();
-        then(deleteEventService).shouldHaveNoInteractions();
-    }
-
-    @Test
-    void childNotOneTime() {
-        given(eventDao.findByIdValidated(PARENT_EVENT_ID)).willReturn(parent);
-        given(parent.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
-        given(parent.getUserId()).willReturn(USER_ID);
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(child));
-        given(child.getEventId()).willReturn(CHILD_EVENT_ID);
-        given(child.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
-
-        underTest.merge(PARENT_EVENT_ID);
-
-        then(occurrenceDao).shouldHaveNoInteractions();
-        then(deleteEventService).shouldHaveNoInteractions();
-    }
-
-    @Test
-    void titleDoesNotMatch() {
-        given(eventDao.findByIdValidated(PARENT_EVENT_ID)).willReturn(parent);
-        given(parent.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
-        given(parent.getUserId()).willReturn(USER_ID);
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(child));
-        given(child.getEventId()).willReturn(CHILD_EVENT_ID);
-        given(child.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
-        given(child.getTitle()).willReturn("asd");
-        given(parent.getTitle()).willReturn(TITLE);
-
-        underTest.merge(PARENT_EVENT_ID);
-
-        then(occurrenceDao).shouldHaveNoInteractions();
-        then(deleteEventService).shouldHaveNoInteractions();
+        ExceptionValidator.validateInvalidParam(() -> underTest.merge(USER_ID, PARENT_EVENT_ID), "eventId", "invalid type");
     }
 
     @Test
     void merge() {
-        given(eventDao.findByIdValidated(PARENT_EVENT_ID)).willReturn(parent);
-        given(parent.getEventId()).willReturn(PARENT_EVENT_ID);
-        given(parent.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
-        given(parent.getUserId()).willReturn(USER_ID);
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(child));
-        given(child.getEventId()).willReturn(CHILD_EVENT_ID);
-        given(child.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
-        given(child.getTitle()).willReturn(TITLE);
-        given(parent.getTitle()).willReturn(TITLE);
-        given(occurrenceDao.getByEventId(CHILD_EVENT_ID)).willReturn(List.of(occurrence));
-        given(child.getContent()).willReturn(CONTENT);
-        given(occurrence.getNote()).willReturn(NOTE);
-        given(occurrence.getTime()).willReturn(TIME);
-        given(occurrence.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
-        given(child.getUserId()).willReturn(USER_ID);
-        given(child.getRemindMeBeforeDays()).willReturn(null);
+        Event parent = event(PARENT_EVENT_ID, " Parent ", RepetitionType.ONE_TIME, "parent-content", LocalTime.of(8, 0), 1);
+        Event matching1 = event(MATCHING_EVENT_ID_1, "parent", RepetitionType.ONE_TIME, "content-1", LocalTime.of(12, 30), 5);
+        Event matching2 = event(MATCHING_EVENT_ID_2, "PARENT", RepetitionType.ONE_TIME, "   ", null, null);
+        Event differentTitle = event(DIFFERENT_TITLE_EVENT_ID, "Other", RepetitionType.ONE_TIME, "ignored", LocalTime.MIDNIGHT, 9);
+        Event differentType = event(DIFFERENT_TYPE_EVENT_ID, "parent", RepetitionType.DAYS_OF_WEEK, "ignored", LocalTime.MIDNIGHT, 9);
 
-        underTest.merge(PARENT_EVENT_ID);
+        Occurrence occurrence1 = occurrence(MATCHING_EVENT_ID_1, "note-1", null, null);
+        Occurrence occurrence2 = occurrence(MATCHING_EVENT_ID_1, "", LocalTime.of(11, 5), 7);
+        Occurrence occurrence3 = occurrence(MATCHING_EVENT_ID_2, "note-3", null, null);
 
-        then(occurrence).should().setEventId(PARENT_EVENT_ID);
-        then(occurrence).should().setNote(String.join("\n\n", CONTENT, NOTE));
-        then(occurrence).should().setTime(TIME);
-        then(occurrence).should().setRemindMeBeforeDays(REMIND_ME_BEFORE_DAYS);
-        then(occurrenceDao).should().save(occurrence);
+        given(eventDao.findByIdValidated(USER_ID, PARENT_EVENT_ID)).willReturn(parent);
+        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(parent, matching1, matching2, differentTitle, differentType));
+        given(occurrenceDao.getByEventId(MATCHING_EVENT_ID_1)).willReturn(List.of(occurrence1, occurrence2));
+        given(occurrenceDao.getByEventId(MATCHING_EVENT_ID_2)).willReturn(List.of(occurrence3));
 
-        then(deleteEventService).should().delete(USER_ID, CHILD_EVENT_ID);
+        underTest.merge(USER_ID, PARENT_EVENT_ID);
+
+        ArgumentCaptor<List<UUID>> deletedEventIdsCaptor = ArgumentCaptor.forClass(List.class);
+        then(deleteEventService).should().delete(org.mockito.ArgumentMatchers.eq(USER_ID), deletedEventIdsCaptor.capture());
+        assertThat(deletedEventIdsCaptor.getValue()).containsExactly(MATCHING_EVENT_ID_1, MATCHING_EVENT_ID_2);
+
+        ArgumentCaptor<List<Occurrence>> deletedOccurrencesCaptor = ArgumentCaptor.forClass(List.class);
+        then(occurrenceDao).should().delete(deletedOccurrencesCaptor.capture());
+        assertThat(deletedOccurrencesCaptor.getValue()).containsExactly(occurrence1, occurrence2, occurrence3);
+
+        ArgumentCaptor<List<Occurrence>> savedOccurrencesCaptor = ArgumentCaptor.forClass(List.class);
+        then(occurrenceDao).should().save(savedOccurrencesCaptor.capture());
+        List<Occurrence> savedOccurrences = savedOccurrencesCaptor.getValue();
+
+        assertThat(savedOccurrences).hasSize(3);
+
+        assertThat(savedOccurrences.getFirst().getEventId()).isEqualTo(PARENT_EVENT_ID);
+        assertThat(savedOccurrences.getFirst().getNote()).isEqualTo("content-1\n\nnote-1");
+        assertThat(savedOccurrences.getFirst().getTime()).isEqualTo(LocalTime.of(12, 30));
+        assertThat(savedOccurrences.getFirst().getRemindMeBeforeDays()).isEqualTo(5);
+
+        assertThat(savedOccurrences.get(1).getEventId()).isEqualTo(PARENT_EVENT_ID);
+        assertThat(savedOccurrences.get(1).getNote()).isEqualTo("content-1");
+        assertThat(savedOccurrences.get(1).getTime()).isEqualTo(LocalTime.of(11, 5));
+        assertThat(savedOccurrences.get(1).getRemindMeBeforeDays()).isEqualTo(7);
+
+        assertThat(savedOccurrences.get(2).getEventId()).isEqualTo(PARENT_EVENT_ID);
+        assertThat(savedOccurrences.get(2).getNote()).isEqualTo("note-3");
+        assertThat(savedOccurrences.get(2).getTime()).isNull();
+        assertThat(savedOccurrences.get(2).getRemindMeBeforeDays()).isNull();
+
+        then(occurrenceDao).should().getByEventId(MATCHING_EVENT_ID_1);
+        then(occurrenceDao).should().getByEventId(MATCHING_EVENT_ID_2);
+        then(occurrenceDao).should(never()).getByEventId(DIFFERENT_TITLE_EVENT_ID);
+        then(occurrenceDao).should(never()).getByEventId(DIFFERENT_TYPE_EVENT_ID);
+    }
+
+    private Event event(UUID eventId, String title, RepetitionType repetitionType, String content, LocalTime time, Integer remindMeBeforeDays) {
+        return Event.builder()
+            .eventId(eventId)
+            .userId(USER_ID)
+            .repetitionType(repetitionType)
+            .repeatForDays(1)
+            .startDate(LocalDate.now())
+            .title(title)
+            .content(content)
+            .time(time)
+            .remindMeBeforeDays(remindMeBeforeDays)
+            .build();
+    }
+
+    private Occurrence occurrence(UUID eventId, String note, LocalTime time, Integer remindMeBeforeDays) {
+        return Occurrence.builder()
+            .userId(USER_ID)
+            .eventId(eventId)
+            .occurrenceId(UUID.randomUUID())
+            .date(LocalDate.now())
+            .status(OccurrenceStatus.PENDING)
+            .note(note)
+            .time(time)
+            .remindMeBeforeDays(remindMeBeforeDays)
+            .build();
     }
 }

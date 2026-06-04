@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelFactory;
@@ -18,29 +19,31 @@ public class LabelService {
     private final LabelDao labelDao;
     private final LabelFactory labelFactory;
     private final LabelValidator labelValidator;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final CommonCalendarDao commonCalendarDao;
 
     public UUID createLabel(UUID userId, String label) {
         labelValidator.validate(userId, label);
 
-        Label domain = labelFactory.create(userId, label);
-        labelDao.save(domain);
+        Label domain = labelFactory.create(label);
+        commonCalendarDao.saveLabel(userId, domain);
 
         return domain.getLabelId();
     }
 
     @Transactional
     public void deleteLabel(UUID userId, UUID labelId) {
-        eventLabelMappingDao.deleteByUserIdAndLabelId(userId, labelId);
-        labelDao.deleteByUserIdAndLabelId(userId, labelId);
+        commonCalendarDao.deleteLabel(userId, labelId);
     }
 
     public void editLabel(UUID userId, UUID labelId, String label) {
-        labelValidator.validate(userId, label);
+        Label domain = labelValidator.validate(userId, label)
+            .stream()
+            .filter(l -> l.getLabelId().equals(labelId))
+            .findAny()
+            .orElseThrow(() -> ExceptionFactory.notFound("Label not found by id " + labelId));
 
-        Label l = labelDao.findByIdValidated(labelId);
-        l.setLabel(label);
+        domain.setLabel(label);
 
-        labelDao.save(l);
+        labelDao.save(userId, domain);
     }
 }

@@ -32,7 +32,7 @@ public class RefreshTokenDao {
     public List<UUID> deleteByUserId(UUID userId) {
         List<RefreshTokenEntity> toDelete = repository.getByUserId(uuidConverter.convertDomain(userId));
 
-        Lists.partition(toDelete, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(toDelete, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
                 .forEach(repository::delete);
 
         return toDelete.stream()

@@ -51,12 +51,12 @@ public class ChecklistItemDao {
             ))
             .toList();
 
-        Lists.partition(ids, Constants.DYNAMO_DB_DELETE_MAX_BATCH_SIZE)
+        Lists.partition(ids, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .forEach(repository::delete);
     }
 
     public void save(List<ChecklistItem> checklistItems) {
-        Lists.partition(checklistItems, Constants.DYNAMO_DB_INSERT_MAX_BATCH_SIZE)
+        Lists.partition(checklistItems, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
             .stream()
             .map(converter::convertDomain)
             .forEach(repository::save);

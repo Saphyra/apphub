@@ -385,6 +385,26 @@ public class ValidationUtilTest {
         ValidationUtil.doesNotContainNull(CollectionUtils.toList("a", "b"), FIELD);
     }
 
+    @Test
+    void containsAll_null() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(null, () -> List.of("a"), FIELD), FIELD, "must not be null");
+    }
+
+    @Test
+    void containsAll_containsNull() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(CollectionUtils.toList("a", null), () -> List.of("a"), FIELD), FIELD, "must not contain null values");
+    }
+
+    @Test
+    void containsAll_unsupportedValue() {
+        ExceptionValidator.validateInvalidParam(() -> ValidationUtil.containsAll(List.of("a", "b"), () -> List.of("a"), FIELD), FIELD, "Unsupported values: [b]");
+    }
+
+    @Test
+    void containsAll() {
+        ValidationUtil.containsAll(List.of("a", "b"), () -> List.of("a", "b", "c"), FIELD);
+    }
+
     enum TestEnum {
         ELEMENT
     }

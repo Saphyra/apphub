@@ -18,6 +18,18 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${versions.guava}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-dynamodb</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.github.saphyra</groupId>
             <artifactId>apphub-lib-concurrency</artifactId>
             <version>${project.version}</version>
@@ -82,6 +94,7 @@
                     <finalName>application</finalName>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -121,7 +134,7 @@
                         </goals>
                         <configuration>
                             <executable>docker</executable>
-                            <workingDirectory />
+                            <workingDirectory/>
                             <arguments>
                                 <argument>build</argument>
                                 <argument>-f</argument>
@@ -132,6 +145,7 @@
                             </arguments>
                         </configuration>
                     </execution>
+
                     <execution>
                         <id>docker-tag</id>
                         <phase>deploy</phase>
@@ -140,7 +154,7 @@
                         </goals>
                         <configuration>
                             <executable>docker</executable>
-                            <workingDirectory />
+                            <workingDirectory/>
                             <arguments>
                                 <argument>tag</argument>
                                 <argument>saphyra/${project.artifactId}:latest</argument>
@@ -148,7 +162,6 @@
                             </arguments>
                         </configuration>
                     </execution>
-
                 </executions>
             </plugin>
         </plugins>
