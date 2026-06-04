@@ -9,6 +9,7 @@ import { CALENDAR_GET_LABELS_OF_EVENT, CALENDAR_GET_OCCURRENCE } from "../../../
 import { hasValue } from "../../../../common/js/Utils";
 
 const SelectedOccurrence = ({
+    eventId,
     occurrenceId,
     setDisplaySpinner,
     localizationHandler,
@@ -20,7 +21,7 @@ const SelectedOccurrence = ({
     const [labels, setLabels] = useState([]);
 
     useLoader({
-        request: CALENDAR_GET_OCCURRENCE.createRequest(null, { occurrenceId: occurrenceId }),
+        request: CALENDAR_GET_OCCURRENCE.createRequest(null, {eventId: eventId, occurrenceId: occurrenceId }),
         mapper: setOccurrence,
         listener: [occurrenceId],
         setDisplaySpinner: setDisplaySpinner,

@@ -54,9 +54,9 @@ public class NotebookRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> TableActions.getCreateTableResponse(getServerPort(), accessToken, new CreateTableRequest()));
         CommonUtils.verifyMissingRole(() -> TableActions.getEditTableResponse(getServerPort(), accessToken, UUID.randomUUID(), new EditTableRequest()));
         CommonUtils.verifyMissingRole(() -> TableActions.getTableResponse(getServerPort(), accessToken, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> TableActions.getUpdateChecklistTableRowStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), false));
         CommonUtils.verifyMissingRole(() -> TableActions.getDeleteCheckedResponse(getServerPort(), accessToken, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> TableActions.getEditCheckboxStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), false));
 
         //Pin
         CommonUtils.verifyMissingRole(() -> PinActions.getPinResponse(getServerPort(), accessToken, UUID.randomUUID(), false));
@@ -94,11 +94,11 @@ public class NotebookRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> ChecklistActions.getCreateChecklistItemResponse(getServerPort(), accessToken, new CreateChecklistRequest()));
         CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistResponse(getServerPort(), accessToken, new EditChecklistRequest(), UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> ChecklistActions.getChecklistResponse(getServerPort(), accessToken, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getUpdateChecklistItemStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), false));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteChecklistItemResponse(getServerPort(), accessToken, UUID.randomUUID()));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getUpdateChecklistItemStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), false));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteChecklistItemResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> ChecklistActions.getDeleteCheckedChecklistItemsResponse(getServerPort(), accessToken, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> ChecklistActions.getOrderItemsResponse(getServerPort(), accessToken, UUID.randomUUID()));
-        CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistItemResponse(getServerPort(), accessToken, UUID.randomUUID(), ""));
+        CommonUtils.verifyMissingRole(() -> ChecklistActions.getEditChecklistItemResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), ""));
         CommonUtils.verifyMissingRole(() -> ChecklistActions.getAddChecklistItemResponse(getServerPort(), accessToken, UUID.randomUUID(), new AddChecklistItemRequest()));
 
         //Category

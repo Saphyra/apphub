@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.pin;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -27,12 +27,10 @@ public class PinService {
     private final NotebookViewFactory notebookViewFactory;
     private final PinMappingDao pinMappingDao;
 
-    public void pinListItem(UUID listItemId, Boolean pinned) {
-        if (isNull(pinned)) {
-            throw ExceptionFactory.invalidParam("pinned", "must not be null");
-        }
+    public void pinListItem(UUID userId, UUID listItemId, Boolean pinned) {
+        ValidationUtil.notNull(pinned, "pinned");
 
-        ListItem listItem = listItemDao.findByIdValidated(listItemId);
+        ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
 
         listItem.setPinned(pinned);
 
@@ -41,7 +39,7 @@ public class PinService {
 
     public List<NotebookView> getPinnedItems(UUID userId, UUID pinGroupId) {
         List<UUID> groupMembers = Optional.ofNullable(pinGroupId)
-            .map(uuid -> pinMappingDao.getByPinGroupId(pinGroupId))
+            .map(_ -> pinMappingDao.getByPinGroupId(pinGroupId))
             .orElse(Collections.emptyList())
             .stream()
             .map(PinMapping::getListItemId)

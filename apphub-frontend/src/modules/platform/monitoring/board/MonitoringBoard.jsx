@@ -39,11 +39,11 @@ const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) 
     }
 
     function getContent() {
-        const min = new Stream(metricsData.metrics)
+        const minTimestamp = new Stream(metricsData.metrics)
             .map(metric => metric.timestamp)
             .min()
             .orElseThrow("IllegalState", "Empty metrics should not be rendered");
-        const max = new Stream(metricsData.metrics)
+        const maxTimestamp = new Stream(metricsData.metrics)
             .map(metric => metric.timestamp)
             .max()
             .orElseThrow("IllegalState", "Empty metrics should not be rendered");
@@ -56,8 +56,8 @@ const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) 
 
                 return <MonitoringDisplay
                     key={groupId}
-                    firstTimestamp={min}
-                    lastTimestamp={max}
+                    firstTimestamp={minTimestamp}
+                    lastTimestamp={maxTimestamp}
                     feature={group.feature}
                     functionality={group.functionality}
                     service={group.service}

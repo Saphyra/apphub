@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.context;
 
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.RecreateOccurrenceService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,13 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class UpdateEventContextFactoryTest {
     @Mock
-    private EventDao eventDao;
-
-    @Mock
-    private OccurrenceDao occurrenceDao;
-
-    @Mock
     private RecreateOccurrenceService recreateOccurrenceService;
+
+    @Mock
+    private CommonCalendarDao commonCalendarDao;
 
     @InjectMocks
     private UpdateEventContextFactory underTest;

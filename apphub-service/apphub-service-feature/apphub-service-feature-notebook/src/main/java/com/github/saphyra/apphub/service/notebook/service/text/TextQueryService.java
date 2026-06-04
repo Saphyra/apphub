@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.response.TextResponse;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -16,17 +14,15 @@ import java.util.UUID;
 @Component
 public class TextQueryService {
     private final ListItemDao listItemDao;
-    private final ContentDao contentDao;
 
-    public TextResponse getTextResponse(UUID textId) {
-        ListItem listItem = listItemDao.findByIdValidated(textId);
-        Content content = contentDao.findByParentValidated(textId);
+    public TextResponse getTextResponse(UUID userId, UUID listItemId) {
+        ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
 
         return TextResponse.builder()
-            .textId(textId)
+            .textId(listItemId)
             .parent(listItem.getParent())
             .title(listItem.getTitle())
-            .content(content.getContent())
+            .content(listItem.getData())
             .build();
     }
 }

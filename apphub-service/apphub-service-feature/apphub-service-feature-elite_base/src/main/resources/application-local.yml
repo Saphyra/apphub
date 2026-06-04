@@ -2,9 +2,6 @@ server:
   port: 8087
 
 elite-base:
-  cache:
-    bufferSynchronizationInterval: PT20M
-    maxBufferSize: 1000000
   messageHandler:
     enabled: true
   messageExpiration: P30D

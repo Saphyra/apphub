@@ -286,7 +286,7 @@ public class TableCrudTest extends BackEndTest {
                 .build()))
             .build();
         Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
-        verifyInvalidParam(create_nullColumnValueResponse, "text", "must not be null");
+        verifyInvalidParam(create_nullColumnValueResponse, "data", "must not be null");
     }
 
     private static void create_nullColumnType(String accessToken) {
@@ -359,13 +359,13 @@ public class TableCrudTest extends BackEndTest {
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TABLE_TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
-        assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(COLUMN_NAME);
+        assertThat(tableResponse.getTableHeads().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(COLUMN_NAME);
         assertThat(tableResponse.getRows()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getColumns()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(COLUMN_VALUE);
+        assertThat(tableResponse.getRows().getFirst().getRowIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getColumns()).hasSize(1);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(COLUMN_VALUE);
 
         return new BiWrapper<>(tableResponse, listItemId);
     }
@@ -380,18 +380,18 @@ public class TableCrudTest extends BackEndTest {
             .title(" ")
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -409,18 +409,18 @@ public class TableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(" ")
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -438,19 +438,19 @@ public class TableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(
                     TableColumnModel.builder()
-                        .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                        .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                         .columnIndex(0)
                         .columnType(ColumnType.TEXT)
                         .itemType(ItemType.EXISTING)
@@ -475,18 +475,18 @@ public class TableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -496,7 +496,7 @@ public class TableCrudTest extends BackEndTest {
             ))
             .build();
         Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
-        verifyInvalidParam(edit_nullColumnValueResponse, "text", "must not be null");
+        verifyInvalidParam(edit_nullColumnValueResponse, "data", "must not be null");
     }
 
     private static void edit_tableHeadNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -511,11 +511,11 @@ public class TableCrudTest extends BackEndTest {
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -533,14 +533,14 @@ public class TableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
@@ -562,18 +562,18 @@ public class TableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -583,7 +583,7 @@ public class TableCrudTest extends BackEndTest {
             ))
             .build();
         Response edit_listItemNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, UUID.randomUUID(), edit_listItemNotFoundRequest);
-        ResponseValidator.verifyInvalidParam(edit_listItemNotFoundResponse, "tableHead.tableHeadId", "points to different table");
+        ResponseValidator.verifyErrorResponse(edit_listItemNotFoundResponse, 404, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
 
     private static void edit_columnDeleted(String accessToken, UUID listItemId) {
@@ -627,13 +627,13 @@ public class TableCrudTest extends BackEndTest {
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(TABLE_TITLE);
         assertThat(tableResponse.getTableHeads()).hasSize(1);
-        assertThat(tableResponse.getTableHeads().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(COLUMN_NAME);
+        assertThat(tableResponse.getTableHeads().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(COLUMN_NAME);
         assertThat(tableResponse.getRows()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getRowIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getColumns()).hasSize(1);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getColumnIndex()).isEqualTo(0);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(COLUMN_VALUE);
+        assertThat(tableResponse.getRows().getFirst().getRowIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getColumns()).hasSize(1);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnIndex()).isEqualTo(0);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(COLUMN_VALUE);
         return tableResponse;
     }
 
@@ -642,18 +642,18 @@ public class TableCrudTest extends BackEndTest {
             .title(NEW_TITLE)
             .tableHeads(
                 List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().get(0).getTableHeadId())
+                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                     .columnIndex(0)
                     .content(NEW_COLUMN_NAME)
                     .type(ItemType.EXISTING)
                     .build()
                 ))
             .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().get(0).getRowId())
+                .rowId(tableResponse.getRows().getFirst().getRowId())
                 .rowIndex(0)
                 .itemType(ItemType.EXISTING)
                 .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().get(0).getColumns().get(0).getColumnId())
+                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
                     .columnIndex(0)
                     .columnType(ColumnType.TEXT)
                     .itemType(ItemType.EXISTING)
@@ -665,8 +665,8 @@ public class TableCrudTest extends BackEndTest {
         TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest);
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_NAME);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(NEW_COLUMN_VALUE);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(NEW_COLUMN_NAME);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(NEW_COLUMN_VALUE);
 
         ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
 

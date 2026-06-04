@@ -10,10 +10,10 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,31 +43,35 @@ class TableControllerImpl implements TableController {
     @Override
     public EditTableResponse editTable(EditTableRequest request, UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to edit table {}", accessToken.getUserId(), listItemId);
-        return tableEditionService.editTable(listItemId, request);
+        List<TableFileUploadResponse> fileUploads = tableEditionService.editTable(accessToken.getUserId(), listItemId, request);
+        return EditTableResponse.builder()
+            .tableResponse(getTable(listItemId, accessToken))
+            .fileUpload(fileUploads)
+            .build();
     }
 
     @Override
     public TableResponse getTable(UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to query table {}", accessToken.getUserId(), listItemId);
-        return tableQueryService.getTable(listItemId);
+        return tableQueryService.getTable(accessToken.getUserId(), listItemId);
     }
 
     @Override
-    public void setRowStatus(UUID rowId, OneParamRequest<Boolean> status, AccessToken accessToken) {
+    public void setRowStatus(UUID listItemId, UUID rowId, OneParamRequest<Boolean> status, AccessToken accessToken) {
         log.info("{} wants to modify status of table row {}", accessToken.getUserId(), rowId);
-        tableRowStatusUpdateService.setRowStatus(rowId, status.getValue());
+        tableRowStatusUpdateService.setRowStatus(listItemId, rowId, status.getValue());
     }
 
     @Override
     public TableResponse deleteCheckedRows(UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to delete checked rows of table {}", accessToken.getUserId(), listItemId);
-        checkedTableRowDeletionService.deleteCheckedRows(listItemId);
+        checkedTableRowDeletionService.deleteCheckedRows(accessToken.getUserId(), listItemId);
         return getTable(listItemId, accessToken);
     }
 
     @Override
-    public void setCheckboxColumnStatus(UUID columnId, OneParamRequest<Boolean> status, AccessToken accessToken) {
+    public void setCheckboxColumnStatus(UUID listItemId, UUID rowId, UUID columnId, OneParamRequest<Boolean> status, AccessToken accessToken) {
         log.info("{} wants to change the status of checked column {}", accessToken.getUserId(), columnId);
-        checkboxColumnStatusUpdateService.updateColumnStatus(columnId, status.getValue());
+        checkboxColumnStatusUpdateService.updateColumnStatus(listItemId, rowId, columnId, status.getValue());
     }
 }

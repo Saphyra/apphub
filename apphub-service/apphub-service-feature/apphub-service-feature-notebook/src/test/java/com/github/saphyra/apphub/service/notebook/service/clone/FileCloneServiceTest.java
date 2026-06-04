@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.file.File;
-import com.github.saphyra.apphub.service.notebook.dao.file.FileDao;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
+import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.StorageProxy;
-import com.github.saphyra.apphub.service.notebook.service.FileFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,23 +14,27 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class FileCloneServiceTest {
-    private static final UUID ORIGINAL_PARENT = UUID.randomUUID();
-    private static final UUID FILE_ID = UUID.randomUUID();
-    private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID NEW_PARENT = UUID.randomUUID();
+class FileCloneServiceTest {
+    private static final UUID PARENT = UUID.randomUUID();
+    private static final String ORIGINAL_DATA = "original-data";
+    private static final UUID ORIGINAL_STORED_FILE_ID = UUID.randomUUID();
+    private static final String CLONED_DATA = "cloned-data";
+    private static final UUID CLONED_STORED_FILE_ID = UUID.randomUUID();
 
     @Mock
-    private FileDao fileDao;
+    private ListItemDao listItemDao;
+
+    @Mock
+    private ListItemFactory listItemFactory;
 
     @Mock
     private StorageProxy storageProxy;
 
     @Mock
-    private FileFactory fileFactory;
+    private UuidConverter uuidConverter;
 
     @InjectMocks
     private FileCloneService underTest;
@@ -39,28 +43,19 @@ public class FileCloneServiceTest {
     private ListItem toClone;
 
     @Mock
-    private ListItem listItemClone;
-
-    @Mock
-    private File file;
-
-    @Mock
-    private File fileClone;
+    private ListItem clone;
 
     @Test
-    public void cloneImage() {
-        given(toClone.getListItemId()).willReturn(ORIGINAL_PARENT);
-        given(toClone.getUserId()).willReturn(USER_ID);
+    void cloneFile() {
+        given(toClone.getData()).willReturn(ORIGINAL_DATA);
+        given(listItemFactory.clone(PARENT, toClone, CLONED_DATA)).willReturn(clone);
+        given(uuidConverter.convertEntity(ORIGINAL_DATA)).willReturn(ORIGINAL_STORED_FILE_ID);
+        given(storageProxy.cloneFile(ORIGINAL_STORED_FILE_ID)).willReturn(CLONED_STORED_FILE_ID);
+        given(uuidConverter.convertDomain(CLONED_STORED_FILE_ID)).willReturn(CLONED_DATA);
 
-        given(listItemClone.getListItemId()).willReturn(NEW_PARENT);
 
-        given(file.getStoredFileId()).willReturn(FILE_ID);
+        underTest.cloneFile(PARENT, toClone);
 
-        given(fileDao.findByParentValidated(ORIGINAL_PARENT)).willReturn(file);
-        given(fileFactory.create(USER_ID, NEW_PARENT, FILE_ID)).willReturn(fileClone);
-
-        underTest.cloneFile(toClone, listItemClone);
-
-        verify(fileDao).save(fileClone);
+        then(listItemDao).should().save(clone);
     }
 }

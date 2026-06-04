@@ -15,7 +15,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class LabelFactoryTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
-    private static final UUID USER_ID = UUID.randomUUID();
     private static final String LABEL = "label";
 
     @Mock
@@ -28,9 +27,11 @@ class LabelFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(LABEL_ID);
 
-        assertThat(underTest.create(USER_ID, LABEL))
+        Label result = underTest.create(LABEL);
+
+        assertThat(result)
             .returns(LABEL_ID, Label::getLabelId)
-            .returns(USER_ID, Label::getUserId)
             .returns(LABEL, Label::getLabel);
     }
 }
+

@@ -21,6 +21,5 @@ public class NotebookView {
     private final boolean archived;
     private final String value;
     private final UUID parentId;
-    private final String parentTitle;
     private final boolean enabled;
 }

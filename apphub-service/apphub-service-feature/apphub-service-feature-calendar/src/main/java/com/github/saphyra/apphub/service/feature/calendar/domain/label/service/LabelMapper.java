@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -15,5 +17,11 @@ class LabelMapper {
             .labelId(label.getLabelId())
             .label(label.getLabel())
             .build();
+    }
+
+    public List<LabelResponse> toResponse(List<Label> labels) {
+        return labels.stream()
+            .map(this::toResponse)
+            .toList();
     }
 }

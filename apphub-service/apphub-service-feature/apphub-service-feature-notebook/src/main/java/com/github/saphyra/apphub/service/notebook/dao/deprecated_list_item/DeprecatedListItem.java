@@ -1,0 +1,33 @@
+package com.github.saphyra.apphub.service.notebook.dao.deprecated_list_item;
+
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
+
+import java.util.UUID;
+
+@Data
+@AllArgsConstructor
+@Builder
+@Deprecated(forRemoval = true)
+public class DeprecatedListItem {
+    @NonNull
+    private final UUID listItemId;
+
+    @NonNull
+    private final UUID userId;
+
+    private UUID parent;
+
+    @NonNull
+    private ListItemType type;
+
+    @NonNull
+    private String title;
+
+    private boolean pinned;
+
+    private boolean archived;
+}

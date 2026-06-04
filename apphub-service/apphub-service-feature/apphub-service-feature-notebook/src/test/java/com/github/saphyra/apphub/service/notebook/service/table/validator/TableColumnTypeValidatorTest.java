@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.CreateTableRequest;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableColumnModel;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableRowModel;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,7 @@ class TableColumnTypeValidatorTest {
     private static final Object DATA = "data";
 
     @Mock
-    private ColumnDataServiceFetcher columnDataServiceFetcher;
+    private ColumnDataServiceProvider columnDataServiceProvider;
 
     @InjectMocks
     private TableColumnTypeValidator underTest;
@@ -118,7 +118,7 @@ class TableColumnTypeValidatorTest {
         given(createTableRequest.getListItemType()).willReturn(ListItemType.CUSTOM_TABLE);
         given(rowModel.getColumns()).willReturn(List.of(columnModel));
         given(columnModel.getColumnType()).willReturn(ColumnType.LINK);
-        given(columnDataServiceFetcher.findColumnDataService(ColumnType.LINK)).willReturn(columnDataService);
+        given(columnDataServiceProvider.getForType(ColumnType.LINK)).willReturn(columnDataService);
         given(columnModel.getData()).willReturn(DATA);
 
         underTest.validateColumnType(createTableRequest);

@@ -25,13 +25,13 @@ public interface ListItemController {
     void deleteListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.POST, path = NotebookEndpoints.NOTEBOOK_EDIT_LIST_ITEM)
-    void editListItem(@RequestBody EditListItemRequest request, @PathVariable("listItemId") UUID listItemId);
+    void editListItem(@RequestBody EditListItemRequest request, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_MOVE_LIST_ITEM)
-    void moveListItem(@RequestBody OneParamRequest<UUID> parent, @PathVariable("listItemId") UUID listItemId);
+    void moveListItem(@RequestBody OneParamRequest<UUID> parent, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @RequestMapping(method = RequestMethod.POST, path = NotebookEndpoints.NOTEBOOK_CLONE_LIST_ITEM)
-    void cloneListItem(@PathVariable("listItemId") UUID listItemId);
+    void cloneListItem(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_SEARCH)
     List<NotebookView> search(@RequestBody OneParamRequest<String> query, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

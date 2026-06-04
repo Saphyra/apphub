@@ -10,6 +10,7 @@ async function save({
     note,
     remindMeBeforeDays,
     reminded,
+    eventId,
     occurrenceId,
     setDisplaySpinner,
     backUrl
@@ -27,7 +28,7 @@ async function save({
         return;
     }
 
-    await CALENDAR_EDIT_OCCURRENCE.createRequest(payload, { occurrenceId: occurrenceId })
+    await CALENDAR_EDIT_OCCURRENCE.createRequest(payload, { eventId: eventId, occurrenceId: occurrenceId })
         .send(setDisplaySpinner);
 
     NotificationService.storeSuccessText(localizationHandler.get("saved"));

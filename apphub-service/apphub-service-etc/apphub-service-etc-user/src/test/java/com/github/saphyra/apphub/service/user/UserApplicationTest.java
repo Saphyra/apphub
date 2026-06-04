@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user;
 
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
@@ -25,6 +26,9 @@ public class UserApplicationTest {
 
     @MockitoBean
     private UserDao userDao;
+
+    @MockitoBean
+    private DynamoDbRepositoryContext  dynamoDbRepositoryContext;
 
     @Test
     public void startup() {

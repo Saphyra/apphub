@@ -30,10 +30,19 @@ public interface ChecklistController {
     ChecklistResponse getChecklist(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS)
-    void updateStatus(@RequestBody OneParamRequest<Boolean> request, @PathVariable("checklistItemId") UUID checklistItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    void updateStatus(
+        @RequestBody OneParamRequest<Boolean> request,
+        @PathVariable("listItemId") UUID listItemId,
+        @PathVariable("checklistItemId") UUID checklistItemId,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
+    );
 
     @DeleteMapping(NotebookEndpoints.NOTEBOOK_DELETE_CHECKLIST_ITEM)
-    void deleteChecklistItem(@PathVariable("checklistItemId") UUID checklistItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    void deleteChecklistItem(
+        @PathVariable("listItemId") UUID listItemId,
+        @PathVariable("checklistItemId") UUID checklistItemId,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
+    );
 
     @DeleteMapping(NotebookEndpoints.NOTEBOOK_CHECKLIST_DELETE_CHECKED)
     ChecklistResponse deleteCheckedItems(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
@@ -42,7 +51,12 @@ public interface ChecklistController {
     ChecklistResponse orderItems(@PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @PostMapping(NotebookEndpoints.NOTEBOOK_EDIT_CHECKLIST_ITEM)
-    void editChecklistItem(@RequestBody OneParamRequest<String> content, @PathVariable("checklistItemId") UUID checklistItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    void editChecklistItem(
+        @RequestBody OneParamRequest<String> content,
+        @PathVariable("listItemId") UUID listItemId,
+        @PathVariable("checklistItemId") UUID checklistItemId,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
+    );
 
     @PutMapping(NotebookEndpoints.NOTEBOOK_ADD_CHECKLIST_ITEM)
     ChecklistResponse addChecklistItem(@RequestBody AddChecklistItemRequest request, @PathVariable("listItemId") UUID listItemId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

@@ -1,0 +1,24 @@
+package com.github.saphyra.apphub.service.notebook.dao.deprecated_table_head;
+
+import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.UUID;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class DeprecatedTableHeadFactory {
+    private final IdGenerator idGenerator;
+
+    public DeprecatedTableHead create(UUID userId, UUID parent, Integer columnIndex) {
+        return DeprecatedTableHead.builder()
+                .tableHeadId(idGenerator.randomUuid())
+                .userId(userId)
+                .parent(parent)
+                .columnIndex(columnIndex)
+                .build();
+    }
+}

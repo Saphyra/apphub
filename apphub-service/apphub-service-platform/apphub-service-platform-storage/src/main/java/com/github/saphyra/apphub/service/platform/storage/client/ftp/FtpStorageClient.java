@@ -14,7 +14,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @FtpClientEnabled
-class FtpStorageClient implements StorageClient {
+public class FtpStorageClient implements StorageClient {
     private final FtpClientFactory ftpClientFactory;
     private final UuidConverter uuidConverter;
     private final ErrorReporterService errorReporterService;
@@ -53,5 +53,10 @@ class FtpStorageClient implements StorageClient {
         } catch (Exception e) {
             errorReporterService.report("Failed deleting FTP file " + storedFileId, e);
         }
+    }
+
+    @Override
+    public void clone(UUID source, UUID target) {
+        throw new UnsupportedOperationException("Files stored in FTP cannot be cloned.");
     }
 }

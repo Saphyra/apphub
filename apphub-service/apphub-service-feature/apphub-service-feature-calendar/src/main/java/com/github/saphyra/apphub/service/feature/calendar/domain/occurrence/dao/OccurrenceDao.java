@@ -1,56 +1,72 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.google.common.collect.Lists;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class OccurrenceDao extends AbstractDao<OccurrenceEntity, Occurrence, String, OccurrenceRepository> implements DeleteByUserIdDao {
+@RequiredArgsConstructor
+public class OccurrenceDao {
     private final UuidConverter uuidConverter;
+    private final OccurrenceConverter converter;
+    private final OccurrenceRepository repository;
 
-    OccurrenceDao(OccurrenceConverter converter, OccurrenceRepository repository, UuidConverter uuidConverter) {
-        super(converter, repository);
-        this.uuidConverter = uuidConverter;
-    }
-
-    @Override
-    public void deleteByUserId(UUID userId) {
-        repository.deleteByUserId(uuidConverter.convertDomain(userId));
-    }
-
-    public void deleteByUserIdAndEventId(UUID userId, UUID eventId) {
-        repository.deleteByUserIdAndEventId(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId));
+    public void save(Occurrence occurrence) {
+        repository.save(converter.convertDomain(occurrence));
     }
 
     public List<Occurrence> getByEventId(UUID eventId) {
         return converter.convertEntity(repository.getByEventId(uuidConverter.convertDomain(eventId)));
     }
 
-    public void deleteAllById(Collection<UUID> deletedOccurrences) {
-        List<String> ids = deletedOccurrences.stream()
-            .map(uuidConverter::convertDomain)
+    public void delete(UUID eventId, Collection<UUID> occurrences) {
+        Lists.partition(uuidConverter.convertDomain(occurrences), Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
+            .forEach(batch -> repository.delete(uuidConverter.convertDomain(eventId), batch));
+    }
+
+    public void save(List<Occurrence> occurrences) {
+        Lists.partition(converter.convertDomain(occurrences), Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
+            .forEach(repository::save);
+    }
+
+    public Occurrence findByIdValidated(UUID eventId, UUID occurrenceId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(eventId), uuidConverter.convertDomain(occurrenceId)))
+            .orElseThrow(() -> ExceptionFactory.notFound("Occurrence not found by id " + occurrenceId + " in event " + eventId));
+    }
+
+    public List<Occurrence> getByBuckets(UUID userId, List<String> buckets) {
+        String userIdString = uuidConverter.convertDomain(userId);
+
+        return buckets.stream()
+            .flatMap(bucket -> repository.getByBucket(userIdString, bucket).stream())
+            .map(converter::convertEntity)
+            .toList();
+    }
+
+    public void delete(List<Occurrence> occurrences) {
+        List<BiWrapper<String, String>> ids = occurrences.stream()
+            .map(occurrence -> new BiWrapper<>(
+                uuidConverter.convertDomain(occurrence.getEventId()),
+                uuidConverter.convertDomain(occurrence.getOccurrenceId())
+            ))
             .toList();
 
-        repository.deleteAllById(ids);
+        Lists.partition(ids, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
+            .forEach(repository::delete);
     }
 
-    public Occurrence findByIdValidated(UUID occurrenceId) {
-        return findById(occurrenceId)
-            .orElseThrow(() -> ExceptionFactory.notFound("Occurrence not found with occurrenceId: " + occurrenceId));
-    }
-
-    public Optional<Occurrence> findById(UUID occurrenceId) {
-        return findById(uuidConverter.convertDomain(occurrenceId));
-    }
-
-    public List<Occurrence> getByUserId(UUID userId) {
-        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    public void deleteByEventId(UUID eventId) {
+        String eventIdString = uuidConverter.convertDomain(eventId);
+        List<OccurrenceEntity> occurrences = repository.getByEventId(eventIdString);
+        Lists.partition(occurrences, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
+            .forEach(batch -> repository.delete(eventIdString, batch.stream().map(OccurrenceEntity::getOccurrenceId).toList()));
     }
 }

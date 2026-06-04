@@ -31,14 +31,11 @@ public class CustomTableColorTest extends BackEndTest {
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullColor(accessToken);
-        create_invalidLength(accessToken);
-        create_doesNotStartWithHashtag(accessToken);
-        create_invalidCharacter(accessToken);
         create(accessToken);
 
         UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
-            .get(0)
+            .getFirst()
             .getId();
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
@@ -50,10 +47,10 @@ public class CustomTableColorTest extends BackEndTest {
     private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.COLOR,
             COLOR_CODE
         );
@@ -63,8 +60,8 @@ public class CustomTableColorTest extends BackEndTest {
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo(COLOR_CODE);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(NEW_COLUMN_TITLE);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(COLOR_CODE);
     }
 
     private void create(String accessToken) {
@@ -73,35 +70,11 @@ public class CustomTableColorTest extends BackEndTest {
         TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_invalidCharacter(String accessToken) {
-        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "#01234g");
-
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-
-        ResponseValidator.verifyInvalidParam(response, "color", "failed to parse");
-    }
-
-    private void create_doesNotStartWithHashtag(String accessToken) {
-        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "asdasda");
-
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-
-        ResponseValidator.verifyInvalidParam(response, "color", "first character is not #");
-    }
-
-    private void create_invalidLength(String accessToken) {
-        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, "asd");
-
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-
-        ResponseValidator.verifyInvalidParam(response, "color", "must be 7 character(s) long");
-    }
-
     private void create_nullColor(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.COLOR, null);
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "color", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
     }
 }

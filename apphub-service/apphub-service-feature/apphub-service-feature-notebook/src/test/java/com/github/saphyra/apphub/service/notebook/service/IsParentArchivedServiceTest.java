@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +17,7 @@ import static org.mockito.BDDMockito.given;
 class IsParentArchivedServiceTest {
     private static final UUID PARENT_ID_1 = UUID.randomUUID();
     private static final UUID PARENT_ID_2 = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
@@ -32,28 +33,28 @@ class IsParentArchivedServiceTest {
 
     @Test
     void nullParentId() {
-        assertThat(underTest.isAnyOfParentsArchived(null)).isFalse();
+        assertThat(underTest.isAnyOfParentsArchived(USER_ID, null)).isFalse();
     }
 
     @Test
     void parentIsArchived() {
-        given(listItemDao.findByIdValidated(PARENT_ID_1)).willReturn(listItem1);
+        given(listItemDao.findByIdValidated(USER_ID, PARENT_ID_1)).willReturn(listItem1);
         given(listItem1.isArchived()).willReturn(false);
         given(listItem1.getParent()).willReturn(PARENT_ID_2);
-        given(listItemDao.findByIdValidated(PARENT_ID_2)).willReturn(listItem2);
+        given(listItemDao.findByIdValidated(USER_ID, PARENT_ID_2)).willReturn(listItem2);
         given(listItem2.isArchived()).willReturn(true);
 
-        assertThat(underTest.isAnyOfParentsArchived(PARENT_ID_1)).isTrue();
+        assertThat(underTest.isAnyOfParentsArchived(USER_ID, PARENT_ID_1)).isTrue();
     }
 
     @Test
     void parentIsNotArchived() {
-        given(listItemDao.findByIdValidated(PARENT_ID_1)).willReturn(listItem1);
+        given(listItemDao.findByIdValidated(USER_ID, PARENT_ID_1)).willReturn(listItem1);
         given(listItem1.isArchived()).willReturn(false);
         given(listItem1.getParent()).willReturn(PARENT_ID_2);
-        given(listItemDao.findByIdValidated(PARENT_ID_2)).willReturn(listItem2);
+        given(listItemDao.findByIdValidated(USER_ID, PARENT_ID_2)).willReturn(listItem2);
         given(listItem2.isArchived()).willReturn(false);
 
-        assertThat(underTest.isAnyOfParentsArchived(PARENT_ID_1)).isFalse();
+        assertThat(underTest.isAnyOfParentsArchived(USER_ID, PARENT_ID_1)).isFalse();
     }
 }

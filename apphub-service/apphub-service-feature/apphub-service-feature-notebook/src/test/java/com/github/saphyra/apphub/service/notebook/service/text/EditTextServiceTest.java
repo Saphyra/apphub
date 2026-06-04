@@ -1,10 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.text;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.request.EditTextRequest;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.service.validator.TextValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TitleValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,16 +14,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-public class EditTextServiceTest {
+class EditTextServiceTest {
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final String TITLE = "title";
     private static final String CONTENT = "content";
-    private static final UUID TEXT_ID = UUID.randomUUID();
 
     @Mock
-    private ContentValidator contentValidator;
+    private TextValidator textValidator;
 
     @Mock
     private TitleValidator titleValidator;
@@ -32,35 +32,28 @@ public class EditTextServiceTest {
     @Mock
     private ListItemDao listItemDao;
 
-    @Mock
-    private ContentDao contentDao;
-
     @InjectMocks
     private EditTextService underTest;
 
     @Mock
     private ListItem listItem;
 
-    @Mock
-    private Content content;
-
     @Test
-    public void editText() {
+    void editText() {
         EditTextRequest request = EditTextRequest.builder()
             .title(TITLE)
             .content(CONTENT)
             .build();
 
-        given(listItemDao.findByIdValidated(TEXT_ID)).willReturn(listItem);
-        given(contentDao.findByParentValidated(TEXT_ID)).willReturn(content);
+        given(listItemDao.findByIdValidated(USER_ID, LIST_ITEM_ID)).willReturn(listItem);
 
-        underTest.editText(TEXT_ID, request);
+        underTest.editText(USER_ID, LIST_ITEM_ID, request);
 
-        verify(contentValidator).validate(CONTENT, "content");
-        verify(titleValidator).validate(TITLE);
-        verify(listItem).setTitle(TITLE);
-        verify(content).setContent(CONTENT);
-        verify(listItemDao).save(listItem);
-        verify(contentDao).save(content);
+        then(titleValidator).should().validate(TITLE);
+        then(textValidator).should().validate(CONTENT, "content");
+        then(listItem).should().setTitle(TITLE);
+        then(listItem).should().setData(CONTENT);
+        then(listItemDao).should().save(listItem);
     }
 }
+

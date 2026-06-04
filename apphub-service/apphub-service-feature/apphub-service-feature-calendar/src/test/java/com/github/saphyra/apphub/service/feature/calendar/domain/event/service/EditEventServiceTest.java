@@ -21,6 +21,8 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class EditEventServiceTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID LABEL_ID = UUID.randomUUID();
 
     @Mock
     private EventRequestValidator eventRequestValidator;
@@ -58,14 +60,15 @@ class EditEventServiceTest {
 
     @Test
     void edit() {
-        given(eventDao.findByIdValidated(EVENT_ID)).willReturn(event);
+        given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(updateEventContextFactory.create(event)).willReturn(context);
+        given(request.getLabels()).willReturn(List.of(LABEL_ID));
 
-        underTest.edit(EVENT_ID, request);
+        underTest.edit(USER_ID, EVENT_ID, request);
 
         then(event).should().setExpirationNotified(false);
-        then(eventRequestValidator).should().validateEdit(request);
+        then(eventRequestValidator).should().validateEdit(USER_ID, request);
         then(eventFieldUpdater).should().update(context, request, event);
-        then(context).should().processChanges();
+        then(context).should().processChanges(List.of(LABEL_ID));
     }
 }

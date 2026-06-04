@@ -1,37 +1,26 @@
 package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content.ContentBasedColumnDataService;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.content.ContentBasedColumnProxy;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Link;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
-class LinkColumnDataService extends ContentBasedColumnDataService {
+class LinkColumnDataService implements ColumnDataService {
     private final ObjectMapper objectMapper;
 
-    public LinkColumnDataService(ContentDao contentDao, ContentBasedColumnProxy proxy, ObjectMapper objectMapper) {
-        super(ColumnType.LINK, contentDao, proxy);
-        this.objectMapper = objectMapper;
-    }
-
     @Override
-    protected String stringifyContent(Object data) {
-        return objectMapper.writeValueAsString(data);
-    }
-
-    @Override
-    public Object getData(UUID columnId) {
-        String content = super.getData(columnId)
-            .toString();
-        return objectMapper.readValue(content, Link.class);
+    public boolean canProcess(ColumnType type) {
+        return ColumnType.LINK == type;
     }
 
     @Override
@@ -39,5 +28,15 @@ class LinkColumnDataService extends ContentBasedColumnDataService {
         Link link = ValidationUtil.parse(data, (d) -> objectMapper.convertValue(d, Link.class), "link");
         ValidationUtil.notBlank(link.getLabel(), "link.label");
         ValidationUtil.notNull(link.getUrl(), "link.url");
+    }
+
+    @Override
+    public Optional<BiWrapper<String, Optional<UUID>>> serialize(Object data) {
+        return Optional.of(new BiWrapper<>(objectMapper.writeValueAsString(data), Optional.empty()));
+    }
+
+    @Override
+    public Object deserialize(String data) {
+        return objectMapper.readValue(data, Link.class);
     }
 }

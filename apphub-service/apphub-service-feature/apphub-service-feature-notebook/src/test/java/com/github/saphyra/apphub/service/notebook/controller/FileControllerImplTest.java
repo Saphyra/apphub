@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
@@ -40,7 +41,7 @@ public class FileControllerImplTest {
 
     @Test
     public void createImage() {
-        given(fileCreationService.createFile(USER_ID, createFileRequest)).willReturn(STORED_FILE_ID);
+        given(fileCreationService.create(USER_ID, createFileRequest, ListItemType.FILE)).willReturn(STORED_FILE_ID);
 
         OneParamResponse<UUID> result = underTest.createFile(createFileRequest, accessToken);
 

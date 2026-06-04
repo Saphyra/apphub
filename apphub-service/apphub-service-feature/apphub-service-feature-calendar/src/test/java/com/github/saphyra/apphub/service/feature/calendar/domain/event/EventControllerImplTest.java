@@ -84,7 +84,8 @@ class EventControllerImplTest {
 
     @Test
     void getEvent() {
-        given(eventQueryService.getEvent(EVENT_ID)).willReturn(eventResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(eventQueryService.getEvent(USER_ID, EVENT_ID)).willReturn(eventResponse);
 
         assertThat(underTest.getEvent(EVENT_ID, accessToken)).isEqualTo(eventResponse);
     }
@@ -108,9 +109,11 @@ class EventControllerImplTest {
 
     @Test
     void editEvent() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
         underTest.editEvent(request, EVENT_ID, accessToken);
 
-        then(editEventService).should().edit(EVENT_ID, request);
+        then(editEventService).should().edit(USER_ID, EVENT_ID, request);
     }
 
     @Test
@@ -127,7 +130,7 @@ class EventControllerImplTest {
 
         underTest.hideExpiredEvent(EVENT_ID, accessToken);
 
-        then(expiredEventService).should().hide(EVENT_ID);
+        then(expiredEventService).should().hide(USER_ID, EVENT_ID);
     }
 
     @Test
@@ -136,7 +139,7 @@ class EventControllerImplTest {
 
         underTest.extendExpiredEvent(new OneParamRequest<>(EXTEND_UNTIL), EVENT_ID, accessToken);
 
-        then(expiredEventService).should().extend(EVENT_ID, EXTEND_UNTIL);
+        then(expiredEventService).should().extend(USER_ID, EVENT_ID, EXTEND_UNTIL);
     }
 
     @Test
@@ -145,7 +148,7 @@ class EventControllerImplTest {
 
         underTest.mergeEvents(EVENT_ID, accessToken);
 
-        then(mergeEventService).should().merge(EVENT_ID);
+        then(mergeEventService).should().merge(USER_ID, EVENT_ID);
     }
 
     @Test

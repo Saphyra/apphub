@@ -44,21 +44,21 @@ class OccurrenceControllerImpl implements OccurrenceController {
     }
 
     @Override
-    public void editOccurrence(OccurrenceRequest request, UUID occurrenceId, AccessToken accessToken) {
-        log.info("{} wants to edit Occurrence {}", accessToken.getUserId(), occurrenceId);
+    public void editOccurrence(OccurrenceRequest request, UUID eventId, UUID occurrenceId, AccessToken accessToken) {
+        log.info("{} wants to edit occurrence {} of event {}", accessToken.getUserId(), occurrenceId, eventId);
         log.debug("occurrenceId: {}", occurrenceId);
         log.debug(request.toString());
 
-        editOccurrenceService.editOccurrence(occurrenceId, request);
+        editOccurrenceService.editOccurrence(accessToken.getUserId(), eventId, occurrenceId, request);
 
         log.debug("Response: {}", HttpStatus.OK);
     }
 
     @Override
-    public void deleteOccurrence(UUID occurrenceId, AccessToken accessToken) {
+    public void deleteOccurrence(UUID eventId, UUID occurrenceId, AccessToken accessToken) {
         log.info("{} wants to delete Occurrence {}", accessToken.getUserId(), occurrenceId);
 
-        deleteOccurrenceService.deleteOccurrence(occurrenceId);
+        deleteOccurrenceService.deleteOccurrence(eventId, occurrenceId);
 
         log.debug("Response: {}", HttpStatus.OK);
     }
@@ -75,10 +75,10 @@ class OccurrenceControllerImpl implements OccurrenceController {
     }
 
     @Override
-    public OccurrenceResponse getOccurrence(UUID occurrenceId, AccessToken accessToken) {
+    public OccurrenceResponse getOccurrence(UUID eventId, UUID occurrenceId, AccessToken accessToken) {
         log.info("{} wants to get Occurrence {}", accessToken.getUserId(), occurrenceId);
 
-        OccurrenceResponse occurrence = occurrenceQueryService.getOccurrence(occurrenceId);
+        OccurrenceResponse occurrence = occurrenceQueryService.getOccurrence(accessToken.getUserId(), eventId, occurrenceId);
         log.debug("Response: {}", occurrence);
 
         return occurrence;
@@ -88,30 +88,30 @@ class OccurrenceControllerImpl implements OccurrenceController {
     public List<OccurrenceResponse> getOccurrencesOfEvent(UUID eventId, AccessToken accessToken) {
         log.info("{} wants to get Occurrences of eventId {}", accessToken.getUserId(), eventId);
 
-        List<OccurrenceResponse> response = occurrenceQueryService.getOccurrencesOfEvent(eventId);
+        List<OccurrenceResponse> response = occurrenceQueryService.getOccurrencesOfEvent(accessToken.getUserId(), eventId);
         log.debug("Response: {}", response);
 
         return response;
     }
 
     @Override
-    public OccurrenceResponse editOccurrenceStatus(OneParamRequest<OccurrenceStatus> status, UUID occurrenceId, AccessToken accessToken) {
-        log.info("{} wants to edit status of Occurrence {}", accessToken.getUserId(), occurrenceId);
+    public OccurrenceResponse editOccurrenceStatus(OneParamRequest<OccurrenceStatus> status, UUID eventId, UUID occurrenceId, AccessToken accessToken) {
+        log.info("{} wants to edit status of Occurrence {} of event {}", accessToken.getUserId(), occurrenceId, eventId);
         log.debug(status.toString());
 
         ValidationUtil.notNull(status.getValue(), "status");
 
-        OccurrenceResponse response = editOccurrenceService.editOccurrenceStatus(occurrenceId, status.getValue());
+        OccurrenceResponse response = editOccurrenceService.editOccurrenceStatus(accessToken.getUserId(), eventId, occurrenceId, status.getValue());
         log.debug("Response: {}", response);
 
         return response;
     }
 
     @Override
-    public OccurrenceResponse setReminded(UUID occurrenceId, AccessToken accessToken) {
-        log.info("{} wants to set reminded to true for Occurrence {}", accessToken.getUserId(), occurrenceId);
+    public OccurrenceResponse setReminded(UUID eventId, UUID occurrenceId, AccessToken accessToken) {
+        log.info("{} wants to set reminded to true for Occurrence {} of event {}", accessToken.getUserId(), occurrenceId, eventId);
 
-        OccurrenceResponse response = editOccurrenceService.setReminded(occurrenceId);
+        OccurrenceResponse response = editOccurrenceService.setReminded(accessToken.getUserId(), eventId, occurrenceId);
         log.debug("Response: {}", response);
 
         return response;

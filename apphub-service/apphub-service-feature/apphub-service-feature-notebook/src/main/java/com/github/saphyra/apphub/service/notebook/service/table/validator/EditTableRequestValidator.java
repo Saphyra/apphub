@@ -6,8 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -17,11 +15,11 @@ public class EditTableRequestValidator {
     private final EditTableRowValidator editTableRowValidator;
     private final ColumnNumberAmountValidator columnNumberAmountValidator;
 
-    public void validate(UUID listItemId, EditTableRequest request) {
+    public void validate(EditTableRequest request) {
         titleValidator.validate(request.getTitle());
 
-        editTableHeadValidator.validateTableHeads(listItemId, request.getTableHeads());
+        editTableHeadValidator.validateTableHeads(request.getTableHeads());
         columnNumberAmountValidator.validateColumnNumbersMatches(request.getTableHeads(), request.getRows());
-        editTableRowValidator.validateTableRows(listItemId, request.getRows());
+        editTableRowValidator.validateTableRows(request.getRows());
     }
 }

@@ -73,7 +73,7 @@ public class MergeEventTest extends BackEndTest {
             .getOccurrenceId();
 
         OccurrenceRequest occurrenceRequest = OccurrenceRequestFactory.editRequest();
-        CalendarOccurrenceActions.editOccurrence(getServerPort(), accessToken, occurrenceId, occurrenceRequest);
+        CalendarOccurrenceActions.editOccurrence(getServerPort(), accessToken, eventId, occurrenceId, occurrenceRequest);
 
         return eventId;
     }

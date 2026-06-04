@@ -9,7 +9,6 @@ import "./list_item.css";
 import ListItemMode from "./ListItemMode";
 import InputField from "common/component/input/InputField";
 import Stream from "common/js/collection/Stream";
-import Constants from "common/js/Constants";
 import Event from "common/js/event/Event";
 import { NOTEBOOK_ARCHIVE_ITEM, NOTEBOOK_CLONE_LIST_ITEM, NOTEBOOK_DELETE_LIST_ITEM, NOTEBOOK_EDIT_PAGE, NOTEBOOK_PIN_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
 

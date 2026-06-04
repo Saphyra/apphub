@@ -74,9 +74,11 @@ class PinControllerImplTest {
 
     @Test
     public void pinListItem() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
         underTest.pinListItem(LIST_ITEM_ID, new OneParamRequest<>(true), accessToken);
 
-        verify(pinService).pinListItem(LIST_ITEM_ID, true);
+        verify(pinService).pinListItem(USER_ID, LIST_ITEM_ID, true);
     }
 
     @Test

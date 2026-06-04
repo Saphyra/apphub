@@ -7,15 +7,11 @@ import com.github.saphyra.apphub.api.feature.notebook.model.checklist.EditCheckl
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemAdditionService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemContentUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemStatusUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.DeleteCheckedItemsOfChecklistService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistCreationService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistItemCrudService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistQueryService;
+import com.github.saphyra.apphub.service.notebook.service.checklist.EditChecklistService;
 import com.github.saphyra.apphub.service.notebook.service.checklist.OrderChecklistItemsService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.create.ChecklistCreationService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.edit.EditChecklistService;
-import com.github.saphyra.apphub.service.notebook.service.checklist.query.ChecklistQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,22 +38,13 @@ class ChecklistControllerImplTest {
     private ChecklistQueryService checklistQueryService;
 
     @Mock
-    private ChecklistItemStatusUpdateService checklistItemStatusUpdateService;
-
-    @Mock
-    private ChecklistItemDeletionService checklistItemDeletionService;
-
-    @Mock
-    private DeleteCheckedItemsOfChecklistService deleteCheckedItemsOfChecklistService;
-
-    @Mock
     private OrderChecklistItemsService orderChecklistItemsService;
 
     @Mock
     private EditChecklistService editChecklistService;
 
     @Mock
-    private ChecklistItemAdditionService checklistItemAdditionService;
+    private ChecklistItemCrudService checklistItemCrudService;
 
     @InjectMocks
     private ChecklistControllerImpl underTest;
@@ -75,9 +62,6 @@ class ChecklistControllerImplTest {
     private ChecklistResponse checklistResponse;
 
     @Mock
-    private ChecklistItemContentUpdateService checklistItemContentUpdateService;
-
-    @Mock
     private AddChecklistItemRequest addChecklistItemRequest;
 
     @Test
@@ -93,6 +77,7 @@ class ChecklistControllerImplTest {
     @Test
     void editChecklist() {
         given(accessToken.getUserId()).willReturn(USER_ID);
+
         given(editChecklistService.edit(USER_ID, LIST_ITEM_ID, editChecklistRequest)).willReturn(checklistResponse);
 
         assertThat(underTest.editChecklist(editChecklistRequest, LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);
@@ -100,53 +85,65 @@ class ChecklistControllerImplTest {
 
     @Test
     void getChecklist() {
-        given(checklistQueryService.getChecklistResponse(LIST_ITEM_ID)).willReturn(checklistResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
+        given(checklistQueryService.getChecklistResponse(USER_ID, LIST_ITEM_ID)).willReturn(checklistResponse);
 
         assertThat(underTest.getChecklist(LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);
     }
 
     @Test
     void updateStatus() {
-        underTest.updateStatus(new OneParamRequest<>(true), CHECKLIST_ITEM_ID, accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(checklistItemStatusUpdateService).should().updateStatus(CHECKLIST_ITEM_ID, true);
+        underTest.updateStatus(new OneParamRequest<>(true), LIST_ITEM_ID, CHECKLIST_ITEM_ID, accessToken);
+
+        then(checklistItemCrudService).should().updateStatus(LIST_ITEM_ID, CHECKLIST_ITEM_ID, true);
     }
 
     @Test
     void deleteCheckedItem() {
-        underTest.deleteChecklistItem(CHECKLIST_ITEM_ID, accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(checklistItemDeletionService).should().deleteChecklistItem(CHECKLIST_ITEM_ID);
+        underTest.deleteChecklistItem(LIST_ITEM_ID, CHECKLIST_ITEM_ID, accessToken);
+
+        then(checklistItemCrudService).should().deleteChecklistItem(USER_ID, LIST_ITEM_ID, CHECKLIST_ITEM_ID);
     }
 
     @Test
     void deleteCheckedItems() {
-        given(deleteCheckedItemsOfChecklistService.deleteCheckedItems(LIST_ITEM_ID)).willReturn(checklistResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(checklistQueryService.getChecklistResponse(USER_ID, LIST_ITEM_ID)).willReturn(checklistResponse);
 
         assertThat(underTest.deleteCheckedItems(LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);
+
+        then(checklistItemCrudService).should().deleteCheckedItems(LIST_ITEM_ID);
     }
 
     @Test
     void orderItems() {
-        given(orderChecklistItemsService.orderItems(LIST_ITEM_ID)).willReturn(checklistResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(orderChecklistItemsService.orderItems(USER_ID, LIST_ITEM_ID)).willReturn(checklistResponse);
 
         assertThat(underTest.orderItems(LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);
     }
 
     @Test
     void editChecklistItem() {
-        underTest.editChecklistItem(new OneParamRequest<>(CONTENT), CHECKLIST_ITEM_ID, accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(checklistItemContentUpdateService).should().updateContent(CHECKLIST_ITEM_ID, CONTENT);
+        underTest.editChecklistItem(new OneParamRequest<>(CONTENT), LIST_ITEM_ID, CHECKLIST_ITEM_ID, accessToken);
+
+        then(checklistItemCrudService).should().updateContent(LIST_ITEM_ID, CHECKLIST_ITEM_ID, CONTENT);
     }
 
     @Test
     void addChecklistItem() {
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(checklistQueryService.getChecklistResponse(LIST_ITEM_ID)).willReturn(checklistResponse);
+        given(checklistQueryService.getChecklistResponse(USER_ID, LIST_ITEM_ID)).willReturn(checklistResponse);
 
         assertThat(underTest.addChecklistItem(addChecklistItemRequest, LIST_ITEM_ID, accessToken)).isEqualTo(checklistResponse);
 
-        then(checklistItemAdditionService).should().addChecklistItem(USER_ID, LIST_ITEM_ID, addChecklistItemRequest);
+        then(checklistItemCrudService).should().addChecklistItem(USER_ID, LIST_ITEM_ID, addChecklistItemRequest);
     }
 }

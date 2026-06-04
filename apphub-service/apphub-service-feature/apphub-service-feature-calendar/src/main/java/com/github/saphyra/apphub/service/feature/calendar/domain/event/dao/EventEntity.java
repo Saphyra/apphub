@@ -1,32 +1,25 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
-@Entity
-@Table(schema = "calendar", name = "event")
 class EventEntity {
-    @Id
-    private String eventId;
     private String userId;
-    private String repetitionType;
-    private String repetitionData;
-    private String repeatForDays;
-    private String startDate;
-    private String time;
-    private String endDate;
-    private String title;
-    private String content;
-    private String remindMeBeforeDays;
-    private String expirationNotified;
-    private String archived;
+    private String eventId;
+    private String repetitionType; //Encrypted
+    private String repetitionData; //Encrypted
+    private String repeatForDays; //Encrypted
+    private String startDate; //Encrypted
+    private String endDate; //Encrypted
+    private String time; //Encrypted
+    private String title; //Encrypted
+    private String content; //Encrypted
+    private String remindMeBeforeDays; //Encrypted
+    private String expirationNotified; //Encrypted
+    private String archived; //Encrypted
 }

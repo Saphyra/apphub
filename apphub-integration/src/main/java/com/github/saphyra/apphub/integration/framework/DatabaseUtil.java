@@ -86,35 +86,6 @@ public class DatabaseUtil {
         }
     }
 
-    public static String getEncryptedDataFromCheckedItem(UUID userId) {
-        String sql = GET_ENCRYPTED_DATA_FROM_CHECKED_ITEM.formatted(userId);
-
-        try {
-            return query(
-                sql,
-                rs -> {
-                    if (rs.next()) {
-                        return rs.getString("checked");
-                    }
-
-                    throw new IllegalStateException("No checked item found by userId " + userId);
-                }
-            );
-        } catch (Exception e) {
-            throw new RuntimeException("Failed querying encrypted data from checked_item", e);
-        }
-    }
-
-    public static void injectEncryptedDataToModules(UUID userId, String data) {
-        String sql = INJECT_ENCRYPTED_DATA_TO_MODULES.formatted(data, userId);
-
-        try {
-            execute(sql);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed injecting data to modules.", e);
-        }
-    }
-
     public static Integer getRowCountByValue(UUID userId, String schema, String tableName, String column) {
         String sql = GET_ROW_COUNT_BY_USER_ID.formatted(schema, tableName, column, userId);
 

@@ -1,0 +1,26 @@
+===FEATURES===
+    ApphubCI
+        Run integration tests by name
+    Monitoring
+        Hidden property does not count when calculating max value
+
+===BUGFIXES===
+    Integration
+        Fix exceptionally high network usage when starting WebDrivers
+
+===PLATFORM CHANGES===
+    Notebook
+        PostgreSQL to DynamoDB migration
+    Calendar
+        PostgreSQL to DynamoDB migration
+
+===TECHNICAL DEBTS===
+    EliteBase
+        Decrease Buffer lifecycle time for smaller batches
+
+===ETC===
+
+===Manual Release Steps===
+    Restart ApphubCI
+    Export Notebook schema for quick rollback
+    Export Calendar schema for quick rollback

@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.service.pin;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
@@ -13,8 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,22 +21,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class PinServiceTest {
-    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
+class PinServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID PIN_GROUP_ID = UUID.randomUUID();
 
     @Mock
     private ListItemDao listItemDao;
 
     @Mock
-    private PinMappingDao pinMappingDao;
+    private NotebookViewFactory notebookViewFactory;
 
     @Mock
-    private NotebookViewFactory notebookViewFactory;
+    private PinMappingDao pinMappingDao;
 
     @InjectMocks
     private PinService underTest;
@@ -48,32 +46,35 @@ public class PinServiceTest {
     @Mock
     private NotebookView notebookView;
 
-    @Mock
-    private PinMapping pinMapping;
-
     @Test
-    public void nullPinned() {
-        Throwable ex = catchThrowable(() -> underTest.pinListItem(LIST_ITEM_ID, null));
+    void pinListItem_nullPinned() {
+        Throwable ex = catchThrowable(() -> underTest.pinListItem(USER_ID, LIST_ITEM_ID, null));
 
         ExceptionValidator.validateInvalidParam(ex, "pinned", "must not be null");
     }
 
     @Test
-    public void pinListItem() {
-        given(listItemDao.findByIdValidated(LIST_ITEM_ID)).willReturn(listItem);
+    void pinListItem() {
+        given(listItemDao.findByIdValidated(USER_ID, LIST_ITEM_ID)).willReturn(listItem);
 
-        underTest.pinListItem(LIST_ITEM_ID, true);
+        underTest.pinListItem(USER_ID, LIST_ITEM_ID, true);
 
-        verify(listItem).setPinned(true);
-        verify(listItemDao).save(listItem);
+        then(listItem).should().setPinned(true);
+        then(listItemDao).should().save(listItem);
     }
 
     @Test
-    public void getPinnedItems() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem, listItem));
-        given(listItem.isPinned()).willReturn(true)
-            .willReturn(false);
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+    void getPinnedItems_nullPinGroupId() {
+        ListItem pinnedItem = ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .title("title")
+            .type(ListItemType.CATEGORY)
+            .pinned(true)
+            .build();
+
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(pinnedItem));
+        given(notebookViewFactory.create(pinnedItem)).willReturn(notebookView);
 
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, null);
 
@@ -82,26 +83,52 @@ public class PinServiceTest {
     }
 
     @Test
-    public void getPinnedItems_notInGroup() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem, listItem));
-        given(listItem.isPinned()).willReturn(true)
-            .willReturn(false);
-        given(pinMappingDao.getByPinGroupId(PIN_GROUP_ID)).willReturn(Collections.emptyList());
+    void getPinnedItems_notPinned() {
+        ListItem notPinnedItem = ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .title("title")
+            .type(ListItemType.CATEGORY)
+            .pinned(false)
+            .build();
 
-        List<NotebookView> result = underTest.getPinnedItems(USER_ID, PIN_GROUP_ID);
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(notPinnedItem));
+
+        List<NotebookView> result = underTest.getPinnedItems(USER_ID, null);
 
         assertThat(result).isEmpty();
     }
 
     @Test
-    public void getPinnedItems_inGroup() {
-        given(listItemDao.getByUserId(USER_ID)).willReturn(Arrays.asList(listItem, listItem));
-        given(listItem.isPinned()).willReturn(true)
-            .willReturn(false);
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+    void getPinnedItems_withPinGroupId() {
+        UUID otherListItemId = UUID.randomUUID();
+
+        ListItem pinnedInGroup = ListItem.builder()
+            .listItemId(LIST_ITEM_ID)
+            .userId(USER_ID)
+            .title("title")
+            .type(ListItemType.CATEGORY)
+            .pinned(true)
+            .build();
+
+        ListItem pinnedNotInGroup = ListItem.builder()
+            .listItemId(otherListItemId)
+            .userId(USER_ID)
+            .title("other")
+            .type(ListItemType.CATEGORY)
+            .pinned(true)
+            .build();
+
+        PinMapping pinMapping = PinMapping.builder()
+            .pinMappingId(UUID.randomUUID())
+            .userId(USER_ID)
+            .pinGroupId(PIN_GROUP_ID)
+            .listItemId(LIST_ITEM_ID)
+            .build();
+
         given(pinMappingDao.getByPinGroupId(PIN_GROUP_ID)).willReturn(List.of(pinMapping));
-        given(pinMapping.getListItemId()).willReturn(LIST_ITEM_ID);
-        given(listItem.getListItemId()).willReturn(LIST_ITEM_ID);
+        given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(pinnedInGroup, pinnedNotInGroup));
+        given(notebookViewFactory.create(pinnedInGroup)).willReturn(notebookView);
 
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, PIN_GROUP_ID);
 

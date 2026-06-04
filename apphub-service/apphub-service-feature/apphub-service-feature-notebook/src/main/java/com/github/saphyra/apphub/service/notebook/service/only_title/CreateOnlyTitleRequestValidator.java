@@ -6,13 +6,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class CreateOnlyTitleRequestValidator {
     private final ListItemRequestValidator listItemRequestValidator;
 
-    void validate(CreateOnlyTitleRequest request) {
-        listItemRequestValidator.validate(request.getTitle(), request.getParent());
+    void validate(UUID userId, CreateOnlyTitleRequest request) {
+        listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
     }
 }

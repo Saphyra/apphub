@@ -19,16 +19,17 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class EventFactoryTest {
-    private static final Integer REPEAT_FOR_DAYS = 123;
-    private static final LocalDate START_DATE = LocalDate.now();
-    private static final LocalDate END_DATE = LocalDate.now();
-    private static final LocalTime TIME = LocalTime.now();
-    private static final String TITLE = "title";
-    private static final String CONTENT = "content";
-    private static final Integer REMIND_ME_BEFORE_DAYS = 321;
-    private static final UUID EVENT_ID = UUID.randomUUID();
-    private static final String STRINGIFIED_REPETITION_DATA = "stringified_repetition_data";
     private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final RepetitionType REPETITION_TYPE = RepetitionType.DAYS_OF_WEEK;
+    private static final String REPETITION_DATA_JSON = "{\"days\":[\"MONDAY\",\"WEDNESDAY\"]}";
+    private static final Integer REPEAT_FOR_DAYS = 10;
+    private static final LocalDate START_DATE = LocalDate.of(2026, 6, 3);
+    private static final LocalDate END_DATE = LocalDate.of(2026, 7, 3);
+    private static final LocalTime TIME = LocalTime.of(14, 30);
+    private static final String TITLE = "Test Event";
+    private static final String CONTENT = "Event Content";
+    private static final Integer REMIND_ME_BEFORE_DAYS = 2;
 
     @Mock
     private IdGenerator idGenerator;
@@ -40,9 +41,11 @@ class EventFactoryTest {
     private EventFactory underTest;
 
     @Test
-    void create() {
+    public void testCreate() {
+        Object repetitionData = new Object();
         EventRequest request = EventRequest.builder()
-            .repetitionType(RepetitionType.EVERY_X_DAYS)
+            .repetitionType(REPETITION_TYPE)
+            .repetitionData(repetitionData)
             .repeatForDays(REPEAT_FOR_DAYS)
             .startDate(START_DATE)
             .endDate(END_DATE)
@@ -51,21 +54,22 @@ class EventFactoryTest {
             .content(CONTENT)
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .build();
+
         given(idGenerator.randomUuid()).willReturn(EVENT_ID);
-        given(objectMapper.writeValueAsString(request.getRepetitionData())).willReturn(STRINGIFIED_REPETITION_DATA);
+        given(objectMapper.writeValueAsString(repetitionData)).willReturn(REPETITION_DATA_JSON);
 
-        assertThat(underTest.create(USER_ID, request))
-            .returns(EVENT_ID, Event::getEventId)
-            .returns(USER_ID, Event::getUserId)
-            .returns(RepetitionType.EVERY_X_DAYS, Event::getRepetitionType)
-            .returns(STRINGIFIED_REPETITION_DATA, Event::getRepetitionData)
-            .returns(REPEAT_FOR_DAYS, Event::getRepeatForDays)
-            .returns(START_DATE, Event::getStartDate)
-            .returns(END_DATE, Event::getEndDate)
-            .returns(TIME, Event::getTime)
-            .returns(TITLE, Event::getTitle)
-            .returns(CONTENT, Event::getContent)
-            .returns(REMIND_ME_BEFORE_DAYS, Event::getRemindMeBeforeDays);
+        Event result = underTest.create(USER_ID, request);
+
+        assertThat(result.getEventId()).isEqualTo(EVENT_ID);
+        assertThat(result.getUserId()).isEqualTo(USER_ID);
+        assertThat(result.getRepetitionType()).isEqualTo(REPETITION_TYPE);
+        assertThat(result.getRepetitionData()).isEqualTo(REPETITION_DATA_JSON);
+        assertThat(result.getRepeatForDays()).isEqualTo(REPEAT_FOR_DAYS);
+        assertThat(result.getStartDate()).isEqualTo(START_DATE);
+        assertThat(result.getEndDate()).isEqualTo(END_DATE);
+        assertThat(result.getTime()).isEqualTo(TIME);
+        assertThat(result.getTitle()).isEqualTo(TITLE);
+        assertThat(result.getContent()).isEqualTo(CONTENT);
+        assertThat(result.getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
     }
-
 }

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.platform.storage.service;
 import com.github.saphyra.apphub.api.platform.storage.model.CreateFileRequest;
 import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

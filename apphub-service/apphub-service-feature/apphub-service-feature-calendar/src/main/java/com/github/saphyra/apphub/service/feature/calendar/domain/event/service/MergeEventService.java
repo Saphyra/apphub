@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,34 +25,46 @@ public class MergeEventService {
     private final OccurrenceDao occurrenceDao;
     private final DeleteEventService deleteEventService;
 
-    public void merge(UUID eventId) {
-        Event parent = eventDao.findByIdValidated(eventId);
+    public void merge(UUID userId, UUID eventId) {
+        Event parent = eventDao.findByIdValidated(userId, eventId);
 
         if (parent.getRepetitionType() != RepetitionType.ONE_TIME) {
             throw ExceptionFactory.invalidParam("eventId", "invalid type");
         }
 
+        List<Occurrence> occurrencesToDelete = new ArrayList<>();
+        List<Occurrence> modifiedOccurrences = new ArrayList<>();
+        List<UUID> deletedEventIds = new ArrayList<>();
         eventDao.getByUserId(parent.getUserId())
             .stream()
             .filter(event -> !event.getEventId().equals(eventId))
             .filter(event -> event.getRepetitionType() == RepetitionType.ONE_TIME)
             .filter(event -> titlesMatch(event.getTitle(), parent.getTitle()))
-            .forEach(event -> merge(parent, event));
+            .forEach(originalEvent -> merge(originalEvent, parent.getEventId(), modifiedOccurrences, occurrencesToDelete, deletedEventIds));
+
+        deleteEventService.delete(userId, deletedEventIds);
+        occurrenceDao.delete(occurrencesToDelete);
+        occurrenceDao.save(modifiedOccurrences);
     }
 
-    private void merge(Event parent, Event event) {
-        occurrenceDao.getByEventId(event.getEventId())
-            .forEach(occurrence -> merge(parent, event, occurrence));
+    private void merge(Event originalEvent, UUID newEventId, List<Occurrence> modifiedOccurrences, List<Occurrence> occurrencesToDelete, List<UUID> deletedEventIds) {
+        occurrenceDao.getByEventId(originalEvent.getEventId())
+            .forEach(occurrence -> merge(originalEvent, newEventId, occurrence, modifiedOccurrences, occurrencesToDelete));
+
+        deletedEventIds.add(originalEvent.getEventId());
     }
 
-    private void merge(Event parent, Event event, Occurrence occurrence) {
-        occurrence.setEventId(parent.getEventId());
-        occurrence.setNote(assembleNote(event.getContent(), occurrence.getNote()));
-        occurrence.setTime(CommonUtils.firstNotNull(occurrence.getTime(), event.getTime()));
-        occurrence.setRemindMeBeforeDays(CommonUtils.firstNotNull(occurrence.getRemindMeBeforeDays(), event.getRemindMeBeforeDays()));
+    private void merge(Event originalEvent, UUID newEventId, Occurrence occurrence, List<Occurrence> modifiedOccurrences, List<Occurrence> occurrencesToDelete) {
+        occurrencesToDelete.add(occurrence);
 
-        occurrenceDao.save(occurrence);
-        deleteEventService.delete(event.getUserId(), event.getEventId());
+        Occurrence cloned = occurrence.toBuilder()
+            .eventId(newEventId)
+            .note(assembleNote(originalEvent.getContent(), occurrence.getNote()))
+            .time(CommonUtils.firstNotNull(occurrence.getTime(), originalEvent.getTime()))
+            .remindMeBeforeDays(CommonUtils.firstNotNull(occurrence.getRemindMeBeforeDays(), originalEvent.getRemindMeBeforeDays()))
+            .build();
+
+        modifiedOccurrences.add(cloned);
     }
 
     private String assembleNote(String content, String note) {

@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.api.platform.storage.model.StoredFileResponse;
 import com.github.saphyra.apphub.api.platform.storage.server.StorageController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.service.platform.storage.service.store.StoreFileService;
 import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +26,7 @@ public class StorageControllerImpl implements StorageController {
     private final DownloadFileService downloadFileService;
     private final DeleteFileService deleteFileService;
     private final StoredFileMetadataQueryService metadataQueryService;
+    private final CloneFileService cloneFileService;
 
     @Override
     public UUID createFile(CreateFileRequest request, AccessToken accessToken) {
@@ -72,5 +72,11 @@ public class StorageControllerImpl implements StorageController {
     public StoredFileResponse getFileMetadata(UUID storedFileId, AccessToken accessToken) {
         log.info("{} wants to know the metadata of file {}", accessToken.getUserId(), storedFileId);
         return metadataQueryService.getMetadata(accessToken.getUserId(), storedFileId);
+    }
+
+    @Override
+    public UUID cloneFile(UUID storedFileId, AccessToken accessToken) {
+        log.info("{} wants to clone StoredFile {}", accessToken.getUserId(), storedFileId);
+        return cloneFileService.clone(accessToken.getUserId(), storedFileId);
     }
 }

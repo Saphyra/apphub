@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
 import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
@@ -48,7 +48,7 @@ class PinGroupItemServiceTest {
 
         underTest.addItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
 
-        then(listItemDao).should().findByIdValidated(LIST_ITEM_ID);
+        then(listItemDao).should().findByIdValidated(USER_ID, LIST_ITEM_ID);
         then(pinGroupDao).should().findByIdValidated(PIN_GROUP_ID);
 
 
@@ -62,7 +62,7 @@ class PinGroupItemServiceTest {
 
         underTest.addItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
 
-        then(listItemDao).should().findByIdValidated(LIST_ITEM_ID);
+        then(listItemDao).should().findByIdValidated(USER_ID, LIST_ITEM_ID);
         then(pinGroupDao).should().findByIdValidated(PIN_GROUP_ID);
         then(pinMappingDao).should().save(pinMapping);
     }

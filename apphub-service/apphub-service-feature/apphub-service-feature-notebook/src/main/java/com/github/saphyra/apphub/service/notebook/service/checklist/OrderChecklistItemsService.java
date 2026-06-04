@@ -1,42 +1,59 @@
 package com.github.saphyra.apphub.service.notebook.service.checklist;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.checklist.ChecklistResponse;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.service.checklist.query.ChecklistQueryService;
+import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class OrderChecklistItemsService {
     private final ChecklistQueryService checklistQueryService;
-    private final DimensionDao dimensionDao;
-    private final ContentDao contentDao;
+    private final CommonListItemDao commonListItemDao;
+    private final ChecklistItemDao checklistItemDao;
 
-    public ChecklistResponse orderItems(UUID listItemId) {
-        List<Dimension> ordered = dimensionDao.getByExternalReference(listItemId)
+    public ChecklistResponse orderItems(UUID userId, UUID listItemId) {
+        TriWrapper<ListItem, List<ChecklistItem>, List<Content>> checklist = commonListItemDao.findChecklistValidated(userId, listItemId);
+        Map<UUID, ChecklistItem> checklistItems = checklist.getEntity2()
             .stream()
-            .map(dimension -> new BiWrapper<>(dimension, contentDao.findByParentValidated(dimension.getDimensionId()).getContent()))
-            .sorted(Comparator.comparing(o -> o.getEntity2().toLowerCase()))
-            .map(BiWrapper::getEntity1)
-            .toList();
+            .collect(Collectors.toMap(ChecklistItem::getChecklistItemId, item -> item));
+        List<Content> contents = checklist.getEntity3();
 
-        for (int i = 0; i < ordered.size(); i++) {
-            Dimension dimension = ordered.get(i);
-            dimension.setIndex(i);
+        List<UUID> checklistItemsOrdered = order(contents);
+        List<ChecklistItem> modifiedItems = new ArrayList<>();
+        for(int i = 0; i  < checklistItemsOrdered.size(); i++) {
+            UUID checklistItemId = checklistItemsOrdered.get(i);
+            ChecklistItem checklistItem = checklistItems.get(checklistItemId);
+            int originalIndex = checklistItem.getIndex();
+            if(i != originalIndex){
+                checklistItem.setIndex(i);
+                modifiedItems.add(checklistItem);
+            }
         }
 
-        dimensionDao.saveAll(ordered);
+        checklistItemDao.save(modifiedItems);
 
-        return checklistQueryService.getChecklistResponse(listItemId);
+        return checklistQueryService.getChecklistResponse(userId, listItemId);
+    }
+
+    private List<UUID> order(List<Content> contents) {
+        return contents.stream()
+            .flatMap(content -> content.getContent().entrySet().stream())
+            .sorted(Map.Entry.comparingByValue())
+            .map(Map.Entry::getKey)
+            .toList();
     }
 }

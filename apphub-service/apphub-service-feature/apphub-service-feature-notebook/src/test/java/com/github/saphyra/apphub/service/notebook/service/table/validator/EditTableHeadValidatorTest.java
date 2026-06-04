@@ -2,38 +2,28 @@ package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHead;
-import com.github.saphyra.apphub.service.notebook.dao.table_head.TableHeadDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class EditTableHeadValidatorTest {
     private static final UUID LIST_ITEM_ID = UUID.randomUUID();
     private static final UUID TABLE_HEAD_ID = UUID.randomUUID();
 
-    @Mock
-    private TableHeadDao tableHeadDao;
-
     @InjectMocks
     private EditTableHeadValidator underTest;
 
-    @Mock
-    private TableHead tableHead;
-
     @Test
     void nullTableHeads() {
-        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(LIST_ITEM_ID, null));
+        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(null));
 
         ExceptionValidator.validateInvalidParam(ex, "tableHeads", "must not be null");
     }
@@ -44,7 +34,7 @@ class EditTableHeadValidatorTest {
             .columnIndex(null)
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(LIST_ITEM_ID, List.of(model)));
+        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
         ExceptionValidator.validateInvalidParam(ex, "tableHead.columnIndex", "must not be null");
     }
@@ -56,7 +46,7 @@ class EditTableHeadValidatorTest {
             .content(" ")
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(LIST_ITEM_ID, List.of(model)));
+        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
         ExceptionValidator.validateInvalidParam(ex, "tableHead.content", "must not be null or blank");
     }
@@ -69,7 +59,7 @@ class EditTableHeadValidatorTest {
             .type(null)
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(LIST_ITEM_ID, List.of(model)));
+        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
         ExceptionValidator.validateInvalidParam(ex, "tableHead.type", "must not be null");
     }
@@ -83,28 +73,9 @@ class EditTableHeadValidatorTest {
             .type(ItemType.EXISTING)
             .build();
 
-        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(LIST_ITEM_ID, List.of(model)));
+        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
         ExceptionValidator.validateInvalidParam(ex, "tableHead.tableHeadId", "must not be null");
-    }
-
-    @Test
-    void differentParentWhenExisting() {
-        TableHeadModel model = TableHeadModel.builder()
-            .tableHeadId(TABLE_HEAD_ID)
-            .columnIndex(3214)
-            .content("a")
-            .type(ItemType.EXISTING)
-            .build();
-
-        given(tableHeadDao.findByIdValidated(TABLE_HEAD_ID)).willReturn(tableHead);
-        given(tableHead.getParent()).willReturn(UUID.randomUUID());
-
-        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(LIST_ITEM_ID, List.of(model)));
-
-        ExceptionValidator.validateInvalidParam(ex, "tableHead.tableHeadId", "points to different table");
-
-
     }
 
     @Test
@@ -116,9 +87,6 @@ class EditTableHeadValidatorTest {
             .type(ItemType.EXISTING)
             .build();
 
-        given(tableHeadDao.findByIdValidated(TABLE_HEAD_ID)).willReturn(tableHead);
-        given(tableHead.getParent()).willReturn(LIST_ITEM_ID);
-
-        underTest.validateTableHeads(LIST_ITEM_ID, List.of(model));
+        underTest.validateTableHeads(List.of(model));
     }
 }

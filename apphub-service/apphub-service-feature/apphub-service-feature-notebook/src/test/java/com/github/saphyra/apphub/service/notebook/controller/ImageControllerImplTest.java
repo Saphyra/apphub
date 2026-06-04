@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.service.notebook.service.image.ImageCreationService;
+import com.github.saphyra.apphub.service.notebook.service.file.FileCreationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,7 @@ public class ImageControllerImplTest {
     private static final UUID STORED_FILE_ID = UUID.randomUUID();
 
     @Mock
-    private ImageCreationService imageCreationService;
+    private FileCreationService fileCreationService;
 
     @InjectMocks
     private ImageControllerImpl underTest;
@@ -40,7 +41,7 @@ public class ImageControllerImplTest {
 
     @Test
     public void createImage() {
-        given(imageCreationService.createImage(USER_ID, createImageRequest)).willReturn(STORED_FILE_ID);
+        given(fileCreationService.create(USER_ID, createImageRequest, ListItemType.IMAGE)).willReturn(STORED_FILE_ID);
 
         OneParamResponse<UUID> result = underTest.createImage(createImageRequest, accessToken);
 

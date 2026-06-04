@@ -21,14 +21,14 @@ import java.util.UUID;
 public class EditOccurrenceService {
     private final OccurrenceRequestValidator occurrenceRequestValidator;
     private final OccurrenceDao occurrenceDao;
-    private final OccurrenceMapper occurrenceMapper;
+    private final OccurrenceResponseMapper occurrenceResponseMapper;
     private final EventDao eventDao;
 
-    public void editOccurrence(UUID occurrenceId, OccurrenceRequest request) {
+    public void editOccurrence(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        Occurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
-        Event event = eventDao.findByIdValidated(occurrence.getEventId());
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
+        Event event = eventDao.findByIdValidated(userId, eventId);
 
         occurrence.setDate(request.getDate());
         occurrence.setTime(nullIfEquals(request.getTime(), event.getTime()));
@@ -52,21 +52,21 @@ public class EditOccurrenceService {
         return fromRequest;
     }
 
-    public OccurrenceResponse editOccurrenceStatus(UUID occurrenceId, OccurrenceStatus status) {
+    public OccurrenceResponse editOccurrenceStatus(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
         ValidationUtil.notNull(status, "status");
 
-        Occurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         occurrence.setStatus(status);
         occurrenceDao.save(occurrence);
 
-        return occurrenceMapper.toResponse(occurrence);
+        return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 
-    public OccurrenceResponse setReminded(UUID occurrenceId) {
-        Occurrence occurrence = occurrenceDao.findByIdValidated(occurrenceId);
+    public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
+        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         occurrence.setReminded(true);
         occurrenceDao.save(occurrence);
 
-        return occurrenceMapper.toResponse(occurrence);
+        return occurrenceResponseMapper.toResponse(userId, occurrence);
     }
 }

@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataService;
-import com.github.saphyra.apphub.service.notebook.service.table.column_data.base.ColumnDataServiceFetcher;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataService;
+import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ class TableColumnDataValidatorTest {
     private static final Object DATA = "data";
 
     @Mock
-    private ColumnDataServiceFetcher columnDataServiceFetcher;
+    private ColumnDataServiceProvider columnDataServiceProvider;
 
     @InjectMocks
     private TableColumnDataValidator underTest;
@@ -27,7 +27,7 @@ class TableColumnDataValidatorTest {
 
     @Test
     void validate() {
-        given(columnDataServiceFetcher.findColumnDataService(ColumnType.CHECKBOX)).willReturn(columnDataService);
+        given(columnDataServiceProvider.getForType(ColumnType.CHECKBOX)).willReturn(columnDataService);
 
         underTest.validate(ColumnType.CHECKBOX, DATA);
 

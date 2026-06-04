@@ -4,14 +4,16 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Builder
 @Data
+@Builder
 public class Label {
+    @NonNull
     private final UUID labelId;
-    private final UUID userId;
+    @NonNull
     private String label;
 }

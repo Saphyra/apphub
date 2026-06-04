@@ -1,28 +1,22 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
-@Builder
-@Entity
-@Table(schema = "calendar", name = "occurrence")
+@Builder(toBuilder = true)
 class OccurrenceEntity {
-    @Id
-    private String occurrenceId;
     private String userId;
     private String eventId;
-    private String date;
-    private String time;
-    private String status;
-    private String note;
-    private String remindMeBeforeDays;
-    private String reminded;
+    private String occurrenceId;
+    private String dateBucket;
+    private String date; //Encrypted
+    private String time; //Encrypted
+    private String status; //Encrypted
+    private String note; //Encrypted
+    private String remindMeBeforeDays; //Encrypted
+    private String reminded; //Encrypted
 }

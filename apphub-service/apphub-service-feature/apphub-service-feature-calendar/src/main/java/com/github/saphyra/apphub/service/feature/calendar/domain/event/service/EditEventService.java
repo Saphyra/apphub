@@ -25,17 +25,17 @@ public class EditEventService {
     private final List<EventFieldUpdater> eventFieldUpdaters;
 
     @Transactional
-    public void edit(UUID eventId, EventRequest request) {
-        eventRequestValidator.validateEdit(request);
+    public void edit(UUID userId, UUID eventId, EventRequest request) {
+        eventRequestValidator.validateEdit(userId, request);
 
-        Event event = eventDao.findByIdValidated(eventId);
+        Event event = eventDao.findByIdValidated(userId, eventId);
         event.setExpirationNotified(false);
         UpdateEventContext context = updateEventContextFactory.create(event);
 
-        log.info("Updating fields of Event {}", eventId);
+        log.info("Updating fields of DeprecatedEvent {}", eventId);
         eventFieldUpdaters.forEach(eventFieldUpdater -> eventFieldUpdater.update(context, request, event));
-        log.info("Updating fields of Event {} finished", eventId);
+        log.info("Updating fields of DeprecatedEvent {} finished", eventId);
 
-        context.processChanges();
+        context.processChanges(request.getLabels());
     }
 }

@@ -23,15 +23,16 @@ export const getTableHeads = (tableHeads, localizationHandler, editingEnabled, s
         .toList();
 }
 
-export const getTableRows = (rows, checklist, editingEnabled, setRows, custom, addFile, setDisplaySpinner) => {
+export const getTableRows = (openedItem, rows, checklist, editingEnabled, setRows, custom, addFile, setDisplaySpinner) => {
     return new Stream(rows)
         .sorted((a, b) => a.rowIndex - b.rowIndex)
         .map(row =>
             <TableRow
                 key={row.rowId}
+                openedItem={openedItem}
                 rowData={row}
                 updateRow={() => copyAndSet(rows, setRows)}
-                updateChecked={row => updateChecked(row, rows, setRows, editingEnabled, setDisplaySpinner)}
+                updateChecked={row => updateChecked(openedItem.id, row, rows, setRows, editingEnabled, setDisplaySpinner)}
                 removeRow={row => removeRow(row, rows, setRows)}
                 moveRow={(row, moveDirection) => moveRow(row, moveDirection, rows, setRows)}
                 editingEnabled={editingEnabled}

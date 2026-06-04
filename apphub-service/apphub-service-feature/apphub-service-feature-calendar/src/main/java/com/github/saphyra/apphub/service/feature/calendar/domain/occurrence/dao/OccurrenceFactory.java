@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class OccurrenceFactory {
     private final IdGenerator idGenerator;
     private final DateTimeUtil dateTimeUtil;
@@ -24,9 +22,9 @@ public class OccurrenceFactory {
 
     public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays, String note) {
         return Occurrence.builder()
-            .occurrenceId(idGenerator.randomUuid())
             .userId(userId)
             .eventId(eventId)
+            .occurrenceId(idGenerator.randomUuid())
             .status(date.isBefore(dateTimeUtil.getCurrentDate()) ? OccurrenceStatus.EXPIRED : OccurrenceStatus.PENDING)
             .date(date)
             .time(time)

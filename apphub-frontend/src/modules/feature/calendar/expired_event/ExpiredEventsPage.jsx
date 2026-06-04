@@ -105,6 +105,7 @@ const ExpiredEventsPage = () => {
 
                 {hasValue(selectedOccurrence) &&
                     <OpenedOccurrence
+                        eventId={selectedEvent}
                         occurrenceId={selectedOccurrence}
                         setConfirmationDialogData={setConfirmationDialogData}
                         setDisplaySpinner={updateDisplaySpinner}

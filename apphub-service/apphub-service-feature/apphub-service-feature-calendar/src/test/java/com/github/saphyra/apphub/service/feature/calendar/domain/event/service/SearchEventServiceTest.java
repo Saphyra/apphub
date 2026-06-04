@@ -16,17 +16,16 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class SearchEventServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final String SEARCH = "search";
     private static final UUID EVENT_ID_1 = UUID.randomUUID();
     private static final UUID EVENT_ID_2 = UUID.randomUUID();
-    private static final UUID EVENT_ID_3 = UUID.randomUUID();
-    private static final UUID EVENT_ID_4 = UUID.randomUUID();
+    private static final String SEARCH = "search";
 
     @Mock
     private EventDao eventDao;
@@ -35,57 +34,56 @@ class SearchEventServiceTest {
     private OccurrenceDao occurrenceDao;
 
     @Mock
-    private EventMapper eventMapper;
+    private EventResponseMapper eventResponseMapper;
 
     @InjectMocks
     private SearchEventService underTest;
 
     @Mock
-    private Event eventWithMatchingTitle;
+    private Event event1;
 
     @Mock
-    private Event eventWithMatchingContent;
+    private Event event2;
 
     @Mock
-    private Event unmatchedEvent;
-
-    @Mock
-    private Occurrence occurrenceWithMatchingNote;
-
-    @Mock
-    private Occurrence unmatchingOccurrence;
-
-    @Mock
-    private Event occurrenceEvent;
+    private Occurrence occurrence;
 
     @Mock
     private EventResponse eventResponse;
 
     @Test
-    void searchTextTooShort() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.search(USER_ID, "aa"), "searchText", "too short");
+    void search_tooShortSearchText() {
+        Throwable ex = catchThrowable(() -> underTest.search(USER_ID, "ab"));
+
+        ExceptionValidator.validateInvalidParam(ex, "searchText", "too short");
+        then(eventDao).shouldHaveNoInteractions();
+        then(eventResponseMapper).shouldHaveNoInteractions();
     }
 
     @Test
-    void search() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(eventWithMatchingTitle, eventWithMatchingContent, unmatchedEvent, occurrenceEvent));
-        given(occurrenceDao.getByUserId(USER_ID)).willReturn(List.of(occurrenceWithMatchingNote, unmatchingOccurrence));
-        given(eventWithMatchingTitle.getTitle()).willReturn(SEARCH);
-        given(eventWithMatchingContent.getTitle()).willReturn("asdf");
-        given(eventWithMatchingContent.getContent()).willReturn(SEARCH);
-        given(unmatchedEvent.getTitle()).willReturn("asdf");
-        given(unmatchedEvent.getContent()).willReturn("asdf");
-        given(occurrenceWithMatchingNote.getNote()).willReturn(SEARCH);
-        given(unmatchingOccurrence.getNote()).willReturn("asdf");
-        given(occurrenceEvent.getTitle()).willReturn("asd");
-        given(occurrenceEvent.getContent()).willReturn("asd");
-        given(eventWithMatchingTitle.getEventId()).willReturn(EVENT_ID_1);
-        given(eventWithMatchingContent.getEventId()).willReturn(EVENT_ID_2);
-        given(occurrenceEvent.getEventId()).willReturn(EVENT_ID_3);
-        given(unmatchedEvent.getEventId()).willReturn(EVENT_ID_4);
-        given(occurrenceWithMatchingNote.getEventId()).willReturn(EVENT_ID_3);
-        given(eventMapper.toResponse(any())).willReturn(eventResponse);
+    void search_eventMatchesByTitle() {
+        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event1));
+        given(event1.getTitle()).willReturn("My Search Text");
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 
-        assertThat(underTest.search(USER_ID, SEARCH)).hasSize(3);
+        List<EventResponse> result = underTest.search(USER_ID, SEARCH);
+
+        assertThat(result).containsExactly(eventResponse);
+        then(occurrenceDao).shouldHaveNoInteractions();
+    }
+
+    @Test
+    void search_eventMatchesByOccurrenceNote() {
+        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event1));
+        given(event1.getEventId()).willReturn(EVENT_ID_1);
+        given(event1.getTitle()).willReturn("title");
+        given(event1.getContent()).willReturn("content");
+        given(occurrenceDao.getByEventId(EVENT_ID_1)).willReturn(List.of(occurrence));
+        given(occurrence.getNote()).willReturn("contains SeaRCh here");
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
+
+        List<EventResponse> result = underTest.search(USER_ID, SEARCH);
+
+        assertThat(result).containsExactly(eventResponse);
     }
 }

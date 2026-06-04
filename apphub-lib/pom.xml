@@ -66,5 +66,6 @@
         <module>apphub-lib-web_socket</module>
         <module>apphub-lib-sql_builder</module>
         <module>apphub-lib-test</module>
+        <module>apphub-lib-dynamodb</module>
     </modules>
 </project>

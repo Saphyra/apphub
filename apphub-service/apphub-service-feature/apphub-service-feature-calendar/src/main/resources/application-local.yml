@@ -1,6 +1,14 @@
 server:
   port: 8097
 
+aws:
+  dynamoDb:
+    accessKeyId: dynamodbaccesskeyid
+    secretKey: dynamodbsecretkey
+    url: http://localhost:8000
+    calendar:
+      tableName: apphub-local-calendar
+
 logging:
   level:
     com:

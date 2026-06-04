@@ -9,10 +9,10 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckboxColumnStatusUpdateService;
 import com.github.saphyra.apphub.service.notebook.service.table.CheckedTableRowDeletionService;
-import com.github.saphyra.apphub.service.notebook.service.table.query.TableQueryService;
-import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
-import com.github.saphyra.apphub.service.notebook.service.table.creation.TableCreationService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableCreationService;
 import com.github.saphyra.apphub.service.notebook.service.table.edit.TableEditionService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableQueryService;
+import com.github.saphyra.apphub.service.notebook.service.table.TableRowStatusUpdateService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -64,9 +64,6 @@ class TableControllerImplTest {
     private TableFileUploadResponse fileUploadResponse;
 
     @Mock
-    private EditTableResponse editTableResponse;
-
-    @Mock
     private EditTableRequest editTableRequest;
 
     @Mock
@@ -82,38 +79,49 @@ class TableControllerImplTest {
 
     @Test
     void editTable() {
-        given(tableEditionService.editTable(LIST_ITEM_ID, editTableRequest)).willReturn(editTableResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(tableEditionService.editTable(USER_ID, LIST_ITEM_ID, editTableRequest)).willReturn(List.of(fileUploadResponse));
+        given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
-        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessToken)).isEqualTo(editTableResponse);
+        assertThat(underTest.editTable(editTableRequest, LIST_ITEM_ID, accessToken))
+            .returns(List.of(fileUploadResponse), EditTableResponse::getFileUpload)
+            .returns(tableResponse, EditTableResponse::getTableResponse);
     }
 
     @Test
     void getTable() {
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
+        given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
         assertThat(underTest.getTable(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
     }
 
     @Test
     void setRowStatus() {
-        underTest.setRowStatus(ROW_ID, new OneParamRequest<>(true), accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(tableRowStatusUpdateService).should().setRowStatus(ROW_ID, true);
+        underTest.setRowStatus(LIST_ITEM_ID, ROW_ID, new OneParamRequest<>(true), accessToken);
+
+        then(tableRowStatusUpdateService).should().setRowStatus(LIST_ITEM_ID, ROW_ID, true);
     }
 
     @Test
     void deleteCheckedRows() {
-        given(tableQueryService.getTable(LIST_ITEM_ID)).willReturn(tableResponse);
+        given(accessToken.getUserId()).willReturn(USER_ID);
+        given(tableQueryService.getTable(USER_ID, LIST_ITEM_ID)).willReturn(tableResponse);
 
         assertThat(underTest.deleteCheckedRows(LIST_ITEM_ID, accessToken)).isEqualTo(tableResponse);
 
-        then(checkedTableRowDeletionService).should().deleteCheckedRows(LIST_ITEM_ID);
+        then(checkedTableRowDeletionService).should().deleteCheckedRows(USER_ID, LIST_ITEM_ID);
     }
 
     @Test
     void setCheckboxColumnStatus(){
-        underTest.setCheckboxColumnStatus(COLUMN_ID, new OneParamRequest<>(true), accessToken);
+        given(accessToken.getUserId()).willReturn(USER_ID);
 
-        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(COLUMN_ID, true);
+        underTest.setCheckboxColumnStatus(LIST_ITEM_ID, ROW_ID, COLUMN_ID, new OneParamRequest<>(true), accessToken);
+
+        then(checkboxColumnStatusUpdateService).should().updateColumnStatus(LIST_ITEM_ID, ROW_ID, COLUMN_ID, true);
     }
 }

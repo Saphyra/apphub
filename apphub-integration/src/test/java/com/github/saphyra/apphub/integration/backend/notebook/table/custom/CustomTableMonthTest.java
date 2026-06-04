@@ -30,12 +30,11 @@ public class CustomTableMonthTest extends BackEndTest {
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullMonth(accessToken);
-        create_failedToParse(accessToken);
         create(accessToken);
 
         UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
-            .get(0)
+            .getFirst()
             .getId();
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
@@ -45,10 +44,10 @@ public class CustomTableMonthTest extends BackEndTest {
     private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.MONTH,
             ""
         );
@@ -58,8 +57,8 @@ public class CustomTableMonthTest extends BackEndTest {
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
-        assertThat(tableResponse.getRows().get(0).getColumns().get(0).getData()).isEqualTo("");
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(NEW_COLUMN_TITLE);
+        assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo("");
     }
 
     private void create(String accessToken) {
@@ -68,19 +67,11 @@ public class CustomTableMonthTest extends BackEndTest {
         TableActions.createTable(getServerPort(), accessToken, request);
     }
 
-    private void create_failedToParse(String accessToken) {
-        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.MONTH, "asd");
-
-        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
-
-        ResponseValidator.verifyInvalidParam(response, "month", "failed to parse");
-    }
-
     private void create_nullMonth(String accessToken) {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.MONTH, null);
 
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
-        ResponseValidator.verifyInvalidParam(response, "month", "must not be null");
+        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
     }
 }

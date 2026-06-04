@@ -1,22 +1,14 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
-@Entity
-@Table(schema = "calendar", name = "label")
 class LabelEntity {
-    @Id
     private String labelId;
-    private String userId;
-    private String label;
+    private String label; //Encrypted
 }

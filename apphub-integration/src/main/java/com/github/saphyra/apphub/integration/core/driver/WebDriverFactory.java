@@ -104,6 +104,31 @@ class WebDriverFactory implements PooledObjectFactory<WebDriverWrapper> {
                     options.addArguments("window-size=1920,1080");
                     options.addArguments("--disable-search-engine-choice-screen");
 
+                    options.addArguments(
+                        "--disable-background-networking",
+                        "--disable-background-timer-throttling",
+                        "--disable-backgrounding-occluded-windows",
+                        "--disable-breakpad",
+                        "--disable-client-side-phishing-detection",
+                        "--disable-component-update",
+                        "--disable-default-apps",
+                        "--disable-domain-reliability",
+                        "--disable-features=AudioServiceOutOfProcess,OptimizationHints,MediaRouter",
+                        "--disable-hang-monitor",
+                        "--disable-ipc-flooding-protection",
+                        "--disable-popup-blocking",
+                        "--disable-prompt-on-repost",
+                        "--disable-renderer-backgrounding",
+                        "--disable-sync",
+                        "--disable-translate",
+                        "--metrics-recording-only",
+                        "--no-first-run",
+                        "--safebrowsing-disable-auto-update",
+                        "--password-store=basic",
+                        "--use-mock-keychain",
+                        "--no-default-browser-check"
+                    );
+
                     driver = new ChromeDriver(options);
                     log.debug("Driver created: {}", driver);
                     SleepUtil.sleep(1000);

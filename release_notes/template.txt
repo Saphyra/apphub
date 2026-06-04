@@ -7,3 +7,6 @@
 ===TECHNICAL DEBTS===
 
 ===ETC===
+
+===Manual Release Steps===
+    Restart ApphubCI

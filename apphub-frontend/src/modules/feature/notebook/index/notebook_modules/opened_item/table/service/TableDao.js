@@ -142,9 +142,9 @@ const deleteChecked = async (listItemId, setDataFromResponse, setConfirmationDia
     setConfirmationDialogData(null);
 }
 
-export const updateChecked = (row, rows, setRows, editingEnabled, setDisplaySpinner) => {
+export const updateChecked = (listItemId, row, rows, setRows, editingEnabled, setDisplaySpinner) => {
     if (!editingEnabled) {
-        NOTEBOOK_TABLE_SET_ROW_STATUS.createRequest({ value: row.checked }, { rowId: row.rowId })
+        NOTEBOOK_TABLE_SET_ROW_STATUS.createRequest({ value: row.checked }, {listItemId: listItemId,  rowId: row.rowId })
             .send(setDisplaySpinner);
     }
 

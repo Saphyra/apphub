@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelFactory;
@@ -32,41 +32,40 @@ class LabelServiceTest {
     private LabelValidator labelValidator;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
-
-    @Mock
-    private Label label;
+    private CommonCalendarDao commonCalendarDao;
 
     @InjectMocks
     private LabelService underTest;
 
+    @Mock
+    private Label label;
+
     @Test
     void createLabel() {
-        given(labelFactory.create(USER_ID, LABEL)).willReturn(label);
+        given(labelFactory.create(LABEL)).willReturn(label);
         given(label.getLabelId()).willReturn(LABEL_ID);
 
         assertThat(underTest.createLabel(USER_ID, LABEL)).isEqualTo(LABEL_ID);
 
         then(labelValidator).should().validate(USER_ID, LABEL);
-        then(labelDao).should().save(label);
+        then(commonCalendarDao).should().saveLabel(USER_ID, label);
     }
 
     @Test
     void deleteLabel() {
         underTest.deleteLabel(USER_ID, LABEL_ID);
 
-        then(eventLabelMappingDao).should().deleteByUserIdAndLabelId(USER_ID, LABEL_ID);
-        then(labelDao).should().deleteByUserIdAndLabelId(USER_ID, LABEL_ID);
+        then(commonCalendarDao).should().deleteLabel(USER_ID, LABEL_ID);
     }
 
     @Test
     void editLabel() {
-        given(labelDao.findByIdValidated(LABEL_ID)).willReturn(label);
+        given(labelValidator.validate(USER_ID, LABEL)).willReturn(java.util.List.of(label));
+        given(label.getLabelId()).willReturn(LABEL_ID);
 
         underTest.editLabel(USER_ID, LABEL_ID, LABEL);
 
-        then(labelValidator).should().validate(USER_ID, LABEL);
         then(label).should().setLabel(LABEL);
-        then(labelDao).should().save(label);
+        then(labelDao).should().save(USER_ID, label);
     }
 }

@@ -2,13 +2,14 @@ package com.github.saphyra.apphub.service.platform.storage.client.s3;
 
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
-import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import com.github.saphyra.apphub.service.platform.storage.client.DownloadResult;
 import com.github.saphyra.apphub.service.platform.storage.client.StorageClient;
+import com.github.saphyra.apphub.service.platform.storage.dao.stored_file.Storage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.CopyObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -66,5 +67,17 @@ public class S3StorageClient implements StorageClient {
         } catch (Exception e) {
             errorReporterService.report("Failed deleting FTP file " + storedFileId, e);
         }
+    }
+
+    @Override
+    public void clone(UUID source, UUID target) {
+        CopyObjectRequest request = CopyObjectRequest.builder()
+            .sourceBucket(s3Properties.getBucketName())
+            .sourceKey(uuidConverter.convertDomain(source))
+            .destinationBucket(s3Properties.getBucketName())
+            .destinationKey(uuidConverter.convertDomain(target))
+            .build();
+
+        s3Client.copyObject(request);
     }
 }

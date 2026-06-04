@@ -1,20 +1,22 @@
 package com.github.saphyra.apphub.service.notebook.service.clone;
 
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItem;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.checked_item.CheckedItemFactory;
-import com.github.saphyra.apphub.service.notebook.dao.content.Content;
-import com.github.saphyra.apphub.service.notebook.dao.content.ContentDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.Dimension;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionDao;
-import com.github.saphyra.apphub.service.notebook.dao.dimension.DimensionFactory;
-import com.github.saphyra.apphub.service.notebook.dao.list_item.ListItem;
-import com.github.saphyra.apphub.service.notebook.service.ContentFactory;
+import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item.ChecklistItemFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentDao;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
+import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,80 +26,82 @@ import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class ChecklistCloneServiceTest {
+    private static final UUID PARENT = UUID.randomUUID();
     private static final UUID ORIGINAL_LIST_ITEM_ID = UUID.randomUUID();
-    private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID CLONED_LIST_ITEM_ID = UUID.randomUUID();
-    private static final Integer INDEX = 432;
-    private static final UUID ORIGINAL_ROW_ID = UUID.randomUUID();
-    private static final UUID CLONED_ROW_ID = UUID.randomUUID();
-    private static final String CONTENT = "content";
+    private static final UUID CHECKLIST_ITEM_ID = UUID.randomUUID();
+    private static final UUID CLONED_CHECKLIST_ITEM_ID = UUID.randomUUID();
+    private static final String CONTENT_VALUE = "content-value";
 
     @Mock
-    private DimensionDao dimensionDao;
+    private ListItemFactory listItemFactory;
 
     @Mock
-    private DimensionFactory dimensionFactory;
+    private ChecklistItemFactory checklistItemFactory;
 
     @Mock
-    private CheckedItemDao checkedItemDao;
+    private ContentFactory contentFactory;
 
     @Mock
-    private CheckedItemFactory checkedItemFactory;
+    private CommonListItemDao commonListItemDao;
 
     @Mock
     private ContentDao contentDao;
 
     @Mock
-    private ContentFactory contentFactory;
+    private ChecklistItemDao checklistItemDao;
 
     @InjectMocks
     private ChecklistCloneService underTest;
 
     @Mock
-    private ListItem originalListItem;
+    private ListItem toClone;
 
     @Mock
-    private ListItem listItemClone;
+    private ListItem clonedListItem;
 
     @Mock
-    private Dimension originalRow;
+    private ChecklistItem originalItem;
 
     @Mock
-    private Dimension rowClone;
-
-    @Mock
-    private CheckedItem originalCheckedItem;
-
-    @Mock
-    private CheckedItem checkedItemClone;
+    private ChecklistItem clonedItem;
 
     @Mock
     private Content originalContent;
 
     @Mock
-    private Content contentClone;
+    private Content clonedContent;
 
     @Test
-    void cloneListItem() {
-        given(originalListItem.getListItemId()).willReturn(ORIGINAL_LIST_ITEM_ID);
-        given(dimensionDao.getByExternalReference(ORIGINAL_LIST_ITEM_ID)).willReturn(List.of(originalRow));
-        given(listItemClone.getUserId()).willReturn(USER_ID);
-        given(listItemClone.getListItemId()).willReturn(CLONED_LIST_ITEM_ID);
-        given(originalRow.getIndex()).willReturn(INDEX);
-        given(dimensionFactory.create(USER_ID, CLONED_LIST_ITEM_ID, INDEX)).willReturn(rowClone);
-        given(originalRow.getDimensionId()).willReturn(ORIGINAL_ROW_ID);
-        given(checkedItemDao.findByIdValidated(ORIGINAL_ROW_ID)).willReturn(originalCheckedItem);
-        given(originalCheckedItem.getChecked()).willReturn(true);
-        given(rowClone.getDimensionId()).willReturn(CLONED_ROW_ID);
-        given(checkedItemFactory.create(USER_ID, CLONED_ROW_ID, true)).willReturn(checkedItemClone);
-        given(contentDao.findByParentValidated(ORIGINAL_ROW_ID)).willReturn(originalContent);
-        given(originalContent.getContent()).willReturn(CONTENT);
-        given(contentFactory.create(CLONED_LIST_ITEM_ID, CLONED_ROW_ID, USER_ID, CONTENT)).willReturn(contentClone);
+    void clone_contentNotFound() {
+        given(toClone.getListItemId()).willReturn(ORIGINAL_LIST_ITEM_ID);
+        given(listItemFactory.clone(PARENT, toClone)).willReturn(clonedListItem);
+        given(clonedListItem.getListItemId()).willReturn(CLONED_LIST_ITEM_ID);
+        given(checklistItemDao.getByListItemId(ORIGINAL_LIST_ITEM_ID)).willReturn(List.of(originalItem));
+        given(contentDao.getByListItemId(ORIGINAL_LIST_ITEM_ID)).willReturn(List.of(originalContent));
+        given(originalItem.getChecklistItemId()).willReturn(CHECKLIST_ITEM_ID);
+        given(checklistItemFactory.clone(CLONED_LIST_ITEM_ID, originalItem)).willReturn(clonedItem);
+        given(originalContent.contains(CHECKLIST_ITEM_ID)).willReturn(false);
 
-        underTest.clone(originalListItem, listItemClone);
+        ExceptionValidator.validateLoggedException(() -> underTest.clone(PARENT, toClone), HttpStatus.INTERNAL_SERVER_ERROR, ErrorCode.DATA_NOT_FOUND);
+    }
 
-        then(dimensionDao).should().save(rowClone);
-        then(checkedItemDao).should().save(checkedItemClone);
-        then(contentDao).should().save(contentClone);
+    @Test
+    void cloneSuccessfully() {
+        given(toClone.getListItemId()).willReturn(ORIGINAL_LIST_ITEM_ID);
+        given(listItemFactory.clone(PARENT, toClone)).willReturn(clonedListItem);
+        given(clonedListItem.getListItemId()).willReturn(CLONED_LIST_ITEM_ID);
+        given(checklistItemDao.getByListItemId(ORIGINAL_LIST_ITEM_ID)).willReturn(List.of(originalItem));
+        given(contentDao.getByListItemId(ORIGINAL_LIST_ITEM_ID)).willReturn(List.of(originalContent));
+        given(originalItem.getChecklistItemId()).willReturn(CHECKLIST_ITEM_ID);
+        given(checklistItemFactory.clone(CLONED_LIST_ITEM_ID, originalItem)).willReturn(clonedItem);
+        given(originalContent.contains(CHECKLIST_ITEM_ID)).willReturn(true);
+        given(originalContent.get(CHECKLIST_ITEM_ID)).willReturn(CONTENT_VALUE);
+        given(clonedItem.getChecklistItemId()).willReturn(CLONED_CHECKLIST_ITEM_ID);
+        given(contentFactory.create(CLONED_LIST_ITEM_ID, CLONED_CHECKLIST_ITEM_ID, CONTENT_VALUE)).willReturn(clonedContent);
+
+        underTest.clone(PARENT, toClone);
+
+        then(commonListItemDao).should().saveChecklist(clonedListItem, List.of(clonedItem), List.of(clonedContent));
     }
 }

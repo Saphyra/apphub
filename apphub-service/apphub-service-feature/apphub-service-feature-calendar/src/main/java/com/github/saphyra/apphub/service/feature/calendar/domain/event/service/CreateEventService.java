@@ -1,16 +1,17 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.service.EventLabelMappingService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.CreateOccurrenceService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -19,20 +20,18 @@ import java.util.UUID;
 public class CreateEventService {
     private final EventRequestValidator eventRequestValidator;
     private final EventFactory eventFactory;
-    private final EventLabelMappingService eventLabelMappingService;
     private final CreateOccurrenceService createOccurrenceService;
-    private final EventDao eventDao;
+    private final CommonCalendarDao commonCalendarDao;
 
     @Transactional
     public UUID create(UUID userId, EventRequest request) {
-        eventRequestValidator.validate(request);
+        eventRequestValidator.validate(userId, request);
 
         Event event = eventFactory.create(userId, request);
 
-        eventLabelMappingService.addLabels(userId, event.getEventId(), request.getLabels());
-        createOccurrenceService.createOccurrences(userId, event.getEventId(), request);
+        List<Occurrence> occurrences = createOccurrenceService.createOccurrences(userId, event.getEventId(), request);
 
-        eventDao.save(event);
+        commonCalendarDao.saveNewEvent(event, occurrences, request.getLabels());
 
         return event.getEventId();
     }

@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -17,6 +17,7 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class DeleteOccurrenceServiceTest {
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
+    private static final UUID EVENT_ID = UUID.randomUUID();
 
     @Mock
     private OccurrenceDao occurrenceDao;
@@ -29,10 +30,10 @@ class DeleteOccurrenceServiceTest {
 
     @Test
     void deleteOccurrence() {
-        given(occurrenceDao.findById(OCCURRENCE_ID)).willReturn(Optional.of(occurrence));
+        given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
 
-        underTest.deleteOccurrence(OCCURRENCE_ID);
+        underTest.deleteOccurrence(EVENT_ID, OCCURRENCE_ID);
 
-        then(occurrenceDao).should().delete(occurrence);
+        then(occurrenceDao).should().delete(List.of(occurrence));
     }
 }

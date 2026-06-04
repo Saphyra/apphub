@@ -31,7 +31,7 @@ class ListItemControllerIImpl implements ListItemController {
 
     @Override
     public NotebookView findListItem(UUID listItemId, AccessToken accessToken) {
-        return listItemQueryService.findListItem(listItemId);
+        return listItemQueryService.findListItem(accessToken.getUserId(), listItemId);
     }
 
     @Override
@@ -41,21 +41,21 @@ class ListItemControllerIImpl implements ListItemController {
     }
 
     @Override
-    public void editListItem(EditListItemRequest request, UUID listItemId) {
-        log.info("Editing listItem {}", listItemId);
-        listItemEditionService.edit(listItemId, request);
+    public void editListItem(EditListItemRequest request, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to edit listItem {}", accessToken.getUserId(), listItemId);
+        listItemEditionService.edit(accessToken.getUserId(), listItemId, request);
     }
 
     @Override
-    public void moveListItem(OneParamRequest<UUID> parent, UUID listItemId) {
-        log.info("Moving listItem {} to parent {}", listItemId, parent);
-        listItemEditionService.moveListItem(listItemId, parent.getValue());
+    public void moveListItem(OneParamRequest<UUID> parent, UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to move listItem with id {} to parent {}", accessToken.getUserId(), listItemId, parent);
+        listItemEditionService.moveListItem(accessToken.getUserId(), listItemId, parent.getValue());
     }
 
     @Override
-    public void cloneListItem(UUID listItemId) {
-        log.info("Cloning listItem {}", listItemId);
-        listItemCloneService.clone(listItemId);
+    public void cloneListItem(UUID listItemId, AccessToken accessToken) {
+        log.info("{} wants to clone ListItem {}", accessToken.getUserId(), listItemId);
+        listItemCloneService.clone(accessToken.getUserId(), listItemId);
     }
 
     @Override
@@ -67,6 +67,6 @@ class ListItemControllerIImpl implements ListItemController {
     @Override
     public void archive(OneParamRequest<Boolean> archived, UUID listItemId, AccessToken accessToken) {
         log.info("{} wants to archive an item.", accessToken.getUserId());
-        archiveService.archive(listItemId, archived.getValue());
+        archiveService.archive(accessToken.getUserId(), listItemId, archived.getValue());
     }
 }

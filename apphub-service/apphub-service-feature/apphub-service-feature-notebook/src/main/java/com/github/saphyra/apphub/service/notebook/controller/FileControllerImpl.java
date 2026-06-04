@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.controller;
 
+import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.request.CreateFileRequest;
 import com.github.saphyra.apphub.api.feature.notebook.server.FileController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
@@ -20,6 +21,6 @@ public class FileControllerImpl implements FileController {
     @Override
     public OneParamResponse<UUID> createFile(CreateFileRequest request, AccessToken accessToken) {
         log.info("{} wants to create a file", accessToken.getUserId());
-        return new OneParamResponse<>(fileCreationService.createFile(accessToken.getUserId(), request));
+        return new OneParamResponse<>(fileCreationService.create(accessToken.getUserId(), request, ListItemType.FILE));
     }
 }
