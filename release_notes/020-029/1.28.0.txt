@@ -1,0 +1,12 @@
+===FEATURES===
+
+===BUGFIXES===
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+
+===Manual Release Steps===
+    Restart ApphubCI
