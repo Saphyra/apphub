@@ -43,4 +43,12 @@
             <column name="archived" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-table-list_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="list_item"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="list_item"/>
+    </changeSet>
 </databaseChangeLog>

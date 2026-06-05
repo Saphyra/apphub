@@ -17,4 +17,12 @@
 
         <addPrimaryKey schemaName="notebook" tableName="file" columnNames="file_id" constraintName="file-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-file" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="file"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="file"/>
+    </changeSet>
 </databaseChangeLog>

@@ -16,4 +16,12 @@
 
         <addPrimaryKey schemaName="notebook" tableName="checked_item" columnNames="checked_item_id" constraintName="checked_item-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-checked_item" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="checked_item"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="checked_item"/>
+    </changeSet>
 </databaseChangeLog>

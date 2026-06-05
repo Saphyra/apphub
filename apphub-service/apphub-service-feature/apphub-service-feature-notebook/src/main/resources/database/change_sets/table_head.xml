@@ -17,4 +17,12 @@
 
         <addPrimaryKey schemaName="notebook" tableName="table_head" columnNames="table_head_id" constraintName="table_head_pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-table_head" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="table_head"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="table_head"/>
+    </changeSet>
 </databaseChangeLog>

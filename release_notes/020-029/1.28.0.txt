@@ -9,6 +9,8 @@
 ===ETC===
     Calendar
         Delete old repositories
+    Notebook
+            Delete old repositories
 
 ===Manual Release Steps===
     Restart ApphubCI

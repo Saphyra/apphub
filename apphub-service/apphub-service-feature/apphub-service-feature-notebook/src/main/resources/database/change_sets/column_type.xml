@@ -16,4 +16,12 @@
 
         <addPrimaryKey schemaName="notebook" tableName="column_type" columnNames="column_id" constraintName="column_type-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-column_type" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="column_type"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="column_type"/>
+    </changeSet>
 </databaseChangeLog>
