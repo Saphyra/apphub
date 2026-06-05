@@ -7,6 +7,8 @@
 ===TECHNICAL DEBTS===
 
 ===ETC===
+    Calendar
+        Delete old repositories
 
 ===Manual Release Steps===
     Restart ApphubCI

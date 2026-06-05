@@ -25,4 +25,12 @@
 
         <addPrimaryKey schemaName="calendar" tableName="event_label_mapping" columnNames="event_id,label_id" constraintName="event_label_mapping-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-event_label_mapping" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="calendar" tableName="event_label_mapping"/>
+        </preConditions>
+
+        <dropTable schemaName="calendar" tableName="event_label_mapping"/>
+    </changeSet>
 </databaseChangeLog>

@@ -21,4 +21,12 @@
 
         <addPrimaryKey schemaName="calendar" tableName="label" columnNames="label_id" constraintName="label-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-label" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="calendar" tableName="label"/>
+        </preConditions>
+
+        <dropTable schemaName="calendar" tableName="label"/>
+    </changeSet>
 </databaseChangeLog>

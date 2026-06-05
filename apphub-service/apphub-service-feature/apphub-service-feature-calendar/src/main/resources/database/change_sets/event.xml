@@ -53,4 +53,12 @@
             <column name="archived" type="text"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-table-event" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="calendar" tableName="event"/>
+        </preConditions>
+
+        <dropTable schemaName="calendar" tableName="event"/>
+    </changeSet>
 </databaseChangeLog>
