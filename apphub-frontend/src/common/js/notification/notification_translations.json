@@ -126,5 +126,9 @@
     "USER_NOT_FOUND": {
         "en": "User not found.",
         "hu": "Felhasználó nem található."
+    },
+    "INVALID_TOKEN": {
+        "en": "Invalid token",
+        "hu": "Érvénytelen kulcs"
     }
 }

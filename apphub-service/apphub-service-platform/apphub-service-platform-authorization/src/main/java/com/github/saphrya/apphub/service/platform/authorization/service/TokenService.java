@@ -15,6 +15,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -74,6 +75,8 @@ class TokenService {
                 .getPayload();
         } catch (ExpiredJwtException e) {
             throw ExceptionFactory.notLoggedException(HttpStatus.UNAUTHORIZED, ErrorCode.NO_SESSION_AVAILABLE, "Token expired.");
+        } catch (SignatureException e) {
+            throw ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.INVALID_TOKEN, "Invalid RefreshToken signature");
         }
 
         LocalDateTime expiration = dateTimeUtil.fromDate(claims.getExpiration());
