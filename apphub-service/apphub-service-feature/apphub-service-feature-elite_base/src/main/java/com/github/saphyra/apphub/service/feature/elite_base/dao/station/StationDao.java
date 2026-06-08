@@ -31,4 +31,9 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
             .toList();
         return converter.convertEntity(entities);
     }
+
+    //TODO unit test
+    public List<Station> getByStarSystemId(UUID starSystemId) {
+        return converter.convertEntity(repository.getByStarSystemId(uuidConverter.convertDomain(starSystemId)));
+    }
 }

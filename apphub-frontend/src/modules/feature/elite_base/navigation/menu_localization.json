@@ -22,5 +22,17 @@
     "COMMODITY_TRADING_SELL_COMMODITIES": {
         "en": "Sell commodities",
         "hu": "Eladás"
+    },
+    "MERIT_FARMING": {
+        "en": "Farm merits",
+        "hu": "Meritet farmolni"
+    },
+    "MERIT_FARMING_NAKATO_KAINE": {
+        "en": "For Nakato Kaine",
+        "hu": "Nakato Kaine-nek"
+    },
+    "MERIT_FARMING_NAKATO_KAINE_MINING": {
+        "en": "By mining",
+        "hu": "Bányászattal"
     }
 }

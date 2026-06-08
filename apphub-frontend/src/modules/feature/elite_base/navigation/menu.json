@@ -26,6 +26,22 @@
                         "clickable": true
                     }
                 ]
+            },
+            {
+                "id": "MERIT_FARMING",
+                "clickable": false,
+                "items": [
+                    {
+                        "id": "MERIT_FARMING_NAKATO_KAINE",
+                        "clickable": false,
+                        "items": [
+                            {
+                                "id": "MERIT_FARMING_NAKATO_KAINE_MINING",
+                                "clickable": true
+                            }
+                        ]
+                    }
+                ]
             }
         ]
     }
