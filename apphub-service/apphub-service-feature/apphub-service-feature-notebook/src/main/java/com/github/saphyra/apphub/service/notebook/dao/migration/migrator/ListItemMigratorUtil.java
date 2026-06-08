@@ -106,7 +106,7 @@ class ListItemMigratorUtil {
                     .listItemId(listItemId)
                     .tableRowId(row.getDimensionId())
                     .index(row.getIndex())
-                    .checked(checkedItemDao.findById(row.getDimensionId()).map(CheckedItem::getChecked).orElse(null))
+                    .checked(checkedItemDao.findById(row.getDimensionId()).map(CheckedItem::getChecked).orElse(false))
                     .columns(migrateColumns(listItemId, row.getDimensionId(), contents))
                     .build();
             })

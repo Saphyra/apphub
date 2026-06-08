@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.table.row;
 
-import jakarta.annotation.Nullable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +18,7 @@ public class TableRow {
     @NonNull
     private final UUID tableRowId;
     private int index;
-    @Nullable //Filled when checklist table
+    @NonNull
     private Boolean checked;
     @NonNull
     private List<TableColumn> columns;

@@ -1,0 +1,17 @@
+===FEATURES===
+
+===BUGFIXES===
+    Notebook
+        @NonNull TableRow.checked
+    Authorization
+        Handle SignatureException
+    EliteBase
+        Drop unique constraint from star_id (it is not used for querying, but causes problems when saving)
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+
+===Manual Release Steps===

@@ -80,6 +80,7 @@ class TableDeletionServiceTest {
             .listItemId(LIST_ITEM_ID)
             .tableRowId(UUID.randomUUID())
             .columns(List.of(column))
+            .checked(false)
             .build();
 
         Map<UUID, String> contentMap = new HashMap<>();
@@ -129,6 +130,7 @@ class TableDeletionServiceTest {
             .listItemId(LIST_ITEM_ID)
             .tableRowId(UUID.randomUUID())
             .columns(List.of(column))
+            .checked(false)
             .build();
 
         Content content = Content.builder()

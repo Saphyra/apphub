@@ -241,7 +241,7 @@ class ListItemMigratorUtilTest {
         assertThat(tableRow.getTableRowId()).isEqualTo(rowId);
         assertThat(tableRow.getListItemId()).isEqualTo(LIST_ITEM_ID);
         assertThat(tableRow.getIndex()).isEqualTo(0);
-        assertThat(tableRow.getChecked()).isNull();
+        assertThat(tableRow.getChecked()).isFalse();
 
         List<TableColumn> columns = tableRow.getColumns();
         assertThat(columns).hasSize(1);
