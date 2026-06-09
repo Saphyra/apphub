@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.ListCachedBufferedDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemDomainId;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @Slf4j
@@ -75,5 +77,14 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
             .map(tradeable -> (Commodity) tradeable)
             .toList();
         saveAll(commodities);
+    }
+
+    //TODO unit test
+    public List<Commodity> getByIds(List<BiWrapper<UUID, String>> ids) {
+        List<ItemEntityId> idList = ids.stream()
+            .map(id -> new ItemEntityId(uuidConverter.convertDomain(id.getEntity1()), id.getEntity2()))
+            .toList();
+
+        return findAllById(idList);
     }
 }

@@ -13,5 +13,14 @@ import java.util.List;
 public interface PowerplayController {
     //TODO role protection test
     @GetMapping(EliteBaseEndpoints.ELITE_BASE_MERIT_FARM_GET_MINE_LOCATIONS)
+    //TODO add filters:
+    /*
+    Commodity
+    Price
+    Demand
+    Activity (Acquisition vs Reinforcement)
+    Max offer age
+    Minimum reserve level
+     */
     List<MiningMeritFarmResponse> meritFarmGetMiningLocations(@PathVariable("power") String power, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

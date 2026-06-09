@@ -8,6 +8,5 @@ interface BodyRingRepository extends CrudRepository<BodyRingEntity, String> {
     List<BodyRingEntity> getByBodyId(String bodyId);
 
     //TODO unit test
-    //TODO index
     List<BodyRingEntity> getByBodyIdIn(List<String> bodyIds);
 }

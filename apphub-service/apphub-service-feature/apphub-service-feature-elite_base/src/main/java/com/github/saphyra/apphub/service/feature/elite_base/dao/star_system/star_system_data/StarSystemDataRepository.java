@@ -6,6 +6,5 @@ import java.util.List;
 
 interface StarSystemDataRepository extends CrudRepository<StarSystemDataEntity, String> {
     //TODO unit test
-    //TODO index
     List<StarSystemDataEntity> getByControllingPower(Power power);
 }

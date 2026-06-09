@@ -35,7 +35,13 @@ public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepositor
     }
 
     //TODO unit test
+    @Deprecated
     public List<Body> getByStarSystemId(UUID starSystemId) {
         return converter.convertEntity(repository.getByStarSystemId(uuidConverter.convertDomain(starSystemId)));
+    }
+
+    //TODO unit test
+    public List<Body> getByStarSystemIds(Collection<UUID> starSystemIds) {
+        return converter.convertEntity(repository.getByStarSystemIdIn(uuidConverter.convertDomain(starSystemIds)));
     }
 }

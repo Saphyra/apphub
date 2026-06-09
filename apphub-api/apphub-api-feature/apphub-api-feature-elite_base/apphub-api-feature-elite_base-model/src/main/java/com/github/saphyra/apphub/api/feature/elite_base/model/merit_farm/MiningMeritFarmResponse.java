@@ -14,6 +14,7 @@ import java.util.UUID;
 public class MiningMeritFarmResponse {
     private UUID sourceStarSystemId; //Mine here
     private String sourceStarSystemName;
+    //TODO add reserve level
     private UUID targetStarSystemId; //Sell in this system...
     private String targetStarSystemName;
     private UUID stationId; //...at this station
@@ -21,5 +22,6 @@ public class MiningMeritFarmResponse {
     private String commodityName;
     private Integer demand;
     private Integer price;
+    //TODO add offer last update
     private PowerplayActivityType activityType;
 }
