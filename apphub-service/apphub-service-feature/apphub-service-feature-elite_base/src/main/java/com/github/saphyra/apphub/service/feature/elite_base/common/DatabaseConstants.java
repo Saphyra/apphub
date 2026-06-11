@@ -54,5 +54,6 @@ public class DatabaseConstants {
     public static final String COLUMN_BUY_PRICE = "buy_price";
     public static final String COLUMN_STOCK = "stock";
     public static final String COLUMN_DEMAND = "demand";
+    public static final String COLUMN_POWERPLAY_STATE = "powerplay_state";
 }
 

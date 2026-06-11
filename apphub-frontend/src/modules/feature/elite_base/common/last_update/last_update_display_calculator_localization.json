@@ -1,0 +1,26 @@
+{
+    "days": {
+        "en": "{value} day(s)",
+        "hu": "{value} nappal"
+    },
+    "hours": {
+        "en": "{value} hour(s)",
+        "hu": "{value} órával"
+    },
+    "minutes": {
+        "en": "{value} minute(s)",
+        "hu": "{value} perccel"
+    },
+    "seconds": {
+        "en": "{value} second(s)",
+        "hu": "{value} másodperccel"
+    },
+    "ago-suffix": {
+        "en": "ago",
+        "hu": "ezelőtt"
+    },
+    "and": {
+        "en": "and",
+        "hu": "és"
+    }
+}

@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.service.feature.elite_base.dao.SecurityLevel;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.StationType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.BodyType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.ReserveLevel;
+import com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarType;

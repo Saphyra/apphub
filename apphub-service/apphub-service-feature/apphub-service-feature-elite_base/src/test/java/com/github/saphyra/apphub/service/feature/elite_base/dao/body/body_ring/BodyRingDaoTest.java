@@ -44,4 +44,13 @@ class BodyRingDaoTest {
 
         assertThat(underTest.getByBodyId(BODY_ID)).containsExactly(domain);
     }
+
+    @Test
+    void getByBodyIds() {
+        given(uuidConverter.convertDomain(List.of(BODY_ID))).willReturn(List.of(BODY_ID_STRING));
+        given(repository.getByBodyIdIn(List.of(BODY_ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByBodyIds(List.of(BODY_ID))).containsExactly(domain);
+    }
 }

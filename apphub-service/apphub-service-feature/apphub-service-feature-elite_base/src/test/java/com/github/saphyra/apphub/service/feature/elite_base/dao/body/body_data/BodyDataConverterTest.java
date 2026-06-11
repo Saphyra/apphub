@@ -71,7 +71,7 @@ class BodyDataConverterTest {
             .lastUpdate(LAST_UPDATE)
             .landable(value)
             .surfaceGravity(SURFACE_GRAVITY)
-            .reserveLevel(ReserveLevel.LOW)
+            .reserveLevel(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW)
             .hasRing(value)
             .build();
 
@@ -83,7 +83,7 @@ class BodyDataConverterTest {
             .returns(LAST_UPDATE_STRING, BodyDataEntity::getLastUpdate)
             .returns(value, BodyDataEntity::getLandable)
             .returns(SURFACE_GRAVITY, BodyDataEntity::getSurfaceGravity)
-            .returns(ReserveLevel.LOW, BodyDataEntity::getReserveLevel)
+            .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyDataEntity::getReserveLevel)
             .returns(value, BodyDataEntity::getHasRing);
 
         then(bodyMaterialSyncService).shouldHaveNoInteractions();
@@ -97,7 +97,7 @@ class BodyDataConverterTest {
             .lastUpdate(LAST_UPDATE)
             .landable(true)
             .surfaceGravity(SURFACE_GRAVITY)
-            .reserveLevel(ReserveLevel.LOW)
+            .reserveLevel(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW)
             .hasRing(true)
             .materials(LazyLoadedField.loaded(List.of(material)))
             .rings(LazyLoadedField.loaded(List.of(ring)))
@@ -111,7 +111,7 @@ class BodyDataConverterTest {
             .returns(LAST_UPDATE_STRING, BodyDataEntity::getLastUpdate)
             .returns(true, BodyDataEntity::getLandable)
             .returns(SURFACE_GRAVITY, BodyDataEntity::getSurfaceGravity)
-            .returns(ReserveLevel.LOW, BodyDataEntity::getReserveLevel)
+            .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyDataEntity::getReserveLevel)
             .returns(true, BodyDataEntity::getHasRing);
 
         then(bodyMaterialSyncService).should().sync(BODY_ID, List.of(material));
@@ -126,7 +126,7 @@ class BodyDataConverterTest {
             .lastUpdate(LAST_UPDATE_STRING)
             .landable(value)
             .surfaceGravity(SURFACE_GRAVITY)
-            .reserveLevel(ReserveLevel.LOW)
+            .reserveLevel(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW)
             .hasRing(value)
             .build();
 
@@ -138,7 +138,7 @@ class BodyDataConverterTest {
             .returns(LAST_UPDATE, BodyData::getLastUpdate)
             .returns(value, BodyData::getLandable)
             .returns(SURFACE_GRAVITY, BodyData::getSurfaceGravity)
-            .returns(ReserveLevel.LOW, BodyData::getReserveLevel)
+            .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyData::getReserveLevel)
             .returns(value, BodyData::getHasRing)
             .returns(Collections.emptyList(), BodyData::getMaterials)
             .returns(Collections.emptyList(), BodyData::getRings);
@@ -151,7 +151,7 @@ class BodyDataConverterTest {
             .lastUpdate(LAST_UPDATE_STRING)
             .landable(true)
             .surfaceGravity(SURFACE_GRAVITY)
-            .reserveLevel(ReserveLevel.LOW)
+            .reserveLevel(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW)
             .hasRing(true)
             .build();
 
@@ -165,7 +165,7 @@ class BodyDataConverterTest {
             .returns(LAST_UPDATE, BodyData::getLastUpdate)
             .returns(true, BodyData::getLandable)
             .returns(SURFACE_GRAVITY, BodyData::getSurfaceGravity)
-            .returns(ReserveLevel.LOW, BodyData::getReserveLevel)
+            .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyData::getReserveLevel)
             .returns(true, BodyData::getHasRing)
             .returns(List.of(material), BodyData::getMaterials)
             .returns(List.of(ring), BodyData::getRings);

@@ -60,4 +60,16 @@
             <column name="powerplay_state_undermining" type="numeric"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="create-index-controlling_power-to-star_system_data" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists schemaName="elite_base" tableName="star_system_data" columnNames="controlling_power" />
+            </not>
+        </preConditions>
+
+        <createIndex schemaName="elite_base" tableName="star_system_data" indexName="index-star_system_data-controlling_power">
+            <column name="controlling_power" />
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

@@ -2,5 +2,8 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.sta
 
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.List;
+
 interface StarSystemDataRepository extends CrudRepository<StarSystemDataEntity, String> {
+    List<StarSystemDataEntity> getByControllingPower(Power power);
 }

@@ -119,5 +119,34 @@ class TableRowConverterTest {
             .returns(CHECKED, TableRow::getChecked)
             .returns(columns, TableRow::getColumns);
     }
+
+    @Test
+    void convertEntity_nullChecked() {
+        List<TableColumn> columns = List.of(tableColumn);
+        TableRowEntity entity = TableRowEntity.builder()
+            .listItemId(LIST_ITEM_ID_STRING)
+            .tableRowId(TABLE_ROW_ID_STRING)
+            .index(INDEX_ENCRYPTED)
+            .checked(CHECKED_ENCRYPTED)
+            .columns(COLUMNS_ENCRYPTED)
+            .build();
+
+        given(accessTokenProvider.getUserIdAsString()).willReturn(USER_ID);
+        given(uuidConverter.convertEntity(TABLE_ROW_ID_STRING)).willReturn(TABLE_ROW_ID);
+        given(uuidConverter.convertEntity(LIST_ITEM_ID_STRING)).willReturn(LIST_ITEM_ID);
+        given(integerEncryptor.decrypt(INDEX_ENCRYPTED, USER_ID, TABLE_ROW_ID_STRING, COLUMN_INDEX)).willReturn(INDEX);
+        given(booleanEncryptor.decrypt(CHECKED_ENCRYPTED, USER_ID, TABLE_ROW_ID_STRING, COLUMN_CHECKED)).willReturn(null);
+        given(stringEncryptor.decrypt(COLUMNS_ENCRYPTED, USER_ID, TABLE_ROW_ID_STRING, COLUMN_COLUMNS)).willReturn(COLUMNS_SERIALIZED);
+        given(objectMapper.readValue(eq(COLUMNS_SERIALIZED), any(TypeReference.class))).willReturn(columns);
+
+        TableRow result = underTest.convertEntity(entity);
+
+        assertThat(result)
+            .returns(TABLE_ROW_ID, TableRow::getTableRowId)
+            .returns(LIST_ITEM_ID, TableRow::getListItemId)
+            .returns(INDEX, TableRow::getIndex)
+            .returns(false, TableRow::getChecked)
+            .returns(columns, TableRow::getColumns);
+    }
 }
 

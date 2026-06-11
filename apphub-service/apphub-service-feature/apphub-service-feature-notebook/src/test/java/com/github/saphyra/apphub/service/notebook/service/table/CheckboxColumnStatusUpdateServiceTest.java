@@ -70,6 +70,7 @@ class CheckboxColumnStatusUpdateServiceTest {
             .listItemId(LIST_ITEM_ID)
             .tableRowId(ROW_ID)
             .columns(List.of())
+            .checked(false)
             .build();
         given(tableRowDao.findByIdValidated(LIST_ITEM_ID, ROW_ID)).willReturn(row);
 
@@ -86,6 +87,7 @@ class CheckboxColumnStatusUpdateServiceTest {
             .listItemId(LIST_ITEM_ID)
             .tableRowId(ROW_ID)
             .columns(List.of(tableColumn))
+            .checked(false)
             .build();
         given(tableRowDao.findByIdValidated(LIST_ITEM_ID, ROW_ID)).willReturn(row);
 
@@ -104,6 +106,7 @@ class CheckboxColumnStatusUpdateServiceTest {
             .listItemId(LIST_ITEM_ID)
             .tableRowId(ROW_ID)
             .columns(List.of(tableColumn))
+            .checked(false)
             .build();
 
         given(tableRowDao.findByIdValidated(LIST_ITEM_ID, ROW_ID)).willReturn(row);
@@ -124,6 +127,7 @@ class CheckboxColumnStatusUpdateServiceTest {
             .listItemId(LIST_ITEM_ID)
             .tableRowId(ROW_ID)
             .columns(List.of(tableColumn))
+            .checked(false)
             .build();
         Content existingContent = Content.builder()
             .listItemId(LIST_ITEM_ID)

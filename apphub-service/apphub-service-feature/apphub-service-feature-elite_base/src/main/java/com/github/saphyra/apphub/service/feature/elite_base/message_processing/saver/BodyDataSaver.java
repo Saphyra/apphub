@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.BodyData;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.BodyDataDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.BodyDataFactory;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.ReserveLevel;
+import com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_material.BodyMaterialFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.structure.journal.NamePercentPair;

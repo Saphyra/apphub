@@ -1,0 +1,66 @@
+{
+    "load": {
+        "en": "Load",
+        "hu": "Betöltés"
+    },
+    "minimum-reserve-level": {
+        "en": "Min reserve level",
+        "hu": "Min. kitermelési szint"
+    },
+    "minimum-price": {
+        "en": "Min price",
+        "hu": "Min. ár"
+    },
+    "minimum-demand": {
+        "en": "Min demand",
+        "hu": "Min. kereslet"
+    },
+    "powerplay-activity": {
+        "en": "Powerplay activity",
+        "hu": "Powerplay tevékenység"
+    },
+    "offer-count": {
+        "en": "{count} offer(s) found.",
+        "hu": "{count} ajánlat található."
+    },
+    "display-more": {
+        "en": "Display more",
+        "hu": "Többet mutat"
+    },
+    "mine-in": {
+        "en": "Mine in",
+        "hu": "Bányászat helye"
+    },
+    "reserve-level": {
+        "en": "Reserve level",
+        "hu": "Kitermelési szint"
+    },
+    "sell-in": {
+        "en": "Sell in",
+        "hu": "Eladás helye"
+    },
+    "at-station": {
+        "en": "At station",
+        "hu": "Állomáson"
+    },
+    "commodity": {
+        "en": "Commodity",
+        "hu": "Áru"
+    },
+    "price": {
+        "en": "Price",
+        "hu": "Ár"
+    },
+    "demand": {
+        "en": "Demand",
+        "hu": "Kereslet"
+    },
+    "last-updated": {
+        "en": "Last updated",
+        "hu": "Utolsó frissítés"
+    },
+    "activity": {
+        "en": "Activity",
+        "hu": "Tevékenység"
+    }
+}

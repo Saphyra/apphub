@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemDomainId;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemEntityId;
@@ -169,5 +170,14 @@ class CommodityDaoTest {
         underTest.saveAll(tradeables);
 
         then(readCache).should().invalidate(MARKET_ID);
+    }
+
+    @Test
+    void getByIds(){
+        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
+        given(repository.findAllById(List.of(new ItemEntityId(EXTERNAL_REFERENCE_STRING, ITEM_NAME)))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByIds(List.of(new BiWrapper<>(EXTERNAL_REFERENCE, ITEM_NAME)))).containsExactly(domain);
     }
 }

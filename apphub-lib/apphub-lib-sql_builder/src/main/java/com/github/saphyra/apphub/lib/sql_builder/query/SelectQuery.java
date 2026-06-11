@@ -71,6 +71,12 @@ public class SelectQuery extends AbstractQuery<SelectQuery> {
         return this;
     }
 
+    public SelectQuery columns(Column... columns) {
+        this.columns.addAll(Arrays.asList(columns));
+
+        return this;
+    }
+
     public SelectQuery columns(String... columnNames) {
         Arrays.stream(columnNames)
             .forEach(this::column);

@@ -12,6 +12,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -54,7 +55,7 @@ class TableRowConverter extends ConverterBase<TableRowEntity, TableRow> {
             .tableRowId(uuidConverter.convertEntity(tableRowId))
             .listItemId(uuidConverter.convertEntity(entity.getListItemId()))
             .index(integerEncryptor.decrypt(entity.getIndex(), userId, tableRowId, COLUMN_INDEX))
-            .checked(booleanEncryptor.decrypt(entity.getChecked(), userId, tableRowId, COLUMN_CHECKED))
+            .checked(Optional.ofNullable(booleanEncryptor.decrypt(entity.getChecked(), userId, tableRowId, COLUMN_CHECKED)).orElse(false))
             .columns(columns)
             .build();
     }

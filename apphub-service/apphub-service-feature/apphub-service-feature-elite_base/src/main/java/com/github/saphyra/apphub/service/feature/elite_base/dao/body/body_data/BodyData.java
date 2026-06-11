@@ -22,7 +22,7 @@ public class BodyData {
     private LocalDateTime lastUpdate;
     private Boolean landable;
     private Double surfaceGravity;
-    private ReserveLevel reserveLevel;
+    private com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel reserveLevel;
     private Boolean hasRing;
     private LazyLoadedField<List<BodyMaterial>> materials;
     private LazyLoadedField<List<BodyRing>> rings;

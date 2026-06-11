@@ -66,4 +66,13 @@ class StationDaoTest {
 
         assertThat(underTest.findAllById(List.of(STATION_ID))).containsExactly(domain);
     }
+
+    @Test
+    void getByStarSystemIds() {
+        given(uuidConverter.convertDomain(List.of(STAR_SYSTEM_ID))).willReturn(List.of(STAR_SYSTEM_ID_STRING));
+        given(repository.getByStarSystemIdIn(List.of(STAR_SYSTEM_ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByStarSystemIds(List.of(STAR_SYSTEM_ID))).containsExactly(domain);
+    }
 }

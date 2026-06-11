@@ -1,4 +1,6 @@
 ===FEATURES===
+    EliteBase
+        Merit-mining locations for Nakato Kaine
 
 ===BUGFIXES===
 

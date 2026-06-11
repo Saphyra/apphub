@@ -6,4 +6,6 @@ import java.util.List;
 
 interface BodyRingRepository extends CrudRepository<BodyRingEntity, String> {
     List<BodyRingEntity> getByBodyId(String bodyId);
+
+    List<BodyRingEntity> getByBodyIdIn(List<String> bodyIds);
 }

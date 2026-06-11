@@ -14,3 +14,4 @@ export const ELITE_BASE_MATERIAL_TRADER_OVERRIDE_CREATE = new Endpoint(RequestMe
 export const ELITE_BASE_IS_ADMIN = new Endpoint(RequestMethod.GET, "/api/elite-base/admin");
 export const ELITE_BASE_MATERIAL_TRADER_OVERRIDE_VERIFY = new Endpoint(RequestMethod.POST, "/api/elite-base/material-trader-override/{stationId}");
 export const ELITE_BASE_MATERIAL_TRADER_OVERRIDE_DELETE = new Endpoint(RequestMethod.DELETE, "/api/elite-base/material-trader-override/{stationId}");
+export const ELITE_BASE_MERIT_FARM_GET_MINE_LOCATIONS = new Endpoint(RequestMethod.POST, "/api/elite-base/merits/{power}/mining");

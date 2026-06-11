@@ -28,4 +28,8 @@ public class StarSystemDataDao extends AbstractDao<StarSystemDataEntity, StarSys
 
         return converter.convertEntity(entities);
     }
+
+    public List<StarSystemData> getByControllingPower(Power power) {
+        return converter.convertEntity(repository.getByControllingPower(power));
+    }
 }

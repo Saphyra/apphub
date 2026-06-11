@@ -11,16 +11,16 @@ import static org.assertj.core.api.ThrowableAssert.catchThrowable;
 class ReserveLevelTest {
     @Test
     void parse_null() {
-        assertThat(ReserveLevel.parse(null)).isNull();
+        assertThat(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.parse(null)).isNull();
     }
 
     @Test
     void parse_error() {
-        assertThat(catchThrowable(() -> ReserveLevel.parse("asd"))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.parse("asd"))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void parse() {
-        assertThat(ReserveLevel.parse("DepletedResources")).isEqualTo(ReserveLevel.DEPLETED);
+        assertThat(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.parse("DepletedResources")).isEqualTo(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.DEPLETED);
     }
 }

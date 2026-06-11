@@ -52,6 +52,7 @@ class TableRowDeletionServiceTest {
             .tableRowId(ROW_ID)
             .index(0)
             .columns(List.of(tableColumn))
+            .checked(false)
             .build();
         List<TableRow> tableRows = new ArrayList<>(List.of(tableRow));
         Content content = Content.builder()

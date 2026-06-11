@@ -23,6 +23,6 @@ import lombok.NoArgsConstructor;
     private Boolean landable;
     private Double surfaceGravity;
     @Enumerated(EnumType.STRING)
-    private ReserveLevel reserveLevel;
+    private com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel reserveLevel;
     private Boolean hasRing;
 }
