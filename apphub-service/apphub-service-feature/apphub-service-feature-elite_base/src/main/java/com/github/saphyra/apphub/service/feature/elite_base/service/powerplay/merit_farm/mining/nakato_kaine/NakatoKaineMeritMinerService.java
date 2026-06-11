@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.feature.elite_base.service.powerplay.merit_farm.mining.nakato_kaine;
 
+import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningMeritFarmRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningMeritFarmResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.PowerplayActivityType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
@@ -21,11 +23,16 @@ import com.github.saphyra.apphub.lib.sql_builder.value.WrappedValue;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.Body;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.BodyDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.BodyType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.BodyData;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data.BodyDataDao;
+import com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRing;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.BodyRingDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_ring.RingType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.Commodity;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.CommodityDao;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystemPosition;
@@ -41,10 +48,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -59,6 +69,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_DATA;
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -83,8 +94,11 @@ public class NakatoKaineMeritMinerService {
     private final JdbcTemplate jdbcTemplate;
     private final UuidConverter uuidConverter;
     private final NDimensionDistanceCalculator distanceCalculator;
+    private final LastUpdateDao lastUpdateDao;
+    private final BodyDataDao bodyDataDao;
+    private final DateTimeUtil dateTimeUtil;
 
-    public List<MiningMeritFarmResponse> getLocations() {
+    public List<MiningMeritFarmResponse> getLocations(MiningMeritFarmRequest request) {
         Map<PowerplayState, List<StarSystemData>> nakatoKaineSystems = starSystemDataDao.getByControllingPower(Power.NAKATO_KAINE)
             .stream()
             .collect(Collectors.groupingBy(StarSystemData::getPowerplayState));
@@ -95,19 +109,26 @@ public class NakatoKaineMeritMinerService {
             )
             .toList();
 
+        LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
+
         return futures.stream()
             .map(FutureWrapper::get)
             .map(ExecutionResult::getOrThrow)
             .flatMap(List::stream)
+            .filter(response -> response.getReserveLevel().getLevel() >= request.getMinimumReserveLevel().getLevel())
+            .filter(response -> response.getPrice() >= request.getMinimumPrice())
+            .filter(response -> response.getDemand() >= request.getMinimumDemand())
+            .filter(response -> response.getLastUpdate().isAfter(currentTime.minus(request.getMaxTimeSinceLastUpdated())))
+            .filter(response -> isNull(request.getPowerplayActivity()) || response.getActivityType() == request.getPowerplayActivity())
             .toList();
     }
 
     private List<MiningMeritFarmResponse> getAcquisition(List<StarSystemData> sourceSystemCandidates) {
         log.info("There are {} source systems for acquisition", sourceSystemCandidates.size());
-        List<UUID> sourceSystemIds = getSystemsWithMetallicRing(sourceSystemCandidates.stream().map(StarSystemData::getStarSystemId).toList());
+        Map<UUID, ReserveLevel> sourceSystemIds = getSystemsWithMetallicRing(sourceSystemCandidates.stream().map(StarSystemData::getStarSystemId).toList());
         log.info("There are {} source systems for acquisition with metallic ring", sourceSystemIds.size());
 
-        Map<UUID, StarSystem> sourceSystems = starSystemDao.getByIds(sourceSystemIds)
+        Map<UUID, StarSystem> sourceSystems = starSystemDao.getByIds(sourceSystemIds.keySet())
             .stream()
             .collect(Collectors.toMap(StarSystem::getId, starSystem -> starSystem));
 
@@ -152,21 +173,19 @@ public class NakatoKaineMeritMinerService {
                 UUID sourceSystemId = tw.getEntity1();
                 UUID targetSystemId = tw.getEntity2();
                 Commodity offer = tw.getEntity3();
-                UUID stationId = offer.getExternalReference();
-                String commodify = offer.getItemName();
-                int demand = offer.getDemand();
-                int buyPrice = offer.getBuyPrice();
 
                 return MiningMeritFarmResponse.builder()
                     .sourceStarSystemId(sourceSystemId)
                     .sourceStarSystemName(starSystemNames.get(sourceSystemId))
+                    .reserveLevel(sourceSystemIds.get(sourceSystemId))
                     .targetStarSystemId(targetSystemId)
                     .targetStarSystemName(starSystemNames.get(targetSystemId))
-                    .stationId(stationId)
-                    .stationName(stationMap.get(stationId).getStationName())
-                    .commodityName(commodify)
-                    .demand(demand)
-                    .price(buyPrice)
+                    .stationId(offer.getExternalReference())
+                    .stationName(stationMap.get(offer.getExternalReference()).getStationName())
+                    .commodityName(offer.getItemName())
+                    .demand(offer.getDemand())
+                    .price(offer.getBuyPrice())
+                    .lastUpdate(lastUpdateDao.findByIdValidated(offer.getExternalReference(), ItemType.COMMODITY).getLastUpdate())
                     .activityType(PowerplayActivityType.ACQUISITION)
                     .build();
             })
@@ -267,10 +286,10 @@ public class NakatoKaineMeritMinerService {
 
     private List<MiningMeritFarmResponse> getReinforcement(List<StarSystemData> starSystemData) {
         log.info("{} systems found for reinforcement", starSystemData.size());
-        List<UUID> starSystemsWithMetallicRing = getSystemsWithMetallicRing(starSystemData.stream().map(StarSystemData::getStarSystemId).toList());
+        Map<UUID, ReserveLevel> starSystemsWithMetallicRing = getSystemsWithMetallicRing(starSystemData.stream().map(StarSystemData::getStarSystemId).toList());
         log.info("{} reinforcement systems have metallic ring", starSystemsWithMetallicRing.size());
 
-        List<Station> stations = stationDao.getByStarSystemIds(starSystemsWithMetallicRing);
+        List<Station> stations = stationDao.getByStarSystemIds(starSystemsWithMetallicRing.keySet());
         log.info("{} stations found in reinforcement systems", stations.size());
 
         Map<UUID, Station> stationMap = stations.stream()
@@ -294,6 +313,7 @@ public class NakatoKaineMeritMinerService {
                 return MiningMeritFarmResponse.builder()
                     .sourceStarSystemId(starSystemId)
                     .sourceStarSystemName(starSystemNames.get(starSystemId))
+                    .reserveLevel(starSystemsWithMetallicRing.get(starSystemId))
                     .targetStarSystemId(starSystemId)
                     .targetStarSystemName(starSystemNames.get(starSystemId))
                     .stationId(offer.getExternalReference())
@@ -301,6 +321,7 @@ public class NakatoKaineMeritMinerService {
                     .commodityName(offer.getItemName())
                     .demand(offer.getDemand())
                     .price(offer.getBuyPrice())
+                    .lastUpdate(lastUpdateDao.findByIdValidated(offer.getExternalReference(), ItemType.COMMODITY).getLastUpdate())
                     .activityType(PowerplayActivityType.REINFORCEMENT)
                     .build();
             })
@@ -334,7 +355,8 @@ public class NakatoKaineMeritMinerService {
         return offers;
     }
 
-    private List<UUID> getSystemsWithMetallicRing(Collection<UUID> starSystemIds) {
+    private Map<UUID, ReserveLevel> getSystemsWithMetallicRing(Collection<UUID> starSystemIds) {
+        log.info("Get bodies of {} starSystems", starSystemIds.size());
         Map<UUID, List<UUID>> starSystemBodiesMap = bodyDao.getByStarSystemIds(starSystemIds)
             .stream()
             .filter(body -> body.getType() == BodyType.PLANET)
@@ -346,21 +368,47 @@ public class NakatoKaineMeritMinerService {
         List<UUID> bodyIds = starSystemBodiesMap.values()
             .stream()
             .flatMap(Collection::stream)
-            .toList();
-
-        return bodyRingDao.getByBodyIds(bodyIds)
-            .stream()
-            .filter(bodyRing -> bodyRing.getType() == RingType.METALLIC)
-            .map(BodyRing::getBodyId)
-            .map(bodyId -> starSystemBodiesMap.entrySet()
-                .stream()
-                .filter(entry -> entry.getValue().contains(bodyId))
-                .map(Map.Entry::getKey)
-                .findAny()
-                .orElseThrow(() -> new IllegalStateException("No StarSystemId found for BodyId " + bodyId))
-            )
             .distinct()
             .toList();
+        log.info("Bodies found: {}", bodyIds.size());
+
+        List<BodyRing> metallicRings = bodyRingDao.getByBodyIds(bodyIds)
+            .stream()
+            .filter(bodyRing -> bodyRing.getType() == RingType.METALLIC)
+            .toList();
+        log.info("Metallic rings found: {}", metallicRings.size());
+
+        Map<UUID, ReserveLevel> bodyReserveLevelMap = getReserveLevels(metallicRings.stream().map(BodyRing::getBodyId).collect(Collectors.toSet()));
+
+        return metallicRings.stream()
+            .map(BodyRing::getBodyId)
+            .distinct()
+            .map(bodyId -> starSystemBodiesMap.entrySet()
+                .stream()
+                .filter(e -> e.getValue().contains(bodyId))
+                .findAny()
+                .orElseThrow(() -> new IllegalStateException("StarSystemId not found for bodyId" + bodyId))
+            )
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> e.getValue()
+                    .stream()
+                    /*
+                    bodyReserveLevelMap contains only reserveLevel of metallic rings,
+                    while starSystemBodiesMap contains all the bodies of a StarSystem.
+                     */
+                    .map(bodyId -> bodyReserveLevelMap.getOrDefault(bodyId, ReserveLevel.UNKNOWN))
+                    .max(Comparator.comparingInt(ReserveLevel::getLevel))
+                    .orElse(ReserveLevel.UNKNOWN),
+                //Planet might have multiple metallic rings, if this happens, pick the ring with higher reserve level (in reality, reserve level should be equal for all rings in the same system)
+                (r1, r2) -> r1.getLevel() >= r2.getLevel() ? r1 : r2
+            ));
+    }
+
+    private Map<UUID, ReserveLevel> getReserveLevels(Collection<UUID> bodyIds) {
+        return bodyDataDao.getByIds(bodyIds)
+            .stream()
+            .collect(Collectors.toMap(BodyData::getBodyId, bodyData -> Optional.ofNullable(bodyData.getReserveLevel()).orElse(ReserveLevel.UNKNOWN)));
     }
 
     private List<StarSystemData> extractByType(Map<PowerplayState, List<StarSystemData>> systems, PowerplayState... states) {

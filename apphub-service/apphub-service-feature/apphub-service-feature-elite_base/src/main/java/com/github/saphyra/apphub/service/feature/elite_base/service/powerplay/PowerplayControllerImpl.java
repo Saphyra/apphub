@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.service.powerplay;
 
+import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningMeritFarmRequest;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningMeritFarmResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.server.PowerplayController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
@@ -19,17 +20,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
-class PowerplayControllerImp implements PowerplayController {
+class PowerplayControllerImpl implements PowerplayController {
     private final NakatoKaineMeritMinerService nakatoKaineMeritMinerService;
 
     @Override
-    public List<MiningMeritFarmResponse> meritFarmGetMiningLocations(String powerString, AccessToken accessToken) {
+    public List<MiningMeritFarmResponse> meritFarmGetMiningLocations(MiningMeritFarmRequest request, String powerString, AccessToken accessToken) {
         Power power = ValidationUtil.parse(powerString, _ -> Power.valueOf(powerString), "power");
+        ValidationUtil.notNull(request.getMinimumReserveLevel(), "minimumReserveLevel");
+        ValidationUtil.atLeast(request.getMinimumPrice(), 0, "minimumPrice");
+        ValidationUtil.atLeast(request.getMinimumDemand(), 0, "minimumDemand");
+        ValidationUtil.notNull(request.getMaxTimeSinceLastUpdated(), "maxTimeSinceLastUpdated");
 
         log.info("Wants to know the merit-mine locations for Power {}", power);
 
         return switch (power) {
-            case NAKATO_KAINE -> nakatoKaineMeritMinerService.getLocations();
+            case NAKATO_KAINE -> nakatoKaineMeritMinerService.getLocations(request);
             default -> throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_TYPE, "Merit-mining is not available for power " + power);
         };
     }

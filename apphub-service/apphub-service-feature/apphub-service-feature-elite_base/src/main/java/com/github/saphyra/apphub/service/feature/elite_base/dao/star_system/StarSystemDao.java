@@ -8,6 +8,7 @@ import com.google.common.cache.Cache;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -79,7 +80,7 @@ public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSyste
     }
 
     //TODO unit test
-    public List<StarSystem> getByIds(List<UUID> ids) {
+    public List<StarSystem> getByIds(Collection<UUID> ids) {
         return findAllById(uuidConverter.convertDomain(ids));
     }
 }

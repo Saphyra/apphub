@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.body.body_data;
 
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -18,5 +20,10 @@ public class BodyDataDao extends AbstractDao<BodyDataEntity, BodyData, String, B
 
     public Optional<BodyData> findById(UUID id) {
         return findById(uuidConverter.convertDomain(id));
+    }
+
+    //TODO unit test
+    public List<BodyData> getByIds(Collection<UUID> bodyIds) {
+        return findAllById(uuidConverter.convertDomain(bodyIds));
     }
 }

@@ -54,12 +54,12 @@ class BodyDataFactoryTest {
     @ParameterizedTest
     @MethodSource("falseish")
     void create_falseish(Boolean value) {
-        assertThat(underTest.create(BODY_ID, LAST_UPDATE, value, SURFACE_GRAVITY, ReserveLevel.LOW, value, null, null))
+        assertThat(underTest.create(BODY_ID, LAST_UPDATE, value, SURFACE_GRAVITY, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, value, null, null))
             .returns(BODY_ID, BodyData::getBodyId)
             .returns(LAST_UPDATE, BodyData::getLastUpdate)
             .returns(value, BodyData::getLandable)
             .returns(SURFACE_GRAVITY, BodyData::getSurfaceGravity)
-            .returns(ReserveLevel.LOW, BodyData::getReserveLevel)
+            .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyData::getReserveLevel)
             .returns(value, BodyData::getHasRing)
             .returns(Collections.emptyList(), BodyData::getMaterials)
             .returns(Collections.emptyList(), BodyData::getRings);
@@ -73,12 +73,12 @@ class BodyDataFactoryTest {
         given(bodyMaterialFactory.create(BODY_ID, materials)).willReturn(List.of(bodyMaterial));
         given(bodyRingFactory.create(BODY_ID, rings)).willReturn(List.of(bodyRing));
 
-        assertThat(underTest.create(BODY_ID, LAST_UPDATE, true, SURFACE_GRAVITY, ReserveLevel.LOW, true, materials, rings))
+        assertThat(underTest.create(BODY_ID, LAST_UPDATE, true, SURFACE_GRAVITY, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, true, materials, rings))
             .returns(BODY_ID, BodyData::getBodyId)
             .returns(LAST_UPDATE, BodyData::getLastUpdate)
             .returns(true, BodyData::getLandable)
             .returns(SURFACE_GRAVITY, BodyData::getSurfaceGravity)
-            .returns(ReserveLevel.LOW, BodyData::getReserveLevel)
+            .returns(com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel.LOW, BodyData::getReserveLevel)
             .returns(true, BodyData::getHasRing)
             .returns(List.of(bodyMaterial), BodyData::getMaterials)
             .returns(List.of(bodyRing), BodyData::getRings);

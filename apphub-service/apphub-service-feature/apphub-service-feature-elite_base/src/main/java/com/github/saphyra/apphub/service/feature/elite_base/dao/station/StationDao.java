@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,7 +40,7 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
     }
 
     //TODO unit test
-    public List<Station> getByStarSystemIds(List<UUID> starSystemIds) {
+    public List<Station> getByStarSystemIds(Collection<UUID> starSystemIds) {
         return converter.convertEntity(repository.getByStarSystemIdIn(uuidConverter.convertDomain(starSystemIds)));
     }
 }
