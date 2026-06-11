@@ -22,7 +22,6 @@ public class BodyDataDao extends AbstractDao<BodyDataEntity, BodyData, String, B
         return findById(uuidConverter.convertDomain(id));
     }
 
-    //TODO unit test
     public List<BodyData> getByIds(Collection<UUID> bodyIds) {
         return findAllById(uuidConverter.convertDomain(bodyIds));
     }

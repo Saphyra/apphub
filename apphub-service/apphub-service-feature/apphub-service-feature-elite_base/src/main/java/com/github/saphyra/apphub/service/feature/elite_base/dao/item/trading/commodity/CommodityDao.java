@@ -79,7 +79,6 @@ public class CommodityDao extends ListCachedBufferedDao<CommodityEntity, Commodi
         saveAll(commodities);
     }
 
-    //TODO unit test
     public List<Commodity> getByIds(List<BiWrapper<UUID, String>> ids) {
         List<ItemEntityId> idList = ids.stream()
             .map(id -> new ItemEntityId(uuidConverter.convertDomain(id.getEntity1()), id.getEntity2()))

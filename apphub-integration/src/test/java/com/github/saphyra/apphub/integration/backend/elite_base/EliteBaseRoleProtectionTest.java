@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseAccountActions;
 import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseCommodityTradingActions;
 import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseMaterialTraderOverrideActions;
+import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseMeritMinerActions;
 import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseNearestActions;
 import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBasePowerActions;
 import com.github.saphyra.apphub.integration.action.backend.elite_base.EliteBaseStarSystemActions;
@@ -16,6 +17,7 @@ import com.github.saphyra.apphub.integration.structure.api.authorization.TokenRe
 import com.github.saphyra.apphub.integration.structure.api.elite_base.CommodityTradingRequest;
 import com.github.saphyra.apphub.integration.structure.api.elite_base.CreateMaterialTraderOverrideRequest;
 import com.github.saphyra.apphub.integration.structure.api.elite_base.MaterialType;
+import com.github.saphyra.apphub.integration.structure.api.elite_base.merit_farm.MiningMeritFarmRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -45,6 +47,8 @@ public class EliteBaseRoleProtectionTest extends BackEndTest {
 
         CommonUtils.verifyMissingRole(() -> EliteBaseAccountActions.getIsAdminResponse(getServerPort(), accessToken));
         CommonUtils.verifyMissingRole(() -> EliteBaseMaterialTraderOverrideActions.getCreateMaterialTraderOverrideResponse(getServerPort(), accessToken, new CreateMaterialTraderOverrideRequest()));
+
+        CommonUtils.verifyMissingRole(() -> EliteBaseMeritMinerActions.getMeritFarmLocations(getServerPort(), accessToken, "power", new MiningMeritFarmRequest()));
     }
 
     @Test(dataProvider = "adminRoleProvider", groups = {"be", "elite-base", "role-protection"})

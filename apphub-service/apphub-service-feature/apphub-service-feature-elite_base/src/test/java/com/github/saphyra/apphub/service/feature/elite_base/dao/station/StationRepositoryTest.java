@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -16,7 +18,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class StationRepositoryTest {
     private static final String ID_1 = "id-1";
+    private static final String ID_2 = "id-2";
+    private static final String ID_3 = "id-3";
     private static final String STAR_SYSTEM_ID_1 = "star-system-id-1";
+    private static final String STAR_SYSTEM_ID_2 = "star-system-id-2";
+    private static final String STAR_SYSTEM_ID_3 = "star-system-id-3";
     private static final String STATION_NAME_1 = "station-name-1";
     private static final Long MARKET_ID = 3423L;
 
@@ -50,5 +56,28 @@ class StationRepositoryTest {
         underTest.save(entity);
 
         assertThat(underTest.findByMarketId(MARKET_ID)).contains(entity);
+    }
+
+    @Test
+    void getByStarSystemIdsIn() {
+        StationEntity entity1 = StationEntity.builder()
+            .id(ID_1)
+            .starSystemId(STAR_SYSTEM_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        StationEntity entity2 = StationEntity.builder()
+            .id(ID_2)
+            .starSystemId(STAR_SYSTEM_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        StationEntity entity3 = StationEntity.builder()
+            .id(ID_3)
+            .starSystemId(STAR_SYSTEM_ID_3)
+            .build();
+        underTest.save(entity3);
+
+        assertThat(underTest.getByStarSystemIdIn(List.of(STAR_SYSTEM_ID_1, STAR_SYSTEM_ID_3))).containsExactlyInAnyOrder(entity1, entity3);
     }
 }

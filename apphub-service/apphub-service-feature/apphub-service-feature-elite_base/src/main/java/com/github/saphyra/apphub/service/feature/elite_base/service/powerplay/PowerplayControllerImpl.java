@@ -19,7 +19,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class PowerplayControllerImpl implements PowerplayController {
     private final NakatoKaineMeritMinerService nakatoKaineMeritMinerService;
 
@@ -35,7 +34,7 @@ class PowerplayControllerImpl implements PowerplayController {
 
         return switch (power) {
             case NAKATO_KAINE -> nakatoKaineMeritMinerService.getLocations(request);
-            default -> throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.INVALID_TYPE, "Merit-mining is not available for power " + power);
+            default -> throw ExceptionFactory.notLoggedException(HttpStatus.NOT_IMPLEMENTED, ErrorCode.GENERAL_ERROR, "Merit-mining is not available for power " + power);
         };
     }
 }

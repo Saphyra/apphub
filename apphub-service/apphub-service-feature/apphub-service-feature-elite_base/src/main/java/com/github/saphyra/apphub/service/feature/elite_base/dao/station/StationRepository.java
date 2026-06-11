@@ -10,10 +10,5 @@ interface StationRepository extends CrudRepository<StationEntity, String> {
 
     Optional<StationEntity> findByMarketId(Long marketId);
 
-    //TODO unit test
-    @Deprecated
-    List<StationEntity> getByStarSystemId(String starSystemId);
-
-    //TODO unit test
     List<StationEntity> getByStarSystemIdIn(List<String> starSystemIds);
 }

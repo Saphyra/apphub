@@ -5,6 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 interface StarSystemDataRepository extends CrudRepository<StarSystemDataEntity, String> {
-    //TODO unit test
     List<StarSystemDataEntity> getByControllingPower(Power power);
 }

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 
 public interface PowerplayController {
-    //TODO role protection test
     @PostMapping(EliteBaseEndpoints.ELITE_BASE_MERIT_FARM_GET_MINE_LOCATIONS)
     List<MiningMeritFarmResponse> meritFarmGetMiningLocations(@RequestBody MiningMeritFarmRequest request, @PathVariable("power") String power, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

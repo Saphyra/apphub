@@ -10,10 +10,5 @@ interface BodyRepository extends CrudRepository<BodyEntity, String> {
 
     Optional<BodyEntity> findByBodyName(String bodyName);
 
-    //TODO unit test
-    @Deprecated
-    List<BodyEntity> getByStarSystemId(String starSystemId);
-
-    //TODO unit test
     List<BodyEntity> getByStarSystemIdIn(List<String> starSystemIds);
 }

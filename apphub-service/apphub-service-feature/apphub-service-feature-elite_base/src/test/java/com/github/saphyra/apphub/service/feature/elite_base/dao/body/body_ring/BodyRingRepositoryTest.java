@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
@@ -17,8 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BodyRingRepositoryTest {
     private static final String ID_1 = "id-1";
     private static final String ID_2 = "id-2";
+    private static final String ID_3 = "id-3";
     private static final String BODY_ID_1 = "body-id-1";
     private static final String BODY_ID_2 = "body-id-2";
+    private static final String BODY_ID_3 = "body-id-3";
 
     @Autowired
     private BodyRingRepository underTest;
@@ -43,5 +47,28 @@ class BodyRingRepositoryTest {
         underTest.save(entity2);
 
         assertThat(underTest.getByBodyId(BODY_ID_1)).containsExactly(entity1);
+    }
+
+    @Test
+    void getByBodyIdIn() {
+        BodyRingEntity entity1 = BodyRingEntity.builder()
+            .id(ID_1)
+            .bodyId(BODY_ID_1)
+            .build();
+        underTest.save(entity1);
+
+        BodyRingEntity entity2 = BodyRingEntity.builder()
+            .id(ID_2)
+            .bodyId(BODY_ID_2)
+            .build();
+        underTest.save(entity2);
+
+        BodyRingEntity entity3 = BodyRingEntity.builder()
+            .id(ID_3)
+            .bodyId(BODY_ID_3)
+            .build();
+        underTest.save(entity3);
+
+        assertThat(underTest.getByBodyIdIn(List.of(BODY_ID_1, BODY_ID_2))).containsExactlyInAnyOrder(entity1, entity2);
     }
 }

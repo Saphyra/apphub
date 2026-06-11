@@ -79,7 +79,6 @@ public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSyste
         return uuidConverter.convertEntity(id);
     }
 
-    //TODO unit test
     public List<StarSystem> getByIds(Collection<UUID> ids) {
         return findAllById(uuidConverter.convertDomain(ids));
     }

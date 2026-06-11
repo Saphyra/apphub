@@ -33,13 +33,6 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
         return converter.convertEntity(entities);
     }
 
-    //TODO unit test
-    @Deprecated
-    public List<Station> getByStarSystemId(UUID starSystemId) {
-        return converter.convertEntity(repository.getByStarSystemId(uuidConverter.convertDomain(starSystemId)));
-    }
-
-    //TODO unit test
     public List<Station> getByStarSystemIds(Collection<UUID> starSystemIds) {
         return converter.convertEntity(repository.getByStarSystemIdIn(uuidConverter.convertDomain(starSystemIds)));
     }

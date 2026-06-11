@@ -56,9 +56,6 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
         condition: () => refreshCounter > 0
     });
 
-    //TODO add filters
-    //TODO localize table heads
-    //TODO format table
     return (
         <div className="elite-base-page">
             <fieldset>
@@ -122,15 +119,15 @@ const MeritFarmMiningPage = ({ setDisplaySpinner }) => {
             <table className="formatted-table" style={{ margin: "auto" }}>
                 <thead>
                     <tr>
-                        <th>Mine in</th>
-                        <th>Reserve level</th>
-                        <th>Sell in</th>
-                        <th>at Station</th>
-                        <th>Commodity</th>
-                        <th>Price</th>
-                        <th>Demand</th>
-                        <th>Last updated</th>
-                        <th>Activity</th>
+                        <th>{localizationHandler.get("mine-in")}</th>
+                        <th>{localizationHandler.get("reserve-level")}</th>
+                        <th>{localizationHandler.get("sell-in")}</th>
+                        <th>{localizationHandler.get("at-station")}</th>
+                        <th>{localizationHandler.get("commodity")}</th>
+                        <th>{localizationHandler.get("price")}</th>
+                        <th>{localizationHandler.get("demand")}</th>
+                        <th>{localizationHandler.get("last-updated")}</th>
+                        <th>{localizationHandler.get("activity")}</th>
                     </tr>
                 </thead>
                 <tbody>
