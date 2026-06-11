@@ -3,6 +3,8 @@
         Merit-mining locations for Nakato Kaine
 
 ===BUGFIXES===
+    Notebook
+        Process ListItems parallel when searching to decrease latency
 
 ===PLATFORM CHANGES===
 
@@ -12,7 +14,7 @@
     Calendar
         Delete old repositories
     Notebook
-            Delete old repositories
+        Delete old repositories
 
 ===Manual Release Steps===
     Restart ApphubCI
