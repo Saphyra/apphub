@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.storage.dao.stored_file;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -68,17 +67,6 @@ class StoredFileRepository {
 
     void save(StoredFileEntity storedFileEntity) {
         getTable().putItem(storedFileEntity);
-    }
-
-    @Deprecated(forRemoval = true)
-    List<BiWrapper<String, String>> getAllIdsWithFtpStorage() {
-        return getTable()
-            .scan()
-            .items()
-            .stream()
-            .filter(entity -> entity.getStorage().equals(Storage.FTP.name()))
-            .map(entity -> new BiWrapper<>(entity.getStoredFileId(), entity.getUserId()))
-            .toList();
     }
 
     @PostConstruct

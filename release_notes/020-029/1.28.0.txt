@@ -8,10 +8,13 @@
         Moving ListItems by drag and drop did not refresh the views
 
 ===PLATFORM CHANGES===
+    Storage
+        Disable FTP
 
 ===TECHNICAL DEBTS===
     Storage
         Remove PSQL related dependencies
+        Delete FTP to S3 migration code
 
 ===ETC===
     Calendar

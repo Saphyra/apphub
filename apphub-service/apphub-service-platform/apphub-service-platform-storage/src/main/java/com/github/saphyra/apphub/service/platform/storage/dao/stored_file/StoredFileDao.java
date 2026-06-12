@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.platform.storage.dao.stored_file;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
@@ -38,13 +37,5 @@ public class StoredFileDao {
 
     public void save(StoredFile storedFile) {
         repository.save(converter.convertDomain(storedFile));
-    }
-
-    @Deprecated(forRemoval = true)
-    public List<BiWrapper<UUID, UUID>> getFtpFileIds() {
-        return repository.getAllIdsWithFtpStorage()
-            .stream()
-            .map(bw -> new BiWrapper<>(uuidConverter.convertEntity(bw.getEntity1()), uuidConverter.convertEntity(bw.getEntity2())))
-            .toList();
     }
 }
