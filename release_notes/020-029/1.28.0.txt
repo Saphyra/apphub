@@ -15,6 +15,8 @@
     Storage
         Remove PSQL related dependencies
         Delete FTP to S3 migration code
+    User
+        Delete old Role and User change sets
 
 ===ETC===
     Calendar
