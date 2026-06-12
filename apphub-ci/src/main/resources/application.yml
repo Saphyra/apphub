@@ -149,7 +149,6 @@ services:
     properties:
       - S3_CONFIGURATION
       - FTP_HOST
-      - PSQL_HOST
       - DYNAMO_DB_CONFIGURATION
   - name: encryption
     port: 8098

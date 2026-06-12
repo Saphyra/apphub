@@ -10,6 +10,8 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    Storage
+        Remove PSQL related dependencies
 
 ===ETC===
     Calendar
@@ -19,3 +21,4 @@
 
 ===Manual Release Steps===
     Restart ApphubCI
+    Delete schema storage
