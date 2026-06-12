@@ -195,7 +195,16 @@ export const cacheAndUpdate = (key, value, callback, convertValue = v => v) => {
 }
 
 export const cachedOrDefault = (key, defaultValue = "", convertValue = v => v) => {
-    return hasValue(sessionStorage[key]) ? convertValue(sessionStorage[key]) : defaultValue;
+    if (hasValue(sessionStorage[key])) {
+        try {
+            return convertValue(sessionStorage[key]);
+        } catch (e) {
+            console.error("Failed to convert cached value for key " + key + ": " + e);
+            return defaultValue;
+        }
+    }
+
+    return defaultValue;
 }
 
 export const validate = (predicate, errorMessage) => {

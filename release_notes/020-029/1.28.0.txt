@@ -5,6 +5,7 @@
 ===BUGFIXES===
     Notebook
         Process ListItems parallel when searching to decrease latency
+        Moving ListItems by drag and drop did not refresh the views
 
 ===PLATFORM CHANGES===
 
