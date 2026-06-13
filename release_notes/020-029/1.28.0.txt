@@ -6,6 +6,7 @@
     Notebook
         Process ListItems parallel when searching to decrease latency
         Moving ListItems by drag and drop did not refresh the views
+        Do not close edited ChecklistItem until request is processed
 
 ===PLATFORM CHANGES===
     Storage
@@ -23,7 +24,9 @@
         Delete old repositories
     Notebook
         Delete old repositories
+    Document DynamoDB repositories
 
 ===Manual Release Steps===
     Restart ApphubCI
     Delete schema storage
+    Delete apphub-prod-refresh_token table (got renamed to follow convention)

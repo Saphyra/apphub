@@ -235,7 +235,6 @@ class UserRepository extends DynamoDbRepository {
 
         List<String> roles = new ArrayList<>();
         TriWrapper<ProfileEntity, List<String>, Optional<Long>> result = new TriWrapper<>(null, roles, Optional.empty());
-        result.setEntity3(Optional.empty());
 
         queryResponse.items()
             .forEach(record -> {

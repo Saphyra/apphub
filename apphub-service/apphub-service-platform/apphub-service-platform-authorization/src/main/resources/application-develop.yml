@@ -4,4 +4,4 @@ aws:
     secretKey: dynamodbsecretkey
     url: http://dynamodb:8000
     refreshToken:
-      tableName: apphub-dev-refresh_token
+      tableName: apphub-minikube-refresh_token

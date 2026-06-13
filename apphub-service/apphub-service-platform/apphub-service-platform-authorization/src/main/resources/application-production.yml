@@ -4,4 +4,4 @@ aws:
     secretKey: ${DYNAMO_DB_SECRET_KEY}
     url: ~
     refreshToken:
-      tableName: apphub-prod-refresh_token
+      tableName: apphub-production-refresh_token

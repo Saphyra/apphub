@@ -10,13 +10,11 @@ export const updateItem = (listItemId, item, updateType, editingEnabled, items, 
     if (!editingEnabled) {
         switch (updateType) {
             case UpdateType.TOGGLE_CHECKED:
-                NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { listItemId: listItemId, checklistItemId: item.checklistItemId })
+                return NOTEBOOK_UPDATE_CHECKLIST_ITEM_STATUS.createRequest({ value: item.checked }, { listItemId: listItemId, checklistItemId: item.checklistItemId })
                     .send(setDisplaySpinner);
-                break;
             case UpdateType.CONTENT_MODIFIED:
-                NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { listItemId: listItemId, checklistItemId: item.checklistItemId })
+                return NOTEBOOK_UPDATE_CHECKLIST_ITEM_CONTENT.createRequest({ value: item.content }, { listItemId: listItemId, checklistItemId: item.checklistItemId })
                     .send(setDisplaySpinner);
-                break;
             default:
                 throwException("IllegalArgument", "Unsupported updateType: " + updateType);
         }
