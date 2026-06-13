@@ -19,6 +19,11 @@ Ensures one credential belongs to one user
 - `sk`: `CREDENTIAL`
 - `user_id`: `USER_ID#userId`
 
+## Role
+
+- `pk`: `USER_ID#userId`
+- `sk`: `ROLE#role`
+
 ## Marked for deletion
 
 - `pk`: `USER_ID#userId`

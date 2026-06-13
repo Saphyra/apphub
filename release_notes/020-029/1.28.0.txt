@@ -25,6 +25,7 @@
     Notebook
         Delete old repositories
     Document DynamoDB repositories
+    User data deleted with account test for each feature
 
 ===Manual Release Steps===
     Restart ApphubCI
