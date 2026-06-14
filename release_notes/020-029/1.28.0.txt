@@ -21,6 +21,7 @@
     User
         Delete old Role and User change sets
         Limit number of deleted users in a batch at repository level
+    Use projectionExpression when querying data of partition to delete in DynamoDB
 
 ===ETC===
     Calendar

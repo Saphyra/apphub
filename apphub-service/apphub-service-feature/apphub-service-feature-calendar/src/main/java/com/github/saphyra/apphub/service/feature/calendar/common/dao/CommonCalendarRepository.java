@@ -44,7 +44,11 @@ class CommonCalendarRepository extends DynamoDbRepository {
         QueryRequest queryRequest = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :userId")
-            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .projectionExpression("#pk, #sk")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
             .expressionAttributeValues(Map.of(":userId", AttributeValue.builder().s(PREFIX_USER + userId).build()))
             .build();
 

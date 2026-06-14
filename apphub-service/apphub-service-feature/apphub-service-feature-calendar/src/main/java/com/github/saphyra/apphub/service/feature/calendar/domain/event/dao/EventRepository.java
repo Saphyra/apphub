@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
@@ -68,10 +67,6 @@ class EventRepository extends DynamoDbRepository {
     }
 
     List<EventEntity> getByIds(List<BiWrapper<String, String>> ids) {
-        if (ids.size() > Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Batch size cannot be greater than " + Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE);
-        }
-
         List<Map<String, AttributeValue>> keys = ids.stream()
             .map(id -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + id.getEntity1()).build(),
@@ -95,10 +90,6 @@ class EventRepository extends DynamoDbRepository {
     }
 
     void delete(String userId, List<String> eventIds) {
-        if (eventIds.size() > Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE) {
-            throw new IllegalArgumentException("Batch size must be less than %d".formatted(Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE));
-        }
-
         List<WriteRequest> requests = eventIds.stream()
             .map(eventId -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),

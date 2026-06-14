@@ -46,7 +46,11 @@ class CommonListItemRepository extends DynamoDbRepository {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :listItemId")
-            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .projectionExpression("#pk, #sk")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
             .expressionAttributeValues(Map.of(":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()))
             .build();
 
