@@ -11,6 +11,8 @@
 ===PLATFORM CHANGES===
     Storage
         Disable FTP
+    Make DynamoDB batch queries parallel
+    Split DynamoDB batch queries to partitions in the repository
 
 ===TECHNICAL DEBTS===
     Storage

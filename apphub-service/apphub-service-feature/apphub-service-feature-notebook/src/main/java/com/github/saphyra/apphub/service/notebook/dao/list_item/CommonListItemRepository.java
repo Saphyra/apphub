@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
-import com.google.common.collect.Lists;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -60,19 +58,16 @@ class CommonListItemRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        Lists.partition(items, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(batch -> {
-                List<WriteRequest> requests = batch.stream()
-                    .map(item -> Map.of(
-                        COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
-                        COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
-                    ))
-                    .map(key -> DeleteRequest.builder().key(key).build())
-                    .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
-                    .toList();
+        List<WriteRequest> requests = items.stream()
+            .map(item -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
+            ))
+            .map(key -> DeleteRequest.builder().key(key).build())
+            .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
+            .toList();
 
-                batchWrite(requests);
-            });
+        batchWrite(requests);
     }
 
     @PostConstruct

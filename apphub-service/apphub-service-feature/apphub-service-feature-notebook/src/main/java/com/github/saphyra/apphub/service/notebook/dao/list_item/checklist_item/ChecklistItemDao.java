@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.checklist_item;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -51,14 +49,10 @@ public class ChecklistItemDao {
             ))
             .toList();
 
-        Lists.partition(ids, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(repository::delete);
+        repository.delete(ids);
     }
 
     public void save(List<ChecklistItem> checklistItems) {
-        Lists.partition(checklistItems, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .stream()
-            .map(converter::convertDomain)
-            .forEach(repository::save);
+        repository.save(converter.convertDomain(checklistItems));
     }
 }

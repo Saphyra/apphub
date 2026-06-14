@@ -46,7 +46,7 @@ class LabelDaoTest {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(List.of(LABEL_ID))).willReturn(List.of(LABEL_ID_STRING));
         given(repository.getByLabelIds(USER_ID_STRING, List.of(LABEL_ID_STRING))).willReturn(List.of(entity));
-        given(converter.convertEntity(entity)).willReturn(domain);
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         List<Label> result = underTest.getByLabelIds(USER_ID, List.of(LABEL_ID));
 

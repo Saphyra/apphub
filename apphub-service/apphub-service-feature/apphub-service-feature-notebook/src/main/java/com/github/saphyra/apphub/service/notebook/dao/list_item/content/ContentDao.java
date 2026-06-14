@@ -1,8 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.content;
 
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,10 +24,7 @@ public class ContentDao {
     public void save(UUID listItemId, List<Content> contents) {
         List<Content> toSave = contentAggregator.aggregate(listItemId, contents);
 
-        Lists.partition(toSave, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .stream()
-            .map(converter::convertDomain)
-            .forEach(repository::save);
+        repository.save(converter.convertDomain(toSave));
     }
 
     /**
@@ -63,8 +58,7 @@ public class ContentDao {
 
         String listItemIdString = uuidConverter.convertDomain(listItemId);
 
-        Lists.partition(batchIndexes, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(i -> repository.delete(listItemIdString, i));
+        repository.delete(listItemIdString, batchIndexes);
     }
 
     public void delete(UUID listItemId) {

@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item.table.row;
 
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,20 +26,14 @@ public class TableRowDao {
     }
 
     public void delete(UUID listItemId, List<TableRow> tableRows) {
-        String listItemIdString = uuidConverter.convertDomain(listItemId);
-
-        Lists.partition(tableRows, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(rows -> repository.delete(
-                listItemIdString,
-                rows.stream().map(TableRow::getTableRowId).map(uuidConverter::convertDomain).toList()
-            ));
+        repository.delete(
+            uuidConverter.convertDomain(listItemId),
+            tableRows.stream().map(TableRow::getTableRowId).map(uuidConverter::convertDomain).toList()
+        );
     }
 
     public void save(List<TableRow> rows) {
-        Lists.partition(rows, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(tableRows -> repository.save(
-                converter.convertDomain(tableRows)
-            ));
+        repository.save(converter.convertDomain(rows));
     }
 
     public TableRow findByIdValidated(UUID listItemId, UUID rowId) {

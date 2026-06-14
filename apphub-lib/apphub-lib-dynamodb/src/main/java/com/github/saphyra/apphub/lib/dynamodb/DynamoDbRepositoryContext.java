@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.lib.dynamodb;
 
 import com.github.saphyra.apphub.lib.common_util.SleepService;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,4 +14,5 @@ public class DynamoDbRepositoryContext {
     private final DynamoDbClient client;
     private final DynamoDbRepositoryConfiguration configuration;
     private final SleepService sleepService;
+    private final ExecutorServiceBean executorServiceBean;
 }

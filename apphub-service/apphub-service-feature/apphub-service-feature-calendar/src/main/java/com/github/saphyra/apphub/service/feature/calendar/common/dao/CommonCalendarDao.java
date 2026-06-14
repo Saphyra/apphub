@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
@@ -11,7 +10,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -111,9 +109,8 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
             .map(Label::getLabelId)
             .toList();
 
-        List<BiWrapper<UUID, List<UUID>>> modifiedMappings = Lists.partition(labelsOfUser, Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
+        List<BiWrapper<UUID, List<UUID>>> modifiedMappings = eventLabelMappingDao.getEventsOfLabels(userId, labelsOfUser)
             .stream()
-            .flatMap(batch -> eventLabelMappingDao.getEventsOfLabels(userId, batch).stream())
             .map(mapping -> { //BiWrapper<LabelId, List<EventId>
                 UUID labelId = mapping.getEntity1();
                 List<UUID> eventIds = mapping.getEntity2();
