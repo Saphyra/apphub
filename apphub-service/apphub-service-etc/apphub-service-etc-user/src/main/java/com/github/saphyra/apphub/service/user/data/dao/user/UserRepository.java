@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.user.config.UserDynamoDbConfiguration;
+import com.github.saphyra.apphub.service.user.config.properties.UserProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -51,8 +52,11 @@ import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConsta
 @Slf4j
 @Profile("!test")
 class UserRepository extends DynamoDbRepository {
-    UserRepository(UserDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
+    private final UserProperties userProperties;
+
+    UserRepository(UserDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, UserProperties userProperties) {
         super(configuration.getTableName(), context);
+        this.userProperties = userProperties;
     }
 
     public void deleteProfile(String userId) {
@@ -80,6 +84,7 @@ class UserRepository extends DynamoDbRepository {
                 ":value", AttributeValue.builder().s(TYPE_MARKED_FOR_DELETION).build(),
                 ":current_time", AttributeValue.builder().n(String.valueOf(currentTimeEpochSeconds)).build()
             ))
+            .limit(userProperties.getDeleteAccountBatchCount())
             .build();
 
         return query(request)

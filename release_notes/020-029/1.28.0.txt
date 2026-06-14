@@ -18,6 +18,7 @@
         Delete FTP to S3 migration code
     User
         Delete old Role and User change sets
+        Limit number of deleted users in a batch at repository level
 
 ===ETC===
     Calendar
