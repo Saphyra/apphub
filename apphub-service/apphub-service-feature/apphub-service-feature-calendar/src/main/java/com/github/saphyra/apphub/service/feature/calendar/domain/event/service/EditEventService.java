@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateE
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ public class EditEventService {
     private final UpdateEventContextFactory updateEventContextFactory;
     private final List<EventFieldUpdater> eventFieldUpdaters;
 
-    @Transactional
     public void edit(UUID userId, UUID eventId, EventRequest request) {
         eventRequestValidator.validateEdit(userId, request);
 

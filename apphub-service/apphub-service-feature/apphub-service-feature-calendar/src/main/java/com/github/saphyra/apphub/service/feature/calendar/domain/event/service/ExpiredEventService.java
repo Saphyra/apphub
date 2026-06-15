@@ -10,7 +10,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -72,7 +71,6 @@ public class ExpiredEventService {
         eventDao.save(event);
     }
 
-    @Transactional
     public void extend(UUID userId, UUID eventId, LocalDate extendUntil) {
         LocalDate startDate = dateTimeUtil.getCurrentDate();
 

@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.CreateOccurrenceService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,6 @@ public class CreateEventService {
     private final CreateOccurrenceService createOccurrenceService;
     private final CommonCalendarDao commonCalendarDao;
 
-    @Transactional
     public UUID create(UUID userId, EventRequest request) {
         eventRequestValidator.validate(userId, request);
 

@@ -5,10 +5,14 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    Calendar
+        Remove PSQL
 
 ===ETC===
 
 ===Manual Release Steps===
     Pre deployment
+        Backup database
         Restart ApphubCI
     Post deployment
+        Delete schema calendar
