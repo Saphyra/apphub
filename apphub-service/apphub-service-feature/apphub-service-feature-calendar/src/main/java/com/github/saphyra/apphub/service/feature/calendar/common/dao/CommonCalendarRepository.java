@@ -52,7 +52,7 @@ class CommonCalendarRepository extends DynamoDbRepository {
             .expressionAttributeValues(Map.of(":userId", AttributeValue.builder().s(PREFIX_USER + userId).build()))
             .build();
 
-        List<BiWrapper<String, String>> items = query(queryRequest)
+        List<BiWrapper<String, String>> items = query(queryRequest, CalendarMonitoringFunctionality.DELETE_ALL_BY_USER_ID_QUERY)
             .stream()
             .map(map -> new BiWrapper<>(
                 map.get(COLUMN_PK).s(),
@@ -69,13 +69,14 @@ class CommonCalendarRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.DELETE_ALL_BY_USER_ID_DELETE);
     }
 
     @PostConstruct
     void createListItemTable() {
         try {
-            client.describeTable(builder -> builder.tableName(tableName));
+            getClient()
+                .describeTable(builder -> builder.tableName(tableName));
             log.info("DynamoDb table '{}' already exists", tableName);
         } catch (ResourceNotFoundException e) {
             log.info("Creating DynamoDb table '{}'", tableName);
@@ -129,9 +130,11 @@ class CommonCalendarRepository extends DynamoDbRepository {
                 .billingMode(BillingMode.PAY_PER_REQUEST)
                 .build();
 
-            client.createTable(createTableRequest);
+            getClient()
+                .createTable(createTableRequest);
 
-            client.waiter()
+            getClient()
+                .waiter()
                 .waitUntilTableExists(builder -> builder.tableName(tableName));
         }
     }

@@ -4,11 +4,11 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarMonitoringFunctionality;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
@@ -40,10 +40,7 @@ class EventRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
-            .map(mapper::convertEntity);
+        return mapper.convertEntity(getItem(request, CalendarMonitoringFunctionality.FIND_EVENT_BY_ID));
     }
 
     List<EventEntity> getByUserId(String userId) {
@@ -60,7 +57,7 @@ class EventRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, CalendarMonitoringFunctionality.GET_EVENTS_BY_USER_ID)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -74,7 +71,7 @@ class EventRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        return batchGetItem(keys)
+        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_EVENTS_BY_IDS)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -86,7 +83,7 @@ class EventRepository extends DynamoDbRepository {
             .item(mapper.convertDomain(eventEntity))
             .build();
 
-        client.putItem(request);
+        putItem(request, CalendarMonitoringFunctionality.SAVE_EVENT);
     }
 
     void delete(String userId, List<String> eventIds) {
@@ -99,6 +96,6 @@ class EventRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.DELETE_EVENTS);
     }
 }

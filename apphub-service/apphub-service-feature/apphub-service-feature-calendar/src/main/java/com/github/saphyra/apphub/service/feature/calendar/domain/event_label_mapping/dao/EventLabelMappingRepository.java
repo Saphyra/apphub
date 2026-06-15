@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarMonitoringFunctionality;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
@@ -19,7 +19,6 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EVENT_IDS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_LABEL_IDS;
@@ -47,9 +46,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
+        return getItem(request, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABEL)
             .map(item -> item.get(COLUMN_EVENT_IDS).s())
             .map(s -> objectMapper.readValue(s, new TypeReference<List<String>>() {
             }))
@@ -64,7 +61,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        return batchGetItem(keys)
+        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_OF_EVENTS)
             .stream()
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_EVENT_LABEL_MAPPING.length()),
@@ -88,7 +85,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, CalendarMonitoringFunctionality.GET_LABELS_OF_EVENTS_BY_USER_ID)
             .stream()
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_EVENT_LABEL_MAPPING.length()),
@@ -108,7 +105,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.putItem(request);
+        putItem(request, CalendarMonitoringFunctionality.SAVE_LABELS_OF_EVENT);
     }
 
     List<BiWrapper<String, List<String>>> getEventsOfLabels(String userId, List<String> labelIds) {
@@ -118,7 +115,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING + id).build()
             ))
             .toList();
-        return batchGetItem(keys)
+        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABELS)
             .stream()
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_LABEL_EVENT_MAPPING.length()),
@@ -142,7 +139,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.SAVE_EVENTS_OF_LABELS);
     }
 
     void deleteLabelsOfEvents(String userId, List<String> eventIds) {
@@ -155,7 +152,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.DELETE_LABELS_OF_EVENTS);
     }
 
     void deleteEventsOfLabel(String userId, String labelId) {
@@ -167,7 +164,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, CalendarMonitoringFunctionality.DELETE_EVENTS_OF_LABEL);
     }
 
     List<BiWrapper<String, List<String>>> getEventsOfLabelsByUserId(String userId) {
@@ -184,7 +181,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABELS_BY_USER_ID)
             .stream()
             .map(item -> new BiWrapper<>(
                 item.get(COLUMN_SK).s().substring(PREFIX_LABEL_EVENT_MAPPING.length()),
@@ -204,6 +201,6 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.putItem(request);
+        putItem(request, CalendarMonitoringFunctionality.SAVE_EVENTS_OF_LABELS);
     }
 }

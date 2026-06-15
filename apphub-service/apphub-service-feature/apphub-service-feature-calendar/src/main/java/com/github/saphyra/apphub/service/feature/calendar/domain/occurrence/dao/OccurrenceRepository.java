@@ -4,12 +4,12 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarMonitoringFunctionality;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
@@ -44,7 +44,7 @@ class OccurrenceRepository extends DynamoDbRepository {
             .item(mapper.convertDomain(occurrence))
             .build();
 
-        client.putItem(request);
+        putItem(request, CalendarMonitoringFunctionality.SAVE_OCCURRENCE);
     }
 
     List<OccurrenceEntity> getByEventId(String eventId) {
@@ -61,7 +61,7 @@ class OccurrenceRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, CalendarMonitoringFunctionality.GET_OCCURRENCES_BY_EVENT_ID)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -77,7 +77,7 @@ class OccurrenceRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.DELETE_OCCURRENCES);
     }
 
     void save(List<OccurrenceEntity> occurrences) {
@@ -87,7 +87,7 @@ class OccurrenceRepository extends DynamoDbRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.SAVE_OCCURRENCES);
     }
 
     Optional<OccurrenceEntity> findById(String eventId, String occurrenceId) {
@@ -99,10 +99,7 @@ class OccurrenceRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
-            .map(mapper::convertEntity);
+        return mapper.convertEntity(getItem(request, CalendarMonitoringFunctionality.FIND_OCCURRENCE_BY_ID));
     }
 
     public List<OccurrenceEntity> getByBucket(String userId, String bucket) {
@@ -120,7 +117,7 @@ class OccurrenceRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, CalendarMonitoringFunctionality.GET_OCCURRENCE_BY_BUCKET)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -139,6 +136,6 @@ class OccurrenceRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, CalendarMonitoringFunctionality.DELETE_OCCURRENCES);
     }
 }

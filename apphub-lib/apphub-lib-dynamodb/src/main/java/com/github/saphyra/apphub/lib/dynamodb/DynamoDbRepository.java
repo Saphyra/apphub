@@ -1,182 +1,72 @@
 package com.github.saphyra.apphub.lib.dynamodb;
 
-import com.github.saphyra.apphub.lib.common_domain.Constants;
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
-import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.google.common.collect.Lists;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.BatchGetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.BatchGetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.KeysAndAttributes;
+import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
-import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
-import software.amazon.awssdk.services.dynamodb.model.ScanResponse;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import static java.util.Objects.nonNull;
+import java.util.Optional;
 
 @Slf4j
 public abstract class DynamoDbRepository {
-    protected final DynamoDbClient client;
-    protected final int maxBatchRetryCount;
-    protected final long batchRetryDelayMs;
-    protected final SleepService sleepService;
+    @Getter
+    private final DynamoDbClient client;
+    private final DynamoDbRepositoryQueryUtil queryUtil;
+    private final DynamoDbRepositoryScanUtil scanUtil;
+    private final DynamoDbRepositoryBatchWriteUtil batchWriteUtil;
+    private final DynamoDbRepositoryBatchGetItemUtil batchGetItemUtil;
+    private final DynamoDbRepositoryPutItemUtil putItemUtil;
+    private final DynamoDbRepositoryGetItemUtil getItemUtil;
+    private final DynamoDbRepositoryDeleteItemUtil deleteItemUtil;
+
     protected final String tableName;
-    protected final ExecutorServiceBean executorServiceBean;
 
     protected DynamoDbRepository(String tableName, DynamoDbRepositoryContext context) {
         this.client = context.getClient();
-        this.sleepService = context.getSleepService();
 
-        DynamoDbRepositoryConfiguration configuration = context.getConfiguration();
-        this.maxBatchRetryCount = configuration.getMaxBatchRetryCount();
-        this.batchRetryDelayMs = configuration.getBatchRetryDelayMs();
         this.tableName = tableName;
-        this.executorServiceBean = context.getExecutorServiceBean();
+        this.queryUtil = context.getQueryUtil();
+        this.scanUtil = context.getScanUtil();
+        this.batchWriteUtil = context.getBatchWriteUtil();
+        this.batchGetItemUtil = context.getBatchGetItemUtil();
+        this.putItemUtil = context.getPutItemUtil();
+        this.getItemUtil = context.getGetItemUtil();
+        this.deleteItemUtil = context.getDeleteItemUtil();
     }
 
-    protected List<Map<String, AttributeValue>> query(QueryRequest queryRequest) {
-        List<Map<String, AttributeValue>> result = new ArrayList<>();
-        Map<String, AttributeValue> lastEvaluatedKey = null;
-
-        do {
-            queryRequest = queryRequest.toBuilder()
-                .exclusiveStartKey(lastEvaluatedKey)
-                .build();
-
-            QueryResponse response = client.query(queryRequest);
-
-            result.addAll(response.items());
-
-            lastEvaluatedKey = response.lastEvaluatedKey();
-        } while (nonNull(lastEvaluatedKey) && !lastEvaluatedKey.isEmpty());
-
-        return result;
+    protected void putItem(PutItemRequest request, MonitoringFunctionality monitoringFunctionality) {
+        putItemUtil.putItem(request, monitoringFunctionality.assemble(tableName));
     }
 
-    protected List<Map<String, AttributeValue>> scan(ScanRequest scanRequest) {
-        List<Map<String, AttributeValue>> result = new ArrayList<>();
-        Map<String, AttributeValue> lastEvaluatedKey = null;
-
-        do {
-            scanRequest = scanRequest.toBuilder()
-                .exclusiveStartKey(lastEvaluatedKey)
-                .build();
-
-            ScanResponse response = client.scan(scanRequest);
-
-            result.addAll(response.items());
-
-            lastEvaluatedKey = response.lastEvaluatedKey();
-        } while (nonNull(lastEvaluatedKey) && !lastEvaluatedKey.isEmpty());
-
-        return result;
+    protected List<Map<String, AttributeValue>> query(QueryRequest queryRequest, MonitoringFunctionality monitoringFunctionality) {
+        return queryUtil.query(queryRequest, monitoringFunctionality.assemble(tableName));
     }
 
-    protected void batchWrite(List<WriteRequest> requests) {
-        if (requests.isEmpty()) {
-            log.debug("Empty parameter list for batchWrite");
-        } else if (requests.size() > Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE) {
-            List<FutureWrapper<Void>> futures = Lists.partition(requests, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-                .stream()
-                .map(batch -> executorServiceBean.execute(() -> batchWrite(batch)))
-                .toList();
-
-            futures.stream()
-                .map(FutureWrapper::get)
-                .forEach(ExecutionResult::getOrThrow);
-        } else {
-            int tryCount = 0;
-            List<WriteRequest> pendingRequests = requests;
-
-            while (nonNull(pendingRequests) && !pendingRequests.isEmpty()) {
-                if (tryCount > maxBatchRetryCount) {
-                    throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
-                }
-
-                if (tryCount > 0) {
-                    sleepService.sleep(tryCount * batchRetryDelayMs);
-                }
-
-                BatchWriteItemRequest batchRequest = BatchWriteItemRequest.builder()
-                    .requestItems(Map.of(tableName, pendingRequests))
-                    .build();
-
-                pendingRequests = client.batchWriteItem(batchRequest)
-                    .unprocessedItems()
-                    .get(tableName);
-
-                tryCount++;
-            }
-        }
+    protected List<Map<String, AttributeValue>> scan(ScanRequest scanRequest, MonitoringFunctionality monitoringFunctionality) {
+        return scanUtil.scan(scanRequest, monitoringFunctionality.assemble(tableName));
     }
 
-    protected List<Map<String, AttributeValue>> batchGetItem(List<Map<String, AttributeValue>> keys) {
-        if (keys.isEmpty()) {
-            return List.of();
-        } else if (keys.size() > Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE) {
-            List<FutureWrapper<List<Map<String, AttributeValue>>>> futures = Lists.partition(keys, Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
-                .stream()
-                .map(batch -> executorServiceBean.asyncProcess(() -> batchGetItem(batch)))
-                .toList();
+    protected void batchWrite(List<WriteRequest> requests, MonitoringFunctionality monitoringFunctionality) {
+        batchWriteUtil.batchWrite(tableName, requests, monitoringFunctionality.assemble(tableName));
+    }
 
-            return futures.stream()
-                .map(FutureWrapper::get)
-                .map(ExecutionResult::getOrThrow)
-                .flatMap(List::stream)
-                .toList();
-        } else {
-            int tryCount = 0;
-            List<Map<String, AttributeValue>> pendingKeys = keys;
-            Set<Map<String, AttributeValue>> result = new LinkedHashSet<>();
+    protected List<Map<String, AttributeValue>> batchGetItem(List<Map<String, AttributeValue>> keys, MonitoringFunctionality monitoringFunctionality) {
+        return batchGetItemUtil.batchGetItem(tableName, keys, monitoringFunctionality.assemble(tableName));
+    }
 
-            while (!pendingKeys.isEmpty()) {
-                if (tryCount > maxBatchRetryCount) {
-                    throw ExceptionFactory.reportedException(HttpStatus.SERVICE_UNAVAILABLE, ErrorCode.GENERAL_ERROR, "Batch retry limit exceeded");
-                }
+    protected Optional<Map<String, AttributeValue>> getItem(GetItemRequest request, MonitoringFunctionality monitoringFunctionality) {
+        return getItemUtil.getItem(request, monitoringFunctionality.assemble(tableName));
+    }
 
-                if (tryCount > 0) {
-                    sleepService.sleep(tryCount * batchRetryDelayMs);
-                }
-
-                BatchGetItemRequest request = BatchGetItemRequest.builder()
-                    .requestItems(Map.of(
-                        tableName,
-                        KeysAndAttributes.builder()
-                            .keys(pendingKeys)
-                            .build()
-                    ))
-                    .build();
-
-                BatchGetItemResponse response = client.batchGetItem(request);
-
-                result.addAll(response.responses().get(tableName));
-
-                pendingKeys = response.unprocessedKeys()
-                    .values()
-                    .stream()
-                    .flatMap(keysAndAttributes -> keysAndAttributes.keys().stream())
-                    .toList();
-
-                tryCount++;
-            }
-
-            return List.copyOf(result);
-        }
+    protected void deleteItem(DeleteItemRequest request, MonitoringFunctionality monitoringFunctionality) {
+        deleteItemUtil.deleteItem(request, monitoringFunctionality.assemble(tableName));
     }
 }

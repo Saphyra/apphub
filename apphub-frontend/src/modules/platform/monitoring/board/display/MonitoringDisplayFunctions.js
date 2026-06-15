@@ -103,7 +103,7 @@ export const getVerticals = (entries, displayedTimestamp, setDisplayedTimestamp)
 export const getLabels = (displayedTimestamp, entryMap, colors) => {
     return (
         <div className="monitoring-diagram-labels">
-            <span>{LocalDateTime.fromEpochSeconds(displayedTimestamp).format()}</span>
+            <span className="nowrap">{LocalDateTime.fromEpochSeconds(displayedTimestamp).format()}</span>
             {getProperties()}
         </div>
     );
@@ -113,7 +113,7 @@ export const getLabels = (displayedTimestamp, entryMap, colors) => {
             .toList((property, color) =>
                 <span
                     key={property}
-                    style={{ color: color.assemble() }}>
+                    style={{ color: color.assemble(), whiteSpace: "nowrap", display: "inline-block" }}>
                     {property}: {formatNumber(entryMap[displayedTimestamp].properties[property], 3)}
                 </span>
             );
@@ -129,10 +129,17 @@ export const getLabels = (displayedTimestamp, entryMap, colors) => {
  * @returns  the lines for each property, representing their values over time
  */
 export const getPropertyLines = (entries, properties, colors, hiddenProperties) => {
-    const maxValue = new Stream(entries)
-        .flatMap(entry => new MapStream(entry.properties).filter((property, value) => !hiddenProperties.includes(property)).toListStream((property, value) => value))
-        .max()
-        .orElseThrow("IllegalArgument", "No properties found for any entry");
+    let maxValue;
+    try {
+        maxValue = new Stream(entries)
+            .flatMap(entry => new MapStream(entry.properties).filter((property, value) => !hiddenProperties.includes(property)).toListStream((property, value) => value))
+            .max()
+            .orElseThrow("IllegalArgument", "No properties found for any entry");
+    } catch (e) {
+        console.log(JSON.stringify(entries));
+        console.log(e);
+    }
+
 
     return new Stream(properties)
         .filter(property => !hiddenProperties.includes(property))

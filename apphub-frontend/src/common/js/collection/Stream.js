@@ -130,7 +130,7 @@ const Stream = class {
             const itemNumber = toIntFunction(item);
 
             if (typeof itemNumber !== "number") {
-                throwException("IllegalArgument", itemNumber + " is not a number. It is " + typeof itemNumber);
+                throw new Error("IllegalArgument: " + itemNumber + " is not a number. It is " + typeof itemNumber);
             }
 
             if (itemNumber > currentMax) {
@@ -150,7 +150,7 @@ const Stream = class {
 
         this.forEach(item => {
             if (typeof item !== "number") {
-                throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+                throw new Error("IllegalArgument: " + item + " is not a number. It is " + typeof item);
             }
 
             if (item < currentMin) {
@@ -192,7 +192,7 @@ const Stream = class {
         let result = 0;
         this.forEach(item => {
             if (typeof item !== "number") {
-                throwException("IllegalArgument", item + " is not a number. It is " + typeof item);
+                throw new Error("IllegalArgument: " + item + " is not a number. It is " + typeof item);
             }
 
             result += item;

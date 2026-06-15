@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar;
 
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
+import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
@@ -12,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -24,10 +24,10 @@ public class CalendarApplicationTest {
     private int serverPort;
 
     @MockitoBean
-    private DynamoDbClient dynamoDbClient;
+    private CommonCalendarDao commonCalendarDao;
 
     @MockitoBean
-    private CommonCalendarDao commonListItemDao;
+    private DynamoDbRepositoryContext dynamoDbRepositoryContext;
 
     @Test
     public void startup() {

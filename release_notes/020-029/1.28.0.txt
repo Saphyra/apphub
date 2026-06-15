@@ -13,6 +13,7 @@
         Disable FTP
     Make DynamoDB batch queries parallel
     Split DynamoDB batch queries to partitions in the repository
+    DynamoDB repository monitoring
 
 ===TECHNICAL DEBTS===
     Storage

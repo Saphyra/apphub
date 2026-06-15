@@ -73,6 +73,7 @@ public class MonitoringControllerImpl implements MonitoringController {
         return metricServiceDao.getByMetricIds(metricIds)
             .stream()
             .map(MetricService::getService)
+            .distinct()
             .toList();
     }
 

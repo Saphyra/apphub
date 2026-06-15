@@ -7,12 +7,14 @@ import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_TABLE_HEAD;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.FIND_TABLE_HEAD_BY_LIST_ITEM_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_TABLE_HEAD;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
@@ -33,7 +35,7 @@ class TableHeadRepository extends DynamoDbRepository {
             .item(mapper.convertDomain(tableHead))
             .build();
 
-        client.putItem(request);
+        putItem(request, SAVE_TABLE_HEAD);
     }
 
     void delete(String listItemId) {
@@ -45,7 +47,7 @@ class TableHeadRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, DELETE_TABLE_HEAD);
     }
 
     public Optional<TableHeadEntity> findByListItemId(String listItemId) {
@@ -57,9 +59,7 @@ class TableHeadRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
+        return getItem(request, FIND_TABLE_HEAD_BY_LIST_ITEM_ID)
             .map(mapper::convertEntity);
     }
 }

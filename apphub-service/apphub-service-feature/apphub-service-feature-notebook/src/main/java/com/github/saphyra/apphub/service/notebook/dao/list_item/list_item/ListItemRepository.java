@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
@@ -16,6 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_LIST_ITEM;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.FIND_LIST_ITEM_BY_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.GET_LIST_ITEMS_BY_USER_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.GET_LIST_ITEMS_BY_USER_ID_AND_PARENT;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.GET_LIST_ITEMS_BY_USER_ID_AND_TYPE;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_LIST_ITEM;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PARENT;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
@@ -42,7 +47,7 @@ class ListItemRepository extends DynamoDbRepository {
             .item(item)
             .build();
 
-        client.putItem(request);
+        putItem(request, SAVE_LIST_ITEM);
     }
 
     List<ListItemEntity> getByUserIdAndParent(String userId, String parent) {
@@ -63,7 +68,7 @@ class ListItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, GET_LIST_ITEMS_BY_USER_ID_AND_PARENT)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -84,7 +89,7 @@ class ListItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, GET_LIST_ITEMS_BY_USER_ID_AND_TYPE)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -99,9 +104,7 @@ class ListItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
+        return getItem(request, FIND_LIST_ITEM_BY_ID)
             .map(mapper::convertEntity);
     }
 
@@ -119,7 +122,7 @@ class ListItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, GET_LIST_ITEMS_BY_USER_ID)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -134,6 +137,6 @@ class ListItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, DELETE_LIST_ITEM);
     }
 }

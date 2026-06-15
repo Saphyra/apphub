@@ -1,7 +1,5 @@
 package com.github.saphyra.apphub.lib.dynamodb;
 
-import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,7 +10,11 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 @Getter
 public class DynamoDbRepositoryContext {
     private final DynamoDbClient client;
-    private final DynamoDbRepositoryConfiguration configuration;
-    private final SleepService sleepService;
-    private final ExecutorServiceBean executorServiceBean;
+    private final DynamoDbRepositoryQueryUtil queryUtil;
+    private final DynamoDbRepositoryScanUtil scanUtil;
+    private final DynamoDbRepositoryBatchWriteUtil batchWriteUtil;
+    private final DynamoDbRepositoryBatchGetItemUtil batchGetItemUtil;
+    private final DynamoDbRepositoryPutItemUtil putItemUtil;
+    private final DynamoDbRepositoryGetItemUtil getItemUtil;
+    private final DynamoDbRepositoryDeleteItemUtil deleteItemUtil;
 }

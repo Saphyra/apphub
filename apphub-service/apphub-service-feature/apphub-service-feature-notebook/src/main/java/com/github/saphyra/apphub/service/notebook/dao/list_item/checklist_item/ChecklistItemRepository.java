@@ -10,7 +10,6 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
@@ -20,6 +19,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_CHECKLIST_ITEM;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_CHECKLIST_ITEMS;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.FIND_CHECKLIST_ITEM_BY_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.GET_CHECKLIST_ITEMS_BY_LIST_ITEM_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_CHECKLIST_ITEM;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_CHECKLIST_ITEMS;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_CHECKLIST_ITEM;
@@ -44,9 +49,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
+        return getItem(request, FIND_CHECKLIST_ITEM_BY_ID)
             .map(mapper::convertEntity);
     }
 
@@ -59,7 +62,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, DELETE_CHECKLIST_ITEM);
     }
 
     void save(ChecklistItemEntity checklistItem) {
@@ -68,7 +71,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
             .item(mapper.convertDomain(checklistItem))
             .build();
 
-        client.putItem(request);
+        putItem(request, SAVE_CHECKLIST_ITEM);
     }
 
     List<ChecklistItemEntity> getByListItemId(String listItemId) {
@@ -85,7 +88,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, GET_CHECKLIST_ITEMS_BY_LIST_ITEM_ID)
             .stream()
             .map(mapper::convertEntity)
             .toList();
@@ -104,7 +107,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, DELETE_CHECKLIST_ITEMS);
     }
 
     void save(List<ChecklistItemEntity> items) {
@@ -114,6 +117,6 @@ class ChecklistItemRepository extends DynamoDbRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, SAVE_CHECKLIST_ITEMS);
     }
 }
