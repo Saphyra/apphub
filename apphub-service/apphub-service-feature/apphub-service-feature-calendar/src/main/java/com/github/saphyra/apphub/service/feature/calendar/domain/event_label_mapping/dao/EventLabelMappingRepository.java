@@ -201,6 +201,6 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .build();
 
-        putItem(request, CalendarMonitoringFunctionality.SAVE_EVENTS_OF_LABELS);
+        putItem(request, CalendarMonitoringFunctionality.SAVE_EVENTS_OF_LABEL);
     }
 }

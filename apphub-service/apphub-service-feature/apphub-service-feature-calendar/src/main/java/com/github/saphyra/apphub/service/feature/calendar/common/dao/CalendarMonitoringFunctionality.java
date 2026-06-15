@@ -39,6 +39,7 @@ public enum CalendarMonitoringFunctionality implements MonitoringFunctionality {
     DELETE_LABELS_OF_EVENTS,
     DELETE_EVENTS_OF_LABEL,
     GET_EVENTS_OF_LABELS_BY_USER_ID,
+    SAVE_EVENTS_OF_LABEL,
     ;
 
     @Override

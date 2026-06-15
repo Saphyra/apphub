@@ -8,7 +8,6 @@
     </parent>
 
     <artifactId>apphub-lib-error_report</artifactId>
-    <version>1.0-SNAPSHOT</version>
 
     <name>apphub-lib-error_report</name>
 
@@ -22,9 +21,18 @@
             <artifactId>apphub-api-etc-admin_panel-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-monitoring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-test-common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
-
-    <build>
-
-    </build>
 </project>

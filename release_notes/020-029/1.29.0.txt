@@ -1,6 +1,7 @@
 ===FEATURES===
     Monitoring
         Filter diagrams
+        Monitor error reports
 
 ===BUGFIXES===
 

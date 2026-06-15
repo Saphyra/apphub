@@ -4,6 +4,8 @@ server:
 initialDelay: 10000
 
 interval:
+  user:
+    deletion: 1000
   skyxplore:
     game:
       gameCleanup: 30000 #30 sec

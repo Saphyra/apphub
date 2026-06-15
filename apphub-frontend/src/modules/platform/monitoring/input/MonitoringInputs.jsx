@@ -81,7 +81,6 @@ const MonitoringInputs = ({ localizationHandler, setDisplaySpinner, queryData, s
             service: nullIfEmpty(service)
         }
         setQueryData(data);
-        setFilterText("");
     }
 }
 
