@@ -36,5 +36,9 @@ public class MonitoringTest extends SeleniumTest {
         MonitoringPageActions.load(driver);
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getMetricServices(driver)).containsAll(Constants.SERVICES));
+
+        MonitoringPageActions.filter(driver, Constants.SERVICE_NAME_USER);
+
+        AwaitilityWrapper.awaitAssert(() -> assertThat(MonitoringPageActions.getMetricServices(driver)).containsExactly(Constants.SERVICE_NAME_USER));
     }
 }

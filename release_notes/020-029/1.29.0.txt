@@ -1,4 +1,6 @@
 ===FEATURES===
+    Monitoring
+        Filter diagrams
 
 ===BUGFIXES===
 

@@ -19,6 +19,7 @@ const MonitoringPage = () => {
 
     const [displaySpinner, setDisplaySpinner] = useState(false);
     const [queryData, setQueryData] = useState(null);
+    const [filterText, setFilterText] = useState("");
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
@@ -30,14 +31,17 @@ const MonitoringPage = () => {
                 <MonitoringInputs
                     localizationHandler={localizationHandler}
                     setDisplaySpinner={setDisplaySpinner}
+                    queryData={queryData}
                     setQueryData={setQueryData}
+                    filterText={filterText}
+                    setFilterText={setFilterText}
                 />
 
                 {hasValue(queryData) &&
                     <MonitoringBoard
                         setDisplaySpinner={setDisplaySpinner}
-                        localizationHandler={localizationHandler}
                         queryData={queryData}
+                        filterText={filterText}
                     />
                 }
             </main>

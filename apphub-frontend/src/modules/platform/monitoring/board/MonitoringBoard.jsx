@@ -7,8 +7,9 @@ import { HOUR, MINUTE, SECOND } from "../input/time_frame/TimeFrame";
 import { throwException } from "../../../../common/js/Utils";
 import PropertyFilter from "./filter/PropertyFilter";
 
-const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) => {
+const MonitoringBoard = ({ setDisplaySpinner, queryData, filterText }) => {
     console.debug(queryData);
+    console.log(filterText);
 
     const [metricsData, setMetricsData] = useState({ queryData: null, metrics: [] });
     const [hiddenProperties, setHiddenProperties] = useState([]);
@@ -50,6 +51,7 @@ const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) 
 
         return new Stream(metricsData.metrics)
             .groupBy(metric => JSON.stringify({ feature: metric.feature, functionality: metric.functionality, service: metric.service }))
+            .filter(group => group.toLowerCase().includes(filterText.toLowerCase()))
             .sorted((a, b) => a.key.localeCompare(b.key))
             .toList((groupId, metrics) => {
                 const group = JSON.parse(groupId);

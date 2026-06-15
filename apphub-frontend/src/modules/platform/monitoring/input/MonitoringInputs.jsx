@@ -2,12 +2,14 @@ import { useState } from "react";
 import TimeFrame from "./time_frame/TimeFrame";
 import TimeFrameSelector from "./time_frame/TimeFrameSelector";
 import FeatureSelector from "./feature/FeatureSelector";
-import { isBlank, nullIfEmpty } from "../../../../common/js/Utils";
+import { hasValue, isBlank, nullIfEmpty } from "../../../../common/js/Utils";
 import FunctionalitySelector from "./functionality/FunctionalitySelector";
 import ServiceSelector from "./service/ServiceSelector";
 import Button from "../../../../common/component/input/Button";
+import PreLabeledInputField from "common/component/input/PreLabeledInputField";
+import InputField from "common/component/input/InputField";
 
-const MonitoringInputs = ({ localizationHandler, setDisplaySpinner, setQueryData }) => {
+const MonitoringInputs = ({ localizationHandler, setDisplaySpinner, queryData, setQueryData, filterText, setFilterText }) => {
     const [timeFrame, setTimeFrame] = useState(TimeFrame.SECOND);
     const [feature, setFeature] = useState("");
     const [functionality, setFunctionality] = useState("");
@@ -55,6 +57,19 @@ const MonitoringInputs = ({ localizationHandler, setDisplaySpinner, setQueryData
                 onclick={assembleQueryData}
                 disabled={isBlank(feature)}
             />
+
+            {hasValue(queryData) &&
+                <PreLabeledInputField
+                    label={localizationHandler.get("filter")}
+                    input={<InputField
+                            id="monitoring-filter"
+                            value={filterText}
+                            onchangeCallback={setFilterText}
+                            placeholder={localizationHandler.get("filter")}
+                        />
+                    }
+                />
+            }
         </div>
     );
 
@@ -66,6 +81,7 @@ const MonitoringInputs = ({ localizationHandler, setDisplaySpinner, setQueryData
             service: nullIfEmpty(service)
         }
         setQueryData(data);
+        setFilterText("");
     }
 }
 
