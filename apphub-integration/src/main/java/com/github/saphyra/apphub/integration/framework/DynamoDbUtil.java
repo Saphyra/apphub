@@ -41,6 +41,11 @@ public class DynamoDbUtil {
 
     private static DynamoDbClient dynamoDbClient;
 
+    public static void checkConnection() {
+        getClient()
+            .listTables();
+    }
+
     public static List<String> getRolesByEmail(String email) {
         UUID userId = getUserIdByEmail(email);
 

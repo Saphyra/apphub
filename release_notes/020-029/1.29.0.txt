@@ -9,6 +9,7 @@
         Remove PSQL
 
 ===ETC===
+    Test DynamoDB connection before running integration tests
 
 ===Manual Release Steps===
     Pre deployment

@@ -108,7 +108,15 @@ public abstract class TestBase {
             log.info("API connection successfully tested");
         } catch (Exception e) {
             log.error("API check failed", e);
-            System.exit(0);
+            System.exit(1);
+        }
+
+        try {
+            DynamoDbUtil.checkConnection();
+            log.info("DynamoDB connection successfully tested");
+        } catch (Exception e) {
+            log.error("DynamoDB connection check failed", e);
+            System.exit(1);
         }
 
         System.setProperty("testng.show.stack.frames", "true");
@@ -118,7 +126,7 @@ public abstract class TestBase {
         List<String> groups = Arrays.asList(method.getGroups());
 
         String methodName = method.getMethodName();
-        if(ENABLED_TEST_GROUPS.contains(methodName)){
+        if (ENABLED_TEST_GROUPS.contains(methodName)) {
             return true;
         }
 
