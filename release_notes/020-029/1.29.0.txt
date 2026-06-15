@@ -12,6 +12,8 @@
 ===TECHNICAL DEBTS===
     Calendar
         Remove PSQL
+    User
+        Drop backup-role change set
 
 ===ETC===
     Test DynamoDB connection before running integration tests

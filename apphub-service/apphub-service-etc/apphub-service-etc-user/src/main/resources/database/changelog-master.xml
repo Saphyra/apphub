@@ -13,12 +13,4 @@
     <include file="database/change_sets/disabled_role.xml"/>
     <include file="database/change_sets/ban.xml"/>
     <include file="database/change_sets/settings.xml"/>
-
-    <changeSet id="drop-table-role-v2" author="Saphyra">
-        <preConditions onFail="MARK_RAN">
-            <tableExists schemaName="apphub_user" tableName="apphub_role"/>
-        </preConditions>
-
-        <dropTable tableName="apphub_role" schemaName="apphub_user"/>
-    </changeSet>
 </databaseChangeLog>
