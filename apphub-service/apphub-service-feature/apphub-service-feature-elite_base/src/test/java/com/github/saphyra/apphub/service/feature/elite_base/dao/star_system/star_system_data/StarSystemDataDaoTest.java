@@ -54,4 +54,12 @@ class StarSystemDataDaoTest {
 
         assertThat(underTest.findAllById(List.of(STAR_SYSTEM_ID))).containsExactly(domain);
     }
+
+    @Test
+    void getByControllingPower() {
+        given(repository.getByControllingPower(Power.NAKATO_KAINE)).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByControllingPower(Power.NAKATO_KAINE)).containsExactly(domain);
+    }
 }

@@ -35,6 +35,7 @@ const EliteBase = () => {
 
                 <EliteBasePages
                     openedPage={openedPage}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 

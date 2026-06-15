@@ -1,11 +1,9 @@
 package com.github.saphyra.apphub.service.notebook.dao.list_item;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.config.NotebookDynamoDbConfiguration;
-import com.google.common.collect.Lists;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -28,6 +26,8 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_BY_LIST_ITEM_ID_DELETE;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_BY_LIST_ITEM_ID_QUERY;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PARENT;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
@@ -48,11 +48,15 @@ class CommonListItemRepository extends DynamoDbRepository {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :listItemId")
-            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .projectionExpression("#pk, #sk")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
             .expressionAttributeValues(Map.of(":listItemId", AttributeValue.builder().s(PREFIX_LIST_ITEM + listItemId).build()))
             .build();
 
-        List<BiWrapper<String, String>> items = query(request)
+        List<BiWrapper<String, String>> items = query(request, DELETE_BY_LIST_ITEM_ID_QUERY)
             .stream()
             .map(map -> new BiWrapper<>(
                 map.get(COLUMN_PK).s(),
@@ -60,25 +64,23 @@ class CommonListItemRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        Lists.partition(items, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(batch -> {
-                List<WriteRequest> requests = batch.stream()
-                    .map(item -> Map.of(
-                        COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
-                        COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
-                    ))
-                    .map(key -> DeleteRequest.builder().key(key).build())
-                    .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
-                    .toList();
+        List<WriteRequest> requests = items.stream()
+            .map(item -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
+            ))
+            .map(key -> DeleteRequest.builder().key(key).build())
+            .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
+            .toList();
 
-                batchWrite(requests);
-            });
+        batchWrite(requests, DELETE_BY_LIST_ITEM_ID_DELETE);
     }
 
     @PostConstruct
     void createListItemTable() {
         try {
-            client.describeTable(builder -> builder.tableName(tableName));
+            getClient()
+                .describeTable(builder -> builder.tableName(tableName));
             log.info("DynamoDb table '{}' already exists", tableName);
         } catch (ResourceNotFoundException e) {
             log.info("Creating DynamoDb table '{}'", tableName);
@@ -146,9 +148,11 @@ class CommonListItemRepository extends DynamoDbRepository {
                 .billingMode(BillingMode.PAY_PER_REQUEST)
                 .build();
 
-            client.createTable(createTableRequest);
+            getClient()
+                .createTable(createTableRequest);
 
-            client.waiter()
+            getClient()
+                .waiter()
                 .waitUntilTableExists(builder -> builder.tableName(tableName));
         }
     }

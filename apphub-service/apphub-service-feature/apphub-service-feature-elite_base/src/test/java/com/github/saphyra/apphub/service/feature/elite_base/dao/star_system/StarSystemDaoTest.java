@@ -133,4 +133,13 @@ class StarSystemDaoTest {
 
         assertThat(underTest.findAllById(List.of(ID))).containsExactly(domain1);
     }
+
+    @Test
+    void getByIds(){
+        given(uuidConverter.convertDomain(List.of(ID))).willReturn(List.of(ID_STRING));
+        given(repository.findAllById(List.of(ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain1));
+
+        assertThat(underTest.getByIds(List.of(ID))).containsExactly(domain1);
+    }
 }

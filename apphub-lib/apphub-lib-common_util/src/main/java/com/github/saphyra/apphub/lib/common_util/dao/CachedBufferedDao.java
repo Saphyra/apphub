@@ -9,11 +9,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, REPOSITORY extends CrudRepository<ENTITY, ENTITY_ID>> extends AbstractDao<ENTITY, DOMAIN, ENTITY_ID, REPOSITORY> {
     protected final Cache<CACHE_KEY, DOMAIN> readCache;
@@ -33,11 +36,13 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
         this.deleteBuffer = deleteBuffer;
     }
 
+    @Override
     public void delete(DOMAIN domain) {
         CACHE_KEY cacheKey = getCacheKey(domain);
         deleteByCacheKey(cacheKey);
     }
 
+    @Override
     public void deleteAll() {
         readCache.invalidateAll();
         writeBuffer.removeAll();
@@ -45,23 +50,42 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
         repository.deleteAll();
     }
 
+    @Override
     public void deleteAll(List<DOMAIN> domains) {
         domains.forEach(this::delete);
     }
 
+    @Override
     public void deleteById(ENTITY_ID id) {
         CACHE_KEY cacheKey = toCacheKey(id);
         deleteByCacheKey(cacheKey);
     }
 
+    @Override
     public List<DOMAIN> findAll() {
         return syncWithCaches(super.findAll());
     }
 
+    @Override
     public List<DOMAIN> findAllById(Iterable<ENTITY_ID> ids) {
-        return syncWithCaches(super.findAllById(ids));
+        Map<CACHE_KEY, DOMAIN> cached = StreamSupport.stream(ids.spliterator(), false)
+            .map(this::toCacheKey)
+            .map(readCache::getIfPresent)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toMap(this::getCacheKey, Function.identity()));
+
+        List<ENTITY_ID> toLoad = StreamSupport.stream(ids.spliterator(), false)
+            .filter(entityId -> !cached.containsKey(toCacheKey(entityId)))
+            .toList();
+
+        return Stream.concat(
+                search(() -> StreamSupport.stream(repository.findAllById(toLoad).spliterator(), false).toList()).stream(),
+                syncWithCaches(cached.values()).stream()
+            )
+            .toList();
     }
 
+    @Override
     public Optional<DOMAIN> findById(ENTITY_ID id) {
         CACHE_KEY cacheKey = toCacheKey(id);
 
@@ -84,6 +108,7 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
         return maybeDomain;
     }
 
+    @Override
     public void save(DOMAIN domain) {
         CACHE_KEY cacheKey = getCacheKey(domain);
         deleteBuffer.remove(cacheKey);
@@ -92,6 +117,7 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
         readCache.put(cacheKey, domain);
     }
 
+    @Override
     public void saveAll(Collection<DOMAIN> domains) {
         domains.forEach(this::save);
     }
@@ -154,7 +180,7 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
         deleteBuffer.add(cacheKey);
     }
 
-    private List<DOMAIN> syncWithCaches(List<DOMAIN> original) {
+    private List<DOMAIN> syncWithCaches(Collection<DOMAIN> original) {
         Map<CACHE_KEY, DOMAIN> upToDate = original.stream()
             .map(domain -> new BiWrapper<>(getCacheKey(domain), domain))
             .filter(bw -> !deleteBuffer.contains(bw.getEntity1()))

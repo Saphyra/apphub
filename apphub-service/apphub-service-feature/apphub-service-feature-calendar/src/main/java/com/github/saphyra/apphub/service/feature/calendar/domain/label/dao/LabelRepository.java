@@ -3,11 +3,11 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
+import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarMonitoringFunctionality;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 
@@ -35,7 +35,7 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        return batchGetItem(keys)
+        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_IDS)
             .stream()
             .map(item -> LabelEntity.builder()
                 .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
@@ -54,7 +54,7 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.putItem(request);
+        putItem(request, CalendarMonitoringFunctionality.SAVE_LABEL);
     }
 
     Optional<LabelEntity> findById(String userId, String labelId) {
@@ -66,9 +66,7 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.ofNullable(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
+        return getItem(request, CalendarMonitoringFunctionality.FIND_LABEL_BY_ID)
             .map(item ->
                 LabelEntity.builder()
                     .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
@@ -91,7 +89,7 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, CalendarMonitoringFunctionality.GET_LABELS_BY_USER_ID)
             .stream()
             .map(item -> LabelEntity.builder()
                 .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
@@ -109,6 +107,6 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, CalendarMonitoringFunctionality.DELETE_LABEL);
     }
 }

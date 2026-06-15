@@ -22,7 +22,7 @@ public class BodyDataFactory {
     private final BodyMaterialFactory bodyMaterialFactory;
     private final BodyRingFactory bodyRingFactory;
 
-    public BodyData create(UUID bodyId, LocalDateTime timestamp, Boolean landable, Double surfaceGravity, ReserveLevel reserveLevel, Boolean hasRing, NamePercentPair[] materials, Ring[] rings) {
+    public BodyData create(UUID bodyId, LocalDateTime timestamp, Boolean landable, Double surfaceGravity, com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel reserveLevel, Boolean hasRing, NamePercentPair[] materials, Ring[] rings) {
         return BodyData.builder()
             .bodyId(bodyId)
             .lastUpdate(timestamp)

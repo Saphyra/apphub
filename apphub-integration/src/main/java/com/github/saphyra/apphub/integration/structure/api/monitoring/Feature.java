@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.structure.api.monitoring;
 
 public enum Feature {
+    DYNAMO_DB,
     MEMORY_MONITORING,
     IN_MEMORY_DAO,
     MONITORING_METRICS,

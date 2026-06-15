@@ -1,5 +1,6 @@
 import EventName from "common/js/event/EventName";
 import { NOTEBOOK_MOVE_LIST_ITEM } from "../NotebookEndpoints";
+import Event from "common/js/event/Event";
 
 const moveListItem = async (listItemId, newParent, setLastEvent) => {
     if (listItemId === newParent) {

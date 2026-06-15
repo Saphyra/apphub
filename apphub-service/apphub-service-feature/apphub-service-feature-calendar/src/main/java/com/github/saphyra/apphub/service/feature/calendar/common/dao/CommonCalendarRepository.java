@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
-import com.google.common.collect.Lists;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -46,11 +44,15 @@ class CommonCalendarRepository extends DynamoDbRepository {
         QueryRequest queryRequest = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :userId")
-            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .projectionExpression("#pk, #sk")
+            .expressionAttributeNames(Map.of(
+                "#pk", COLUMN_PK,
+                "#sk", COLUMN_SK
+            ))
             .expressionAttributeValues(Map.of(":userId", AttributeValue.builder().s(PREFIX_USER + userId).build()))
             .build();
 
-        List<BiWrapper<String, String>> items = query(queryRequest)
+        List<BiWrapper<String, String>> items = query(queryRequest, CalendarMonitoringFunctionality.DELETE_ALL_BY_USER_ID_QUERY)
             .stream()
             .map(map -> new BiWrapper<>(
                 map.get(COLUMN_PK).s(),
@@ -58,25 +60,23 @@ class CommonCalendarRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        Lists.partition(items, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(batch -> {
-                List<WriteRequest> requests = batch.stream()
-                    .map(item -> Map.of(
-                        COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
-                        COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
-                    ))
-                    .map(key -> DeleteRequest.builder().key(key).build())
-                    .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
-                    .toList();
+        List<WriteRequest> requests = items.stream()
+            .map(item -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(item.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(item.getEntity2()).build()
+            ))
+            .map(key -> DeleteRequest.builder().key(key).build())
+            .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
+            .toList();
 
-                batchWrite(requests);
-            });
+        batchWrite(requests, CalendarMonitoringFunctionality.DELETE_ALL_BY_USER_ID_DELETE);
     }
 
     @PostConstruct
     void createListItemTable() {
         try {
-            client.describeTable(builder -> builder.tableName(tableName));
+            getClient()
+                .describeTable(builder -> builder.tableName(tableName));
             log.info("DynamoDb table '{}' already exists", tableName);
         } catch (ResourceNotFoundException e) {
             log.info("Creating DynamoDb table '{}'", tableName);
@@ -130,9 +130,11 @@ class CommonCalendarRepository extends DynamoDbRepository {
                 .billingMode(BillingMode.PAY_PER_REQUEST)
                 .build();
 
-            client.createTable(createTableRequest);
+            getClient()
+                .createTable(createTableRequest);
 
-            client.waiter()
+            getClient()
+                .waiter()
                 .waitUntilTableExists(builder -> builder.tableName(tableName));
         }
     }

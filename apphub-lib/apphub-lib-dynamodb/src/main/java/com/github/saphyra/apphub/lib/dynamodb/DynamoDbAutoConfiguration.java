@@ -20,6 +20,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @AutoConfiguration
 @Slf4j
 @ComponentScan(basePackageClasses = DynamoDbAutoConfiguration.class)
+@Profile("!test")
 public class DynamoDbAutoConfiguration {
     @ConditionalOnMissingBean
     @Bean

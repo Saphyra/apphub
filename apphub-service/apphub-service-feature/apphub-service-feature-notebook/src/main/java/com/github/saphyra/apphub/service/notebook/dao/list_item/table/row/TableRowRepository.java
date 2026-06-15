@@ -8,7 +8,6 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
@@ -18,6 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_TABLE_ROW;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_TABLE_ROWS;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.FIND_TABLE_ROW_BY_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.GET_TABLE_ROWS_BY_LIST_ITEM_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_TABLE_ROW;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_TABLE_ROWS;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_LIST_ITEM;
@@ -41,7 +46,7 @@ class TableRowRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, DELETE_TABLE_ROW);
     }
 
     void save(TableRowEntity row) {
@@ -50,7 +55,7 @@ class TableRowRepository extends DynamoDbRepository {
             .item(mapper.convertDomain(row))
             .build();
 
-        client.putItem(request);
+        putItem(request, SAVE_TABLE_ROW);
     }
 
     public void delete(String listItemId, List<String> rowIds) {
@@ -63,7 +68,7 @@ class TableRowRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, DELETE_TABLE_ROWS);
     }
 
     public void save(List<TableRowEntity> rows) {
@@ -73,7 +78,7 @@ class TableRowRepository extends DynamoDbRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, SAVE_TABLE_ROWS);
     }
 
     public Optional<TableRowEntity> findById(String listItemId, String rowId) {
@@ -85,9 +90,7 @@ class TableRowRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return Optional.of(client.getItem(request))
-            .filter(GetItemResponse::hasItem)
-            .map(GetItemResponse::item)
+        return getItem(request, FIND_TABLE_ROW_BY_ID)
             .map(mapper::convertEntity);
     }
 
@@ -105,7 +108,7 @@ class TableRowRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, GET_TABLE_ROWS_BY_LIST_ITEM_ID)
             .stream()
             .map(mapper::convertEntity)
             .toList();

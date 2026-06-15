@@ -9,6 +9,7 @@ import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
@@ -43,6 +44,10 @@ public class DynamoDbUtil {
     public static List<String> getRolesByEmail(String email) {
         UUID userId = getUserIdByEmail(email);
 
+        return getRolesByUserId(userId);
+    }
+
+    public static List<String> getRolesByUserId(UUID userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(getUserTableName())
             .keyConditionExpression("#pk = :userId AND begins_with(#sk, :role)")
@@ -194,6 +199,23 @@ public class DynamoDbUtil {
             .toList();
     }
 
+    public static int getRefreshTokenCountOfUser(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getRefreshTokenTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", "userId"))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s(userId.toString()).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .count();
+    }
+
+    private static String getRefreshTokenTableName() {
+        return "apphub-%s-refresh_token".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
     private static String getUserTableName() {
         return "apphub-%s-user".formatted(TestConfiguration.ENVIRONMENT);
     }
@@ -214,5 +236,111 @@ public class DynamoDbUtil {
         }
 
         return dynamoDbClient;
+    }
+
+    public static boolean profileExists(UUID userId) {
+        GetItemRequest request = GetItemRequest.builder()
+            .tableName(getUserTableName())
+            .key(Map.of(
+                COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId.toString())).build(),
+                COLUMN_SK, AttributeValue.builder().s(TYPE_PROFILE).build()
+            ))
+            .build();
+
+        return getClient()
+            .getItem(request)
+            .hasItem();
+    }
+
+    public static boolean credentialExists(String credential) {
+        GetItemRequest request = GetItemRequest.builder()
+            .tableName(getUserTableName())
+            .key(Map.of(
+                COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_CREDENTIAL, credential)).build(),
+                COLUMN_SK, AttributeValue.builder().s(TYPE_CREDENTIAL).build()
+            ))
+            .build();
+
+        return getClient()
+            .getItem(request)
+            .hasItem();
+    }
+
+    public static boolean markedForDeletionExists(UUID userId) {
+        GetItemRequest request = GetItemRequest.builder()
+            .tableName(getUserTableName())
+            .key(Map.of(
+                COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId.toString())).build(),
+                COLUMN_SK, AttributeValue.builder().s(TYPE_MARKED_FOR_DELETION).build()
+            ))
+            .build();
+
+        return getClient()
+            .getItem(request)
+            .hasItem();
+    }
+
+    public static boolean calendarRecordExists(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getCalendarTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s("USER#" + userId.toString()).build()))
+            .build();
+
+        return !getClient()
+            .query(request)
+            .items()
+            .isEmpty();
+    }
+
+    private static String getCalendarTableName() {
+        return "apphub-%s-calendar".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static boolean occurrenceExists(UUID eventId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getCalendarTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s("EVENT#" + eventId).build()))
+            .build();
+
+        return !getClient()
+            .query(request)
+            .items()
+            .isEmpty();
+    }
+
+    public static boolean listItemExists(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getListItemTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s("USER#" + userId.toString()).build()))
+            .build();
+
+        return !getClient()
+            .query(request)
+            .items()
+            .isEmpty();
+    }
+
+    private static String getListItemTableName() {
+        return "apphub-%s-list_item".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static boolean listItemHasChildren(UUID listItemId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getListItemTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s("LIST_ITEM#" + listItemId.toString()).build()))
+            .build();
+
+        return !getClient()
+            .query(request)
+            .items()
+            .isEmpty();
     }
 }

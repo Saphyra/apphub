@@ -1,0 +1,38 @@
+===FEATURES===
+    EliteBase
+        Merit-mining locations for Nakato Kaine
+
+===BUGFIXES===
+    Notebook
+        Process ListItems parallel when searching to decrease latency
+        Moving ListItems by drag and drop did not refresh the views
+        Do not close edited ChecklistItem until request is processed
+
+===PLATFORM CHANGES===
+    Storage
+        Disable FTP
+    Make DynamoDB batch queries parallel
+    Split DynamoDB batch queries to partitions in the repository
+    DynamoDB repository monitoring
+
+===TECHNICAL DEBTS===
+    Storage
+        Remove PSQL related dependencies
+        Delete FTP to S3 migration code
+    User
+        Delete old Role and User change sets
+        Limit number of deleted users in a batch at repository level
+    Use projectionExpression when querying data of partition to delete in DynamoDB
+
+===ETC===
+    Calendar
+        Delete old repositories
+    Notebook
+        Delete old repositories
+    Document DynamoDB repositories
+    User data deleted with account test for each feature
+
+===Manual Release Steps===
+    Restart ApphubCI
+    Delete schema storage
+    Delete apphub-prod-refresh_token table (got renamed to follow convention)

@@ -54,4 +54,12 @@
             <column name="list_item_id" type="varchar(37)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet id="drop-table-content" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="content"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="content"/>
+    </changeSet>
 </databaseChangeLog>

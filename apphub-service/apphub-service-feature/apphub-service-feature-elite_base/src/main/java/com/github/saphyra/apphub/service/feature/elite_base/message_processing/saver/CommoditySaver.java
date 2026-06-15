@@ -70,7 +70,7 @@ public class CommoditySaver {
         try {
             LastUpdate originalLastUpdate = lastUpdateDao.findById(externalReference, type)
                 .orElse(null);
-            LastUpdate lastUpdate = saveLastUpdate(timestamp, type, externalReference);
+            saveLastUpdate(timestamp, type, externalReference);
 
             commodities = filterEmptyCommodities(commodities);
 
@@ -127,12 +127,10 @@ public class CommoditySaver {
         }
     }
 
-    private LastUpdate saveLastUpdate(LocalDateTime timestamp, ItemType type, UUID externalReference) {
+    private void saveLastUpdate(LocalDateTime timestamp, ItemType type, UUID externalReference) {
         LastUpdate lastUpdate = lastUpdateFactory.create(externalReference, type, timestamp);
         lastUpdateDao.save(lastUpdate);
         log.debug("LastUpdate saved for location {} and type {}", externalReference, type);
-
-        return lastUpdate;
     }
 
     private static List<CommodityData> filterEmptyCommodities(List<CommodityData> commodities) {

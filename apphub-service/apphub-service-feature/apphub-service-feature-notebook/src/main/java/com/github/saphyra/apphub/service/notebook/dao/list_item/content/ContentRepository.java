@@ -13,6 +13,9 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.DELETE_CONTENTS_BY_LIST_ITEM_ID_AND_BATCH_INDEXES;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.GET_CONTENTS_BY_LIST_ITEM_ID;
+import static com.github.saphyra.apphub.service.notebook.dao.NotebookMonitoringFunctionality.SAVE_CONTENTS;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemDaoConstants.PREFIX_CONTENT;
@@ -34,7 +37,7 @@ class ContentRepository extends DynamoDbRepository {
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, SAVE_CONTENTS);
     }
 
     void delete(String listItemId, List<Integer> batchIndexes) {
@@ -47,7 +50,7 @@ class ContentRepository extends DynamoDbRepository {
             .map(deleteRequest -> WriteRequest.builder().deleteRequest(deleteRequest).build())
             .toList();
 
-        batchWrite(requests);
+        batchWrite(requests, DELETE_CONTENTS_BY_LIST_ITEM_ID_AND_BATCH_INDEXES);
     }
 
     List<ContentEntity> getByListItemId(String listItemId) {
@@ -64,7 +67,7 @@ class ContentRepository extends DynamoDbRepository {
             ))
             .build();
 
-        return query(request)
+        return query(request, GET_CONTENTS_BY_LIST_ITEM_ID)
             .stream()
             .map(mapper::convertEntity)
             .toList();

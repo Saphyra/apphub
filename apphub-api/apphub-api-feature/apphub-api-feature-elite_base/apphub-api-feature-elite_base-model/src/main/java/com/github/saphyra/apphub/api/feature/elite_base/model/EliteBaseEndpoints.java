@@ -26,4 +26,7 @@ public class EliteBaseEndpoints {
     public static final String ELITE_BASE_MATERIAL_TRADER_OVERRIDE_CREATE = "/api/elite-base/material-trader-override";
     public static final String ELITE_BASE_MATERIAL_TRADER_OVERRIDE_DELETE = "/api/elite-base/material-trader-override/{stationId}";
     public static final String ELITE_BASE_MATERIAL_TRADER_OVERRIDE_VERIFY = "/api/elite-base/material-trader-override/{stationId}";
+
+    //Merit farm
+    public static final String ELITE_BASE_MERIT_FARM_GET_MINE_LOCATIONS = "/api/elite-base/merits/{power}/mining";
 }

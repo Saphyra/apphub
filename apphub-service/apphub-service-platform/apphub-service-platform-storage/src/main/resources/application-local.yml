@@ -8,7 +8,7 @@ ftp:
     server: localhost
 
 storage:
-  type: FTP
+  type: S3
 
 aws:
   dynamoDb:

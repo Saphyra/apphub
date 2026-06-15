@@ -1,0 +1,17 @@
+#elite-base-merit-farm-mining-minimum-price {
+    width: 75px;
+}
+
+#elite-base-merit-farm-mining-minimum-demand {
+    width: 75px;
+}
+
+#elite-base-merit-miner-offer-count {
+    margin: 10px;
+}
+
+#elite-base-merit-miner-filters {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly
+}

@@ -6,7 +6,7 @@ import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 
-const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true , tabIndex}) => {
+const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, moveItem, editingEnabled = true, tabIndex }) => {
     const [contentEditingEnabled, setContentEditingEnabled] = useState(false);
     const [modifiedContent, setModifiedContent] = useState(item.content);
 
@@ -24,7 +24,7 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
 
     const updateContent = (content) => {
         item.content = content;
-        updateItem(item, UpdateType.CONTENT_MODIFIED);
+        return updateItem(item, UpdateType.CONTENT_MODIFIED);
     }
 
     const remove = () => {
@@ -41,8 +41,8 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
 
     const saveIfEnter = (e) => {
         if (e.which === 13) {
-            updateContent(modifiedContent);
-            setContentEditingEnabled(false);
+            updateContent(modifiedContent)
+                .then(r => setContentEditingEnabled(false));
         }
     }
 
@@ -130,8 +130,8 @@ const ChecklistItem = ({ localizationHandler, item, updateItem, removeItem, move
                             id="notebook-checklist-item-content-edit-save-button"
                             label={localizationHandler.get("save")}
                             onclick={() => {
-                                updateContent(modifiedContent);
-                                setContentEditingEnabled(false);
+                                updateContent(modifiedContent)
+                                    .then(r => setContentEditingEnabled(false));
                             }}
                         />,
                         <Button

@@ -8,7 +8,7 @@ import { throwException } from "../../../../common/js/Utils";
 import PropertyFilter from "./filter/PropertyFilter";
 
 const MonitoringBoard = ({ setDisplaySpinner, localizationHandler, queryData }) => {
-    console.log(queryData);
+    console.debug(queryData);
 
     const [metricsData, setMetricsData] = useState({ queryData: null, metrics: [] });
     const [hiddenProperties, setHiddenProperties] = useState([]);

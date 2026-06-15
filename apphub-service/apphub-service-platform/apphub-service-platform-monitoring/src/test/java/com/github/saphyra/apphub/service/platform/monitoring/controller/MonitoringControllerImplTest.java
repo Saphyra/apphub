@@ -94,7 +94,7 @@ class MonitoringControllerImplTest {
     void getServices() {
         given(metricDao.getByFeatureAndOptionalFunctionality(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY)).willReturn(List.of(metric));
         given(metric.getMetricId()).willReturn(METRIC_ID);
-        given(metricServiceDao.getByMetricIds(List.of(METRIC_ID))).willReturn(List.of(metricService));
+        given(metricServiceDao.getByMetricIds(List.of(METRIC_ID))).willReturn(List.of(metricService, metricService));
         given(metricService.getService()).willReturn(SERVICE);
 
         assertThat(underTest.getServices(Feature.ELITE_BASE_MESSAGE_PROCESSING, FUNCTIONALITY, accessToken)).containsExactly(SERVICE);

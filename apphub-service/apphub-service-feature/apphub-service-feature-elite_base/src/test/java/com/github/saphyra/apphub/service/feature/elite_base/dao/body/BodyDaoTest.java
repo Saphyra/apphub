@@ -59,11 +59,20 @@ class BodyDaoTest {
     }
 
     @Test
-    void findAllById(){
+    void findAllById() {
         given(uuidConverter.convertDomain(List.of(ID))).willReturn(List.of(ID_STRING));
         given(repository.findAllById(List.of(ID_STRING))).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         assertThat(underTest.findAllById(List.of(ID))).containsExactly(domain);
+    }
+
+    @Test
+    void getByStarSystemIds() {
+        given(uuidConverter.convertDomain(List.of(STAR_SYSTEM_ID))).willReturn(List.of(STAR_SYSTEM_ID_STRING));
+        given(repository.getByStarSystemIdIn(List.of(STAR_SYSTEM_ID_STRING))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByStarSystemIds(List.of(STAR_SYSTEM_ID))).contains(domain);
     }
 }

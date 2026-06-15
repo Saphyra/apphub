@@ -18,8 +18,6 @@ public class DatabaseUtil {
     private static final String FIND_SKYXPLORE_CHARACTER_NAME_BY_USER_ID = "SELECT name FROM skyxplore.character WHERE user_id = '%s'";
     private static final String INSERT_MIGRATION_TASK = "INSERT INTO admin_panel.migration_task(event, name, completed, repeatable) VALUES ('%s', '%s', '%s', '%s');";
     private static final String DELETE_MIGRATION_TASK_BY_EVENT = "DELETE FROM admin_panel.migration_task WHERE event='%s'";
-    private static final String GET_ENCRYPTED_DATA_FROM_CHECKED_ITEM = "SELECT checked FROM notebook.checked_item WHERE user_id='%s' LIMIT 1";
-    private static final String INJECT_ENCRYPTED_DATA_TO_MODULES = "UPDATE modules.favorite SET favorite='%s' WHERE user_id='%s'";
     private static final String GET_ROW_COUNT_BY_USER_ID = "SELECT count(*) from %s.%s WHERE %s='%s'";
 
     private static <T> T query(String sql, Mapper<T> mapper) throws Exception {

@@ -27,4 +27,12 @@
 
         <addPrimaryKey schemaName="calendar" tableName="occurrence" columnNames="occurrence_id" constraintName="occurrence_v2-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-occurrence" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="calendar" tableName="occurrence"/>
+        </preConditions>
+
+        <dropTable schemaName="calendar" tableName="occurrence"/>
+    </changeSet>
 </databaseChangeLog>

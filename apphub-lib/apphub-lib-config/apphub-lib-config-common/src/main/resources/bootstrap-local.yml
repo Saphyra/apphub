@@ -37,7 +37,7 @@ spring:
     url: jdbc:postgresql://${postgreSqlHost}:5432/apphub?ApplicationName=${spring.application.name}
     driverClassName: org.postgresql.Driver
     hikari:
-      maximumPoolSize: 5
+      maximumPoolSize: 10
       minimumIdle: 1
       idleTimeout: 10000
 

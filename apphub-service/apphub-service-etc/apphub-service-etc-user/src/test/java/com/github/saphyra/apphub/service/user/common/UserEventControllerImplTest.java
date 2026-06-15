@@ -79,7 +79,6 @@ public class UserEventControllerImplTest {
     @Test
     public void triggerAccountDeletion() {
         given(userDao.getUsersMarkedForDeletion()).willReturn(List.of(USER_ID));
-        given(userProperties.getDeleteAccountBatchCount()).willReturn(1);
 
         underTest.triggerAccountDeletion();
 

@@ -81,7 +81,7 @@ class EventDaoTest {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
         given(repository.getByIds(List.of(new BiWrapper<>(USER_ID_STRING, EVENT_ID_STRING)))).willReturn(List.of(entity));
-        given(converter.convertEntity(entity)).willReturn(domain);
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
 
         assertThat(underTest.getByIds(USER_ID, List.of(EVENT_ID))).containsExactly(domain);
     }
@@ -98,7 +98,7 @@ class EventDaoTest {
     @Test
     void delete() {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
+        given(uuidConverter.convertDomain(List.of(EVENT_ID))).willReturn(List.of(EVENT_ID_STRING));
 
         underTest.delete(USER_ID, List.of(EVENT_ID));
 

@@ -1,9 +1,10 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.station;
 
-import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,5 +31,9 @@ public class StationDao extends AbstractDao<StationEntity, Station, String, Stat
         List<StationEntity> entities = StreamSupport.stream(repository.findAllById(uuidConverter.convertDomain(stationIds)).spliterator(), false)
             .toList();
         return converter.convertEntity(entities);
+    }
+
+    public List<Station> getByStarSystemIds(Collection<UUID> starSystemIds) {
+        return converter.convertEntity(repository.getByStarSystemIdIn(uuidConverter.convertDomain(starSystemIds)));
     }
 }

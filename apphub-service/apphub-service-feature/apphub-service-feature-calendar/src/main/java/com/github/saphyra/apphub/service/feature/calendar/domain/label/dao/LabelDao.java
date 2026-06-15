@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,14 +16,7 @@ public class LabelDao {
     private final LabelRepository repository;
 
     public List<Label> getByLabelIds(UUID userId, List<UUID> labelIds) {
-        String userIdString = uuidConverter.convertDomain(userId);
-
-        return Lists.partition(labelIds, Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
-            .stream()
-            .map(batch -> repository.getByLabelIds(userIdString, uuidConverter.convertDomain(batch)))
-            .flatMap(List::stream)
-            .map(converter::convertEntity)
-            .toList();
+        return converter.convertEntity(repository.getByLabelIds(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelIds)));
     }
 
     public void save(UUID userId, Label label) {

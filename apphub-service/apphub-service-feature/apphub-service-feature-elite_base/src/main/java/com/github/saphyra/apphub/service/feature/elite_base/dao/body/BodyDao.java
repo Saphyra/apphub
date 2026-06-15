@@ -14,7 +14,7 @@ import java.util.stream.StreamSupport;
 public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepository> {
     private final UuidConverter uuidConverter;
 
-    public BodyDao(BodyConverter converter, BodyRepository repository, UuidConverter uuidConverter) {
+    BodyDao(BodyConverter converter, BodyRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -32,5 +32,9 @@ public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepositor
             .toList();
 
         return converter.convertEntity(entities);
+    }
+
+    public List<Body> getByStarSystemIds(Collection<UUID> starSystemIds) {
+        return converter.convertEntity(repository.getByStarSystemIdIn(uuidConverter.convertDomain(starSystemIds)));
     }
 }

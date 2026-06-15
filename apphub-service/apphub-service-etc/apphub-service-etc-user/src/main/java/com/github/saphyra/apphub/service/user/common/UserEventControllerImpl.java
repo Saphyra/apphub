@@ -42,8 +42,6 @@ class UserEventControllerImpl implements UserEventController {
     @Override
     public void triggerAccountDeletion() {
         userDao.getUsersMarkedForDeletion()
-            .stream()
-            .limit(userProperties.getDeleteAccountBatchCount())
             .forEach(this::deleteAccount);
     }
 

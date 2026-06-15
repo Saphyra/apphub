@@ -8,7 +8,7 @@ import { getEntries, getLabels, getPropertyLines, getVerticals } from "./Monitor
 export const MONITORING_VIEWBOX_HEIGHT = Constants.GRAPH_HEIGHT + Constants.GRAPH_PADDING * 2;
 
 const MonitoringDisplay = ({ firstTimestamp, lastTimestamp, step, feature, functionality, service, metrics, hiddenProperties }) => {
-    console.log(
+    console.debug(
         "Rendering display",
         {
             feature: feature,

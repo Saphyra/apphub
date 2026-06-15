@@ -1,9 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -27,11 +25,8 @@ public class EventLabelMappingDao {
     }
 
     public Map<UUID, List<UUID>> getLabelsOfEvents(UUID userId, Collection<UUID> eventIds) {
-        String userIdString = uuidConverter.convertDomain(userId);
-
-        return Lists.partition(uuidConverter.convertDomain(eventIds), Constants.DYNAMO_DB_QUERY_MAX_BATCH_SIZE)
+        return repository.getLabelsOfEvents(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventIds))
             .stream()
-            .flatMap(eventIdsStrings -> repository.getLabelsOfEvents(userIdString, eventIdsStrings).stream())
             .collect(Collectors.toMap(bw -> uuidConverter.convertEntity(bw.getEntity1()), bw -> uuidConverter.convertEntity(bw.getEntity2())));
     }
 
@@ -67,8 +62,7 @@ public class EventLabelMappingDao {
         String userIdString = uuidConverter.convertDomain(userId);
         List<String> eventIdsString = uuidConverter.convertDomain(eventIds);
 
-        Lists.partition(eventIds, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(batch -> repository.deleteLabelsOfEvents(userIdString, uuidConverter.convertDomain(batch)));
+        repository.deleteLabelsOfEvents(userIdString, uuidConverter.convertDomain(eventIds));
 
         List<BiWrapper<String, List<String>>> modifiedMappings = repository.getEventsOfLabelsByUserId(userIdString)
             .stream()

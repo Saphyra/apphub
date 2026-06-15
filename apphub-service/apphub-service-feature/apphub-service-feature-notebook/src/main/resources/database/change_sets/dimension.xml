@@ -17,4 +17,12 @@
 
         <addPrimaryKey schemaName="notebook" tableName="dimension" columnNames="dimension_id" constraintName="dimension-pk"/>
     </changeSet>
+
+    <changeSet id="drop-table-dimension" author="saphyra">
+        <preConditions onFail="MARK_RAN">
+            <tableExists schemaName="notebook" tableName="dimension"/>
+        </preConditions>
+
+        <dropTable schemaName="notebook" tableName="dimension"/>
+    </changeSet>
 </databaseChangeLog>

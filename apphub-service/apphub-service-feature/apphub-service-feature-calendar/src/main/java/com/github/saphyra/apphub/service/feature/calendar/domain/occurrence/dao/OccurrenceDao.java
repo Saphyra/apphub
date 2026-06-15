@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,13 +26,11 @@ public class OccurrenceDao {
     }
 
     public void delete(UUID eventId, Collection<UUID> occurrences) {
-        Lists.partition(uuidConverter.convertDomain(occurrences), Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(batch -> repository.delete(uuidConverter.convertDomain(eventId), batch));
+        repository.delete(uuidConverter.convertDomain(eventId), uuidConverter.convertDomain(occurrences));
     }
 
     public void save(List<Occurrence> occurrences) {
-        Lists.partition(converter.convertDomain(occurrences), Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(repository::save);
+        repository.save(converter.convertDomain(occurrences));
     }
 
     public Occurrence findByIdValidated(UUID eventId, UUID occurrenceId) {
@@ -59,14 +55,13 @@ public class OccurrenceDao {
             ))
             .toList();
 
-        Lists.partition(ids, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(repository::delete);
+        repository.delete(ids);
     }
 
     public void deleteByEventId(UUID eventId) {
         String eventIdString = uuidConverter.convertDomain(eventId);
         List<OccurrenceEntity> occurrences = repository.getByEventId(eventIdString);
-        Lists.partition(occurrences, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .forEach(batch -> repository.delete(eventIdString, batch.stream().map(OccurrenceEntity::getOccurrenceId).toList()));
+
+        repository.delete(eventIdString, occurrences.stream().map(OccurrenceEntity::getOccurrenceId).toList());
     }
 }

@@ -19,4 +19,8 @@ public class BodyRingDao extends AbstractDao<BodyRingEntity, BodyRing, String, B
     public List<BodyRing> getByBodyId(UUID bodyId) {
         return converter.convertEntity(repository.getByBodyId(uuidConverter.convertDomain(bodyId)));
     }
+
+    public List<BodyRing> getByBodyIds(List<UUID> bodyIds) {
+        return converter.convertEntity(repository.getByBodyIdIn(uuidConverter.convertDomain(bodyIds)));
+    }
 }

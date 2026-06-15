@@ -3,7 +3,9 @@ package com.github.saphyra.apphub.service.user.data.dao.user;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
+import com.github.saphyra.apphub.service.user.common.UserMonitoringFunctionality;
 import com.github.saphyra.apphub.service.user.config.UserDynamoDbConfiguration;
+import com.github.saphyra.apphub.service.user.config.properties.UserProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -20,7 +22,6 @@ import software.amazon.awssdk.services.dynamodb.model.Projection;
 import software.amazon.awssdk.services.dynamodb.model.ProjectionType;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
-import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
@@ -30,6 +31,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.github.saphyra.apphub.service.user.common.UserMonitoringFunctionality.FIND_CREDENTIAL;
+import static com.github.saphyra.apphub.service.user.common.UserMonitoringFunctionality.FIND_USER;
+import static com.github.saphyra.apphub.service.user.common.UserMonitoringFunctionality.GET_ALL_USER_IDS;
 import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConstants.COLUMN_EMAIL;
 import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConstants.COLUMN_LANGUAGE;
 import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConstants.COLUMN_LOCKED_UNTIL;
@@ -51,8 +55,11 @@ import static com.github.saphyra.apphub.service.user.data.dao.user.UserDaoConsta
 @Slf4j
 @Profile("!test")
 class UserRepository extends DynamoDbRepository {
-    UserRepository(UserDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
+    private final UserProperties userProperties;
+
+    UserRepository(UserDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, UserProperties userProperties) {
         super(configuration.getTableName(), context);
+        this.userProperties = userProperties;
     }
 
     public void deleteProfile(String userId) {
@@ -64,7 +71,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, UserMonitoringFunctionality.DELETE_PROFILE);
     }
 
     List<String> getUserIdsMarkedForDeletion(long currentTimeEpochSeconds) {
@@ -80,9 +87,10 @@ class UserRepository extends DynamoDbRepository {
                 ":value", AttributeValue.builder().s(TYPE_MARKED_FOR_DELETION).build(),
                 ":current_time", AttributeValue.builder().n(String.valueOf(currentTimeEpochSeconds)).build()
             ))
+            .limit(userProperties.getDeleteAccountBatchCount())
             .build();
 
-        return query(request)
+        return query(request, UserMonitoringFunctionality.GET_USER_IDS_MARKED_FOR_DELETION)
             .stream()
             .map(record -> record.get(COLUMN_PK).s().split("#")[1])
             .toList();
@@ -100,7 +108,7 @@ class UserRepository extends DynamoDbRepository {
             .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
             .build();
 
-        client.putItem(request);
+        putItem(request, UserMonitoringFunctionality.SAVE_CREDENTIAL);
     }
 
     void deleteCredential(String credential) {
@@ -112,7 +120,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, UserMonitoringFunctionality.DELETE_CREDENTIAL);
     }
 
     void save(ProfileEntity profile) {
@@ -130,7 +138,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.putItem(request);
+        putItem(request, UserMonitoringFunctionality.SAVE_PROFILE);
     }
 
     void addRole(String userId, String role) {
@@ -142,7 +150,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.putItem(request);
+        putItem(request, UserMonitoringFunctionality.SAVE_ROLE);
     }
 
     void markForDeletion(String userId, long markedForDeletionAtEpochSeconds) {
@@ -155,7 +163,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.putItem(request);
+        putItem(request, UserMonitoringFunctionality.MARK_USER_FOR_DELETION);
     }
 
     void unmarkForDeletion(String userId) {
@@ -167,7 +175,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, UserMonitoringFunctionality.UNMARK_USER_FOR_DELETION);
     }
 
     void deleteRole(String userId, String role) {
@@ -179,7 +187,7 @@ class UserRepository extends DynamoDbRepository {
             ))
             .build();
 
-        client.deleteItem(request);
+        deleteItem(request, UserMonitoringFunctionality.DELETE_ROLE);
     }
 
     List<String> getAllUserIds() {
@@ -190,28 +198,27 @@ class UserRepository extends DynamoDbRepository {
             .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(TYPE_PROFILE).build()))
             .build();
 
-        return scan(scanRequest)
+        return scan(scanRequest, GET_ALL_USER_IDS)
             .stream()
             .map(record -> record.get(COLUMN_PK).s().split("#")[1])
             .toList();
     }
 
     Optional<CredentialEntity> findByCredential(String query) {
-        QueryRequest queryRequest = QueryRequest.builder()
+        QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :value")
             .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
             .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(String.join("#", TYPE_CREDENTIAL, query)).build()))
             .build();
 
-        QueryResponse queryResponse = client.query(queryRequest);
+        List<Map<String, AttributeValue>> queryResponse = query(request, FIND_CREDENTIAL);
 
-        if (queryResponse.items().size() > 1) {
+        if (queryResponse.size() > 1) {
             throw new IllegalStateException("Multiple credentials found for query " + query);
         }
 
-        return queryResponse.items()
-            .stream()
+        return queryResponse.stream()
             .findFirst()
             .map(record -> new CredentialEntity(
                 record.get(COLUMN_PK).s().split("#")[1],
@@ -220,46 +227,44 @@ class UserRepository extends DynamoDbRepository {
     }
 
     Optional<TriWrapper<ProfileEntity, List<String>, Optional<Long>>> findByUserId(String userId) {
-        QueryRequest queryRequest = QueryRequest.builder()
+        QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :value")
             .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
             .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId)).build()))
             .build();
 
-        QueryResponse queryResponse = client.query(queryRequest);
+        List<Map<String, AttributeValue>> queryResponse = query(request, FIND_USER);
 
-        if (queryResponse.items().isEmpty()) {
+        if (queryResponse.isEmpty()) {
             return Optional.empty();
         }
 
         List<String> roles = new ArrayList<>();
         TriWrapper<ProfileEntity, List<String>, Optional<Long>> result = new TriWrapper<>(null, roles, Optional.empty());
-        result.setEntity3(Optional.empty());
 
-        queryResponse.items()
-            .forEach(record -> {
-                String type = record.get(COLUMN_SK).s();
+        queryResponse.forEach(record -> {
+            String type = record.get(COLUMN_SK).s();
 
-                if (TYPE_PROFILE.equals(type)) {
-                    ProfileEntity profile = ProfileEntity.builder()
-                        .userId(record.get(COLUMN_PK).s().split("#")[1])
-                        .email(record.get(COLUMN_EMAIL).s())
-                        .username(record.get(COLUMN_USERNAME).s())
-                        .language(record.get(COLUMN_LANGUAGE).s())
-                        .password(record.get(COLUMN_PASSWORD).s())
-                        .passwordFailureCount(Integer.parseInt(record.get(COLUMN_PASSWORD_FAILURE_COUNT).n()))
-                        .lockedUntil(Long.parseLong(record.get(COLUMN_LOCKED_UNTIL).n()))
-                        .build();
-                    result.setEntity1(profile);
-                } else if (TYPE_MARKED_FOR_DELETION.equals(type)) {
-                    Long markedForDeletionAt = Long.parseLong(record.get(COLUMN_MARKED_FOR_DELETION_AT).n());
-                    result.setEntity3(Optional.of(markedForDeletionAt));
-                } else if (type.startsWith(TYPE_ROLE)) {
-                    String role = record.get(COLUMN_SK).s().split("#")[1];
-                    roles.add(role);
-                }
-            });
+            if (TYPE_PROFILE.equals(type)) {
+                ProfileEntity profile = ProfileEntity.builder()
+                    .userId(record.get(COLUMN_PK).s().split("#")[1])
+                    .email(record.get(COLUMN_EMAIL).s())
+                    .username(record.get(COLUMN_USERNAME).s())
+                    .language(record.get(COLUMN_LANGUAGE).s())
+                    .password(record.get(COLUMN_PASSWORD).s())
+                    .passwordFailureCount(Integer.parseInt(record.get(COLUMN_PASSWORD_FAILURE_COUNT).n()))
+                    .lockedUntil(Long.parseLong(record.get(COLUMN_LOCKED_UNTIL).n()))
+                    .build();
+                result.setEntity1(profile);
+            } else if (TYPE_MARKED_FOR_DELETION.equals(type)) {
+                Long markedForDeletionAt = Long.parseLong(record.get(COLUMN_MARKED_FOR_DELETION_AT).n());
+                result.setEntity3(Optional.of(markedForDeletionAt));
+            } else if (type.startsWith(TYPE_ROLE)) {
+                String role = record.get(COLUMN_SK).s().split("#")[1];
+                roles.add(role);
+            }
+        });
 
         return Optional.of(result);
     }
@@ -267,7 +272,8 @@ class UserRepository extends DynamoDbRepository {
     @PostConstruct
     void createTable() {
         try {
-            client.describeTable(builder -> builder.tableName(tableName));
+            getClient()
+                .describeTable(builder -> builder.tableName(tableName));
             log.info("DynamoDb table '{}' already exists", tableName);
         } catch (ResourceNotFoundException e) {
             log.info("Creating DynamoDb table '{}'", tableName);
@@ -317,9 +323,11 @@ class UserRepository extends DynamoDbRepository {
                 .billingMode(BillingMode.PAY_PER_REQUEST)
                 .build();
 
-            client.createTable(createTableRequest);
+            getClient()
+                .createTable(createTableRequest);
 
-            client.waiter()
+            getClient()
+                .waiter()
                 .waitUntilTableExists(builder -> builder.tableName(tableName));
         }
     }
