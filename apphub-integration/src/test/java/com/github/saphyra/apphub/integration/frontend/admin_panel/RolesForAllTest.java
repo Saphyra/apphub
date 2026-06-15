@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
+import com.github.saphyra.apphub.integration.core.testng.PermitCount;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
@@ -30,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RolesForAllTest extends SeleniumTest {
     @Test(groups = {"fe", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
+    @PermitCount(value = PermitCount.PermitCountType.ALL)
     public void addAndRemoveRoleFromAll() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);

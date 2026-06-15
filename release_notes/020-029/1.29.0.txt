@@ -4,6 +4,8 @@
         Monitor error reports
 
 ===BUGFIXES===
+    Integration
+        Run RolesForAll tests solo
 
 ===PLATFORM CHANGES===
 

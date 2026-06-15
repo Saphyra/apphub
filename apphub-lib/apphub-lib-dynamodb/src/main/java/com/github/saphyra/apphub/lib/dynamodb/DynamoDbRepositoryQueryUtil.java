@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 @Component
@@ -22,8 +23,8 @@ class DynamoDbRepositoryQueryUtil {
     private final DynamoDbClient client;
     private final DynamoDbMonitoringInstruments monitoringInstruments;
 
-    List<Map<String, AttributeValue>> query(QueryRequest queryRequest, String monitoringFunctionality) {
-        queryRequest = queryRequest.toBuilder()
+    List<Map<String, AttributeValue>> query(QueryRequest request, String monitoringFunctionality) {
+        request = request.toBuilder()
             .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
             .build();
 
@@ -38,11 +39,11 @@ class DynamoDbRepositoryQueryUtil {
         do {
             transactionCount += 1;
             Stopwatch transactionStopwatch = Stopwatch.createStarted();
-            queryRequest = queryRequest.toBuilder()
+            request = request.toBuilder()
                 .exclusiveStartKey(lastEvaluatedKey)
                 .build();
 
-            QueryResponse response = client.query(queryRequest);
+            QueryResponse response = client.query(request);
             consumedCapacity += response.consumedCapacity()
                 .capacityUnits();
 
@@ -56,7 +57,7 @@ class DynamoDbRepositoryQueryUtil {
             if (transactionLatency > maxTransactionLatency) {
                 maxTransactionLatency = transactionLatency;
             }
-        } while (nonNull(lastEvaluatedKey) && !lastEvaluatedKey.isEmpty());
+        } while (nonNull(lastEvaluatedKey) && !lastEvaluatedKey.isEmpty() && !limitReached(request.limit(), result.size()));
 
         operationStopwatch.stop();
 
@@ -74,5 +75,13 @@ class DynamoDbRepositoryQueryUtil {
         );
 
         return result;
+    }
+
+    private boolean limitReached(Integer limit, int size) {
+        if (isNull(limit)) {
+            return false;
+        }
+
+        return size >= limit;
     }
 }
