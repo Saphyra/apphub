@@ -29,7 +29,8 @@ public class CommodityDataTransformer {
         UUID externalReference,
         Long marketId,
         CommoditySaver.CommodityData commodityData,
-        LastUpdate originalLastUpdate
+        LastUpdate originalLastUpdate,
+        UUID starSystemId
     ) {
         Tradeable created = tradingDaoSupport.create(
             type,
@@ -40,7 +41,8 @@ public class CommodityDataTransformer {
             commodityData.getBuyPrice(),
             commodityData.getSellPrice(),
             commodityData.getDemand(),
-            commodityData.getStock()
+            commodityData.getStock(),
+            starSystemId
         );
 
         if (isNull(maybeStoredCommodity)) {

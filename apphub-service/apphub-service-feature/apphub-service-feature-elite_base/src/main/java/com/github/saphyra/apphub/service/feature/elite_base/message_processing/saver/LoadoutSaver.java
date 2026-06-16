@@ -39,7 +39,7 @@ public class LoadoutSaver {
     private final ItemTypeDao itemTypeDao;
 
     @SneakyThrows
-    public void save(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<String> items) {
+    public void save(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<String> items, UUID starSystemId) {
         if (isNull(marketId)) {
             throw new IllegalArgumentException("marketId must not be null");
         }
@@ -74,7 +74,7 @@ public class LoadoutSaver {
 
             List<Loadout> newItems = lowercaseItems.stream()
                 .filter(item -> !existingLoadouts.containsKey(item))
-                .map(name -> loadoutDaoSupport.create(type, locationType, externalReference, marketId, name))
+                .map(name -> loadoutDaoSupport.create(type, locationType, externalReference, marketId, name, starSystemId))
                 .toList();
 
             List<Loadout> deletedItems = existingLoadouts.values()

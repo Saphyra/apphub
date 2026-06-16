@@ -28,6 +28,7 @@ class CommodityDataTransformerTest {
     private static final Integer DEMAND = 200;
     private static final Integer STOCK = 300;
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private TradingDaoSupport tradingDaoSupport;
@@ -64,20 +65,21 @@ class CommodityDataTransformerTest {
             BUY_PRICE,
             SELL_PRICE,
             DEMAND,
-            STOCK
+            STOCK,
+            STAR_SYSTEM_ID
         )).willReturn(created);
     }
 
     @Test
     void noStored() {
-        assertThat(underTest.transform(null, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).contains(created);
+        assertThat(underTest.transform(null, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).contains(created);
     }
 
     @Test
     void outdatedData() {
         given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.plusMinutes(1));
 
-        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).isEmpty();
+        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).isEmpty();
     }
 
     @Test
@@ -92,16 +94,17 @@ class CommodityDataTransformerTest {
             BUY_PRICE,
             SELL_PRICE,
             DEMAND,
-            STOCK
+            STOCK,
+            STAR_SYSTEM_ID
         )).willReturn(existing);
 
-        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).isEmpty();
+        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).isEmpty();
     }
 
     @Test
     void newData() {
         given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.minusMinutes(1));
 
-        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate)).contains(created);
+        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).contains(created);
     }
 }

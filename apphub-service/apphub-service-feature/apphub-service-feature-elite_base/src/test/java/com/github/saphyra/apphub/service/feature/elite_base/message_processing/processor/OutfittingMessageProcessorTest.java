@@ -120,6 +120,6 @@ class OutfittingMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(loadoutSaver).should().save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(MODULE));
+        then(loadoutSaver).should().save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(MODULE), STAR_SYSTEM_ID);
     }
 }

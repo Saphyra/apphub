@@ -120,6 +120,6 @@ class ShipyardMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(loadoutSaver).should().save(TIMESTAMP, ItemType.SPACESHIP, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(SHIP));
+        then(loadoutSaver).should().save(TIMESTAMP, ItemType.SPACESHIP, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(SHIP), STAR_SYSTEM_ID);
     }
 }

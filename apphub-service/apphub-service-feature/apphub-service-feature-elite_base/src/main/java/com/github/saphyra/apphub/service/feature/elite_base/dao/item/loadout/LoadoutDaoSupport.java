@@ -46,10 +46,10 @@ public class LoadoutDaoSupport {
         return (List<Loadout>) list;
     }
 
-    public Loadout create(ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, String name) {
+    public Loadout create(ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, String name, UUID starSystemId) {
         return switch (type) {
-            case EQUIPMENT -> equipmentFactory.create(locationType, externalReference, marketId, name);
-            case SPACESHIP -> spaceshipFactory.create(locationType, externalReference, marketId, name);
+            case EQUIPMENT -> equipmentFactory.create(locationType, externalReference, marketId, name, starSystemId);
+            case SPACESHIP -> spaceshipFactory.create(locationType, externalReference, marketId, name, starSystemId);
             default -> throw createTypeNotSupportedException(type);
         };
     }

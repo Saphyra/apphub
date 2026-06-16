@@ -19,13 +19,14 @@ class CommodityFactoryTest {
     private static final Integer SELL_PRICE = 3;
     private static final Integer DEMAND = 4;
     private static final Integer STOCK = 5;
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @InjectMocks
     private CommodityFactory underTest;
 
     @Test
     void create() {
-        assertThat(underTest.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK))
+        assertThat(underTest.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID))
             .returns(ItemLocationType.STATION, Commodity::getLocationType)
             .returns(EXTERNAL_REFERENCE, Commodity::getExternalReference)
             .returns(MARKET_ID, Commodity::getMarketId)
@@ -33,6 +34,7 @@ class CommodityFactoryTest {
             .returns(BUY_PRICE, Commodity::getBuyPrice)
             .returns(SELL_PRICE, Commodity::getSellPrice)
             .returns(DEMAND, Commodity::getDemand)
-            .returns(STOCK, Commodity::getStock);
+            .returns(STOCK, Commodity::getStock)
+            .returns(STAR_SYSTEM_ID, Commodity::getStarSystemId);
     }
 }
