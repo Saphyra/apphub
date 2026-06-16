@@ -9,7 +9,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Data
 public class EditTableRequest {
     private String title;

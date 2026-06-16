@@ -14,6 +14,8 @@
         Remove PSQL
     User
         Drop backup-role change set
+    Notebook
+        Limit size of contents
 
 ===ETC===
     Test DynamoDB connection before running integration tests

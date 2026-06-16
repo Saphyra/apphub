@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -31,6 +32,7 @@ public class CustomTableTextTest extends BackEndTest {
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_nullText(accessToken);
+        create_tooLongText(accessToken);
         create(accessToken);
 
         UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
@@ -39,6 +41,8 @@ public class CustomTableTextTest extends BackEndTest {
             .getId();
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
+        edit_nullText(accessToken, listItemId, tableResponse);
+        edit_tooLongText(accessToken, listItemId, tableResponse);
         edit(accessToken, listItemId, tableResponse);
 
         ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
@@ -68,6 +72,51 @@ public class CustomTableTextTest extends BackEndTest {
         CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.TEXT, TEXT);
 
         TableActions.createTable(getServerPort(), accessToken, request);
+    }
+
+    private static void create_tooLongText(String accessToken) {
+        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(
+            TITLE,
+            COLUMN_TITLE,
+            ColumnType.TEXT,
+            "a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1)
+        );
+
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
+
+        ResponseValidator.verifyInvalidParam(response, "data", "too long");
+    }
+
+    private static void edit_nullText(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
+            NEW_TITLE,
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
+            NEW_COLUMN_TITLE,
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
+            ColumnType.TEXT,
+            null
+        );
+
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
+
+        ResponseValidator.verifyInvalidParam(response, "data", "must not be null");
+    }
+
+    private static void edit_tooLongText(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
+            NEW_TITLE,
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
+            NEW_COLUMN_TITLE,
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
+            ColumnType.TEXT,
+            "a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1)
+        );
+
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
+
+        ResponseValidator.verifyInvalidParam(response, "data", "too long");
     }
 
     private static void create_nullText(String accessToken) {

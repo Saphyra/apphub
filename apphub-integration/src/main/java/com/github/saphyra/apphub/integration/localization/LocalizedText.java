@@ -27,6 +27,8 @@ public enum LocalizedText {
 
     //NOTEBOOK
     NOTEBOOK_TITLE_MUST_NOT_BE_BLANK("Title must not be blank."),
+    NOTEBOOK_TITLE_TOO_LONG("Title too long."),
+    NOTEBOOK_CONTENT_TOO_LONG("Content too long."),
     NOTEBOOK_URL_MUST_NOT_BE_BLANK("URL must not be blank."),
     NOTEBOOK_COLUMN_NAME_MUST_NOT_BE_BLANK("Name of the column must not be blank."),
     NOTEBOOK_LINK_LABEL_BLANK("Link label must not be blank."),

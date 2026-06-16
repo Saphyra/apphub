@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.Link;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
@@ -36,12 +37,14 @@ public class CustomTableLinkTest extends BackEndTest {
 
         create_nullData(accessToken);
         create_nullLink(accessToken);
+        create_tooLongLink(accessToken);
         create_blankLabel(accessToken);
+        create_tooLongLabel(accessToken);
         create(accessToken);
 
         UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
-            .get(0)
+            .getFirst()
             .getId();
         TableResponse tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
@@ -49,7 +52,9 @@ public class CustomTableLinkTest extends BackEndTest {
 
         edit_nullData(accessToken, listItemId, tableResponse);
         edit_nullLink(accessToken, listItemId, tableResponse);
+        edit_tooLongLink(accessToken, listItemId, tableResponse);
         edit_blankLabel(accessToken, listItemId, tableResponse);
+        edit_tooLongLabel(accessToken, listItemId, tableResponse);
         edit(accessToken, listItemId, tableResponse);
 
         ListItemActions.deleteListItem(getServerPort(), accessToken, listItemId);
@@ -57,9 +62,9 @@ public class CustomTableLinkTest extends BackEndTest {
 
     private void verifyCreatedTable(TableResponse tableResponse) {
         Object data = tableResponse.getRows()
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .getData();
         Link link = OBJECT_MAPPER_WRAPPER.convertValue(data, Link.class);
 
@@ -70,10 +75,10 @@ public class CustomTableLinkTest extends BackEndTest {
     private void edit_nullData(String accessToken, UUID listItemId, TableResponse tableResponse) {
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.LINK,
             null
         );
@@ -91,10 +96,10 @@ public class CustomTableLinkTest extends BackEndTest {
 
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.LINK,
             link
         );
@@ -102,6 +107,27 @@ public class CustomTableLinkTest extends BackEndTest {
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
         ResponseValidator.verifyInvalidParam(response, "link.url", "must not be null");
+    }
+
+    private void edit_tooLongLink(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        Link link = Link.builder()
+            .label(NEW_LABEL)
+            .url("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .build();
+
+        EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
+            NEW_TITLE,
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
+            NEW_COLUMN_TITLE,
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
+            ColumnType.LINK,
+            link
+        );
+
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
+
+        ResponseValidator.verifyInvalidParam(response, "link.url", "too long");
     }
 
     private void edit_blankLabel(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -112,10 +138,10 @@ public class CustomTableLinkTest extends BackEndTest {
 
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.LINK,
             link
         );
@@ -123,6 +149,27 @@ public class CustomTableLinkTest extends BackEndTest {
         Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
 
         ResponseValidator.verifyInvalidParam(response, "link.label", "must not be null or blank");
+    }
+
+    private void edit_tooLongLabel(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        Link link = Link.builder()
+            .label("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .url(NEW_URL)
+            .build();
+
+        EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
+            NEW_TITLE,
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
+            NEW_COLUMN_TITLE,
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
+            ColumnType.LINK,
+            link
+        );
+
+        Response response = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, editTableRequest);
+
+        ResponseValidator.verifyInvalidParam(response, "link.label", "too long");
     }
 
     private void edit(String accessToken, UUID listItemId, TableResponse tableResponse) {
@@ -133,10 +180,10 @@ public class CustomTableLinkTest extends BackEndTest {
 
         EditTableRequest editTableRequest = CustomTableUtils.createEditCustomTableRequest(
             NEW_TITLE,
-            tableResponse.getTableHeads().get(0).getTableHeadId(),
+            tableResponse.getTableHeads().getFirst().getTableHeadId(),
             NEW_COLUMN_TITLE,
-            tableResponse.getRows().get(0).getRowId(),
-            tableResponse.getRows().get(0).getColumns().get(0).getColumnId(),
+            tableResponse.getRows().getFirst().getRowId(),
+            tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId(),
             ColumnType.LINK,
             link
         );
@@ -146,11 +193,11 @@ public class CustomTableLinkTest extends BackEndTest {
         tableResponse = TableActions.getTable(getServerPort(), accessToken, listItemId);
 
         assertThat(tableResponse.getTitle()).isEqualTo(NEW_TITLE);
-        assertThat(tableResponse.getTableHeads().get(0).getContent()).isEqualTo(NEW_COLUMN_TITLE);
+        assertThat(tableResponse.getTableHeads().getFirst().getContent()).isEqualTo(NEW_COLUMN_TITLE);
         Object data = tableResponse.getRows()
-            .get(0)
+            .getFirst()
             .getColumns()
-            .get(0)
+            .getFirst()
             .getData();
         Link responseLink = OBJECT_MAPPER_WRAPPER.convertValue(data, Link.class);
         assertThat(responseLink.getLabel()).isEqualTo(NEW_LABEL);
@@ -181,6 +228,19 @@ public class CustomTableLinkTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(response, "link.label", "must not be null or blank");
     }
 
+    private void create_tooLongLabel(String accessToken) {
+        Link link = Link.builder()
+            .label("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .url(URL)
+            .build();
+
+        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.LINK, link);
+
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
+
+        ResponseValidator.verifyInvalidParam(response, "link.label", "too long");
+    }
+
     private void create_nullLink(String accessToken) {
         Link link = Link.builder()
             .label(LABEL)
@@ -192,6 +252,19 @@ public class CustomTableLinkTest extends BackEndTest {
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
 
         ResponseValidator.verifyInvalidParam(response, "link.url", "must not be null");
+    }
+
+    private void create_tooLongLink(String accessToken) {
+        Link link = Link.builder()
+            .label(LABEL)
+            .url("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .build();
+
+        CreateTableRequest request = CustomTableUtils.createCustomTableRequest(TITLE, COLUMN_TITLE, ColumnType.LINK, link);
+
+        Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
+
+        ResponseValidator.verifyInvalidParam(response, "link.url", "too long");
     }
 
     private static void create_nullData(String accessToken) {

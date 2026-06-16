@@ -64,6 +64,8 @@ public class Constants {
     public static final String FAILED = "FAILED";
     public static final String DEFAULT_PIN_GROUP_NAME = "All";
     public static final String DEFAULT_LOCALE = "en";
+    public static final int MAX_LIST_ITEM_TITLE_LENGTH = 1024;
+    public static final int MAX_LIST_ITEM_CONTENT_LENGTH = 1024 * 100; //100 KB
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
