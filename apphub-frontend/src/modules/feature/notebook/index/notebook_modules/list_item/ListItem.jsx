@@ -2,7 +2,7 @@ import ConfirmationDialogData from "common/component/confirmation_dialog/Confirm
 import Button from "common/component/input/Button";
 import EventName from "common/js/event/EventName";
 import NotificationService from "common/js/notification/NotificationService";
-import { addAndSet, removeAndSet, throwException } from "common/js/Utils";
+import { addAndSet, copyToClipboard, removeAndSet, throwException } from "common/js/Utils";
 import moveListItem from "modules/feature/notebook/common/MoveListItemService";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 import "./list_item.css";
@@ -212,6 +212,14 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
                         className="notebook-content-category-content-list-item-edit-button"
                         onclick={() => window.location.href = NOTEBOOK_EDIT_PAGE + "/" + data.id}
                         title={localizationHandler.get("edit")}
+                    />
+                }
+
+                {listItemMode !== ListItemMode.PINNED_ITEM &&
+                    <Button
+                        className="notebook-content-category-content-list-item-copy-button"
+                        onclick={() => copyToClipboard(data.title)}
+                        title={localizationHandler.get("copy-title")}
                     />
                 }
             </div>

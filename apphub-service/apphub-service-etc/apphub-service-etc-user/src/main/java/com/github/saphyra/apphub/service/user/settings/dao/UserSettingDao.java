@@ -12,7 +12,7 @@ import java.util.UUID;
 public class UserSettingDao extends AbstractDao<UserSettingEntity, UserSetting, UserSettingEntityId, UserSettingRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public UserSettingDao(UserSettingConverter converter, UserSettingRepository repository, UuidConverter uuidConverter) {
+    UserSettingDao(UserSettingConverter converter, UserSettingRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }
@@ -24,5 +24,14 @@ public class UserSettingDao extends AbstractDao<UserSettingEntity, UserSetting, 
     @Override
     public void deleteByUserId(UUID userId) {
         repository.deleteByUserId(uuidConverter.convertDomain(userId));
+    }
+
+    public void delete(UUID userId, String category, String key) {
+        UserSettingEntityId id = UserSettingEntityId.builder()
+            .userId(uuidConverter.convertDomain(userId))
+            .category(category)
+            .key(key)
+            .build();
+        repository.deleteById(id);
     }
 }

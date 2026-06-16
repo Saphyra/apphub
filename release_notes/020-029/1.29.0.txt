@@ -2,6 +2,8 @@
     Monitoring
         Filter diagrams
         Monitor error reports
+    Notebook
+        Copy list item title
 
 ===BUGFIXES===
     Integration

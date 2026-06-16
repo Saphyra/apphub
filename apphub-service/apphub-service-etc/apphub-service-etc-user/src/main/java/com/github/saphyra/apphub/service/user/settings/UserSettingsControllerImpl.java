@@ -52,14 +52,18 @@ public class UserSettingsControllerImpl implements UserSettingsController {
             throw ExceptionFactory.invalidParam("key", "not supported");
         }
 
-        UserSetting setting = UserSetting.builder()
-            .userId(accessToken.getUserId())
-            .category(request.getCategory())
-            .key(request.getKey())
-            .value(request.getValue())
-            .build();
+        if (isNull(request.getValue())) {
+            userSettingDao.delete(accessToken.getUserId(), request.getCategory(), request.getKey());
+        } else {
+            UserSetting setting = UserSetting.builder()
+                .userId(accessToken.getUserId())
+                .category(request.getCategory())
+                .key(request.getKey())
+                .value(request.getValue())
+                .build();
 
-        userSettingDao.save(setting);
+            userSettingDao.save(setting);
+        }
 
         return getUserSettings(request.getCategory(), accessToken);
     }
