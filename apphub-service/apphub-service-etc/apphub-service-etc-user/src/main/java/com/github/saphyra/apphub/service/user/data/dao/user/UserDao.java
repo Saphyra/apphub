@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -121,13 +122,15 @@ public class UserDao implements DeleteByUserIdDao {
     }
 
     public void addRoleToAll(String role) {
-        repository.getAllUserIds()
-            .forEach(userId -> repository.addRole(userId, role));
+        List<String> userIds = repository.getAllUserIds();
+
+        repository.addRoleToUsers(userIds, role);
     }
 
     public void deleteRoleFromAll(String role) {
-        repository.getAllUserIds()
-            .forEach(userId -> repository.deleteRole(userId, role));
+        List<BiWrapper<String, String>> keys = repository.getRoles(role);
+
+        repository.deleteRoles(keys);
     }
 
     public void updateMarkedForDeletion(User user) {

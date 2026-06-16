@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
+import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -21,6 +20,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +31,7 @@ public class RoleToAllServiceTest {
     private static final String PASSWORD = "password";
 
     @Spy
-    private final ExecutorServiceBeanFactory executorServiceBeanFactory = ExecutorServiceBeenTestUtils.createFactory(Mockito.mock(ErrorReporterService.class));
+    private final ExecutorServiceBean executorServiceBean = ExecutorServiceBeenTestUtils.create(mock(ErrorReporterService.class));
 
     @Mock
     private AddRoleToAllProperties properties;

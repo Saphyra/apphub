@@ -23,7 +23,10 @@ public enum UserMonitoringFunctionality implements MonitoringFunctionality {
 
     //Role
     SAVE_ROLE,
+    BATCH_SAVE_ROLE,
+    SCAN_ROLES,
     DELETE_ROLE,
+    BATCH_DELETE_ROLE,
     ;
 
     @Override
