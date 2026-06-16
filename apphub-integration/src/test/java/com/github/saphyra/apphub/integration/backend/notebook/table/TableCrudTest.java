@@ -179,7 +179,7 @@ public class TableCrudTest extends BackEndTest {
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, validCreateRequest().toBuilder()
             .tableHeads(List.of(TableHeadModel.builder()
                 .columnIndex(0)
-                .content("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+                .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
                 .build()))
             .build());
         verifyInvalidParam(response, "tableHead.content", "too long");
@@ -352,7 +352,7 @@ public class TableCrudTest extends BackEndTest {
             .tableHeads(List.of(TableHeadModel.builder()
                 .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
                 .columnIndex(0)
-                .content("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+                .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
                 .type(ItemType.EXISTING)
                 .build()))
             .build());
