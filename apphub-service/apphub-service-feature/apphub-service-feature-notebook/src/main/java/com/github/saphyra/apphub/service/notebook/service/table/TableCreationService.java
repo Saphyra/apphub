@@ -18,7 +18,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableR
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowFactory;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
 import com.github.saphyra.apphub.service.notebook.service.table.validator.TableCreationRequestValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -40,7 +39,6 @@ public class TableCreationService {
     private final ColumnDataServiceProvider columnDataServiceProvider;
     private final CommonListItemDao commonListItemDao;
 
-    @Transactional
     public List<TableFileUploadResponse> create(UUID userId, CreateTableRequest request) {
         tableCreationRequestValidator.validate(userId, request);
 

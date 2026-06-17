@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListIt
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemFactory;
 import com.github.saphyra.apphub.service.notebook.service.validator.TextValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +20,6 @@ public class TextCreationService {
     private final ListItemDao listItemDao;
     private final ListItemFactory listItemFactory;
 
-    @Transactional
     public UUID create(CreateTextRequest request, UUID userId) {
         textValidator.validate(userId, request);
 

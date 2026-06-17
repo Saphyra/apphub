@@ -203,7 +203,6 @@ services:
     group: 2
     optional: true
     properties:
-      - PSQL_HOST
       - DYNAMO_DB_CONFIGURATION
   - name: community
     port: 8096

@@ -33,3 +33,4 @@
         Restart ApphubCI
     Post deployment
         Delete schema calendar
+        Delete schema notebook

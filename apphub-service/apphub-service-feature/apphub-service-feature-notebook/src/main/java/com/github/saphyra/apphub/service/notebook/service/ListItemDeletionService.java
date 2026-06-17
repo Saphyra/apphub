@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.file.FileDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,6 @@ public class ListItemDeletionService {
     private final PinGroupDao pinGroupDao;
     private final FileDeletionService fileDeletionService;
 
-    @Transactional
     public void deleteListItem(UUID listItemId, UUID userId) {
         ListItem listItem = listItemDao.findByIdValidated(userId, listItemId);
         deleteChild(listItem, userId);

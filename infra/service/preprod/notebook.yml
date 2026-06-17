@@ -22,11 +22,6 @@ spec:
           env:
             - name: SPRING_ACTIVE_PROFILE
               value: server,preprod
-            - name: PSQL_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: psql-host
-                  key: PSQL_HOST
             - name: DYNAMO_DB_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:

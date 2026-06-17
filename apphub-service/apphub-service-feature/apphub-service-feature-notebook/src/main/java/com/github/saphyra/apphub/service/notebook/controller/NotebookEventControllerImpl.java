@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ public class NotebookEventControllerImpl implements NotebookEventController {
 
     @Override
     @SneakyThrows
-    @Transactional
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
         UUID userId = request.getPayload().getUserId();
         log.info("DeleteAccountEvent arrived with userId {}", userId);
