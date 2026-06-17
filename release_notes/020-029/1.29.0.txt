@@ -26,6 +26,7 @@
 
 ===ETC===
     Test DynamoDB connection before running integration tests
+    Delete service encryption
 
 ===Manual Release Steps===
     Pre deployment

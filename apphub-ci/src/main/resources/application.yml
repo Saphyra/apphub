@@ -150,14 +150,6 @@ services:
       - S3_CONFIGURATION
       - FTP_HOST
       - DYNAMO_DB_CONFIGURATION
-  - name: encryption
-    port: 8098
-    location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
-    moduleName: apphub-service-platform-encryption
-    group: 2
-    optional: true
-    properties:
-      - PSQL_HOST
   - name: modules
     port: 8088
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-modules/target/application.jar"

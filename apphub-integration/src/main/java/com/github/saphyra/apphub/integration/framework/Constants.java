@@ -90,7 +90,6 @@ public class Constants {
         SERVICE_NAME_USER,
         "community",
         "calendar",
-        "encryption",
         "storage",
         "elite-base",
         "monitoring",
