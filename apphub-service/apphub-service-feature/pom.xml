@@ -9,7 +9,6 @@
 
     <artifactId>apphub-service-feature</artifactId>
     <packaging>pom</packaging>
-
     <name>apphub-service-feature</name>
 
     <modules>
@@ -19,5 +18,6 @@
         <module>apphub-service-feature-notebook</module>
         <module>apphub-service-feature-skyxplore</module>
         <module>apphub-service-feature-training</module>
+        <module>apphub-service-feature-task_manager</module>
     </modules>
 </project>

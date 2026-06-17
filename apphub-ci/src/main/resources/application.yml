@@ -196,6 +196,14 @@ services:
     optional: true
     properties:
       - DYNAMO_DB_CONFIGURATION
+  - name: task-manager
+    port: 8098
+    location: "./apphub-service/apphub-service-feature/apphub-service-feature-task_manager/target/application.jar"
+    moduleName: apphub-service-feature-task_manager
+    group: 2
+    optional: true
+    properties:
+      - DYNAMO_DB_CONFIGURATION
   - name: community
     port: 8096
     location: "./apphub-service/apphub-service-feature/apphub-service-feature-community/target/application.jar"
