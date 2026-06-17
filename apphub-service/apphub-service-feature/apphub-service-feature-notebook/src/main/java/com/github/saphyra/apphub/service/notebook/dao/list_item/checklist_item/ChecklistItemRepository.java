@@ -36,7 +36,7 @@ class ChecklistItemRepository extends DynamoDbRepository {
     private final ChecklistItemMapper mapper;
 
     ChecklistItemRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ChecklistItemMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getListItemTableName(), context);
         this.mapper = mapper;
     }
 

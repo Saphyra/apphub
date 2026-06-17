@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
 import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
@@ -40,11 +39,7 @@ public class NotebookDataDeletedWithUserTest extends BackEndTest {
         UUID tableId = createTable(accessToken);
         UUID checklistId = createChecklist(accessToken);
 
-        UUID pinGroupId = PinActions.createPinGroup(getServerPort(), accessToken, PIN_GROUP)
-            .getFirst()
-            .getPinGroupId();
-        PinActions.pin(getServerPort(), accessToken, tableId, true);
-        PinActions.addItemToPinGroup(getServerPort(), accessToken, pinGroupId, checklistId);
+        PinActions.createPinGroup(getServerPort(), accessToken, PIN_GROUP);
 
         AccountActions.deleteAccount(getServerPort(), accessToken, userData.getPassword());
 
@@ -52,8 +47,7 @@ public class NotebookDataDeletedWithUserTest extends BackEndTest {
             assertThat(DynamoDbUtil.listItemExists(userId)).isFalse();
             assertThat(DynamoDbUtil.listItemHasChildren(tableId)).isFalse();
             assertThat(DynamoDbUtil.listItemHasChildren(checklistId)).isFalse();
-            assertThat(DatabaseUtil.getRowCountByValue(userId, "notebook", "pin_group", "user_id")).isZero();
-            assertThat(DatabaseUtil.getRowCountByValue(userId, "notebook", "pin_mapping", "user_id")).isZero();
+            assertThat(DynamoDbUtil.getPinGroups(userId)).isEmpty();
         });
     }
 

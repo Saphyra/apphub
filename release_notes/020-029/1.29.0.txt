@@ -12,6 +12,8 @@
         Fill starSystemId in Loadout and Commodity records
 
 ===PLATFORM CHANGES===
+    Notebook
+        Pin to DynamoDB
 
 ===TECHNICAL DEBTS===
     Calendar

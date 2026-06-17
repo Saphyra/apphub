@@ -33,7 +33,7 @@ class TableRowRepository extends DynamoDbRepository {
     private final TableRowMapper mapper;
 
     TableRowRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, TableRowMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getListItemTableName(), context);
         this.mapper = mapper;
     }
 

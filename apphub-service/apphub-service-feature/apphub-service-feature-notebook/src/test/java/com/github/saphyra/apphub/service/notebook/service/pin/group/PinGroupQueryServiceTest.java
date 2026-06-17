@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.pin.PinGroupResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroup;
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

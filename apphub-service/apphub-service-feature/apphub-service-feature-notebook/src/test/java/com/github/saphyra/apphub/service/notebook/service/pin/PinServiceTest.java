@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import com.github.saphyra.apphub.service.notebook.service.NotebookViewFactory;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +36,7 @@ class PinServiceTest {
     private NotebookViewFactory notebookViewFactory;
 
     @Mock
-    private PinMappingDao pinMappingDao;
+    private PinGroupDao pinGroupDao;
 
     @InjectMocks
     private PinService underTest;
@@ -45,6 +46,9 @@ class PinServiceTest {
 
     @Mock
     private NotebookView notebookView;
+
+    @Mock
+    private PinGroup pinGroup;
 
     @Test
     void pinListItem_nullPinned() {
@@ -79,7 +83,7 @@ class PinServiceTest {
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, null);
 
         assertThat(result).containsExactly(notebookView);
-        then(pinMappingDao).shouldHaveNoInteractions();
+        then(pinGroupDao).shouldHaveNoInteractions();
     }
 
     @Test
@@ -119,14 +123,8 @@ class PinServiceTest {
             .pinned(true)
             .build();
 
-        PinMapping pinMapping = PinMapping.builder()
-            .pinMappingId(UUID.randomUUID())
-            .userId(USER_ID)
-            .pinGroupId(PIN_GROUP_ID)
-            .listItemId(LIST_ITEM_ID)
-            .build();
-
-        given(pinMappingDao.getByPinGroupId(PIN_GROUP_ID)).willReturn(List.of(pinMapping));
+        given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
+        given(pinGroup.getListItemIds()).willReturn(Set.of(LIST_ITEM_ID));
         given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(pinnedInGroup, pinnedNotInGroup));
         given(notebookViewFactory.create(pinnedInGroup)).willReturn(notebookView);
 

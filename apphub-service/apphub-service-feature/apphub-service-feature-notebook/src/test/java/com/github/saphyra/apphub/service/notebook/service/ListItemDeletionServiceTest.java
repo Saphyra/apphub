@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.file.FileDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.InOrder;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -39,7 +39,7 @@ class ListItemDeletionServiceTest {
 	private ChecklistDeletionService checklistDeletionService;
 
 	@Mock
-	private PinMappingDao pinMappingDao;
+	private PinGroupDao pinGroupDao;
 
 	@Mock
 	private FileDeletionService fileDeletionService;
@@ -62,11 +62,11 @@ class ListItemDeletionServiceTest {
 
 		underTest.deleteListItem(LIST_ITEM_ID, USER_ID);
 
-		InOrder inOrder = inOrder(listItemDao, pinMappingDao);
+		InOrder inOrder = inOrder(listItemDao, pinGroupDao);
 		inOrder.verify(listItemDao).delete(child);
-		inOrder.verify(pinMappingDao).deleteByListItemId(CHILD_ID);
+		inOrder.verify(pinGroupDao).deleteListItemId(USER_ID, CHILD_ID);
 		inOrder.verify(listItemDao).delete(listItem);
-		inOrder.verify(pinMappingDao).deleteByListItemId(LIST_ITEM_ID);
+		inOrder.verify(pinGroupDao).deleteListItemId(USER_ID, LIST_ITEM_ID);
 	}
 
 	@Test
@@ -76,7 +76,7 @@ class ListItemDeletionServiceTest {
 		underTest.deleteListItem(LIST_ITEM_ID, USER_ID);
 
 		then(checklistDeletionService).should().delete(listItem);
-		then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID);
+		then(pinGroupDao).should().deleteListItemId(USER_ID, LIST_ITEM_ID);
 	}
 
 	@ParameterizedTest
@@ -87,7 +87,7 @@ class ListItemDeletionServiceTest {
 		underTest.deleteListItem(LIST_ITEM_ID, USER_ID);
 
 		then(listItemDao).should().delete(listItem);
-		then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID);
+		then(pinGroupDao).should().deleteListItemId(USER_ID, LIST_ITEM_ID);
 	}
 
 	@ParameterizedTest
@@ -98,7 +98,7 @@ class ListItemDeletionServiceTest {
 		underTest.deleteListItem(LIST_ITEM_ID, USER_ID);
 
 		then(fileDeletionService).should().deleteFile(listItem);
-		then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID);
+		then(pinGroupDao).should().deleteListItemId(USER_ID, LIST_ITEM_ID);
 	}
 
 	@ParameterizedTest
@@ -109,7 +109,7 @@ class ListItemDeletionServiceTest {
 		underTest.deleteListItem(LIST_ITEM_ID, USER_ID);
 
 		then(tableDeletionService).should().delete(listItem);
-		then(pinMappingDao).should().deleteByListItemId(LIST_ITEM_ID);
+		then(pinGroupDao).should().deleteListItemId(USER_ID, LIST_ITEM_ID);
 	}
 
 	private void givenListItemType(ListItemType listItemType) {

@@ -1,7 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroup;
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

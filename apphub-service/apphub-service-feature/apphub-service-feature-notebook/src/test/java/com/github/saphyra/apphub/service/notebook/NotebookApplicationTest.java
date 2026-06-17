@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayA
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.CommonListItemDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ public class NotebookApplicationTest {
 
     @MockitoBean
     private CommonListItemDao commonListItemDao;
+
+    @MockitoBean
+    private PinGroupDao pinGroupDao;
 
     @Test
     public void startup() {

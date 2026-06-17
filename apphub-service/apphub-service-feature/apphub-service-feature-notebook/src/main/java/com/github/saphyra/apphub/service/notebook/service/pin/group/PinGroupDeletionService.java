@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,13 +13,9 @@ import java.util.UUID;
 @Slf4j
 public class PinGroupDeletionService {
     private final PinGroupDao pinGroupDao;
-    private final PinMappingDao pinMappingDao;
 
     @Transactional
-    public void delete(UUID pinGroupId) {
-        pinGroupDao.findByIdValidated(pinGroupId); //Validate own
-
-        pinGroupDao.deleteById(pinGroupId);
-        pinMappingDao.deleteByPinGroupId(pinGroupId);
+    public void delete(UUID userId, UUID pinGroupId) {
+        pinGroupDao.delete(userId, pinGroupId);
     }
 }

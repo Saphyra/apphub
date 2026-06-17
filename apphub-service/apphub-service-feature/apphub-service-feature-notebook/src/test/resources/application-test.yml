@@ -1,4 +1,6 @@
 aws:
   dynamoDb:
     listItem:
-      tableName: apphub-minikube-list_item
+      tableName: apphub-test-list_item
+    pinGroup:
+      tableName: apphub-test-pin_group

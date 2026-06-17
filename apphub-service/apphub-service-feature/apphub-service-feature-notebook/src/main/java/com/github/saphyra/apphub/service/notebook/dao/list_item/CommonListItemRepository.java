@@ -41,7 +41,7 @@ import static com.github.saphyra.apphub.service.notebook.dao.list_item.ListItemD
 @Slf4j
 class CommonListItemRepository extends DynamoDbRepository {
     CommonListItemRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
-        super(configuration.getTableName(), context);
+        super(configuration.getListItemTableName(), context);
     }
 
     void deleteByListItemId(String listItemId) {

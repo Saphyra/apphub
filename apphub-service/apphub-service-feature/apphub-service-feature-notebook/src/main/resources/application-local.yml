@@ -8,3 +8,5 @@ aws:
     url: http://localhost:8000
     listItem:
       tableName: apphub-local-list_item
+    pinGroup:
+      tableName: apphub-local-notebook-pin_group

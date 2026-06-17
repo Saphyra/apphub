@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.notebook.service;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import com.github.saphyra.apphub.service.notebook.service.checklist.ChecklistDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.file.FileDeletionService;
 import com.github.saphyra.apphub.service.notebook.service.table.TableDeletionService;
@@ -22,7 +22,7 @@ public class ListItemDeletionService {
     private final ListItemDao listItemDao;
     private final TableDeletionService tableDeletionService;
     private final ChecklistDeletionService checklistDeletionService;
-    private final PinMappingDao pinMappingDao;
+    private final PinGroupDao pinGroupDao;
     private final FileDeletionService fileDeletionService;
 
     @Transactional
@@ -44,7 +44,7 @@ public class ListItemDeletionService {
             default -> throw ExceptionFactory.reportedException(HttpStatus.NOT_IMPLEMENTED, "Unhandled listItemType: " + listItem.getType());
         }
 
-        pinMappingDao.deleteByListItemId(listItem.getListItemId());
+        pinGroupDao.deleteListItemId(userId, listItem.getListItemId());
     }
 
     private void deleteChildren(ListItem category, UUID userId) {

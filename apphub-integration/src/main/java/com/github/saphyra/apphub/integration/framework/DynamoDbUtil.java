@@ -374,4 +374,21 @@ public class DynamoDbUtil {
             .items()
             .isEmpty();
     }
+
+    public static List<Map<String, AttributeValue>> getPinGroups(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getNotebookPinGroupTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s("USER#" + userId.toString()).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getNotebookPinGroupTableName() {
+        return "apphub-%s-notebook-pin_group".formatted(TestConfiguration.ENVIRONMENT);
+    }
 }

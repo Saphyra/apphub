@@ -36,7 +36,7 @@ class ListItemRepository extends DynamoDbRepository {
     private final ListItemMapper mapper;
 
     ListItemRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ListItemMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getListItemTableName(), context);
         this.mapper = mapper;
     }
 
