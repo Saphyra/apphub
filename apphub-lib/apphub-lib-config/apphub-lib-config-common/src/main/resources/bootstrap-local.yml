@@ -23,6 +23,7 @@ serviceHosts:
   calendar: localhost:8097
   eliteBase: localhost:8087
   mainGateway: localhost:8080
+  taskManager: localhost:8098
 
 authorization:
   issuer: apphub-local

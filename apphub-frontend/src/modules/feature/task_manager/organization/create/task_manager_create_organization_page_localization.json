@@ -1,0 +1,54 @@
+{
+    "title": {
+        "en": "Create organization - Task Manager - Apphub",
+        "hu": "Szervezet létrehozása - Feladatkezelő - Apphub"
+    },
+    "page-title": {
+        "en": "Create organization",
+        "hu": "Szervezet létrehozása"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "organization-name": {
+        "en": "Organization name",
+        "hu": "Szervezet neve"
+    },
+    "create": {
+        "en": "Create",
+        "hu": "Létrehozás"
+    },
+    "organization-description": {
+        "en": "Organization description",
+        "hu": "Szervezet leírása"
+    },
+    "invited-users": {
+        "en": "Invited users",
+        "hu": "Meghívott felhasználók"
+    },
+    "user-search": {
+        "en": "Search for users",
+        "hu": "Felhasználók keresése"
+    },
+    "no-invited-users": {
+        "en": "No invited users",
+        "hu": "Nincsenek meghívott felhasználók"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "user-search-too-short": {
+        "en": "Enter at least 3 characters to search",
+        "hu": "Adjon meg legalább 3 karaktert a kereséshez"
+    },
+    "no-user-found": {
+        "en": "No user found",
+        "hu": "FElhasználó nem található"
+    },
+    "organization-name-required": {
+        "en": "Organization name is required",
+        "hu": "A szervezet neve kötelező"
+    }
+}

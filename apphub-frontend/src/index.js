@@ -65,6 +65,9 @@ import { UTILS_BASE_64_PAGE, UTILS_JSON_FORMATTER_PAGE, UTILS_RANDOM_DIRECTION_P
 import { ELITE_BASE_PAGE } from 'modules/feature/elite_base/EliteBaseEndpoints';
 import { CALENDAR_CREATE_EVENT_PAGE, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_LABELS_PAGE, CALENDAR_PAGE, CALENDAR_SEARCH_PAGE } from 'modules/feature/calendar/CalendarEndpoints';
 import { MONITORING_PAGE } from 'modules/platform/monitoring/MonitoringEndpoints';
+import { TASK_MANAGER_CREATE_ORGANIZATION_PAGE, TASK_MANAGER_PAGE } from 'modules/feature/task_manager/TaskManagerEndpoints';
+import TaskManagerIndexPage from 'modules/feature/task_manager/index/TaskManagerIndexPage';
+import TaskManagerCreateOrganizationPage from 'modules/feature/task_manager/organization/create/TaskManagerCreateOrganizationPage';
 
 const router = createBrowserRouter([
   {
@@ -364,6 +367,14 @@ const router = createBrowserRouter([
   {
     path: MONITORING_PAGE,
     element: <MonitoringPage />
+  },
+  {
+    path: TASK_MANAGER_PAGE,
+    element: <TaskManagerIndexPage />
+  },
+  {
+    path: TASK_MANAGER_CREATE_ORGANIZATION_PAGE,
+    element: <TaskManagerCreateOrganizationPage />
   },
 ]);
 

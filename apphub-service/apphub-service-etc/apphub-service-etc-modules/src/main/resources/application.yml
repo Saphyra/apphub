@@ -56,6 +56,11 @@ modules:
       mobileAllowed: false
       roles:
       - CALENDAR
+    - name: task-manager
+      url: /web/task-manager
+      mobileAllowed: false
+      roles:
+        - TASK_MANAGER
     development-utils:
     - name: json-formatter
       url: /web/utils/json-formatter

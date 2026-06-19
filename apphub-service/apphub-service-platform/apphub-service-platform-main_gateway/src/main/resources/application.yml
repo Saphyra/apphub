@@ -48,6 +48,8 @@ spring:
                 /web/utils/direction,\
                 /web/calendar,\
                 /web/calendar/**,\
+                /web/task-manager,\
+                /web/task-manager/**,\
                 /web/user/account"
               filters:
                 - StripPrefix=${stripPrefix.web}
@@ -126,6 +128,10 @@ spring:
               uri: http://${serviceHosts.monitoring}
               predicates:
                 - Path=/api/monitoring/**
+            - id: task-manager
+              uri: http://${serviceHosts.taskManager}
+              predicates:
+                - Path=/api/task-manager/**
 
             #WS
             - id: web-socket-admin-panel

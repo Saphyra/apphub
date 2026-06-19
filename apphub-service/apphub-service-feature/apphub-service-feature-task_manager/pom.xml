@@ -12,9 +12,27 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-etc-user-client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-api-feature-task_manager-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${versions.spring-boot}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-security</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

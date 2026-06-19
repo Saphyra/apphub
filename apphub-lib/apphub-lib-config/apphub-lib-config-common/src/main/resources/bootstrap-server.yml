@@ -19,6 +19,7 @@ serviceHosts:
   calendar: calendar:8080
   eliteBase: elite-base:8080
   mainGateway: main-gateway:8080
+  taskManager: task-manager:8080
 
 event:
   serviceHost: ${spring.application.name}:${server.port}

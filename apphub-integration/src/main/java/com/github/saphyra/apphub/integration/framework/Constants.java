@@ -27,6 +27,7 @@ public class Constants {
     public final String ROLE_COMMUNITY = "COMMUNITY";
     public final String ROLE_CALENDAR = "CALENDAR";
     public final String ROLE_ELITE_BASE = "ELITE_BASE";
+    public final String ROLE_TASK_MANAGER = "TASK_MANAGER";
     public static final String ROLE_ELITE_BASE_ADMIN = "ELITE_BASE_ADMIN";
 
     //Alliances

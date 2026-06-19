@@ -19,6 +19,7 @@ registration:
   - COMMUNITY
   - CALENDAR
   - ELITE_BASE
+  - TASK_MANAGER
 
 rolesCanBeDisabled:
 - NOTEBOOK
@@ -30,6 +31,7 @@ rolesCanBeDisabled:
 - CALENDAR
 - ELITE_BASE
 - ELITE_BASE_ADMIN
+- TASK_MANAGER
 
 add-role-to-all:
   restrictedRoles:
