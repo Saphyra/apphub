@@ -1,0 +1,57 @@
+.task-manager-organization-notification {
+    border: 1px solid white;
+    margin: 5px;
+    border-radius: 5px;
+}
+
+.task-manager-organization-notification-checkbox {
+    transform: scale(1.25);
+    margin-left: 5px;
+}
+
+.task-manager-organization-notification-message {
+    display: inline-block;
+    padding: 5px;
+}
+
+.task-manager-organization-notification.unread {
+    border-color: orange;
+}
+
+.task-manager-organization-notification.read {
+    opacity: 0.5;
+}
+
+.task-manager-organization-notification.marked {
+    border-color: red;
+}
+
+.task-manager-organization-notification-buttons {
+    float: right;
+}
+
+.task-manager-organization-notification-buttons button {
+    border-width: 1px;
+    margin: 3px;
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.task-manager-organization-notification-mark-as-unread-button {
+    background-image: url("/src/common/style/img/mark_as_unread.png")
+}
+
+.task-manager-organization-notification-mark-as-read-button {
+    background-image: url("/src/common/style/img/mark_as_read.png")
+}
+
+.task-manager-organization-notification-mark-button {
+    background-image: url("/src/common/style/img/mark.png")
+}
+
+.task-manager-organization-notification-delete-button {
+    background-image: url("/src/common/style/img/delete.png")
+}

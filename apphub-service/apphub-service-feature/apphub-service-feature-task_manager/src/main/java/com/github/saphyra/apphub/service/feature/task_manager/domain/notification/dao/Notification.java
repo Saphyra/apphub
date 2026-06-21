@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.feature.task_manager.domain.notification.dao;
 
+import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationStatus;
+import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +17,7 @@ import java.util.UUID;
 public class Notification {
     private final UUID recipient;
     private final UUID notificationId;
-    private final NotificationStatus status;
+    private NotificationStatus status;
     private final NotificationType notificationType;
     private final LocalDateTime createdAt;
     private LocalDateTime lastModified;

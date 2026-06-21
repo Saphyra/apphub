@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +33,12 @@ class OrganizationControllerImpl implements OrganizationController {
         log.info("{} wants to know their organizations", accessToken.getUserId());
 
         return organizationQueryService.getOrganizationsOfUser(accessToken.getUserId());
+    }
+
+    @Override
+    public OrganizationResponse getOrganization(UUID organizationId, AccessToken accessToken) {
+        log.info("{} wants to query organization {}", accessToken.getUserId(), organizationId);
+
+        return organizationQueryService.getOrganization(accessToken.getUserId(), organizationId);
     }
 }

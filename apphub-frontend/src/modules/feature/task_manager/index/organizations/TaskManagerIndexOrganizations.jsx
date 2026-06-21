@@ -1,6 +1,6 @@
 import Button from "common/component/input/Button";
 import { useState } from "react";
-import { TASK_MANAGER_CREATE_ORGANIZATION_PAGE, TASK_MANAGER_GET_ORGANIZATIONS } from "../../TaskManagerEndpoints";
+import { TASK_MANAGER_CREATE_ORGANIZATION_PAGE, TASK_MANAGER_GET_ORGANIZATIONS, TASK_MANAGER_ORGANIZATION_INDEX_PAGE } from "../../TaskManagerEndpoints";
 import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
 
@@ -43,6 +43,7 @@ export const TaskManagerIndexOrganizations = ({ setDisplaySpinner, localizationH
                     key={organization.organizationId}
                     className="task-manager-index-organization button"
                     title={organization.description}
+                    onClick={() => window.location.href = TASK_MANAGER_ORGANIZATION_INDEX_PAGE.assembleUrl({ organizationId: organization.organizationId })}
                 >
                     {organization.organizationName}
                 </div>

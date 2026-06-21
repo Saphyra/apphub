@@ -1,0 +1,22 @@
+{
+    "USER_ACCEPTED_YOUR_INVITATION": {
+        "en": "'{username}' ({email}) accepted your invitation.",
+        "hu": "'{username}' ({email}) elfogadta a meghívását."
+    },
+    "mark-as-read": {
+        "en": "Mark as read",
+        "hu": "Jelölés olvasottként"
+    },
+    "mark-as-unread": {
+        "en": "Mark as unread",
+        "hu": "Jelölés olvasatlanként"
+    },
+    "mark": {
+        "en": "Mark",
+        "hu": "Jelölés"
+    },
+    "delete": {
+        "en": "Delete",
+        "hu": "Törlés"
+    }
+}

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -23,5 +24,13 @@ public class AlmDao {
             .filter(alm -> alm.getPrincipal().equals(userId))
             .filter(alm -> alm.getObjectType().equals(objectType))
             .toList();
+    }
+
+    public Optional<Alm> findByObjectId(UUID userId, UUID organizationId, ObjectType objectType) {
+        return repository.stream()
+            .filter(alm -> alm.getPrincipal().equals(userId))
+            .filter(alm -> alm.getObjectType().equals(objectType))
+            .filter(alm -> alm.getObjectId().equals(organizationId))
+            .findFirst();
     }
 }

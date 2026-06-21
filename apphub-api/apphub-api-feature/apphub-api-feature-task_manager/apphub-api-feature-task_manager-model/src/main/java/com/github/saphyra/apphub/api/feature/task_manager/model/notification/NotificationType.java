@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.feature.task_manager.domain.notification.dao;
+package com.github.saphyra.apphub.api.feature.task_manager.model.notification;
 
 public enum NotificationType {
     USER_ACCEPTED_YOUR_INVITATION,

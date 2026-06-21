@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -26,9 +27,13 @@ public class OrganizationDao {
     }
 
     public Organization findByIdValidated(UUID organizationId) {
+        return findById(organizationId)
+            .orElseThrow(() -> ExceptionFactory.notFound("Organization not found by id " + organizationId));
+    }
+
+    public Optional<Organization> findById(UUID organizationId) {
         return repository.stream()
             .filter(organization -> organization.getId().equals(organizationId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.notFound("Organization not found by id " + organizationId));
+            .findAny();
     }
 }

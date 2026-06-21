@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.feature.task_manager.domain.notification.dao;
 
+import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationStatus;
+import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationType;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;

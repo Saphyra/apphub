@@ -22,6 +22,6 @@ public interface InvitationController {
     @PostMapping(TaskManagerEndpoints.TASK_MANAGER_ACCEPT_INVITATION)
     void acceptInvitation(@PathVariable("organizationId") UUID organizationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
-    @DeleteMapping(TaskManagerEndpoints.TASK_MANAGER_ACCEPT_INVITATION)
+    @DeleteMapping(TaskManagerEndpoints.TASK_MANAGER_REJECT_INVITATION)
     void rejectInvitation(@PathVariable("organizationId") UUID organizationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }
