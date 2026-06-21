@@ -14,13 +14,15 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AlmService {
     private final AlmFactory almFactory;
     private final AlmDao almDao;
 
-    public void grantOperations(UUID principal, PrincipalType principalType, UUID id, ObjectType objectType, List<Operation> operations) {
-        Alm alm = almFactory.createAlm(principal, principalType, id, objectType, operations);
+    public void grantOperations(UUID principal, PrincipalType principalType, UUID objectId, ObjectType objectType, List<Operation> operations) {
+        Alm alm = almDao.findForObject(principal, principalType, objectId, objectType)
+            .orElseGet(() -> almFactory.createAlm(principal, principalType, objectId, objectType, operations));
+
+        operations.forEach(alm::addOperation);
 
         almDao.save(alm);
     }

@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.etc.user.client.AccountClient;
 import com.github.saphyra.apphub.api.feature.task_manager.model.organization.CreateOrganizationRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.Operation;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.PrincipalType;
@@ -40,6 +41,8 @@ public class CreateOrganizationService {
 
     private void validateRequest(CreateOrganizationRequest request) {
         ValidationUtil.notBlank(request.getOrganizationName(), "organizationName");
+        ValidationUtil.maxLength(request.getOrganizationName(), TaskManagerConstants.MAX_ORGANIZATION_NAME_LENGTH, "organizationName");
+        ValidationUtil.maxLength(request.getDescription(), TaskManagerConstants.MAX_ORGANIZATION_DESCRIPTION_LENGTH, "description");
         ValidationUtil.notNull(request.getDescription(), "description");
         ValidationUtil.notNull(request.getInvitedUsers(), "invitedUsers");
 

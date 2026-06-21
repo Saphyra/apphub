@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.Alm;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.AlmDao;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.ObjectType;
+import com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao.PrincipalType;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.organization.dao.Organization;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.organization.dao.OrganizationDao;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class OrganizationQueryService {
     }
 
     public OrganizationResponse getOrganization(UUID userId, UUID organizationId) {
-        return almDao.findByObjectId(userId, organizationId, ObjectType.ORGANIZATION)
+        return almDao.findForObject(userId, PrincipalType.USER, organizationId, ObjectType.ORGANIZATION)
             .map(alm -> organizationDao.findByIdValidated(alm.getObjectId()))
             .map(OrganizationQueryService::toResponse)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.FORBIDDEN, ErrorCode.FORBIDDEN_OPERATION, userId + " has no access to organization " + organizationId));

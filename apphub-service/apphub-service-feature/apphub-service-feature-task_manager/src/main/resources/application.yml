@@ -1,3 +1,6 @@
 spring:
   application:
     name: task-manager
+
+task-manager:
+  notificationExpiration: P30D

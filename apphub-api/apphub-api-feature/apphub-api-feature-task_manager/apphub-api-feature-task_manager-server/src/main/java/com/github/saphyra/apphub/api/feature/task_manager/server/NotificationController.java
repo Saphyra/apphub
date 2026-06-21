@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO unit test
+//TODO API test
 //TODO role protection test
 public interface NotificationController {
     @GetMapping(TaskManagerEndpoints.TASK_MANAGER_GET_NOTIFICATIONS)

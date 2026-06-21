@@ -16,6 +16,7 @@ import { USER_DATA_SEARCH_ACCOUNT } from "common/js/GenericEndpoints";
 import Constants from "common/js/Constants";
 import { hasValue, isBlank, removeAndSet } from "common/js/Utils";
 import Stream from "common/js/collection/Stream";
+import { MAX_ORGANIZATION_DESCRIPTION_LENGTH, MAX_ORGANIZATION_NAME_LENGTH } from "../../common/TaskManagerConstants";
 
 const TaskManagerCreateOrganizationPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -214,9 +215,18 @@ const TaskManagerCreateOrganizationPage = () => {
     }
 
     async function createOrganization() {
-        //TODO limit max length of organizationName and organizationDescription
         if(isBlank(organizationName)) {
             NotificationService.showError(localizationHandler.get("organization-name-required"));
+            return;
+        }
+
+        if(organizationName.length > MAX_ORGANIZATION_NAME_LENGTH) {
+            NotificationService.showError(localizationHandler.get("organization-name-too-long"));
+            return;
+        }
+
+        if(description.length > MAX_ORGANIZATION_DESCRIPTION_LENGTH) {
+            NotificationService.showError(localizationHandler.get("organization-description-too-long"));
             return;
         }
 

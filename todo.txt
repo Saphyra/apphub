@@ -1,3 +1,4 @@
 TODO Order organizations
 TODO Set favorite organizations
 TODO Filter organizations
+TODO Handle user deletion

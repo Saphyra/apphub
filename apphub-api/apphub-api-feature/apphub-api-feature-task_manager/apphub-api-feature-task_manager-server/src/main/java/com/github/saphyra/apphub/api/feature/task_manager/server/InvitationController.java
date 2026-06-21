@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO unit test
+//TODO API test
 //TODO role protection test
 public interface InvitationController {
     @GetMapping(TaskManagerEndpoints.TASK_MANAGER_GET_INVITATIONS)

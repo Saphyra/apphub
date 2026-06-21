@@ -50,5 +50,13 @@
     "organization-name-required": {
         "en": "Organization name is required",
         "hu": "A szervezet neve kötelező"
+    },
+    "organization-name-too-long": {
+        "en": "Organization name is too long",
+        "hu": "A szervezet neve túl hosszú"
+    },
+    "organization-description-too-long": {
+        "en": "Organization description is too long",
+        "hu": "A szervezet leírása túl hosszú"
     }
 }

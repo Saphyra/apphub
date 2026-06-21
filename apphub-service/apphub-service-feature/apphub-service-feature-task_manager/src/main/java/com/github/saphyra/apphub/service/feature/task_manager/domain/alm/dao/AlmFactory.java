@@ -8,7 +8,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AlmFactory {
     public Alm createAlm(UUID principal, PrincipalType principalType, UUID objectId, ObjectType objectType, List<Operation> operations) {
         return Alm.builder()

@@ -3,34 +3,24 @@ package com.github.saphyra.apphub.service.feature.task_manager.domain.alm.dao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AlmDao {
-    private final List<Alm> repository = Collections.synchronizedList(new ArrayList<>());
+    private final AlmRepository repository;
 
     public void save(Alm alm) {
-        repository.add(alm);
+        repository.save(alm);
     }
 
     public List<Alm> getByUserIdAndObjectType(UUID userId, ObjectType objectType) {
-        return repository.stream()
-            .filter(alm -> alm.getPrincipal().equals(userId))
-            .filter(alm -> alm.getObjectType().equals(objectType))
-            .toList();
+        return repository.getByPrincipalAndObjectType(userId, PrincipalType.USER, objectType);
     }
 
-    public Optional<Alm> findByObjectId(UUID userId, UUID organizationId, ObjectType objectType) {
-        return repository.stream()
-            .filter(alm -> alm.getPrincipal().equals(userId))
-            .filter(alm -> alm.getObjectType().equals(objectType))
-            .filter(alm -> alm.getObjectId().equals(organizationId))
-            .findFirst();
+    public Optional<Alm> findForObject(UUID principalId, PrincipalType principalType, UUID objectId, ObjectType objectType) {
+        return repository.findForObject(principalId, principalType, objectId, objectType);
     }
 }

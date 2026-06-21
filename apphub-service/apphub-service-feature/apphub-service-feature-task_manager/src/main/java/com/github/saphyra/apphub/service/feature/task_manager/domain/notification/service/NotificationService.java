@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.task_manager.domain.notificati
 
 import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationStatus;
 import com.github.saphyra.apphub.api.feature.task_manager.model.notification.NotificationType;
+import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.notification.dao.Notification;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.notification.dao.NotificationConstants;
 import com.github.saphyra.apphub.service.feature.task_manager.domain.notification.dao.NotificationDao;
@@ -9,6 +10,7 @@ import com.github.saphyra.apphub.service.feature.task_manager.domain.notificatio
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class NotificationService {
     private final NotificationFactory notificationFactory;
     private final NotificationDao notificationDao;
+    private final DateTimeUtil dateTimeUtil;
 
     public void createUserAcceptedYourInvitationNotification(List<UUID> recipients, UUID invitedUserId) {
         List<Notification> notifications = recipients.stream()
@@ -39,7 +42,13 @@ public class NotificationService {
     public void setStatus(UUID userId, Collection<UUID> notificationIds, NotificationStatus status) {
         List<Notification> notifications = notificationDao.getByIds(userId, notificationIds);
 
-        notifications.forEach(notification -> notification.setStatus(status));
+        LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
+
+        notifications.forEach(notification -> {
+            notification.setStatus(status);
+
+            notification.setLastModified(currentTime);
+        });
 
         notificationDao.save(notifications);
     }

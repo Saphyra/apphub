@@ -7,7 +7,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class InvitationFactory {
     public Invitation create(UUID userId, UUID organizationId, UUID invitedUserId) {
         return Invitation.builder()

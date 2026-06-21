@@ -24,7 +24,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class InvitationService {
     private final InvitationFactory invitationFactory;
     private final InvitationDao invitationDao;
