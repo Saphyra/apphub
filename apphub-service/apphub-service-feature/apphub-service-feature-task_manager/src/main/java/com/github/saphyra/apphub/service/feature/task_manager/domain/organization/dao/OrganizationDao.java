@@ -4,26 +4,21 @@ import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class OrganizationDao {
-    private final List<Organization> repository = Collections.synchronizedList(new ArrayList<>());
+    private final OrganizationRepository repository;
 
     public void save(Organization organization) {
-        repository.add(organization);
+        repository.save(organization);
     }
 
     public List<Organization> getByIds(List<UUID> organizationIds) {
-        return repository.stream()
-            .filter(organization -> organizationIds.contains(organization.getId()))
-            .toList();
+        return repository.getByIds(organizationIds);
     }
 
     public Organization findByIdValidated(UUID organizationId) {
@@ -32,8 +27,6 @@ public class OrganizationDao {
     }
 
     public Optional<Organization> findById(UUID organizationId) {
-        return repository.stream()
-            .filter(organization -> organization.getId().equals(organizationId))
-            .findAny();
+        return repository.findById(organizationId);
     }
 }

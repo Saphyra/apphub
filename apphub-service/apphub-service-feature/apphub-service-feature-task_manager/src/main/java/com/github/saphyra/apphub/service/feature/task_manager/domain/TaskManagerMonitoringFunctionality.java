@@ -19,6 +19,11 @@ public enum TaskManagerMonitoringFunctionality implements MonitoringFunctionalit
     GET_NOTIFICATIONS_BY_USER_ID,
     DELETE_NOTIFICATIONS,
     GET_NOTIFICATIONS,
+
+    //Organization
+    SAVE_ORGANIZATION,
+    GET_ORGANIZATIONS,
+    GET_ORGANIZATION,
     ;
 
     @Override

@@ -1,2 +1,6 @@
 server:
   port: 8098
+
+aws:
+  dynamoDb:
+    url: http://localhost:8000

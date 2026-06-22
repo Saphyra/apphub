@@ -17,7 +17,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class NotificationService {
     private final NotificationFactory notificationFactory;
     private final NotificationDao notificationDao;

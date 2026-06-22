@@ -21,7 +21,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class CreateOrganizationService {
     private final OrganizationFactory organizationFactory;
     private final AccountClient accountClient;
@@ -43,8 +42,7 @@ public class CreateOrganizationService {
         ValidationUtil.notBlank(request.getOrganizationName(), "organizationName");
         ValidationUtil.maxLength(request.getOrganizationName(), TaskManagerConstants.MAX_ORGANIZATION_NAME_LENGTH, "organizationName");
         ValidationUtil.maxLength(request.getDescription(), TaskManagerConstants.MAX_ORGANIZATION_DESCRIPTION_LENGTH, "description");
-        ValidationUtil.notNull(request.getDescription(), "description");
-        ValidationUtil.notNull(request.getInvitedUsers(), "invitedUsers");
+        ValidationUtil.doesNotContainNull(request.getInvitedUsers(), "invitedUsers");
 
         if (request.getInvitedUsers().stream().anyMatch(userId -> !accountClient.userExists(userId))) {
             throw ExceptionFactory.invalidParam("invitedUser", "does not exist");

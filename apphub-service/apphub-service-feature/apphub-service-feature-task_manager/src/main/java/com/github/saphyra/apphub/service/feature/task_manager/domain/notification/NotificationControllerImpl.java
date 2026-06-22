@@ -18,7 +18,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class NotificationControllerImpl implements NotificationController {
     private final NotificationQueryService notificationQueryService;
     private final NotificationService notificationService;

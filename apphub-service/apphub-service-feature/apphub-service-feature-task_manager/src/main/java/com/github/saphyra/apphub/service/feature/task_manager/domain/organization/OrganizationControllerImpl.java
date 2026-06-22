@@ -16,7 +16,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OrganizationControllerImpl implements OrganizationController {
     private final CreateOrganizationService createOrganizationService;
     private final OrganizationQueryService organizationQueryService;

@@ -10,6 +10,8 @@ public class TaskManagerConstants {
     public static final String COLUMN_LAST_MODIFIED = "lastModified";
     public static final String COLUMN_DATA = "data";
     public static final String COLUMN_EXPIRATION = "expiration";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_DESCRIPTION = "description";
 
     public static final String PREFIX_USER = "USER#";
     public static final String PREFIX_ORGANIZATION = "ORGANIZATION#";

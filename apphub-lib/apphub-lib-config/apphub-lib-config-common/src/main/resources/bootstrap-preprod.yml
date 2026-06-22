@@ -2,5 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${postgreSqlHost}:5432/apphub_preprod?ApplicationName=${spring.application.name}
 
+environment: preprod
+
 authorization:
   issuer: apphub-preprod

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class OrganizationFactory {
     private final IdGenerator idGenerator;
 

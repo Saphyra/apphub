@@ -15,12 +15,14 @@ public class TaskManagerDynamoDbConfiguration implements DynamoDbRepositoryConfi
     private final String almTableName;
     private final String invitationTableName;
     private final String notificationTableName;
+    private final String organizationTableName;
 
     TaskManagerDynamoDbConfiguration(
         @Value("${aws.dynamoDb.maxBatchRetryCount}") int maxBatchRetryCount,
         @Value("${aws.dynamoDb.batchRetryDelayMs}") long batchRetryDelayMs,
         @Value("${aws.dynamoDb.alm.tableName}") String almTableName,
         @Value("${aws.dynamoDb.notification.tableName}") String notificationTableName,
+        @Value("${aws.dynamoDb.organization.tableName}") String organizationTableName,
         @Value("${aws.dynamoDb.invitation.tableName}") String invitationTableName
     ) {
         this.maxBatchRetryCount = maxBatchRetryCount;
@@ -28,5 +30,6 @@ public class TaskManagerDynamoDbConfiguration implements DynamoDbRepositoryConfi
         this.almTableName = almTableName;
         this.invitationTableName = invitationTableName;
         this.notificationTableName = notificationTableName;
+        this.organizationTableName = organizationTableName;
     }
 }

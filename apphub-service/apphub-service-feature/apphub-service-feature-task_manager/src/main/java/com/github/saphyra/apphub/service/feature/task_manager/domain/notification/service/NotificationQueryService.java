@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class NotificationQueryService {
     private final NotificationDao notificationDao;
     private final DateTimeUtil dateTimeUtil;
@@ -53,7 +52,7 @@ public class NotificationQueryService {
                 AccountResponse account = accountClient.getAccountInternal(uuidConverter.convertEntity(value));
                 yield List.of(
                     new BiWrapper<>(NotificationConstants.KEY_USERNAME, account.getUsername()),
-                    new BiWrapper<>(NotificationConstants.KEY_EMAIL, account.getUsername())
+                    new BiWrapper<>(NotificationConstants.KEY_EMAIL, account.getEmail())
                 );
             }
             default -> throw new IllegalStateException("Unexpected value: " + key);

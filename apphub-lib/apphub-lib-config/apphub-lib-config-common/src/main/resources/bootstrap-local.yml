@@ -3,6 +3,7 @@ event:
   processor:
     enabled: true
 
+environment: local
 postgreSqlHost: localhost
 
 serviceHosts:

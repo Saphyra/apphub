@@ -1,0 +1,3 @@
+aws:
+  dynamoDb:
+    url: http://dynamodb:8000
