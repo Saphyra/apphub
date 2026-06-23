@@ -75,7 +75,7 @@ public class InvitationService {
             .map(Invitation::getInvitedBy)
             .toList();
 
-        notificationService.createUserAcceptedYourInvitationNotification(invitorIds, userId);
+        notificationService.createUserAcceptedYourInvitationNotification(invitorIds, organizationId, userId);
     }
 
     public void rejectInvitation(UUID userId, UUID organizationId) {
@@ -87,7 +87,7 @@ public class InvitationService {
         List<UUID> invitorIds = invitations.stream()
             .map(Invitation::getInvitedBy)
             .toList();
-        notificationService.createUserRejectedYourInvitationNotification(invitorIds, userId);
+        notificationService.createUserRejectedYourInvitationNotification(invitorIds, organizationId, userId);
 
         invitationDao.delete(invitations);
     }

@@ -26,6 +26,7 @@ class NotificationFactoryTest {
     private static final UUID NOTIFICATION_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
     private static final String VALUE_STRING = "value";
+    private static final UUID ORGANIZATION_ID = UUID.randomUUID();
 
     @Mock
     private IdGenerator idGenerator;
@@ -46,9 +47,10 @@ class NotificationFactoryTest {
 
         given(idGenerator.randomUuid()).willReturn(NOTIFICATION_ID);
 
-        assertThat(underTest.create(RECIPIENT, NotificationType.USER_ACCEPTED_YOUR_INVITATION, KEY, VALUE))
+        assertThat(underTest.create(RECIPIENT, ORGANIZATION_ID, NotificationType.USER_ACCEPTED_YOUR_INVITATION, KEY, VALUE))
             .returns(RECIPIENT, Notification::getRecipient)
             .returns(NOTIFICATION_ID, Notification::getNotificationId)
+            .returns(ORGANIZATION_ID, Notification::getOrganizationId)
             .returns(NotificationStatus.UNREAD, Notification::getStatus)
             .returns(NotificationType.USER_ACCEPTED_YOUR_INVITATION, Notification::getNotificationType)
             .returns(CURRENT_TIME, Notification::getCreatedAt)

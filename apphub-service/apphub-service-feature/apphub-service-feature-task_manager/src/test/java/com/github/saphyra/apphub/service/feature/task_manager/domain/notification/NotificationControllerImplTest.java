@@ -27,6 +27,7 @@ import static org.mockito.BDDMockito.then;
 class NotificationControllerImplTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID NOTIFICATION_ID = UUID.randomUUID();
+    private static final UUID ORGANIZATION_ID = UUID.randomUUID();
 
     @Mock
     private NotificationQueryService notificationQueryService;
@@ -46,9 +47,9 @@ class NotificationControllerImplTest {
     @Test
     void getNotifications() {
         given(accessToken.getUserId()).willReturn(USER_ID);
-        given(notificationQueryService.getNotifications(USER_ID)).willReturn(List.of(notificationResponse));
+        given(notificationQueryService.getNotifications(USER_ID, ORGANIZATION_ID)).willReturn(List.of(notificationResponse));
 
-        assertThat(underTest.getNotifications(accessToken)).containsExactly(notificationResponse);
+        assertThat(underTest.getNotifications(ORGANIZATION_ID, accessToken)).containsExactly(notificationResponse);
     }
 
     @Test

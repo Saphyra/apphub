@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 class NotificationEntity {
     private String recipient;
     private String notificationId;
+    private String organizationId;
     private String status;
     private String notificationType;
     private LocalDateTime createdAt;

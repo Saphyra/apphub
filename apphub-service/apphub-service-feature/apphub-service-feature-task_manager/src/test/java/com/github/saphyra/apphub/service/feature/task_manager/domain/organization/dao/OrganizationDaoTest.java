@@ -55,4 +55,11 @@ class OrganizationDaoTest {
 
         ExceptionValidator.validateNotFoundException(() -> underTest.findByIdValidated(ORGANIZATION_ID));
     }
+
+    @Test
+    void delete() {
+        underTest.delete(ORGANIZATION_ID);
+
+        then(repository).should().delete(ORGANIZATION_ID);
+    }
 }

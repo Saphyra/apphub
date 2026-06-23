@@ -23,10 +23,10 @@ class NotificationControllerImpl implements NotificationController {
     private final NotificationService notificationService;
 
     @Override
-    public List<NotificationResponse> getNotifications(AccessToken accessToken) {
-        log.info("{} wants to know their notifications", accessToken.getUserId());
+    public List<NotificationResponse> getNotifications(UUID organizationId, AccessToken accessToken) {
+        log.info("{} wants to know their notifications for organization {}", accessToken.getUserId(), organizationId);
 
-        return notificationQueryService.getNotifications(accessToken.getUserId());
+        return notificationQueryService.getNotifications(accessToken.getUserId(), organizationId);
     }
 
     @Override

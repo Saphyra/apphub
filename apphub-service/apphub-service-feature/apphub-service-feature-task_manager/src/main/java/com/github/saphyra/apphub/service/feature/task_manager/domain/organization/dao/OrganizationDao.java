@@ -29,4 +29,8 @@ public class OrganizationDao {
     public Optional<Organization> findById(UUID organizationId) {
         return repository.findById(organizationId);
     }
+
+    public void delete(UUID organizationId) {
+        repository.delete(organizationId);
+    }
 }

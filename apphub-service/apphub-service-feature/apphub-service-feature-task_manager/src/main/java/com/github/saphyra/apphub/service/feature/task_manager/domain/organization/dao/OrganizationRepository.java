@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.BillingMode;
 import software.amazon.awssdk.services.dynamodb.model.CreateTableRequest;
+import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.KeySchemaElement;
 import software.amazon.awssdk.services.dynamodb.model.KeyType;
@@ -26,6 +27,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_ORGANIZATION;
 
 @Component
 @Slf4j
@@ -51,7 +53,7 @@ class OrganizationRepository extends DynamoDbRepository {
 
     List<Organization> getByIds(List<UUID> organizationIds) {
         List<Map<String, AttributeValue>> keys = organizationIds.stream()
-            .map(id -> Map.of(COLUMN_PK, AttributeValue.builder().s(uuidConverter.convertDomain(id)).build()))
+            .map(id -> Map.of(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(id)).build()))
             .toList();
 
         return batchGetItem(keys, TaskManagerMonitoringFunctionality.GET_ORGANIZATIONS)
@@ -63,11 +65,20 @@ class OrganizationRepository extends DynamoDbRepository {
     Optional<Organization> findById(UUID organizationId) {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
-            .key(Map.of(COLUMN_PK, AttributeValue.builder().s(uuidConverter.convertDomain(organizationId)).build()))
+            .key(Map.of(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
             .build();
 
         return getItem(request, TaskManagerMonitoringFunctionality.GET_ORGANIZATION)
             .map(mapper::convertEntity);
+    }
+
+    void delete(UUID organizationId) {
+        DeleteItemRequest request = DeleteItemRequest.builder()
+            .tableName(tableName)
+            .key(Map.of(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
+            .build();
+
+        deleteItem(request, TaskManagerMonitoringFunctionality.DELETE_ORGANIZATION);
     }
 
     @PostConstruct

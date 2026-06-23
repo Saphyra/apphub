@@ -12,7 +12,7 @@ public class TaskManagerEndpoints {
     public static final String TASK_MANAGER_REJECT_INVITATION = "/api/task-manager/invitations/{organizationId}";
 
     //Notification
-    public static final String TASK_MANAGER_GET_NOTIFICATIONS = "/api/task-manager/notifications";
+    public static final String TASK_MANAGER_GET_NOTIFICATIONS = "/api/task-manager/notifications/{organizationId}";
     public static final String TASK_MANAGER_SET_NOTIFICATION_STATUS = "/api/task-manager/notifications/status";
     public static final String TASK_MANAGER_DELETE_NOTIFICATION = "/api/task-manager/notifications";
 

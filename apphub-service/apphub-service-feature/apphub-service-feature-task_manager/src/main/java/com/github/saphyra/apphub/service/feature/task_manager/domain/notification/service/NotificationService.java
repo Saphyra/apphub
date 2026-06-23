@@ -22,17 +22,17 @@ public class NotificationService {
     private final NotificationDao notificationDao;
     private final DateTimeUtil dateTimeUtil;
 
-    public void createUserAcceptedYourInvitationNotification(List<UUID> recipients, UUID invitedUserId) {
+    public void createUserAcceptedYourInvitationNotification(List<UUID> recipients, UUID organizationId, UUID invitedUserId) {
         List<Notification> notifications = recipients.stream()
-            .map(recipient -> notificationFactory.create(recipient, NotificationType.USER_ACCEPTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, invitedUserId))
+            .map(recipient -> notificationFactory.create(recipient, organizationId, NotificationType.USER_ACCEPTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, invitedUserId))
             .toList();
 
         notificationDao.save(notifications);
     }
 
-    public void createUserRejectedYourInvitationNotification(List<UUID> recipients, UUID invitedUserId) {
+    public void createUserRejectedYourInvitationNotification(List<UUID> recipients, UUID organizationId, UUID invitedUserId) {
         List<Notification> notifications = recipients.stream()
-            .map(recipient -> notificationFactory.create(recipient, NotificationType.USER_REJECTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, invitedUserId))
+            .map(recipient -> notificationFactory.create(recipient, organizationId, NotificationType.USER_REJECTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, invitedUserId))
             .toList();
 
         notificationDao.save(notifications);

@@ -34,6 +34,7 @@ class NotificationQueryServiceTest {
     private static final UUID VALUE = UUID.randomUUID();
     private static final String USERNAME = "username";
     private static final String EMAIL = "email";
+    private static final UUID ORGANIZATION_ID = UUID.randomUUID();
 
     @Mock
     private NotificationDao notificationDao;
@@ -58,7 +59,7 @@ class NotificationQueryServiceTest {
 
     @Test
     void getNotifications(){
-        given(notificationDao.getByUserId(USER_ID)).willReturn(List.of(notification));
+        given(notificationDao.getByUserIdAndOrganizationId(USER_ID, ORGANIZATION_ID)).willReturn(List.of(notification));
         given(notification.getNotificationId()).willReturn(NOTIFICATION_ID);
         given(notification.getStatus()).willReturn(NotificationStatus.UNREAD);
         given(notification.getNotificationType()).willReturn(NotificationType.USER_ACCEPTED_YOUR_INVITATION);
@@ -70,7 +71,7 @@ class NotificationQueryServiceTest {
         given(accountResponse.getUsername()).willReturn(USERNAME);
         given(accountResponse.getEmail()).willReturn(EMAIL);
 
-        assertThat(underTest.getNotifications(USER_ID))
+        assertThat(underTest.getNotifications(USER_ID, ORGANIZATION_ID))
             .singleElement()
             .returns(NOTIFICATION_ID, NotificationResponse::getNotificationId)
             .returns(NotificationStatus.UNREAD, NotificationResponse::getStatus)

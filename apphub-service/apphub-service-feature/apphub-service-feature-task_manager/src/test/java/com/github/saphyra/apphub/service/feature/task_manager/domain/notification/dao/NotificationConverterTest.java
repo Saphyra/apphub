@@ -32,9 +32,11 @@ class NotificationConverterTest {
     private static final LocalDateTime LAST_MODIFIED = CREATED_AT.plusSeconds(3600);
     private static final String DATA_JSON = "{\"key\":\"value\"}";
     private static final Map<String, String> DATA = Map.of("key", "value");
-    private static final String RECIPIENT_UUID = "recipient-uuid";
-    private static final String NOTIFICATION_UUID = "notification-uuid";
+    private static final String RECIPIENT_ID_STRING = "recipient-id";
+    private static final String NOTIFICATION_ID_STRING = "notification-id";
     private static final Duration EXPIRATION = Duration.ofSeconds(32);
+    private static final UUID ORGANIZATION_ID = UUID.randomUUID();
+    private static final String ORGANIZATION_ID_STRING = "organization-id";
 
     @Mock
     private TaskManagerProperties properties;
@@ -53,6 +55,7 @@ class NotificationConverterTest {
         Notification domain = Notification.builder()
             .recipient(RECIPIENT)
             .notificationId(NOTIFICATION_ID)
+            .organizationId(ORGANIZATION_ID)
             .status(STATUS)
             .notificationType(TYPE)
             .createdAt(CREATED_AT)
@@ -60,15 +63,17 @@ class NotificationConverterTest {
             .data(DATA)
             .build();
 
-        given(uuidConverter.convertDomain(RECIPIENT)).willReturn(RECIPIENT_UUID);
-        given(uuidConverter.convertDomain(NOTIFICATION_ID)).willReturn(NOTIFICATION_UUID);
+        given(uuidConverter.convertDomain(RECIPIENT)).willReturn(RECIPIENT_ID_STRING);
+        given(uuidConverter.convertDomain(NOTIFICATION_ID)).willReturn(NOTIFICATION_ID_STRING);
+        given(uuidConverter.convertDomain(ORGANIZATION_ID)).willReturn(ORGANIZATION_ID_STRING);
         given(objectMapper.writeValueAsString(DATA)).willReturn(DATA_JSON);
         given(properties.getNotificationExpiration()).willReturn(EXPIRATION);
 
         NotificationEntity result = converter.processDomainConversion(domain);
 
-        assertThat(result.getRecipient()).isEqualTo(RECIPIENT_UUID);
-        assertThat(result.getNotificationId()).isEqualTo(NOTIFICATION_UUID);
+        assertThat(result.getRecipient()).isEqualTo(RECIPIENT_ID_STRING);
+        assertThat(result.getNotificationId()).isEqualTo(NOTIFICATION_ID_STRING);
+        assertThat(result.getOrganizationId()).isEqualTo(ORGANIZATION_ID_STRING);
         assertThat(result.getStatus()).isEqualTo(STATUS.name());
         assertThat(result.getNotificationType()).isEqualTo(TYPE.name());
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
@@ -82,6 +87,7 @@ class NotificationConverterTest {
         Notification domain = Notification.builder()
             .recipient(RECIPIENT)
             .notificationId(NOTIFICATION_ID)
+            .organizationId(ORGANIZATION_ID)
             .status(NotificationStatus.UNREAD)
             .notificationType(TYPE)
             .createdAt(CREATED_AT)
@@ -89,14 +95,16 @@ class NotificationConverterTest {
             .data(DATA)
             .build();
 
-        given(uuidConverter.convertDomain(RECIPIENT)).willReturn(RECIPIENT_UUID);
-        given(uuidConverter.convertDomain(NOTIFICATION_ID)).willReturn(NOTIFICATION_UUID);
+        given(uuidConverter.convertDomain(RECIPIENT)).willReturn(RECIPIENT_ID_STRING);
+        given(uuidConverter.convertDomain(NOTIFICATION_ID)).willReturn(NOTIFICATION_ID_STRING);
+        given(uuidConverter.convertDomain(ORGANIZATION_ID)).willReturn(ORGANIZATION_ID_STRING);
         given(objectMapper.writeValueAsString(DATA)).willReturn(DATA_JSON);
 
         NotificationEntity result = converter.processDomainConversion(domain);
 
-        assertThat(result.getRecipient()).isEqualTo(RECIPIENT_UUID);
-        assertThat(result.getNotificationId()).isEqualTo(NOTIFICATION_UUID);
+        assertThat(result.getRecipient()).isEqualTo(RECIPIENT_ID_STRING);
+        assertThat(result.getNotificationId()).isEqualTo(NOTIFICATION_ID_STRING);
+        assertThat(result.getOrganizationId()).isEqualTo(ORGANIZATION_ID_STRING);
         assertThat(result.getStatus()).isEqualTo(NotificationStatus.UNREAD.name());
         assertThat(result.getNotificationType()).isEqualTo(TYPE.name());
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);
@@ -108,8 +116,9 @@ class NotificationConverterTest {
     @Test
     void convertEntity() {
         NotificationEntity entity = NotificationEntity.builder()
-            .recipient(RECIPIENT_UUID)
-            .notificationId(NOTIFICATION_UUID)
+            .recipient(RECIPIENT_ID_STRING)
+            .notificationId(NOTIFICATION_ID_STRING)
+            .organizationId(ORGANIZATION_ID_STRING)
             .status(STATUS.name())
             .notificationType(TYPE.name())
             .createdAt(CREATED_AT)
@@ -117,14 +126,16 @@ class NotificationConverterTest {
             .data(DATA_JSON)
             .build();
 
-        given(uuidConverter.convertEntity(RECIPIENT_UUID)).willReturn(RECIPIENT);
-        given(uuidConverter.convertEntity(NOTIFICATION_UUID)).willReturn(NOTIFICATION_ID);
+        given(uuidConverter.convertEntity(RECIPIENT_ID_STRING)).willReturn(RECIPIENT);
+        given(uuidConverter.convertEntity(NOTIFICATION_ID_STRING)).willReturn(NOTIFICATION_ID);
+        given(uuidConverter.convertEntity(ORGANIZATION_ID_STRING)).willReturn(ORGANIZATION_ID);
         given(objectMapper.readValue(eq(DATA_JSON), any(TypeReference.class))).willReturn(DATA);
 
         Notification result = converter.processEntityConversion(entity);
 
         assertThat(result.getRecipient()).isEqualTo(RECIPIENT);
         assertThat(result.getNotificationId()).isEqualTo(NOTIFICATION_ID);
+        assertThat(result.getOrganizationId()).isEqualTo(ORGANIZATION_ID);
         assertThat(result.getStatus()).isEqualTo(STATUS);
         assertThat(result.getNotificationType()).isEqualTo(TYPE);
         assertThat(result.getCreatedAt()).isEqualTo(CREATED_AT);

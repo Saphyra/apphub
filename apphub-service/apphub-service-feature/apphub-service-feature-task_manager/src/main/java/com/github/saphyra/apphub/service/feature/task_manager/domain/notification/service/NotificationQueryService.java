@@ -24,8 +24,8 @@ public class NotificationQueryService {
     private final AccountClient accountClient;
     private final UuidConverter uuidConverter;
 
-    public List<NotificationResponse> getNotifications(UUID userId) {
-        return notificationDao.getByUserId(userId)
+    public List<NotificationResponse> getNotifications(UUID userId, UUID organizationId) {
+        return notificationDao.getByUserIdAndOrganizationId(userId, organizationId)
             .stream()
             .map(notification -> NotificationResponse.builder()
                 .notificationId(notification.getNotificationId())

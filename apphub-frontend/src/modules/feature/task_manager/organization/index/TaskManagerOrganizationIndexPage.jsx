@@ -54,8 +54,8 @@ const TaskManagerOrganizationIndexPage = () => {
 
             <main id="task-manager-organization-index-main">
                 <TaskManagerOrganizationNotifications
-                    localizationHandler={localizationHandler}
                     setDisplaySpinner={updateDisplaySpinner}
+                    organizationId={organizationId}
                 />
             </main>
 

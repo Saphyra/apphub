@@ -19,12 +19,13 @@ public class NotificationFactory {
     private final DateTimeUtil dateTimeUtil;
     private final UuidConverter uuidConverter;
 
-    public Notification create(UUID recipient, NotificationType notificationType, String key, UUID value) {
+    public Notification create(UUID recipient, UUID organizationId, NotificationType notificationType, String key, UUID value) {
         LocalDateTime currentTime = dateTimeUtil.getCurrentDateTime();
 
         return Notification.builder()
             .recipient(recipient)
             .notificationId(idGenerator.randomUuid())
+            .organizationId(organizationId)
             .status(NotificationStatus.UNREAD)
             .notificationType(notificationType)
             .createdAt(currentTime)

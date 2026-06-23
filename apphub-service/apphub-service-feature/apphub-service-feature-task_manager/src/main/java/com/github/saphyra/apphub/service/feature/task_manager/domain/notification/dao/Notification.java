@@ -17,6 +17,7 @@ import java.util.UUID;
 public class Notification {
     private final UUID recipient;
     private final UUID notificationId;
+    private final UUID organizationId;
     private NotificationStatus status;
     private final NotificationType notificationType;
     private final LocalDateTime createdAt;

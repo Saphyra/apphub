@@ -26,6 +26,7 @@ class NotificationServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID NOTIFICATION_ID = UUID.randomUUID();
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
+    private static final UUID ORGANIZATION_ID = UUID.randomUUID();
 
     @Mock
     private NotificationFactory notificationFactory;
@@ -43,25 +44,25 @@ class NotificationServiceTest {
     private Notification notification;
 
     @Test
-    void createUserAcceptedYourInvitationNotification(){
-        given(notificationFactory.create(RECIPIENT, NotificationType.USER_ACCEPTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, USER_ID)).willReturn(notification);
+    void createUserAcceptedYourInvitationNotification() {
+        given(notificationFactory.create(RECIPIENT, ORGANIZATION_ID, NotificationType.USER_ACCEPTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, USER_ID)).willReturn(notification);
 
-        underTest.createUserAcceptedYourInvitationNotification(List.of(RECIPIENT), USER_ID);
-
-        then(notificationDao).should().save(List.of(notification));
-    }
-
-    @Test
-    void createUserRejectedYourInvitationNotification(){
-        given(notificationFactory.create(RECIPIENT, NotificationType.USER_REJECTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, USER_ID)).willReturn(notification);
-
-        underTest.createUserRejectedYourInvitationNotification(List.of(RECIPIENT), USER_ID);
+        underTest.createUserAcceptedYourInvitationNotification(List.of(RECIPIENT), ORGANIZATION_ID, USER_ID);
 
         then(notificationDao).should().save(List.of(notification));
     }
 
     @Test
-    void setStatus(){
+    void createUserRejectedYourInvitationNotification() {
+        given(notificationFactory.create(RECIPIENT, ORGANIZATION_ID, NotificationType.USER_REJECTED_YOUR_INVITATION, NotificationConstants.KEY_USER_ID, USER_ID)).willReturn(notification);
+
+        underTest.createUserRejectedYourInvitationNotification(List.of(RECIPIENT), ORGANIZATION_ID, USER_ID);
+
+        then(notificationDao).should().save(List.of(notification));
+    }
+
+    @Test
+    void setStatus() {
         given(notificationDao.getByIds(USER_ID, List.of(NOTIFICATION_ID))).willReturn(List.of(notification));
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
@@ -73,7 +74,7 @@ class NotificationServiceTest {
     }
 
     @Test
-    void delete(){
+    void delete() {
         underTest.delete(USER_ID, List.of(NOTIFICATION_ID));
 
         then(notificationDao).should().delete(USER_ID, List.of(NOTIFICATION_ID));

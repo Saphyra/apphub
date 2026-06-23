@@ -8,11 +8,11 @@ import notificationComparator from "../NotificationComparator";
 import useRefresh from "common/hook/Refresh";
 import { useState } from "react";
 
-const TaskManagerOrganizationNotifications = ({ localizationHandler, setDisplaySpinner }) => {
+const TaskManagerOrganizationNotifications = ({ setDisplaySpinner, organizationId }) => {
     const [refreshCounter, refresh] = useRefresh();
 
     const [notifications] = useLoader({
-        request: TASK_MANAGER_GET_NOTIFICATIONS.createRequest(),
+        request: TASK_MANAGER_GET_NOTIFICATIONS.createRequest(null, { organizationId: organizationId }),
         setDisplaySpinner: setDisplaySpinner,
         listener: [refreshCounter],
     });
