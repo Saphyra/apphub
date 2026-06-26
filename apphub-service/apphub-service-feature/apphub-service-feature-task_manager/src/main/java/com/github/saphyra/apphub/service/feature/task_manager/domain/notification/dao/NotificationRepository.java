@@ -196,6 +196,10 @@ class NotificationRepository extends DynamoDbRepository {
             getClient()
                 .createTable(createTableRequest);
 
+            getClient()
+                .waiter()
+                .waitUntilTableExists(builder -> builder.tableName(tableName));
+
             UpdateTimeToLiveRequest request = UpdateTimeToLiveRequest.builder()
                 .tableName(tableName)
                 .timeToLiveSpecification(TimeToLiveSpecification.builder()
@@ -206,10 +210,6 @@ class NotificationRepository extends DynamoDbRepository {
 
             getClient()
                 .updateTimeToLive(request);
-
-            getClient()
-                .waiter()
-                .waitUntilTableExists(builder -> builder.tableName(tableName));
         }
     }
 }

@@ -63,10 +63,12 @@ platform:
   prodDisabledTestGroups:
     - skyxplore
     - community
+    - task-manager
 
   prodDisabledRoles:
     - SKYXPLORE
     - COMMUNITY
+    - TASK_MANAGER
 
 defaults:
   defaultLocale: ENGLISH
