@@ -76,9 +76,6 @@ The app's purpose is to provide an easy-to extend frame for multiple application
   * Responsible for the landing page after registration/login.
 * ### notebook
   * Responsible for the "Notebook" feature.
-* ### encryption
-  * Currently unused
-  * Will be responsible for storing encryption keys, and the access management for encrypted entities
 * ### event-gateway
   * Broadcasts incoming events to the subscribers
 * ### main-gateway

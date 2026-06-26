@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { hasValue, throwException } from "../js/Utils";
 
 const useLoader = (args) => {
+    const [value, setValue] = useState(args.alternativeResult || null);
+
     const request = args.request || throwException("IllegalArgument", "request must not be null");
-    const mapper = args.mapper || throwException("IllegalArgument", "mapper must not be null");
+    const mapper = args.mapper || setValue;
     const listener = args.listener || [];
     const condition = args.condition || (() => true);
     const alternativeResult = args.alternativeResult;
@@ -28,6 +30,8 @@ const useLoader = (args) => {
             mapper(alternativeResult);
         }
     }
+
+    return [value, setValue];
 }
 
 export default useLoader;

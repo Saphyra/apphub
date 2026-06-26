@@ -2,5 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://${postgreSqlHost}:5432/postgres?ApplicationName=${spring.application.name}
 
+environment: minikube
+
 authorization:
   issuer: apphub-develop

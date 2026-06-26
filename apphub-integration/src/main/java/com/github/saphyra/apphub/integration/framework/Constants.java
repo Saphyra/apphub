@@ -27,6 +27,7 @@ public class Constants {
     public final String ROLE_COMMUNITY = "COMMUNITY";
     public final String ROLE_CALENDAR = "CALENDAR";
     public final String ROLE_ELITE_BASE = "ELITE_BASE";
+    public final String ROLE_TASK_MANAGER = "TASK_MANAGER";
     public static final String ROLE_ELITE_BASE_ADMIN = "ELITE_BASE_ADMIN";
 
     //Alliances
@@ -66,6 +67,8 @@ public class Constants {
     public static final String DEFAULT_LOCALE = "en";
     public static final int MAX_LIST_ITEM_TITLE_LENGTH = 1024;
     public static final int MAX_LIST_ITEM_CONTENT_LENGTH = 1024 * 100; //100 KB
+    public static final int MAX_ORGANIZATION_NAME_LENGTH = 1024;
+    public static final int MAX_ORGANIZATION_DESCRIPTION_LENGTH = 1024 * 100; //100 KB
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
@@ -90,11 +93,11 @@ public class Constants {
         SERVICE_NAME_USER,
         "community",
         "calendar",
-        "encryption",
         "storage",
         "elite-base",
         "monitoring",
-        "authorization"
+        "authorization",
+        "task-manager"
     );
 
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";

@@ -1,0 +1,10 @@
+{
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "title": {
+        "en": "{name} - Task Manager - Apphub",
+        "hu": "{name} - Feladatkezelő - Apphub"
+    }
+}

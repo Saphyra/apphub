@@ -1,0 +1,40 @@
+#task-manager-index-main {
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+#task-manager-index-organizations {
+    border-left: 3px ridge white;
+    border-right: 3px ridge white;
+}
+
+#task-manager-index-invitations {
+    border-right: 3px ridge white;
+}
+
+.task-manager-index-section-title {
+    border-bottom: 3px ridge white;
+    font-weight: bold;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.task-manager-index-section-empty {
+    padding: 10px;
+}
+
+#task-manager-index-create-organization-button {
+    display: block;
+    margin: auto;
+}
+
+.task-manager-index-invitation {
+    border: 1px solid white;
+    margin: 5px;
+    padding: 3px;
+}
+
+.task-manager-index-invitation-reject-button{
+    float: right;
+}

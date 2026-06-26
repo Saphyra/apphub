@@ -24,7 +24,8 @@ public class TestGroupValidator {
         "misc",
         "training",
         "elite-base",
-        "monitoring"
+        "monitoring",
+        "task-manager"
     );
 
     public static void validateTestGroups(Method method) {

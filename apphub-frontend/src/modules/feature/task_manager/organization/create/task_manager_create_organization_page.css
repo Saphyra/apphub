@@ -1,0 +1,27 @@
+#task-manager-create-organization-main fieldset {
+    margin: 0 10px;
+}
+
+#task-manager-create-organization-name {
+    width: 100%;
+}
+
+#task-manager-create-organization-description {
+    width: 100%;
+    min-height: 100px;
+}
+
+#task-manager-create-organization-user-search-input {
+    width: 100%;
+}
+
+#task-manager-create-organization-no-invited-users {
+    margin: 10px 0;
+}
+
+.task-manager-create-organization-user {
+    display: inline-block;
+    border: 1px solid white;
+    padding-left: 5px;
+    font-size: 20px;
+}

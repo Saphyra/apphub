@@ -48,7 +48,7 @@ public class FilterTest extends SeleniumTest {
             .findFirst()
             .orElseThrow(() -> new IllegalStateException("Failed resetting search result."));
 
-        ModulesPageActions.search(driver, "manage");
+        ModulesPageActions.search(driver, "random");
         Category moduleResult = AwaitilityWrapper.getListWithWait(() -> ModulesPageActions.getCategories(driver), categories -> categories.size() == 1)
             .stream()
             .findFirst()

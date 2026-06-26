@@ -1,0 +1,10 @@
+aws:
+  dynamoDb:
+    alm:
+      tableName: dummy-table
+    invitation:
+      tableName: dummy-table
+    notification:
+      tableName: dummy-table
+    organization:
+      tableName: dummy-table

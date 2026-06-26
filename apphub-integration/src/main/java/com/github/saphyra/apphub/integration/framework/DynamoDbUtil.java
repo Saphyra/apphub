@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
@@ -25,6 +26,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -36,6 +38,7 @@ public class DynamoDbUtil {
     private static final String COLUMN_SK = "sk";
     private static final String COLUMN_MARKED_FOR_DELETION_AT = "marked_for_deletion_at";
     private static final String COLUMN_LOCKED_UNTIL = "locked_until";
+    private static final String COLUMN_ORGANIZATION = "organization";
 
     private static final String TYPE_USER_ID = "USER_ID";
     private static final String TYPE_MARKED_FOR_DELETION = "MARKED_FOR_DELETION";
@@ -43,6 +46,10 @@ public class DynamoDbUtil {
     private static final String TYPE_PROFILE = "PROFILE";
     private static final String TYPE_CREDENTIAL = "CREDENTIAL";
     private static final String COLUMN_USER_ID = "user_id";
+    private static final String COLUMN_OBJECT = "object";
+    private static final String COLUMN_USER = "user";
+
+    private static final String PREFIX_USER = "USER#";
 
     private static DynamoDbClient dynamoDbClient;
 
@@ -390,5 +397,73 @@ public class DynamoDbUtil {
 
     private static String getNotebookPinGroupTableName() {
         return "apphub-%s-notebook-pin_group".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static Optional<Map<String, AttributeValue>> findOrganization(UUID organizationId) {
+        GetItemRequest request = GetItemRequest.builder()
+            .tableName(getTaskManagerOrganizationTableName())
+            .key(Map.of(COLUMN_ORGANIZATION, AttributeValue.builder().s("PREFIX_ORGANIZATION" + organizationId.toString()).build()))
+            .build();
+
+        return Optional.of(getClient())
+            .map(client -> client.getItem(request))
+            .filter(GetItemResponse::hasItem)
+            .map(GetItemResponse::item);
+    }
+
+    private static String getTaskManagerOrganizationTableName() {
+        return "apphub-task_manager-%s-organization".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static List<Map<String, AttributeValue>> getAlmsByObject(UUID objectId, String objectType) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getTaskManagerAlmTableName())
+            .indexName("GSI-alm-object-principal")
+            .keyConditionExpression("#object = :object")
+            .expressionAttributeNames(Map.of("#object", COLUMN_OBJECT))
+            .expressionAttributeValues(Map.of(":object", AttributeValue.builder().s(objectType + "#" + objectId.toString()).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getTaskManagerAlmTableName() {
+        return "apphub-task_manager-%s-alm".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static List<Map<String, AttributeValue>> getInvitationsByUserId(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getTaskManagerInvitationTable())
+            .keyConditionExpression("#user = :user")
+            .expressionAttributeNames(Map.of("#user", COLUMN_USER))
+            .expressionAttributeValues(Map.of(":user", AttributeValue.builder().s(PREFIX_USER + userId).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getTaskManagerInvitationTable() {
+        return "apphub-task_manager-%s-invitation".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static List<Map<String, AttributeValue>> getNotificationsByUserId(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getTaskManagerNotificationTable())
+            .keyConditionExpression("#user = :user")
+            .expressionAttributeNames(Map.of("#user", COLUMN_USER))
+            .expressionAttributeValues(Map.of(":user", AttributeValue.builder().s(PREFIX_USER + userId).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getTaskManagerNotificationTable() {
+        return "apphub-task_manager-%s-notification".formatted(TestConfiguration.ENVIRONMENT);
     }
 }

@@ -42,5 +42,9 @@
     "ELITE_BASE_ADMIN": {
         "en": "EliteBase Admin",
         "hu": "EliteBase Admin"
+    },
+    "TASK_MANAGER": {
+        "en": "Task Manager",
+        "hu": "Feladatkezelő"
     }
 }
