@@ -5,3 +5,5 @@ aws:
     url: ~
     listItem:
       tableName: apphub-production-list_item
+    pinGroup:
+      tableName: apphub-production-notebook-pin_group

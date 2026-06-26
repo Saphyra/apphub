@@ -6,7 +6,9 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions
 import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
@@ -37,13 +39,25 @@ public class LinkCrudTest extends BackEndTest {
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_blankTitle(accessToken);
+        create_tooLongTitle(accessToken);
         create_parentNotCategory(accessToken);
         create_parentNotFound(accessToken);
         create_nullUrl(accessToken);
+        create_tooLongUrl(accessToken);
         UUID parentId = CategoryActions.createCategory(getServerPort(), accessToken, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
         UUID linkId = create(accessToken, parentId);
+        editLink_tooLongUrl(accessToken, parentId, linkId);
         editLink(accessToken, parentId, linkId);
         delete(accessToken, parentId, linkId);
+    }
+
+    private static void create_tooLongTitle(String accessToken) {
+        CreateLinkRequest request = CreateLinkRequest.builder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+            .url(URL)
+            .build();
+        Response create_blankTitleResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, request);
+        verifyInvalidParam(create_blankTitleResponse, "title", "too long");
     }
 
     private static void create_blankTitle(String accessToken) {
@@ -76,6 +90,15 @@ public class LinkCrudTest extends BackEndTest {
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
     }
 
+    private static void create_tooLongUrl(String accessToken) {
+        CreateLinkRequest create_nullUrlRequest = CreateLinkRequest.builder()
+            .title(TITLE)
+            .url("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .build();
+        Response create_nullUrlResponse = LinkActions.getCreateLinkResponse(getServerPort(), accessToken, create_nullUrlRequest);
+        verifyInvalidParam(create_nullUrlResponse, "url", "too long");
+    }
+
     private static void create_nullUrl(String accessToken) {
         CreateLinkRequest create_nullUrlRequest = CreateLinkRequest.builder()
             .title(TITLE)
@@ -94,12 +117,22 @@ public class LinkCrudTest extends BackEndTest {
         UUID linkId = LinkActions.createLink(getServerPort(), accessToken, createRequest);
         ChildrenOfCategoryResponse childrenOfCategoryResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, parentId);
         assertThat(childrenOfCategoryResponse.getChildren()).hasSize(1);
-        NotebookView view = childrenOfCategoryResponse.getChildren().get(0);
+        NotebookView view = childrenOfCategoryResponse.getChildren().getFirst();
         assertThat(view.getId()).isEqualTo(linkId);
         assertThat(view.getTitle()).isEqualTo(TITLE);
         assertThat(view.getValue()).isEqualTo(URL);
         assertThat(view.getType()).isEqualTo(ListItemType.LINK.name());
         return linkId;
+    }
+
+    private void editLink_tooLongUrl(String accessToken, UUID parentId, UUID linkId) {
+        EditListItemRequest editLinkRequest = EditListItemRequest.builder()
+            .title(NEW_TITLE)
+            .value("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .parent(parentId)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(ListItemActions.getEditListItemResponse(getServerPort(), accessToken, editLinkRequest, linkId), "value", "too long");
     }
 
     private static void editLink(String accessToken, UUID parentId, UUID linkId) {
@@ -111,7 +144,7 @@ public class LinkCrudTest extends BackEndTest {
         ListItemActions.editListItem(getServerPort(), accessToken, editLinkRequest, linkId);
         ChildrenOfCategoryResponse childrenOfLinksParentResponse = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, parentId);
         assertThat(childrenOfLinksParentResponse.getChildren()).hasSize(1);
-        NotebookView linkView = childrenOfLinksParentResponse.getChildren().get(0);
+        NotebookView linkView = childrenOfLinksParentResponse.getChildren().getFirst();
         assertThat(linkView.getValue()).isEqualTo(NEW_URL);
         assertThat(linkView.getTitle()).isEqualTo(NEW_TITLE);
     }

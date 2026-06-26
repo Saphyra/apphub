@@ -4,5 +4,7 @@ spring:
     password: postgres
     url: jdbc:postgresql://${postgreSqlHost}:5432/apphub_production?ApplicationName=${spring.application.name}
 
+environment: production
+
 authorization:
   issuer: apphub-prod

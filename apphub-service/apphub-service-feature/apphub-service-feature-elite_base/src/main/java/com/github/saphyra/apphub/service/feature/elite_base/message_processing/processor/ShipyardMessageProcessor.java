@@ -67,7 +67,8 @@ class ShipyardMessageProcessor implements MessageProcessor {
                 saveResult.getLocationType(),
                 saveResult.getExternalReference(),
                 shipyardMessage.getMarketId(),
-                CollectionUtils.toList(shipyardMessage.getShips())
+                CollectionUtils.toList(shipyardMessage.getShips()),
+                starSystem.getId()
             ),
             Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_SHIPYARD_MESSAGE_SAVE_LOADOUT.name()

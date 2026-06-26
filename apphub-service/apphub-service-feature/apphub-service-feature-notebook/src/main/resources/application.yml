@@ -1,6 +1,3 @@
 spring:
   application:
     name: notebook
-
-liquibase:
-  schema: notebook

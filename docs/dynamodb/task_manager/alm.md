@@ -1,0 +1,12 @@
+# `apphub-task_manager-${Environment}-alm`
+
+- `principal`: `princitpalType#userId`
+- `object`: `objectType#objectId`
+- `operations`: `Set<Operation>`
+
+## GSI-alm-object-principal
+
+Supports reverse lookup
+
+- `object`: `objectType#objectId`
+- `principal`: `princitpalType#userId`

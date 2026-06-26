@@ -254,5 +254,9 @@
     "default-list-item-title": {
         "en": "Default list item",
         "hu": "Alapértelmezett listaelem"
+    },
+    "copy-title": {
+        "en": "Copy title",
+        "hu": "Cím másolása"
     }
 }

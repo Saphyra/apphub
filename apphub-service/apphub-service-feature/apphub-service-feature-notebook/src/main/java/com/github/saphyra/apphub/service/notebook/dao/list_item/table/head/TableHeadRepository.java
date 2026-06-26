@@ -25,7 +25,7 @@ class TableHeadRepository extends DynamoDbRepository {
     private final TableHeadMapper mapper;
 
     TableHeadRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, TableHeadMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getListItemTableName(), context);
         this.mapper = mapper;
     }
 

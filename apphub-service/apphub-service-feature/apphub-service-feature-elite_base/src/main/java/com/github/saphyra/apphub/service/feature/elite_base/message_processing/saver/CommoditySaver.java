@@ -38,7 +38,7 @@ public class CommoditySaver {
     private final CommodityAveragePriceSaver commodityAveragePriceSaver;
     private final ItemTypeDao itemTypeDao;
 
-    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, EdCommodity[] commodities) {
+    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, EdCommodity[] commodities, UUID starSystemId) {
         List<CommodityData> commodityDataList = Arrays.stream(commodities)
             .map(edCommodity -> CommodityData.builder()
                 .name(edCommodity.getName())
@@ -50,11 +50,11 @@ public class CommoditySaver {
                 .build())
             .toList();
 
-        saveAll(timestamp, type, locationType, externalReference, marketId, commodityDataList);
+        saveAll(timestamp, type, locationType, externalReference, marketId, commodityDataList, starSystemId);
     }
 
     @SneakyThrows
-    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<CommodityData> commodities) {
+    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<CommodityData> commodities, UUID starSystemId) {
         if (isNull(marketId)) {
             throw new IllegalArgumentException("Both locationType or externalReference and marketId is null");
         }
@@ -90,7 +90,8 @@ public class CommoditySaver {
                         externalReference,
                         marketId,
                         commodity,
-                        originalLastUpdate
+                        originalLastUpdate,
+                        starSystemId
                     ))
                     .flatMap(Optional::stream)
                     .toList();

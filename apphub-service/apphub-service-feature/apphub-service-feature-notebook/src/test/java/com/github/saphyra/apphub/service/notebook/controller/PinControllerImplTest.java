@@ -108,20 +108,22 @@ class PinControllerImplTest {
 
     @Test
     void renamePinGroup() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
         assertThat(underTest.renamePinGroup(new OneParamRequest<>(PIN_GROUP_NAME), PIN_GROUP_ID, accessToken)).containsExactly(pinGroupResponse);
 
-        then(pinGroupRenameService).should().rename(PIN_GROUP_ID, PIN_GROUP_NAME);
+        then(pinGroupRenameService).should().rename(USER_ID, PIN_GROUP_ID, PIN_GROUP_NAME);
     }
 
     @Test
     void deletePinGroup() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
         assertThat(underTest.deletePinGroup(PIN_GROUP_ID, accessToken)).containsExactly(pinGroupResponse);
 
-        then(pinGroupDeletionService).should().delete(PIN_GROUP_ID);
+        then(pinGroupDeletionService).should().delete(USER_ID, PIN_GROUP_ID);
     }
 
     @Test
@@ -143,11 +145,12 @@ class PinControllerImplTest {
     }
 
     @Test
-    void pinGroupOpened(){
+    void pinGroupOpened() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
         given(pinGroupQueryService.getPinGroups(USER_ID)).willReturn(List.of(pinGroupResponse));
 
         assertThat(underTest.pinGroupOpened(PIN_GROUP_ID, accessToken)).containsExactly(pinGroupResponse);
 
-        then(pinGroupUpdateService).should().setLastOpened(PIN_GROUP_ID);
+        then(pinGroupUpdateService).should().setLastOpened(USER_ID, PIN_GROUP_ID);
     }
 }

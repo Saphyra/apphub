@@ -5,3 +5,5 @@ aws:
     url: http://dynamodb:8000
     listItem:
       tableName: apphub-minikube-list_item
+    pinGroup:
+      tableName: apphub-minikube-notebook-pin_group

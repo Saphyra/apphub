@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static com.github.saphyra.apphub.integration.core.TestBase.getPermitCount;
+
 @Slf4j
 public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
     @Override
@@ -51,15 +53,24 @@ public class SkipDisabledTestsInterceptor implements IMethodInterceptor {
     }
 
     private int compare(IMethodInstance o1, IMethodInstance o2, Map<String, Long> durations) {
-        if (TestConfiguration.INTEGRATION_SERVER_ENABLED) {
-            String mi1 = TestUtils.getMethodIdentifier(o1.getMethod().getConstructorOrMethod().getMethod());
-            String mi2 = TestUtils.getMethodIdentifier(o2.getMethod().getConstructorOrMethod().getMethod());
+        int permitCount1 = getPermitCount(o1.getMethod().getConstructorOrMethod().getMethod());
+        int permitCount2 = getPermitCount(o2.getMethod().getConstructorOrMethod().getMethod());
 
-            return Long.compare(
-                durations.getOrDefault(mi2, 0L),
-                durations.getOrDefault(mi1, 0L)
-            );
+        int permitOrder = Integer.compare(permitCount1, permitCount2);
+
+        if (permitOrder == 0) {
+            if (TestConfiguration.INTEGRATION_SERVER_ENABLED) {
+                String mi1 = TestUtils.getMethodIdentifier(o1.getMethod().getConstructorOrMethod().getMethod());
+                String mi2 = TestUtils.getMethodIdentifier(o2.getMethod().getConstructorOrMethod().getMethod());
+
+                return Long.compare(
+                    durations.getOrDefault(mi2, 0L),
+                    durations.getOrDefault(mi1, 0L)
+                );
+            }
+            return Integer.compare(o1.getMethod().getPriority(), o2.getMethod().getPriority());
+        } else {
+            return permitOrder;
         }
-        return Integer.compare(o1.getMethod().getPriority(), o2.getMethod().getPriority());
     }
 }

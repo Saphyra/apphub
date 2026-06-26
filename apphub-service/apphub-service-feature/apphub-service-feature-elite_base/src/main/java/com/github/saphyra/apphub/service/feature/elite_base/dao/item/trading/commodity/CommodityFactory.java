@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Component
 public class CommodityFactory {
-    public Commodity create(ItemLocationType locationType, UUID externalReference, Long marketId, String name, Integer buyPrice, Integer sellPrice, Integer demand, Integer stock) {
+    public Commodity create(ItemLocationType locationType, UUID externalReference, Long marketId, String name, Integer buyPrice, Integer sellPrice, Integer demand, Integer stock, UUID starSystemId) {
         return Commodity.builder()
             .locationType(locationType)
             .externalReference(externalReference)
@@ -17,6 +17,7 @@ public class CommodityFactory {
             .sellPrice(sellPrice)
             .demand(demand)
             .stock(stock)
+            .starSystemId(starSystemId)
             .build();
     }
 }

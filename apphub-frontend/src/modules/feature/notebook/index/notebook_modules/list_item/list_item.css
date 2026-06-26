@@ -65,6 +65,10 @@
     background-image: url("common/style/img/edit.png");
 }
 
+.notebook-content-category-content-list-item-copy-button{
+    background-image: url("common/style/img/download.png");
+}
+
 .category {
     border-color: springgreen;
 }

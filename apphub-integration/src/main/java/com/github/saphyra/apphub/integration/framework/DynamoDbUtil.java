@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.framework;
 
 import com.github.saphyra.apphub.integration.core.TestConfiguration;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
@@ -8,18 +9,24 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClientBuilder;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.BatchWriteItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.DeleteItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryResponse;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
 import software.amazon.awssdk.services.dynamodb.model.ScanResponse;
+import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -31,6 +38,7 @@ public class DynamoDbUtil {
     private static final String COLUMN_SK = "sk";
     private static final String COLUMN_MARKED_FOR_DELETION_AT = "marked_for_deletion_at";
     private static final String COLUMN_LOCKED_UNTIL = "locked_until";
+    private static final String COLUMN_ORGANIZATION = "organization";
 
     private static final String TYPE_USER_ID = "USER_ID";
     private static final String TYPE_MARKED_FOR_DELETION = "MARKED_FOR_DELETION";
@@ -38,8 +46,17 @@ public class DynamoDbUtil {
     private static final String TYPE_PROFILE = "PROFILE";
     private static final String TYPE_CREDENTIAL = "CREDENTIAL";
     private static final String COLUMN_USER_ID = "user_id";
+    private static final String COLUMN_OBJECT = "object";
+    private static final String COLUMN_USER = "user";
+
+    private static final String PREFIX_USER = "USER#";
 
     private static DynamoDbClient dynamoDbClient;
+
+    public static void checkConnection() {
+        getClient()
+            .listTables();
+    }
 
     public static List<String> getRolesByEmail(String email) {
         UUID userId = getUserIdByEmail(email);
@@ -71,7 +88,7 @@ public class DynamoDbUtil {
 
     public static void markForDeletionByEmail(String email) {
         UUID userId = getUserIdByEmail(email);
-        markForDeletion(userId);
+        markForDeletion(List.of(userId));
     }
 
     public static void unlockUserByEmail(String email) {
@@ -162,20 +179,41 @@ public class DynamoDbUtil {
     public static void markForDeleteWhenEmailEndsWith(String prefix) {
         List<UUID> userIds = getUserIdsByEmailStartsWith(prefix);
         log.info("Deleting {} test users", userIds.size());
-        userIds.forEach(DynamoDbUtil::markForDeletion);
+        markForDeletion(userIds);
     }
 
-    public static void markForDeletion(UUID userId) {
-        PutItemRequest request = PutItemRequest.builder()
-            .tableName(getUserTableName())
-            .item(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId.toString())).build(),
-                COLUMN_SK, AttributeValue.builder().s(TYPE_MARKED_FOR_DELETION).build(),
-                COLUMN_MARKED_FOR_DELETION_AT, AttributeValue.builder().n(String.valueOf(0)).build()
-            ))
-            .build();
+    public static void markForDeletion(List<UUID> userIds) {
+        if (userIds.isEmpty()) {
+            return;
+        }
 
-        getClient().putItem(request);
+        List<WriteRequest> writeRequests = userIds.stream()
+            .map(userId -> WriteRequest.builder()
+                .putRequest(PutRequest.builder()
+                    .item(Map.of(
+                        COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId.toString())).build(),
+                        COLUMN_SK, AttributeValue.builder().s(TYPE_MARKED_FOR_DELETION).build(),
+                        COLUMN_MARKED_FOR_DELETION_AT, AttributeValue.builder().n("0").build()
+                    ))
+                    .build())
+                .build())
+            .toList();
+
+        for (List<WriteRequest> batch : Lists.partition(writeRequests, 25)) {
+            BatchWriteItemRequest request = BatchWriteItemRequest.builder()
+                .requestItems(Map.of(getUserTableName(), batch))
+                .build();
+            BatchWriteItemResponse response = getClient()
+                .batchWriteItem(request);
+
+            while (!response.unprocessedItems().isEmpty()) {
+                request = BatchWriteItemRequest.builder()
+                    .requestItems(response.unprocessedItems())
+                    .build();
+                response = getClient()
+                    .batchWriteItem(request);
+            }
+        }
     }
 
     private static List<UUID> getUserIdsByEmailStartsWith(String prefix) {
@@ -342,5 +380,90 @@ public class DynamoDbUtil {
             .query(request)
             .items()
             .isEmpty();
+    }
+
+    public static List<Map<String, AttributeValue>> getPinGroups(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getNotebookPinGroupTableName())
+            .keyConditionExpression("#pk = :pk")
+            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s("USER#" + userId.toString()).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getNotebookPinGroupTableName() {
+        return "apphub-%s-notebook-pin_group".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static Optional<Map<String, AttributeValue>> findOrganization(UUID organizationId) {
+        GetItemRequest request = GetItemRequest.builder()
+            .tableName(getTaskManagerOrganizationTableName())
+            .key(Map.of(COLUMN_ORGANIZATION, AttributeValue.builder().s("PREFIX_ORGANIZATION" + organizationId.toString()).build()))
+            .build();
+
+        return Optional.of(getClient())
+            .map(client -> client.getItem(request))
+            .filter(GetItemResponse::hasItem)
+            .map(GetItemResponse::item);
+    }
+
+    private static String getTaskManagerOrganizationTableName() {
+        return "apphub-task_manager-%s-organization".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static List<Map<String, AttributeValue>> getAlmsByObject(UUID objectId, String objectType) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getTaskManagerAlmTableName())
+            .indexName("GSI-alm-object-principal")
+            .keyConditionExpression("#object = :object")
+            .expressionAttributeNames(Map.of("#object", COLUMN_OBJECT))
+            .expressionAttributeValues(Map.of(":object", AttributeValue.builder().s(objectType + "#" + objectId.toString()).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getTaskManagerAlmTableName() {
+        return "apphub-task_manager-%s-alm".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static List<Map<String, AttributeValue>> getInvitationsByUserId(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getTaskManagerInvitationTable())
+            .keyConditionExpression("#user = :user")
+            .expressionAttributeNames(Map.of("#user", COLUMN_USER))
+            .expressionAttributeValues(Map.of(":user", AttributeValue.builder().s(PREFIX_USER + userId).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getTaskManagerInvitationTable() {
+        return "apphub-task_manager-%s-invitation".formatted(TestConfiguration.ENVIRONMENT);
+    }
+
+    public static List<Map<String, AttributeValue>> getNotificationsByUserId(UUID userId) {
+        QueryRequest request = QueryRequest.builder()
+            .tableName(getTaskManagerNotificationTable())
+            .keyConditionExpression("#user = :user")
+            .expressionAttributeNames(Map.of("#user", COLUMN_USER))
+            .expressionAttributeValues(Map.of(":user", AttributeValue.builder().s(PREFIX_USER + userId).build()))
+            .build();
+
+        return getClient()
+            .query(request)
+            .items();
+    }
+
+    private static String getTaskManagerNotificationTable() {
+        return "apphub-task_manager-%s-notification".formatted(TestConfiguration.ENVIRONMENT);
     }
 }

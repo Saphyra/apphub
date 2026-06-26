@@ -30,5 +30,13 @@
     "pin-group-name-too-long": {
         "en": "Pin group name too long. (Maximum 30 characters)",
         "hu": "Csoport neve túl hosszú. (Maximum 30 karakter.)"
+    },
+    "list-item-title-too-long": {
+        "en": "Title too long.",
+        "hu": "Cím túl hosszú."
+    },
+    "content-too-long": {
+        "en": "Content too long.",
+        "hu": "Tartalom túl hosszú."
     }
 }

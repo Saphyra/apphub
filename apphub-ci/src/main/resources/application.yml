@@ -63,10 +63,12 @@ platform:
   prodDisabledTestGroups:
     - skyxplore
     - community
+    - task-manager
 
   prodDisabledRoles:
     - SKYXPLORE
     - COMMUNITY
+    - TASK_MANAGER
 
 defaults:
   defaultLocale: ENGLISH
@@ -150,14 +152,6 @@ services:
       - S3_CONFIGURATION
       - FTP_HOST
       - DYNAMO_DB_CONFIGURATION
-  - name: encryption
-    port: 8098
-    location: "./apphub-service/apphub-service-platform/apphub-service-platform-encryption/target/application.jar"
-    moduleName: apphub-service-platform-encryption
-    group: 2
-    optional: true
-    properties:
-      - PSQL_HOST
   - name: modules
     port: 8088
     location: "./apphub-service/apphub-service-etc/apphub-service-etc-modules/target/application.jar"
@@ -203,7 +197,14 @@ services:
     group: 2
     optional: true
     properties:
-      - PSQL_HOST
+      - DYNAMO_DB_CONFIGURATION
+  - name: task-manager
+    port: 8098
+    location: "./apphub-service/apphub-service-feature/apphub-service-feature-task_manager/target/application.jar"
+    moduleName: apphub-service-feature-task_manager
+    group: 2
+    optional: true
+    properties:
       - DYNAMO_DB_CONFIGURATION
   - name: community
     port: 8096
@@ -220,7 +221,6 @@ services:
     group: 2
     optional: true
     properties:
-      - PSQL_HOST
       - DYNAMO_DB_CONFIGURATION
   - name: elite-base
     port: 8087

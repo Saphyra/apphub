@@ -29,8 +29,8 @@ class LoadoutSaverTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final LocalDateTime TIMESTAMP = LocalDateTime.now();
     private static final String ITEM_NAME_1 = "item-NAME-1";
-    private static final String ITEM_NAME_2 = "item-name-2";
     private static final Long MARKET_ID = 2345L;
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private LastUpdateDao lastUpdateDao;
@@ -58,7 +58,8 @@ class LoadoutSaverTest {
 
     @Test
     void nullMarketId() {
-        assertThat(catchThrowable(() -> underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(ITEM_NAME_1)))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(ITEM_NAME_1), STAR_SYSTEM_ID)))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -66,7 +67,7 @@ class LoadoutSaverTest {
         given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).willReturn(Optional.of(lastUpdate));
         given(lastUpdate.getLastUpdate()).willReturn(TIMESTAMP.plusSeconds(1));
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1));
+        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
 
         then(loadoutDaoSupport).shouldHaveNoInteractions();
     }
@@ -77,9 +78,9 @@ class LoadoutSaverTest {
         given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).willReturn(Optional.empty());
         given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ItemType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
         given(loadoutDaoSupport.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).willReturn(List.of());
-        given(loadoutDaoSupport.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, ITEM_NAME_1.toLowerCase())).willReturn(newLoadout);
+        given(loadoutDaoSupport.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, ITEM_NAME_1.toLowerCase(), STAR_SYSTEM_ID)).willReturn(newLoadout);
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1));
+        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
 
         then(lastUpdateDao).should().save(lastUpdate);
         then(itemTypeDao).should().saveAll(ItemType.EQUIPMENT, List.of(ITEM_NAME_1.toLowerCase()));
@@ -94,7 +95,7 @@ class LoadoutSaverTest {
         given(loadoutDaoSupport.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).willReturn(List.of(existingLoadout));
         given(existingLoadout.getItemName()).willReturn(ITEM_NAME_1.toLowerCase());
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1));
+        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
 
         then(lastUpdateDao).should().save(lastUpdate);
         then(itemTypeDao).should().saveAll(ItemType.EQUIPMENT, List.of(ITEM_NAME_1.toLowerCase()));
@@ -109,7 +110,7 @@ class LoadoutSaverTest {
         given(loadoutDaoSupport.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).willReturn(List.of(existingLoadout));
         given(existingLoadout.getItemName()).willReturn(ITEM_NAME_1.toLowerCase());
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of());
+        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(), STAR_SYSTEM_ID);
 
         then(lastUpdateDao).should().save(lastUpdate);
         then(itemTypeDao).should().saveAll(ItemType.EQUIPMENT, List.of());

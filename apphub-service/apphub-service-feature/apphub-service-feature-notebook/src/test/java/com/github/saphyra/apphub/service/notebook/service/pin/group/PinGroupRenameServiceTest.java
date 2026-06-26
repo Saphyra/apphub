@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroup;
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +17,7 @@ import static org.mockito.BDDMockito.then;
 class PinGroupRenameServiceTest {
     private static final UUID PIN_GROUP_ID = UUID.randomUUID();
     private static final String NEW_NAME = "new-name";
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private PinGroupNameValidator pinGroupNameValidator;
@@ -32,9 +33,9 @@ class PinGroupRenameServiceTest {
 
     @Test
     void rename() {
-        given(pinGroupDao.findByIdValidated(PIN_GROUP_ID)).willReturn(pinGroup);
+        given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
 
-        underTest.rename(PIN_GROUP_ID, NEW_NAME);
+        underTest.rename(USER_ID, PIN_GROUP_ID, NEW_NAME);
 
         then(pinGroupNameValidator).should().validate(NEW_NAME);
         then(pinGroup).should().setPinGroupName(NEW_NAME);

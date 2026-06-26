@@ -13,7 +13,6 @@
 
     <modules>
         <module>apphub-api-platform-event_gateway</module>
-        <module>apphub-api-platform-encryption</module>
         <module>apphub-api-platform-storage</module>
         <module>apphub-api-platform-monitoring</module>
         <module>apphub-api-platform-authorization</module>

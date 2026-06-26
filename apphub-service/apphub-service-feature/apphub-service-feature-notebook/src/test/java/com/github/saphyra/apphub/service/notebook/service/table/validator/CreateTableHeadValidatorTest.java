@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.notebook.service.table.validator;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.TableHeadModel;
+import com.github.saphyra.apphub.service.notebook.common.NotebookConstants;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +46,18 @@ class CreateTableHeadValidatorTest {
         Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
 
         ExceptionValidator.validateInvalidParam(ex, "tableHead.content", "must not be null or blank");
+    }
+
+    @Test
+    void tooLongContent() {
+        TableHeadModel model = TableHeadModel.builder()
+            .content("A".repeat(NotebookConstants.MAX_CONTENT_LENGTH + 1))
+            .columnIndex(324)
+            .build();
+
+        Throwable ex = catchThrowable(() -> underTest.validateTableHeads(List.of(model)));
+
+        ExceptionValidator.validateInvalidParam(ex, "tableHead.content", "too long");
     }
 
     @Test

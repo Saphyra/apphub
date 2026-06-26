@@ -12,6 +12,7 @@ import OpenedListItemHeader from "../OpenedListItemHeader";
 import Textarea from "common/component/input/Textarea";
 import Event from "common/js/event/Event";
 import { NOTEBOOK_EDIT_TEXT, NOTEBOOK_GET_TEXT } from "modules/feature/notebook/NotebookEndpoints";
+import validateText from "modules/feature/notebook/common/validator/TextValidator";
 
 const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, setDisplaySpinner }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -66,9 +67,15 @@ const Text = ({ localizationHandler, openedListItem, setOpenedListItem, setLastE
     }
 
     const save = async () => {
-        const result = validateListItemTitle(title);
-        if (!result.valid) {
-            NotificationService.showError(result.message);
+        const titleValidation = validateListItemTitle(title);
+        if (!titleValidation.valid) {
+            NotificationService.showError(titleValidation.message);
+            return;
+        }
+
+        const contentValidation = validateText(content);
+        if (!contentValidation.valid) {
+            NotificationService.showError(contentValidation.message);
             return;
         }
 

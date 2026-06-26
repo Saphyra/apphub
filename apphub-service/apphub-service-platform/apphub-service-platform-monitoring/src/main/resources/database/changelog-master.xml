@@ -13,4 +13,11 @@
     <include file="database/change_sets/metric_data.xml"/>
     <include file="database/change_sets/metric_property.xml"/>
     <include file="database/change_sets/metric_service.xml"/>
+    
+    <changeSet id="delete-metric-apphub-local-calendar_SAVE_EVENTS_OF_LABELS" author="Saphyra">
+        <sql>
+            DELETE FROM monitoring.metric_property WHERE metric_id = (SELECT metric_id FROM monitoring.metric WHERE functionality = 'apphub-local-calendar_SAVE_EVENTS_OF_LABELS');
+            DELETE FROM monitoring.metric WHERE functionality = 'apphub-local-calendar_SAVE_EVENTS_OF_LABELS';
+        </sql>
+    </changeSet>
 </databaseChangeLog>

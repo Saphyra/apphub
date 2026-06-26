@@ -22,9 +22,14 @@ public class TitleValidatorTest {
     }
 
     @Test
-    public void invalid() {
+    public void blank() {
         Throwable ex = catchThrowable(() -> underTest.validate(" "));
 
         ExceptionValidator.validateInvalidParam(ex, "title", "must not be null or blank");
+    }
+
+    @Test
+    void tooLong() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate("a".repeat(1024 * 200 + 1)), "title", "too long");
     }
 }

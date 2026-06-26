@@ -36,6 +36,7 @@ class CommoditySaverTest {
     private static final String MODIFIED_COMMODITY_NAME = "modified-commodity-name";
     private static final Integer AVERAGE_PRICE = 24;
     private static final String DELETED_COMMODITY_NAME = "deleted-commodity-name";
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private TradingDaoSupport tradingDaoSupport;
@@ -96,7 +97,7 @@ class CommoditySaverTest {
 
     @Test
     void nullMarketId() {
-        assertThat(catchThrowable(() -> underTest.saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(existingCommodityData))))
+        assertThat(catchThrowable(() -> underTest.saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(existingCommodityData), STAR_SYSTEM_ID)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -129,11 +130,11 @@ class CommoditySaverTest {
         given(newCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
         given(modifiedCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
 
-        given(commodityDataTransformer.transform(null, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData, originalLastUpdate))
+        given(commodityDataTransformer.transform(null, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
             .willReturn(Optional.of(newCommodity));
-        given(commodityDataTransformer.transform(existingCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData, originalLastUpdate))
+        given(commodityDataTransformer.transform(existingCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
             .willReturn(Optional.empty());
-        given(commodityDataTransformer.transform(modifiedCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, modifiedCommodityData, originalLastUpdate))
+        given(commodityDataTransformer.transform(modifiedCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, modifiedCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
             .willReturn(Optional.of(modifiedCommodity));
 
         underTest.saveAll(
@@ -142,7 +143,8 @@ class CommoditySaverTest {
             ItemLocationType.STATION,
             EXTERNAL_REFERENCE,
             MARKET_ID,
-            List.of(existingCommodityData, newCommodityData, emptyCommodityData, modifiedCommodityData)
+            List.of(existingCommodityData, newCommodityData, emptyCommodityData, modifiedCommodityData),
+            STAR_SYSTEM_ID
         );
 
         then(lastUpdateDao).should().save(newLastUpdate);

@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.LinkActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateLinkRequest;
@@ -33,9 +34,18 @@ public class EditListItemTest extends BackEndTest {
         UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessToken, CreateCategoryRequest.builder().title(ORIGINAL_TITLE).build());
 
         blankTitle(accessToken, parentCategoryId);
+        tooLongTitle(accessToken, parentCategoryId);
         newParentNotFound(accessToken, parentCategoryId);
         parentNotCategory(accessToken, parentCategoryId);
         listItemNotFound(accessToken);
+    }
+
+    private void tooLongTitle(String accessToken, UUID parentCategoryId) {
+        EditListItemRequest blankTitleRequest = EditListItemRequest.builder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+            .build();
+        Response blankTitleResponse = ListItemActions.getEditListItemResponse(getServerPort(), accessToken, blankTitleRequest, parentCategoryId);
+        verifyInvalidParam(blankTitleResponse, "title", "too long");
     }
 
     private static void blankTitle(String accessToken, UUID parentCategoryId) {

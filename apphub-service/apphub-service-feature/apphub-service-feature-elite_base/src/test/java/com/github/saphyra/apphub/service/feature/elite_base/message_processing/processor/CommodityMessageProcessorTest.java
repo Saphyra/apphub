@@ -147,6 +147,6 @@ class CommodityMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodities);
+        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodities, STAR_SYSTEM_ID);
     }
 }

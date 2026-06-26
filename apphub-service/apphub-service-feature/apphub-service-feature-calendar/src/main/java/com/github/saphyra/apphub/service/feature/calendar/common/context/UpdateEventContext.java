@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalen
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.RecreateOccurrenceService;
-import jakarta.transaction.Transactional;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -48,7 +47,6 @@ public class UpdateEventContext {
         return occurrences.get();
     }
 
-    @Transactional
     public void processChanges() {
         if (occurrenceRecreationNeeded) {
             recreateOccurrenceService.recreateOccurrences(this);

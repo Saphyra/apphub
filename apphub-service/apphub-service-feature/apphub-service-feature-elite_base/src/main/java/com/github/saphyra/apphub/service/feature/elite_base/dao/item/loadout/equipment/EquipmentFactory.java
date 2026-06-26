@@ -7,12 +7,13 @@ import java.util.UUID;
 
 @Component
 public class EquipmentFactory {
-    public Equipment create(ItemLocationType locationType, UUID externalReference, Long marketId, String name) {
+    public Equipment create(ItemLocationType locationType, UUID externalReference, Long marketId, String name, UUID starSystemId) {
         return Equipment.builder()
             .locationType(locationType)
             .externalReference(externalReference)
             .marketId(marketId)
             .itemName(name)
+            .starSystemId(starSystemId)
             .build();
     }
 }

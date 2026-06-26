@@ -12,5 +12,6 @@ public enum Role {
     CALENDAR,
     ELITE_BASE,
     ELITE_BASE_ADMIN,
+    TASK_MANAGER,
 }
 

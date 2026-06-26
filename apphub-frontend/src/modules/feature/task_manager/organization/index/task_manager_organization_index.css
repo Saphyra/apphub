@@ -1,0 +1,15 @@
+#task-manager-organization-index-main {
+    padding: 0;
+}
+
+.task-manager-organization-index-panel {
+    border: 3px ridge white;
+    border-radius: 10px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.task-manager-organization-index-panel-header {
+    border-bottom: 3px ridge white;
+    padding: 5px 10px;
+}

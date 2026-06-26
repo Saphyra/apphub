@@ -2,6 +2,15 @@ import Constants from "./Constants";
 import Optional from "./collection/Optional";
 import Stream from "./collection/Stream";
 
+export const copyToClipboard = (text) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+    } else {
+        throw new Error("Clipboard is not supported.");
+    }
+}
+
+
 export const spinnerWrappedOperation = (setDisplaySpinner, call) => {
     setDisplaySpinner(true);
 

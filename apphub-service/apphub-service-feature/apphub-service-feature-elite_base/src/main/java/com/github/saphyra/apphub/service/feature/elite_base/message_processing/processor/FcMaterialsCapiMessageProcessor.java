@@ -48,7 +48,8 @@ class FcMaterialsCapiMessageProcessor implements MessageProcessor {
                 ItemLocationType.FLEET_CARRIER,
                 fleetCarrier.getId(),
                 fcMaterialsCapiMessage.getMarketId(),
-                getMaterials(fcMaterialsCapiMessage.getItems())
+                getMaterials(fcMaterialsCapiMessage.getItems()),
+                fleetCarrier.getStarSystemId()
             ));
     }
 

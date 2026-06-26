@@ -95,4 +95,8 @@ public class DateTimeUtil {
     public long getCurrentTimeEpochSeconds() {
         return toEpochSecond(getCurrentDateTime());
     }
+
+    public LocalDateTime getZeroLocalDateTime() {
+        return fromEpochSecond(0L);
+    }
 }

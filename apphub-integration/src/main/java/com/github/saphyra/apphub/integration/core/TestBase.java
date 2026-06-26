@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.core.exception.ExceptionConverter;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLockListener;
 import com.github.saphyra.apphub.integration.core.integration_server.IntegrationServer;
 import com.github.saphyra.apphub.integration.core.testng.MethodCollectorSuiteListener;
+import com.github.saphyra.apphub.integration.core.testng.PermitCount;
 import com.github.saphyra.apphub.integration.core.testng.RetryAnalyzerAnnotatorSuiteListener;
 import com.github.saphyra.apphub.integration.core.testng.SkipDisabledTestsInterceptor;
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
@@ -34,6 +35,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -108,7 +110,15 @@ public abstract class TestBase {
             log.info("API connection successfully tested");
         } catch (Exception e) {
             log.error("API check failed", e);
-            System.exit(0);
+            System.exit(1);
+        }
+
+        try {
+            DynamoDbUtil.checkConnection();
+            log.info("DynamoDB connection successfully tested");
+        } catch (Exception e) {
+            log.error("DynamoDB connection check failed", e);
+            System.exit(1);
         }
 
         System.setProperty("testng.show.stack.frames", "true");
@@ -118,7 +128,7 @@ public abstract class TestBase {
         List<String> groups = Arrays.asList(method.getGroups());
 
         String methodName = method.getMethodName();
-        if(ENABLED_TEST_GROUPS.contains(methodName)){
+        if (ENABLED_TEST_GROUPS.contains(methodName)) {
             return true;
         }
 
@@ -146,21 +156,29 @@ public abstract class TestBase {
 
         log.debug("Available permits before acquiring: {}", SEMAPHORE.availablePermits());
         Stopwatch stopwatch = Stopwatch.createStarted();
-        acquirePermit(method, stopwatch, getPermitCount());
+        acquirePermit(method, stopwatch, getPermitCount(method));
         DURATION_STOPWATCH.set(Stopwatch.createStarted());
 
         TEST_METHOD_NAME.set(testMethod.toLowerCase());
         StatusLogger.addToStartOrder(method);
     }
 
-    protected int getPermitCount() {
-        return 1;
+    public static int getPermitCount(Method method) {
+        PermitCount.PermitCountType permitCountType = Optional.ofNullable(method.getAnnotation(PermitCount.class))
+            .map(PermitCount::value)
+            .orElse(PermitCount.PermitCountType.ONE);
+
+        return switch (permitCountType) {
+            case ONE -> 1;
+            case ALL -> TestConfiguration.AVAILABLE_PERMITS;
+            case NONE -> 0;
+        };
     }
 
     private static synchronized void acquirePermit(Method method, Stopwatch stopwatch, int permits) throws InterruptedException {
         SEMAPHORE.acquire(permits);
         stopwatch.stop();
-        log.debug("Permit acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
+        log.debug("Permit(s) acquired for test {} in {}ms. Permits left: {}", method.getName(), stopwatch.elapsed(TimeUnit.MILLISECONDS), SEMAPHORE.availablePermits());
     }
 
     @AfterMethod(alwaysRun = true)
@@ -174,7 +192,7 @@ public abstract class TestBase {
         IntegrationServer.reportTestCaseRun(method, duration, testResult.getStatus() == ITestResult.SUCCESS);
 
         log.debug("Available permits before releasing: {}", SEMAPHORE.availablePermits());
-        SEMAPHORE.release(getPermitCount());
+        SEMAPHORE.release(getPermitCount(method));
         log.debug("Available permits after releasing {}: {}", methodName, SEMAPHORE.availablePermits());
 
         StatusLogger.incrementFinishedTestCount(method, duration);

@@ -44,6 +44,7 @@ class FcMaterialsCapiMessageProcessorTest {
     private static final String SALE = "sale";
     private static final Integer SELL_PRICE = 3425;
     private static final Integer STOCK = 34637;
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private ObjectMapper objectMapper;
@@ -97,10 +98,11 @@ class FcMaterialsCapiMessageProcessorTest {
         given(objectMapper.readValue(MESSAGE, FcMaterialsCapiMessage.class)).willReturn(fcMaterialsCapiMessage);
         given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.of(fleetCarrier));
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
+        given(fleetCarrier.getStarSystemId()).willReturn(STAR_SYSTEM_ID);
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.FC_MATERIAL, ItemLocationType.FLEET_CARRIER, FLEET_CARRIER_ID, MARKET_ID, Collections.emptyList());
+        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.FC_MATERIAL, ItemLocationType.FLEET_CARRIER, FLEET_CARRIER_ID, MARKET_ID, Collections.emptyList(), STAR_SYSTEM_ID);
     }
 
     @Test
@@ -152,10 +154,11 @@ class FcMaterialsCapiMessageProcessorTest {
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
         given(objectMapper.convertValue(eq(List.of(purchase)), any(TypeReference.class))).willReturn(List.of(purchase));
         given(objectMapper.convertValue(eq(Map.of(1L, sale)), any(TypeReference.class))).willReturn(Map.of(1L, sale));
+        given(fleetCarrier.getStarSystemId()).willReturn(STAR_SYSTEM_ID);
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(eq(TIMESTAMP), eq(ItemType.FC_MATERIAL), eq(ItemLocationType.FLEET_CARRIER), eq(FLEET_CARRIER_ID), eq(MARKET_ID), argumentCaptor.capture());
+        then(commoditySaver).should().saveAll(eq(TIMESTAMP), eq(ItemType.FC_MATERIAL), eq(ItemLocationType.FLEET_CARRIER), eq(FLEET_CARRIER_ID), eq(MARKET_ID), argumentCaptor.capture(), eq(STAR_SYSTEM_ID));
 
         assertThat(argumentCaptor.getValue()).containsExactlyInAnyOrder(
             CommoditySaver.CommodityData.builder()

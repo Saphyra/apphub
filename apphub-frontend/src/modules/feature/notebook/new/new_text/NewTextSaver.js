@@ -2,11 +2,17 @@ import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "../../common/validator/ListItemTitleValidator";
 import Constants from "common/js/Constants";
 import { NOTEBOOK_CREATE_TEXT, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
+import validateText from "../../common/validator/TextValidator";
 
 const create = async (listItemTitle, parent, content) => {
-    const result = validateListItemTitle(listItemTitle);
-    if (!result.valid) {
-        NotificationService.showError(result.message);
+    const titleValidation = validateListItemTitle(listItemTitle);
+    if (!titleValidation.valid) {
+        NotificationService.showError(titleValidation.message);
+        return;
+    }
+    const contentValidation = validateText(content);
+    if (!contentValidation.valid) {
+        NotificationService.showError(contentValidation.message);
         return;
     }
 

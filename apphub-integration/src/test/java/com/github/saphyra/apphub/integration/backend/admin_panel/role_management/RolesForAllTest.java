@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.integration.backend.admin_panel.role_managemen
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.RoleManagementActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.core.TestConfiguration;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
+import com.github.saphyra.apphub.integration.core.testng.PermitCount;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
@@ -21,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RolesForAllTest extends BackEndTest {
     @Test(groups = {"be", "admin-panel"})
     @FeatureLocked(Feature.ROLE_TEST)
+    @PermitCount(value = PermitCount.PermitCountType.ALL)
     public void rolesForAll() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());

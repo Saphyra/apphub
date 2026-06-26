@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.CategoryAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ChildrenOfCategoryResponse;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateCategoryRequest;
@@ -30,20 +31,53 @@ public class TextCrudTest extends BackEndTest {
     private static final String NEW_TITLE = "new-title";
 
     @Test(groups = {"be", "notebook"})
-    public void blankTitle() {
+    public void textCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_blankTitle(accessToken);
+        create_tooLongTitle(accessToken);
+        create_tooLongContent(accessToken);
         create_parentNotFound(accessToken);
         create_parentNotCategory(accessToken);
         create_nullContent(accessToken);
         UUID parentCategoryId = CategoryActions.createCategory(getServerPort(), accessToken, CreateCategoryRequest.builder().title(PARENT_TITLE).build());
         UUID textId = create(accessToken, parentCategoryId);
         edit_blankTitle(accessToken, textId);
+        edit_tooLongTitle(accessToken, textId);
         edit_nullContent(accessToken, textId);
+        edit_tooLongContent(accessToken, textId);
         edit(accessToken, textId);
         delete(accessToken, parentCategoryId, textId);
+    }
+
+    @Test(groups = {"be", "notebook"})
+    public void createTextWithMaxSizedData() {
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
+
+        CreateTextRequest createRequest = CreateTextRequest.builder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH))
+            .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH))
+            .build();
+        TextActions.createText(getServerPort(), accessToken, createRequest);
+    }
+
+    private void create_tooLongContent(String accessToken) {
+        CreateTextRequest request = CreateTextRequest.builder()
+            .title(TITLE)
+            .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .build();
+        Response create_tooLongContentResponse = TextActions.getCreateTextResponse(getServerPort(), accessToken, request);
+        verifyInvalidParam(create_tooLongContentResponse, "content", "too long");
+    }
+
+    private void create_tooLongTitle(String accessToken) {
+        CreateTextRequest request = CreateTextRequest.builder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+            .build();
+        Response create_blankTitleResponse = TextActions.getCreateTextResponse(getServerPort(), accessToken, request);
+        verifyInvalidParam(create_blankTitleResponse, "title", "too long");
     }
 
     private static void create_blankTitle(String accessToken) {
@@ -98,10 +132,19 @@ public class TextCrudTest extends BackEndTest {
         assertThat(textResponse.getContent()).isEqualTo(CONTENT);
         ChildrenOfCategoryResponse childrenOfCategory = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, parentCategoryId);
         assertThat(childrenOfCategory.getChildren()).hasSize(1);
-        assertThat(childrenOfCategory.getChildren().get(0).getId()).isEqualTo(textId);
-        assertThat(childrenOfCategory.getChildren().get(0).getTitle()).isEqualTo(TITLE);
-        assertThat(childrenOfCategory.getChildren().get(0).getType()).isEqualTo(ListItemType.TEXT.name());
+        assertThat(childrenOfCategory.getChildren().getFirst().getId()).isEqualTo(textId);
+        assertThat(childrenOfCategory.getChildren().getFirst().getTitle()).isEqualTo(TITLE);
+        assertThat(childrenOfCategory.getChildren().getFirst().getType()).isEqualTo(ListItemType.TEXT.name());
         return textId;
+    }
+
+    private static void edit_tooLongTitle(String accessToken, UUID textId) {
+        EditTextRequest edit_blankTitleRequest = EditTextRequest.builder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+            .content(NEW_CONTENT)
+            .build();
+        Response edit_blankTitleResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_blankTitleRequest);
+        verifyInvalidParam(edit_blankTitleResponse, "title", "too long");
     }
 
     private static void edit_blankTitle(String accessToken, UUID textId) {
@@ -111,6 +154,15 @@ public class TextCrudTest extends BackEndTest {
             .build();
         Response edit_blankTitleResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_blankTitleRequest);
         verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
+    }
+
+    private static void edit_tooLongContent(String accessToken, UUID textId) {
+        EditTextRequest edit_nullContentRequest = EditTextRequest.builder()
+            .title(NEW_TITLE)
+            .content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .build();
+        Response edit_nullContentResponse = TextActions.getEditTextResponse(getServerPort(), accessToken, textId, edit_nullContentRequest);
+        verifyInvalidParam(edit_nullContentResponse, "content", "too long");
     }
 
     private static void edit_nullContent(String accessToken, UUID textId) {

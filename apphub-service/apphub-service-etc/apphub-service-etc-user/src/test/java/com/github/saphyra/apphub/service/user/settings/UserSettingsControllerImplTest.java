@@ -25,6 +25,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -138,6 +139,30 @@ public class UserSettingsControllerImplTest {
         assertThat(userSetting.getCategory()).isEqualTo(CATEGORY);
         assertThat(userSetting.getKey()).isEqualTo(KEY);
         assertThat(userSetting.getValue()).isEqualTo(VALUE);
+
+        assertThat(result).containsEntry(KEY, "asd");
+        assertThat(result).containsEntry(DEFAULT_KEY, DEFAULT_VALUE);
+    }
+
+    @Test
+    public void setUserSettings_nullValue() {
+        SetUserSettingsRequest request = SetUserSettingsRequest.builder()
+            .category(CATEGORY)
+            .key(KEY)
+            .value(null)
+            .build();
+
+        given(properties.getSettings()).willReturn(CollectionUtils.singleValueMap(
+            CATEGORY,
+            CollectionUtils.toMap(
+                new BiWrapper<>(KEY, "asd"),
+                new BiWrapper<>(DEFAULT_KEY, DEFAULT_VALUE)
+            )
+        ));
+
+        Map<String, String> result = underTest.setUserSettings(request, accessToken);
+
+        then(userSettingDao).should().delete(USER_ID, CATEGORY, KEY);
 
         assertThat(result).containsEntry(KEY, "asd");
         assertThat(result).containsEntry(DEFAULT_KEY, DEFAULT_VALUE);

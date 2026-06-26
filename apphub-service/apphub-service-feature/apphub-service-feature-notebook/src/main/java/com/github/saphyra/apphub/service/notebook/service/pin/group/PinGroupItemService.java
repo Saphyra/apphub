@@ -1,10 +1,8 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,29 +15,29 @@ import java.util.UUID;
 public class PinGroupItemService {
     private final ListItemDao listItemDao;
     private final PinGroupDao pinGroupDao;
-    private final PinMappingDao pinMappingDao;
-    private final PinMappingFactory pinMappingFactory;
 
     public void addItem(UUID userId, UUID pinGroupId, UUID listItemId) {
         listItemDao.findByIdValidated(userId, listItemId); //Validate existing and own
-        pinGroupDao.findByIdValidated(pinGroupId); //Validate existing and own
+        PinGroup pinGroup = pinGroupDao.findByIdValidated(userId, pinGroupId); //Validate existing and own
 
-        if (pinMappingDao.findByPinGroupIdAndListItemId(pinGroupId, listItemId).isPresent()) {
+        if (pinGroup.getListItemIds().contains(listItemId)) {
             log.debug("List item {} is already in PinGroup {}", listItemId, pinGroupId);
             return;
         }
 
-        PinMapping pinMapping = pinMappingFactory.create(userId, pinGroupId, listItemId);
-        pinMappingDao.save(pinMapping);
+        pinGroup.addListItem(listItemId);
+        pinGroupDao.save(pinGroup);
     }
 
     public void removeItem(UUID userId, UUID pinGroupId, UUID listItemId) {
-        PinMapping pinMapping = pinMappingDao.findByPinGroupIdAndListItemIdValidated(pinGroupId, listItemId);
+        PinGroup pinGroup = pinGroupDao.findByIdValidated(userId, pinGroupId);
 
-        if (!pinMapping.getUserId().equals(userId)) {
-            throw ExceptionFactory.forbiddenOperation(userId + " has no access to PinMapping " + pinMapping.getPinMappingId());
+        if (!pinGroup.getListItemIds().contains(listItemId)) {
+            log.debug("List item {} is not in PinGroup {}", listItemId, pinGroupId);
+            return;
         }
 
-        pinMappingDao.delete(pinMapping);
+        pinGroup.removeListItem(listItemId);
+        pinGroupDao.save(pinGroup);
     }
 }

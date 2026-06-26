@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.table.head.Table
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRow;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.table.row.TableRowDao;
 import com.github.saphyra.apphub.service.notebook.service.table.column_data.ColumnDataServiceProvider;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,6 @@ public class CheckedTableRowDeletionService {
     private final CommonListItemDao commonListItemDao;
     private final TableRowDao tableRowDao;
 
-    @Transactional
     public void deleteCheckedRows(UUID userId, UUID listItemId) {
         QuadWrapper<ListItem, List<TableHead>, List<TableRow>, List<Content>> table = commonListItemDao.findTableValidated(userId, listItemId);
 

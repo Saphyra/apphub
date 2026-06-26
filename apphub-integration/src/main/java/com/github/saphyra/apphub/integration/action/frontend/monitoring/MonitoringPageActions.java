@@ -42,4 +42,8 @@ public class MonitoringPageActions {
             .map(text -> text.split(" - ")[2])
             .toList();
     }
+
+    public static void filter(WebDriver driver, String filterText) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("monitoring-filter")), filterText);
+    }
 }

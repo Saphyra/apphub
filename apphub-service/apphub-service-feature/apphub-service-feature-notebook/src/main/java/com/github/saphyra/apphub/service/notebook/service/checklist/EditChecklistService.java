@@ -13,7 +13,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.content.Content;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.content.ContentFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,7 +35,6 @@ public class EditChecklistService {
     private final ContentFactory contentFactory;
     private final CommonListItemDao commonListItemDao;
 
-    @Transactional
     public ChecklistResponse edit(UUID userId, UUID listItemId, EditChecklistRequest request) {
         checklistValidator.validate(request);
 

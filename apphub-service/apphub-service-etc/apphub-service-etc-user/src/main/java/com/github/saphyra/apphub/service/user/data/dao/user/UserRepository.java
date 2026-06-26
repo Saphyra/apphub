@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
@@ -21,10 +22,12 @@ import software.amazon.awssdk.services.dynamodb.model.KeyType;
 import software.amazon.awssdk.services.dynamodb.model.Projection;
 import software.amazon.awssdk.services.dynamodb.model.ProjectionType;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
 import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
+import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,6 +144,19 @@ class UserRepository extends DynamoDbRepository {
         putItem(request, UserMonitoringFunctionality.SAVE_PROFILE);
     }
 
+    public void addRoleToUsers(List<String> userIds, String role) {
+        List<WriteRequest> requests = userIds.stream()
+            .map(userId -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_USER_ID, userId)).build(),
+                COLUMN_SK, AttributeValue.builder().s(String.join("#", TYPE_ROLE, role)).build()
+            ))
+            .map(item -> PutRequest.builder().item(item).build())
+            .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
+            .toList();
+
+        batchWrite(requests, UserMonitoringFunctionality.BATCH_SAVE_ROLE);
+    }
+
     void addRole(String userId, String role) {
         PutItemRequest request = PutItemRequest.builder()
             .tableName(tableName)
@@ -176,6 +192,38 @@ class UserRepository extends DynamoDbRepository {
             .build();
 
         deleteItem(request, UserMonitoringFunctionality.UNMARK_USER_FOR_DELETION);
+    }
+
+    public List<BiWrapper<String, String>> getRoles(String role) {
+        ScanRequest request = ScanRequest.builder()
+            .tableName(tableName)
+            .filterExpression("#sk = :role")
+            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+            .expressionAttributeValues(Map.of(":role", AttributeValue.builder().s(String.join("#", TYPE_ROLE, role)).build()))
+            .build();
+
+        return scan(request, UserMonitoringFunctionality.SCAN_ROLES)
+            .stream()
+            .map(record -> new BiWrapper<>(
+                record.get(COLUMN_PK).s().split("#")[1],
+                record.get(COLUMN_SK).s().split("#")[1]
+            ))
+            .toList();
+    }
+
+    /**
+     * @param keys List<BiWrapper<UserId, Role>>
+     */
+    public void deleteRoles(List<BiWrapper<String, String>> keys) {
+        List<WriteRequest> requests = keys.stream()
+            .map(key -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_USER_ID, key.getEntity1())).build(),
+                COLUMN_SK, AttributeValue.builder().s(String.join("#", TYPE_ROLE, key.getEntity2())).build()
+            ))
+            .map(item -> WriteRequest.builder().deleteRequest(builder -> builder.key(item)).build())
+            .toList();
+
+        batchWrite(requests, UserMonitoringFunctionality.BATCH_DELETE_ROLE);
     }
 
     void deleteRole(String userId, String role) {

@@ -50,10 +50,10 @@ public class TradingDaoSupport {
         getDao(type).deleteAllTradeables(tradeables);
     }
 
-    public Tradeable create(ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, String name, Integer buyPrice, Integer sellPrice, Integer demand, Integer stock) {
+    public Tradeable create(ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, String name, Integer buyPrice, Integer sellPrice, Integer demand, Integer stock, UUID starSystemId) {
         return switch (type) {
-            case COMMODITY -> commodityFactory.create(locationType, externalReference, marketId, name, buyPrice, sellPrice, demand, stock);
-            case FC_MATERIAL -> fcMaterialFactory.create(locationType, externalReference, marketId, name, buyPrice, sellPrice, demand, stock);
+            case COMMODITY -> commodityFactory.create(locationType, externalReference, marketId, name, buyPrice, sellPrice, demand, stock, starSystemId);
+            case FC_MATERIAL -> fcMaterialFactory.create(locationType, externalReference, marketId, name, buyPrice, sellPrice, demand, stock, starSystemId);
             default -> throw createTypeNotSupportedException(type);
         };
     }

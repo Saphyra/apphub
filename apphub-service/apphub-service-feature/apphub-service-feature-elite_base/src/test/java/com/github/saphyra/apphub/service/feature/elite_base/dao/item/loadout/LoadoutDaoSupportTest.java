@@ -27,6 +27,7 @@ class LoadoutDaoSupportTest {
     private static final Long MARKET_ID = 32L;
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final String NAME = "name";
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private EquipmentDao equipmentDao;
@@ -63,21 +64,21 @@ class LoadoutDaoSupportTest {
 
     @Test
     void create_equipment() {
-        given(equipmentFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME)).willReturn(equipment);
+        given(equipmentFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).willReturn(equipment);
 
-        assertThat(underTest.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME)).isEqualTo(equipment);
+        assertThat(underTest.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).isEqualTo(equipment);
     }
 
     @Test
     void create_spaceship() {
-        given(spaceshipFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME)).willReturn(spaceship);
+        given(spaceshipFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).willReturn(spaceship);
 
-        assertThat(underTest.create(ItemType.SPACESHIP, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME)).isEqualTo(spaceship);
+        assertThat(underTest.create(ItemType.SPACESHIP, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).isEqualTo(spaceship);
     }
 
     @Test
     void create_unsupported() {
-        assertThat(catchThrowable(() -> underTest.create(ItemType.COMMODITY, null, null, null, null))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.create(ItemType.COMMODITY, null, null, null, null, STAR_SYSTEM_ID))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

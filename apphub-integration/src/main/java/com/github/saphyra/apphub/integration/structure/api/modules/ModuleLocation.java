@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.framework.endpoints.CommunityEndpoi
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.MonitoringEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.NotebookEndpoints;
+import com.github.saphyra.apphub.integration.framework.endpoints.TaskManagerEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.TrainingEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
@@ -43,6 +44,7 @@ public enum ModuleLocation {
     JAVASCRIPT("training", "javascript", TrainingEndpoints.TRAINING_JAVASCRIPT_PAGE, "JavaScript"),
     UTILS_BASE_64("development-utils", "base64", GenericEndpoints.UTILS_BASE64_PAGE, "Base64 Encoder"),
     MONITORING("admin-panel", "monitoring", MonitoringEndpoints.MONITORING_PAGE, "Monitoring"),
+    TASK_MANAGER("office", "task-manager", TaskManagerEndpoints.TASK_MANAGER_PAGE, "Task Manager"),
     ;
 
     private final String categoryId;

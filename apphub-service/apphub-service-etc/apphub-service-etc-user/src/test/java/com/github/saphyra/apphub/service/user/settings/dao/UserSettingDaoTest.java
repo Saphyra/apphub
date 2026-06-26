@@ -19,6 +19,7 @@ public class UserSettingDaoTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String CATEGORY = "category";
     private static final String USER_ID_STRING = "user-id";
+    private static final String KEY = "key";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -56,5 +57,14 @@ public class UserSettingDaoTest {
         underTest.deleteByUserId(USER_ID);
 
         then(repository).should().deleteByUserId(USER_ID_STRING);
+    }
+
+    @Test
+    void delete() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+
+        underTest.delete(USER_ID, CATEGORY, KEY);
+
+        then(repository).should().deleteById(UserSettingEntityId.builder().userId(USER_ID_STRING).category(CATEGORY).key(KEY).build());
     }
 }

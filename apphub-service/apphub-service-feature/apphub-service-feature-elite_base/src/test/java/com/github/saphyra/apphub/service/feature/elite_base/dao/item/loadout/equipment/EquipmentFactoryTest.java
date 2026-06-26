@@ -15,16 +15,18 @@ class EquipmentFactoryTest {
     private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
     private static final Long MARKET_ID = 123L;
     private static final String NAME = "name";
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @InjectMocks
     private EquipmentFactory underTest;
 
     @Test
     void create() {
-        assertThat(underTest.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME))
+        assertThat(underTest.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID))
             .returns(ItemLocationType.STATION, Equipment::getLocationType)
             .returns(EXTERNAL_REFERENCE, Equipment::getExternalReference)
             .returns(MARKET_ID, Equipment::getMarketId)
-            .returns(NAME, Equipment::getItemName);
+            .returns(NAME, Equipment::getItemName)
+            .returns(STAR_SYSTEM_ID, Equipment::getStarSystemId);
     }
 }

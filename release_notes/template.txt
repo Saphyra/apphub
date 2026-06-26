@@ -9,4 +9,6 @@
 ===ETC===
 
 ===Manual Release Steps===
-    Restart ApphubCI
+    Pre deployment
+        Restart ApphubCI
+    Post deployment

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.service.notebook.common.NotebookConstants;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,6 +67,11 @@ class TextColumnDataServiceTest {
         Throwable ex = catchThrowable(() -> underTest.validateData(null));
 
         ExceptionValidator.validateInvalidParam(ex, "data", "must not be null");
+    }
+
+    @Test
+    void validateData_tooLong() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.validateData("a".repeat(NotebookConstants.MAX_CONTENT_LENGTH + 1)), "data", "too long");
     }
 
     @Test

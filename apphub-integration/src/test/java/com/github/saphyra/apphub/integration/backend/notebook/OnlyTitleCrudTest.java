@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.ListItemAct
 import com.github.saphyra.apphub.integration.action.backend.notebook.OnlyTitleActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateOnlyTitleRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTextRequest;
@@ -30,14 +31,23 @@ public class OnlyTitleCrudTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        create_emptyTitle(accessToken);
+        create_blankTitle(accessToken);
+        create_tooLongTitle(accessToken);
         create_parentNotFound(accessToken);
         UUID listItemId = create(accessToken);
         create_parentNotCategory(accessToken);
         delete(accessToken, listItemId);
     }
 
-    private static void create_emptyTitle(String accessToken) {
+    private static void create_tooLongTitle(String accessToken) {
+        CreateOnlyTitleRequest request = CreateOnlyTitleRequest.builder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+            .build();
+        Response create_emptyTitleResponse = OnlyTitleActions.getCreateOnlyTitleResponse(getServerPort(), accessToken, request);
+        verifyInvalidParam(create_emptyTitleResponse, "title", "too long");
+    }
+
+    private static void create_blankTitle(String accessToken) {
         CreateOnlyTitleRequest create_emptyTitleRequest = CreateOnlyTitleRequest.builder()
             .title(" ")
             .build();

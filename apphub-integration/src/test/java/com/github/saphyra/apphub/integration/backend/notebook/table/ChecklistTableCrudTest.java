@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.TableAction
 import com.github.saphyra.apphub.integration.action.backend.notebook.TextActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CategoryTreeView;
@@ -48,16 +49,19 @@ public class ChecklistTableCrudTest extends BackEndTest {
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
         create_blankTitle(accessToken);
+        create_tooLongTitle(accessToken);
         create_nullListItemType(accessToken);
         create_parentNotFound(accessToken);
         create_parentNotCategory(accessToken);
         create_blankColumnName(accessToken);
+        create_tooLongColumnName(accessToken);
         create_nullRows(accessToken);
         create_nullRowIndex(accessToken);
         create_nullColumns(accessToken);
         create_nullChecked(accessToken);
         create_incorrectColumnAmount(accessToken);
         create_nullColumnValue(accessToken);
+        create_tooLongColumnValue(accessToken);
         create_nullColumnType(accessToken);
         create_nullColumnIndex(accessToken);
 
@@ -69,10 +73,13 @@ public class ChecklistTableCrudTest extends BackEndTest {
         get_listItemNotFound(accessToken);
 
         edit_blankTitle(accessToken, listItemId, tableResponse);
+        edit_tooLongTitle(accessToken, listItemId, tableResponse);
         edit_blankColumnName(accessToken, listItemId, tableResponse);
+        edit_tooLongColumnName(accessToken, listItemId, tableResponse);
         edit_differentColumnAmount(accessToken, listItemId, tableResponse);
         edit_nullChecked(accessToken, listItemId, tableResponse);
         edit_nullColumnValue(accessToken, listItemId, tableResponse);
+        edit_tooLongColumnValue(accessToken, listItemId, tableResponse);
         edit_tableHeadNotFound(accessToken, listItemId, tableResponse);
         edit_columnNotFound(accessToken, listItemId, tableResponse);
         edit_listItemNotFound(accessToken, tableResponse);
@@ -102,64 +109,32 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static void create_blankTitle(String accessToken) {
-        CreateTableRequest create_blankTitleRequest = CreateTableRequest.builder()
+        CreateTableRequest create_blankTitleRequest = validCreateRequest().toBuilder()
             .title(" ")
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
             .build();
         Response create_blankTitleResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankTitleRequest);
         verifyInvalidParam(create_blankTitleResponse, "title", "must not be null or blank");
     }
 
+    private static void create_tooLongTitle(String accessToken) {
+        CreateTableRequest create_blankTitleRequest = validCreateRequest().toBuilder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1))
+            .build();
+        Response create_blankTitleResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankTitleRequest);
+        verifyInvalidParam(create_blankTitleResponse, "title", "too long");
+    }
+
     private static void create_nullListItemType(String accessToken) {
-        CreateTableRequest create_nullListItemTypeRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
+        CreateTableRequest create_nullListItemTypeRequest = validCreateRequest().toBuilder()
             .listItemType(null)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
             .build();
         Response create_nullListItemTypeResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullListItemTypeRequest);
         verifyInvalidParam(create_nullListItemTypeResponse, "listItemType", "must not be null");
     }
 
     private static void create_parentNotFound(String accessToken) {
-        CreateTableRequest create_parentNotFoundRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
+        CreateTableRequest create_parentNotFoundRequest = validCreateRequest().toBuilder()
             .parent(UUID.randomUUID())
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
             .build();
         Response create_parentNotFoundResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_parentNotFoundRequest);
         verifyErrorResponse(create_parentNotFoundResponse, 404, ErrorCode.CATEGORY_NOT_FOUND);
@@ -167,56 +142,31 @@ public class ChecklistTableCrudTest extends BackEndTest {
 
     private static void create_parentNotCategory(String accessToken) {
         UUID notCategoryParentId = TextActions.createText(getServerPort(), accessToken, CreateTextRequest.builder().title("title").content("").build());
-        CreateTableRequest create_parentNotCategoryRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
+        CreateTableRequest create_parentNotCategoryRequest = validCreateRequest().toBuilder()
             .parent(notCategoryParentId)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
             .build();
         Response create_parentNotCategoryResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_parentNotCategoryRequest);
         verifyErrorResponse(create_parentNotCategoryResponse, 422, ErrorCode.INVALID_TYPE);
     }
 
     private static void create_blankColumnName(String accessToken) {
-        CreateTableRequest create_blankColumnNameRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(" ")
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
+        CreateTableRequest create_blankColumnNameRequest = validCreateRequest().toBuilder()
+            .tableHeads(List.of(validCreateTableHead().toBuilder().content(" ").build()))
             .build();
         Response create_blankColumnNameResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankColumnNameRequest);
         verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", "must not be null or blank");
     }
 
+    private static void create_tooLongColumnName(String accessToken) {
+        CreateTableRequest create_blankColumnNameRequest = validCreateRequest().toBuilder()
+            .tableHeads(List.of(validCreateTableHead().toBuilder().content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1)).build()))
+            .build();
+        Response create_blankColumnNameResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_blankColumnNameRequest);
+        verifyInvalidParam(create_blankColumnNameResponse, "tableHead.content", "too long");
+    }
+
     private static void create_nullRows(String accessToken) {
-        CreateTableRequest request = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
+        CreateTableRequest request = validCreateRequest().toBuilder()
             .rows(null)
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
@@ -224,88 +174,35 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static void create_nullRowIndex(String accessToken) {
-        CreateTableRequest request = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(null)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
+        CreateTableRequest request = validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder().rowIndex(null).build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.rowIndex", "must not be null");
     }
 
     private static void create_nullColumns(String accessToken) {
-        CreateTableRequest request = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .columns(null)
-                .build()
-            ))
+        CreateTableRequest request = validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder().columns(null).build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.columns", "must not be null");
     }
 
     private static void create_nullChecked(String accessToken) {
-        CreateTableRequest request = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .checked(null)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
+        CreateTableRequest request = validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder().checked(null).build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
         verifyInvalidParam(response, "row.checked", "must not be null");
     }
 
     private static void create_incorrectColumnAmount(String accessToken) {
-        CreateTableRequest create_incorrectColumnAmountRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .checked(true)
+        CreateTableRequest create_incorrectColumnAmountRequest = validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder()
                 .columns(List.of(
-                    TableColumnModel.builder()
-                        .columnIndex(0)
-                        .columnType(ColumnType.TEXT)
-                        .data(COLUMN_VALUE)
-                        .build(),
-                    TableColumnModel.builder()
-                        .columnIndex(1)
-                        .columnType(ColumnType.TEXT)
-                        .data(COLUMN_VALUE)
-                        .build()
+                    validCreateTableColumn(),
+                    validCreateTableColumn().toBuilder().columnIndex(1).build()
                 ))
                 .build()))
             .build();
@@ -314,43 +211,21 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static void create_nullColumnValue(String accessToken) {
-        CreateTableRequest create_nullColumnValueRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .checked(true)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(null)
-                    .build()))
-                .build()))
-            .build();
+        CreateTableRequest create_nullColumnValueRequest = createRequestWithInvalidColumnData(null);
         Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
         verifyInvalidParam(create_nullColumnValueResponse, "data", "must not be null");
     }
 
+    private static void create_tooLongColumnValue(String accessToken) {
+        CreateTableRequest create_nullColumnValueRequest = createRequestWithInvalidColumnData("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1));
+        Response create_nullColumnValueResponse = TableActions.getCreateTableResponse(getServerPort(), accessToken, create_nullColumnValueRequest);
+        verifyInvalidParam(create_nullColumnValueResponse, "data", "too long");
+    }
+
     private static void create_nullColumnType(String accessToken) {
-        CreateTableRequest request = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .checked(true)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(null)
-                    .data("a")
-                    .build()))
+        CreateTableRequest request = validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder()
+                .columns(List.of(validCreateTableColumn().toBuilder().columnType(null).data("a").build()))
                 .build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
@@ -358,21 +233,9 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static void create_nullColumnIndex(String accessToken) {
-        CreateTableRequest request = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .checked(true)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(null)
-                    .columnType(ColumnType.TEXT)
-                    .data("")
-                    .build()))
+        CreateTableRequest request = validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder()
+                .columns(List.of(validCreateTableColumn().toBuilder().columnIndex(null).data("").build()))
                 .build()))
             .build();
         Response response = TableActions.getCreateTableResponse(getServerPort(), accessToken, request);
@@ -380,23 +243,7 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static BiWrapper<TableResponse, UUID> create(String accessToken) {
-        CreateTableRequest createRequest = CreateTableRequest.builder()
-            .title(TABLE_TITLE)
-            .listItemType(ListItemType.CHECKLIST_TABLE)
-            .tableHeads(List.of(TableHeadModel.builder()
-                .columnIndex(0)
-                .content(COLUMN_NAME)
-                .build()))
-            .rows(List.of(TableRowModel.builder()
-                .rowIndex(0)
-                .checked(true)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .data(COLUMN_VALUE)
-                    .build()))
-                .build()))
-            .build();
+        CreateTableRequest createRequest = validCreateRequest();
         TableActions.createTable(getServerPort(), accessToken, createRequest);
         UUID listItemId = CategoryActions.getChildrenOfCategory(getServerPort(), accessToken, null)
             .getChildren()
@@ -426,89 +273,42 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static void edit_blankTitle(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_blankTitleRequest = EditTableRequest.builder()
+        EditTableRequest edit_blankTitleRequest = validEditRequest(tableResponse).toBuilder()
             .title(" ")
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(NEW_COLUMN_NAME)
-                    .build()))
-                .build()
-            ))
             .build();
         Response edit_blankTitleResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankTitleRequest);
         verifyInvalidParam(edit_blankTitleResponse, "title", "must not be null or blank");
     }
 
+    private static void edit_tooLongTitle(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        EditTableRequest edit_blankTitleRequest = validEditRequest(tableResponse).toBuilder()
+            .title("a".repeat(Constants.MAX_LIST_ITEM_TITLE_LENGTH + 1))
+            .build();
+        Response edit_blankTitleResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankTitleRequest);
+        verifyInvalidParam(edit_blankTitleResponse, "title", "too long");
+    }
+
     private static void edit_blankColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_blankColumnNameRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(" ")
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(NEW_COLUMN_NAME)
-                    .build()))
-                .build()
-            ))
+        EditTableRequest edit_blankColumnNameRequest = validEditRequest(tableResponse).toBuilder()
+            .tableHeads(List.of(validEditTableHead(tableResponse).toBuilder().content(" ").build()))
             .build();
         Response edit_blankColumnNameResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankColumnNameRequest);
         verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", "must not be null or blank");
     }
 
+    private static void edit_tooLongColumnName(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        EditTableRequest edit_blankColumnNameRequest = validEditRequest(tableResponse).toBuilder()
+            .tableHeads(List.of(validEditTableHead(tableResponse).toBuilder().content("a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1)).build()))
+            .build();
+        Response edit_blankColumnNameResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_blankColumnNameRequest);
+        verifyInvalidParam(edit_blankColumnNameResponse, "tableHead.content", "too long");
+    }
+
     private static void edit_differentColumnAmount(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_differentColumnAmountRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
+        EditTableRequest edit_differentColumnAmountRequest = validEditRequest(tableResponse).toBuilder()
+            .rows(List.of(validEditTableRow(tableResponse).toBuilder()
                 .columns(List.of(
-                    TableColumnModel.builder()
-                        .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                        .columnIndex(0)
-                        .columnType(ColumnType.TEXT)
-                        .itemType(ItemType.EXISTING)
-                        .data(NEW_COLUMN_NAME)
-                        .build(),
+                    validEditTableColumn(tableResponse),
                     TableColumnModel.builder()
                         .columnIndex(0)
                         .columnType(ColumnType.TEXT)
@@ -516,161 +316,52 @@ public class ChecklistTableCrudTest extends BackEndTest {
                         .data("asd")
                         .build()
                 ))
-                .build()
-            ))
+                .build()))
             .build();
         Response edit_differentColumnAmountResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_differentColumnAmountRequest);
         verifyInvalidParam(edit_differentColumnAmountResponse, "row.columns", "item count mismatch");
     }
 
     private static void edit_nullChecked(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_differentColumnAmountRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(null)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(
-                    TableColumnModel.builder()
-                        .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                        .columnIndex(0)
-                        .columnType(ColumnType.TEXT)
-                        .itemType(ItemType.EXISTING)
-                        .data(NEW_COLUMN_NAME)
-                        .build()
-                ))
-                .build()
-            ))
+        EditTableRequest edit_differentColumnAmountRequest = validEditRequest(tableResponse).toBuilder()
+            .rows(List.of(validEditTableRow(tableResponse).toBuilder().checked(null).build()))
             .build();
         Response edit_differentColumnAmountResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_differentColumnAmountRequest);
         verifyInvalidParam(edit_differentColumnAmountResponse, "row.checked", "must not be null");
     }
 
     private static void edit_nullColumnValue(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_nullColumnValueRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(null)
-                    .build()))
-                .build()
-            ))
-            .build();
+        EditTableRequest edit_nullColumnValueRequest = createEditRequestWithInvalidColumnData(tableResponse, null);
         Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
         verifyInvalidParam(edit_nullColumnValueResponse, "data", "must not be null");
     }
 
+    private static void edit_tooLongColumnValue(String accessToken, UUID listItemId, TableResponse tableResponse) {
+        EditTableRequest edit_nullColumnValueRequest = createEditRequestWithInvalidColumnData(tableResponse, "a".repeat(Constants.MAX_LIST_ITEM_CONTENT_LENGTH + 1));
+        Response edit_nullColumnValueResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_nullColumnValueRequest);
+        verifyInvalidParam(edit_nullColumnValueResponse, "data", "too long");
+    }
+
     private static void edit_tableHeadNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_columnHeadNotFoundRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(UUID.randomUUID())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(NEW_COLUMN_NAME)
-                    .build()))
-                .build()
-            ))
+        EditTableRequest edit_columnHeadNotFoundRequest = validEditRequest(tableResponse).toBuilder()
+            .tableHeads(List.of(validEditTableHead(tableResponse).toBuilder().tableHeadId(UUID.randomUUID()).build()))
             .build();
         Response edit_columnHeadNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_columnHeadNotFoundRequest);
         ResponseValidator.verifyErrorResponse(edit_columnHeadNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void edit_columnNotFound(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest edit_tableJoinNotFoundRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(UUID.randomUUID())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(NEW_COLUMN_NAME)
-                    .build()))
-                .build()
-            ))
+        EditTableRequest edit_tableJoinNotFoundRequest = validEditRequest(tableResponse).toBuilder()
+            .rows(List.of(validEditTableRow(tableResponse).toBuilder()
+                .columns(List.of(validEditTableColumn(tableResponse).toBuilder().columnId(UUID.randomUUID()).build()))
+                .build()))
             .build();
         Response edit_tableJoinNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, listItemId, edit_tableJoinNotFoundRequest);
         ResponseValidator.verifyErrorResponse(edit_tableJoinNotFoundResponse, 404, ErrorCode.DATA_NOT_FOUND);
     }
 
     private static void edit_listItemNotFound(String accessToken, TableResponse tableResponse) {
-        EditTableRequest edit_listItemNotFoundRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(NEW_COLUMN_NAME)
-                    .build()))
-                .build()
-            ))
-            .build();
+        EditTableRequest edit_listItemNotFoundRequest = validEditRequest(tableResponse);
         Response edit_listItemNotFoundResponse = TableActions.getEditTableResponse(getServerPort(), accessToken, UUID.randomUUID(), edit_listItemNotFoundRequest);
         ResponseValidator.verifyErrorResponse(edit_listItemNotFoundResponse, 404, ErrorCode.LIST_ITEM_NOT_FOUND);
     }
@@ -729,30 +420,10 @@ public class ChecklistTableCrudTest extends BackEndTest {
     }
 
     private static TableResponse edit_columnModified(String accessToken, UUID listItemId, TableResponse tableResponse) {
-        EditTableRequest editTableRequest = EditTableRequest.builder()
-            .title(NEW_TITLE)
-            .tableHeads(
-                List.of(TableHeadModel.builder()
-                    .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
-                    .columnIndex(0)
-                    .content(NEW_COLUMN_NAME)
-                    .type(ItemType.EXISTING)
-                    .build()
-                ))
-            .rows(List.of(TableRowModel.builder()
-                .rowId(tableResponse.getRows().getFirst().getRowId())
-                .rowIndex(0)
-                .checked(true)
-                .itemType(ItemType.EXISTING)
-                .columns(List.of(TableColumnModel.builder()
-                    .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
-                    .columnIndex(0)
-                    .columnType(ColumnType.TEXT)
-                    .itemType(ItemType.EXISTING)
-                    .data(NEW_COLUMN_VALUE)
-                    .build()))
-                .build()
-            ))
+        EditTableRequest editTableRequest = validEditRequest(tableResponse).toBuilder()
+            .rows(List.of(validEditTableRow(tableResponse).toBuilder()
+                .columns(List.of(validEditTableColumn(tableResponse).toBuilder().data(NEW_COLUMN_VALUE).build()))
+                .build()))
             .build();
         tableResponse = TableActions.editTable(getServerPort(), accessToken, listItemId, editTableRequest)
             .getTableResponse();
@@ -762,6 +433,91 @@ public class ChecklistTableCrudTest extends BackEndTest {
         assertThat(tableResponse.getRows().getFirst().getColumns().getFirst().getData()).isEqualTo(NEW_COLUMN_VALUE);
 
         return tableResponse;
+    }
+
+    private static CreateTableRequest validCreateRequest() {
+        return CreateTableRequest.builder()
+            .title(TABLE_TITLE)
+            .listItemType(ListItemType.CHECKLIST_TABLE)
+            .tableHeads(List.of(validCreateTableHead()))
+            .rows(List.of(validCreateTableRow()))
+            .build();
+    }
+
+    private static CreateTableRequest createRequestWithInvalidColumnData(Object incorrectData) {
+        return validCreateRequest().toBuilder()
+            .rows(List.of(validCreateTableRow().toBuilder()
+                .columns(List.of(validCreateTableColumn().toBuilder().data(incorrectData).build()))
+                .build()))
+            .build();
+    }
+
+    private static TableHeadModel validCreateTableHead() {
+        return TableHeadModel.builder()
+            .columnIndex(0)
+            .content(COLUMN_NAME)
+            .build();
+    }
+
+    private static TableRowModel validCreateTableRow() {
+        return TableRowModel.builder()
+            .rowIndex(0)
+            .checked(true)
+            .columns(List.of(validCreateTableColumn()))
+            .build();
+    }
+
+    private static TableColumnModel validCreateTableColumn() {
+        return TableColumnModel.builder()
+            .columnIndex(0)
+            .columnType(ColumnType.TEXT)
+            .data(COLUMN_VALUE)
+            .build();
+    }
+
+    private static EditTableRequest validEditRequest(TableResponse tableResponse) {
+        return EditTableRequest.builder()
+            .title(NEW_TITLE)
+            .tableHeads(List.of(validEditTableHead(tableResponse)))
+            .rows(List.of(validEditTableRow(tableResponse)))
+            .build();
+    }
+
+    private static EditTableRequest createEditRequestWithInvalidColumnData(TableResponse tableResponse, Object incorrectData) {
+        return validEditRequest(tableResponse).toBuilder()
+            .rows(List.of(validEditTableRow(tableResponse).toBuilder()
+                .columns(List.of(validEditTableColumn(tableResponse).toBuilder().data(incorrectData).build()))
+                .build()))
+            .build();
+    }
+
+    private static TableHeadModel validEditTableHead(TableResponse tableResponse) {
+        return TableHeadModel.builder()
+            .tableHeadId(tableResponse.getTableHeads().getFirst().getTableHeadId())
+            .columnIndex(0)
+            .content(NEW_COLUMN_NAME)
+            .type(ItemType.EXISTING)
+            .build();
+    }
+
+    private static TableRowModel validEditTableRow(TableResponse tableResponse) {
+        return TableRowModel.builder()
+            .rowId(tableResponse.getRows().getFirst().getRowId())
+            .rowIndex(0)
+            .checked(true)
+            .itemType(ItemType.EXISTING)
+            .columns(List.of(validEditTableColumn(tableResponse)))
+            .build();
+    }
+
+    private static TableColumnModel validEditTableColumn(TableResponse tableResponse) {
+        return TableColumnModel.builder()
+            .columnId(tableResponse.getRows().getFirst().getColumns().getFirst().getColumnId())
+            .columnIndex(0)
+            .columnType(ColumnType.TEXT)
+            .itemType(ItemType.EXISTING)
+            .data(NEW_COLUMN_NAME)
+            .build();
     }
 
     private static void delete(String accessToken, UUID listItemId) {

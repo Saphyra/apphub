@@ -77,7 +77,8 @@ class CommodityMessageProcessor implements MessageProcessor {
                 saveResult.getLocationType(),
                 saveResult.getExternalReference(),
                 commodityMessage.getMarketId(),
-                commodityMessage.getCommodities()
+                commodityMessage.getCommodities(),
+                starSystem.getId()
             ),
             Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_COMMODITY_MESSAGE_SAVE_COMMODITIES.name()

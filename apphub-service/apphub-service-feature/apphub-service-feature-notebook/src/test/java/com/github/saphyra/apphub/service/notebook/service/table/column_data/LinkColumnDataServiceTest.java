@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.notebook.service.table.column_data;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.table.ColumnType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.service.notebook.common.NotebookConstants;
 import com.github.saphyra.apphub.service.notebook.service.table.dto.Link;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -68,6 +69,16 @@ class LinkColumnDataServiceTest {
     }
 
     @Test
+    void validateData_labelTooLong() {
+        Link link = Link.builder().label("a".repeat(NotebookConstants.MAX_CONTENT_LENGTH + 1)).url(URL).build();
+        given(objectMapper.convertValue(DATA, Link.class)).willReturn(link);
+
+        Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
+
+        ExceptionValidator.validateInvalidParam(ex, "link.label", "too long");
+    }
+
+    @Test
     void validateData_nullUrl() {
         Link link = Link.builder().label(LABEL).url(null).build();
         given(objectMapper.convertValue(DATA, Link.class)).willReturn(link);
@@ -75,6 +86,16 @@ class LinkColumnDataServiceTest {
         Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
 
         ExceptionValidator.validateInvalidParam(ex, "link.url", "must not be null");
+    }
+
+    @Test
+    void validateData_tooLongUrl() {
+        Link link = Link.builder().label(LABEL).url("a".repeat(NotebookConstants.MAX_CONTENT_LENGTH + 1)).build();
+        given(objectMapper.convertValue(DATA, Link.class)).willReturn(link);
+
+        Throwable ex = catchThrowable(() -> underTest.validateData(DATA));
+
+        ExceptionValidator.validateInvalidParam(ex, "link.url", "too long");
     }
 
     @Test

@@ -19,13 +19,14 @@ class FcMaterialFactoryTest {
     private static final Integer SELL_PRICE = 3;
     private static final Integer DEMAND = 4;
     private static final Integer STOCK = 5;
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @InjectMocks
     private FcMaterialFactory underTest;
 
     @Test
     void create() {
-        assertThat(underTest.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK))
+        assertThat(underTest.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID))
             .returns(ItemLocationType.STATION, FcMaterial::getLocationType)
             .returns(EXTERNAL_REFERENCE, FcMaterial::getExternalReference)
             .returns(MARKET_ID, FcMaterial::getMarketId)
@@ -33,6 +34,7 @@ class FcMaterialFactoryTest {
             .returns(BUY_PRICE, FcMaterial::getBuyPrice)
             .returns(SELL_PRICE, FcMaterial::getSellPrice)
             .returns(DEMAND, FcMaterial::getDemand)
-            .returns(STOCK, FcMaterial::getStock);
+            .returns(STOCK, FcMaterial::getStock)
+            .returns(STAR_SYSTEM_ID, FcMaterial::getStarSystemId);
     }
 }

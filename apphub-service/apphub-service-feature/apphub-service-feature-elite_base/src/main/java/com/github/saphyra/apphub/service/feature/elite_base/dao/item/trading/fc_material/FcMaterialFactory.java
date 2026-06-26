@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Component
 public class FcMaterialFactory {
-    public FcMaterial create(ItemLocationType locationType, UUID externalReference, Long marketId, String name, Integer buyPrice, Integer sellPrice, Integer demand, Integer stock) {
+    public FcMaterial create(ItemLocationType locationType, UUID externalReference, Long marketId, String name, Integer buyPrice, Integer sellPrice, Integer demand, Integer stock, UUID starSystemId) {
         return FcMaterial.builder()
             .locationType(locationType)
             .externalReference(externalReference)
@@ -17,6 +17,7 @@ public class FcMaterialFactory {
             .sellPrice(sellPrice)
             .demand(demand)
             .stock(stock)
+            .starSystemId(starSystemId)
             .build();
     }
 }

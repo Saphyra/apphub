@@ -5,7 +5,6 @@ import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalen
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelFactory;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,6 @@ public class LabelService {
         return domain.getLabelId();
     }
 
-    @Transactional
     public void deleteLabel(UUID userId, UUID labelId) {
         commonCalendarDao.deleteLabel(userId, labelId);
     }

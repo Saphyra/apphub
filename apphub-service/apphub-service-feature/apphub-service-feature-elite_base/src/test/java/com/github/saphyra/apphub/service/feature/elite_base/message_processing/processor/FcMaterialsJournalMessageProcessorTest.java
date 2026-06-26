@@ -35,6 +35,7 @@ class FcMaterialsJournalMessageProcessorTest {
     private static final Integer PRICE = 32143;
     private static final Integer STOCK = 56;
     private static final Integer DEMAND = 67;
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private ObjectMapper objectMapper;
@@ -80,6 +81,7 @@ class FcMaterialsJournalMessageProcessorTest {
         given(objectMapper.readValue(MESSAGE, FcMaterialsJournalMessage.class)).willReturn(fcMaterialsJournalMessage);
         given(fleetCarrierSaver.save(TIMESTAMP, CARRIER_ID, CARRIER_NAME, MARKET_ID)).willReturn(fleetCarrier);
         given(fleetCarrier.getId()).willReturn(FLEET_CARRIER_ID);
+        given(fleetCarrier.getStarSystemId()).willReturn(STAR_SYSTEM_ID);
 
         underTest.processMessage(edMessage);
 
@@ -95,7 +97,8 @@ class FcMaterialsJournalMessageProcessorTest {
                 .sellPrice(PRICE)
                 .stock(STOCK)
                 .demand(DEMAND)
-                .build())
+                .build()),
+            STAR_SYSTEM_ID
         );
     }
 }

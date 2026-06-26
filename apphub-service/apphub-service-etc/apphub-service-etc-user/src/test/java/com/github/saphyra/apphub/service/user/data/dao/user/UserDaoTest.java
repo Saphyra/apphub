@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.dao.user;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
@@ -259,16 +260,16 @@ class UserDaoTest {
 
         underTest.addRoleToAll(Role.ACCESS.name());
 
-        then(userRepository).should().addRole(USER_ID.toString(), Role.ACCESS.name());
+        then(userRepository).should().addRoleToUsers(List.of(USER_ID.toString()), Role.ACCESS.name());
     }
 
     @Test
     void removeRoleFromAll() {
-        given(userRepository.getAllUserIds()).willReturn(List.of(USER_ID.toString()));
+        given(userRepository.getRoles(Role.ACCESS.name())).willReturn(List.of(new BiWrapper<>(USER_ID.toString(), Role.ACCESS.name())));
 
         underTest.deleteRoleFromAll(Role.ACCESS.name());
 
-        then(userRepository).should().deleteRole(USER_ID.toString(), Role.ACCESS.name());
+        then(userRepository).should().deleteRoles(List.of(new BiWrapper<>(USER_ID.toString(), Role.ACCESS.name())));
     }
 
     @Test

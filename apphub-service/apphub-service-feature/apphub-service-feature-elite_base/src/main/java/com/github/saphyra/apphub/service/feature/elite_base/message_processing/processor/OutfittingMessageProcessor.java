@@ -67,7 +67,8 @@ class OutfittingMessageProcessor implements MessageProcessor {
                 saveResult.getLocationType(),
                 saveResult.getExternalReference(),
                 outfittingMessage.getMarketId(),
-                CollectionUtils.toList(outfittingMessage.getModules())
+                CollectionUtils.toList(outfittingMessage.getModules()),
+                starSystem.getId()
             ),
             Feature.ELITE_BASE_MESSAGE_PROCESSING,
             PerformanceReportingKey.PROCESS_OUTFITTING_MESSAGE_SAVE_LOADOUT.name()

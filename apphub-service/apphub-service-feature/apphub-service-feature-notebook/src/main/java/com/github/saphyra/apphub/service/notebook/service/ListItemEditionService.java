@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListIt
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
 import com.github.saphyra.apphub.service.notebook.service.validator.ListItemRequestValidator;
 import com.github.saphyra.apphub.service.notebook.service.validator.TextValidator;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,7 +23,6 @@ public class ListItemEditionService {
     private final ListItemDao listItemDao;
     private final ListItemRequestValidator listItemRequestValidator;
 
-    @Transactional
     public void edit(UUID userId, UUID listItemId, EditListItemRequest request) {
         listItemRequestValidator.validate(userId, request.getTitle(), request.getParent());
 

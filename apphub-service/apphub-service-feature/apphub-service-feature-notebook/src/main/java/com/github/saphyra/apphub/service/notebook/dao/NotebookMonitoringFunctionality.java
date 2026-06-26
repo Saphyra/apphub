@@ -40,6 +40,15 @@ public enum NotebookMonitoringFunctionality implements MonitoringFunctionality {
     SAVE_CONTENTS,
     DELETE_CONTENTS_BY_LIST_ITEM_ID_AND_BATCH_INDEXES,
     GET_CONTENTS_BY_LIST_ITEM_ID,
+
+    //Pin Group
+    SAVE_PIN_GROUP,
+    FIND_PIN_GROUP,
+    GET_PIN_GROUPS_BY_USER_ID,
+    DELETE_PIN_GROUP,
+    SAVE_PIN_GROUPS,
+    GET_PIN_GROUP_IDS_BY_USER_ID,
+    DELETE_PIN_GROUPS_BY_USER_ID,
     ;
 
     @Override

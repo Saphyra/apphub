@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.feature.training.config;
 
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
+import com.github.saphyra.apphub.lib.common_util.SleepService;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
-import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @ComponentScan(basePackages = "com.github.saphyra.util")
@@ -32,5 +32,10 @@ class TrainingBeanConfiguration {
         templateResolver.setOrder(0);
 
         return templateResolver;
+    }
+
+    @Bean
+    SleepService sleepService() {
+        return new SleepService();
     }
 }

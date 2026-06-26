@@ -8,13 +8,7 @@
     </parent>
 
     <artifactId>apphub-lib-concurrency</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
     <name>apphub-lib-concurrency</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -36,7 +30,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-
-    <build>
-    </build>
 </project>

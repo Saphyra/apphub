@@ -31,6 +31,7 @@ class TradingDaoSupportTest {
     private static final Integer SELL_PRICE = 456;
     private static final Integer DEMAND = 789;
     private static final Integer STOCK = 1011;
+    private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
 
     @Mock
     private CommodityDao commodityDao;
@@ -79,21 +80,22 @@ class TradingDaoSupportTest {
 
     @Test
     void create_commodity() {
-        given(commodityFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK)).willReturn(commodity);
+        given(commodityFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).willReturn(commodity);
 
-        assertThat(underTest.create(ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK)).isEqualTo(commodity);
+        assertThat(underTest.create(ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).isEqualTo(commodity);
     }
 
     @Test
     void create_fcMaterial() {
-        given(fcMaterialFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK)).willReturn(fcMaterial);
+        given(fcMaterialFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).willReturn(fcMaterial);
 
-        assertThat(underTest.create(ItemType.FC_MATERIAL, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK)).isEqualTo(fcMaterial);
+        assertThat(underTest.create(ItemType.FC_MATERIAL, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).isEqualTo(fcMaterial);
     }
 
     @Test
     void create_unsupported() {
-        assertThat(catchThrowable(() -> underTest.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)))
+            .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

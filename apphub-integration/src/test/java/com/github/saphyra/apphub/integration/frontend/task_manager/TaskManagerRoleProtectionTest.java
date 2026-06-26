@@ -1,0 +1,40 @@
+package com.github.saphyra.apphub.integration.frontend.task_manager;
+
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
+import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
+import com.github.saphyra.apphub.integration.core.SeleniumTest;
+import com.github.saphyra.apphub.integration.framework.CommonUtils;
+import com.github.saphyra.apphub.integration.framework.Constants;
+import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.endpoints.TaskManagerEndpoints;
+import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+public class TaskManagerRoleProtectionTest extends SeleniumTest {
+    @Test(dataProvider = "roleDataProvider", groups = {"fe", "notebook", "role-protection"})
+    public void taskManagerRoleProtection(String role) {
+        WebDriver driver = extractDriver();
+
+        Navigation.toIndexPage(getServerPort(), driver);
+        RegistrationParameters userData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(driver, userData);
+
+        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
+
+        CommonUtils.verifyMissingRole(getServerPort(), driver, TaskManagerEndpoints.TASK_MANAGER_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, TaskManagerEndpoints.TASK_MANAGER_CREATE_ORGANIZATION_PAGE);
+        CommonUtils.verifyMissingRole(getServerPort(), driver, TaskManagerEndpoints.TASK_MANAGER_ORGANIZATION_INDEX_PAGE);
+    }
+
+    @DataProvider(parallel = true)
+    public Object[][] roleDataProvider() {
+        return new Object[][]{
+            new Object[]{Constants.ROLE_TASK_MANAGER},
+            new Object[]{Constants.ROLE_ACCESS}
+        };
+    }
+}

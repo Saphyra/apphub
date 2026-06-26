@@ -26,7 +26,7 @@ class ContentRepository extends DynamoDbRepository {
     private final ContentMapper mapper;
 
     ContentRepository(NotebookDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ContentMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getListItemTableName(), context);
         this.mapper = mapper;
     }
 

@@ -1,22 +1,21 @@
 package com.github.saphyra.apphub.service.notebook.service.pin.group;
 
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.group.PinGroupDao;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMapping;
-import com.github.saphyra.apphub.service.notebook.dao.pin.mapping.PinMappingDao;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroup;
+import com.github.saphyra.apphub.service.notebook.dao.pin_group.PinGroupDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
-import static org.assertj.core.api.AssertionsForClassTypes.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class PinGroupItemServiceTest {
@@ -30,60 +29,55 @@ class PinGroupItemServiceTest {
     @Mock
     private PinGroupDao pinGroupDao;
 
-    @Mock
-    private PinMappingDao pinMappingDao;
-
-    @Mock
-    private PinMappingFactory pinMappingFactory;
-
     @InjectMocks
     private PinGroupItemService underTest;
 
     @Mock
-    private PinMapping pinMapping;
+    private PinGroup pinGroup;
 
     @Test
     void addItem_alreadyInPinGroup() {
-        given(pinMappingDao.findByPinGroupIdAndListItemId(PIN_GROUP_ID, LIST_ITEM_ID)).willReturn(Optional.of(pinMapping));
+        given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
+        given(pinGroup.getListItemIds()).willReturn(Set.of(LIST_ITEM_ID));
 
         underTest.addItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
 
         then(listItemDao).should().findByIdValidated(USER_ID, LIST_ITEM_ID);
-        then(pinGroupDao).should().findByIdValidated(PIN_GROUP_ID);
-
-
-        then(pinMappingFactory).shouldHaveNoInteractions();
+        then(pinGroup).should(never()).addListItem(any());
+        then(pinGroupDao).should(never()).save(any());
     }
 
     @Test
     void addItem() {
-        given(pinMappingDao.findByPinGroupIdAndListItemId(PIN_GROUP_ID, LIST_ITEM_ID)).willReturn(Optional.empty());
-        given(pinMappingFactory.create(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID)).willReturn(pinMapping);
+        given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
+        given(pinGroup.getListItemIds()).willReturn(Set.of());
 
         underTest.addItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
 
         then(listItemDao).should().findByIdValidated(USER_ID, LIST_ITEM_ID);
-        then(pinGroupDao).should().findByIdValidated(PIN_GROUP_ID);
-        then(pinMappingDao).should().save(pinMapping);
+        then(pinGroup).should().addListItem(LIST_ITEM_ID);
+        then(pinGroupDao).should().save(pinGroup);
     }
 
     @Test
-    void removeItem_forbiddenOperation() {
-        given(pinMappingDao.findByPinGroupIdAndListItemIdValidated(PIN_GROUP_ID, LIST_ITEM_ID)).willReturn(pinMapping);
-        given(pinMapping.getUserId()).willReturn(UUID.randomUUID());
+    void removeItem_notInPinGroup() {
+        given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
+        given(pinGroup.getListItemIds()).willReturn(Set.of());
 
-        Throwable ex = catchThrowable(() -> underTest.removeItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID));
+        underTest.removeItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
 
-        ExceptionValidator.validateForbiddenOperation(ex);
+        then(pinGroup).should(never()).removeListItem(any());
+        then(pinGroupDao).should(never()).save(any());
     }
 
     @Test
     void removeItem() {
-        given(pinMappingDao.findByPinGroupIdAndListItemIdValidated(PIN_GROUP_ID, LIST_ITEM_ID)).willReturn(pinMapping);
-        given(pinMapping.getUserId()).willReturn(USER_ID);
+        given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
+        given(pinGroup.getListItemIds()).willReturn(Set.of(LIST_ITEM_ID));
 
         underTest.removeItem(USER_ID, PIN_GROUP_ID, LIST_ITEM_ID);
 
-        then(pinMappingDao).should().delete(pinMapping);
+        then(pinGroup).should().removeListItem(LIST_ITEM_ID);
+        then(pinGroupDao).should().save(pinGroup);
     }
 }

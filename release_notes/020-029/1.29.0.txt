@@ -1,0 +1,37 @@
+===FEATURES===
+    Monitoring
+        Filter diagrams
+        Monitor error reports
+    Notebook
+        Copy list item title
+
+===BUGFIXES===
+    Integration
+        Run RolesForAll tests solo
+    EliteBase
+        Fill starSystemId in Loadout and Commodity records
+
+===PLATFORM CHANGES===
+    Notebook
+        Pin to DynamoDB
+
+===TECHNICAL DEBTS===
+    Calendar
+        Remove PSQL
+    User
+        Drop backup-role change set
+        RoleForAll is more efficient
+    Notebook
+        Limit size of contents
+
+===ETC===
+    Test DynamoDB connection before running integration tests
+    Delete service encryption
+
+===Manual Release Steps===
+    Pre deployment
+        Backup database
+        Restart ApphubCI
+    Post deployment
+        Delete schema calendar
+        Delete schema notebook
