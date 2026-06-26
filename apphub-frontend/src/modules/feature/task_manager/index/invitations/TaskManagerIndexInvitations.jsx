@@ -71,7 +71,7 @@ const TaskManagerIndexInvitations = ({ setDisplaySpinner, localizationHandler, s
                 [
                     <Button
                         key="accept"
-                        id="task-manager-index-invitation-accept-confirmation-dialog-accept-button"
+                        id="task-manager-index-invitation-accept-confirmation-dialog-confirm-button"
                         label={localizationHandler.get("accept")}
                         onclick={() => acceptInvitation(invitation)}
                     />,
@@ -100,7 +100,7 @@ const TaskManagerIndexInvitations = ({ setDisplaySpinner, localizationHandler, s
                 [
                     <Button
                         key="reject"
-                        id="task-manager-index-invitation-reject-confirmation-dialog-reject-button"
+                        id="task-manager-index-invitation-reject-confirmation-dialog-confirm-button"
                         label={localizationHandler.get("reject")}
                         onclick={() => rejectInvitation(invitation)}
                     />,

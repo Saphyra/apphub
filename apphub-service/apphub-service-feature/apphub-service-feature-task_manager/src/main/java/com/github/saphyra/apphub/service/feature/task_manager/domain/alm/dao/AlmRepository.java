@@ -36,9 +36,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_SK;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.GSI_ALM_SK_PK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_OBJECT;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PRINCIPAL;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.GSI_ALM_OBJECT_PRINCIPAL;
 
 @Component
 @Profile("!test")
@@ -67,10 +67,10 @@ class AlmRepository extends DynamoDbRepository {
     List<Alm> getByPrincipalAndObjectType(UUID principalId, PrincipalType principalType, ObjectType objectType) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#pk = :principal AND begins_with(#sk, :objectType)")
+            .keyConditionExpression("#principal = :principal AND begins_with(#object, :objectType)")
             .expressionAttributeNames(Map.of(
-                "#pk", COLUMN_PK,
-                "#sk", COLUMN_SK
+                "#principal", COLUMN_PRINCIPAL,
+                "#object", COLUMN_OBJECT
             ))
             .expressionAttributeValues(Map.of(
                 ":principal", AttributeValue.builder().s(principalType.name() + "#" + uuidConverter.convertDomain(principalId)).build(),
@@ -88,8 +88,8 @@ class AlmRepository extends DynamoDbRepository {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(principalType + "#" + uuidConverter.convertDomain(principalId)).build(),
-                COLUMN_SK, AttributeValue.builder().s(objectType + "#" + uuidConverter.convertDomain(objectId)).build()
+                COLUMN_PRINCIPAL, AttributeValue.builder().s(principalType + "#" + uuidConverter.convertDomain(principalId)).build(),
+                COLUMN_OBJECT, AttributeValue.builder().s(objectType + "#" + uuidConverter.convertDomain(objectId)).build()
             ))
             .build();
 
@@ -101,8 +101,8 @@ class AlmRepository extends DynamoDbRepository {
     List<Alm> getByPrincipal(UUID userId, PrincipalType principalType) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#pk = :principal")
-            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
+            .keyConditionExpression("#principal = :principal")
+            .expressionAttributeNames(Map.of("#principal", COLUMN_PRINCIPAL))
             .expressionAttributeValues(Map.of(":principal", AttributeValue.builder().s(principalType.name() + "#" + uuidConverter.convertDomain(userId)).build()))
             .build();
 
@@ -115,9 +115,10 @@ class AlmRepository extends DynamoDbRepository {
     List<Alm> getByObjects(List<BiWrapper<UUID, ObjectType>> keys) {
         List<FutureWrapper<List<Map<String, AttributeValue>>>> futures = keys.stream()
             .map(key -> QueryRequest.builder()
-                .indexName(TaskManagerConstants.GSI_ALM_SK_PK)
-                .keyConditionExpression("#sk = :object")
-                .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+                .tableName(tableName)
+                .indexName(TaskManagerConstants.GSI_ALM_OBJECT_PRINCIPAL)
+                .keyConditionExpression("#object = :object")
+                .expressionAttributeNames(Map.of("#object", COLUMN_OBJECT))
                 .expressionAttributeValues(Map.of(":object", AttributeValue.builder().s(key.getEntity2() + "#" + uuidConverter.convertDomain(key.getEntity1())).build()))
                 .build())
             .map(request -> executorServiceBean.asyncProcess(() -> query(request, TaskManagerMonitoringFunctionality.GET_ALMS_BY_OBJECTS)))
@@ -137,8 +138,8 @@ class AlmRepository extends DynamoDbRepository {
             .map(item -> WriteRequest.builder()
                 .deleteRequest(DeleteRequest.builder()
                     .key(Map.of(
-                        COLUMN_PK, item.get(COLUMN_PK),
-                        COLUMN_SK, item.get(COLUMN_SK)
+                        COLUMN_PRINCIPAL, item.get(COLUMN_PRINCIPAL),
+                        COLUMN_OBJECT, item.get(COLUMN_OBJECT)
                     ))
                     .build())
                 .build())
@@ -150,9 +151,9 @@ class AlmRepository extends DynamoDbRepository {
     List<Alm> getForObject(UUID objectId, ObjectType objectType) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .indexName(GSI_ALM_SK_PK)
-            .keyConditionExpression("#sk = :object")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+            .indexName(GSI_ALM_OBJECT_PRINCIPAL)
+            .keyConditionExpression("#object = :object")
+            .expressionAttributeNames(Map.of("#object", COLUMN_OBJECT))
             .expressionAttributeValues(Map.of(":object", AttributeValue.builder().s(objectType + "#" + uuidConverter.convertDomain(objectId)).build()))
             .build();
 
@@ -175,33 +176,33 @@ class AlmRepository extends DynamoDbRepository {
                 .tableName(tableName)
                 .attributeDefinitions(
                     AttributeDefinition.builder()
-                        .attributeName(COLUMN_PK)
+                        .attributeName(COLUMN_PRINCIPAL)
                         .attributeType(ScalarAttributeType.S)
                         .build(),
                     AttributeDefinition.builder()
-                        .attributeName(COLUMN_SK)
+                        .attributeName(COLUMN_OBJECT)
                         .attributeType(ScalarAttributeType.S)
                         .build()
                 )
                 .keySchema(
                     KeySchemaElement.builder()
-                        .attributeName(COLUMN_PK)
+                        .attributeName(COLUMN_PRINCIPAL)
                         .keyType(KeyType.HASH)
                         .build(),
                     KeySchemaElement.builder()
-                        .attributeName(COLUMN_SK)
+                        .attributeName(COLUMN_OBJECT)
                         .keyType(KeyType.RANGE)
                         .build()
                 )
                 .globalSecondaryIndexes(GlobalSecondaryIndex.builder()
-                    .indexName(TaskManagerConstants.GSI_ALM_SK_PK)
+                    .indexName(TaskManagerConstants.GSI_ALM_OBJECT_PRINCIPAL)
                     .keySchema(
                         KeySchemaElement.builder()
-                            .attributeName(COLUMN_SK)
+                            .attributeName(COLUMN_OBJECT)
                             .keyType(KeyType.HASH)
                             .build(),
                         KeySchemaElement.builder()
-                            .attributeName(COLUMN_PK)
+                            .attributeName(COLUMN_PRINCIPAL)
                             .keyType(KeyType.RANGE)
                             .build()
                     )

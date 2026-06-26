@@ -385,3 +385,17 @@ role:
         - DELETE
       requiredRoles:
         - ELITE_BASE_ADMIN
+    #TaskManager
+    - pattern: /web/task-manager/**
+      methods:
+        - GET
+      requiredRoles:
+        - TASK_MANAGER
+    - pattern: /api/task-manager/**
+      methods:
+        - GET
+        - DELETE
+        - POST
+        - PUT
+      requiredRoles:
+        - TASK_MANAGER

@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_OBJECT;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_OPERATIONS;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_SK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PRINCIPAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,16 +34,16 @@ class AlmMapperTest {
 
         Map<String, AttributeValue> result = underTest.convertDomain(domain);
 
-        assertThat(result.get(COLUMN_PK).s()).isEqualTo(PrincipalType.USER + "#" + PRINCIPAL);
-        assertThat(result.get(COLUMN_SK).s()).isEqualTo(ObjectType.ORGANIZATION + "#" + OBJECT_ID);
+        assertThat(result.get(COLUMN_PRINCIPAL).s()).isEqualTo(PrincipalType.USER + "#" + PRINCIPAL);
+        assertThat(result.get(COLUMN_OBJECT).s()).isEqualTo(ObjectType.ORGANIZATION + "#" + OBJECT_ID);
         assertThat(result.get(COLUMN_OPERATIONS).ss()).containsExactly(Operation.OWNER.name(), Operation.READ.name());
     }
 
     @Test
     void convertEntity() {
         Map<String, AttributeValue> entity = Map.of(
-            COLUMN_PK, AttributeValue.builder().s(PrincipalType.USER + "#" + PRINCIPAL).build(),
-            COLUMN_SK, AttributeValue.builder().s(ObjectType.ORGANIZATION + "#" + OBJECT_ID).build(),
+            COLUMN_PRINCIPAL, AttributeValue.builder().s(PrincipalType.USER + "#" + PRINCIPAL).build(),
+            COLUMN_OBJECT, AttributeValue.builder().s(ObjectType.ORGANIZATION + "#" + OBJECT_ID).build(),
             COLUMN_OPERATIONS, AttributeValue.builder().ss(Operation.OWNER.name(), Operation.READ.name()).build()
         );
 

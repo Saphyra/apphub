@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO role protection test
-//TODO API test
 public interface OrganizationController {
     @PostMapping(TaskManagerEndpoints.TASK_MANAGER_CREATE_ORGANIZATION)
     void createOrganization(@RequestBody CreateOrganizationRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

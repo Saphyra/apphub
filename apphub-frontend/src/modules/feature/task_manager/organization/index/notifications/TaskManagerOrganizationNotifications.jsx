@@ -21,9 +21,13 @@ const TaskManagerOrganizationNotifications = ({ setDisplaySpinner, organizationI
 
     if (hasValue(notifications) && notifications.length > 0) {
         return (
-            <div className="task-manager-organization-notifications task-manager-organization-index-panel">
+            <div id="task-manager-organization-notifications" className="task-manager-organization-index-panel">
                 <div className="task-manager-organization-index-panel-header">
-                    <span className={unreadNotificationCount > 0 ? "red" : ""}>{unreadNotificationCount}</span>
+                    <span
+                        id="task-manager-organization-unread-notification-count"
+                        className={unreadNotificationCount > 0 ? "red" : ""}
+                    >{unreadNotificationCount}
+                    </span>
                 </div>
 
                 <div className="task-manager-organization-index-panel-content">{getNotifications()}</div>

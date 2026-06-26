@@ -1,7 +1,7 @@
 # `apphub-task_manager-${Environment}-notification`
 
-- `pk`: `USER#userId` (recipient)
-- `sk`: `NOTIFICATION#notificationId`
+- `user`: `USER#userId` (recipient)
+- `notification`: `NOTIFICATION#notificationId`
 - `organizationId`: `ORGANIZATION#organizationId`
 - `status`: `enum: NotificationStatus`
 - `notificationType`: `enum: NotificationType`
@@ -10,7 +10,7 @@
 - `expiration`: `timestamp` (ttl)
 - `data`: `JSON Map<String, String>`
 
-## GSI-notification-organization_id-user_id
+## GSI-notification-organization-user
 
-- `pk`: `ORGANIZATION#organizationId`
-- `sk`: `USER#userId` (recipient)
+- `organization`: `ORGANIZATION#organizationId`
+- `user`: `USER#userId` (recipient)

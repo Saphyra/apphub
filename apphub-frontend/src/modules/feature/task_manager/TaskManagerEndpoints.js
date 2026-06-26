@@ -16,6 +16,6 @@ export const TASK_MANAGER_ACCEPT_INVITATION = new Endpoint(RequestMethod.POST, "
 export const TASK_MANAGER_REJECT_INVITATION = new Endpoint(RequestMethod.DELETE, "/api/task-manager/invitations/{organizationId}");
 
 //Notification
-export const TASK_MANAGER_GET_NOTIFICATIONS = new Endpoint(RequestMethod.GET, "/api/task-manager/notifications");
+export const TASK_MANAGER_GET_NOTIFICATIONS = new Endpoint(RequestMethod.GET, "/api/task-manager/notifications/{organizationId}");
 export const TASK_MANAGER_DELETE_NOTIFICATION = new Endpoint(RequestMethod.DELETE, "/api/task-manager/notifications");
 export const TASK_MANAGER_SET_NOTIFICATION_STATUS = new Endpoint(RequestMethod.POST, "/api/task-manager/notifications/status");

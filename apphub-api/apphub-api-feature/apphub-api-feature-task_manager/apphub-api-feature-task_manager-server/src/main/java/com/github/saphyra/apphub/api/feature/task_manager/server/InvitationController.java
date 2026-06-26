@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import java.util.List;
 import java.util.UUID;
 
-//TODO API test
-//TODO role protection test
 public interface InvitationController {
     @GetMapping(TaskManagerEndpoints.TASK_MANAGER_GET_INVITATIONS)
     List<InvitationResponse> getInvitations(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

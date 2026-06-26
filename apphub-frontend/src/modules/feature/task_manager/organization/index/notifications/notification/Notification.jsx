@@ -10,7 +10,7 @@ const Notification = ({ notification, refresh, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     return (
-        <div className={"task-manager-organization-notification " + notification.status.toLowerCase()}>
+        <div className={"task-manager-organization-notificaation " + notification.status.toLowerCase() + " " + notification.type}>
             <InputField
                 type="checkbox"
                 className="task-manager-organization-notification-checkbox"

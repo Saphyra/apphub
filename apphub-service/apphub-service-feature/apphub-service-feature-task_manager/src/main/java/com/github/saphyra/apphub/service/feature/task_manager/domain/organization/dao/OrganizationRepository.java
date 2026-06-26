@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_ORGANIZATION;
 
 @Component
@@ -53,7 +53,7 @@ class OrganizationRepository extends DynamoDbRepository {
 
     List<Organization> getByIds(List<UUID> organizationIds) {
         List<Map<String, AttributeValue>> keys = organizationIds.stream()
-            .map(id -> Map.of(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(id)).build()))
+            .map(id -> Map.of(COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(id)).build()))
             .toList();
 
         return batchGetItem(keys, TaskManagerMonitoringFunctionality.GET_ORGANIZATIONS)
@@ -65,7 +65,7 @@ class OrganizationRepository extends DynamoDbRepository {
     Optional<Organization> findById(UUID organizationId) {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
-            .key(Map.of(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
+            .key(Map.of(COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
             .build();
 
         return getItem(request, TaskManagerMonitoringFunctionality.GET_ORGANIZATION)
@@ -75,7 +75,7 @@ class OrganizationRepository extends DynamoDbRepository {
     void delete(UUID organizationId) {
         DeleteItemRequest request = DeleteItemRequest.builder()
             .tableName(tableName)
-            .key(Map.of(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
+            .key(Map.of(COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
             .build();
 
         deleteItem(request, TaskManagerMonitoringFunctionality.DELETE_ORGANIZATION);
@@ -94,13 +94,13 @@ class OrganizationRepository extends DynamoDbRepository {
                 .tableName(tableName)
                 .attributeDefinitions(
                     AttributeDefinition.builder()
-                        .attributeName(COLUMN_PK)
+                        .attributeName(COLUMN_ORGANIZATION)
                         .attributeType(ScalarAttributeType.S)
                         .build()
                 )
                 .keySchema(
                     KeySchemaElement.builder()
-                        .attributeName(COLUMN_PK)
+                        .attributeName(COLUMN_ORGANIZATION)
                         .keyType(KeyType.HASH)
                         .build()
                 )

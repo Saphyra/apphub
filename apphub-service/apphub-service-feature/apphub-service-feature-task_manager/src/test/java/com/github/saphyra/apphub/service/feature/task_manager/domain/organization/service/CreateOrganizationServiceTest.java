@@ -124,6 +124,16 @@ class CreateOrganizationServiceTest {
     }
 
     @Test
+    void selfInvitation() {
+        CreateOrganizationRequest request = validRequest()
+            .toBuilder()
+            .invitedUsers(List.of(USER_ID))
+            .build();
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.createOrganization(USER_ID, request), "invitedUser", "cannot invite yourself");
+    }
+
+    @Test
     void createOrganization() {
         CreateOrganizationRequest request = validRequest();
 

@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-//TODO API test
-//TODO role protection test
 public interface NotificationController {
     @GetMapping(TaskManagerEndpoints.TASK_MANAGER_GET_NOTIFICATIONS)
     List<NotificationResponse> getNotifications(@PathVariable("organizationId") UUID organizationId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

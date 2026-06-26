@@ -15,11 +15,11 @@ import static com.github.saphyra.apphub.service.feature.task_manager.domain.Task
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_DATA;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_EXPIRATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_LAST_MODIFIED;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_NOTIFICATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_NOTIFICATION_TYPE;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION_ID;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_SK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_STATUS;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_USER;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_NOTIFICATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_USER;
@@ -67,9 +67,9 @@ class NotificationMapperTest {
 
 		Map<String, AttributeValue> result = underTest.convertDomain(domain);
 
-		assertThat(result.get(COLUMN_PK).s()).isEqualTo(PREFIX_USER + RECIPIENT);
-		assertThat(result.get(COLUMN_SK).s()).isEqualTo(PREFIX_NOTIFICATION + NOTIFICATION_ID);
-		assertThat(result.get(COLUMN_ORGANIZATION_ID).s()).isEqualTo(PREFIX_ORGANIZATION + ORGANIZATION_ID);
+		assertThat(result.get(COLUMN_USER).s()).isEqualTo(PREFIX_USER + RECIPIENT);
+		assertThat(result.get(COLUMN_NOTIFICATION).s()).isEqualTo(PREFIX_NOTIFICATION + NOTIFICATION_ID);
+		assertThat(result.get(COLUMN_ORGANIZATION).s()).isEqualTo(PREFIX_ORGANIZATION + ORGANIZATION_ID);
 		assertThat(result.get(COLUMN_STATUS).s()).isEqualTo(STATUS);
 		assertThat(result.get(COLUMN_NOTIFICATION_TYPE).s()).isEqualTo(NOTIFICATION_TYPE);
 		assertThat(result.get(COLUMN_CREATED_AT).n()).isEqualTo(String.valueOf(CREATED_AT_EPOCH));
@@ -97,9 +97,9 @@ class NotificationMapperTest {
 
 		Map<String, AttributeValue> result = underTest.convertDomain(domain);
 
-		assertThat(result.get(COLUMN_PK).s()).isEqualTo(PREFIX_USER + RECIPIENT);
-		assertThat(result.get(COLUMN_SK).s()).isEqualTo(PREFIX_NOTIFICATION + NOTIFICATION_ID);
-		assertThat(result.get(COLUMN_ORGANIZATION_ID).s()).isEqualTo(PREFIX_ORGANIZATION + ORGANIZATION_ID);
+		assertThat(result.get(COLUMN_USER).s()).isEqualTo(PREFIX_USER + RECIPIENT);
+		assertThat(result.get(COLUMN_NOTIFICATION).s()).isEqualTo(PREFIX_NOTIFICATION + NOTIFICATION_ID);
+		assertThat(result.get(COLUMN_ORGANIZATION).s()).isEqualTo(PREFIX_ORGANIZATION + ORGANIZATION_ID);
 		assertThat(result.get(COLUMN_STATUS).s()).isEqualTo(STATUS);
 		assertThat(result.get(COLUMN_NOTIFICATION_TYPE).s()).isEqualTo(NOTIFICATION_TYPE);
 		assertThat(result.get(COLUMN_CREATED_AT).n()).isEqualTo(String.valueOf(CREATED_AT_EPOCH));
@@ -111,9 +111,9 @@ class NotificationMapperTest {
 	@Test
 	void convertEntity() {
 		Map<String, AttributeValue> entity = Map.of(
-			COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + RECIPIENT).build(),
-			COLUMN_SK, AttributeValue.builder().s(PREFIX_NOTIFICATION + NOTIFICATION_ID).build(),
-			COLUMN_ORGANIZATION_ID, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID).build(),
+			COLUMN_USER, AttributeValue.builder().s(PREFIX_USER + RECIPIENT).build(),
+			COLUMN_NOTIFICATION, AttributeValue.builder().s(PREFIX_NOTIFICATION + NOTIFICATION_ID).build(),
+			COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID).build(),
 			COLUMN_STATUS, AttributeValue.builder().s(STATUS).build(),
 			COLUMN_NOTIFICATION_TYPE, AttributeValue.builder().s(NOTIFICATION_TYPE).build(),
 			COLUMN_CREATED_AT, AttributeValue.builder().n(String.valueOf(CREATED_AT_EPOCH)).build(),
@@ -141,9 +141,9 @@ class NotificationMapperTest {
 	@Test
 	void convertEntity_withoutExpiration() {
 		Map<String, AttributeValue> entity = Map.of(
-			COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + RECIPIENT).build(),
-			COLUMN_SK, AttributeValue.builder().s(PREFIX_NOTIFICATION + NOTIFICATION_ID).build(),
-			COLUMN_ORGANIZATION_ID, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID).build(),
+			COLUMN_USER, AttributeValue.builder().s(PREFIX_USER + RECIPIENT).build(),
+			COLUMN_NOTIFICATION, AttributeValue.builder().s(PREFIX_NOTIFICATION + NOTIFICATION_ID).build(),
+			COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID).build(),
 			COLUMN_STATUS, AttributeValue.builder().s(STATUS).build(),
 			COLUMN_NOTIFICATION_TYPE, AttributeValue.builder().s(NOTIFICATION_TYPE).build(),
 			COLUMN_CREATED_AT, AttributeValue.builder().n(String.valueOf(CREATED_AT_EPOCH)).build(),

@@ -161,7 +161,7 @@ const TaskManagerCreateOrganizationPage = () => {
                     (<span className="task-manager-create-organization-user-email">{user.email}</span>)
 
                     <Button
-                        className="task-manager-create-organization-user-invite-button"
+                        className="task-manager-create-organization-user-disinvite-button"
                         label="X"
                         onclick={() => removeAndSet(invitedUsers, u => u.userId == user.userId, setInvitedUsers)}
                     />

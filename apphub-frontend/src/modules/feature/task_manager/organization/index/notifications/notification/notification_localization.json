@@ -3,6 +3,10 @@
         "en": "'{username}' ({email}) accepted your invitation.",
         "hu": "'{username}' ({email}) elfogadta a meghívását."
     },
+    "USER_REJECTED_YOUR_INVITATION": {
+        "en": "'{username}' ({email}) rejected your invitation.",
+        "hu": "'{username}' ({email}) elutasította a meghívását."
+    },
     "mark-as-read": {
         "en": "Mark as read",
         "hu": "Jelölés olvasottként"

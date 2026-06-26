@@ -13,7 +13,7 @@ import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_DESCRIPTION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_NAME;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_ORGANIZATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -42,7 +42,7 @@ class OrganizationMapperTest {
         given(uuidConverter.convertDomain(ORGANIZATION_ID)).willReturn(ORGANIZATION_ID_STRING);
 
         assertThat(underTest.convertDomain(domain))
-            .containsEntry(COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID_STRING).build())
+            .containsEntry(COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID_STRING).build())
             .containsEntry(COLUMN_NAME, AttributeValue.builder().s(NAME).build())
             .containsEntry(COLUMN_DESCRIPTION, AttributeValue.builder().s(DESCRIPTION).build());
     }
@@ -50,7 +50,7 @@ class OrganizationMapperTest {
     @Test
     void convertEntity() {
         Map<String, AttributeValue> entity = Map.of(
-            COLUMN_PK, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID_STRING).build(),
+            COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + ORGANIZATION_ID_STRING).build(),
             COLUMN_NAME, AttributeValue.builder().s(NAME).build(),
             COLUMN_DESCRIPTION, AttributeValue.builder().s(DESCRIPTION).build()
         );

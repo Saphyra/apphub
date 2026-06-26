@@ -14,11 +14,11 @@ import static com.github.saphyra.apphub.service.feature.task_manager.domain.Task
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_DATA;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_EXPIRATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_LAST_MODIFIED;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_NOTIFICATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_NOTIFICATION_TYPE;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION_ID;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_SK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_STATUS;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_USER;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_NOTIFICATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_USER;
@@ -32,9 +32,9 @@ class NotificationMapper extends ConverterBase<Map<String, AttributeValue>, Noti
     protected Map<String, AttributeValue> processDomainConversion(NotificationEntity domain) {
         Map<String, AttributeValue> result = new HashMap<>();
 
-        result.put(COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + domain.getRecipient()).build());
-        result.put(COLUMN_SK, AttributeValue.builder().s(PREFIX_NOTIFICATION + domain.getNotificationId()).build());
-        result.put(COLUMN_ORGANIZATION_ID, AttributeValue.builder().s(PREFIX_ORGANIZATION + domain.getOrganizationId()).build());
+        result.put(COLUMN_USER, AttributeValue.builder().s(PREFIX_USER + domain.getRecipient()).build());
+        result.put(COLUMN_NOTIFICATION, AttributeValue.builder().s(PREFIX_NOTIFICATION + domain.getNotificationId()).build());
+        result.put(COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + domain.getOrganizationId()).build());
         result.put(COLUMN_STATUS, AttributeValue.builder().s(domain.getStatus()).build());
         result.put(COLUMN_NOTIFICATION_TYPE, AttributeValue.builder().s(domain.getNotificationType()).build());
         result.put(COLUMN_CREATED_AT, AttributeValue.builder().n(String.valueOf(dateTimeUtil.toEpochSecond(domain.getCreatedAt()))).build());
@@ -51,9 +51,9 @@ class NotificationMapper extends ConverterBase<Map<String, AttributeValue>, Noti
     @Override
     protected NotificationEntity processEntityConversion(Map<String, AttributeValue> entity) {
         return NotificationEntity.builder()
-            .recipient(entity.get(COLUMN_PK).s().substring(PREFIX_USER.length()))
-            .notificationId(entity.get(COLUMN_SK).s().substring(PREFIX_NOTIFICATION.length()))
-            .organizationId(entity.get(COLUMN_ORGANIZATION_ID).s().substring(PREFIX_ORGANIZATION.length()))
+            .recipient(entity.get(COLUMN_USER).s().substring(PREFIX_USER.length()))
+            .notificationId(entity.get(COLUMN_NOTIFICATION).s().substring(PREFIX_NOTIFICATION.length()))
+            .organizationId(entity.get(COLUMN_ORGANIZATION).s().substring(PREFIX_ORGANIZATION.length()))
             .status(entity.get(COLUMN_STATUS).s())
             .notificationType(entity.get(COLUMN_NOTIFICATION_TYPE).s())
             .createdAt(dateTimeUtil.fromEpochSecond(Long.parseLong(entity.get(COLUMN_CREATED_AT).n())))

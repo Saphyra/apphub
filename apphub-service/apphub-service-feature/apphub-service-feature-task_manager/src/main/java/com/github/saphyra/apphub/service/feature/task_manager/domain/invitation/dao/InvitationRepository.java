@@ -30,10 +30,10 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_INVITED_BY;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_PK;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_SK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_ORGANIZATION;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.COLUMN_USER;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.GSI_INVITATION_INVITED_BY;
-import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.GSI_INVITATION_SK;
+import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.GSI_INVITATION_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_ORGANIZATION;
 import static com.github.saphyra.apphub.service.feature.task_manager.domain.TaskManagerConstants.PREFIX_USER;
 
@@ -65,9 +65,9 @@ class InvitationRepository extends DynamoDbRepository {
     List<Invitation> getByUserId(UUID userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#pk = :pk")
-            .expressionAttributeNames(Map.of("#pk", COLUMN_PK))
-            .expressionAttributeValues(Map.of(":pk", AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(userId)).build()))
+            .keyConditionExpression("#user = :user")
+            .expressionAttributeNames(Map.of("#user", COLUMN_USER))
+            .expressionAttributeValues(Map.of(":user", AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(userId)).build()))
             .build();
 
         return query(request, TaskManagerMonitoringFunctionality.GET_INVITATIONS_OF_USER)
@@ -79,14 +79,14 @@ class InvitationRepository extends DynamoDbRepository {
     List<Invitation> getByInvitedUserIdAndOrganizationId(UUID userId, UUID organizationId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .keyConditionExpression("#pk = :pk AND #sk = :sk")
+            .keyConditionExpression("#user = :user AND #organization = :organization")
             .expressionAttributeNames(Map.of(
-                "#pk", COLUMN_PK,
-                "#sk", COLUMN_SK
+                "#user", COLUMN_USER,
+                "#organization", COLUMN_ORGANIZATION
             ))
             .expressionAttributeValues(Map.of(
-                ":pk", AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(userId)).build(),
-                ":sk", AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()
+                ":user", AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(userId)).build(),
+                ":organization", AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()
             ))
             .build();
 
@@ -101,8 +101,8 @@ class InvitationRepository extends DynamoDbRepository {
             .map(invitation -> WriteRequest.builder()
                 .deleteRequest(DeleteRequest.builder()
                     .key(Map.of(
-                        COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(invitation.getInvitedUserId())).build(),
-                        COLUMN_SK, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(invitation.getOrganizationId())).build()
+                        COLUMN_USER, AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(invitation.getInvitedUserId())).build(),
+                        COLUMN_ORGANIZATION, AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(invitation.getOrganizationId())).build()
                     ))
                     .build())
                 .build())
@@ -129,10 +129,10 @@ class InvitationRepository extends DynamoDbRepository {
     List<Invitation> getByOrganizationId(UUID organizationId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
-            .indexName(GSI_INVITATION_SK)
-            .keyConditionExpression("#sk = :sk")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-            .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
+            .indexName(GSI_INVITATION_ORGANIZATION)
+            .keyConditionExpression("#organization = :organization")
+            .expressionAttributeNames(Map.of("#organization", COLUMN_ORGANIZATION))
+            .expressionAttributeValues(Map.of(":organization", AttributeValue.builder().s(PREFIX_ORGANIZATION + uuidConverter.convertDomain(organizationId)).build()))
             .build();
 
         return query(request, TaskManagerMonitoringFunctionality.GET_INVITATIONS_BY_ORGANIZATION_ID)
@@ -154,11 +154,11 @@ class InvitationRepository extends DynamoDbRepository {
                 .tableName(tableName)
                 .attributeDefinitions(
                     AttributeDefinition.builder()
-                        .attributeName(COLUMN_PK)
+                        .attributeName(COLUMN_USER)
                         .attributeType(ScalarAttributeType.S)
                         .build(),
                     AttributeDefinition.builder()
-                        .attributeName(COLUMN_SK)
+                        .attributeName(COLUMN_ORGANIZATION)
                         .attributeType(ScalarAttributeType.S)
                         .build(),
                     AttributeDefinition.builder()
@@ -178,10 +178,10 @@ class InvitationRepository extends DynamoDbRepository {
                         .projection(Projection.builder().projectionType(ProjectionType.ALL).build())
                         .build(),
                     GlobalSecondaryIndex.builder()
-                        .indexName(GSI_INVITATION_SK)
+                        .indexName(GSI_INVITATION_ORGANIZATION)
                         .keySchema(
                             KeySchemaElement.builder()
-                                .attributeName(COLUMN_SK)
+                                .attributeName(COLUMN_ORGANIZATION)
                                 .keyType(KeyType.HASH)
                                 .build()
                         )
@@ -190,11 +190,11 @@ class InvitationRepository extends DynamoDbRepository {
                 )
                 .keySchema(
                     KeySchemaElement.builder()
-                        .attributeName(COLUMN_PK)
+                        .attributeName(COLUMN_USER)
                         .keyType(KeyType.HASH)
                         .build(),
                     KeySchemaElement.builder()
-                        .attributeName(COLUMN_SK)
+                        .attributeName(COLUMN_ORGANIZATION)
                         .keyType(KeyType.RANGE)
                         .build()
                 )

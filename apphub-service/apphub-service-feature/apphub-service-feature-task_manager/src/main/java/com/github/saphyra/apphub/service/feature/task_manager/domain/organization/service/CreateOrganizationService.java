@@ -29,7 +29,7 @@ public class CreateOrganizationService {
     private final InvitationService invitationService;
 
     public void createOrganization(UUID userId, CreateOrganizationRequest request) {
-        validateRequest(request);
+        validateRequest(userId, request);
 
         Organization organization = organizationFactory.create(request.getOrganizationName(), request.getDescription());
         organizationDao.save(organization);
@@ -38,13 +38,17 @@ public class CreateOrganizationService {
         invitationService.invite(userId, organization.getId(), request.getInvitedUsers());
     }
 
-    private void validateRequest(CreateOrganizationRequest request) {
+    private void validateRequest(UUID userId, CreateOrganizationRequest request) {
         ValidationUtil.notBlank(request.getOrganizationName(), "organizationName");
         ValidationUtil.maxLength(request.getOrganizationName(), TaskManagerConstants.MAX_ORGANIZATION_NAME_LENGTH, "organizationName");
         ValidationUtil.maxLength(request.getDescription(), TaskManagerConstants.MAX_ORGANIZATION_DESCRIPTION_LENGTH, "description");
         ValidationUtil.doesNotContainNull(request.getInvitedUsers(), "invitedUsers");
 
-        if (request.getInvitedUsers().stream().anyMatch(userId -> !accountClient.userExists(userId))) {
+        if(request.getInvitedUsers().stream().anyMatch(invitedUserId -> invitedUserId.equals(userId))) {
+            throw ExceptionFactory.invalidParam("invitedUser", "cannot invite yourself");
+        }
+
+        if (request.getInvitedUsers().stream().anyMatch(invitedUserId -> !accountClient.userExists(invitedUserId))) {
             throw ExceptionFactory.invalidParam("invitedUser", "does not exist");
         }
     }

@@ -8,7 +8,7 @@ import { NotificationStatus } from "./notifications/NotificationStatus";
 
 const notificationComparator = (a, b) => {
 	if (a.status === b.status) {
-		return a.createdAt - b.createdAt;
+		return b.createdAt - a.createdAt;
 	}
 
 	if (a.status === NotificationStatus.UNREAD) {
@@ -19,7 +19,7 @@ const notificationComparator = (a, b) => {
 		return -1;
 	}
 
-	return a.createdAt - b.createdAt;
+	return b.createdAt - a.createdAt;
 }
 
 export default notificationComparator;

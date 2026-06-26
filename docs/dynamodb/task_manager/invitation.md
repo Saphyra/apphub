@@ -1,13 +1,13 @@
 # `apphub-task_manager-${Environment}-invitation`
 
-- `pk`: `USER#invitedUserId`
-- `sk`: `ORGANIZATION#organizationId`
+- `user`: `USER#invitedUserId`
+- `organization`: `ORGANIZATION#organizationId`
 - `invitedBy`: `USER#invitorId`
 
 ## GSI-invitation-invited_by
 
-- `pk`: `USER#invitorId`
+- `user`: `USER#invitorId`
 
-## GSI-invitation-sk
+## GSI-invitation-organization
 
-- `pk`: `ORGANIZATION#organizationId`
+- `organi`: `ORGANIZATION#organizationId`
