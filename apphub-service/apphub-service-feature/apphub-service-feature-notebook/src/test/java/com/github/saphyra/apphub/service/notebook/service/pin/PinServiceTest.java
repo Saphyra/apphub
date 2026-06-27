@@ -78,7 +78,7 @@ class PinServiceTest {
             .build();
 
         given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(pinnedItem));
-        given(notebookViewFactory.create(pinnedItem)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(pinnedItem))).willReturn(List.of(notebookView));
 
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, null);
 
@@ -126,7 +126,7 @@ class PinServiceTest {
         given(pinGroupDao.findByIdValidated(USER_ID, PIN_GROUP_ID)).willReturn(pinGroup);
         given(pinGroup.getListItemIds()).willReturn(Set.of(LIST_ITEM_ID));
         given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(pinnedInGroup, pinnedNotInGroup));
-        given(notebookViewFactory.create(pinnedInGroup)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(pinnedInGroup))).willReturn(List.of(notebookView));
 
         List<NotebookView> result = underTest.getPinnedItems(USER_ID, PIN_GROUP_ID);
 

@@ -1,6 +1,10 @@
 ===FEATURES===
 
 ===BUGFIXES===
+    Notebook
+        Speed up NotebookView creation
+    EliteBase
+        Consider Time Zones when displaying dates
 
 ===PLATFORM CHANGES===
 
