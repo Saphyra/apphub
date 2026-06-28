@@ -19,4 +19,5 @@ public class OccurrenceRequest {
     private String note;
     private Integer remindMeBeforeDays;
     private Boolean reminded;
+    private Boolean autoDone;
 }

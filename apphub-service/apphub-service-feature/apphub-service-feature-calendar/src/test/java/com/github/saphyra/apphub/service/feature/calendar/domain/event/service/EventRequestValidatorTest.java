@@ -164,6 +164,19 @@ class EventRequestValidatorTest {
     }
 
     @Test
+    void oneTimeEvent_nullAutoDone() {
+        given(request.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
+        given(request.getRepeatForDays()).willReturn(1);
+        given(request.getStartDate()).willReturn(LocalDate.now());
+        given(request.getTitle()).willReturn("title");
+        given(request.getContent()).willReturn("content");
+        given(request.getRemindMeBeforeDays()).willReturn(0);
+        given(request.getAutoDone()).willReturn(null);
+
+        ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "autoDone", "must not be null");
+    }
+
+    @Test
     void oneTimeEvent_valid() {
         given(request.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
         given(request.getRepeatForDays()).willReturn(1);
@@ -174,6 +187,7 @@ class EventRequestValidatorTest {
         given(request.getLabels()).willReturn(CollectionUtils.toList(LABEL_ID));
         given(labelDao.getByLabelIds(USER_ID, List.of(LABEL_ID))).willReturn(List.of(label));
         given(label.getLabelId()).willReturn(LABEL_ID);
+        given(request.getAutoDone()).willReturn(false);
 
         underTest.validate(USER_ID, request);
     }

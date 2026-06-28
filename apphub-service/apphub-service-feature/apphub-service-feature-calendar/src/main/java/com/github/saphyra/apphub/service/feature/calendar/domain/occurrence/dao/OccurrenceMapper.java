@@ -7,6 +7,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
@@ -36,6 +37,7 @@ class OccurrenceMapper extends ConverterBase<Map<String, AttributeValue>, Occurr
         result.put(COLUMN_NOTE, AttributeValue.builder().s(occurrence.getNote()).build());
         result.put(COLUMN_REMIND_ME_BEFORE_DAYS, AttributeValue.builder().s(occurrence.getRemindMeBeforeDays()).build());
         result.put(COLUMN_REMINDED, AttributeValue.builder().s(occurrence.getReminded()).build());
+        result.put(COLUMN_AUTO_DONE, AttributeValue.builder().s(occurrence.getAutoDone()).build());
 
         return result;
     }
@@ -53,6 +55,7 @@ class OccurrenceMapper extends ConverterBase<Map<String, AttributeValue>, Occurr
             .note(entity.get(COLUMN_NOTE).s())
             .remindMeBeforeDays(entity.get(COLUMN_REMIND_ME_BEFORE_DAYS).s())
             .reminded(entity.get(COLUMN_REMINDED).s())
+            .autoDone(entity.get(COLUMN_AUTO_DONE).s())
             .build();
     }
 }

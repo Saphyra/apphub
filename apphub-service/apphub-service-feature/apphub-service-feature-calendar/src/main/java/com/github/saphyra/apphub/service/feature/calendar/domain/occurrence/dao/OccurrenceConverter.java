@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMINDED;
@@ -51,6 +52,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .note(stringEncryptor.encrypt(domain.getNote(), userId, occurrenceId, COLUMN_NOTE))
             .remindMeBeforeDays(integerEncryptor.encrypt(domain.getRemindMeBeforeDays(), userId, occurrenceId, COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.encrypt(domain.isReminded(), userId, occurrenceId, COLUMN_REMINDED))
+            .autoDone(booleanEncryptor.encrypt(domain.getAutoDone(), userId, occurrenceId, COLUMN_AUTO_DONE))
             .build();
     }
 
@@ -70,6 +72,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .note(stringEncryptor.decrypt(entity.getNote(), userId, entity.getOccurrenceId(), COLUMN_NOTE))
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userId, entity.getOccurrenceId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .reminded(booleanEncryptor.decrypt(entity.getReminded(), userId, entity.getOccurrenceId(), COLUMN_REMINDED))
+            .autoDone(booleanEncryptor.decrypt(entity.getAutoDone(), userId, entity.getOccurrenceId(), COLUMN_AUTO_DONE))
             .build();
     }
 

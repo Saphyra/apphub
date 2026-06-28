@@ -54,6 +54,7 @@ class EventRequestValidator {
         ValidationUtil.notBlank(request.getTitle(), "title");
         ValidationUtil.notNull(request.getContent(), "content");
         ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
+        ValidationUtil.notNull(request.getAutoDone(), "autoDone");
 
         ValidationUtil.containsAll(request.getLabels(), () -> labelDao.getByLabelIds(userId, request.getLabels()).stream().map(Label::getLabelId).toList(), "labels");
     }

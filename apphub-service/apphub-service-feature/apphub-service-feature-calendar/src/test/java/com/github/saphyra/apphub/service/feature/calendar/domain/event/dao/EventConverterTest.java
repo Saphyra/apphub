@@ -19,6 +19,7 @@ import java.time.LocalTime;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_ARCHIVED;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_CONTENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_END_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EXPIRATION_NOTIFIED;
@@ -61,6 +62,8 @@ class EventConverterTest {
     private static final String EXPIRATION_NOTIFIED_ENCRYPTED = "expiration-notified-encrypted";
     private static final Boolean ARCHIVED = false;
     private static final String ARCHIVED_ENCRYPTED = "archived-encrypted";
+    private static final boolean AUTO_DONE = true;
+    private static final String AUTO_DONE_ENCRYPTED = "auto-done-encrypted";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -102,6 +105,7 @@ class EventConverterTest {
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .expirationNotified(EXPIRATION_NOTIFIED)
             .archived(ARCHIVED)
+            .autoDone(AUTO_DONE)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -118,6 +122,7 @@ class EventConverterTest {
         given(integerEncryptor.encrypt(REMIND_ME_BEFORE_DAYS, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_REMIND_ME_BEFORE_DAYS)).willReturn(REMIND_ME_BEFORE_DAYS_ENCRYPTED);
         given(booleanEncryptor.encrypt(EXPIRATION_NOTIFIED, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_EXPIRATION_NOTIFIED)).willReturn(EXPIRATION_NOTIFIED_ENCRYPTED);
         given(booleanEncryptor.encrypt(ARCHIVED, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_ARCHIVED)).willReturn(ARCHIVED_ENCRYPTED);
+        given(booleanEncryptor.encrypt(AUTO_DONE, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_AUTO_DONE)).willReturn(AUTO_DONE_ENCRYPTED);
 
         EventEntity result = underTest.convertDomain(domain);
 
@@ -134,7 +139,8 @@ class EventConverterTest {
             .returns(CONTENT_ENCRYPTED, EventEntity::getContent)
             .returns(REMIND_ME_BEFORE_DAYS_ENCRYPTED, EventEntity::getRemindMeBeforeDays)
             .returns(EXPIRATION_NOTIFIED_ENCRYPTED, EventEntity::getExpirationNotified)
-            .returns(ARCHIVED_ENCRYPTED, EventEntity::getArchived);
+            .returns(ARCHIVED_ENCRYPTED, EventEntity::getArchived)
+            .returns(AUTO_DONE_ENCRYPTED, EventEntity::getAutoDone);
     }
 
     @Test
@@ -153,6 +159,7 @@ class EventConverterTest {
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS_ENCRYPTED)
             .expirationNotified(EXPIRATION_NOTIFIED_ENCRYPTED)
             .archived(ARCHIVED_ENCRYPTED)
+            .autoDone(AUTO_DONE_ENCRYPTED)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -169,6 +176,7 @@ class EventConverterTest {
         given(integerEncryptor.decrypt(REMIND_ME_BEFORE_DAYS_ENCRYPTED, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_REMIND_ME_BEFORE_DAYS)).willReturn(REMIND_ME_BEFORE_DAYS);
         given(booleanEncryptor.decrypt(EXPIRATION_NOTIFIED_ENCRYPTED, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_EXPIRATION_NOTIFIED)).willReturn(EXPIRATION_NOTIFIED);
         given(booleanEncryptor.decrypt(ARCHIVED_ENCRYPTED, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_ARCHIVED)).willReturn(ARCHIVED);
+        given(booleanEncryptor.decrypt(AUTO_DONE_ENCRYPTED, ACCESS_TOKEN_USER_ID, EVENT_ID_STRING, COLUMN_AUTO_DONE)).willReturn(AUTO_DONE);
 
         Event result = underTest.convertEntity(entity);
 
@@ -185,6 +193,7 @@ class EventConverterTest {
             .returns(CONTENT, Event::getContent)
             .returns(REMIND_ME_BEFORE_DAYS, Event::getRemindMeBeforeDays)
             .returns(EXPIRATION_NOTIFIED, Event::isExpirationNotified)
-            .returns(ARCHIVED, Event::isArchived);
+            .returns(ARCHIVED, Event::isArchived)
+            .returns(AUTO_DONE, Event::isAutoDone);
     }
 }

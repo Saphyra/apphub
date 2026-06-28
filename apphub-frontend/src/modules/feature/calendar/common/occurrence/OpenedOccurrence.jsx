@@ -52,6 +52,12 @@ const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, se
                         placeholder={localizationHandler.get("note")}
                     />
 
+                    <div id="calendar-opened-occurrence-auto-done">
+                        <span>{localizationHandler.get("auto-done")}</span>
+                        <span>: </span>
+                        <span>{localizationHandler.get(occurrence.autoDone ? "true" : "false")}</span>
+                    </div>
+
                     {occurrence.remindMeBeforeDays > 0 &&
                         <div id="calendar-opened-occurrence-reminder">
                             {localizationHandler.get("reminder", { days: occurrence.remindMeBeforeDays })}

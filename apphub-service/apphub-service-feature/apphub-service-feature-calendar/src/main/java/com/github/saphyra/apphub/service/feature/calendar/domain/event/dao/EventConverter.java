@@ -12,7 +12,10 @@ import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_ARCHIVED;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_CONTENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_END_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EXPIRATION_NOTIFIED;
@@ -54,6 +57,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .remindMeBeforeDays(integerEncryptor.encrypt(domain.getRemindMeBeforeDays(), userId, eventId, COLUMN_REMIND_ME_BEFORE_DAYS))
             .expirationNotified(booleanEncryptor.encrypt(domain.isExpirationNotified(), userId, eventId, COLUMN_EXPIRATION_NOTIFIED))
             .archived(booleanEncryptor.encrypt(domain.isArchived(), userId, eventId, COLUMN_ARCHIVED))
+            .autoDone(booleanEncryptor.encrypt(domain.isAutoDone(), userId, eventId, COLUMN_AUTO_DONE))
             .build();
     }
 
@@ -75,6 +79,7 @@ class EventConverter extends ConverterBase<EventEntity, Event> {
             .remindMeBeforeDays(integerEncryptor.decrypt(entity.getRemindMeBeforeDays(), userId, entity.getEventId(), COLUMN_REMIND_ME_BEFORE_DAYS))
             .expirationNotified(booleanEncryptor.decrypt(entity.getExpirationNotified(), userId, entity.getEventId(), COLUMN_EXPIRATION_NOTIFIED))
             .archived(booleanEncryptor.decrypt(entity.getArchived(), userId, entity.getEventId(), COLUMN_ARCHIVED))
+            .autoDone(Optional.ofNullable(booleanEncryptor.decrypt(entity.getAutoDone(), userId, entity.getEventId(), COLUMN_AUTO_DONE)).orElse(false))
             .build();
     }
 }

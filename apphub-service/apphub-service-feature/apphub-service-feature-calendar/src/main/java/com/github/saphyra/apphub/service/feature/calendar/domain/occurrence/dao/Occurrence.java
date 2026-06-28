@@ -30,7 +30,9 @@ public class Occurrence {
     private OccurrenceStatus status;
     @NonNull
     private String note;
-    @Nullable
+    @Nullable //If null, Event's value is used
     private Integer remindMeBeforeDays;
     private boolean reminded;
+    @Nullable //If null Event's value is used
+    private Boolean autoDone;
 }

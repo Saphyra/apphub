@@ -1,4 +1,6 @@
 ===FEATURES===
+    Calendar
+        Auto-done occurrences
 
 ===BUGFIXES===
     Notebook

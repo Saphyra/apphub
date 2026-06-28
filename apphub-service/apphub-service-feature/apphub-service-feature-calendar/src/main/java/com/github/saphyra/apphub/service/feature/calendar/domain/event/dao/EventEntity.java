@@ -22,4 +22,5 @@ class EventEntity {
     private String remindMeBeforeDays; //Encrypted
     private String expirationNotified; //Encrypted
     private String archived; //Encrypted
+    private String autoDone; //Encrypted
 }

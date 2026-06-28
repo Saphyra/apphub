@@ -71,8 +71,10 @@ class EditOccurrenceServiceTest {
         given(occurrenceRequest.getNote()).willReturn(NOTE);
         given(occurrenceRequest.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
         given(occurrenceRequest.getReminded()).willReturn(true);
+        given(occurrenceRequest.getAutoDone()).willReturn(true);
         given(event.getTime()).willReturn(TIME.plusHours(1));
         given(event.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS + 1);
+        given(event.isAutoDone()).willReturn(false);
 
         underTest.editOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, occurrenceRequest);
 
@@ -82,6 +84,7 @@ class EditOccurrenceServiceTest {
         then(occurrence).should().setNote(NOTE);
         then(occurrence).should().setRemindMeBeforeDays(REMIND_ME_BEFORE_DAYS);
         then(occurrence).should().setReminded(true);
+        then(occurrence).should().setAutoDone(true);
         then(occurrenceDao).should().save(occurrence);
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
     }
@@ -95,10 +98,12 @@ class EditOccurrenceServiceTest {
         given(occurrenceRequest.getTime()).willReturn(TIME);
         given(occurrenceRequest.getStatus()).willReturn(OccurrenceStatus.DONE);
         given(occurrenceRequest.getNote()).willReturn(NOTE);
+        given(occurrenceRequest.getAutoDone()).willReturn(false);
         given(occurrenceRequest.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
         given(occurrenceRequest.getReminded()).willReturn(true);
         given(event.getTime()).willReturn(TIME);
         given(event.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
+        given(event.isAutoDone()).willReturn(false);
 
         underTest.editOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, occurrenceRequest);
 
@@ -108,6 +113,7 @@ class EditOccurrenceServiceTest {
         then(occurrence).should().setNote(NOTE);
         then(occurrence).should().setRemindMeBeforeDays(null);
         then(occurrence).should().setReminded(true);
+        then(occurrence).should().setAutoDone(null);
         then(occurrenceDao).should().save(occurrence);
         then(occurrenceRequestValidator).should().validate(occurrenceRequest);
     }

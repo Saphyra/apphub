@@ -50,6 +50,7 @@ class EventResponseMapper {
             .remindMeBeforeDays(event.getRemindMeBeforeDays())
             .labels(labels)
             .archived(event.isArchived())
+            .autoDone(event.isAutoDone())
             .build();
     }
 }

@@ -114,5 +114,9 @@
     "empty-start-date": {
         "en": "Start date is empty.",
         "hu": "A kezdés dátuma üres."
+    },
+    "auto-done": {
+        "en": "Mark occurrences automatically done when they expire",
+        "hu": "Jelöld az eseményeket automatikusan elvégzettként, amikor lejárnak"
     }
 }

@@ -33,6 +33,7 @@ import ConfirmationDialogData from "common/component/confirmation_dialog/Confirm
 import saveEvent from "./saveEvent";
 import Optional from "common/js/collection/Optional";
 import { CALENDAR_GET_EVENT, CALENDAR_PAGE } from "../CalendarEndpoints";
+import EventAutoDone from "../common/event/EventAutoDone";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -70,6 +71,8 @@ const CalendarEditEventPage = () => {
     const [repetitionData, setRepetitionData] = useExtractAsync(o => o.repetitionData, event);
     const [repeatForDays, setRepeatForDays] = useExtractAsync(o => o.repeatForDays, event, 1);
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, event, 0);
+    const [autoDone, setAutoDone] = useExtractAsync(o => o.autoDone, event, false);
+
     const [archived, setArchived] = useExtractAsync(o => o.archived, event, false);
     const [existingLabels, setExistingLabels] = useExtractAsync(o => o.labels, event, []);
 
@@ -147,6 +150,11 @@ const CalendarEditEventPage = () => {
                     <EventReminder
                         remindMeBeforeDays={remindMeBeforeDays}
                         setRemindMeBeforeDays={setRemindMeBeforeDays}
+                    />
+
+                    <EventAutoDone
+                        value={autoDone}
+                        setValue={setAutoDone}
                     />
                 </fieldset>
 
@@ -265,7 +273,8 @@ const CalendarEditEventPage = () => {
                             title: title,
                             content: content,
                             remindMeBeforeDays: remindMeBeforeDays,
-                            archived: archived
+                            archived: archived,
+                            autoDone: autoDone
                         },
                         existingLabels,
                         setDisplaySpinner,

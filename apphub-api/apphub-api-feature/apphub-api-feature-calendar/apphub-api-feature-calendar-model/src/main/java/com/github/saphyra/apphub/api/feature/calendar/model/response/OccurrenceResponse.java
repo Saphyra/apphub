@@ -26,4 +26,5 @@ public class OccurrenceResponse {
     private Integer remindMeBeforeDays;
     private Boolean reminded;
     private Boolean eventArchived;
+    private Boolean autoDone;
 }

@@ -23,6 +23,7 @@ public class CalendarDaoConstants {
     public static final String COLUMN_NOTE = "note";
     public static final String COLUMN_REMINDED = "reminded";
     public static final String COLUMN_USER_ID = "user_id";
+    public static final String COLUMN_AUTO_DONE = "auto_done";
 
     public static final String PREFIX_USER = "USER#";
     public static final String PREFIX_EVENT = "EVENT#";

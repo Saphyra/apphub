@@ -95,7 +95,7 @@ class CreateOccurrenceServiceTest {
         given(occurrenceRequest.getTime()).willReturn(TIME);
         given(occurrenceRequest.getRemindMeBeforeDays()).willReturn(REMIND_ME_BEFORE_DAYS);
         given(occurrenceRequest.getNote()).willReturn(NOTE);
-        given(occurrenceFactory.create(USER_ID, EVENT_ID, DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE)).willReturn(occurrence);
+        given(occurrenceFactory.create(USER_ID, EVENT_ID, DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE, false)).willReturn(occurrence);
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
 
         assertThat(underTest.createOccurrence(USER_ID, EVENT_ID, occurrenceRequest)).isEqualTo(OCCURRENCE_ID);

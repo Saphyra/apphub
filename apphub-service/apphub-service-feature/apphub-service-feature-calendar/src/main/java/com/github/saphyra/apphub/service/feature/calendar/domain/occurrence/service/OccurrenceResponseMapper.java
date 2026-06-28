@@ -1,9 +1,11 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 class OccurrenceResponseMapper {
     private final EventDao eventDao;
+    private final OccurrenceDao occurrenceDao;
 
     public List<OccurrenceResponse> toResponse(UUID userId, List<Occurrence> occurrences) {
         List<UUID> eventIds = occurrences.stream()
@@ -47,6 +50,12 @@ class OccurrenceResponseMapper {
     }
 
     private OccurrenceResponse toResponse(Event event, Occurrence occurrence) {
+        Boolean autoDone = getFromEventIfNull(event, occurrence.getAutoDone(), Event::isAutoDone);
+        if (occurrence.getStatus() == OccurrenceStatus.EXPIRED && autoDone) {
+            occurrence.setStatus(OccurrenceStatus.DONE);
+            occurrenceDao.save(occurrence);
+        }
+
         return OccurrenceResponse.builder()
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
@@ -59,6 +68,7 @@ class OccurrenceResponseMapper {
             .remindMeBeforeDays(getFromEventIfNull(event, occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
             .reminded(occurrence.isReminded())
             .eventArchived(event.isArchived())
+            .autoDone(autoDone)
             .build();
     }
 

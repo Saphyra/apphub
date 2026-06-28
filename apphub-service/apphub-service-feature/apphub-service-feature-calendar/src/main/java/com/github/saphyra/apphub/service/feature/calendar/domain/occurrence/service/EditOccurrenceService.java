@@ -36,6 +36,7 @@ public class EditOccurrenceService {
         occurrence.setNote(request.getNote());
         occurrence.setRemindMeBeforeDays(nullIfEquals(request.getRemindMeBeforeDays(), event.getRemindMeBeforeDays()));
         occurrence.setReminded(request.getReminded());
+        occurrence.setAutoDone(nullIfEquals(request.getAutoDone(), event.isAutoDone()));
 
         occurrenceDao.save(occurrence);
     }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_ARCHIVED;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_CONTENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_END_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EXPIRATION_NOTIFIED;
@@ -43,6 +44,7 @@ class EventMapper extends ConverterBase<Map<String, AttributeValue>, EventEntity
         result.put(COLUMN_EXPIRATION_NOTIFIED, AttributeValue.builder().s(domain.getExpirationNotified()).build());
         result.put(COLUMN_ARCHIVED, AttributeValue.builder().s(domain.getArchived()).build());
         result.put(COLUMN_END_DATE, AttributeValue.builder().s(domain.getEndDate()).build());
+        result.put(COLUMN_AUTO_DONE, AttributeValue.builder().s(domain.getAutoDone()).build());
 
         return result;
     }
@@ -63,6 +65,7 @@ class EventMapper extends ConverterBase<Map<String, AttributeValue>, EventEntity
             .remindMeBeforeDays(entity.get(COLUMN_REMIND_ME_BEFORE_DAYS).s())
             .expirationNotified(entity.get(COLUMN_EXPIRATION_NOTIFIED).s())
             .archived(entity.get(COLUMN_ARCHIVED).s())
+            .autoDone(entity.get(COLUMN_AUTO_DONE).s())
             .build();
     }
 }

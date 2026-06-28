@@ -19,4 +19,5 @@ class OccurrenceEntity {
     private String note; //Encrypted
     private String remindMeBeforeDays; //Encrypted
     private String reminded; //Encrypted
+    private String autoDone; //Encrypted
 }

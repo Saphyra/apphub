@@ -448,6 +448,16 @@ public class CalendarEventValidationTest extends BackEndTest {
         create_nullLabels(accessToken, repetitionType);
         create_labelsContainNull(accessToken, repetitionType);
         create_labelDoesNotExist(accessToken, repetitionType);
+        create_nullAutoDone(accessToken, repetitionType);
+    }
+
+    private void create_nullAutoDone(String accessToken, RepetitionType repetitionType) {
+        EventRequest request = EventRequestFactory.validRequest(repetitionType)
+            .toBuilder()
+            .autoDone(null)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "autoDone", "must not be null");
     }
 
     private void create_labelDoesNotExist(String accessToken, RepetitionType repetitionType) {

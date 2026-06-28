@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceR
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -45,13 +46,16 @@ class OccurrenceResponseMapperTest {
 	@Mock
 	private EventDao eventDao;
 
+	@Mock
+	private OccurrenceDao occurrenceDao;
+
 	@InjectMocks
 	private OccurrenceResponseMapper underTest;
 
 	@Test
 	void toResponse_userId_occurrence() {
-		Event event = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, true, "title-1", "content-1");
-		Occurrence occurrence = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false);
+		Event event = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, true, "title-1", "content-1", true);
+		Occurrence occurrence = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, OccurrenceStatus.EXPIRED, NOTE_1, null, false, null);
 		given(eventDao.findByIdValidated(USER_ID, EVENT_ID_1)).willReturn(event);
 
 		OccurrenceResponse result = underTest.toResponse(USER_ID, occurrence);
@@ -61,21 +65,24 @@ class OccurrenceResponseMapperTest {
 			.returns(EVENT_ID_1, OccurrenceResponse::getEventId)
 			.returns(DATE_1, OccurrenceResponse::getDate)
 			.returns(EVENT_TIME_1, OccurrenceResponse::getTime)
-			.returns(STATUS_1, OccurrenceResponse::getStatus)
+			.returns(OccurrenceStatus.DONE, OccurrenceResponse::getStatus)
 			.returns("title-1", OccurrenceResponse::getTitle)
 			.returns("content-1", OccurrenceResponse::getContent)
 			.returns(NOTE_1, OccurrenceResponse::getNote)
 			.returns(EVENT_REMIND_ME_BEFORE_DAYS_1, OccurrenceResponse::getRemindMeBeforeDays)
 			.returns(false, OccurrenceResponse::getReminded)
-			.returns(true, OccurrenceResponse::getEventArchived);
+			.returns(true, OccurrenceResponse::getEventArchived)
+			.returns(true, OccurrenceResponse::getAutoDone);
+
+		then(occurrenceDao).should().save(occurrence);
 	}
 
 	@Test
 	void toResponse_userId_occurrences() {
-		Event event1 = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, false, "title-1", "content-1");
-		Event event2 = createEvent(EVENT_ID_2, EVENT_TIME_2, EVENT_REMIND_ME_BEFORE_DAYS_2, true, "title-2", "content-2");
-		Occurrence occurrence1 = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false);
-		Occurrence occurrence2 = createOccurrence(EVENT_ID_2, OCCURRENCE_ID_2, DATE_2, OCCURRENCE_TIME_2, STATUS_2, NOTE_2, OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, true);
+		Event event1 = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, false, "title-1", "content-1", false);
+		Event event2 = createEvent(EVENT_ID_2, EVENT_TIME_2, EVENT_REMIND_ME_BEFORE_DAYS_2, true, "title-2", "content-2", false);
+		Occurrence occurrence1 = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false, true);
+		Occurrence occurrence2 = createOccurrence(EVENT_ID_2, OCCURRENCE_ID_2, DATE_2, OCCURRENCE_TIME_2, STATUS_2, NOTE_2, OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, true, true);
 		given(eventDao.getByIds(USER_ID, List.of(EVENT_ID_1, EVENT_ID_2))).willReturn(List.of(event1, event2));
 
 		List<OccurrenceResponse> result = underTest.toResponse(USER_ID, List.of(occurrence1, occurrence2));
@@ -92,7 +99,8 @@ class OccurrenceResponseMapperTest {
 			.returns(NOTE_1, OccurrenceResponse::getNote)
 			.returns(EVENT_REMIND_ME_BEFORE_DAYS_1, OccurrenceResponse::getRemindMeBeforeDays)
 			.returns(false, OccurrenceResponse::getReminded)
-			.returns(false, OccurrenceResponse::getEventArchived);
+			.returns(false, OccurrenceResponse::getEventArchived)
+			.returns(true, OccurrenceResponse::getAutoDone);
 		assertThat(result.get(1))
 			.returns(OCCURRENCE_ID_2, OccurrenceResponse::getOccurrenceId)
 			.returns(EVENT_ID_2, OccurrenceResponse::getEventId)
@@ -104,17 +112,18 @@ class OccurrenceResponseMapperTest {
 			.returns(NOTE_2, OccurrenceResponse::getNote)
 			.returns(OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, OccurrenceResponse::getRemindMeBeforeDays)
 			.returns(true, OccurrenceResponse::getReminded)
-			.returns(true, OccurrenceResponse::getEventArchived);
+			.returns(true, OccurrenceResponse::getEventArchived)
+			.returns(true, OccurrenceResponse::getAutoDone);
 
 		then(eventDao).should().getByIds(USER_ID, List.of(EVENT_ID_1, EVENT_ID_2));
 	}
 
 	@Test
 	void toResponse_events() {
-		Event event1 = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, false, "title-1", "content-1");
-		Event event2 = createEvent(EVENT_ID_2, EVENT_TIME_2, EVENT_REMIND_ME_BEFORE_DAYS_2, true, "title-2", "content-2");
-		Occurrence occurrence1 = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false);
-		Occurrence occurrence2 = createOccurrence(EVENT_ID_2, OCCURRENCE_ID_2, DATE_2, OCCURRENCE_TIME_2, STATUS_2, NOTE_2, OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, true);
+		Event event1 = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, false, "title-1", "content-1", true);
+		Event event2 = createEvent(EVENT_ID_2, EVENT_TIME_2, EVENT_REMIND_ME_BEFORE_DAYS_2, true, "title-2", "content-2", true);
+		Occurrence occurrence1 = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false, null);
+		Occurrence occurrence2 = createOccurrence(EVENT_ID_2, OCCURRENCE_ID_2, DATE_2, OCCURRENCE_TIME_2, STATUS_2, NOTE_2, OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, true, null);
 
 		List<OccurrenceResponse> result = underTest.toResponse(Map.of(EVENT_ID_1, event1, EVENT_ID_2, event2), List.of(occurrence1, occurrence2));
 
@@ -125,7 +134,7 @@ class OccurrenceResponseMapperTest {
 		assertThat(result.get(1).getRemindMeBeforeDays()).isEqualTo(OCCURRENCE_REMIND_ME_BEFORE_DAYS_2);
 	}
 
-	private Event createEvent(UUID eventId, LocalTime time, Integer remindMeBeforeDays, boolean archived, String title, String content) {
+	private Event createEvent(UUID eventId, LocalTime time, Integer remindMeBeforeDays, boolean archived, String title, String content, boolean autoDone) {
 		return Event.builder()
 			.eventId(eventId)
 			.userId(USER_ID)
@@ -140,10 +149,11 @@ class OccurrenceResponseMapperTest {
 			.startDate(LocalDate.of(2030, 1, 1))
 			.endDate(null)
 			.expirationNotified(false)
+			.autoDone(autoDone)
 			.build();
 	}
 
-	private Occurrence createOccurrence(UUID eventId, UUID occurrenceId, LocalDate date, LocalTime time, OccurrenceStatus status, String note, Integer remindMeBeforeDays, boolean reminded) {
+	private Occurrence createOccurrence(UUID eventId, UUID occurrenceId, LocalDate date, LocalTime time, OccurrenceStatus status, String note, Integer remindMeBeforeDays, boolean reminded, Boolean autoDone) {
 		return Occurrence.builder()
 			.userId(USER_ID)
 			.eventId(eventId)
@@ -154,6 +164,7 @@ class OccurrenceResponseMapperTest {
 			.note(note)
 			.remindMeBeforeDays(remindMeBeforeDays)
 			.reminded(reminded)
+			.autoDone(autoDone)
 			.build();
 	}
 }

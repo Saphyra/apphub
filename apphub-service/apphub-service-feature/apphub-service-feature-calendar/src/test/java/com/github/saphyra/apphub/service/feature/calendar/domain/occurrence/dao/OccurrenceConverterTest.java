@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
 
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_REMIND_ME_BEFORE_DAYS;
@@ -49,6 +50,7 @@ class OccurrenceConverterTest {
     private static final String NOTE = "note";
     private static final Integer REMIND_ME_BEFORE_DAYS = 3;
     private static final String ENCRYPTED_NEW_STATUS = "encrypted-new-status";
+    private static final String ENCRYPTED_AUTO_DONE = "encrypted-auto-done";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -92,6 +94,7 @@ class OccurrenceConverterTest {
             .note(NOTE)
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .reminded(true)
+            .autoDone(true)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -104,6 +107,7 @@ class OccurrenceConverterTest {
         given(stringEncryptor.encrypt(NOTE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_NOTE)).willReturn(ENCRYPTED_NOTE);
         given(integerEncryptor.encrypt(REMIND_ME_BEFORE_DAYS, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_REMIND_ME_BEFORE_DAYS)).willReturn(ENCRYPTED_REMIND_ME_BEFORE_DAYS);
         given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_REMINDED)).willReturn(ENCRYPTED_REMINDED);
+        given(booleanEncryptor.encrypt(true, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_AUTO_DONE)).willReturn(ENCRYPTED_AUTO_DONE);
 
         assertThat(underTest.convertDomain(domain))
             .returns(USER_ID_STRING, OccurrenceEntity::getUserId)
@@ -115,7 +119,8 @@ class OccurrenceConverterTest {
             .returns(ENCRYPTED_STATUS, OccurrenceEntity::getStatus)
             .returns(ENCRYPTED_NOTE, OccurrenceEntity::getNote)
             .returns(ENCRYPTED_REMIND_ME_BEFORE_DAYS, OccurrenceEntity::getRemindMeBeforeDays)
-            .returns(ENCRYPTED_REMINDED, OccurrenceEntity::getReminded);
+            .returns(ENCRYPTED_REMINDED, OccurrenceEntity::getReminded)
+            .returns(ENCRYPTED_AUTO_DONE , OccurrenceEntity::getAutoDone);
     }
 
     @Test
@@ -130,6 +135,7 @@ class OccurrenceConverterTest {
             .note(ENCRYPTED_NOTE)
             .remindMeBeforeDays(ENCRYPTED_REMIND_ME_BEFORE_DAYS)
             .reminded(ENCRYPTED_REMINDED)
+            .autoDone(ENCRYPTED_AUTO_DONE)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -143,6 +149,7 @@ class OccurrenceConverterTest {
         given(integerEncryptor.decrypt(ENCRYPTED_REMIND_ME_BEFORE_DAYS, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_REMIND_ME_BEFORE_DAYS)).willReturn(REMIND_ME_BEFORE_DAYS);
         given(booleanEncryptor.decrypt(ENCRYPTED_REMINDED, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_REMINDED)).willReturn(false);
         given(dateTimeUtil.getCurrentDate()).willReturn(DATE.minusDays(1));
+        given(booleanEncryptor.decrypt(ENCRYPTED_AUTO_DONE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_AUTO_DONE)).willReturn(true);
 
         assertThat(underTest.convertEntity(entity))
             .returns(USER_ID, Occurrence::getUserId)
@@ -153,7 +160,8 @@ class OccurrenceConverterTest {
             .returns(OccurrenceStatus.PENDING, Occurrence::getStatus)
             .returns(NOTE, Occurrence::getNote)
             .returns(REMIND_ME_BEFORE_DAYS, Occurrence::getRemindMeBeforeDays)
-            .returns(false, Occurrence::isReminded);
+            .returns(false, Occurrence::isReminded)
+            .returns(true, Occurrence::getAutoDone);
     }
 
     @Test
@@ -168,6 +176,7 @@ class OccurrenceConverterTest {
             .note(ENCRYPTED_NOTE)
             .remindMeBeforeDays(ENCRYPTED_REMIND_ME_BEFORE_DAYS)
             .reminded(ENCRYPTED_REMINDED)
+            .autoDone(ENCRYPTED_AUTO_DONE)
             .build();
 
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
@@ -182,6 +191,7 @@ class OccurrenceConverterTest {
         given(booleanEncryptor.decrypt(ENCRYPTED_REMINDED, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_REMINDED)).willReturn(false);
         given(dateTimeUtil.getCurrentDate()).willReturn(DATE.plusDays(1));
         given(stringEncryptor.encrypt(OccurrenceStatus.EXPIRED.name(), ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_STATUS)).willReturn(ENCRYPTED_NEW_STATUS);
+        given(booleanEncryptor.decrypt(ENCRYPTED_AUTO_DONE, ACCESS_TOKEN_USER_ID, OCCURRENCE_ID_STRING, COLUMN_AUTO_DONE)).willReturn(true);
 
         assertThat(underTest.convertEntity(entity))
             .returns(USER_ID, Occurrence::getUserId)
@@ -192,7 +202,8 @@ class OccurrenceConverterTest {
             .returns(OccurrenceStatus.EXPIRED, Occurrence::getStatus)
             .returns(NOTE, Occurrence::getNote)
             .returns(REMIND_ME_BEFORE_DAYS, Occurrence::getRemindMeBeforeDays)
-            .returns(false, Occurrence::isReminded);
+            .returns(false, Occurrence::isReminded)
+            .returns(true, Occurrence::getAutoDone);
 
         assertThat(entity.getStatus()).isEqualTo(ENCRYPTED_NEW_STATUS);
         then(occurrenceRepository).should().save(entity);

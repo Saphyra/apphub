@@ -59,10 +59,11 @@ const CalendarEditOccurrencePage = () => {
     const [note, setNote] = useExtractAsync(o => o.note, occurrence, "");
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, occurrence, 0);
     const [reminded, setReminded] = useExtractAsync(o => o.reminded, occurrence, false);
+    const [autoDone, setAutoDone] = useExtractAsync(o => o.autoDone, occurrence, false);
 
     useLoader(
         {
-            request: CALENDAR_GET_OCCURRENCE.createRequest(null, {eventId: eventId, occurrenceId: occurrenceId }),
+            request: CALENDAR_GET_OCCURRENCE.createRequest(null, { eventId: eventId, occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
             listener: [occurrenceId, refreshCounter]
@@ -132,7 +133,7 @@ const CalendarEditOccurrencePage = () => {
                     />
                 </fieldset>
 
-                <fieldset>
+                <fieldset id="calendar-edit-occurrence-settings">
                     <legend>{localizationHandler.get("settings")}</legend>
 
                     <div>
@@ -155,6 +156,16 @@ const CalendarEditOccurrencePage = () => {
                             type="checkbox"
                             checked={reminded}
                             onchangeCallback={setReminded}
+                        />}
+                    />
+
+                    <PostLabeledInputField
+                        label={localizationHandler.get("auto-done")}
+                        input={<InputField
+                            id="calendar-edit-occurrence-auto-done"
+                            type="checkbox"
+                            checked={autoDone}
+                            onchangeCallback={setAutoDone}
                         />}
                     />
                 </fieldset>

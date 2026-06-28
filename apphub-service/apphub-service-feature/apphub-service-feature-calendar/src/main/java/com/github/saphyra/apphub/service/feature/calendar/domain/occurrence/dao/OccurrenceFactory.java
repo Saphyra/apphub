@@ -17,10 +17,10 @@ public class OccurrenceFactory {
     private final DateTimeUtil dateTimeUtil;
 
     public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays) {
-        return create(userId, eventId, date, time, remindMeBeforeDays, "");
+        return create(userId, eventId, date, time, remindMeBeforeDays, "", null);
     }
 
-    public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays, String note) {
+    public Occurrence create(UUID userId, UUID eventId, LocalDate date, LocalTime time, Integer remindMeBeforeDays, String note, Boolean autoDone) {
         return Occurrence.builder()
             .userId(userId)
             .eventId(eventId)
@@ -31,6 +31,7 @@ public class OccurrenceFactory {
             .note(note)
             .remindMeBeforeDays(remindMeBeforeDays)
             .reminded(false)
+            .autoDone(autoDone)
             .build();
     }
 }

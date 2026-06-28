@@ -36,7 +36,8 @@ public class Event {
     private String title;
     @NonNull
     private String content;
-    private Integer remindMeBeforeDays;
+    private int remindMeBeforeDays;
     private boolean expirationNotified;
     private boolean archived;
+    private boolean autoDone;
 }

@@ -112,6 +112,12 @@ const OpenedEvent = ({
                         <span>{localizationHandler.get(event.archived ? "true" : "false")}</span>
                     </div>
 
+                    <div id="calendar-opened-event-auto-done">
+                        <span>{localizationHandler.get("auto-done")}</span>
+                        <span>: </span>
+                        <span>{localizationHandler.get(event.autoDone ? "true" : "false")}</span>
+                    </div>
+
                     {event.repeatForDays > 1 &&
                         <div id="calendar-opened-event-repeat-for-days">
                             {localizationHandler.get("repeat-for-days", { days: event.repeatForDays })}

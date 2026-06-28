@@ -27,6 +27,7 @@ public class EventFactory {
             .title(request.getTitle())
             .content(request.getContent())
             .remindMeBeforeDays(request.getRemindMeBeforeDays())
+            .autoDone(request.getAutoDone())
             .build();
     }
 }
