@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.elite_base.common.BufferSynchronizationService;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.equipment.Equipment;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.equipment.EquipmentDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.spaceship.Spaceship;
@@ -95,28 +95,28 @@ class LastUpdateOrphanedRecordsCleanerTest {
 
         LastUpdate commodityLastUpdate = LastUpdate.builder()
             .externalReference(EXTERNAL_REFERENCE)
-            .type(ItemType.COMMODITY)
+            .type(ObjectType.COMMODITY)
             .build();
         lastUpdateDao.save(commodityLastUpdate);
         LastUpdate fcMaterialLastUpdate = LastUpdate.builder()
             .externalReference(EXTERNAL_REFERENCE)
-            .type(ItemType.FC_MATERIAL)
+            .type(ObjectType.FC_MATERIAL)
             .build();
         lastUpdateDao.save(fcMaterialLastUpdate);
         LastUpdate equipmentLastUpdate = LastUpdate.builder()
             .externalReference(EXTERNAL_REFERENCE)
-            .type(ItemType.EQUIPMENT)
+            .type(ObjectType.EQUIPMENT)
             .build();
         lastUpdateDao.save(equipmentLastUpdate);
         LastUpdate spaceshipLastUpdate = LastUpdate.builder()
             .externalReference(EXTERNAL_REFERENCE)
-            .type(ItemType.SPACESHIP)
+            .type(ObjectType.SPACESHIP)
             .build();
         lastUpdateDao.save(spaceshipLastUpdate);
 
         LastUpdate orphanedRecord = LastUpdate.builder()
             .externalReference(UUID.randomUUID())
-            .type(ItemType.SPACESHIP)
+            .type(ObjectType.SPACESHIP)
             .build();
         lastUpdateDao.save(orphanedRecord);
         bufferSynchronizationService.synchronizeAll();

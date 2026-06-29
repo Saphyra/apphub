@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.monitoring.instrument.MetricMapper;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.EdMessage;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver.CommoditySaver;
@@ -147,6 +147,6 @@ class CommodityMessageProcessorTest {
 
         underTest.processMessage(edMessage);
 
-        then(commoditySaver).should().saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodities, STAR_SYSTEM_ID);
+        then(commoditySaver).should().saveAll(TIMESTAMP, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodities, STAR_SYSTEM_ID);
     }
 }

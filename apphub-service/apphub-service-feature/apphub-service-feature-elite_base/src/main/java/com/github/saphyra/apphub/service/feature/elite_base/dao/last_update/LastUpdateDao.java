@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
     protected LastUpdateId extractId(LastUpdate lastUpdate) {
         return LastUpdateId.builder()
             .externalReference(uuidConverter.convertDomain(lastUpdate.getExternalReference()))
-            .type(lastUpdate.getType())
+            .objectType(lastUpdate.getType())
             .build();
     }
 
@@ -35,19 +35,19 @@ public class LastUpdateDao extends CachedDao<LastUpdateEntity, LastUpdate, LastU
         return maybeLastUpdate.isEmpty() || !maybeLastUpdate.get().getLastUpdate().equals(lastUpdate.getLastUpdate());
     }
 
-    public LastUpdate findByIdValidated(UUID externalReference, ItemType itemType) {
-        return findById(externalReference, itemType)
+    public LastUpdate findByIdValidated(UUID externalReference, ObjectType objectType) {
+        return findById(externalReference, objectType)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(
                 HttpStatus.NOT_FOUND,
                 ErrorCode.DATA_NOT_FOUND,
-                "LastUpdate not found by externalReference %s and type %s".formatted(externalReference, itemType)
+                "LastUpdate not found by externalReference %s and type %s".formatted(externalReference, objectType)
             ));
     }
 
-    public Optional<LastUpdate> findById(UUID externalReference, ItemType type) {
+    public Optional<LastUpdate> findById(UUID externalReference, ObjectType type) {
         LastUpdateId id = LastUpdateId.builder()
             .externalReference(uuidConverter.convertDomain(externalReference))
-            .type(type)
+            .objectType(type)
             .build();
         return findById(id);
     }

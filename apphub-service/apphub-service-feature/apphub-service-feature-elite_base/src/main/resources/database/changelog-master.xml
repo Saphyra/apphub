@@ -26,6 +26,7 @@
     <include file="database/change_sets/fleet_carrier.xml"/>
     <include file="database/change_sets/commodity_average_price.xml"/>
     <include file="database/change_sets/last_update.xml"/>
+    <include file="database/change_sets/last_update-v2.xml"/>
     <include file="database/change_sets/body_data.xml"/>
     <include file="database/change_sets/body_ring.xml"/>
     <include file="database/change_sets/body_material.xml"/>

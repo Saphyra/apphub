@@ -1,0 +1,43 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-last_update_v2-psql" author="Saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="last_update_v2"/>
+            </not>
+        </preConditions>
+
+        <sql>
+            CREATE TABLE elite_base.last_update_v2 (
+            external_reference varchar(37) NOT NULL,
+            object_type varchar(255) NOT NULL,
+            last_update TEXT
+            ) PARTITION BY LIST (object_type);
+        </sql>
+
+        <addPrimaryKey schemaName="elite_base" tableName="last_update_v2" columnNames="external_reference,object_type" constraintName="last_update_v2-pk"/>
+
+        <rollback>
+            <dropTable schemaName="elite_base" tableName="last_update_v2"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-table-last_update_v2-h2" author="Saphyra" dbms="h2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="last_update_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="last_update_v2">
+            <column name="external_reference" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="object_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_update" type="text"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="last_update_v2" columnNames="external_reference,object_type" constraintName="last_update_v2-pk"/>
+    </changeSet>
+</databaseChangeLog>

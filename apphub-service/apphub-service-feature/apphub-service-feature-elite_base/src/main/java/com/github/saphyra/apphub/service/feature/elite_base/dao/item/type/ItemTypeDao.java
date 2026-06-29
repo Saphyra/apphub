@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.lib.common_util.dao.AbstractDao;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
@@ -139,7 +139,7 @@ public class ItemTypeDao extends AbstractDao<ItemTypeEntity, ItemTypeDto, String
      * @param types to filter for
      * @return all the known item names
      */
-    public List<String> getItemNames(List<ItemType> types) {
+    public List<String> getItemNames(List<ObjectType> types) {
         waitForCacheLoaded();
 
         return cache.stream()
@@ -148,7 +148,7 @@ public class ItemTypeDao extends AbstractDao<ItemTypeEntity, ItemTypeDto, String
             .toList();
     }
 
-    public void saveAll(ItemType type, List<String> commodityNames) {
+    public void saveAll(ObjectType type, List<String> commodityNames) {
         List<ItemTypeDto> dtos = commodityNames.stream()
             .map(commodityName -> ItemTypeDto.builder()
                 .itemName(commodityName)

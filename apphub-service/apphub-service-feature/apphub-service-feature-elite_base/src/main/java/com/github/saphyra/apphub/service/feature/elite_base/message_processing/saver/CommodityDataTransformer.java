@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.TradingDaoSupport;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdate;
@@ -24,7 +24,7 @@ public class CommodityDataTransformer {
     public Optional<Tradeable> transform(
         Tradeable maybeStoredCommodity,
         LocalDateTime timestamp,
-        ItemType type,
+        ObjectType type,
         ItemLocationType locationType,
         UUID externalReference,
         Long marketId,

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +35,7 @@ class LastUpdateConverterTest {
     void convertDomain() {
         LastUpdate domain = LastUpdate.builder()
             .externalReference(EXTERNAL_REFERENCE)
-            .type(ItemType.COMMODITY)
+            .type(ObjectType.COMMODITY)
             .lastUpdate(LAST_UPDATE)
             .build();
 
@@ -44,7 +44,7 @@ class LastUpdateConverterTest {
 
         assertThat(underTest.convertDomain(domain))
             .returns(EXTERNAL_REFERENCE_STRING, lastUpdateEntity -> lastUpdateEntity.getId().getExternalReference())
-            .returns(ItemType.COMMODITY, lastUpdateEntity -> lastUpdateEntity.getId().getType())
+            .returns(ObjectType.COMMODITY, lastUpdateEntity -> lastUpdateEntity.getId().getObjectType())
             .returns(LAST_UPDATE_STRING, LastUpdateEntity::getLastUpdate);
     }
 
@@ -53,7 +53,7 @@ class LastUpdateConverterTest {
         LastUpdateEntity domain = LastUpdateEntity.builder()
             .id(LastUpdateId.builder()
                 .externalReference(EXTERNAL_REFERENCE_STRING)
-                .type(ItemType.COMMODITY)
+                .objectType(ObjectType.COMMODITY)
                 .build())
 
             .lastUpdate(LAST_UPDATE_STRING)
@@ -64,7 +64,7 @@ class LastUpdateConverterTest {
 
         assertThat(underTest.convertEntity(domain))
             .returns(EXTERNAL_REFERENCE, LastUpdate::getExternalReference)
-            .returns(ItemType.COMMODITY, LastUpdate::getType)
+            .returns(ObjectType.COMMODITY, LastUpdate::getType)
             .returns(LAST_UPDATE, LastUpdate::getLastUpdate);
     }
 }

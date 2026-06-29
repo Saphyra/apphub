@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.message_processing.
 
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.Loadout;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.LoadoutDaoSupport;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
@@ -39,7 +39,7 @@ public class LoadoutSaver {
     private final ItemTypeDao itemTypeDao;
 
     @SneakyThrows
-    public void save(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<String> items, UUID starSystemId) {
+    public void save(LocalDateTime timestamp, ObjectType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<String> items, UUID starSystemId) {
         if (isNull(marketId)) {
             throw new IllegalArgumentException("marketId must not be null");
         }
@@ -96,6 +96,6 @@ public class LoadoutSaver {
     @Data
     private static class LockKey {
         private final UUID externalReference;
-        private final ItemType itemType;
+        private final ObjectType objectType;
     }
 }

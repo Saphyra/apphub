@@ -75,20 +75,35 @@ public class ExecutorServiceBean {
      *
      * @param dataList    the data to process
      * @param mapper      mapping the data
-     * @param parallelism max batch size
+     * @param threadCount max number of parallel threads
      * @param <I>         type of the input
      * @param <R>         type of the output
      * @return the processed list
      */
-    public <I, R> List<R> processCollectionWithWait(List<I> dataList, Function<I, R> mapper, int parallelism) {
-        if (parallelism < 1) {
-            throw ExceptionFactory.reportedException("Parallelism must not be lower than 1. It was " + parallelism);
+    public <I, R> List<R> processCollectionWithWait(List<I> dataList, Function<I, R> mapper, int threadCount) {
+        if (threadCount < 1) {
+            throw ExceptionFactory.reportedException("Parallelism must not be lower than 1. It was " + threadCount);
         }
 
-        return Lists.partition(dataList, parallelism)
-            .stream()
-            .map(part -> processCollectionWithWait(part, mapper))
-            .flatMap(Collection::stream)
+        Semaphore semaphore = new Semaphore(threadCount);
+
+        List<FutureWrapper<R>> futures = new ArrayList<>();
+
+        for (I item : dataList) {
+            semaphore.acquireUninterruptibly();
+            FutureWrapper<R> fw = asyncProcess(() -> {
+                try {
+                    return mapper.apply(item);
+                } finally {
+                    semaphore.release();
+                }
+            });
+            futures.add(fw);
+        }
+
+        return futures.stream()
+            .map(FutureWrapper::get)
+            .map(ExecutionResult::getOrThrow)
             .collect(Collectors.toList());
     }
 

@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_LAST_UPDATE;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE_V2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +23,7 @@ class LastUpdatedOfferDaoTest {
     @Test
     void getOrderByColumn() {
         assertThat(underTest.getOrderByColumn(null))
-            .returns(TABLE_LAST_UPDATE, QualifiedColumn::getTable)
+            .returns(TABLE_LAST_UPDATE_V2, QualifiedColumn::getTable)
             .returns(COLUMN_LAST_UPDATE, QualifiedColumn::getColumn);
     }
 

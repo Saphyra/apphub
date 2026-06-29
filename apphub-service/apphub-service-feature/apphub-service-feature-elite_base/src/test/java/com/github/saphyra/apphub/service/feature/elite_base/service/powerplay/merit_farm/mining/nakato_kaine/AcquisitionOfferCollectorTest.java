@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.powerplay.m
 import com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningMeritFarmResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.PowerplayActivityType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.Commodity;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateDao;
@@ -99,7 +99,7 @@ class AcquisitionOfferCollectorTest {
         given(commodity.getDemand()).willReturn(DEMAND);
         given(commodity.getItemName()).willReturn(COMMODITY_NAME);
         given(commodity.getBuyPrice()).willReturn(PRICE);
-        given(lastUpdateDao.findByIdValidated(STATION_ID, ItemType.COMMODITY)).willReturn(lastUpdate);
+        given(lastUpdateDao.findByIdValidated(STATION_ID, ObjectType.COMMODITY)).willReturn(lastUpdate);
         given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE);
         given(station.getStarSystemId()).willReturn(TARGET_SYSTEM_ID);
 

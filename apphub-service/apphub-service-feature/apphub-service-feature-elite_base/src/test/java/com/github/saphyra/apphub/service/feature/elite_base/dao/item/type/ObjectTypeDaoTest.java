@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.service.feature.elite_base.common.CacheProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class ItemTypeDaoTest {
+class ObjectTypeDaoTest {
     private static final Duration CACHE_TIMEOUT = Duration.ofMillis(10);
     private static final String ITEM_NAME = "item-name";
 
@@ -156,24 +156,24 @@ class ItemTypeDaoTest {
         given(eliteBaseProperties.getCache()).willReturn(cacheProperties);
         given(cacheProperties.getCacheReadTimeout()).willReturn(CACHE_TIMEOUT);
 
-        ExceptionValidator.validateLoggedException(() -> underTest.getItemNames(List.of(ItemType.EQUIPMENT)), HttpStatus.REQUEST_TIMEOUT, ErrorCode.TEMPORARILY_NOT_AVAILABLE);
+        ExceptionValidator.validateLoggedException(() -> underTest.getItemNames(List.of(ObjectType.EQUIPMENT)), HttpStatus.REQUEST_TIMEOUT, ErrorCode.TEMPORARILY_NOT_AVAILABLE);
     }
 
     @Test
     void getItemNames_differentType() {
         loadCache();
-        given(domain1.getType()).willReturn(ItemType.EQUIPMENT);
+        given(domain1.getType()).willReturn(ObjectType.EQUIPMENT);
 
-        assertThat(underTest.getItemNames(List.of(ItemType.COMMODITY))).isEmpty();
+        assertThat(underTest.getItemNames(List.of(ObjectType.COMMODITY))).isEmpty();
     }
 
     @Test
     void getItemNames() {
         loadCache();
-        given(domain1.getType()).willReturn(ItemType.EQUIPMENT);
+        given(domain1.getType()).willReturn(ObjectType.EQUIPMENT);
         given(domain1.getItemName()).willReturn(ITEM_NAME);
 
-        assertThat(underTest.getItemNames(List.of(ItemType.EQUIPMENT))).containsExactly(ITEM_NAME);
+        assertThat(underTest.getItemNames(List.of(ObjectType.EQUIPMENT))).containsExactly(ITEM_NAME);
     }
 
     private void loadCache() {

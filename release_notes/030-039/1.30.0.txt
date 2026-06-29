@@ -15,6 +15,8 @@
         Use constants for schema and table name in @Entity
 
 ===ETC===
+    EliteBase
+        Partitioned LastUpdate table
 
 ===Manual Release Steps===
     Pre deployment

@@ -14,7 +14,9 @@ public class DatabaseConstants {
     public static final String TABLE_BODY_MATERIAL = "body_material";
     public static final String TABLE_BODY_RING = "body_ring";
     public static final String TABLE_FLEET_CARRIER = "fleet_carrier";
+    @Deprecated
     public static final String TABLE_LAST_UPDATE = "last_update";
+    public static final String TABLE_LAST_UPDATE_V2 = "last_update_v2";
     public static final String TABLE_MINOR_FACTION = "minor_faction";
     public static final String TABLE_MINOR_FACTION_STATE = "minor_faction_state";
     public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING = "star_system_minor_faction_mapping";
@@ -50,7 +52,9 @@ public class DatabaseConstants {
     public static final String COLUMN_CONFLICT_ID = "conflict_id";
     public static final String COLUMN_ITEM_NAME = "item_name";
     public static final String COLUMN_LAST_UPDATE = "last_update";
+    @Deprecated
     public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_OBJECT_TYPE = "object_type";
     public static final String COLUMN_LOCATION_TYPE = "location_type";
     public static final String COLUMN_SELL_PRICE = "sell_price";
     public static final String COLUMN_BUY_PRICE = "buy_price";

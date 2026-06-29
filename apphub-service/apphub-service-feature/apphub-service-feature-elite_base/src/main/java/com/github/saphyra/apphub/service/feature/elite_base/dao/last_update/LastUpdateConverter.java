@@ -19,7 +19,7 @@ class LastUpdateConverter extends ConverterBase<LastUpdateEntity, LastUpdate> {
         return LastUpdateEntity.builder()
             .id(LastUpdateId.builder()
                 .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
-                .type(domain.getType())
+                .objectType(domain.getType())
                 .build())
             .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .build();
@@ -29,7 +29,7 @@ class LastUpdateConverter extends ConverterBase<LastUpdateEntity, LastUpdate> {
     protected LastUpdate processEntityConversion(LastUpdateEntity entity) {
         return LastUpdate.builder()
             .externalReference(uuidConverter.convertEntity(entity.getId().getExternalReference()))
-            .type(entity.getId().getType())
+            .type(entity.getId().getObjectType())
             .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .build();
     }
