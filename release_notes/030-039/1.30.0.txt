@@ -11,6 +11,8 @@
 ===PLATFORM CHANGES===
 
 ===TECHNICAL DEBTS===
+    EliteBase
+        Use constants for schema and table name in @Entity
 
 ===ETC===
 

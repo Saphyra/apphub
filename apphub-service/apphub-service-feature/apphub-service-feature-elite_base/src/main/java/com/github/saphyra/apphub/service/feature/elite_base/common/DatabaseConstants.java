@@ -27,6 +27,8 @@ public class DatabaseConstants {
     public static final String TABLE_ITEM_FC_MATERIAL = "item_fc_material";
     public static final String TABLE_ITEM_EQUIPMENT = "item_equipment";
     public static final String TABLE_ITEM_SPACESHIP = "item_spaceship";
+    public static final String TABLE_COMMODITY_AVERAGE_PRICE = "commodity_average_price";
+    public static final String TABLE_SETTLEMENT = "settlement";
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";

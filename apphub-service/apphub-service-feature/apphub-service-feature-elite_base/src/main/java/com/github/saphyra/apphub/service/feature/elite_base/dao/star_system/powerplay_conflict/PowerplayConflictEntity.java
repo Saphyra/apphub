@@ -8,12 +8,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_POWERPLAY_CONFLICT;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
 @Entity
-@Table(schema = "elite_base", name = "powerplay_conflict")
+@Table(schema = SCHEMA, name = TABLE_POWERPLAY_CONFLICT)
 class PowerplayConflictEntity {
     @EmbeddedId
     private PowerplayConflictEntityId id;

@@ -14,12 +14,15 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_POWER_MAPPING;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "star_system_power_mapping")
+@Table(schema = SCHEMA, name = TABLE_STAR_SYSTEM_POWER_MAPPING)
 @IdClass(StarSystemPowerMappingEntity.class)
 class StarSystemPowerMappingEntity implements Serializable {
     @Id
