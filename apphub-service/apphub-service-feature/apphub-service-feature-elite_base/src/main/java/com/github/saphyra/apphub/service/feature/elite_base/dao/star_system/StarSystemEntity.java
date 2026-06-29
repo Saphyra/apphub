@@ -22,7 +22,6 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 class StarSystemEntity {
     @Id
     private String id;
-    private String lastUpdate;
     private Long starId;
     private String starName;
     private Double xPos;

@@ -19,7 +19,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,24 +79,6 @@ class StarSystemDaoTest {
         given(readCache.asMap()).willReturn(map);
 
         assertThat(underTest.findByStarName(STAR_NAME)).contains(domain1);
-    }
-
-    @Test
-    void findByStarName_mergerPicksLatest() {
-        ConcurrentHashMap<UUID, StarSystem> map = new ConcurrentHashMap<>();
-        map.put(ID, domain1);
-        given(domain1.getStarName()).willReturn(STAR_NAME);
-        given(readCache.asMap()).willReturn(map);
-
-        given(domain1.getId()).willReturn(ID);
-        given(domain2.getId()).willReturn(ID);
-
-        given(domain1.getLastUpdate()).willReturn(CURRENT_TIME);
-        given(domain2.getLastUpdate()).willReturn(CURRENT_TIME.plusSeconds(1));
-
-        given(writeBuffer.search(any())).willReturn(List.of(domain2));
-
-        assertThat(underTest.findByStarName(STAR_NAME)).contains(domain2);
     }
 
     @Test

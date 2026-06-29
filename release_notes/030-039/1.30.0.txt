@@ -17,6 +17,7 @@
 ===ETC===
     EliteBase
         Partitioned LastUpdate table
+        Move LastUpdate from StarSystem
 
 ===Manual Release Steps===
     Pre deployment

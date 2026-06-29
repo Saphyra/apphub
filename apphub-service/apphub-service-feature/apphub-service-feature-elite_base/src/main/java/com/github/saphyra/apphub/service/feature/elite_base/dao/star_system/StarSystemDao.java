@@ -12,22 +12,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.BiFunction;
 
 @Component
 public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSystem, String, UUID, StarSystemRepository> {
-    private static final BiFunction<StarSystem, StarSystem, StarSystem> MERGER = (s1, s2) -> {
-        if (s1.getLastUpdate().equals(s2.getLastUpdate())) {
-            return s1;
-        } else if (s1.getLastUpdate().isAfter(s2.getLastUpdate())) {
-            return s1;
-        } else if (s2.getLastUpdate().isAfter(s1.getLastUpdate())) {
-            return s2;
-        }
-
-        throw new IllegalStateException("Cannot merge " + s1 + " with " + s2);
-    };
-
     private final UuidConverter uuidConverter;
 
     StarSystemDao(
@@ -49,7 +36,7 @@ public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSyste
     }
 
     public Optional<StarSystem> findByStarName(String starName) {
-        return searchOne(starSystem -> starSystem.getStarName().equals(starName), () -> repository.findByStarName(starName), MERGER);
+        return searchOne(starSystem -> starSystem.getStarName().equals(starName), () -> repository.findByStarName(starName), (s1, _) -> s1);
     }
 
     public List<StarSystem> getByStarNameLike(String query) {

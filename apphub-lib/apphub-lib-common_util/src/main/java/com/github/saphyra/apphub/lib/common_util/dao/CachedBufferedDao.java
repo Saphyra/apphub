@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -130,7 +130,7 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
      * @param mergeFunction If multiple versions are found in different caches, this function is used to merge them.
      * @throws IllegalStateException If multiple matches are found for the search criteria.
      */
-    protected Optional<DOMAIN> searchOne(Function<DOMAIN, Boolean> search, Supplier<Optional<ENTITY>> query, BiFunction<DOMAIN, DOMAIN, DOMAIN> mergeFunction) {
+    protected Optional<DOMAIN> searchOne(Function<DOMAIN, Boolean> search, Supplier<Optional<ENTITY>> query, BinaryOperator<DOMAIN> mergeFunction) {
         List<DOMAIN> matches = new ArrayList<>(writeBuffer.search(search));
 
         List<DOMAIN> readCacheResults = readCache.asMap()
@@ -142,7 +142,7 @@ public abstract class CachedBufferedDao<ENTITY, DOMAIN, ENTITY_ID, CACHE_KEY, RE
 
         Map<CACHE_KEY, DOMAIN> available = matches.stream()
             .map(domain -> new BiWrapper<>(getCacheKey(domain), domain))
-            .collect(Collectors.toMap(BiWrapper::getEntity1, BiWrapper::getEntity2, mergeFunction::apply));
+            .collect(Collectors.toMap(BiWrapper::getEntity1, BiWrapper::getEntity2, mergeFunction));
 
         if (available.size() > 1) {
             throw new IllegalStateException("Multiple matches found for search criteria.");
