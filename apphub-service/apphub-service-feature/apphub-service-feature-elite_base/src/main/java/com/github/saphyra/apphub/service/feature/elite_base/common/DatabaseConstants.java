@@ -22,6 +22,8 @@ public class DatabaseConstants {
     public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING = "star_system_minor_faction_mapping";
     public static final String TABLE_MINOR_FACTION_CONFLICT = "minor_faction_conflict";
     public static final String TABLE_CONFLICTING_MINOR_FACTION = "conflicting_minor_faction";
+    public static final String TABLE_STAR_SYSTEM_POWER_MAPPING_V2 = "star_system_power_mapping_v2";
+    @Deprecated
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING = "star_system_power_mapping";
     public static final String TABLE_POWERPLAY_CONFLICT = "powerplay_conflict";
     public static final String TABLE_ITEM_TYPE = "item_type";
@@ -52,6 +54,7 @@ public class DatabaseConstants {
     public static final String COLUMN_CONFLICT_ID = "conflict_id";
     public static final String COLUMN_ITEM_NAME = "item_name";
     public static final String COLUMN_LAST_UPDATE = "last_update";
+    public static final String COLUMN_POWER = "power";
     @Deprecated
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_OBJECT_TYPE = "object_type";

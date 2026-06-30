@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.co
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import com.google.common.cache.Cache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +29,7 @@ class CommodityAveragePriceDaoTest {
     private CommodityAveragePriceRepository repository;
 
     @Mock
-    private CommodityAveragePriceCache cache;
+    private Cache<String, CommodityAveragePrice> cache;
 
     @InjectMocks
     private CommodityAveragePriceDao underTest;
@@ -109,7 +110,7 @@ class CommodityAveragePriceDaoTest {
 
     @Test
     void findByIdValidated_notFound() {
-        given(cache.getIfPresent(COMMODITY_NAME)).willReturn(Optional.empty());
+        given(cache.getIfPresent(COMMODITY_NAME)).willReturn(null);
         given(repository.findById(COMMODITY_NAME)).willReturn(Optional.empty());
 
         ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(COMMODITY_NAME), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
@@ -117,7 +118,7 @@ class CommodityAveragePriceDaoTest {
 
     @Test
     void findByIdValidated() {
-        given(cache.getIfPresent(COMMODITY_NAME)).willReturn(Optional.of(storedDomain));
+        given(cache.getIfPresent(COMMODITY_NAME)).willReturn(storedDomain);
 
         assertThat(underTest.findByIdValidated(COMMODITY_NAME)).isEqualTo(storedDomain);
     }

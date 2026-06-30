@@ -13,11 +13,13 @@
 ===TECHNICAL DEBTS===
     EliteBase
         Use constants for schema and table name in @Entity
+        Delete OrphanedRecordCleaners
 
 ===ETC===
     EliteBase
         Partitioned LastUpdate table
         Move LastUpdate from StarSystem
+        Foreign key constraint to star_system_power_mapping.star_system_id
 
 ===Manual Release Steps===
     Pre deployment

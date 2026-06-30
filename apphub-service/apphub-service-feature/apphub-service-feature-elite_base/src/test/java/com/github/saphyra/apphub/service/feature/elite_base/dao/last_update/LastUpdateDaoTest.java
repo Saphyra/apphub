@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
+import com.google.common.cache.Cache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,7 +35,7 @@ class LastUpdateDaoTest {
     private LastUpdateRepository repository;
 
     @Mock
-    private LastUpdateCache cache;
+    private Cache<LastUpdateId, LastUpdate> cache;
 
     @InjectMocks
     private LastUpdateDao underTest;
@@ -69,7 +70,7 @@ class LastUpdateDaoTest {
             .externalReference(EXTERNAL_REFERENCE_STRING)
             .objectType(ObjectType.COMMODITY)
             .build();
-        given(cache.getIfPresent(id)).willReturn(Optional.empty());
+        given(cache.getIfPresent(id)).willReturn(null);
         given(repository.findById(id)).willReturn(Optional.empty());
 
         assertThat(underTest.shouldSave(domain)).isTrue();
@@ -85,7 +86,7 @@ class LastUpdateDaoTest {
             .externalReference(EXTERNAL_REFERENCE_STRING)
             .objectType(ObjectType.COMMODITY)
             .build();
-        given(cache.getIfPresent(id)).willReturn(Optional.of(storedDomain));
+        given(cache.getIfPresent(id)).willReturn(storedDomain);
         given(domain.getLastUpdate()).willReturn(LAST_UPDATE);
         given(storedDomain.getLastUpdate()).willReturn(LAST_UPDATE);
 
@@ -102,7 +103,7 @@ class LastUpdateDaoTest {
             .externalReference(EXTERNAL_REFERENCE_STRING)
             .objectType(ObjectType.COMMODITY)
             .build();
-        given(cache.getIfPresent(id)).willReturn(Optional.of(storedDomain));
+        given(cache.getIfPresent(id)).willReturn(storedDomain);
         given(domain.getLastUpdate()).willReturn(LAST_UPDATE);
         given(storedDomain.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
 
@@ -116,7 +117,7 @@ class LastUpdateDaoTest {
             .objectType(ObjectType.EQUIPMENT)
             .build();
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
-        given(cache.getIfPresent(id)).willReturn(Optional.empty());
+        given(cache.getIfPresent(id)).willReturn(null);
         given(repository.findById(id)).willReturn(Optional.empty());
 
         ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
@@ -129,7 +130,7 @@ class LastUpdateDaoTest {
             .objectType(ObjectType.EQUIPMENT)
             .build();
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
-        given(cache.getIfPresent(id)).willReturn(Optional.of(domain));
+        given(cache.getIfPresent(id)).willReturn(domain);
 
         assertThat(underTest.findByIdValidated(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).isEqualTo(domain);
     }
@@ -141,7 +142,7 @@ class LastUpdateDaoTest {
             .objectType(ObjectType.EQUIPMENT)
             .build();
         given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
-        given(cache.getIfPresent(id)).willReturn(Optional.of(domain));
+        given(cache.getIfPresent(id)).willReturn(domain);
 
         assertThat(underTest.findById(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).contains(domain);
     }

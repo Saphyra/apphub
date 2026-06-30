@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -50,23 +48,6 @@ public class EliteBaseScheduler {
             SendEventRequest.builder()
                 .eventName(eventName)
                 .build()
-        );
-    }
-
-    @Scheduled(cron = "${interval.eliteBase.orphanedRecordCleanup}")
-    void orphanedRecordCleanup() {
-        String eventName = EmptyEvent.ELITE_BASE_ORPHANED_RECORD_CLEANUP;
-        scheduledExecutorServiceBean.schedule(
-            () -> {
-                log.info("Sending event with name {}", eventName);
-
-                eventGatewayApi.sendEvent(
-                    SendEventRequest.builder()
-                        .eventName(eventName)
-                        .build()
-                );
-            },
-            Duration.ofMillis(schedulerProperties.getInitialDelay())
         );
     }
 }

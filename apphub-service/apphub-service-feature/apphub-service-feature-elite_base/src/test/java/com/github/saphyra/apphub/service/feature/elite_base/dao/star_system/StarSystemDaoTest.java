@@ -44,12 +44,6 @@ class StarSystemDaoTest {
     @Mock
     private Cache<UUID, StarSystem> readCache;
 
-    @Mock
-    private StarSystemWriteBuffer writeBuffer;
-
-    @Mock
-    private StarSystemDeleteBuffer deleteBuffer;
-
     @InjectMocks
     private StarSystemDao underTest;
 
@@ -65,7 +59,7 @@ class StarSystemDaoTest {
     @Test
     void findByStarName_fromRepository() {
         given(repository.findByStarName(STAR_NAME)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(entity)).willReturn(domain1);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain1));
         given(readCache.asMap()).willReturn(new ConcurrentHashMap<>());
 
         assertThat(underTest.findByStarName(STAR_NAME)).contains(domain1);

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.star_system;
 
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.common_util.dao.CachedBufferedDao;
+import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.cache.Cache;
 import org.springframework.http.HttpStatus;
@@ -14,29 +14,26 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSystem, String, UUID, StarSystemRepository> {
+public class StarSystemDao extends CachedDao<StarSystemEntity, StarSystem, String, StarSystemRepository> {
     private final UuidConverter uuidConverter;
 
     StarSystemDao(
         StarSystemConverter converter,
         StarSystemRepository repository,
-        Cache<UUID, StarSystem> starSystemReadCache,
-        StarSystemWriteBuffer writeBuffer,
-        StarSystemDeleteBuffer deleteBuffer,
+        Cache<String, StarSystem> starSystemReadCache,
         UuidConverter uuidConverter
     ) {
-        super(
-            converter,
-            repository,
-            starSystemReadCache,
-            writeBuffer,
-            deleteBuffer
-        );
+        super(converter, repository, false, starSystemReadCache);
         this.uuidConverter = uuidConverter;
     }
 
     public Optional<StarSystem> findByStarName(String starName) {
-        return searchOne(starSystem -> starSystem.getStarName().equals(starName), () -> repository.findByStarName(starName), (s1, _) -> s1);
+        return cache.asMap()
+            .values()
+            .stream()
+            .filter(starSystem -> starSystem.getStarName().equals(starName))
+            .findAny()
+            .or(() -> converter.convertEntity(repository.findByStarName(starName)));
     }
 
     public List<StarSystem> getByStarNameLike(String query) {
@@ -56,17 +53,17 @@ public class StarSystemDao extends CachedBufferedDao<StarSystemEntity, StarSyste
         return super.findAllById(uuidConverter.convertDomain(starIds));
     }
 
-    @Override
-    protected UUID getCacheKey(StarSystem starSystem) {
-        return starSystem.getId();
-    }
-
-    @Override
-    protected UUID toCacheKey(String id) {
-        return uuidConverter.convertEntity(id);
-    }
-
     public List<StarSystem> getByIds(Collection<UUID> ids) {
         return findAllById(uuidConverter.convertDomain(ids));
+    }
+
+    @Override
+    protected String extractId(StarSystem starSystem) {
+        return uuidConverter.convertDomain(starSystem.getId());
+    }
+
+    @Override
+    protected boolean shouldSave(StarSystem starSystem) {
+        return true;
     }
 }

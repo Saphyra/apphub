@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -71,7 +71,7 @@ class CachedBufferedDaoTest {
     private Supplier<Optional<Entity>> query;
 
     @Mock
-    private BiFunction<Domain, Domain, Domain> mergeFunction;
+    private BinaryOperator<Domain> mergeFunction;
 
     @BeforeEach
     void setUp() {

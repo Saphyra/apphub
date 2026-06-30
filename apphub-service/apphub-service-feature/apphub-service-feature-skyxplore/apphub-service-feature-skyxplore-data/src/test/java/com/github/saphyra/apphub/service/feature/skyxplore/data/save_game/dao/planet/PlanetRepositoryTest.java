@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.data.save_game.dao.planet;
 
-import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.lib.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
