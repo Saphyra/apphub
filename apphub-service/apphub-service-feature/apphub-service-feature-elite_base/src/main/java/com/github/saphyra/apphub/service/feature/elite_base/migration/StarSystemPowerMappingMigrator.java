@@ -71,21 +71,21 @@ class StarSystemPowerMappingMigrator {
     }
 
     private void save(List<Map<String, String>> batch) {
-        List<String> sqls = batch.stream()
-            .map(entry -> SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM_POWER_MAPPING_V2), entry).build())
-            .toList();
+        executorServiceBean.processCollectionWithWait(
+            batch,
+            record -> {
+                String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM_POWER_MAPPING_V2), record.keySet()).build();
 
-        executorServiceBean.processCollectionWithWait(sqls, this::save, THREAD_COUNT);
-    }
+                try {
+                    jdbcTemplate.update(sql, record);
+                } catch (Exception e) {
+                    errorReporterService.report("Failed to execute SQL: " + sql, e);
+                }
 
-    private Void save(String sql) {
-        try {
-            jdbcTemplate.execute(sql);
-        } catch (Exception e) {
-            errorReporterService.report("Failed to execute SQL: " + sql, e);
-        }
-
-        return null;
+                return null;
+            },
+            THREAD_COUNT
+        );
     }
 
     private List<Map<String, String>> fetchBatch() {

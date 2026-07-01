@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Component
@@ -14,10 +13,9 @@ import java.util.UUID;
 public class BodyFactory {
     private final IdGenerator idGenerator;
 
-    public Body create(LocalDateTime timestamp, UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
+    public Body create(UUID starSystemId, BodyType bodyType, Long bodyId, String bodyName, Double distanceFromStar) {
         return Body.builder()
             .id(idGenerator.randomUuid())
-            .lastUpdate(timestamp)
             .starSystemId(starSystemId)
             .type(bodyType)
             .bodyId(bodyId)

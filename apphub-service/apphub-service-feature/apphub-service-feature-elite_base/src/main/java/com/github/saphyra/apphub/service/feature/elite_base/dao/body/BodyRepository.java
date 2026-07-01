@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 interface BodyRepository extends CrudRepository<BodyEntity, String> {
-    Optional<BodyEntity> findByStarSystemIdAndBodyId(String starSystemId, Long bodyId);
-
     Optional<BodyEntity> findByBodyName(String bodyName);
 
     List<BodyEntity> getByStarSystemIdIn(List<String> starSystemIds);

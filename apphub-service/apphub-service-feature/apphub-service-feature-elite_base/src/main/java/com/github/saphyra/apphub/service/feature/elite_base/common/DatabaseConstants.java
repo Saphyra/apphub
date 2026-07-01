@@ -8,7 +8,9 @@ public class DatabaseConstants {
     public static final String TABLE_STATION = "station";
     public static final String TABLE_STATION_SERVICE = "station_service";
     public static final String TABLE_STATION_ECONOMY = "station_economy";
+    @Deprecated
     public static final String TABLE_BODY = "body";
+    public static final String TABLE_BODY_V2 = "body_v2";
     public static final String TABLE_MATERIAL_TRADER_OVERRIDE = "material_trader_override";
     public static final String TABLE_BODY_DATA = "body_data";
     public static final String TABLE_BODY_MATERIAL = "body_material";
@@ -42,6 +44,7 @@ public class DatabaseConstants {
     public static final String COLUMN_Z_POS = "z_pos";
     public static final String COLUMN_STATION_ID = "station_id";
     public static final String COLUMN_STATION_NAME = "station_name";
+    public static final String COLUMN_BODY_NAME = "body_name";
     public static final String COLUMN_DISTANCE_FROM_STAR = "distance_from_star";
     public static final String COLUMN_DISTANCE_FROM_REFERENCE = "distance_from_reference";
     public static final String COLUMN_BODY_ID = "body_id";
@@ -55,7 +58,6 @@ public class DatabaseConstants {
     public static final String COLUMN_ITEM_NAME = "item_name";
     public static final String COLUMN_LAST_UPDATE = "last_update";
     public static final String COLUMN_POWER = "power";
-    @Deprecated
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_OBJECT_TYPE = "object_type";
     public static final String COLUMN_LOCATION_TYPE = "location_type";

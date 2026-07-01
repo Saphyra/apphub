@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.body;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
@@ -12,13 +11,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class BodyConverter extends ConverterBase<BodyEntity, Body> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
 
     @Override
     protected BodyEntity processDomainConversion(Body domain) {
         return BodyEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
-            .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .type(domain.getType())
             .bodyId(domain.getBodyId())
@@ -31,7 +28,6 @@ class BodyConverter extends ConverterBase<BodyEntity, Body> {
     protected Body processEntityConversion(BodyEntity entity) {
         return Body.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
-            .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .type(entity.getType())
             .bodyId(entity.getBodyId())

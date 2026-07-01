@@ -11,7 +11,7 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ class LastUpdateToV2Migrator {
     //Ensure migration runs after partitions are created
     @SuppressWarnings("unused")
     private final LastUpdatePartitionCreator lastUpdatePartitionCreator;
-    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate jdbcTemplate;
     private final ExecutorServiceBean executorServiceBean;
 
     @PostConstruct
@@ -67,15 +67,21 @@ class LastUpdateToV2Migrator {
             )
             .toList();
 
-        executorServiceBean.processCollectionWithWait(sqls, jdbcTemplate::update, THREAD_COUNT);
+        executorServiceBean.processCollectionWithWait(sqls, sql -> jdbcTemplate.update(sql, Map.of()), THREAD_COUNT);
     }
 
     private void save(List<Map<String, String>> batch) {
-        List<String> sqls = batch.stream()
-            .map(entry -> SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_LAST_UPDATE_V2), entry).build())
-            .toList();
+        executorServiceBean.processCollectionWithWait(
+            batch,
+            record -> {
+                String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_LAST_UPDATE_V2), record.keySet()).build();
 
-        executorServiceBean.processCollectionWithWait(sqls, jdbcTemplate::update, THREAD_COUNT);
+                jdbcTemplate.update(sql, record);
+
+                return null;
+            },
+            THREAD_COUNT
+        );
     }
 
     private List<Map<String, String>> fetchBatch() {

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -32,7 +32,7 @@ class StarSystemPowerMappingRepositoryTest {
     private StarSystemPowerMappingRepository underTest;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
@@ -44,7 +44,7 @@ class StarSystemPowerMappingRepositoryTest {
     @AfterEach
     public void clear() {
         underTest.deleteAll();
-        jdbcTemplate.execute(SqlBuilder.delete().from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM)).build());
+        jdbcTemplate.update(SqlBuilder.delete().from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM)).build(), Map.of());
     }
 
     @Test
@@ -87,9 +87,9 @@ class StarSystemPowerMappingRepositoryTest {
     private void saveStarSystem(String starSystemId) {
         Map<String, String> data = Map.of(COLUMN_ID, starSystemId);
 
-        String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM), data)
+        String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM), data.keySet())
             .build();
 
-        jdbcTemplate.execute(sql);
+        jdbcTemplate.update(sql, data);
     }
 }

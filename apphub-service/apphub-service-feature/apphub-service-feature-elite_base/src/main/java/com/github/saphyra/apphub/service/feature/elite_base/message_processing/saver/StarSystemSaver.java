@@ -49,29 +49,31 @@ public class StarSystemSaver {
             throw new IllegalArgumentException("starName must not be null.");
         }
 
-        Optional<Lock> starNameLock = Optional.of(starName)
-            .map(STAR_NAME_LOCK::get);
-
-        starNameLock.ifPresent(this::lock);
+        Lock starNameLock = STAR_NAME_LOCK.get(starName);
+        lock(starNameLock);
 
         log.debug("Saving starSystem {}", starName);
 
         try {
-            StarSystem starSystem = starSystemDao.findByStarName(starName)
-                .orElseGet(() -> {
-                    StarSystem created = starSystemFactory.create(starId, starName, starPosition, starType);
-                    log.debug("Saving new {}", created);
-                    starSystemDao.save(created);
-                    return created;
-                });
+            Optional<StarSystem> maybeStarSystem = starSystemDao.findByStarName(starName);
+            if (maybeStarSystem.isPresent()) {
+                StarSystem starSystem = maybeStarSystem.get();
 
-            updateFields(timestamp, starSystem, starId, starName, starPosition, starType);
+                updateFields(timestamp, starSystem, starId, starName, starPosition, starType);
 
-            log.debug("Saved starSystem {}", starName);
+                return starSystem;
+            } else {
+                StarSystem created = starSystemFactory.create(starId, starName, starPosition, starType);
+                log.debug("Saving new {}", created);
 
-            return starSystem;
+                starSystemDao.save(created);
+
+                saveLastUpdate(timestamp, created);
+
+                return created;
+            }
         } finally {
-            starNameLock.ifPresent(Lock::unlock);
+            starNameLock.unlock();
         }
     }
 
@@ -90,7 +92,7 @@ public class StarSystemSaver {
             return;
         }
 
-        lastUpdateDao.save(lastUpdateFactory.create(starSystem.getId(), ObjectType.STAR_SYSTEM, timestamp));
+        saveLastUpdate(timestamp, starSystem);
 
         StarSystemPosition starSystemPosition = StarSystemPosition.parse(starPosition);
 
@@ -106,5 +108,9 @@ public class StarSystemSaver {
         if (results.stream().anyMatch(Boolean::booleanValue)) {
             starSystemDao.save(starSystem);
         }
+    }
+
+    private void saveLastUpdate(LocalDateTime timestamp, StarSystem starSystem) {
+        lastUpdateDao.save(lastUpdateFactory.create(starSystem.getId(), ObjectType.STAR_SYSTEM, timestamp));
     }
 }

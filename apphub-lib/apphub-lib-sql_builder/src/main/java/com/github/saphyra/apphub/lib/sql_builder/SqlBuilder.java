@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.lib.sql_builder.query.SelectQuery;
 import com.github.saphyra.apphub.lib.sql_builder.query.UpdateQuery;
 import com.github.saphyra.apphub.lib.sql_builder.table.Table;
 
-import java.util.Map;
+import java.util.Collection;
 
 public interface SqlBuilder extends SegmentProvider {
     static SelectQuery select() {
@@ -18,11 +18,8 @@ public interface SqlBuilder extends SegmentProvider {
         return new DeleteQuery();
     }
 
-    /**
-     * @param data Map<ColumnName, ColumnValue>
-     */
-    static InsertQuery insert(Table table, Map<String, String> data) {
-        return new InsertQuery(table, data);
+    static InsertQuery insert(Table table, Collection<String> columns) {
+        return new InsertQuery(table, columns);
     }
 
     static UpdateQuery update(Table table) {
