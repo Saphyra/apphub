@@ -24,7 +24,6 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 class MinorFactionEntity {
     @Id
     private String id;
-    private String lastUpdate;
     private String factionName;
     @Enumerated(EnumType.STRING)
     private FactionStateEnum state;

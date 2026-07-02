@@ -10,6 +10,7 @@ public enum ObjectType {
     STAR_SYSTEM,
     BODY,
     COMMODITY_AVERAGE_PRICE,
+    MINOR_FACTION,
     ;
 
     public static final List<ObjectType> TRADING_TYPES = List.of(COMMODITY);

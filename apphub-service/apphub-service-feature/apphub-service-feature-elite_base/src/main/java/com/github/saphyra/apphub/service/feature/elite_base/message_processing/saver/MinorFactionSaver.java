@@ -2,6 +2,13 @@ package com.github.saphyra.apphub.service.feature.elite_base.message_processing.
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.Allegiance;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdate;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.MinorFaction;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.MinorFactionDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.MinorFactionFactory;
@@ -9,9 +16,9 @@ import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.st
 import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.state.StateStatus;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.structure.journal.Faction;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.structure.journal.FactionState;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.FactionStateEnum;
+import com.google.common.util.concurrent.Striped;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +26,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
 import static java.util.Objects.isNull;
@@ -27,9 +37,13 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class MinorFactionSaver {
+    private static final Striped<Lock> MINOR_FACTION_NAME_LOCK = Striped.lock(8);
+
     private final MinorFactionDao minorFactionDao;
     private final MinorFactionFactory minorFactionFactory;
     private final MinorFactionStateFactory minorFactionStateFactory;
+    private final LastUpdateDao lastUpdateDao;
+    private final LastUpdateFactory lastUpdateFactory;
 
     public List<MinorFaction> save(LocalDateTime timestamp, Faction[] factions) {
         if (isNull(factions)) {
@@ -51,14 +65,10 @@ public class MinorFactionSaver {
     }
 
     public MinorFaction save(LocalDateTime timestamp, String factionName, FactionStateEnum economicState) {
-        if (isBlank(factionName)) {
-            return null;
-        }
-
         return save(timestamp, factionName, economicState, null, null, Collections.emptyList(), Collections.emptyList(), Collections.emptyList());
     }
 
-    private synchronized MinorFaction save(
+    private MinorFaction save(
         LocalDateTime timestamp,
         String factionName,
         FactionStateEnum economicState,
@@ -68,12 +78,25 @@ public class MinorFactionSaver {
         List<FactionState> pendingStates,
         List<FactionState> recoveringStates
     ) {
+        if (isBlank(factionName)) {
+            return null;
+        }
+
         log.debug("Saving minorFaction {}", factionName);
 
-        MinorFaction minorFaction = minorFactionDao.findByFactionName(factionName)
-            .orElseGet(() -> {
+        Lock lock = MINOR_FACTION_NAME_LOCK.get(factionName);
+        lock(lock);
+
+        try {
+            Optional<MinorFaction> maybeMinorFaction = minorFactionDao.findByFactionName(factionName);
+            if (maybeMinorFaction.isPresent()) {
+                MinorFaction minorFaction = maybeMinorFaction.get();
+
+                updateFields(timestamp, minorFaction, economicState, influence, allegiance, activeStates, pendingStates, recoveringStates);
+
+                return minorFaction;
+            } else {
                 MinorFaction created = minorFactionFactory.create(
-                    timestamp,
                     factionName,
                     economicState,
                     influence,
@@ -84,12 +107,21 @@ public class MinorFactionSaver {
                 );
                 log.debug("Saving new {}", created);
                 minorFactionDao.save(created);
+
+                saveLastUpdate(timestamp, created);
+
                 return created;
-            });
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
 
-        updateFields(timestamp, minorFaction, economicState, influence, allegiance, activeStates, pendingStates, recoveringStates);
-
-        return minorFaction;
+    @SneakyThrows
+    private void lock(Lock lock) {
+        if (!lock.tryLock(30, TimeUnit.SECONDS)) {
+            throw new MessageProcessingDelayedException("Lock acquisition failed in class " + getClass().getSimpleName());
+        }
     }
 
     private void updateFields(
@@ -102,13 +134,16 @@ public class MinorFactionSaver {
         List<FactionState> pendingStates,
         List<FactionState> recoveringStates
     ) {
-        if (timestamp.isBefore(minorFaction.getLastUpdate())) {
+        LocalDateTime lastUpdated = lastUpdateDao.findByIdOrDefault(minorFaction.getId(), ObjectType.MINOR_FACTION)
+            .getLastUpdate();
+        if (timestamp.isBefore(lastUpdated)) {
             log.debug("MinorFaction {} has newer data than {}", minorFaction.getId(), timestamp);
             return;
         }
 
+        saveLastUpdate(timestamp, minorFaction);
+
         List.of(
-                new UpdateHelper(timestamp, minorFaction::getLastUpdate, () -> minorFaction.setLastUpdate(timestamp)),
                 new UpdateHelper(economicState, minorFaction::getState, () -> minorFaction.setState(economicState)),
                 new UpdateHelper(influence, minorFaction::getInfluence, () -> minorFaction.setInfluence(influence)),
                 new UpdateHelper(allegiance, minorFaction::getAllegiance, () -> minorFaction.setAllegiance(allegiance)),
@@ -119,5 +154,10 @@ public class MinorFactionSaver {
             .forEach(UpdateHelper::modify);
 
         minorFactionDao.save(minorFaction);
+    }
+
+    private void saveLastUpdate(LocalDateTime timestamp, MinorFaction minorFaction) {
+        LastUpdate lastUpdate = lastUpdateFactory.create(minorFaction.getId(), ObjectType.MINOR_FACTION, timestamp);
+        lastUpdateDao.save(lastUpdate);
     }
 }
