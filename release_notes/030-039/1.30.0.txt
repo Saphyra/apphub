@@ -10,6 +10,7 @@
         Support FrontlineSolutions Allegiance
 
 ===PLATFORM CHANGES===
+    DynamoDbRepository automatically fills tableName
 
 ===TECHNICAL DEBTS===
     EliteBase

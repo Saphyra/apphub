@@ -50,6 +50,11 @@ public class CommodityDataTransformer {
             return Optional.of(created);
         }
 
+        if (isNull(originalLastUpdate)) {
+            //Stored commodity of unknown origin
+            return Optional.of(created);
+        }
+
         if (originalLastUpdate.getLastUpdate().isAfter(timestamp)) {
             //Existing commodity is newer version than the updated one
             return Optional.empty();

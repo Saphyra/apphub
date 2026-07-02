@@ -19,8 +19,9 @@ class DynamoDbRepositoryGetItemUtil {
     private final DynamoDbClient client;
     private final DynamoDbMonitoringInstruments instruments;
 
-    Optional<Map<String, AttributeValue>> getItem(GetItemRequest request, String monitoringFunctionality) {
+    Optional<Map<String, AttributeValue>> getItem(String tableName, GetItemRequest request, String monitoringFunctionality) {
         request = request.toBuilder()
+            .tableName(tableName)
             .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
             .build();
 

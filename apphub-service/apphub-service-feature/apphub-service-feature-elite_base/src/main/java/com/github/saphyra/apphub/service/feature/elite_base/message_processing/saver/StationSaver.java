@@ -56,7 +56,7 @@ public class StationSaver {
             throw new IllegalArgumentException("marketId must not be null.");
         }
 
-        if (EconomyEnum.CARRIER == economy || StationType.FLEET_CARRIER == stationType) {
+        if (StationType.FLEET_CARRIER == stationType) {
             throw new IllegalArgumentException("Carrier must not be saved as station");
         }
 
