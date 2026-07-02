@@ -9,6 +9,7 @@ public enum ObjectType {
     SPACESHIP,
     STAR_SYSTEM,
     BODY,
+    COMMODITY_AVERAGE_PRICE,
     ;
 
     public static final List<ObjectType> TRADING_TYPES = List.of(COMMODITY);

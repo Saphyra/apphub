@@ -57,6 +57,7 @@ public class DatabaseConstants {
     public static final String COLUMN_CONFLICT_ID = "conflict_id";
     public static final String COLUMN_ITEM_NAME = "item_name";
     public static final String COLUMN_LAST_UPDATE = "last_update";
+    public static final String COLUMN_COMMODITY_NAME = "commodity_name";
     public static final String COLUMN_POWER = "power";
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_OBJECT_TYPE = "object_type";

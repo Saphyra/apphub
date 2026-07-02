@@ -20,6 +20,5 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 class CommodityAveragePriceEntity {
     @Id
     private String commodityName;
-    private String lastUpdate;
     private Integer averagePrice;
 }

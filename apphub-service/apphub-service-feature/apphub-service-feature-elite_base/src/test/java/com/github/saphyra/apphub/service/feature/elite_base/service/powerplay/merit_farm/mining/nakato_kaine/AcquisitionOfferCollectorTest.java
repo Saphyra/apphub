@@ -99,7 +99,7 @@ class AcquisitionOfferCollectorTest {
         given(commodity.getDemand()).willReturn(DEMAND);
         given(commodity.getItemName()).willReturn(COMMODITY_NAME);
         given(commodity.getBuyPrice()).willReturn(PRICE);
-        given(lastUpdateDao.findByIdValidated(STATION_ID, ObjectType.COMMODITY)).willReturn(lastUpdate);
+        given(lastUpdateDao.findByIdOrDefault(STATION_ID, ObjectType.COMMODITY)).willReturn(lastUpdate);
         given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE);
         given(station.getStarSystemId()).willReturn(TARGET_SYSTEM_ID);
 

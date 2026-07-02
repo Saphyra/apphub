@@ -97,7 +97,7 @@ class AcquisitionOfferCollector {
                     .commodityName(offer.getItemName())
                     .demand(offer.getDemand())
                     .price(offer.getBuyPrice())
-                    .lastUpdate(lastUpdateDao.findByIdValidated(offer.getExternalReference(), ObjectType.COMMODITY).getLastUpdate())
+                    .lastUpdate(lastUpdateDao.findByIdOrDefault(offer.getExternalReference(), ObjectType.COMMODITY).getLastUpdate())
                     .activityType(PowerplayActivityType.ACQUISITION)
                     .build();
             })

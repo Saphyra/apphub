@@ -8,7 +8,7 @@
 
         <sql>
             CREATE TABLE elite_base.last_update_v2 (
-            external_reference varchar(37) NOT NULL,
+            external_reference varchar(255) NOT NULL,
             object_type varchar(255) NOT NULL,
             last_update TEXT
             ) PARTITION BY LIST (object_type);
@@ -29,7 +29,7 @@
         </preConditions>
 
         <createTable schemaName="elite_base" tableName="last_update_v2">
-            <column name="external_reference" type="varchar(37)">
+            <column name="external_reference" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="object_type" type="varchar(255)">

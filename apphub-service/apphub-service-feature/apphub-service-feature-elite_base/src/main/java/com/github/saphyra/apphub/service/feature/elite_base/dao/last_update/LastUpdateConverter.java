@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.last_update;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
-import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,14 +10,13 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 class LastUpdateConverter extends ConverterBase<LastUpdateEntity, LastUpdate> {
-    private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;
 
     @Override
     protected LastUpdateEntity processDomainConversion(LastUpdate domain) {
         return LastUpdateEntity.builder()
             .id(LastUpdateId.builder()
-                .externalReference(uuidConverter.convertDomain(domain.getExternalReference()))
+                .externalReference(domain.getExternalReference())
                 .objectType(domain.getType())
                 .build())
             .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
@@ -28,7 +26,7 @@ class LastUpdateConverter extends ConverterBase<LastUpdateEntity, LastUpdate> {
     @Override
     protected LastUpdate processEntityConversion(LastUpdateEntity entity) {
         return LastUpdate.builder()
-            .externalReference(uuidConverter.convertEntity(entity.getId().getExternalReference()))
+            .externalReference(entity.getId().getExternalReference())
             .type(entity.getId().getObjectType())
             .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .build();

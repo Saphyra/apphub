@@ -1,29 +1,27 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.last_update;
 
-import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
-import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import com.google.common.cache.Cache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class LastUpdateDaoTest {
-    private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
-    private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
+    private static final String EXTERNAL_REFERENCE = "external-reference";
     private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
+
+     @Mock
+     private LastUpdateFactory lastUpdateFactory;
 
     @Mock
     private UuidConverter uuidConverter;
@@ -53,10 +51,9 @@ class LastUpdateDaoTest {
     void extractId() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(domain.getType()).willReturn(ObjectType.COMMODITY);
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         assertThat(underTest.extractId(domain))
-            .returns(EXTERNAL_REFERENCE_STRING, LastUpdateId::getExternalReference)
+            .returns(EXTERNAL_REFERENCE, LastUpdateId::getExternalReference)
             .returns(ObjectType.COMMODITY, LastUpdateId::getObjectType);
     }
 
@@ -64,10 +61,9 @@ class LastUpdateDaoTest {
     void shouldSave_newEntity() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(domain.getType()).willReturn(ObjectType.COMMODITY);
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         LastUpdateId id = LastUpdateId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .externalReference(EXTERNAL_REFERENCE)
             .objectType(ObjectType.COMMODITY)
             .build();
         given(cache.getIfPresent(id)).willReturn(null);
@@ -80,10 +76,9 @@ class LastUpdateDaoTest {
     void shouldSave_matchingLastUpdate() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(domain.getType()).willReturn(ObjectType.COMMODITY);
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         LastUpdateId id = LastUpdateId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .externalReference(EXTERNAL_REFERENCE)
             .objectType(ObjectType.COMMODITY)
             .build();
         given(cache.getIfPresent(id)).willReturn(storedDomain);
@@ -97,10 +92,9 @@ class LastUpdateDaoTest {
     void shouldSave_differentLastUpdate() {
         given(domain.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(domain.getType()).willReturn(ObjectType.COMMODITY);
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
 
         LastUpdateId id = LastUpdateId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .externalReference(EXTERNAL_REFERENCE)
             .objectType(ObjectType.COMMODITY)
             .build();
         given(cache.getIfPresent(id)).willReturn(storedDomain);
@@ -113,35 +107,33 @@ class LastUpdateDaoTest {
     @Test
     void findByIdValidated_notFound() {
         LastUpdateId id = LastUpdateId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .externalReference(EXTERNAL_REFERENCE)
             .objectType(ObjectType.EQUIPMENT)
             .build();
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(cache.getIfPresent(id)).willReturn(null);
         given(repository.findById(id)).willReturn(Optional.empty());
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).willReturn(domain);
 
-        ExceptionValidator.validateNotLoggedException(() -> underTest.findByIdValidated(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT), HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND);
+        assertThat(underTest.findByIdOrDefault(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).isEqualTo(domain);
     }
 
     @Test
     void findByIdValidated() {
         LastUpdateId id = LastUpdateId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .externalReference(EXTERNAL_REFERENCE)
             .objectType(ObjectType.EQUIPMENT)
             .build();
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(cache.getIfPresent(id)).willReturn(domain);
 
-        assertThat(underTest.findByIdValidated(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).isEqualTo(domain);
+        assertThat(underTest.findByIdOrDefault(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).isEqualTo(domain);
     }
 
     @Test
     void findById() {
         LastUpdateId id = LastUpdateId.builder()
-            .externalReference(EXTERNAL_REFERENCE_STRING)
+            .externalReference(EXTERNAL_REFERENCE)
             .objectType(ObjectType.EQUIPMENT)
             .build();
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(cache.getIfPresent(id)).willReturn(domain);
 
         assertThat(underTest.findById(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).contains(domain);

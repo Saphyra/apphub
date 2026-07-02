@@ -21,6 +21,7 @@
         Partitioned LastUpdate table
         Move LastUpdate from StarSystem
         Move LastUpdate from Body
+        Move LastUpdate from CommodityAveragePrice
         Foreign key constraint to star_system_power_mapping.star_system_id
         Foreign key constraint to body.star_system_id
 

@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +19,6 @@ import static org.mockito.BDDMockito.given;
 class CommodityAveragePriceDaoTest {
     private static final String COMMODITY_NAME = "commodity-name";
     private static final Integer AVERAGE_PRICE = 34;
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
 
     @Mock
     private CommodityAveragePriceConverter converter;
@@ -68,40 +66,11 @@ class CommodityAveragePriceDaoTest {
     }
 
     @Test
-    void shouldSave_outdated() {
-        given(newDomain.getCommodityName()).willReturn(COMMODITY_NAME);
-        given(newDomain.getAveragePrice()).willReturn(AVERAGE_PRICE);
-        given(repository.findById(COMMODITY_NAME)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.ofNullable(entity))).willReturn(Optional.of(storedDomain));
-        given(newDomain.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
-        given(storedDomain.getCommodityName()).willReturn(COMMODITY_NAME);
-        given(storedDomain.getLastUpdate()).willReturn(LAST_UPDATE);
-
-        assertThat(underTest.shouldSave(newDomain)).isFalse();
-    }
-
-    @Test
-    void shouldSave_sameData() {
-        given(newDomain.getCommodityName()).willReturn(COMMODITY_NAME);
-        given(newDomain.getAveragePrice()).willReturn(AVERAGE_PRICE);
-        given(repository.findById(COMMODITY_NAME)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.ofNullable(entity))).willReturn(Optional.of(storedDomain));
-        given(newDomain.getLastUpdate()).willReturn(LAST_UPDATE);
-        given(storedDomain.getLastUpdate()).willReturn(LAST_UPDATE);
-        given(storedDomain.getAveragePrice()).willReturn(AVERAGE_PRICE);
-        given(storedDomain.getCommodityName()).willReturn(COMMODITY_NAME);
-
-        assertThat(underTest.shouldSave(newDomain)).isFalse();
-    }
-
-    @Test
     void shouldSave() {
         given(newDomain.getCommodityName()).willReturn(COMMODITY_NAME);
         given(newDomain.getAveragePrice()).willReturn(AVERAGE_PRICE);
         given(repository.findById(COMMODITY_NAME)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.ofNullable(entity))).willReturn(Optional.of(storedDomain));
-        given(newDomain.getLastUpdate()).willReturn(LAST_UPDATE);
-        given(storedDomain.getLastUpdate()).willReturn(LAST_UPDATE);
+        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(storedDomain));
         given(storedDomain.getAveragePrice()).willReturn(AVERAGE_PRICE + 1);
         given(storedDomain.getCommodityName()).willReturn(COMMODITY_NAME);
 

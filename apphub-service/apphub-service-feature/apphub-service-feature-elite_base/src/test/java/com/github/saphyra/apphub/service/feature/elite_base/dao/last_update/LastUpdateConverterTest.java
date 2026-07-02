@@ -10,16 +10,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class LastUpdateConverterTest {
-    private static final UUID EXTERNAL_REFERENCE = UUID.randomUUID();
+    private static final String EXTERNAL_REFERENCE = "external_reference";
     private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
-    private static final String EXTERNAL_REFERENCE_STRING = "external-reference";
     private static final String LAST_UPDATE_STRING = "last-update";
 
     @Mock
@@ -39,11 +37,10 @@ class LastUpdateConverterTest {
             .lastUpdate(LAST_UPDATE)
             .build();
 
-        given(uuidConverter.convertDomain(EXTERNAL_REFERENCE)).willReturn(EXTERNAL_REFERENCE_STRING);
         given(dateTimeConverter.convertDomain(LAST_UPDATE)).willReturn(LAST_UPDATE_STRING);
 
         assertThat(underTest.convertDomain(domain))
-            .returns(EXTERNAL_REFERENCE_STRING, lastUpdateEntity -> lastUpdateEntity.getId().getExternalReference())
+            .returns(EXTERNAL_REFERENCE, lastUpdateEntity -> lastUpdateEntity.getId().getExternalReference())
             .returns(ObjectType.COMMODITY, lastUpdateEntity -> lastUpdateEntity.getId().getObjectType())
             .returns(LAST_UPDATE_STRING, LastUpdateEntity::getLastUpdate);
     }
@@ -52,14 +49,13 @@ class LastUpdateConverterTest {
     void convertEntity() {
         LastUpdateEntity domain = LastUpdateEntity.builder()
             .id(LastUpdateId.builder()
-                .externalReference(EXTERNAL_REFERENCE_STRING)
+                .externalReference(EXTERNAL_REFERENCE)
                 .objectType(ObjectType.COMMODITY)
                 .build())
 
             .lastUpdate(LAST_UPDATE_STRING)
             .build();
 
-        given(uuidConverter.convertEntity(EXTERNAL_REFERENCE_STRING)).willReturn(EXTERNAL_REFERENCE);
         given(dateTimeConverter.convertToLocalDateTime(LAST_UPDATE_STRING)).willReturn(LAST_UPDATE);
 
         assertThat(underTest.convertEntity(domain))

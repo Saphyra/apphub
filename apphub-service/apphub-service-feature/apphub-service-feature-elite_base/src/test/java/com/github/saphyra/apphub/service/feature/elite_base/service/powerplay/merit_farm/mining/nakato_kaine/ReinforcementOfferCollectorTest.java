@@ -89,15 +89,15 @@ class ReinforcementOfferCollectorTest {
             .demand(DEMAND_2)
             .buyPrice(PRICE_2)
             .build();
-        LastUpdate firstLastUpdate = LastUpdate.builder().externalReference(STATION_ID_1).type(ObjectType.COMMODITY).lastUpdate(LAST_UPDATE_1).build();
-        LastUpdate secondLastUpdate = LastUpdate.builder().externalReference(STATION_ID_2).type(ObjectType.COMMODITY).lastUpdate(LAST_UPDATE_2).build();
+        LastUpdate firstLastUpdate = LastUpdate.builder().type(ObjectType.COMMODITY).lastUpdate(LAST_UPDATE_1).build();
+        LastUpdate secondLastUpdate = LastUpdate.builder().type(ObjectType.COMMODITY).lastUpdate(LAST_UPDATE_2).build();
 
         given(metallicRingService.getSystemsWithMetallicRing(List.of(firstSystem.getStarSystemId(), secondSystem.getStarSystemId()))).willReturn(Map.of(SYSTEM_ID, ReserveLevel.MAJOR));
         given(stationDao.getByStarSystemIds(eq(Set.of(SYSTEM_ID)))).willReturn(List.of(firstStation, secondStation));
         given(offerService.getOffers(List.of(firstStation, secondStation), PowerplayActivityType.REINFORCEMENT)).willReturn(List.of(firstCommodity, secondCommodity));
         given(starSystemDao.getByIds(List.of(SYSTEM_ID))).willReturn(List.of(StarSystem.builder().id(SYSTEM_ID).starName(SYSTEM_NAME).build()));
-        given(lastUpdateDao.findByIdValidated(STATION_ID_1, ObjectType.COMMODITY)).willReturn(firstLastUpdate);
-        given(lastUpdateDao.findByIdValidated(STATION_ID_2, ObjectType.COMMODITY)).willReturn(secondLastUpdate);
+        given(lastUpdateDao.findByIdOrDefault(STATION_ID_1, ObjectType.COMMODITY)).willReturn(firstLastUpdate);
+        given(lastUpdateDao.findByIdOrDefault(STATION_ID_2, ObjectType.COMMODITY)).willReturn(secondLastUpdate);
 
         List<MiningMeritFarmResponse> result = underTest.getReinforcement(List.of(firstSystem, secondSystem));
 

@@ -7,13 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Data
 public class LastUpdate {
-    private final UUID externalReference;
+    private final String externalReference;
     private final ObjectType type;
     private LocalDateTime lastUpdate;
 }

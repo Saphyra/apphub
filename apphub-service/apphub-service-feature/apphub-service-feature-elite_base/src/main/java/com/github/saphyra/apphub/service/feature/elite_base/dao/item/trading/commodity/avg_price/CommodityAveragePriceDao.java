@@ -8,9 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
@@ -32,19 +30,9 @@ public class CommodityAveragePriceDao extends CachedDao<CommodityAveragePriceEnt
             return false;
         }
 
-        Optional<CommodityAveragePrice> maybeStored = findById(extractId(commodityAveragePrice));
-        if (maybeStored.isEmpty()) {
-            return true;
-        }
-
-        CommodityAveragePrice stored = maybeStored.get();
-        LocalDateTime lastUpdate = Optional.ofNullable(commodityAveragePrice.getLastUpdate())
-            .orElse(LocalDateTime.MIN);
-        if (lastUpdate.isBefore(stored.getLastUpdate())) {
-            return false;
-        }
-
-        return !Objects.equals(maybeStored.get().getAveragePrice(), commodityAveragePrice.getAveragePrice());
+        return findById(extractId(commodityAveragePrice))
+            .filter(averagePrice -> Objects.equals(averagePrice.getAveragePrice(), commodityAveragePrice.getAveragePrice()))
+            .isEmpty();
     }
 
     public CommodityAveragePrice findByIdValidated(String commodityName) {
