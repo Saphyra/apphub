@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.feature.elite_base.message_processing.
 
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdate;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
@@ -85,9 +84,8 @@ public class StarSystemSaver {
     }
 
     private void updateFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, StarType starType) {
-        Optional<LocalDateTime> lastUpdated = lastUpdateDao.findById(starSystem.getId(), ObjectType.STAR_SYSTEM)
-            .map(LastUpdate::getLastUpdate);
-        if (lastUpdated.isPresent() && timestamp.isBefore(lastUpdated.get())) {
+        LocalDateTime lastUpdated = lastUpdateDao.findByIdOrDefault(starSystem.getId(), ObjectType.STAR_SYSTEM).getLastUpdate();
+        if ( timestamp.isBefore(lastUpdated)) {
             log.debug("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
             return;
         }

@@ -16,6 +16,7 @@ public class DatabaseConstants {
     public static final String TABLE_BODY_MATERIAL = "body_material";
     public static final String TABLE_BODY_RING = "body_ring";
     public static final String TABLE_FLEET_CARRIER = "fleet_carrier";
+    public static final String TABLE_FLEET_CARRIER_V2 = "fleet_carrier_v2";
     @Deprecated
     public static final String TABLE_LAST_UPDATE = "last_update";
     public static final String TABLE_LAST_UPDATE_V2 = "last_update_v2";
@@ -38,6 +39,9 @@ public class DatabaseConstants {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";
+    public static final String COLUMN_CARRIER_ID = "carrier_id";
+    public static final String COLUMN_DOCKING_ACCESS = "docking_access";
+    public static final String COLUMN_MARKET_ID = "market_id";
     public static final String COLUMN_STAR_NAME = "star_name";
     public static final String COLUMN_X_POS = "x_pos";
     public static final String COLUMN_Y_POS = "y_pos";

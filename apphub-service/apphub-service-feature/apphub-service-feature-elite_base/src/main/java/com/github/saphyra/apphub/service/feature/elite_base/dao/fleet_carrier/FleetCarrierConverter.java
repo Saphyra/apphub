@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.fleet_carrier;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
@@ -12,14 +11,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 class FleetCarrierConverter extends ConverterBase<FleetCarrierEntity, FleetCarrier> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
 
     @Override
     protected FleetCarrierEntity processDomainConversion(FleetCarrier domain) {
         return FleetCarrierEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
             .carrierId(domain.getCarrierId())
-            .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .carrierName(domain.getCarrierName())
             .starSystemId(uuidConverter.convertDomain(domain.getStarSystemId()))
             .dockingAccess(domain.getDockingAccess())
@@ -32,7 +29,6 @@ class FleetCarrierConverter extends ConverterBase<FleetCarrierEntity, FleetCarri
         return FleetCarrier.builder()
             .id(uuidConverter.convertEntity(entity.getId()))
             .carrierId(entity.getCarrierId())
-            .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .carrierName(entity.getCarrierName())
             .starSystemId(uuidConverter.convertEntity(entity.getStarSystemId()))
             .dockingAccess(entity.getDockingAccess())

@@ -8,6 +8,7 @@ public enum ObjectType {
     EQUIPMENT,
     SPACESHIP,
     STAR_SYSTEM,
+    FLEET_CARRIER,
     BODY,
     COMMODITY_AVERAGE_PRICE,
     MINOR_FACTION,

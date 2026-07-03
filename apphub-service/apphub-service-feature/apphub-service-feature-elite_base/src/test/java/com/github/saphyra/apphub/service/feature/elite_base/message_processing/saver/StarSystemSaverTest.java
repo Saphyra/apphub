@@ -81,6 +81,10 @@ class StarSystemSaverTest {
     void save_existing() {
         given(starSystemDao.findByStarName(STAR_NAME)).willReturn(Optional.of(starSystem));
         given(starSystem.getStarId()).willReturn(null);
+        given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
+        given(lastUpdateDao.findByIdOrDefault(STAR_SYSTEM_ID, ObjectType.STAR_SYSTEM)).willReturn(lastUpdate);
+        given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE.minusSeconds(1));
+        given(lastUpdateFactory.create(STAR_SYSTEM_ID, ObjectType.STAR_SYSTEM, LAST_UPDATE)).willReturn(lastUpdate);
 
         assertThat(underTest.save(LAST_UPDATE, STAR_ID, STAR_NAME, STAR_POSITION, StarType.A)).isEqualTo(starSystem);
 
@@ -89,13 +93,14 @@ class StarSystemSaverTest {
         then(starSystem).should().setPosition(StarSystemPosition.parse(STAR_POSITION));
         then(starSystem).should().setStarType(StarType.A);
         then(starSystemDao).should().save(starSystem);
+        then(lastUpdateDao).should().save(lastUpdate);
     }
 
     @Test
     void outdatedMessage(){
         given(starSystemDao.findByStarName(STAR_NAME)).willReturn(Optional.of(starSystem));
         given(starSystem.getId()).willReturn(STAR_SYSTEM_ID);
-        given(lastUpdateDao.findById(STAR_SYSTEM_ID, ObjectType.STAR_SYSTEM)).willReturn(Optional.of(lastUpdate));
+        given(lastUpdateDao.findByIdOrDefault(STAR_SYSTEM_ID, ObjectType.STAR_SYSTEM)).willReturn(lastUpdate);
         given(lastUpdate.getLastUpdate()).willReturn(LAST_UPDATE.plusSeconds(1));
 
         assertThat(underTest.save(LAST_UPDATE, STAR_ID, STAR_NAME, STAR_POSITION, StarType.A)).isEqualTo(starSystem);

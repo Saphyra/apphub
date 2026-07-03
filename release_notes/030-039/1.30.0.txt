@@ -24,8 +24,10 @@
         Move LastUpdate from Body
         Move LastUpdate from CommodityAveragePrice
         Move LastUpdate from MinorFaction
+        Move LastUpdate from FleetCarrier
         Foreign key constraint to star_system_power_mapping.star_system_id
         Foreign key constraint to body.star_system_id
+        Foreign key constraint to fleet_carrier.star_system_id
 
 ===Manual Release Steps===
     Pre deployment
