@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 import static io.micrometer.common.util.StringUtils.isBlank;
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -61,6 +62,10 @@ public class FleetCarrierSaver {
 
                 return fleetCarrier;
             } else {
+                if(isNull(starSystemId)){
+                    throw new MessageProcessingDelayedException("StarSystemId of FleetCarrier " + carrierId + " is null");
+                }
+
                 FleetCarrier created = fleetCarrierFactory.create(carrierId, carrierName, starSystemId, dockingAccess, marketId);
                 log.debug("Saving new {}", created);
                 fleetCarrierDao.clearMarketId(created.getId(), marketId);

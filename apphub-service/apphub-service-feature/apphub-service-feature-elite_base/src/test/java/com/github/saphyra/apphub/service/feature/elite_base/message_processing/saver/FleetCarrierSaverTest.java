@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver;
 
+import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.fleet_carrier.FleetCarrier;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.fleet_carrier.FleetCarrierDao;
@@ -59,6 +60,17 @@ class FleetCarrierSaverTest {
     @Test
     void nullCarrierId() {
         assertThat(catchThrowable(() -> underTest.save(LAST_UPDATE, STAR_SYSTEM_ID, null, CARRIER_NAME, FleetCarrierDockingAccess.ALL, MARKET_ID))).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void save_new_nullStarSystemId() {
+        given(fleetCarrierDao.findByCarrierId(CARRIER_ID)).willReturn(Optional.empty());
+
+        assertThat(catchThrowable(() -> underTest.save(LAST_UPDATE, null, CARRIER_ID, CARRIER_NAME, FleetCarrierDockingAccess.ALL, MARKET_ID))).isInstanceOf(MessageProcessingDelayedException.class);
+
+        then(fleetCarrierDao).should(never()).save(any());
+        then(fleetCarrierDao).should(never()).clearMarketId(any(), any());
+        then(lastUpdateDao).should(never()).save(any());
     }
 
     @Test

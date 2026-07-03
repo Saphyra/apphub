@@ -15,6 +15,7 @@ public class DatabaseConstants {
     public static final String TABLE_BODY_DATA = "body_data";
     public static final String TABLE_BODY_MATERIAL = "body_material";
     public static final String TABLE_BODY_RING = "body_ring";
+    @Deprecated
     public static final String TABLE_FLEET_CARRIER = "fleet_carrier";
     public static final String TABLE_FLEET_CARRIER_V2 = "fleet_carrier_v2";
     @Deprecated
@@ -23,7 +24,9 @@ public class DatabaseConstants {
     public static final String TABLE_MINOR_FACTION = "minor_faction";
     public static final String TABLE_MINOR_FACTION_STATE = "minor_faction_state";
     public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING = "star_system_minor_faction_mapping";
+    @Deprecated
     public static final String TABLE_MINOR_FACTION_CONFLICT = "minor_faction_conflict";
+    public static final String TABLE_MINOR_FACTION_CONFLICT_V2 = "minor_faction_conflict_v2";
     public static final String TABLE_CONFLICTING_MINOR_FACTION = "conflicting_minor_faction";
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING_V2 = "star_system_power_mapping_v2";
     @Deprecated
@@ -39,6 +42,8 @@ public class DatabaseConstants {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";
+    public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_WAR_TYPE = "war_type";
     public static final String COLUMN_CARRIER_ID = "carrier_id";
     public static final String COLUMN_DOCKING_ACCESS = "docking_access";
     public static final String COLUMN_MARKET_ID = "market_id";
@@ -57,8 +62,6 @@ public class DatabaseConstants {
     public static final String COLUMN_MATERIAL_TYPE = "material_type";
     public static final String COLUMN_VERIFIED = "verified";
     public static final String COLUMN_EXTERNAL_REFERENCE = "external_reference";
-    public static final String COLUMN_MINOR_FACTION_ID = "minor_faction_id";
-    public static final String COLUMN_CONFLICT_ID = "conflict_id";
     public static final String COLUMN_ITEM_NAME = "item_name";
     public static final String COLUMN_LAST_UPDATE = "last_update";
     public static final String COLUMN_COMMODITY_NAME = "commodity_name";
