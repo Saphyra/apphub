@@ -43,6 +43,7 @@
     <include file="database/change_sets/star_system_data.xml"/>
     <include file="database/change_sets/material_trader_override.xml"/>
     <include file="database/change_sets/powerplay_conflict.xml"/>
+    <include file="database/change_sets/powerplay_conflict-v2.xml"/>
     <include file="database/change_sets/item_type.xml"/>
     <include file="database/change_sets/item_commodity.xml"/>
     <include file="database/change_sets/item_fc_material.xml"/>

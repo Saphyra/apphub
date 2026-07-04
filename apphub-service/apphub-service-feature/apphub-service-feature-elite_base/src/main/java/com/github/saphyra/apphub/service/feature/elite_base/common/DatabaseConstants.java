@@ -33,7 +33,9 @@ public class DatabaseConstants {
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING_V2 = "star_system_power_mapping_v2";
     @Deprecated
     public static final String TABLE_STAR_SYSTEM_POWER_MAPPING = "star_system_power_mapping";
+    @Deprecated
     public static final String TABLE_POWERPLAY_CONFLICT = "powerplay_conflict";
+    public static final String TABLE_POWERPLAY_CONFLICT_V2 = "powerplay_conflict_v2";
     public static final String TABLE_ITEM_TYPE = "item_type";
     public static final String TABLE_ITEM_COMMODITY = "item_commodity";
     public static final String TABLE_ITEM_FC_MATERIAL = "item_fc_material";
@@ -71,6 +73,7 @@ public class DatabaseConstants {
     public static final String COLUMN_LAST_UPDATE = "last_update";
     public static final String COLUMN_COMMODITY_NAME = "commodity_name";
     public static final String COLUMN_POWER = "power";
+    public static final String COLUMN_CONFLICT_PROGRESS = "conflict_progress";
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_OBJECT_TYPE = "object_type";
     public static final String COLUMN_LOCATION_TYPE = "location_type";
