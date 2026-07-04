@@ -25,7 +25,9 @@ public class DatabaseConstants {
     @Deprecated
     public static final String TABLE_MINOR_FACTION_STATE = "minor_faction_state";
     public static final String TABLE_MINOR_FACTION_STATE_V2 = "minor_faction_state_v2";
+    @Deprecated
     public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING = "star_system_minor_faction_mapping";
+    public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING_V2 = "star_system_minor_faction_mapping_v2";
     @Deprecated
     public static final String TABLE_MINOR_FACTION_CONFLICT = "minor_faction_conflict";
     public static final String TABLE_MINOR_FACTION_CONFLICT_V2 = "minor_faction_conflict_v2";

@@ -19,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_POWER;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_MINOR_FACTION_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_STAR_SYSTEM_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING_V2;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_POWER_MAPPING;
 import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.MAX_BATCH_SIZE;
 import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.THREAD_COUNT;
 
@@ -31,7 +31,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.migration.Mig
 @RequiredArgsConstructor
 @Slf4j
 @Profile("!test")
-class StarSystemPowerMappingMigrator {
+class StarSystemMinorFactionMappingMigrator {
     //Ensure migration runs after partitions are created
     @SuppressWarnings("unused")
     private final LastUpdatePartitionCreator lastUpdatePartitionCreator;
@@ -41,7 +41,7 @@ class StarSystemPowerMappingMigrator {
 
     @PostConstruct
     void migrate() {
-        log.info("Migrating StarSystemPowerMappings to V2...");
+        log.info("Migrating StarSystemMinorFactionMappings to V2...");
 
         int totalCount = 0;
         List<Map<String, String>> batch;
@@ -53,16 +53,16 @@ class StarSystemPowerMappingMigrator {
             delete(batch);
         } while (!batch.isEmpty());
 
-        log.info("{} records are migrated to StarSystemPowerMappingV2", totalCount);
+        log.info("{} records are migrated to StarSystemMinorFactionMappingV2", totalCount);
     }
 
     private void delete(List<Map<String, String>> batch) {
         List<String> sqls = batch.stream()
             .map(entry -> SqlBuilder.delete()
-                .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM_POWER_MAPPING))
+                .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING))
                 .condition(new Equation(new DefaultColumn(COLUMN_STAR_SYSTEM_ID), new WrappedValue(entry.get(COLUMN_STAR_SYSTEM_ID))))
                 .and()
-                .condition(new Equation(new DefaultColumn(COLUMN_POWER), new WrappedValue(entry.get(COLUMN_POWER))))
+                .condition(new Equation(new DefaultColumn(COLUMN_MINOR_FACTION_ID), new WrappedValue(entry.get(COLUMN_MINOR_FACTION_ID))))
                 .build()
             )
             .toList();
@@ -90,8 +90,8 @@ class StarSystemPowerMappingMigrator {
 
     private List<Map<String, String>> fetchBatch() {
         String sql = SqlBuilder.select()
-            .columns(COLUMN_STAR_SYSTEM_ID, COLUMN_POWER)
-            .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM_POWER_MAPPING))
+            .columns(COLUMN_STAR_SYSTEM_ID, COLUMN_MINOR_FACTION_ID)
+            .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING))
             .limit(MAX_BATCH_SIZE)
             .build();
 
@@ -102,7 +102,7 @@ class StarSystemPowerMappingMigrator {
                 while (rs.next()) {
                     Map<String, String> map = Map.of(
                         COLUMN_STAR_SYSTEM_ID, rs.getString(COLUMN_STAR_SYSTEM_ID),
-                        COLUMN_POWER, rs.getString(COLUMN_POWER)
+                        COLUMN_MINOR_FACTION_ID, rs.getString(COLUMN_MINOR_FACTION_ID)
                     );
                     result.add(map);
                 }

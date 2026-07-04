@@ -12,14 +12,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING_V2;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = SCHEMA, name = TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING)
+@Table(schema = SCHEMA, name = TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING_V2)
 @IdClass(StarSystemMinorFactionMappingEntity.class)
 public class StarSystemMinorFactionMappingEntity implements Serializable {
     @Id
