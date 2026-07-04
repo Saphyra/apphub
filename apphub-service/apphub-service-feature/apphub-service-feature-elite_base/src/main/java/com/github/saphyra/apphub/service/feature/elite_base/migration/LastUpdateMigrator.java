@@ -32,7 +32,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.migration.Mig
 @Component
 @Slf4j
 @Profile("!test")
-class LastUpdateToV2Migrator {
+class LastUpdateMigrator {
     //Ensure migration runs after partitions are created
     @SuppressWarnings("unused")
     private final LastUpdatePartitionCreator lastUpdatePartitionCreator;

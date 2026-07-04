@@ -36,6 +36,7 @@
     <include file="database/change_sets/star_system_power_mapping.xml"/>
     <include file="database/change_sets/star_system_power_mapping-v2.xml"/>
     <include file="database/change_sets/minor_faction_state.xml"/>
+    <include file="database/change_sets/minor_faction_state-v2.xml"/>
     <include file="database/change_sets/minor_faction_conflict.xml"/>
     <include file="database/change_sets/minor_faction_conflict-v2.xml"/>
     <include file="database/change_sets/conflicting_minor_faction.xml"/>

@@ -29,6 +29,7 @@
         Foreign key constraint to body.star_system_id
         Foreign key constraint to fleet_carrier.star_system_id
         Foreign key constraint to minor_faction_conflict.star_system_id
+        Foreign key constraint to minor_faction_state.minor_faction_id
 
 ===Manual Release Steps===
     Pre deployment

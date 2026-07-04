@@ -22,7 +22,9 @@ public class DatabaseConstants {
     public static final String TABLE_LAST_UPDATE = "last_update";
     public static final String TABLE_LAST_UPDATE_V2 = "last_update_v2";
     public static final String TABLE_MINOR_FACTION = "minor_faction";
+    @Deprecated
     public static final String TABLE_MINOR_FACTION_STATE = "minor_faction_state";
+    public static final String TABLE_MINOR_FACTION_STATE_V2 = "minor_faction_state_v2";
     public static final String TABLE_STAR_SYSTEM_MINOR_FACTION_MAPPING = "star_system_minor_faction_mapping";
     @Deprecated
     public static final String TABLE_MINOR_FACTION_CONFLICT = "minor_faction_conflict";
@@ -42,7 +44,10 @@ public class DatabaseConstants {
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_STAR_SYSTEM_ID = "star_system_id";
+    public static final String COLUMN_MINOR_FACTION_ID = "minor_faction_id";
     public static final String COLUMN_STATUS = "status";
+    public static final String COLUMN_STATE = "state";
+    public static final String COLUMN_TREND = "trend";
     public static final String COLUMN_WAR_TYPE = "war_type";
     public static final String COLUMN_CARRIER_ID = "carrier_id";
     public static final String COLUMN_DOCKING_ACCESS = "docking_access";
