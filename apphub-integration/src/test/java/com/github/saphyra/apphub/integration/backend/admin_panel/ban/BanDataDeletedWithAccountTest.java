@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActio
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -24,11 +24,11 @@ public class BanDataDeletedWithAccountTest extends BackEndTest {
     public void banDataDeletedWithAccount() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), adminUserData.toRegistrationRequest());
-        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), adminUserData.toLoginRequest());
         String adminAccessToken = tokenResponse.getAccessToken()
             .getJwt();

@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.framework;
+package com.github.saphyra.apphub.integration.framework.db;
 
 import com.github.saphyra.apphub.integration.core.connection.ConnectionProvider;
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;

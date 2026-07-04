@@ -13,8 +13,8 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.Sky
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.PlanetQueueItem;
@@ -30,7 +30,7 @@ public class TerraformationQueueTest extends SeleniumTest {
         RegistrationParameters registrationParameters = RegistrationParameters.validParameters();
         Navigation.toIndexPage(getServerPort(), driver);
         IndexPageActions.registerUser(driver, registrationParameters);
-        DynamoDbUtil.addRoleByEmail(registrationParameters.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(registrationParameters.getEmail(), Constants.ROLE_ADMIN);
 
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.SKYXPLORE);
 

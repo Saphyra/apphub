@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.DisabledRoleResponse;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -29,13 +29,13 @@ public class DisabledRoleCrudTest extends BackEndTest {
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
 
 
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         //Initial check
         assertThat(DisabledRoleActions.getDisabledRoles(getServerPort(), accessToken)).contains(new DisabledRoleResponse(Constants.ROLE_TEST, false));
@@ -58,7 +58,7 @@ public class DisabledRoleCrudTest extends BackEndTest {
         Response accountLockedDisableRoleResponse = DisabledRoleActions.getDisableRoleResponse(getServerPort(), accessToken, "asd", Constants.ROLE_TEST);
         verifyErrorResponse(accountLockedDisableRoleResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();
@@ -83,7 +83,7 @@ public class DisabledRoleCrudTest extends BackEndTest {
         Response accountLockedEnableResponse = DisabledRoleActions.getEnableRoleResponse(getServerPort(), ati2, "asd", Constants.ROLE_TEST);
         verifyErrorResponse(accountLockedEnableResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();

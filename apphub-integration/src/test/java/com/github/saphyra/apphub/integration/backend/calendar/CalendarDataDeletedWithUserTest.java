@@ -7,7 +7,8 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLab
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.CalendarDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -25,7 +26,7 @@ public class CalendarDataDeletedWithUserTest extends BackEndTest {
     public void calendarDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL);
 
@@ -38,8 +39,8 @@ public class CalendarDataDeletedWithUserTest extends BackEndTest {
         AccountActions.deleteAccount(getServerPort(), accessToken, userData.getPassword());
 
         AwaitilityWrapper.awaitAssert(() -> {
-            assertThat(DynamoDbUtil.calendarRecordExists(userId)).isFalse();
-            assertThat(DynamoDbUtil.occurrenceExists(eventId)).isFalse();
+            assertThat(CalendarDynamoDbRepository.calendarRecordExists(userId)).isFalse();
+            assertThat(CalendarDynamoDbRepository.occurrenceExists(eventId)).isFalse();
         });
     }
 }

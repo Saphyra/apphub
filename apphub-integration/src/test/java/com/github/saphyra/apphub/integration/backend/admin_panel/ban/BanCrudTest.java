@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.admin_panel.BanActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.BanDetailsResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.BanRequest;
@@ -29,15 +29,15 @@ public class BanCrudTest extends BackEndTest {
     public void banCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        UUID adminUserId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UUID adminUserId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
 
         RegistrationParameters testUser = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), testUser.toRegistrationRequest());
-        UUID testUserId = DynamoDbUtil.getUserIdByEmail(testUser.getEmail());
+        UUID testUserId = UserDynamoDbRepository.getUserIdByEmail(testUser.getEmail());
 
         ban_nullBannedUserId(userData, accessToken);
         ban_nullBannedRole(userData, accessToken, testUserId);
@@ -206,7 +206,7 @@ public class BanCrudTest extends BackEndTest {
         verifyErrorResponse(ban_accountLockedResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();
@@ -263,7 +263,7 @@ public class BanCrudTest extends BackEndTest {
         Response revokeBan_accountLockedResponse = BanActions.getRevokeBanResponse(getServerPort(), ati2, ban.getId(), "asd");
         verifyErrorResponse(revokeBan_accountLockedResponse, 423, ErrorCode.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         accessToken = IndexPageActions.login(getServerPort(), userData.toLoginRequest())
             .getAccessToken()
             .getJwt();

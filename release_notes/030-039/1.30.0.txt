@@ -16,6 +16,7 @@
     EliteBase
         Use constants for schema and table name in @Entity
         Delete OrphanedRecordCleaners
+    Split DynamoDbUtil
 
 ===ETC===
     EliteBase

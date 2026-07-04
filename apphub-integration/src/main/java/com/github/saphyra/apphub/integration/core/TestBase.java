@@ -12,8 +12,9 @@ import com.github.saphyra.apphub.integration.core.testng.SkipDisabledTestsInterc
 import com.github.saphyra.apphub.integration.core.util.AutoCloseableImpl;
 import com.github.saphyra.apphub.integration.core.util.CacheItemWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.google.common.base.Stopwatch;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -240,6 +241,6 @@ public abstract class TestBase {
 
     private synchronized static void deleteTestUsers() {
         log.debug("Deleting testUsers...");
-        DynamoDbUtil.markForDeleteWhenEmailEndsWith(Constants.CREDENTIAL_PREFIX);
+        UserDynamoDbRepository.markForDeleteWhenEmailEndsWith(Constants.CREDENTIAL_PREFIX);
     }
 }
