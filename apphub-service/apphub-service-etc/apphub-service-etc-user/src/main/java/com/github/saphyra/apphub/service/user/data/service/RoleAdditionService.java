@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
@@ -21,6 +22,7 @@ public class RoleAdditionService {
     private final UserDao userDao;
     private final RoleRequestValidator roleRequestValidator;
     private final CheckPasswordService checkPasswordService;
+    private final AuthorizationClient authorizationClient;
 
     public User addRole(UUID userId, RoleRequest roleRequest) {
         roleRequestValidator.validate(roleRequest);
@@ -34,6 +36,8 @@ public class RoleAdditionService {
         }
         user.getRoles().add(roleRequest.getRole());
         userDao.addRole(user.getUserId(), roleRequest.getRole());
+
+        authorizationClient.invalidateAllAccessTokens(user.getUserId());
 
         return user;
     }

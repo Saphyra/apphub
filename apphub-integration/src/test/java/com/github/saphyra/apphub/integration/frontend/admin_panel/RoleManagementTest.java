@@ -12,7 +12,6 @@ import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
@@ -87,7 +86,6 @@ public class RoleManagementTest extends SeleniumTest {
 
         ToastMessageUtil.verifySuccessToast(adminDriver, LocalizedText.ROLE_MANAGEMENT_ROLE_REVOKED);
 
-        SleepUtil.sleep(3000);
         testUserDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
             .until(() -> !ModulesPageActions.getCategories(testUserDriver).isEmpty())
@@ -123,7 +121,6 @@ public class RoleManagementTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(adminDriver, LocalizedText.ACCOUNT_LOCKED);
 
         UserDynamoDbRepository.unlockUserByEmail(adminUserData.getEmail());
-        SleepUtil.sleep(3000);
 
         IndexPageActions.login(serverPort, adminDriver, LoginParameters.fromRegistrationParameters(adminUserData));
         AwaitilityWrapper.createDefault()
@@ -154,7 +151,7 @@ public class RoleManagementTest extends SeleniumTest {
             .stream()
             .filter(role -> role.getRole().equals(Constants.ROLE_TEST))
             .findFirst()
-            .orElseThrow(() -> new RuntimeException("Admin role is not available."))
+            .orElseThrow(() -> new RuntimeException("Test role is not available."))
             .grant(adminDriver);
 
         RoleManagementActions.fillPassword(adminDriver, adminUserData.getPassword());
@@ -162,11 +159,10 @@ public class RoleManagementTest extends SeleniumTest {
 
         ToastMessageUtil.verifySuccessToast(adminDriver, LocalizedText.ROLE_MANAGEMENT_ROLE_GRANTED);
 
-        SleepUtil.sleep(3000);
         testUserDriver.navigate().refresh();
         AwaitilityWrapper.createDefault()
             .until(() -> ModulesPageActions.getCategories(testUserDriver).stream().anyMatch(category -> category.getCategoryId().equals(ModuleLocation.TEST.getCategoryId())))
-            .assertTrue("Admin role is not granted.");
+            .assertTrue("Test role is not granted.");
     }
 
     private void addRole_incorrectPassword(WebDriver adminDriver, RegistrationParameters adminUserData) {

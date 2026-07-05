@@ -8,6 +8,8 @@
     EliteBase
         Consider Time Zones when displaying dates
         Support FrontlineSolutions Allegiance
+    User
+        Adding or revoking role from User should invalidate all AccessTokens
 
 ===PLATFORM CHANGES===
     DynamoDbRepository automatically fills tableName
