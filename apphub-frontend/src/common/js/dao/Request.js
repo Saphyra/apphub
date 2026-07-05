@@ -48,7 +48,7 @@ export default class Request {
         return this;
     }
 
-    send(setDisplaySpinner = () => { }, shouldRefreshTokens = true) {
+    send(setDisplaySpinner = (() => { throw new Error("setDisplaySpinner must be provided"); })(), shouldRefreshTokens = true) {
         setDisplaySpinner(true);
 
         const xhr = new XMLHttpRequest();
@@ -113,7 +113,7 @@ async function refreshTokens() {
                 window.location.href = "/web?redirect=/" + (window.location.pathname + window.location.search).substr(1);
             }
         ))
-        .send()
+        .send(() => { })
         .then(response => {
             setCookie("access-token", response.accessToken.jwt, response.accessToken.expiration, response.accessToken.path);
             setCookie("refresh-token", response.refreshToken.jwt, response.refreshToken.expiration, response.refreshToken.path);

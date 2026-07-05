@@ -4,12 +4,13 @@ import CitizenName from "./name/CitizenName";
 import CitizenSkills from "./skills/CitizenSkills";
 import CitizenStats from "./stats/CitizenStats";
 
-const Citizen = ({ citizen, hiddenProperties }) => {
+const Citizen = ({ citizen, hiddenProperties, setDisplaySpinner }) => {
     return (
         <div className="skyxplore-game-population-citizen">
             <CitizenName
                 name={citizen.name}
                 citizenId={citizen.citizenId}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <div className="skyxplore-game-population-citizen-content">

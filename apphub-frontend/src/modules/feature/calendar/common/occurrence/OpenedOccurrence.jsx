@@ -26,7 +26,8 @@ const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, se
             listener: [occurrenceId, refreshCounter],
             errorHandler: new ErrorHandler(
                 (response) => response.status == 404,
-                () => setSelectedOccurrence(null))
+                () => setSelectedOccurrence(null)),
+            setDisplaySpinner: setDisplaySpinner
         }
     );
 
@@ -127,7 +128,7 @@ const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, se
 
         async function editStatus(newStatus) {
             const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, { eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId })
-                .send();
+                .send(setDisplaySpinner);
 
             setOccurrence(response);
             refresh();

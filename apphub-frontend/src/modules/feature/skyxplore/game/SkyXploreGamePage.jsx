@@ -33,6 +33,9 @@ const SkyXploreGamePage = () => {
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
+    }
     const [userId, setUserId] = useState("");
     const [isAdmin, setIsAdmin] = useState(false);
     const [isHost, setIsHost] = useState(false);
@@ -46,13 +49,13 @@ const SkyXploreGamePage = () => {
     const [unreadMessages, setUnreadMessages] = useState({});
     const [chatRooms, setChatRooms] = useState([]);
 
-    useEffect(() => Redirection.forGame(), []);
+    useEffect(() => Redirection.forGame(updateDisplaySpinner), []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => fetchUserId(), []);
     useEffect(() => fetchIsHost(), []);
 
-    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value) });
-    useLoader({ request: SKYXPLORE_GET_GAME_ID_OF_USER.createRequest(), mapper: (r) => setGameId(r.value) });
+    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value), setDisplaySpinner: updateDisplaySpinner });
+    useLoader({ request: SKYXPLORE_GET_GAME_ID_OF_USER.createRequest(), mapper: (r) => setGameId(r.value), setDisplaySpinner: updateDisplaySpinner });
 
     const { sendMessage } = useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_MAIN,
@@ -62,7 +65,7 @@ const SkyXploreGamePage = () => {
     const fetchUserId = () => {
         const fetch = async () => {
             const response = await GET_OWN_USER_ID.createRequest()
-                .send();
+                .send(updateDisplaySpinner);
             setUserId(response.value);
         }
         fetch();
@@ -71,7 +74,7 @@ const SkyXploreGamePage = () => {
     const fetchIsHost = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_GAME_IS_HOST.createRequest()
-                .send();
+                .send(updateDisplaySpinner);
             setIsHost(response.value);
         }
         fetch();
@@ -190,12 +193,12 @@ const SkyXploreGamePage = () => {
         setConfirmationDialogData(null);
 
         SKYXPLORE_GAME_PAUSE.createRequest({ value: false })
-            .send();
+            .send(updateDisplaySpinner);
     }
 
     const processTick = async () => {
         await SKYXPLORE_PROCESS_TICK.createRequest()
-            .send(setDisplaySpinner);
+            .send(updateDisplaySpinner);
     }
 
     const footer = () => {
@@ -213,12 +216,13 @@ const SkyXploreGamePage = () => {
                     key="exit"
                     setConfirmationDialogData={setConfirmationDialogData}
                     isHost={isHost}
-                    setDisplaySpinner={setDisplayChat}
+                    setDisplaySpinner={updateDisplaySpinner}
                 />,
                 <PauseAndResumeGameButton
                     key="pause-and-resume"
                     isHost={isHost}
                     paused={paused}
+                    setDisplaySpinner={updateDisplaySpinner}
                 />
             ]}
             centerButtons={centerButtons()}
@@ -261,12 +265,9 @@ const SkyXploreGamePage = () => {
     }
 
     const save = async () => {
-        setDisplaySpinner(true);
-
         await SKYXPLORE_GAME_SAVE.createRequest()
-            .send();
+            .send(updateDisplaySpinner);
 
-        setDisplaySpinner(false);
         NotificationService.showSuccess(localizationHandler.get("game-saved"));
     }
 
@@ -277,6 +278,7 @@ const SkyXploreGamePage = () => {
                     <Navigation
                         footer={footer()}
                         setConfirmationDialogData={setConfirmationDialogData}
+                        setDisplaySpinner={updateDisplaySpinner}
                     />
                 </div>
             </div>
@@ -293,6 +295,7 @@ const SkyXploreGamePage = () => {
                 setCurrentChatRoom={setCurrentChatRoom}
                 chatRooms={chatRooms}
                 setChatRooms={setChatRooms}
+                setDisplaySpinner={updateDisplaySpinner}
             />
 
             {confirmationDialogData &&

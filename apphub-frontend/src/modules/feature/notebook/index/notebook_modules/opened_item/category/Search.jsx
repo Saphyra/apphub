@@ -98,6 +98,7 @@ const Search = ({
                 setOpenedListItem={setOpenedListItem}
                 userSettings={userSettings}
                 changeUserSettings={changeUserSettings}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <CategoryNavigation

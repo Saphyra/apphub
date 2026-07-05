@@ -17,37 +17,43 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import { ToastContainer } from "react-toastify";
 import { ACCOUNT_GET_USER } from "./AccountEndpoints";
 import { MODULES_PAGE } from "../modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 
 const AccountPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("page-title");
 
-    const [confirmationDialogData, setCinfirmationDialogData] = useState(null);
+    const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
+
     const [userData, setUserData] = useState({});
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader({ request: ACCOUNT_GET_USER.createRequest(), mapper: setUserData });
+    useLoader({ request: ACCOUNT_GET_USER.createRequest(), mapper: setUserData, setDisplaySpinner: setDisplaySpinner });
 
     return (
         <div className="main-page">
             <Header label={localizationHandler.get("title")} />
 
             <main>
-                <AccountLanguageSelector />
+                <AccountLanguageSelector setDisplaySpinner={setDisplaySpinner} />
 
                 <EmailChanger
                     userData={userData}
                     setUserData={setUserData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
                 <UsernameChanger
                     userData={userData}
                     setUserData={setUserData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
-                <PasswordChanger />
+                <PasswordChanger setDisplaySpinner={setDisplaySpinner} />
                 <AccountDeleter
-                    setConfirmationDialogData={setCinfirmationDialogData}
+                    setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 
@@ -71,6 +77,8 @@ const AccountPage = () => {
             }
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

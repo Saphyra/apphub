@@ -3,7 +3,6 @@ import Stream from "common/js/collection/Stream";
 import { useEffect, useState } from "react";
 import SavedGame from "./saved_game/SavedGame";
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { SKYXPLORE_ADMIN_MAIN_PAGE } from "../../admin/SkyXploreAdminEndpoints";
 import { SKYXPLORE_DELETE_GAME } from "../../lobby/SkyXploreLobbyEndpoints";
@@ -12,20 +11,20 @@ import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 import { SKYXPLORE_GET_GAMES } from "../SkyXploreMainMenuEndpoints";
 import { SKYXPLORE_CHARACTER_PAGE } from "../../character/SkyXploreCharacterEndpoints";
 
-const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
+const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDialog, setDisplaySpinner }) => {
     const [displaySavedGames, setDisplaySavedGames] = useState(false);
     const [savedGames, setSavedGames] = useState([]);
     const [gameToDelete, setGameToDelete] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
 
-    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value) });
+    useLoader({ request: IS_ADMIN.createRequest(), mapper: (r) => setIsAdmin(r.value), setDisplaySpinner: setDisplaySpinner });
 
     useEffect(() => loadSavedGames(), [displaySavedGames]);
 
     const loadSavedGames = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_GET_GAMES.createRequest()
-                .send();
+                .send(setDisplaySpinner);
 
             setSavedGames(response);
         }
@@ -38,7 +37,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
 
     const deleteGame = async () => {
         await SKYXPLORE_DELETE_GAME.createRequest(null, { gameId: gameToDelete.gameId })
-            .send();
+            .send(setDisplaySpinner);
 
         const copy = new Stream(savedGames)
             .filter(savedGame => savedGame.gameId !== gameToDelete.gameId)
@@ -64,6 +63,7 @@ const MainMenuButtons = ({ localizationHandler, setDisplaynNewGameConfirmationDi
                         savedGame={savedGame}
                         localizationHandler={localizationHandler}
                         deleteGameCallback={askDeleteGame}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
                 )
                 .toList();

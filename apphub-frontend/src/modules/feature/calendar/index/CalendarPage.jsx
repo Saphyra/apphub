@@ -99,6 +99,7 @@ const CalendarPage = () => {
                         <Labels
                             activeLabel={activeLabel}
                             setActiveLabel={v => cacheAndUpdate(CACHE_KEY_ACTIVE_LABEL, v, setActiveLabel)}
+                            setDisplaySpinner={updateDisplaySpinner}
                         />
 
                         <CalendarContent

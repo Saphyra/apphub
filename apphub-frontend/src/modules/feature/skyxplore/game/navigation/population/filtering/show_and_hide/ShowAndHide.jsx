@@ -10,7 +10,7 @@ import { addAndSet, hasValue, removeAndSet } from "common/js/Utils";
 import Button from "common/component/input/Button";
 import { SKYXPLORE_DATA_CREATE_SETTING, SKYXPLORE_DATA_DELETE_SETTING } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updateHidden, planetId }) => {
+const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updateHidden, planetId, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const citizenLocalizationHandler = new LocalizationHandler(skillTypeLocalizationData);
 
@@ -68,7 +68,7 @@ const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updat
         }
 
         SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
     }
 
     const deleteSetting = async (location) => {
@@ -78,7 +78,7 @@ const ShowAndHide = ({ hiddenProperties, setHiddenProperties, hideSetting, updat
         }
 
         const response = await SKYXPLORE_DATA_DELETE_SETTING.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         updateHidden(response.value);
     }

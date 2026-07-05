@@ -3,7 +3,7 @@ import NotificationService from "common/js/notification/NotificationService";
 import validateListItemTitle from "modules/feature/notebook/common/validator/ListItemTitleValidator";
 import { NOTEBOOK_CREATE_CHECKLIST, NOTEBOOK_PAGE } from "modules/feature/notebook/NotebookEndpoints";
 
-const create = async (listItemTitle, parent, items) => {
+const create = async (listItemTitle, parent, items, setDisplaySpinner) => {
     const result = validateListItemTitle(listItemTitle);
     if (!result.valid) {
         NotificationService.showError(result.message);
@@ -17,7 +17,7 @@ const create = async (listItemTitle, parent, items) => {
     }
 
     await NOTEBOOK_CREATE_CHECKLIST.createRequest(payload)
-        .send();
+        .send(setDisplaySpinner);
 
     window.location.href = NOTEBOOK_PAGE;
 }

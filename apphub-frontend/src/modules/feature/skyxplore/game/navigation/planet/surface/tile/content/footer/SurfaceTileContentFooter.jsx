@@ -4,7 +4,7 @@ import localizationData from "./surface_tile_content_footer_localization.json";
 import TerraformationFooter from "./content/TerraformationFooter";
 import { hasValue, throwException } from "common/js/Utils";
 
-const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
+const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId, openPage, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {
@@ -14,6 +14,7 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                 localizationHandler={localizationHandler}
                 setConfirmationDialogData={setConfirmationDialogData}
                 openPage={openPage}
+                setDisplaySpinner={setDisplaySpinner}
             />
         } else if (hasValue(surface.terraformation)) {
             return <TerraformationFooter
@@ -21,6 +22,7 @@ const SurfaceTileContentFooter = ({ surface, setConfirmationDialogData, planetId
                 localizationHandler={localizationHandler}
                 setConfirmationDialogData={setConfirmationDialogData}
                 planetId={planetId}
+                setDisplaySpinner={setDisplaySpinner}
             />
         } else {
             throwException("IllegalState", "Surface has no building or terraformation in progress. It should be an empty surface.");

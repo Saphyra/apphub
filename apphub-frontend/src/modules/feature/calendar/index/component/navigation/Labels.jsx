@@ -7,7 +7,7 @@ import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "modules/feature/calen
 import { useState } from "react";
 import { useUpdateEffect } from "react-use";
 
-const Labels = ({ activeLabel, setActiveLabel }) => {
+const Labels = ({ activeLabel, setActiveLabel, setDisplaySpinner }) => {
     const [labels, setLabels] = useState([]);
 
     const [refreshCounter, refresh] = useRefresh();
@@ -18,7 +18,7 @@ const Labels = ({ activeLabel, setActiveLabel }) => {
         }
     }, [isInFocus]);
 
-    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: setLabels, listener: [refreshCounter] });
+    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: setLabels, listener: [refreshCounter], setDisplaySpinner });
 
     return (
         <div id="calendar-labels">

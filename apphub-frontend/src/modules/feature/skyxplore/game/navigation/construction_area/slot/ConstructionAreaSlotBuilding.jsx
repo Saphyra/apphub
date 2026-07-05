@@ -7,7 +7,7 @@ import BuildingConstruction from "./building/BuildingConstruction";
 import BuildingDeconstruction from "./building/BuildingDeconstruction";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_DECONSTRUCT_BUILDING_MODULE } from "../../../SkyXploreGameEndpoints";
 
-const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildings, setConfirmationDialogData }) => {
+const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildings, setConfirmationDialogData, setDisplaySpinner }) => {
     const buildingModuleLocalizationHandler = new LocalizationHandler(buildingModuleLocalizationData);
 
     const openDeconstructionConfirmation = () => {
@@ -34,7 +34,7 @@ const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildi
 
     const deconstructBuilding = async () => {
         const response = await SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_DECONSTRUCT_BUILDING_MODULE.createRequest(null, { buildingModuleId: building.buildingModuleId })
-            .send();
+            .send(setDisplaySpinner);
 
         setBuildings(response);
         setConfirmationDialogData(null);
@@ -51,6 +51,7 @@ const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildi
                         construction={building.construction}
                         localizationHandler={localizationHandler}
                         setBuildings={setBuildings}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
                 }
 
@@ -59,6 +60,7 @@ const ConstructionAreaSlotBuilding = ({ localizationHandler, building, setBuildi
                         deconstruction={building.deconstruction}
                         localizationHandler={localizationHandler}
                         setBuildings={setBuildings}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
                 }
 

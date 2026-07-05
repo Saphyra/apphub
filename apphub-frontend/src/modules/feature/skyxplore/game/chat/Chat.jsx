@@ -17,7 +17,8 @@ const Chat = ({
     currentChatRoom,
     setCurrentChatRoom,
     chatRooms,
-    setChatRooms
+    setChatRooms,
+    setDisplaySpinner
 }) => {
     const [displayRoomCreator, setDisplayRoomCreator] = useState(false);
 
@@ -59,12 +60,14 @@ const Chat = ({
                         setDisplayRoomCreator={setDisplayRoomCreator}
                         chatRooms={chatRooms}
                         setChatRooms={setChatRooms}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
                 </div>
             );
         } else {
             return <ChatRoomCreator
                 setDisplayRoomCreator={setDisplayRoomCreator}
+                setDisplaySpinner={setDisplaySpinner}
             />
         }
     }

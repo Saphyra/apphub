@@ -1,9 +1,9 @@
 import { NOTEBOOK_GET_LIST_ITEM } from "../../NotebookEndpoints";
 
-const loadItemData = (listItemId, setDataFromResponse) => {
+const loadItemData = (listItemId, setDataFromResponse, setDisplaySpinner) => {
     const fetch = async () => {
         const response = await NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: listItemId })
-            .send();
+            .send(setDisplaySpinner);
 
         setDataFromResponse(response);
     }

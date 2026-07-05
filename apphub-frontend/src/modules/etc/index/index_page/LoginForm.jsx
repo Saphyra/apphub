@@ -51,7 +51,7 @@ const LoginForm = ({ localizationHandler, setDisplaySpinner }) => {
             <Button
                 id="login-button"
                 label={localizationHandler.get("login-button")}
-                onclick={() => login(userIdentifier, password, rememberMe)}
+                onclick={() => login(userIdentifier, password, rememberMe, setDisplaySpinner)}
             />
         </div>
     );

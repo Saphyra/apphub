@@ -11,10 +11,13 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_CREATE_CATEGORY, NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
+import Spinner from "common/component/Spinner";
 
 const NewCategoryPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const { parent } = useParams();
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
@@ -35,7 +38,7 @@ const NewCategoryPage = () => {
             title: listItemTitle
         }
         await NOTEBOOK_CREATE_CATEGORY.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         window.location.href = NOTEBOOK_PAGE;
     }
@@ -55,6 +58,7 @@ const NewCategoryPage = () => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 
@@ -85,6 +89,8 @@ const NewCategoryPage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

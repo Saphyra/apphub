@@ -1,7 +1,7 @@
 import SurfaceTileContentFooterProgressBar from "../progress_bar/SurfaceTileContentFooterProgressBar";
 import confirmCancelConstructionAreaConstruction from "./CancelConstructionAreaConstructionService";
 
-const ConstructionAreaConstructionFooter = ({ surface, localizationHandler, setConfirmationDialogData }) => {
+const ConstructionAreaConstructionFooter = ({ surface, localizationHandler, setConfirmationDialogData, setDisplaySpinner }) => {
     const constructionArea = surface.constructionArea;
     const construction = constructionArea.construction;
 
@@ -13,7 +13,8 @@ const ConstructionAreaConstructionFooter = ({ surface, localizationHandler, setC
             constructionArea.dataId,
             localizationHandler,
             construction.constructionId,
-            setConfirmationDialogData
+            setConfirmationDialogData,
+            setDisplaySpinner
         )}
     />
 }

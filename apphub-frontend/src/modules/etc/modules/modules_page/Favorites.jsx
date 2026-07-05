@@ -5,7 +5,7 @@ import Stream from "common/js/collection/Stream";
 import Entry from "common/js/collection/Entry";
 import Category from "./modules/Category";
 
-const Favorites = ({ pageLocalizationHandler, modules, updateModules }) => {
+const Favorites = ({ pageLocalizationHandler, modules, updateModules, setDisplaySpinner }) => {
     const categoryLocalizationHandler = new LocalizationHandler(categoryLocalization);
     const moduleLocalizationHandler = new LocalizationHandler(moduleLocalization);
 
@@ -29,6 +29,7 @@ const Favorites = ({ pageLocalizationHandler, modules, updateModules }) => {
                 modules={entry.value}
                 updateModules={updateModules}
                 favorite={true}
+                setDisplaySpinner={setDisplaySpinner}
             />
         )
         .toList();

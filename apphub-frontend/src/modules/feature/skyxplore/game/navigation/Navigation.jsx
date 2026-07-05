@@ -13,7 +13,7 @@ import ConstructionArea from "./construction_area/ConstructionArea";
 import ConstructBuildingModule from "./construct_building_module/ConstructBuildingModule";
 import "./navigation.css";
 
-const Navigation = ({ footer, setConfirmationDialogData }) => {
+const Navigation = ({ footer, setConfirmationDialogData, setDisplaySpinner }) => {
     const [history, setHistory] = useState(sessionStorage.skyXplorePageHistory ? JSON.parse(sessionStorage.skyXplorePageHistory) : []);
     useEffect(() => { sessionStorage.skyXplorePageHistory = JSON.stringify(history) }, [history]);
 
@@ -40,6 +40,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
             return <Map
                 footer={footer}
                 openPage={openPage}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.SOLAR_SYSTEM:
             return <SolarSystem
@@ -47,6 +48,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 footer={footer}
                 closePage={closePage}
                 openPage={openPage}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.PLANET:
             return <Planet
@@ -55,6 +57,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 closePage={closePage}
                 openPage={openPage}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.MODIFY_SURFACE:
             return <ModifySurface
@@ -63,12 +66,14 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 planetId={data.planetId}
                 surfaceId={data.surfaceId}
                 surfaceType={data.surfaceType}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.POPULATION:
             return <Population
                 closePage={closePage}
                 footer={footer}
                 planetId={data}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.STORAGE:
             return <Storage
@@ -76,6 +81,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 footer={footer}
                 planetId={data}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.CONSTRUCTION_AREA:
             return <ConstructionArea
@@ -84,6 +90,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 footer={footer}
                 constructionArea={data.constructionArea}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case PageName.CONSTRUCT_BUILDING_MODULE:
             return <ConstructBuildingModule
@@ -91,6 +98,7 @@ const Navigation = ({ footer, setConfirmationDialogData }) => {
                 footer={footer}
                 constructionAreaId={data.constructionAreaId}
                 buildingModuleCategory={data.buildingModuleCategory}
+                setDisplaySpinner={setDisplaySpinner}
             />
         default:
             throwException("IllegalArgument", "Unhandled PageName: " + lastPage.pageName);

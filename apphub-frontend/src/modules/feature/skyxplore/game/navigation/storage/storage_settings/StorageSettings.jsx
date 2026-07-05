@@ -9,13 +9,13 @@ import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
 import { SKYXPLORE_PLANET_GET_STORAGE_SETTINGS } from "../../../SkyXploreGameEndpoints";
 
-const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
+const StorageSettings = ({ planetId, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resosurceLocalizationData);
 
     const [storageSettings, setStorageSettings] = useState([]);
 
-    useLoader({ request: SKYXPLORE_PLANET_GET_STORAGE_SETTINGS.createRequest(null, { planetId: planetId }), mapper: setStorageSettings });
+    useLoader({ request: SKYXPLORE_PLANET_GET_STORAGE_SETTINGS.createRequest(null, { planetId: planetId }), mapper: setStorageSettings, setDisplaySpinner: setDisplaySpinner });
 
     const getStorageSettings = () => {
         return new Stream(storageSettings)
@@ -25,6 +25,7 @@ const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
                 storageSetting={storageSetting}
                 setStorageSettings={setStorageSettings}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }
@@ -38,6 +39,7 @@ const StorageSettings = ({ planetId, setConfirmationDialogData }) => {
                     planetId={planetId}
                     storageSettings={storageSettings}
                     setStorageSettings={setStorageSettings}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="skyxplore-game-storage-setting-list">

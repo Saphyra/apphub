@@ -14,6 +14,7 @@ import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import { USER_DATA_ROLES_FOR_ALL_RESTRICTED } from "../AdminPanelEndpoints";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const RolesForAllPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -21,10 +22,11 @@ const RolesForAllPage = () => {
     document.title = localizationHandler.get("title");
 
     const [restrictedRoles, setRestrictedRoles] = useState([]);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader({ request: USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), mapper: setRestrictedRoles });
+    useLoader({ request: USER_DATA_ROLES_FOR_ALL_RESTRICTED.createRequest(), mapper: setRestrictedRoles, setDisplaySpinner: setDisplaySpinner });
 
     const getRoles = () => {
         return new Stream(roles)
@@ -34,6 +36,7 @@ const RolesForAllPage = () => {
                 key={role}
                 localizationHandler={localizationHandler}
                 role={role}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }
@@ -61,6 +64,8 @@ const RolesForAllPage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

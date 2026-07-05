@@ -6,7 +6,8 @@ const confirmDeconstructConstructionArea = (
     localizationHandler,
     buildingLocalizationHandler,
     constructionArea,
-    setConfirmationDialogData
+    setConfirmationDialogData,
+    setDisplaySpinner
 ) => {
     const dialogData = new ConfirmationDialogData(
         "skyxplore-game-planet-surface-confirm-deconstruct-construction-area",
@@ -17,7 +18,7 @@ const confirmDeconstructConstructionArea = (
                 key="deconstruct"
                 id="skyxplore-game-planet-surface-confirm-deconstruct-construction-area-button"
                 label={localizationHandler.get("deconstruct")}
-                onclick={() => deconstructConstructionArea(constructionArea.constructionAreaId, setConfirmationDialogData)}
+                onclick={() => deconstructConstructionArea(constructionArea.constructionAreaId, setConfirmationDialogData, setDisplaySpinner)}
             />,
             <Button
                 key="cancel"
@@ -31,9 +32,9 @@ const confirmDeconstructConstructionArea = (
     setConfirmationDialogData(dialogData);
 }
 
-const deconstructConstructionArea = async (constructionAreaId, setConfirmationDialogData) => {
+const deconstructConstructionArea = async (constructionAreaId, setConfirmationDialogData, setDisplaySpinner) => {
     await SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA.createRequest(null, { constructionAreaId: constructionAreaId })
-        .send();
+        .send(setDisplaySpinner);
 
     setConfirmationDialogData(null);
 }

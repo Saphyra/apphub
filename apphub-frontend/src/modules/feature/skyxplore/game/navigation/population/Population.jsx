@@ -15,7 +15,7 @@ import Button from "common/component/input/Button";
 import PopulationFiltering from "./filtering/PopulationFiltering";
 import { SKYXPLORE_PLANET_GET_POPULATION } from "../../SkyXploreGameEndpoints";
 
-const Population = ({ footer, closePage, planetId }) => {
+const Population = ({ footer, closePage, planetId, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [population, setPopulation] = useState([]);
@@ -41,8 +41,8 @@ const Population = ({ footer, closePage, planetId }) => {
     }
 
     useEffect(() => loadPopulation(), []);
-    useLoadSetting(SettingType.POPULATION_HIDE, planetId, updateHidden);
-    useLoadSetting(SettingType.POPULATION_ORDER, planetId, updateOrder);
+    useLoadSetting(SettingType.POPULATION_HIDE, planetId, updateHidden, setDisplaySpinner);
+    useLoadSetting(SettingType.POPULATION_ORDER, planetId, updateOrder, setDisplaySpinner);
 
     useConnectToWebSocket(
         WebSocketEndpoint.SKYXPLORE_GAME_POPULATION,
@@ -63,7 +63,7 @@ const Population = ({ footer, closePage, planetId }) => {
     const loadPopulation = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_PLANET_GET_POPULATION.createRequest(null, { planetId: planetId })
-                .send();
+                .send(setDisplaySpinner);
 
             setPopulation(response);
         }
@@ -77,6 +77,7 @@ const Population = ({ footer, closePage, planetId }) => {
                 key={citizen.citizenId}
                 citizen={citizen}
                 hiddenProperties={hiddenProperties}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }
@@ -105,6 +106,7 @@ const Population = ({ footer, closePage, planetId }) => {
                     orderSetting={orderSetting}
                     updateOrder={updateOrder}
                     planetId={planetId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="skyxplore-game-population-citizens">

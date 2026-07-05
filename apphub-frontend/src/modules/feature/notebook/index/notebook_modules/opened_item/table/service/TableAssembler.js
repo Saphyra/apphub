@@ -39,6 +39,7 @@ export const getTableRows = (openedItem, rows, checklist, editingEnabled, setRow
                 checklist={checklist}
                 custom={custom}
                 addFile={addFile}
+                setDisplaySpinner={setDisplaySpinner}
             />
         )
         .toList();

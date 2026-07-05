@@ -19,6 +19,7 @@
         Use constants for schema and table name in @Entity
         Delete OrphanedRecordCleaners
     Split DynamoDbUtil
+    Dao requires setDisplaySpinner
 
 ===ETC===
     EliteBase

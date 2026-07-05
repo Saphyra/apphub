@@ -8,7 +8,7 @@ import validate from "common/js/validation/Validator";
 import { useEffect, useState } from "react";
 import { SKYXPLORE_CREATE_LOBBY, SKYXPLORE_LOBBY_PAGE } from "../../lobby/SkyXploreLobbyEndpoints";
 
-const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConfirmationDialog }) => {
+const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConfirmationDialog, setDisplaySpinner }) => {
     const [gameName, setGameName] = useState("");
     const [validationResult, setValidationResult] = useState({});
 
@@ -27,7 +27,7 @@ const NewGameConfirmationDialog = ({ localizationHandler, setDisplaynNewGameConf
 
     const createLobby = async () => {
         await SKYXPLORE_CREATE_LOBBY.createRequest({ value: gameName })
-            .send();
+            .send(setDisplaySpinner);
 
         window.location.href = SKYXPLORE_LOBBY_PAGE;
     }

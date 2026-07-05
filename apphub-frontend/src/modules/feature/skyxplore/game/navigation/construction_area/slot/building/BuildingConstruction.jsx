@@ -2,10 +2,10 @@ import Button from "common/component/input/Button";
 import ProgressBar from "common/component/progress_bar/ProgressBar";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_CONSTRUCTION_OF_BUILDING_MODULE } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const BuildingConstruction = ({ construction, localizationHandler, setBuildings }) => {
+const BuildingConstruction = ({ construction, localizationHandler, setBuildings, setDisplaySpinner }) => {
     const cancelConstruction = async () => {
         const response = await SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_CONSTRUCTION_OF_BUILDING_MODULE.createRequest(null, { constructionId: construction.constructionId })
-            .send();
+            .send(setDisplaySpinner);
 
         setBuildings(response);
     }

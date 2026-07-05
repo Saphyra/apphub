@@ -66,7 +66,8 @@ const CalendarEditOccurrencePage = () => {
             request: CALENDAR_GET_OCCURRENCE.createRequest(null, { eventId: eventId, occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
-            listener: [occurrenceId, refreshCounter]
+            listener: [occurrenceId, refreshCounter],
+            setDisplaySpinner: setDisplaySpinner
         }
     );
 

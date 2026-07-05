@@ -10,7 +10,7 @@ import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import { ACCOUNT_CHANGE_USERNAME } from "../AccountEndpoints";
 
-const UsernameChanger = ({ userData, setUserData }) => {
+const UsernameChanger = ({ userData, setUserData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [newUsername, setNewUsername] = useState("");
@@ -24,7 +24,7 @@ const UsernameChanger = ({ userData, setUserData }) => {
 
     const changeUsername = async () => {
         const response = await ACCOUNT_CHANGE_USERNAME.createRequest({ username: newUsername, password: password })
-            .send();
+            .send(setDisplaySpinner);
 
         setNewUsername("");
         setPassword("");

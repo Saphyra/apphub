@@ -30,7 +30,7 @@ const NotebookEditListItemPage = () => {
     const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useEffect(() => loadItemData(listItemId, setDataFromResponse), []);
+    useEffect(() => loadItemData(listItemId, setDataFromResponse, setDisplaySpinner), []);
 
     const setDataFromResponse = (response) => {
         setParentId(response.parentId);

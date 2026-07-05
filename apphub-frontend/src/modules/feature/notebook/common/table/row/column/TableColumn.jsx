@@ -20,7 +20,7 @@ import FileColumn from "./type/FileColumn";
 import ImageColumn from "./type/ImageColumn";
 import { throwException } from "common/js/Utils";
 
-const TableColumn = ({ openedItem, rowId, columnData, updateColumn, editingEnabled = true, custom = false, addFileToColum }) => {
+const TableColumn = ({ openedItem, rowId, columnData, updateColumn, editingEnabled = true, custom = false, addFileToColum, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [displayColumnTypeSelector, setDisplayColumnTypeSelector] = useState(false);
@@ -77,6 +77,7 @@ const TableColumn = ({ openedItem, rowId, columnData, updateColumn, editingEnabl
                 editingEnabled={editingEnabled}
                 localizationHandler={localizationHandler}
                 selectType={() => setDisplayColumnTypeSelector(true)}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case ColumnType.COLOR:
             return <ColorColumn
@@ -142,6 +143,7 @@ const TableColumn = ({ openedItem, rowId, columnData, updateColumn, editingEnabl
                 localizationHandler={localizationHandler}
                 selectType={() => setDisplayColumnTypeSelector(true)}
                 addFileToColum={addFileToColum}
+                setDisplaySpinner={setDisplaySpinner}
             />
         case ColumnType.IMAGE:
             return <ImageColumn

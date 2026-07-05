@@ -8,7 +8,7 @@ import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import { SKYXPLORE_PLANET_RENAME_CITIZEN } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const CitizenName = ({ citizenId, name }) => {
+const CitizenName = ({ citizenId, name, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -28,7 +28,7 @@ const CitizenName = ({ citizenId, name }) => {
         }
 
         await SKYXPLORE_PLANET_RENAME_CITIZEN.createRequest({ value: modifiedName }, { citizenId: citizenId })
-            .send();
+            .send(setDisplaySpinner);
 
         setEditingEnabled(false);
     }

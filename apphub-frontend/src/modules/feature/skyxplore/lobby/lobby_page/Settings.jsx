@@ -6,7 +6,7 @@ import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import { SKYXPLORE_LOBBY_EDIT_SETTINGS } from "../SkyXploreLobbyEndpoints";
 import { ADDITIONAL_SOLAR_SYSTEMS_MAX, ADDITIONAL_SOLAR_SYSTEMS_MIN, MAX_PLAYERS_PER_SOLAR_SYSTEM, MIN_PLAYERS_PER_SOLAR_SYSTEM, PLANET_SIZE_MAX, PLANET_SIZE_MIN, PLANETS_PER_SOLAR_SYSTEM_MAX, PLANETS_PER_SOLAR_SYSTEM_MIN } from "../SkyXploreLobbyConstants";
 
-const Settings = ({ localizationHandler, isHost, settings }) => {
+const Settings = ({ localizationHandler, isHost, settings, setDisplaySpinner }) => {
     const [maxPlayersPerSolarSystem, setMaxPlayersPerSolarSystem] = useState(0);
     const [additionalSolarSystemsMin, setAdditionalSolarSystemsMin] = useState(0);
     const [additionalSolarSystemsMax, setAdditionalSolarSystemsMax] = useState(0);
@@ -156,7 +156,7 @@ const Settings = ({ localizationHandler, isHost, settings }) => {
         }
 
         SKYXPLORE_LOBBY_EDIT_SETTINGS.createRequest(request)
-            .send();
+            .send(setDisplaySpinner);
 
         setShouldSendToServer(false);
     }

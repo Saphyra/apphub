@@ -36,7 +36,7 @@ const IndexPage = () => {
                     (response) => response.statusKey === ResponseStatus.UNAUTHORIZED,
                     (response) => console.log("User is not logged in.")
                 ))
-                .send();
+                .send(setDisplaySpinner);
 
             const location = searchParams.get("redirect") || MODULES_PAGE;
 

@@ -10,7 +10,7 @@ import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import { ACCOUNT_CHANGE_EMAIL } from "../AccountEndpoints";
 
-const EmailChanger = ({ userData, setUserData }) => {
+const EmailChanger = ({ userData, setUserData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [newEmail, setNewEmail] = useState("");
@@ -24,7 +24,7 @@ const EmailChanger = ({ userData, setUserData }) => {
 
     const changeEmail = async () => {
         const response = await ACCOUNT_CHANGE_EMAIL.createRequest({ email: newEmail, password: password })
-            .send();
+            .send(setDisplaySpinner);
 
         setNewEmail("");
         setPassword("");

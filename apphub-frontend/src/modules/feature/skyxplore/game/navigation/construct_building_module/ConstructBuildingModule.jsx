@@ -10,7 +10,7 @@ import AvailableBuilding from "./AvailableBuilding";
 import Button from "common/component/input/Button";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES } from "../../SkyXploreGameEndpoints";
 
-const ConstructBuildingModule = ({ closePage, footer, constructionAreaId, buildingModuleCategory }) => {
+const ConstructBuildingModule = ({ closePage, footer, constructionAreaId, buildingModuleCategory, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const buildingModuleCategoryLocalizationHandler = new LocalizationHandler(buildingModuleCategoryLocalizationData);
     const buildingModuleLocalizationHandler = new LocalizationHandler(buildingModuleLocalizationData);
@@ -19,7 +19,8 @@ const ConstructBuildingModule = ({ closePage, footer, constructionAreaId, buildi
 
     useLoader({
         request: SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_AVAILABLE_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionAreaId, buildingModuleCategory: buildingModuleCategory }),
-        mapper: setAvailableBuildings
+        mapper: setAvailableBuildings,
+        setDisplaySpinner: setDisplaySpinner
     });
 
     const getContent = () => {
@@ -32,6 +33,7 @@ const ConstructBuildingModule = ({ closePage, footer, constructionAreaId, buildi
                     localizationHandler={localizationHandler}
                     dataId={dataId}
                     constructionAreaId={constructionAreaId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             )
             .toList();

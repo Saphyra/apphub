@@ -4,12 +4,12 @@ import LanguageSelector from "common/component/language_selector/LanguageSelecto
 import { ACCOUNT_CHANGE_LANGUAGE } from "../AccountEndpoints";
 import Constants from "common/js/Constants";
 
-const AccountLanguageSelector = () => {
+const AccountLanguageSelector = ({ setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const setLanguage = async (language) => {
         await ACCOUNT_CHANGE_LANGUAGE.createRequest({ value: language })
-            .send();
+            .send(setDisplaySpinner);
 
         localStorage[Constants.STORAGE_KEY_LOCALE] = language;
         window.location.reload();

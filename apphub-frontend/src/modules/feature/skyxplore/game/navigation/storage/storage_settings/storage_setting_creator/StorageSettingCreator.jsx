@@ -16,7 +16,7 @@ import Button from "common/component/input/Button";
 import { isBlank } from "common/js/Utils";
 import { SKYXPLORE_PLANET_CREATE_STORAGE_SETTING } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }) => {
+const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
 
@@ -63,7 +63,7 @@ const StorageSettingCreator = ({ planetId, storageSettings, setStorageSettings }
         }
 
         const response = await SKYXPLORE_PLANET_CREATE_STORAGE_SETTING.createRequest(paylaod, { planetId: planetId })
-            .send();
+            .send(setDisplaySpinner);
         setStorageSettings(response);
     }
 

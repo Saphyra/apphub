@@ -13,6 +13,7 @@ import Button from "common/component/input/Button";
 import create from "./NewTextSaver";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
+import Spinner from "common/component/Spinner";
 
 const NewTextPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -20,6 +21,8 @@ const NewTextPage = () => {
 
     const { parent } = useParams();
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [listItemTitle, setListItemTitle] = useState("");
     const [content, setContent] = useState("");
@@ -41,6 +44,7 @@ const NewTextPage = () => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="notebook-new-text-content-wrapper">
@@ -78,18 +82,19 @@ const NewTextPage = () => {
                         onclick={() => window.location.href = NOTEBOOK_PAGE}
                     />
                 ]}
-
                 centerButtons={[
                     <Button
                         key="create-button"
                         id="notebook-new-text-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create(listItemTitle, parentId, content)}
+                        onclick={() => create(listItemTitle, parentId, content, setDisplaySpinner)}
                     />
                 ]}
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

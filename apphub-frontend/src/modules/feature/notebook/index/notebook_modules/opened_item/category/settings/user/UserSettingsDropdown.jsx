@@ -7,7 +7,8 @@ import "./user_settings.css";
 const UserSettingsDropdown = ({
     userSettings,
     changeUserSettings,
-    localizationHandler
+    localizationHandler,
+    setDisplaySpinner
 }) => {
     return (
         <div id="notebook-settings-user">
@@ -25,6 +26,7 @@ const UserSettingsDropdown = ({
                 localizationHandler={localizationHandler}
                 userSettings={userSettings}
                 changeUserSettings={changeUserSettings}
+                setDisplaySpinner={setDisplaySpinner}
             />
         </div>
     )

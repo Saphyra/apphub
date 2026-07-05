@@ -142,7 +142,7 @@ const Table = ({
                     <Button
                         id="notebook-content-table-discard-button"
                         label={localizationHandler.get("discard")}
-                        onclick={() => discard(setConfirmationDialogData, localizationHandler, setEditingEnabled, openedListItem.id, setDataFromResponse)}
+                        onclick={() => discard(setConfirmationDialogData, localizationHandler, setEditingEnabled, openedListItem.id, setDataFromResponse, setDisplaySpinner)}
                     />
                 }
 

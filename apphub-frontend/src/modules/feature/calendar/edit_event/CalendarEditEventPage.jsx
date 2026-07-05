@@ -81,7 +81,8 @@ const CalendarEditEventPage = () => {
             request: CALENDAR_GET_EVENT.createRequest(null, { eventId: eventId }),
             mapper: setEvent,
             condition: () => hasValue(eventId),
-            listener: [eventId, refreshCounter]
+            listener: [eventId, refreshCounter],
+            setDisplaySpinner: setDisplaySpinner
         }
     );
 
