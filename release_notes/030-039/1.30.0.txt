@@ -33,6 +33,7 @@
         Foreign key constraint to powerplay_conflict.star_system_id
         Foreign key constraint to minor_faction_state.minor_faction_id
         Foreign key constraint to star_system_minor_faction_mapping.minor_faction_id and star_system_id
+    Helper overloads for DynamoDbRepository
 
 ===Manual Release Steps===
     Pre deployment
