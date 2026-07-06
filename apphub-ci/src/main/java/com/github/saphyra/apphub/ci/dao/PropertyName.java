@@ -33,4 +33,5 @@ public enum PropertyName {
     AUTHORIZATION_CERTIFICATE,
     PSQL_HOST,
     FTP_HOST,
+    DB_BACKUP,
 }

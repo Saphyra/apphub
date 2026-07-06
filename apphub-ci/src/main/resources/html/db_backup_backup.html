@@ -1,0 +1,69 @@
+<html>
+<head>
+    <title>Database Backup - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>
+    <span>Backing up</span>
+    <span th:text="${dbhost}"></span>
+    <span th:text="${dbname}"></span>
+    <span> to bucket </span>
+    <span th:text="${s3bucket}"></span>
+</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<div class="menu">
+    <form action="/db-backup/backup" method="POST">
+        <div>
+            <a href="/db-backup">Back</a>
+        </div>
+
+        <div>
+            <fieldset>
+                <legend>Select tables</legend>
+
+                <div>
+                    <input type="checkbox" id="unselect-all" onclick="unselectAll(event)"/>
+                    /
+                    <input type="checkbox" id="select-all" checked onclick="selectAll(event)"/>
+                </div>
+
+                <div th:each="table : ${tables}">
+                    <label>
+                        <input type="checkbox" class="table" name="tables" th:value="${table}">
+                        <span th:text="${table}"></span>
+                    </label>
+                </div>
+            </fieldset>
+        </div>
+
+        <div>
+            <input type="submit" value="Backup">
+        </div>
+    </form>
+</div>
+
+<script>
+    function unselectAll(e) {
+        select(e, false)
+    }
+
+    function selectAll(e) {
+        select(e, true)
+    }
+
+    function select(e, checked) {
+        e.preventDefault();
+
+        const checkboxes = document.getElementsByClassName("table");
+        for (let checkbox of checkboxes) {
+            checkbox.checked = checked;
+        }
+    }
+</script>
+
+</body>
+</html>

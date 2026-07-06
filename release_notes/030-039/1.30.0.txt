@@ -1,6 +1,8 @@
 ===FEATURES===
     Calendar
         Auto-done occurrences
+    ApphubCI
+        Database backup and restoration tool
 
 ===BUGFIXES===
     Notebook
