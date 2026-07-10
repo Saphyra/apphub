@@ -89,9 +89,9 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
         eventLabelMappingDao.deleteByLabelId(userId, labelId);
     }
 
-    public void saveLabel(UUID userId, Label label) {
-        labelDao.save(userId, label);
-        eventLabelMappingDao.saveEventsOfLabel(userId, label.getLabelId(), List.of());
+    public void saveLabel(Label label) {
+        labelDao.save(label);
+        eventLabelMappingDao.saveEventsOfLabel(label.getUserId(), label.getLabelId(), List.of());
     }
 
     /**

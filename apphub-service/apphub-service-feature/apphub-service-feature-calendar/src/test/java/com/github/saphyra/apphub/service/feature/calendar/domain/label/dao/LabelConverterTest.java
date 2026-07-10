@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
+import lombok.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +23,8 @@ class LabelConverterTest {
     private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
     private static final String LABEL = "label";
     private static final String LABEL_ENCRYPTED = "label-encrypted";
+    private static final @NonNull UUID USER_ID = UUID.randomUUID();
+    private static final String USER_ID_STRING = "user-id";
 
     @Mock
     private UuidConverter uuidConverter;
@@ -38,6 +41,7 @@ class LabelConverterTest {
     @Test
     void convertDomain() {
         Label domain = Label.builder()
+            .userId(USER_ID)
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
@@ -45,10 +49,12 @@ class LabelConverterTest {
         given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
         given(stringEncryptor.encrypt(LABEL, ACCESS_TOKEN_USER_ID, LABEL_ID_STRING, COLUMN_LABEL)).willReturn(LABEL_ENCRYPTED);
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
         LabelEntity result = underTest.convertDomain(domain);
 
         assertThat(result)
+            .returns(USER_ID_STRING, LabelEntity::getUserId)
             .returns(LABEL_ID_STRING, LabelEntity::getLabelId)
             .returns(LABEL_ENCRYPTED, LabelEntity::getLabel);
     }
@@ -56,6 +62,7 @@ class LabelConverterTest {
     @Test
     void convertEntity() {
         LabelEntity entity = LabelEntity.builder()
+            .userId(USER_ID_STRING)
             .labelId(LABEL_ID_STRING)
             .label(LABEL_ENCRYPTED)
             .build();
@@ -63,10 +70,12 @@ class LabelConverterTest {
         given(uuidConverter.convertEntity(LABEL_ID_STRING)).willReturn(LABEL_ID);
         given(accessTokenProvider.getUserIdAsString()).willReturn(ACCESS_TOKEN_USER_ID);
         given(stringEncryptor.decrypt(LABEL_ENCRYPTED, ACCESS_TOKEN_USER_ID, LABEL_ID_STRING, COLUMN_LABEL)).willReturn(LABEL);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
 
         Label result = underTest.convertEntity(entity);
 
         assertThat(result)
+            .returns(USER_ID, Label::getUserId)
             .returns(LABEL_ID, Label::getLabelId)
             .returns(LABEL, Label::getLabel);
     }

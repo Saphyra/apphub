@@ -40,7 +40,9 @@ public enum CalendarMonitoringFunctionality implements MonitoringFunctionality {
     DELETE_EVENTS_OF_LABEL,
     GET_EVENTS_OF_LABELS_BY_USER_ID,
     SAVE_EVENTS_OF_LABEL,
-    ;
+
+    //Alm
+    SAVE_ALM, GET_ALM_BY_PRINCIPAL_AND_OBJECT_TYPE, FIND_ALM_FOR_OBJECT, GET_ALMS_BY_PRINCIPAL, GET_ALMS_BY_OBJECTS, DELETE_ALMS, GET_ALMS_BY_OBJECT;
 
     @Override
     public String assemble(String tableName) {

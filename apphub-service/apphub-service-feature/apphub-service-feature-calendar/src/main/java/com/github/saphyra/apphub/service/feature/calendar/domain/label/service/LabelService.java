@@ -23,8 +23,8 @@ public class LabelService {
     public UUID createLabel(UUID userId, String label) {
         labelValidator.validate(userId, label);
 
-        Label domain = labelFactory.create(label);
-        commonCalendarDao.saveLabel(userId, domain);
+        Label domain = labelFactory.create(userId, label);
+        commonCalendarDao.saveLabel(domain);
 
         return domain.getLabelId();
     }
@@ -42,6 +42,6 @@ public class LabelService {
 
         domain.setLabel(label);
 
-        labelDao.save(userId, domain);
+        labelDao.save(domain);
     }
 }

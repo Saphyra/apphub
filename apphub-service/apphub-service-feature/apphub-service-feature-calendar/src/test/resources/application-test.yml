@@ -1,4 +1,6 @@
 aws:
   dynamoDb:
     calendar:
-      tableName: apphub-minikube-calendar
+      tableName: apphub-test-calendar
+    alm:
+      tableName: apphub-calendar-test-alm

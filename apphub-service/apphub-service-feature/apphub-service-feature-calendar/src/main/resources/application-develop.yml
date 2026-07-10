@@ -5,3 +5,5 @@ aws:
     url: http://dynamodb:8000
     calendar:
       tableName: apphub-minikube-calendar
+    alm:
+      tableName: apphub-calendar-minikube-alm

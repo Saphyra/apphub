@@ -29,7 +29,7 @@ class LabelQueryServiceTest {
     private LabelDao labelDao;
 
     @Mock
-    private LabelMapper labelMapper;
+    private LabelToResponseMapper labelToResponseMapper;
 
     @InjectMocks
     private LabelQueryService underTest;
@@ -44,7 +44,7 @@ class LabelQueryServiceTest {
     void getByEventId() {
         given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID)).willReturn(List.of(LABEL_ID));
         given(labelDao.getByLabelIds(USER_ID, List.of(LABEL_ID))).willReturn(List.of(label));
-        given(labelMapper.toResponse(List.of(label))).willReturn(List.of(labelResponse));
+        given(labelToResponseMapper.toResponse(List.of(label))).willReturn(List.of(labelResponse));
 
         assertThat(underTest.getByEventId(USER_ID, EVENT_ID)).containsExactly(labelResponse);
     }
@@ -52,7 +52,7 @@ class LabelQueryServiceTest {
     @Test
     void getByUserId() {
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(labelMapper.toResponse(label)).willReturn(labelResponse);
+        given(labelToResponseMapper.toResponse(label)).willReturn(labelResponse);
 
         assertThat(underTest.getByUserId(USER_ID)).containsExactly(labelResponse);
     }
@@ -60,7 +60,7 @@ class LabelQueryServiceTest {
     @Test
     void getLabel() {
         given(labelDao.findByIdValidated(USER_ID, LABEL_ID)).willReturn(label);
-        given(labelMapper.toResponse(label)).willReturn(labelResponse);
+        given(labelToResponseMapper.toResponse(label)).willReturn(labelResponse);
 
         assertThat(underTest.getLabel(USER_ID, LABEL_ID)).isEqualTo(labelResponse);
     }

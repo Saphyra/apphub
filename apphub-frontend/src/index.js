@@ -59,16 +59,17 @@ import { SKYXPLORE_LOBBY_PAGE } from 'modules/feature/skyxplore/lobby/SkyXploreL
 import { SKYXPLORE_GAME_PAGE } from 'modules/feature/skyxplore/game/SkyXploreGameEndpoints';
 import { SKYXPLORE_ADMIN_DETAILS_PAGE, SKYXPLORE_ADMIN_LIST_PAGE, SKYXPLORE_ADMIN_MAIN_PAGE } from 'modules/feature/skyxplore/admin/SkyXploreAdminEndpoints';
 import { NOTEBOOK_EDIT_LIST_ITEM_PAGE, NOTEBOOK_NEW_CATEGORY_PAGE, NOTEBOOK_NEW_CHECKLIST_PAGE, NOTEBOOK_NEW_CHECKLIST_TABLE_PAGE, NOTEBOOK_NEW_CUSTOM_TABLE_PAGE, NOTEBOOK_NEW_FILE_PAGE, NOTEBOOK_NEW_FILES_PAGE, NOTEBOOK_NEW_IMAGE_PAGE, NOTEBOOK_NEW_IMAGES_PAGE, NOTEBOOK_NEW_LINK_PAGE, NOTEBOOK_NEW_ONLY_TITLE_PAGE, NOTEBOOK_NEW_PAGE, NOTEBOOK_NEW_TABLE_PAGE, NOTEBOOK_NEW_TEXT_PAGE, NOTEBOOK_PAGE } from 'modules/feature/notebook/NotebookEndpoints';
-import { ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, ADMIN_PANEL_MIGRATION_TASKS_PAGE, ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, ADMIN_PANEL_ROLES_FOR_ALL_PAGE, ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_ERROR_REPORT_PAGE, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_BAN_PAGE, ADMIN_PANEL_BAN_DETAILS_PAGE } from 'modules/etc/admin_panel/AdminPanelEndpoints';
+import { ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, ADMIN_PANEL_MIGRATION_TASKS_PAGE, ADMIN_PANEL_ROLE_MANAGEMENT_PAGE, ADMIN_PANEL_ROLES_FOR_ALL_PAGE, ADMIN_PANEL_ERROR_REPORT_PAGE, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_BAN_PAGE, ADMIN_PANEL_BAN_DETAILS_PAGE } from 'modules/etc/admin_panel/AdminPanelEndpoints';
 import { ACCOUNT_PAGE } from 'modules/etc/account/AccountEndpoints';
 import { UTILS_BASE_64_PAGE, UTILS_JSON_FORMATTER_PAGE, UTILS_RANDOM_DIRECTION_PAGE } from 'modules/feature/utils/UtilsEndpoints';
 import { ELITE_BASE_PAGE } from 'modules/feature/elite_base/EliteBaseEndpoints';
-import { CALENDAR_CREATE_EVENT_PAGE, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_LABELS_PAGE, CALENDAR_PAGE, CALENDAR_SEARCH_PAGE } from 'modules/feature/calendar/CalendarEndpoints';
+import { CALENDAR_CREATE_EVENT_PAGE, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EXPIRED_EVENTS_PAGE, CALENDAR_LABELS_PAGE, CALENDAR_PAGE, CALENDAR_SEARCH_PAGE, CALENDAR_SHARE_PAGE } from 'modules/feature/calendar/CalendarEndpoints';
 import { MONITORING_PAGE } from 'modules/platform/monitoring/MonitoringEndpoints';
 import { TASK_MANAGER_CREATE_ORGANIZATION_PAGE, TASK_MANAGER_ORGANIZATION_INDEX_PAGE, TASK_MANAGER_PAGE } from 'modules/feature/task_manager/TaskManagerEndpoints';
 import TaskManagerIndexPage from 'modules/feature/task_manager/index/TaskManagerIndexPage';
 import TaskManagerCreateOrganizationPage from 'modules/feature/task_manager/organization/create/TaskManagerCreateOrganizationPage';
 import TaskManagerOrganizationIndexPage from 'modules/feature/task_manager/organization/index/TaskManagerOrganizationIndexPage';
+import CalendarSharePage from 'modules/feature/calendar/share/CalendarSharePage';
 
 const router = createBrowserRouter([
   {
@@ -343,6 +344,16 @@ const router = createBrowserRouter([
     element: <CalendarSearchPage />
   },
   {
+    path: CALENDAR_SHARE_PAGE.toPageUrl(),
+    element: <CalendarSharePage />,
+    loader: ({ params }) => {
+      return {
+        type: params.type,
+        id: params.id
+      }
+    }
+  },
+  {
     path: CALENDAR_EDIT_OCCURRENCE_PAGE.toPageUrl(),
     element: <CalendarEditOccurrencePage />,
     loader: ({ params }) => {
@@ -377,7 +388,7 @@ const router = createBrowserRouter([
     path: TASK_MANAGER_CREATE_ORGANIZATION_PAGE,
     element: <TaskManagerCreateOrganizationPage />
   },
-    {
+  {
     path: TASK_MANAGER_ORGANIZATION_INDEX_PAGE.toPageUrl(),
     element: <TaskManagerOrganizationIndexPage />,
     loader: ({ params }) => {

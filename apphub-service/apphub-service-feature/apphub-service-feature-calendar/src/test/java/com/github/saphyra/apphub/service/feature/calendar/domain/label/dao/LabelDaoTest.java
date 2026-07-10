@@ -55,12 +55,11 @@ class LabelDaoTest {
 
     @Test
     void save() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(converter.convertDomain(domain)).willReturn(entity);
 
-        underTest.save(USER_ID, domain);
+        underTest.save(domain);
 
-        then(repository).should().save(USER_ID_STRING, entity);
+        then(repository).should().save(entity);
     }
 
     @Test

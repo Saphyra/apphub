@@ -107,19 +107,24 @@ class CommonCalendarDaoTest {
     @Test
     void saveLabel() {
         Label label = Label.builder()
+            .userId(USER_ID)
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
 
-        underTest.saveLabel(USER_ID, label);
+        underTest.saveLabel(label);
 
-        then(labelDao).should().save(USER_ID, label);
+        then(labelDao).should().save(label);
         then(eventLabelMappingDao).should().saveEventsOfLabel(USER_ID, LABEL_ID, List.of());
     }
 
     @Test
     void editLabelsOfEvent_addEventToLabel() {
-        Label label = Label.builder().labelId(LABEL_ID).label(LABEL).build();
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
         given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID))));
 
@@ -132,7 +137,11 @@ class CommonCalendarDaoTest {
 
     @Test
     void editLabelsOfEvent_removeEventFromLabel() {
-        Label label = Label.builder().labelId(LABEL_ID).label(LABEL).build();
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
         given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(EVENT_ID, OTHER_EVENT_ID))));
 
@@ -145,7 +154,11 @@ class CommonCalendarDaoTest {
 
     @Test
     void editLabelsOfEvent_noModifiedMappings() {
-        Label label = Label.builder().labelId(LABEL_ID).label(LABEL).build();
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
         given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(EVENT_ID, OTHER_EVENT_ID))));
 

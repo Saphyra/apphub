@@ -17,24 +17,24 @@ import java.util.UUID;
 public class LabelQueryService {
     private final EventLabelMappingDao eventLabelMappingDao;
     private final LabelDao labelDao;
-    private final LabelMapper labelMapper;
+    private final LabelToResponseMapper labelToResponseMapper;
 
     public List<LabelResponse> getByEventId(UUID userId, UUID eventId) {
         List<UUID> labelIds = eventLabelMappingDao.getLabelsOfEvent(userId, eventId)
             .stream()
             .toList();
         List<Label> labels = labelDao.getByLabelIds(userId, labelIds);
-        return labelMapper.toResponse(labels);
+        return labelToResponseMapper.toResponse(labels);
     }
 
     public List<LabelResponse> getByUserId(UUID userId) {
         return labelDao.getByUserId(userId)
             .stream()
-            .map(labelMapper::toResponse)
+            .map(labelToResponseMapper::toResponse)
             .toList();
     }
 
     public LabelResponse getLabel(UUID userId, UUID labelId) {
-        return labelMapper.toResponse(labelDao.findByIdValidated(userId, labelId));
+        return labelToResponseMapper.toResponse(labelDao.findByIdValidated(userId, labelId));
     }
 }

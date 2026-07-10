@@ -12,16 +12,17 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
-class LabelMapperTest {
+class LabelToResponseMapperTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final String LABEL = "label";
 
     @InjectMocks
-    private LabelMapper underTest;
+    private LabelToResponseMapper underTest;
 
     @Test
     void toResponse() {
         Label label = Label.builder()
+            .userId(UUID.randomUUID())
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();

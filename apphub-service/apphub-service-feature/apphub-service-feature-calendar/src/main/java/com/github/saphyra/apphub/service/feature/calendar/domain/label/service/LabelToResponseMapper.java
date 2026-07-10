@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class LabelMapper {
+class LabelToResponseMapper {
     LabelResponse toResponse(Label label) {
         return LabelResponse.builder()
             .labelId(label.getLabelId())

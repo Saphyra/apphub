@@ -94,5 +94,9 @@
     "auto-done": {
         "en": "Mark done when expired",
         "hu": "Jelezd késznek, ha lejárt"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

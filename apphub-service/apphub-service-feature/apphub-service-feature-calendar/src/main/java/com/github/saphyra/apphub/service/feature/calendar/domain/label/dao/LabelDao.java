@@ -19,8 +19,8 @@ public class LabelDao {
         return converter.convertEntity(repository.getByLabelIds(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelIds)));
     }
 
-    public void save(UUID userId, Label label) {
-        repository.save(uuidConverter.convertDomain(userId), converter.convertDomain(label));
+    public void save(Label label) {
+        repository.save(converter.convertDomain(label));
     }
 
     public Label findByIdValidated(UUID userId, UUID labelId) {

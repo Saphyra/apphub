@@ -1,6 +1,7 @@
 ===FEATURES===
     Calendar
         Auto-done occurrences
+        Share your calendar
     ApphubCI
         Database backup and restoration tool
 

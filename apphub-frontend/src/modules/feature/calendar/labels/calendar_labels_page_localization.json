@@ -31,9 +31,9 @@
         "en": "Cancel",
         "hu": "Mégse"
     },
-    "rename-label": {
-        "en": "Rename label",
-        "hu": "Címke átnevezése"
+    "edit-label": {
+        "en": "Edit label",
+        "hu": "Címke szerkesztése"
     },
     "new-label": {
         "en": "New label",
@@ -94,5 +94,9 @@
     "events-without-label": {
         "en": "Events without label",
         "hu": "Címke nélküli események"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

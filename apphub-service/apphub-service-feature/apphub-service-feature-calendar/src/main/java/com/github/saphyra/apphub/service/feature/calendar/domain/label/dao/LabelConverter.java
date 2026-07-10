@@ -20,6 +20,7 @@ class LabelConverter extends ConverterBase<LabelEntity, Label> {
     protected LabelEntity processDomainConversion(Label domain) {
         String labelId = uuidConverter.convertDomain(domain.getLabelId());
         return LabelEntity.builder()
+            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .labelId(labelId)
             .label(stringEncryptor.encrypt(domain.getLabel(), accessTokenProvider.getUserIdAsString(), labelId, COLUMN_LABEL))
             .build();
@@ -28,6 +29,7 @@ class LabelConverter extends ConverterBase<LabelEntity, Label> {
     @Override
     protected Label processEntityConversion(LabelEntity entity) {
         return Label.builder()
+            .userId(uuidConverter.convertEntity(entity.getUserId()))
             .labelId(uuidConverter.convertEntity(entity.getLabelId()))
             .label(stringEncryptor.decrypt(entity.getLabel(), accessTokenProvider.getUserIdAsString(), entity.getLabelId(), COLUMN_LABEL))
             .build();

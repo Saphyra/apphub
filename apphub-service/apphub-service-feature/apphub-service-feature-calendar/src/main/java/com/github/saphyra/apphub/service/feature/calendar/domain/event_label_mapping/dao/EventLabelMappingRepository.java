@@ -33,7 +33,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
     private final ObjectMapper objectMapper;
 
     EventLabelMappingRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ObjectMapper objectMapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getCalendarTableName(), context);
         this.objectMapper = objectMapper;
     }
 

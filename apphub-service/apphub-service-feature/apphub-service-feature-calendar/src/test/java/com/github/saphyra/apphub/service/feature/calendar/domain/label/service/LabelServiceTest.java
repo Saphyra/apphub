@@ -42,13 +42,13 @@ class LabelServiceTest {
 
     @Test
     void createLabel() {
-        given(labelFactory.create(LABEL)).willReturn(label);
+        given(labelFactory.create(USER_ID, LABEL)).willReturn(label);
         given(label.getLabelId()).willReturn(LABEL_ID);
 
         assertThat(underTest.createLabel(USER_ID, LABEL)).isEqualTo(LABEL_ID);
 
         then(labelValidator).should().validate(USER_ID, LABEL);
-        then(commonCalendarDao).should().saveLabel(USER_ID, label);
+        then(commonCalendarDao).should().saveLabel(label);
     }
 
     @Test
@@ -66,6 +66,6 @@ class LabelServiceTest {
         underTest.editLabel(USER_ID, LABEL_ID, LABEL);
 
         then(label).should().setLabel(LABEL);
-        then(labelDao).should().save(USER_ID, label);
+        then(labelDao).should().save(label);
     }
 }

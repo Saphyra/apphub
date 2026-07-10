@@ -27,7 +27,7 @@ class EventRepository extends DynamoDbRepository {
     private final EventMapper mapper;
 
     EventRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, EventMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getCalendarTableName(), context);
         this.mapper = mapper;
     }
 

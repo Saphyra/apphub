@@ -34,7 +34,7 @@ class OccurrenceRepository extends DynamoDbRepository {
     private final OccurrenceMapper mapper;
 
     OccurrenceRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, OccurrenceMapper mapper) {
-        super(configuration.getTableName(), context);
+        super(configuration.getCalendarTableName(), context);
         this.mapper = mapper;
     }
 

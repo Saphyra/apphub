@@ -5,10 +5,10 @@ import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import NotificationService from "common/js/notification/NotificationService";
 import { isBlank } from "common/js/Utils";
 import { useState } from "react";
-import { MAX_LABEL_LENGTH } from "../../CalendarConstants";
+import { MAX_LABEL_LENGTH, TYPE_LABEL } from "../../CalendarConstants";
 import Stream from "common/js/collection/Stream";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
-import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL } from "../../CalendarEndpoints";
+import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL, CALENDAR_LABELS_PAGE, CALENDAR_SHARE_PAGE } from "../../CalendarEndpoints";
 
 const Label = ({
     labelId,
@@ -49,7 +49,7 @@ const Label = ({
             {displayEditDialog &&
                 <ConfirmationDialog
                     id={"calendar-labels-edit-label"}
-                    title={localizationHandler.get("rename-label")}
+                    title={localizationHandler.get("edit-label")}
                     content={
                         <PreLabeledInputField
                             label={localizationHandler.get("new-label")}
@@ -67,6 +67,12 @@ const Label = ({
                             id="calendar-labels-edit-label-save"
                             label={localizationHandler.get("save")}
                             onclick={() => renameLabel()}
+                        />,
+                        <Button
+                            key="share"
+                            id="calendar-labels-edit-label-share"
+                            label={localizationHandler.get("share")}
+                            onclick={()=> window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({type: TYPE_LABEL, id: labelId}, {backUrl: CALENDAR_LABELS_PAGE})}
                         />,
                         <Button
                             key="cancel"
