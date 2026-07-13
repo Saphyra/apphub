@@ -12,16 +12,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 class LabelToResponseMapper {
-    LabelResponse toResponse(Label label) {
+    LabelResponse toResponse(Label label, boolean shared) {
         return LabelResponse.builder()
             .labelId(label.getLabelId())
             .label(label.getLabel())
+            .shared(shared)
             .build();
     }
 
     public List<LabelResponse> toResponse(List<Label> labels) {
         return labels.stream()
-            .map(this::toResponse)
+            .map(label -> toResponse(label, false))
             .toList();
     }
 }

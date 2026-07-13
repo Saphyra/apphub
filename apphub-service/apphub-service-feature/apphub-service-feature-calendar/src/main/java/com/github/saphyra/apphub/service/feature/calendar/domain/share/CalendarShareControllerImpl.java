@@ -30,7 +30,7 @@ class CalendarShareControllerImpl implements CalendarShareController {
 
     @Override
     public SharedObjectResponse getSharedItem(SharedObjectType type, UUID id, AccessToken accessToken) {
-        log.info("{} wants to query SharedItem {} of type {}", accessToken, id, type);
+        log.info("{} wants to query SharedItem {} of type {}", accessToken.getUserId(), id, type);
         return sharedObjectQueryService.getSharedItem(accessToken.getUserId(), type, id);
     }
 

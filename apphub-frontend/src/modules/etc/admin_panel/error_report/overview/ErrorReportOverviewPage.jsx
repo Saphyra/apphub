@@ -221,6 +221,7 @@ const ErrorReportOverviewPage = () => {
                     selectedErrorReports={selectedErrorReports}
                     setSelectedErrorReports={setSelectedErrorReports}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <ErrorReportPageSelector

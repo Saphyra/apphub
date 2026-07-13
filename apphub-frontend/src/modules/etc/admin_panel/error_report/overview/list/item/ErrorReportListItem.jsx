@@ -8,7 +8,7 @@ import InputField from "common/component/input/InputField";
 import ErrorReportStatus from "../../../ErrorReportStatus";
 import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE, ADMIN_PANEL_MARK_ERROR_REPORTS } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
-const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErrorReports, refreshCallback, setConfirmationDialogData }) => {
+const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErrorReports, refreshCallback, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const setCheckedStatus = (checked) => {
@@ -43,7 +43,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
 
     const deleteErrorReport = async () => {
         await ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest([errorReport.id])
-            .send();
+            .send(setDisplaySpinner);
 
         refreshCallback();
         setConfirmationDialogData(null);
@@ -51,7 +51,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
 
     const mark = async (status) => {
         await ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest([errorReport.id], { status: status })
-            .send();
+            .send(setDisplaySpinner);
 
         refreshCallback();
     }
@@ -105,7 +105,7 @@ const ErrorReportListItem = ({ errorReport, selectedErrorReports, setSelectedErr
                     className="error-report-list-item-open"
                     label={localizationHandler.get("open")}
                     onclick={() => {
-                        window.open(ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.assembleUrl({errorReportId: errorReport.id}));
+                        window.open(ADMIN_PANEL_ERROR_REPORT_DETAILS_PAGE.assembleUrl({ errorReportId: errorReport.id }));
                         setTimeout(() => refreshCallback(), 1000);
                     }}
                 />

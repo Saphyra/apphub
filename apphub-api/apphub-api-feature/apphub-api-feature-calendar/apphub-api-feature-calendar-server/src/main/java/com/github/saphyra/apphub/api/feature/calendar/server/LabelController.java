@@ -27,12 +27,15 @@ public interface LabelController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABEL)
     LabelResponse getLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
+    //TODO check permission if not own
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_LABEL)
     List<LabelResponse> deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
+    //TODO check permission if not own
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_LABEL)
     List<LabelResponse> editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
+    //TODO Include shared labels
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELS_OF_EVENT)
     List<LabelResponse> getLabelsOfEvent(@PathVariable("eventId") UUID eventId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 }

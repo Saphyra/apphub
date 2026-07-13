@@ -9,6 +9,7 @@ import { MAX_LABEL_LENGTH, TYPE_LABEL } from "../../CalendarConstants";
 import Stream from "common/js/collection/Stream";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL, CALENDAR_LABELS_PAGE, CALENDAR_SHARE_PAGE } from "../../CalendarEndpoints";
+import Constants from "common/js/Constants";
 
 const Label = ({
     labelId,
@@ -19,7 +20,8 @@ const Label = ({
     labels,
     setLabels,
     selected,
-    setSelectedLabel
+    setSelectedLabel,
+    shared
 }) => {
     const [newLabel, setNewLabel] = useState(label);
     const [displayEditDialog, setDisplayEditDialog] = useState(false);
@@ -30,7 +32,7 @@ const Label = ({
                 onClick={() => setSelectedLabel((labelId))}
                 className={"calendar-labels-label dynamic button" + (selected ? " selected" : "")}
             >
-                <span className="calendar-labels-label-title">{label}</span>
+                <span className="calendar-labels-label-title">{label + (shared ? " " + Constants.ICON_SHARED : "")}</span>
 
                 <div className="calendar-labels-label-operations">
                     <Button

@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +18,8 @@ public class Alm {
     private final UUID principal;
     private final PrincipalType principalType;
     private final UUID objectId;
-    private final com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType objectType;
+    private final SharedObjectType objectType;
+    private final UUID owner; //Owner of the object shared
     private List<Operation> operations;
 
     public void addOperation(Operation operation) {

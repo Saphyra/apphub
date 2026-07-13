@@ -7,5 +7,5 @@ import java.util.UUID;
 public interface SharedObjectService {
     SharedObjectType getType();
 
-    SharedObject getSharedObject(UUID objectId);
+    SharedObject getSharedObject(UUID owner, UUID objectId);
 }

@@ -27,8 +27,9 @@ class LabelToResponseMapperTest {
             .label(LABEL)
             .build();
 
-        assertThat(underTest.toResponse(label))
+        assertThat(underTest.toResponse(label, true))
             .returns(LABEL_ID, LabelResponse::getLabelId)
-            .returns(LABEL, LabelResponse::getLabel);
+            .returns(LABEL, LabelResponse::getLabel)
+            .returns(true, LabelResponse::getShared);
     }
 }

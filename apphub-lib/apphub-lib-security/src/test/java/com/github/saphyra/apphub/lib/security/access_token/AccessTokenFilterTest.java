@@ -54,7 +54,7 @@ public class AccessTokenFilterTest {
 
         underTest.doFilterInternal(request, response, filterChain);
 
-        verify(accessTokenProvider, times(0)).set(any());
+        verify(accessTokenProvider, times(0)).set(any(AccessToken.class));
         verify(filterChain).doFilter(request, response);
         verify(accessTokenProvider).clear();
     }
@@ -65,7 +65,7 @@ public class AccessTokenFilterTest {
 
         underTest.doFilterInternal(request, response, filterChain);
 
-        verify(accessTokenProvider, times(0)).set(any());
+        verify(accessTokenProvider, times(0)).set(any(AccessToken.class));
         verify(filterChain).doFilter(request, response);
         verify(accessTokenProvider).clear();
     }

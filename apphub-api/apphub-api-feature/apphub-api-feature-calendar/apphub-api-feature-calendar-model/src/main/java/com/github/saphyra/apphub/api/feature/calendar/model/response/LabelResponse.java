@@ -14,4 +14,5 @@ import java.util.UUID;
 public class LabelResponse {
     private UUID labelId;
     private String label;
+    private Boolean shared;
 }

@@ -6,14 +6,18 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedObjectResponse;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedWithResponse;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObject;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectServiceProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -26,10 +30,15 @@ public class SharedObjectQueryService {
     private final ExecutorServiceBean executorServiceBean;
 
     public SharedObjectResponse getSharedItem(UUID userId, SharedObjectType type, UUID objectId) {
-        //TODO check permission
+        SharedObjectService sharedObjectService = sharedObjectServiceProvider.getForType(type);
 
-        SharedObject sharedObject = sharedObjectServiceProvider.getForType(type)
-            .getSharedObject(objectId);
+        //Find Alm for object
+        SharedObject sharedObject = almDao.findForObject(userId, PrincipalType.USER, objectId, type)
+            //Search by alm if found
+            .map(alm -> sharedObjectService.getSharedObject(alm.getOwner(), objectId)) //TODO check permission
+            //Search own if not found by alm
+            .or(() -> Optional.of(sharedObjectService.getSharedObject(userId, objectId)))
+            .orElseThrow(() -> ExceptionFactory.notFound("SharedObject not found for userId %s and objectId %s for type %s".formatted(userId, objectId, type)));
 
         return SharedObjectResponse.builder()
             .objectId(sharedObject.objectId())
