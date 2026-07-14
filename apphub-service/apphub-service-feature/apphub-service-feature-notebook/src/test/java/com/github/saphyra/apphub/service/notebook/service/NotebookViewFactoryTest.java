@@ -62,7 +62,7 @@ class NotebookViewFactoryTest {
 
      @BeforeEach
      void setUp(){
-         given(accessTokenProvider.set(any())).willReturn(accessTokenProvider);
+         given(accessTokenProvider.set(any(AccessToken.class))).willReturn(accessTokenProvider);
      }
 
      @AfterEach

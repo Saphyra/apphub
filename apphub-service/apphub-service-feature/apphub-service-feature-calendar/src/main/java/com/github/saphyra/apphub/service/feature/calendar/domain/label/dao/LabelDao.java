@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -24,8 +25,12 @@ public class LabelDao {
     }
 
     public Label findByIdValidated(UUID userId, UUID labelId) {
-        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)))
+        return findById(userId, labelId)
             .orElseThrow(() -> ExceptionFactory.notFound("Label not found by id " + labelId));
+    }
+
+    public Optional<Label> findById(UUID userId, UUID labelId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)));
     }
 
     public List<Label> getByUserId(UUID userId) {

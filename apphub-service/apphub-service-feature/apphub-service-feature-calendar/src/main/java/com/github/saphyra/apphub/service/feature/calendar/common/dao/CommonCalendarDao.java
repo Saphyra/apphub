@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,6 +34,7 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
     private final EventLabelMappingDao eventLabelMappingDao;
     @Getter
     private final LabelDao labelDao;
+    private final AlmDao almDao;
 
     @Override
     public void deleteByUserId(UUID userId) {
@@ -82,11 +85,13 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
      * <ul>
      *     <li>Delete labelId-eventIds mapping</li>
      *     <li>Remove labelId from all eventId-labelId mappings</li>
+     *     <li>Delete Alms of the given label</li>
      * </ul>
      */
     public void deleteLabel(UUID userId, UUID labelId) {
         labelDao.delete(userId, labelId);
         eventLabelMappingDao.deleteByLabelId(userId, labelId);
+        almDao.deleteByObject(labelId, SharedObjectType.LABEL);
     }
 
     public void saveLabel(Label label) {

@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
@@ -9,6 +10,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -50,6 +52,9 @@ class CommonCalendarDaoTest {
 
     @Mock
     private LabelDao labelDao;
+
+    @Mock
+    private AlmDao almDao;
 
     @InjectMocks
     private CommonCalendarDao underTest;
@@ -102,6 +107,7 @@ class CommonCalendarDaoTest {
 
         then(labelDao).should().delete(USER_ID, LABEL_ID);
         then(eventLabelMappingDao).should().deleteByLabelId(USER_ID, LABEL_ID);
+        then(almDao).should().deleteByObject(LABEL_ID, SharedObjectType.LABEL);
     }
 
     @Test

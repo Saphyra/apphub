@@ -31,7 +31,6 @@ public interface LabelController {
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_LABEL)
     List<LabelResponse> deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
-    //TODO check permission if not own
     @PostMapping(CalendarEndpoints.CALENDAR_EDIT_LABEL)
     List<LabelResponse> editLabel(@RequestBody OneParamRequest<String> label, @PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
