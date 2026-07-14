@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_ma
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class EventLabelMappingDao {
     private final UuidConverter uuidConverter;
     private final EventLabelMappingRepository repository;
@@ -74,6 +76,8 @@ public class EventLabelMappingDao {
     }
 
     public void deleteByLabelId(UUID userId, UUID labelId) {
+        log.info("Deleting mappings of label {} of user {}.", labelId, userId);
+
         String userIdString = uuidConverter.convertDomain(userId);
         String labelIdString = uuidConverter.convertDomain(labelId);
 
@@ -82,9 +86,10 @@ public class EventLabelMappingDao {
         List<BiWrapper<String, List<String>>> modifiedMappings = repository.getLabelsOfEventsByUserId(userIdString)
             .stream()
             .filter(bw -> bw.getEntity2().removeIf(l -> l.equals(labelIdString)))
+            .peek(bw -> log.info("Labels mapped to event {} modified. New labels: {}", bw.getEntity1(), bw.getEntity2()))
             .toList();
         if (!modifiedMappings.isEmpty()) {
-            repository.saveEventsOfLabels(userIdString, modifiedMappings);
+            repository.saveLabelsOfEvents(userIdString, modifiedMappings);
         }
     }
 

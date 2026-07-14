@@ -27,7 +27,6 @@ public interface LabelController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABEL)
     LabelResponse getLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
-    //TODO check permission if not own
     @DeleteMapping(CalendarEndpoints.CALENDAR_DELETE_LABEL)
     List<LabelResponse> deleteLabel(@PathVariable("labelId") UUID labelId, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 

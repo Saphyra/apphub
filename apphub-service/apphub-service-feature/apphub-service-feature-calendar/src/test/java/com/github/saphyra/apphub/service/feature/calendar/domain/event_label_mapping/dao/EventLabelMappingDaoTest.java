@@ -99,7 +99,7 @@ class EventLabelMappingDaoTest {
         underTest.deleteByLabelId(USER_ID, LABEL_ID);
 
         then(repository).should().deleteEventsOfLabel(USER_ID_STRING, LABEL_ID_STRING);
-        then(repository).should().saveEventsOfLabels(USER_ID_STRING, List.of(new BiWrapper<>(EVENT_ID_STRING, List.of())));
+        then(repository).should().saveLabelsOfEvents(USER_ID_STRING, List.of(new BiWrapper<>(EVENT_ID_STRING, List.of())));
     }
 
     @Test

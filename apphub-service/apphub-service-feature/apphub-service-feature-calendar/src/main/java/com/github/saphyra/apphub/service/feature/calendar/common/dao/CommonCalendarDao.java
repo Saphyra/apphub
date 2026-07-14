@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class CommonCalendarDao implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
     private final CommonCalendarRepository repository;
@@ -89,6 +91,7 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
      * </ul>
      */
     public void deleteLabel(UUID userId, UUID labelId) {
+        log.info("Deleting label {} of user {}.", labelId, userId);
         labelDao.delete(userId, labelId);
         eventLabelMappingDao.deleteByLabelId(userId, labelId);
         almDao.deleteByObject(labelId, SharedObjectType.LABEL);

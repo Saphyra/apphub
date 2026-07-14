@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 //TODO unit test
 //TODO cache alms of user
 public class AlmDao implements DeleteByUserIdDao {
@@ -53,6 +55,7 @@ public class AlmDao implements DeleteByUserIdDao {
     }
 
     public void deleteByObject(UUID objectId, SharedObjectType objectType) {
+        log.info("Deleting Alms for {} {}", objectType, objectId);
         repository.delete(repository.getForObject(objectId, objectType));
     }
 
