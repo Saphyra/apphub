@@ -23,7 +23,7 @@ public class CalendarLabelsPageActions {
             .stream()
             .filter(calendarLabel -> calendarLabel.getLabel().equals(label))
             .findAny()
-            .orElseThrow(() -> new IllegalStateException("Label not found: " + label));
+            .orElseThrow(() -> new IllegalStateException("Label not found: " + label + ". Labels: " + getLabels(driver).stream().map(CalendarLabel::getLabel).collect(Collectors.joining(", "))));
     }
 
     public static List<WebElement> getEvents(WebDriver driver) {

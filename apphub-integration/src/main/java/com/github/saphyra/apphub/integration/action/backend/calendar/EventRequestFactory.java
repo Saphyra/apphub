@@ -8,6 +8,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 
 public class EventRequestFactory {
     public static final Integer DEFAULT_REPEAT_FOR_DAYS = 1;
@@ -42,7 +43,7 @@ public class EventRequestFactory {
             .title(DEFAULT_TITLE)
             .content(DEFAULT_CONTENT)
             .remindMeBeforeDays(0)
-            .labels(List.of())
+            .labels(Map.of())
             .archived(false)
             .autoDone(false)
             .build();

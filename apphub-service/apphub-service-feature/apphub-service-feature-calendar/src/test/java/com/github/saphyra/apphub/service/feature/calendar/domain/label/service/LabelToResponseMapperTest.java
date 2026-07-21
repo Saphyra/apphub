@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LabelToResponseMapperTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final String LABEL = "label";
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @InjectMocks
     private LabelToResponseMapper underTest;
@@ -22,13 +23,14 @@ class LabelToResponseMapperTest {
     @Test
     void toResponse() {
         Label label = Label.builder()
-            .userId(UUID.randomUUID())
+            .userId(USER_ID)
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
 
         assertThat(underTest.toResponse(label, true))
             .returns(LABEL_ID, LabelResponse::getLabelId)
+            .returns(USER_ID, LabelResponse::getUserId)
             .returns(LABEL, LabelResponse::getLabel)
             .returns(true, LabelResponse::getShared);
     }

@@ -52,15 +52,6 @@ public class CalendarEventPageValidationTest extends SeleniumTest {
 
         labelTooShort(driver);
         labelTooLong(driver);
-        labelAlreadyExists(driver);
-    }
-
-    private void labelAlreadyExists(WebDriver driver) {
-        CalendarEventPageActions.addNewLabel(driver, LABEL_1);
-        CalendarEventPageActions.addNewLabel(driver, LABEL_1);
-
-        ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_LABEL_ALREADY_EXISTS);
-        ToastMessageUtil.clearToasts(driver);
     }
 
     private void labelTooLong(WebDriver driver) {

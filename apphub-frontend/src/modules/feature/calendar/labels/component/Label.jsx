@@ -99,11 +99,6 @@ const Label = ({
             return;
         }
 
-        if (new Stream(labels).anyMatch(l => l.label === newLabel)) {
-            NotificationService.showError(localizationHandler.get("label-already-exists"));
-            return;
-        }
-
         const response = await CALENDAR_EDIT_LABEL.createRequest({ value: newLabel }, { labelId: labelId })
             .send(setDisplaySpinner);
 

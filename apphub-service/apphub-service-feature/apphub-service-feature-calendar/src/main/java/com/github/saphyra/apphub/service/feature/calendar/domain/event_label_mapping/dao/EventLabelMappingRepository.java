@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao;
 
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
@@ -15,14 +14,11 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EVENT_IDS;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_LABEL_IDS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_EVENT_LABEL_MAPPING;
@@ -32,14 +28,21 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Component
 @Slf4j
 class EventLabelMappingRepository extends DynamoDbRepository {
-    private final ObjectMapper objectMapper;
+    private final LabelEventMappingMapper labelEventMappingMapper;
+    private final EventLabelMappingMapper eventLabelMappingMapper;
 
-    EventLabelMappingRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ObjectMapper objectMapper) {
+    EventLabelMappingRepository(
+        CalendarDynamoDbConfiguration configuration,
+        DynamoDbRepositoryContext context,
+        LabelEventMappingMapper labelEventMappingMapper,
+        EventLabelMappingMapper eventLabelMappingMapper
+    ) {
         super(configuration.getCalendarTableName(), context);
-        this.objectMapper = objectMapper;
+        this.labelEventMappingMapper = labelEventMappingMapper;
+        this.eventLabelMappingMapper = eventLabelMappingMapper;
     }
 
-    List<String> getEventsOfLabel(String userId, String labelId) {
+    LabelEventMappingEntity getEventsOfLabel(String userId, String labelId) {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
@@ -49,13 +52,15 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             .build();
 
         return getItem(request, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABEL)
-            .map(item -> item.get(COLUMN_EVENT_IDS).s())
-            .map(s -> objectMapper.readValue(s, new TypeReference<List<String>>() {
-            }))
-            .orElse(List.of());
+            .map(labelEventMappingMapper::convertEntity)
+            .orElseGet(() -> LabelEventMappingEntity.builder()
+                .userId(userId)
+                .labelId(labelId)
+                .eventIds(new HashMap<>())
+                .build());
     }
 
-    List<BiWrapper<String, List<String>>> getLabelsOfEvents(String userId, List<String> eventIds) {
+    List<EventLabelMappingEntity> getLabelsOfEvents(String userId, List<String> eventIds) {
         List<Map<String, AttributeValue>> keys = eventIds.stream()
             .map(id -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
@@ -63,17 +68,24 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_OF_EVENTS)
-            .stream()
-            .map(item -> new BiWrapper<>(
-                item.get(COLUMN_SK).s().substring(PREFIX_EVENT_LABEL_MAPPING.length()),
-                objectMapper.readValue(item.get(COLUMN_LABEL_IDS).s(), new TypeReference<List<String>>() {
-                })
-            ))
-            .toList();
+        return eventLabelMappingMapper.convertEntity(batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_OF_EVENTS));
     }
 
-    List<BiWrapper<String, List<String>>> getLabelsOfEventsByUserId(String userId) {
+    public EventLabelMappingEntity getLabelsOfEvent(String userId, String eventId) {
+        Map<String, AttributeValue> key = Map.of(
+            COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
+            COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING + eventId).build()
+        );
+
+        return eventLabelMappingMapper.convertEntity(getItem(key, CalendarMonitoringFunctionality.GET_LABELS_OF_EVENT))
+            .orElseGet(() -> EventLabelMappingEntity.builder()
+                .userId(userId)
+                .eventId(eventId)
+                .labelIds(new HashMap<>())
+                .build());
+    }
+
+    List<EventLabelMappingEntity> getLabelsOfEventsByUserId(String userId) {
         log.info("Querying mapped labels of events of user {}.", userId);
 
         QueryRequest request = QueryRequest.builder()
@@ -91,57 +103,35 @@ class EventLabelMappingRepository extends DynamoDbRepository {
 
         return query(request, CalendarMonitoringFunctionality.GET_LABELS_OF_EVENTS_BY_USER_ID)
             .stream()
-            .map(item -> new BiWrapper<>(
-                item.get(COLUMN_SK).s().substring(PREFIX_EVENT_LABEL_MAPPING.length()),
-                objectMapper.readValue(item.get(COLUMN_LABEL_IDS).s(), new TypeReference<List<String>>() {
-                })
-            ))
-            .peek(bw -> log.info("Labels found for event {}: {}", bw.getEntity1(), bw.getEntity2()))
+            .map(eventLabelMappingMapper::convertEntity)
+            .peek(mapping -> log.info("Labels found for event {}: {}", mapping.getEventId(), mapping.getLabelIds()))
             .toList();
     }
 
-    void saveLabelsOfEvent(String userId, String eventId, List<String> labelIds) {
+    void saveLabelsOfEvent(EventLabelMappingEntity mapping) {
         PutItemRequest request = PutItemRequest.builder()
             .tableName(tableName)
-            .item(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING + eventId).build(),
-                COLUMN_LABEL_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(labelIds)).build()
-            ))
+            .item(eventLabelMappingMapper.convertDomain(mapping))
             .build();
 
         putItem(request, CalendarMonitoringFunctionality.SAVE_LABELS_OF_EVENT);
     }
 
-    List<BiWrapper<String, List<String>>> getEventsOfLabels(String userId, List<String> labelIds) {
+    List<LabelEventMappingEntity> getEventsOfLabels(String userId, List<String> labelIds) {
         List<Map<String, AttributeValue>> keys = labelIds.stream()
             .map(id -> Map.of(
                 COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
                 COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING + id).build()
             ))
             .toList();
-        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABELS)
-            .stream()
-            .map(item -> new BiWrapper<>(
-                item.get(COLUMN_SK).s().substring(PREFIX_LABEL_EVENT_MAPPING.length()),
-                objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), new TypeReference<List<String>>() {
-                })
-            ))
-            .toList();
+        return labelEventMappingMapper.convertEntity(batchGetItem(keys, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABELS));
     }
 
-    /**
-     * @param mappings <LabelId, List<EventId>>
-     */
-    void saveEventsOfLabels(String userId, List<BiWrapper<String, List<String>>> mappings) {
-        mappings.forEach(bw -> log.info("Saving events {} of label {} of user {}.", bw.getEntity2(), bw.getEntity1(), userId));
+    void saveEventsOfLabels(List<LabelEventMappingEntity> mappings) {
+        mappings.forEach(mapping -> log.info("Saving events {} of label {} of user {}.", mapping.getEventIds(), mapping.getLabelId(), mapping.getUserId()));
 
         List<WriteRequest> requests = mappings.stream()
-            .map(mapping -> Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING + mapping.getEntity1()).build(),
-                COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(mapping.getEntity2())).build()
-            ))
+            .map(labelEventMappingMapper::convertDomain)
             .map(item -> PutRequest.builder().item(item).build())
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();
@@ -175,7 +165,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
         deleteItem(request, CalendarMonitoringFunctionality.DELETE_EVENTS_OF_LABEL);
     }
 
-    List<BiWrapper<String, List<String>>> getEventsOfLabelsByUserId(String userId) {
+    List<LabelEventMappingEntity> getEventsOfLabelsByUserId(String userId) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .keyConditionExpression("#pk = :userId AND begins_with(#sk, :prefix)")
@@ -191,36 +181,24 @@ class EventLabelMappingRepository extends DynamoDbRepository {
 
         return query(request, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABELS_BY_USER_ID)
             .stream()
-            .map(item -> new BiWrapper<>(
-                item.get(COLUMN_SK).s().substring(PREFIX_LABEL_EVENT_MAPPING.length()),
-                objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), new TypeReference<List<String>>() {
-                })
-            ))
+            .map(labelEventMappingMapper::convertEntity)
             .toList();
     }
 
-    void saveEventsOfLabels(String userId, String labelId, List<String> eventIds) {
+    void saveEventsOfLabels(LabelEventMappingEntity mapping) {
         PutItemRequest request = PutItemRequest.builder()
             .tableName(tableName)
-            .item(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING + labelId).build(),
-                COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(eventIds)).build()
-            ))
+            .item(labelEventMappingMapper.convertDomain(mapping))
             .build();
 
         putItem(request, CalendarMonitoringFunctionality.SAVE_EVENTS_OF_LABEL);
     }
 
-    public void saveLabelsOfEvents(String userId, List<BiWrapper<String, List<String>>> mappings) {
-        mappings.forEach(bw -> log.info("Saving labels {} of event {} of user {}.", bw.getEntity2(), bw.getEntity1(), userId));
+     void saveLabelsOfEvents(List<EventLabelMappingEntity> mappings) {
+        mappings.forEach(mapping -> log.info("Saving labels {} of event {} of user {}.", mapping.getEventId(), mapping.getLabelIds(), mapping.getUserId()));
 
         List<WriteRequest> requests = mappings.stream()
-            .map(mapping -> Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING + mapping.getEntity1()).build(),
-                COLUMN_LABEL_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(mapping.getEntity2())).build()
-            ))
+            .map(eventLabelMappingMapper::convertDomain)
             .map(item -> PutRequest.builder().item(item).build())
             .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
             .toList();

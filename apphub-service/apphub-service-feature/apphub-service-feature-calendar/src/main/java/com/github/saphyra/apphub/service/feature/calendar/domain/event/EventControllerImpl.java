@@ -116,6 +116,7 @@ class EventControllerImpl implements EventController {
         return searchEventService.search(accessToken.getUserId(), search.getValue());
     }
 
+    //TODO unit test
     @Override
     public void archiveEvent(OneParamRequest<Boolean> archive, UUID eventId, AccessToken accessToken) {
         log.info("{} wants to archive event {}", accessToken.getUserId(), eventId);

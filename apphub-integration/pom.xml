@@ -30,8 +30,8 @@
         <versions.apache-commons-pool>2.12.1</versions.apache-commons-pool>
         <versions.gson>2.13.2</versions.gson>
         <versions.jackson-databind>3.0.1</versions.jackson-databind>
-        <versions.selenium>4.45.0</versions.selenium>
 
+        <versions.selenium>4.45.0</versions.selenium>
         <versions.dynamodb>2.44.0</versions.dynamodb>
 
         <!-- Plugin Versions -->

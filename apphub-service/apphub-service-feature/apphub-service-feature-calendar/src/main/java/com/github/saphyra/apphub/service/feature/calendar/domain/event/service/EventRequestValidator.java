@@ -31,13 +31,13 @@ class EventRequestValidator {
     private final CalendarParams calendarParams;
     private final LabelDao labelDao;
 
-    public void validateEdit(UUID userId, EventRequest request) {
-        validate(userId, request);
+    public void validateEdit(EventRequest request) {
+        validate(request);
 
         ValidationUtil.notNull(request.getArchived(), "archived");
     }
 
-    void validate(UUID userId, EventRequest request) {
+    void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
         validateRepetitionData(request.getRepetitionType(), request.getRepetitionData());
 
@@ -56,7 +56,10 @@ class EventRequestValidator {
         ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
         ValidationUtil.notNull(request.getAutoDone(), "autoDone");
 
-        ValidationUtil.containsAll(request.getLabels(), () -> labelDao.getByLabelIds(userId, request.getLabels()).stream().map(Label::getLabelId).toList(), "labels");
+        ValidationUtil.notNull(request.getLabels(), "labels");
+        Set<UUID> eventLabels = request.getLabels().keySet();
+        List<UUID> existingLabels = labelDao.getByIds(request.getLabels()).stream().map(Label::getLabelId).toList();
+        ValidationUtil.containsAll(eventLabels, () -> existingLabels, "labels");
     }
 
     public void validateDates(LocalDate startDate, LocalDate endDate) {

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,12 +55,12 @@ class CreateEventServiceTest {
         given(eventFactory.create(USER_ID, request)).willReturn(event);
         given(event.getEventId()).willReturn(EVENT_ID);
         given(createOccurrenceService.createOccurrences(USER_ID, EVENT_ID, request)).willReturn(List.of(occurrence));
-        given(request.getLabels()).willReturn(List.of(LABEL_ID));
+        given(request.getLabels()).willReturn(Map.of(LABEL_ID, USER_ID));
 
         assertThat(underTest.create(USER_ID, request)).isEqualTo(EVENT_ID);
 
-        then(eventRequestValidator).should().validate(USER_ID, request);
+        then(eventRequestValidator).should().validate(request);
         then(createOccurrenceService).should().createOccurrences(USER_ID, EVENT_ID, request);
-        then(commonCalendarDao).should().saveNewEvent(event, List.of(occurrence), List.of(LABEL_ID));
+        then(commonCalendarDao).should().saveNewEvent(event, List.of(occurrence), Map.of(LABEL_ID, USER_ID));
     }
 }

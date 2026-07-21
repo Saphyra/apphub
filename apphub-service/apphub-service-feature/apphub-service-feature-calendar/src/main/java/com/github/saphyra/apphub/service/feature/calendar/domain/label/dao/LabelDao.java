@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,5 +44,10 @@ public class LabelDao {
     public void delete(UUID userId, UUID labelId) {
         log.info("Deleting label {} of user {}.", labelId, userId);
         repository.delete(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId));
+    }
+
+    //TODO unit test
+    public List<Label> getByIds(Map<UUID, UUID> labels) {
+        return converter.convertEntity(repository.getByIds(CollectionUtils.convertMap(labels, uuidConverter::convertDomain, uuidConverter::convertDomain)));
     }
 }

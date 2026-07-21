@@ -10,11 +10,12 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.CalendarDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,11 +29,11 @@ public class CalendarDataDeletedWithUserTest extends BackEndTest {
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
         UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
-        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL);
+        LabelResponse label = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL);
 
         EventRequest eventRequest = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
-            .labels(List.of(labelId))
+            .labels(Map.of(label.getLabelId(), label.getUserId()))
             .build();
         UUID eventId = CalendarEventActions.createEvent(getServerPort(), accessToken, eventRequest);
 

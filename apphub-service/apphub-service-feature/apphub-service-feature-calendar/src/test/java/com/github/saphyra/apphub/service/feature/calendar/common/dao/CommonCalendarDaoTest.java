@@ -1,11 +1,12 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
@@ -18,12 +19,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,6 +36,7 @@ class CommonCalendarDaoTest {
     private static final UUID OTHER_EVENT_ID = UUID.randomUUID();
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final String LABEL = "label";
+    private static final UUID OTHER_LABEL_ID = UUID.randomUUID();
 
     @Mock
     private UuidConverter uuidConverter;
@@ -83,11 +86,11 @@ class CommonCalendarDaoTest {
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
 
-        underTest.saveNewEvent(event, List.of(occurrence), List.of(LABEL_ID));
+        underTest.saveNewEvent(event, List.of(occurrence), Map.of(LABEL_ID, USER_ID));
 
         then(eventDao).should().save(event);
         then(occurrenceDao).should().save(List.of(occurrence));
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
     }
 
     @Test
@@ -121,7 +124,7 @@ class CommonCalendarDaoTest {
         underTest.saveLabel(label);
 
         then(labelDao).should().save(label);
-        then(eventLabelMappingDao).should().saveEventsOfLabel(USER_ID, LABEL_ID, List.of());
+        then(eventLabelMappingDao).should().saveEventsOfLabel(new LabelEventMapping(USER_ID, LABEL_ID, Map.of()));
     }
 
     @Test
@@ -131,14 +134,18 @@ class CommonCalendarDaoTest {
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
+
+        LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, LABEL_ID, Map.of());
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID))));
+        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(labelEventMapping));
 
-        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
-        then(eventLabelMappingDao).should().saveEventsOfLabels(USER_ID, List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID, EVENT_ID))));
-
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
+        then(eventLabelMappingDao).should().saveEventsOfLabels(List.of(labelEventMapping));
+        assertThat(labelEventMapping.getEventIds())
+            .hasSize(1)
+            .containsEntry(EVENT_ID, USER_ID);
     }
 
     @Test
@@ -149,13 +156,16 @@ class CommonCalendarDaoTest {
             .label(LABEL)
             .build();
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(EVENT_ID, OTHER_EVENT_ID))));
+        LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, OTHER_LABEL_ID, Map.of(EVENT_ID, USER_ID, OTHER_EVENT_ID, USER_ID));
+        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(labelEventMapping));
 
-        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, List.of());
+        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of());
-        then(eventLabelMappingDao).should().saveEventsOfLabels(USER_ID, List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID))));
-
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
+        then(eventLabelMappingDao).should().saveEventsOfLabels(List.of(labelEventMapping));
+        assertThat(labelEventMapping.getEventIds())
+            .hasSize(1)
+            .containsEntry(OTHER_EVENT_ID, USER_ID);
     }
 
     @Test
@@ -166,11 +176,12 @@ class CommonCalendarDaoTest {
             .label(LABEL)
             .build();
         given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(EVENT_ID, OTHER_EVENT_ID))));
+        LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, LABEL_ID, Map.of(EVENT_ID, USER_ID));
+        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(labelEventMapping));
 
-        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
-        then(eventLabelMappingDao).should(never()).saveEventsOfLabels(any(), anyList());
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
+        then(eventLabelMappingDao).should(never()).saveEventsOfLabels(any());
     }
 }

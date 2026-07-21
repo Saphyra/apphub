@@ -121,4 +121,5 @@ public class Constants {
     //Monitoring
     public static final String MONITORING_FUNCTIONALITY_MEMORY_STATUS = "MEMORY_STATUS";
     public static final String MONITORING_METRIC_TYPE_SECOND = "SECOND";
+    public static final String SHARED_SUFFIX = " \uD83D\uDC65\uFE0E";
 }

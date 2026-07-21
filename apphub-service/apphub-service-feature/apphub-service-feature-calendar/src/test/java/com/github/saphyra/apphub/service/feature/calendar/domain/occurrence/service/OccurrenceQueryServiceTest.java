@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceR
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
@@ -62,6 +63,9 @@ class OccurrenceQueryServiceTest {
     @Mock
     private Event event;
 
+    @Mock
+    private EventLabelMapping eventLabelMapping        ;
+
     @Test
     void getOccurrences() {
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
@@ -69,7 +73,9 @@ class OccurrenceQueryServiceTest {
         given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(eventDao.getByIds(USER_ID, Set.of(EVENT_ID))).willReturn(List.of(event));
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, Set.of(EVENT_ID))).willReturn(Map.of(EVENT_ID, List.of(LABEL_ID)));
+        given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, Set.of(EVENT_ID))).willReturn(List.of(eventLabelMapping));
+        given(eventLabelMapping.getEventId()).willReturn(EVENT_ID);
+        given(eventLabelMapping.getLabelIds()).willReturn(Map.of(LABEL_ID, USER_ID));
         given(helper.getOccurrencesToAdd(event, occurrence, CURRENT_DATE, START_DATE, END_DATE)).willReturn(List.of(occurrence));
         given(occurrenceResponseMapper.toResponse(Map.of(EVENT_ID, event), List.of(occurrence))).willReturn(List.of(response));
 
@@ -83,8 +89,10 @@ class OccurrenceQueryServiceTest {
         given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(eventDao.getByIds(USER_ID, Set.of(EVENT_ID))).willReturn(List.of(event));
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, Set.of(EVENT_ID))).willReturn(Map.of(EVENT_ID, List.of(UUID.randomUUID())));
+        given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, Set.of(EVENT_ID))).willReturn(List.of(eventLabelMapping));
         given(occurrenceResponseMapper.toResponse(Map.of(EVENT_ID, event), List.of())).willReturn(List.of());
+        given(eventLabelMapping.getEventId()).willReturn(EVENT_ID);
+        given(eventLabelMapping.getLabelIds()).willReturn(Map.of(UUID.randomUUID(), USER_ID));
 
         assertThat(underTest.getOccurrences(USER_ID, START_DATE, END_DATE, LABEL_ID)).isEmpty();
     }

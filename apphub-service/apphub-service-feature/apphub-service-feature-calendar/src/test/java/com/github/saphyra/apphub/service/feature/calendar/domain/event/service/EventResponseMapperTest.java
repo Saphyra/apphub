@@ -2,8 +2,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
+import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -41,30 +42,32 @@ class EventResponseMapperTest {
     private static final UUID LABEL_ID_1 = UUID.randomUUID();
     private static final UUID LABEL_ID_2 = UUID.randomUUID();
     private static final UUID LABEL_ID_3 = UUID.randomUUID();
+    private static final Object PARSED_REPETITION_DATA = "parsed-repetition-data";
 
     @Mock
     private ObjectMapper objectMapper;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private LabelQueryService labelQueryService;
 
     @InjectMocks
     private EventResponseMapper underTest;
 
+    @Mock
+    private LabelResponse labelResponse;
+
     @Test
     void toResponse_event() {
         Event event = createEvent(EVENT_ID_1, REPETITION_DATA_1, false);
-        Object parsedRepetitionData = Map.of("days", List.of("MONDAY", "TUESDAY"));
-        List<UUID> labels = List.of(LABEL_ID_1, LABEL_ID_2);
-        given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID_1)).willReturn(labels);
-        given(objectMapper.readValue(REPETITION_DATA_1, Object.class)).willReturn(parsedRepetitionData);
+        given(labelQueryService.getByEventId(USER_ID,EVENT_ID_1)).willReturn(List.of(labelResponse));
+        given(objectMapper.readValue(REPETITION_DATA_1, Object.class)).willReturn(PARSED_REPETITION_DATA);
 
-        EventResponse result = underTest.toResponse(event);
+        EventResponse result = underTest.toResponse(USER_ID, event);
 
         assertThat(result)
             .returns(EVENT_ID_1, EventResponse::getEventId)
             .returns(RepetitionType.DAYS_OF_WEEK, EventResponse::getRepetitionType)
-            .returns(parsedRepetitionData, EventResponse::getRepetitionData)
+            .returns(PARSED_REPETITION_DATA, EventResponse::getRepetitionData)
             .returns(REPEAT_FOR_DAYS, EventResponse::getRepeatForDays)
             .returns(START_DATE, EventResponse::getStartDate)
             .returns(END_DATE, EventResponse::getEndDate)
@@ -72,7 +75,7 @@ class EventResponseMapperTest {
             .returns(TITLE, EventResponse::getTitle)
             .returns(CONTENT, EventResponse::getContent)
             .returns(REMIND_ME_BEFORE_DAYS, EventResponse::getRemindMeBeforeDays)
-            .returns(labels, EventResponse::getLabels)
+            .returns(List.of(labelResponse), EventResponse::getLabels)
             .returns(false, EventResponse::getArchived);
     }
 
@@ -82,11 +85,10 @@ class EventResponseMapperTest {
         Event event2 = createEvent(EVENT_ID_2, REPETITION_DATA_2, true);
         Object parsedRepetitionData1 = List.of("MONDAY", "TUESDAY");
         Object parsedRepetitionData2 = Map.of("xDays", 3);
-        List<UUID> event1Labels = List.of(LABEL_ID_1, LABEL_ID_2);
-        List<UUID> event2Labels = List.of(LABEL_ID_3);
-        given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, List.of(EVENT_ID_1, EVENT_ID_2))).willReturn(Map.of(EVENT_ID_1, event1Labels, EVENT_ID_2, event2Labels));
         given(objectMapper.readValue(REPETITION_DATA_1, Object.class)).willReturn(parsedRepetitionData1);
         given(objectMapper.readValue(REPETITION_DATA_2, Object.class)).willReturn(parsedRepetitionData2);
+        given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
+        given(labelQueryService.getByEventId(USER_ID, EVENT_ID_2)).willReturn(List.of(labelResponse));
 
         List<EventResponse> result = underTest.toResponse(USER_ID, List.of(event1, event2));
 
@@ -94,28 +96,27 @@ class EventResponseMapperTest {
         assertThat(result.get(0))
             .returns(EVENT_ID_1, EventResponse::getEventId)
             .returns(parsedRepetitionData1, EventResponse::getRepetitionData)
-            .returns(event1Labels, EventResponse::getLabels)
+            .returns(List.of(labelResponse), EventResponse::getLabels)
             .returns(false, EventResponse::getArchived);
         assertThat(result.get(1))
             .returns(EVENT_ID_2, EventResponse::getEventId)
             .returns(parsedRepetitionData2, EventResponse::getRepetitionData)
-            .returns(event2Labels, EventResponse::getLabels)
+            .returns(List.of(labelResponse), EventResponse::getLabels)
             .returns(true, EventResponse::getArchived);
     }
 
     @Test
     void toResponse_eventWithNullRepetitionData() {
         Event event = createEvent(EVENT_ID_1, null, false);
-        List<UUID> labels = List.of(LABEL_ID_1);
+        given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
 
-        EventResponse result = underTest.toResponse(event, labels);
+        EventResponse result = underTest.toResponse(USER_ID, event);
 
         assertThat(result)
             .returns(EVENT_ID_1, EventResponse::getEventId)
             .returns(null, EventResponse::getRepetitionData)
-            .returns(labels, EventResponse::getLabels);
+            .returns(List.of(labelResponse), EventResponse::getLabels);
         then(objectMapper).should(never()).readValue(anyString(), eq(Object.class));
-        then(eventLabelMappingDao).shouldHaveNoInteractions();
     }
 
     private Event createEvent(UUID eventId, String repetitionData, boolean archived) {

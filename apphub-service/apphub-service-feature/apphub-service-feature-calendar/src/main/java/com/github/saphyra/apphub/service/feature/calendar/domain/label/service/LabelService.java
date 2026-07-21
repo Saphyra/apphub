@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
@@ -28,14 +29,15 @@ public class LabelService {
     private final CommonCalendarDao commonCalendarDao;
     private final AlmDao almDao;
     private final AccessTokenProvider accessTokenProvider;
+    private final LabelToResponseMapper labelToResponseMapper;
 
-    public UUID createLabel(UUID userId, String label) {
+    public LabelResponse createLabel(UUID userId, String label) {
         labelValidator.validate(label);
 
         Label domain = labelFactory.create(userId, label);
         commonCalendarDao.saveLabel(domain);
 
-        return domain.getLabelId();
+        return labelToResponseMapper.toResponse(domain, false);
     }
 
     public void deleteLabel(UUID userId, UUID labelId) {

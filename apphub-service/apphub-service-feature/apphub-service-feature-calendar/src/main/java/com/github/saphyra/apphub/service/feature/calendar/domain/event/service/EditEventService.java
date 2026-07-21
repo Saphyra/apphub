@@ -24,7 +24,7 @@ public class EditEventService {
     private final List<EventFieldUpdater> eventFieldUpdaters;
 
     public void edit(UUID userId, UUID eventId, EventRequest request) {
-        eventRequestValidator.validateEdit(userId, request);
+        eventRequestValidator.validateEdit(request);
 
         Event event = eventDao.findByIdValidated(userId, eventId);
         event.setExpirationNotified(false);

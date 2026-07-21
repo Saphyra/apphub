@@ -40,6 +40,7 @@ const Labels = ({ activeLabel, setActiveLabel, setDisplaySpinner }) => {
 
     function getLabels() {
         return new Stream(labels)
+            .sorted((a, b) => a.label.localeCompare(b.label))
             .map(label =>
                 <Button
                     key={label.labelId}

@@ -1,12 +1,13 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
@@ -18,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -57,7 +58,7 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
      * @param occurrences of the event
      * @param labelIds    all labelIds of the event
      */
-    public void saveNewEvent(Event event, List<Occurrence> occurrences, List<UUID> labelIds) {
+    public void saveNewEvent(Event event, List<Occurrence> occurrences, Map<UUID, UUID> labelIds) {
         eventDao.save(event);
         occurrenceDao.save(occurrences);
 
@@ -99,7 +100,10 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
 
     public void saveLabel(Label label) {
         labelDao.save(label);
-        eventLabelMappingDao.saveEventsOfLabel(label.getUserId(), label.getLabelId(), List.of());
+
+        LabelEventMapping mapping = new LabelEventMapping(label.getUserId(), label.getLabelId(), Map.of());
+
+        eventLabelMappingDao.saveEventsOfLabel(mapping);
     }
 
     /**
@@ -109,44 +113,45 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
      *     <li>Deletes eventId from labels no longer mapped to this event</li>
      * </ul>
      */
-    public void editLabelsOfEvent(UUID userId, UUID eventId, List<UUID> labelIds) {
-        eventLabelMappingDao.saveLabelsOfEvent(userId, eventId, labelIds);
+    public void editLabelsOfEvent(UUID userId, UUID eventId, Map<UUID, UUID> labelIds) {
+        EventLabelMapping newMapping = new EventLabelMapping(userId, eventId, labelIds);
 
+        eventLabelMappingDao.saveLabelsOfEvent(newMapping);
+
+        //Get labels available for user
         List<UUID> labelsOfUser = labelDao.getByUserId(userId)
             .stream()
             .map(Label::getLabelId)
             .toList();
 
-        List<BiWrapper<UUID, List<UUID>>> modifiedMappings = eventLabelMappingDao.getEventsOfLabels(userId, labelsOfUser)
+        //Iterate through labels to see which one needs to be changed
+        List<LabelEventMapping> modifiedMappings = eventLabelMappingDao.getEventsOfLabels(userId, labelsOfUser)
             .stream()
-            .map(mapping -> { //BiWrapper<LabelId, List<EventId>
-                UUID labelId = mapping.getEntity1();
-                List<UUID> eventIds = mapping.getEntity2();
-                if (labelIds.contains(labelId) && !eventIds.contains(eventId)) {
-                    return Optional.of(new BiWrapper<>(
-                        labelId,
-                        Stream.concat(eventIds.stream(), Stream.of(eventId)) //Add event to existing list
-                            .toList()
-                    ));
+            .map(mapping -> {
+                //Label is added to event, add event to LabelEventMapping
+                if (labelIds.containsKey(mapping.getLabelId()) && !mapping.getEventIds().containsKey(eventId)) {
+                    mapping.addEvent(userId, eventId);
+
+                    return Optional.of(mapping);
                 }
 
-                if (!labelIds.contains(labelId) && eventIds.contains(eventId)) { //Label is not in new label list of event, but eventId is in the event list of label
-                    return Optional.of(new BiWrapper<>(
-                        labelId,
-                        eventIds.stream().filter(e -> !e.equals(eventId)) //Remove the label
-                            .toList()
-                    ));
+                //Label is removed from event, remove event from LabelEventMapping
+                UUID labelId = mapping.getLabelId();
+                Map<UUID, UUID> eventIds = mapping.getEventIds();
+                if (!labelIds.containsKey(mapping.getLabelId()) && mapping.getEventIds().containsKey(eventId)) {
+                    mapping.removeEvent(eventId);
+                    return Optional.of(mapping);
                 }
 
                 //No modification needed
-                return Optional.<BiWrapper<UUID, List<UUID>>>empty();
+                return Optional.<LabelEventMapping>empty();
             })
             .filter(Optional::isPresent)
             .map(Optional::get)
             .toList();
 
         if (!modifiedMappings.isEmpty()) {
-            eventLabelMappingDao.saveEventsOfLabels(userId, modifiedMappings);
+            eventLabelMappingDao.saveEventsOfLabels(modifiedMappings);
         }
     }
 }

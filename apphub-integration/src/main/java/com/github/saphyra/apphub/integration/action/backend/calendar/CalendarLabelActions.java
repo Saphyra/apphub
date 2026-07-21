@@ -20,14 +20,12 @@ public class CalendarLabelActions {
             .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_CREATE_LABEL));
     }
 
-    public static UUID createLabel(int serverPort, String accessToken, String label) {
+    public static LabelResponse createLabel(int serverPort, String accessToken, String label) {
         Response response = getCreateLabelResponse(serverPort, accessToken, label);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
-        return response.getBody()
-            .jsonPath()
-            .getObject("value", UUID.class);
+        return response.getBody().as(LabelResponse.class);
     }
 
     public static List<LabelResponse> getLabels(int serverPort, String accessToken) {

@@ -5,7 +5,7 @@ import useLoader from "common/hook/Loader";
 import Stream from "common/js/collection/Stream";
 import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
-import { addAndSet, hasValue, isBlank, removeAndSet } from "common/js/Utils";
+import { addAndSet, generateRandomId, hasValue, isBlank, removeAndSet } from "common/js/Utils";
 import Label from "./Label";
 import MapStream from "common/js/collection/MapStream";
 import NotificationService from "common/js/notification/NotificationService";
@@ -20,7 +20,7 @@ const EventLabels = ({ existingLabels = [], setExistingLabels, setDisplaySpinner
 
     useLoader({
         request: CALENDAR_GET_LABELS.createRequest(),
-        mapper: v => setAvailableLabels(new Stream(v).toMap(i => i.labelId)),
+        mapper: setAvailableLabels,
         setDisplaySpinner: setDisplaySpinner
     });
 
@@ -50,38 +50,27 @@ const EventLabels = ({ existingLabels = [], setExistingLabels, setDisplaySpinner
             return [];
         }
 
-        const el = new Stream(existingLabels)
-            .toMap(
-                labelId => availableLabels[labelId].label,
-                labelId => <Label
-                    key={labelId}
-                    text={availableLabels[labelId].label}
-                    callback={() => removeAndSet(existingLabels, l => l === labelId, setExistingLabels)}
-                />);
-        const nl = new Stream(newLabels)
-            .toMap(
-                label => label,
-                label => <Label
-                    key={label}
-                    text={label}
-                    callback={() => removeAndSet(newLabels, l => l === label, setNewLabels)}
-                />);
-
-        const merged = { ...el, ...nl };
-
-        return new MapStream(merged)
-            .sorted((a, b) => a.key.localeCompare(b.key))
-            .toList();
-    }
-
-    function getAvailableLabels() {
-        return new MapStream(availableLabels)
-            .toListStream()
-            .filter(label => existingLabels.indexOf(label.labelId) < 0)
+        return new Stream(existingLabels.concat(newLabels))
             .sorted((a, b) => a.label.localeCompare(b.label))
             .map(label => <Label
                 key={label.labelId}
                 text={label.label}
+                callback={() => {
+                    removeAndSet(existingLabels, l => l.labelId === label.labelId, setExistingLabels);
+                    removeAndSet(newLabels, l => l.labelId === label.labelId, setNewLabels);
+                }}
+            />)
+            .toList();
+    }
+
+    function getAvailableLabels() {
+        return new Stream(availableLabels)
+            .filter(label => new Stream(existingLabels).noneMatch(l => l.labelId === label.labelId))
+            .sorted((a, b) => a.label.localeCompare(b.label))
+            .map(label => <Label
+                key={label.labelId}
+                text={label.label}
+                shared={label.shared}
                 callback={() => addAndSet(existingLabels, label.labelId, setExistingLabels)}
             />)
             .toList();
@@ -98,17 +87,7 @@ const EventLabels = ({ existingLabels = [], setExistingLabels, setDisplaySpinner
             return;
         }
 
-        if (new MapStream(availableLabels).toListStream().anyMatch(label => label.label === newLabel)) {
-            NotificationService.showError(localizationHandler.get("label-already-exists"));
-            return;
-        }
-
-        if (new Stream(newLabels).anyMatch(label => label === newLabel)) {
-            NotificationService.showError(localizationHandler.get("label-already-exists"));
-            return;
-        }
-
-        addAndSet(newLabels, newLabel, setNewLabels);
+        addAndSet(newLabels, { labelId: generateRandomId(), label: newLabel }, setNewLabels);
         setNewLabel("");
     }
 }

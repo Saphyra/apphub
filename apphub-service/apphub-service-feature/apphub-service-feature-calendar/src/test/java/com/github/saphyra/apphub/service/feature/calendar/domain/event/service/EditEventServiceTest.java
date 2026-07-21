@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -62,13 +63,13 @@ class EditEventServiceTest {
     void edit() {
         given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
         given(updateEventContextFactory.create(event)).willReturn(context);
-        given(request.getLabels()).willReturn(List.of(LABEL_ID));
+        given(request.getLabels()).willReturn(Map.of(LABEL_ID, USER_ID));
 
         underTest.edit(USER_ID, EVENT_ID, request);
 
         then(event).should().setExpirationNotified(false);
-        then(eventRequestValidator).should().validateEdit(USER_ID, request);
+        then(eventRequestValidator).should().validateEdit(request);
         then(eventFieldUpdater).should().update(context, request, event);
-        then(context).should().processChanges(List.of(LABEL_ID));
+        then(context).should().processChanges(Map.of(LABEL_ID, USER_ID));
     }
 }

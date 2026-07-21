@@ -13,6 +13,7 @@ import java.util.UUID;
 @Builder
 public class LabelResponse {
     private UUID labelId;
+    private UUID userId;
     private String label;
     private Boolean shared;
 }

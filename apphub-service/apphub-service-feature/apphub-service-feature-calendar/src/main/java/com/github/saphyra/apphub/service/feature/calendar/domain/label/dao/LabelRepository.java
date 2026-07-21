@@ -37,7 +37,7 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_IDS)
+        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_USER_IDS_AND_LABEL_IDS)
             .stream()
             .map(labelMapper::convertEntity)
             .toList();
@@ -95,5 +95,21 @@ class LabelRepository extends DynamoDbRepository {
             .build();
 
         deleteItem(request, CalendarMonitoringFunctionality.DELETE_LABEL);
+    }
+
+    /**
+     *
+     * @param ids Map<labelId, userId></labelId,>
+     */
+    public List<LabelEntity> getByIds(Map<String, String> ids) {
+        List<Map<String, AttributeValue>> keys = ids.entrySet()
+            .stream()
+            .map(entry -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + entry.getValue()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + entry.getKey()).build()
+            ))
+            .toList();
+
+        return labelMapper.convertEntity(batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_USER_IDS_AND_LABEL_IDS));
     }
 }

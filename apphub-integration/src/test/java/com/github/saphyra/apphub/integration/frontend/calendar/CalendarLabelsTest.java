@@ -56,15 +56,6 @@ public class CalendarLabelsTest extends SeleniumTest {
             .extracting(CalendarLabel::getLabel)
             .containsExactlyInAnyOrder(LABEL_1, LABEL_2);
 
-        //Label exists
-        CalendarLabelsPageActions.getLabel(driver, LABEL_1)
-            .edit()
-            .newLabel(driver, LABEL_2)
-            .confirmNewLabel(driver)
-            .run(() -> ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_LABEL_ALREADY_EXISTS))
-            .run(() -> ToastMessageUtil.clearToasts(driver))
-            .cancelNewLabel(driver);
-
         //Delete label
         CalendarLabelsPageActions.getLabel(driver, LABEL_2)
             .delete()

@@ -3,13 +3,14 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -27,7 +28,9 @@ public class EventQueryService {
         if (isNull(labelId)) {
             events = eventDao.getByUserId(userId);
         } else {
-            List<UUID> eventIds = eventLabelMappingDao.getEventsOfLabel(userId, labelId);
+            Collection<UUID> eventIds = eventLabelMappingDao.getEventsOfLabel(userId, labelId)
+                .getEventIds()
+                .keySet();
             events = eventDao.getByIds(userId, eventIds);
         }
 
@@ -36,10 +39,9 @@ public class EventQueryService {
 
     public List<EventResponse> getLabellessEvents(UUID userId) {
         List<UUID> eventIds =  eventLabelMappingDao.getLabelsOfEventsByUserId(userId)
-            .entrySet()
             .stream()
-            .filter(entry -> entry.getValue().isEmpty())
-            .map(Map.Entry::getKey)
+            .filter(mapping -> mapping.getLabelIds().isEmpty())
+            .map(EventLabelMapping::getEventId)
             .toList();
 
         return eventDao.getByIds(userId, eventIds)
@@ -49,6 +51,6 @@ public class EventQueryService {
     }
 
     public EventResponse getEvent(UUID userId, UUID eventId) {
-        return eventResponseMapper.toResponse(eventDao.findByIdValidated(userId, eventId));
+        return eventResponseMapper.toResponse(userId, eventDao.findByIdValidated(userId, eventId));
     }
 }

@@ -3,14 +3,15 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,6 +43,12 @@ class EventQueryServiceTest {
 	@Mock
 	private EventResponse eventResponse;
 
+	@Mock
+	private LabelEventMapping labelEventMapping;
+
+	@Mock
+	private EventLabelMapping eventLabelMapping;
+
 	@Test
 	void getEvents_nullLabelId() {
 		given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
@@ -54,8 +61,10 @@ class EventQueryServiceTest {
 
 	@Test
 	void getEvents_withLabelId() {
-		given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(List.of(EVENT_ID));
-		given(eventDao.getByIds(USER_ID, List.of(EVENT_ID))).willReturn(List.of(event));
+		given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(labelEventMapping);
+		Map<UUID, UUID> eventIds = Map.of(EVENT_ID, USER_ID);
+		given(labelEventMapping.getEventIds()).willReturn(eventIds);
+		given(eventDao.getByIds(USER_ID, eventIds.keySet())).willReturn(List.of(event));
 		given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
 		List<EventResponse> result = underTest.getEvents(USER_ID, LABEL_ID);
@@ -65,10 +74,10 @@ class EventQueryServiceTest {
 
 	@Test
 	void getLabellessEvents() {
-		Map<UUID, List<UUID>> labelsOfEvents = new LinkedHashMap<>();
-		labelsOfEvents.put(EVENT_ID, List.of());
+		given(eventLabelMappingDao.getLabelsOfEventsByUserId(USER_ID)).willReturn(List.of(eventLabelMapping));
+		given(eventLabelMapping.getEventId()).willReturn(EVENT_ID);
+		given(eventLabelMapping.getLabelIds()).willReturn(Map.of());
 
-		given(eventLabelMappingDao.getLabelsOfEventsByUserId(USER_ID)).willReturn(labelsOfEvents);
 		given(eventDao.getByIds(USER_ID, List.of(EVENT_ID))).willReturn(List.of(event));
 		given(eventResponseMapper.toResponse(event, List.of())).willReturn(eventResponse);
 
@@ -80,11 +89,10 @@ class EventQueryServiceTest {
 	@Test
 	void getEvent() {
 		given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
-		given(eventResponseMapper.toResponse(event)).willReturn(eventResponse);
+		given(eventResponseMapper.toResponse(USER_ID, event)).willReturn(eventResponse);
 
 		EventResponse result = underTest.getEvent(USER_ID, EVENT_ID);
 
 		assertThat(result).isEqualTo(eventResponse);
 	}
-
 }

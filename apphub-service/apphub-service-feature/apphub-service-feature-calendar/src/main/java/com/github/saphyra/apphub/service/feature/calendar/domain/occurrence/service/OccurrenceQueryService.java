@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceR
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,7 +41,9 @@ public class OccurrenceQueryService {
         Map<UUID, Event> events = eventDao.getByIds(userId, occurrenceMapping.keySet())
             .stream()
             .collect(Collectors.toMap(Event::getEventId, event -> event));
-        Map<UUID, List<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet());
+        Map<UUID, Collection<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet())
+            .stream()
+            .collect(Collectors.toMap(EventLabelMapping::getEventId, mapping -> mapping.getLabelIds().keySet()));
 
         List<Occurrence> occurrences = occurrenceMapping.entrySet()
             .stream()

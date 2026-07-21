@@ -1,3 +1,6 @@
-TODO delete ALM when record is deleted
 TODO data deletion test
 TODO role protection test
+TODO Fix: Users item already shared with cannot share again
+
+TODO test cases:
+Create event to shared label
