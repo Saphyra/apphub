@@ -34,7 +34,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class EventConverterTest {
+class DeprecatedEventConverterTest {
     private static final UUID EVENT_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String EVENT_ID_STRING = "event-id";
@@ -87,7 +87,7 @@ class EventConverterTest {
     private AccessTokenProvider accessTokenProvider;
 
     @InjectMocks
-    private EventConverter underTest;
+    private DeprecatedEventConverter underTest;
 
     @Test
     void convertDomain() {

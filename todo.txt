@@ -1,6 +1,9 @@
-TODO data deletion test
-TODO role protection test
 TODO Fix: Users item already shared with cannot share again
 
 TODO test cases:
 Create event to shared label
+Create occurrence to shared event
+Shared event/occurrence appears in search result
+Shared expired event appears only for owner
+Data deletion test
+Role protection test

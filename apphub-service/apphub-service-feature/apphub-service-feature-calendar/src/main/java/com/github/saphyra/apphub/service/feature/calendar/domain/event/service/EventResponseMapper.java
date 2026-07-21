@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +22,17 @@ class EventResponseMapper {
     private final ObjectMapper objectMapper;
     private final LabelQueryService labelQueryService;
 
-    List<EventResponse> toResponse(UUID userId, List<Event> events) {
+    List<EventResponse> toResponse(UUID userId, List<BiWrapper<Event, Boolean>> events) {
         return events.stream()
-            .map(event -> toResponse(event, labelQueryService.getByEventId(userId, event.getEventId())))
+            .map(bw -> toResponse(bw.getEntity1(), bw.getEntity2(), labelQueryService.getByEventId(userId, bw.getEntity1().getEventId())))
             .toList();
     }
 
-    EventResponse toResponse(UUID userId, Event event) {
-        return toResponse(event, labelQueryService.getByEventId(userId, event.getEventId()));
+    EventResponse toResponse(UUID userId, Event event, boolean shared) {
+        return toResponse(event, shared, labelQueryService.getByEventId(userId, event.getEventId()));
     }
 
-    EventResponse toResponse(Event event, Collection<LabelResponse> labels) {
+    EventResponse toResponse(Event event, boolean shared, Collection<LabelResponse> labels) {
         return EventResponse.builder()
             .eventId(event.getEventId())
             .repetitionType(event.getRepetitionType())
@@ -46,6 +47,7 @@ class EventResponseMapper {
             .labels(labels)
             .archived(event.isArchived())
             .autoDone(event.isAutoDone())
+            .shared(shared)
             .build();
     }
 }

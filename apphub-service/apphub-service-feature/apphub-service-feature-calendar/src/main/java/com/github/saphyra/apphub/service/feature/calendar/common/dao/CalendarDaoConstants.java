@@ -37,4 +37,6 @@ public class CalendarDaoConstants {
 
     public static final String GSI_USER_ID_DATE_BUCKET = "GSI-user_id-date_bucket";
     public static final String GSI_ALM_OBJECT_PRINCIPAL = "GSI-alm-object-principal";
+
+    public static final String MIGRATION = "MIGRATION";
 }

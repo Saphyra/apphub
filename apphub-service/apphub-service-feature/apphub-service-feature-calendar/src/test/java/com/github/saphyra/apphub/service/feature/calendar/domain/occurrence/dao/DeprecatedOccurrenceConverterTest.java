@@ -31,7 +31,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class OccurrenceConverterTest {
+class DeprecatedOccurrenceConverterTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final String USER_ID_STRING = "user-id";
     private static final UUID EVENT_ID = UUID.randomUUID();
@@ -80,7 +80,7 @@ class OccurrenceConverterTest {
     private OccurrenceRepository occurrenceRepository;
 
     @InjectMocks
-    private OccurrenceConverter underTest;
+    private DeprecatedOccurrenceConverter underTest;
 
     @Test
     void convertDomain() {

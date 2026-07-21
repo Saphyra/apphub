@@ -13,11 +13,11 @@ class OccurrenceEntity {
     private String eventId;
     private String occurrenceId;
     private String dateBucket;
-    private String date; //Encrypted
-    private String time; //Encrypted
-    private String status; //Encrypted
-    private String note; //Encrypted
-    private String remindMeBeforeDays; //Encrypted
-    private String reminded; //Encrypted
-    private String autoDone; //Encrypted
+    private String date;
+    private String time;
+    private String status;
+    private String note;
+    private String remindMeBeforeDays;
+    private String reminded;
+    private String autoDone;
 }

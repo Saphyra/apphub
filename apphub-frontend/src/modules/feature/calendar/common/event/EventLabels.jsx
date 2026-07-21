@@ -71,7 +71,7 @@ const EventLabels = ({ existingLabels = [], setExistingLabels, setDisplaySpinner
                 key={label.labelId}
                 text={label.label}
                 shared={label.shared}
-                callback={() => addAndSet(existingLabels, label.labelId, setExistingLabels)}
+                callback={() => addAndSet(existingLabels, label, setExistingLabels)}
             />)
             .toList();
     }

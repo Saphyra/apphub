@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class LabelConverterTest {
+class DeprecatedLabelConverterTest {
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final String LABEL_ID_STRING = "label-id";
     private static final String ACCESS_TOKEN_USER_ID = "access-token-user-id";
@@ -36,7 +36,7 @@ class LabelConverterTest {
     private AccessTokenProvider accessTokenProvider;
 
     @InjectMocks
-    private LabelConverter underTest;
+    private DeprecatedLabelConverter underTest;
 
     @Test
     void convertDomain() {

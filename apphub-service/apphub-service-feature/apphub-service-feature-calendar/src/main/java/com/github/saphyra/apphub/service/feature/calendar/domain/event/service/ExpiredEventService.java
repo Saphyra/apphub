@@ -33,7 +33,7 @@ public class ExpiredEventService {
         return eventDao.getByUserId(userId)
             .stream()
             .filter(this::isExpired)
-            .map(event -> eventResponseMapper.toResponse(userId, event))
+            .map(event -> eventResponseMapper.toResponse(userId, event, false))
             .toList();
     }
 

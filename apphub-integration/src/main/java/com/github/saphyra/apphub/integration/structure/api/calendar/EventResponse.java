@@ -28,4 +28,5 @@ public class EventResponse {
     private List<LabelResponse> labels;
     private Boolean archived;
     private Boolean autoDone;
+    private Boolean shared;
 }

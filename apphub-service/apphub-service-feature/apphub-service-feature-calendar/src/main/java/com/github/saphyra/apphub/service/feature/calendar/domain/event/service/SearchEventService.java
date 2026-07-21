@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
@@ -24,9 +25,10 @@ public class SearchEventService {
     public List<EventResponse> search(UUID userId, String search) {
         ValidationUtil.minLength(search, 3, "searchText");
 
-        List<Event> events =  eventDao.getByUserId(userId)
+        List<BiWrapper<Event, Boolean>> events =  eventDao.getByUserId(userId)
             .stream()
             .filter(event -> eventMatches(event, search) || occurrenceMatches(event.getEventId(), search))
+            .map(event -> new BiWrapper<>(event, false))
             .toList();
 
         return eventResponseMapper.toResponse(userId, events);
