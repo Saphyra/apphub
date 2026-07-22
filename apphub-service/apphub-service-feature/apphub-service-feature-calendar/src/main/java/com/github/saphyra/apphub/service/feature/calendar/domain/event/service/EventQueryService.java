@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
@@ -97,6 +98,21 @@ public class EventQueryService {
     }
 
     public EventResponse getEvent(UUID userId, UUID eventId) {
-        return eventResponseMapper.toResponse(userId, eventDao.findByIdValidated(userId, eventId), false);
+        return eventDao.findById(userId, eventId)
+            .map(event -> new BiWrapper<>(event, false))
+            .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT)
+                .flatMap(alm -> eventDao.findById(alm.getOwner(), eventId).map(event -> new BiWrapper<>(event, true))))
+            .or(() -> findEventBySharedLabel(userId, eventId))
+            .map(biWrapper -> eventResponseMapper.toResponse(userId, biWrapper.getEntity1(), biWrapper.getEntity2()))
+            .orElseThrow(() -> ExceptionFactory.notFound(userId + " has no access to event " + eventId + " or event does not exist."));
+    }
+
+    private Optional<BiWrapper<Event, Boolean>> findEventBySharedLabel(UUID userId, UUID eventId) {
+        return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
+            .stream()
+            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
+            .filter(mapping -> mapping.getEventIds().containsKey(eventId))
+            .findAny()
+            .map(mapping -> new BiWrapper<>(eventDao.findByIdValidated(mapping.getEventIds().get(eventId), eventId), true));
     }
 }

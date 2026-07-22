@@ -17,6 +17,7 @@ import LocalTime from "common/js/date/LocalTime";
 import LocalDate from "common/js/date/LocalDate";
 import { CALENDAR_ARCHIVE_EVENT, CALENDAR_EDIT_EVENT_PAGE, CALENDAR_GET_EVENT, CALENDAR_GET_OCCURRENCES_OF_EVENT, CALENDAR_MERGE_EVENTS, CALENDAR_SHARE_PAGE } from "modules/feature/calendar/CalendarEndpoints";
 import { TYPE_EVENT } from "modules/feature/calendar/CalendarConstants";
+import Constants from "common/js/Constants";
 
 const OpenedEvent = ({
     eventId,
@@ -61,7 +62,7 @@ const OpenedEvent = ({
 
         return (
             <div id="calendar-opened-event">
-                <div id="calendar-opened-event-title">{event.title}</div>
+                <div id="calendar-opened-event-title">{event.title + (event.shared ? Constants.ICON_SHARED : "")}</div>
 
                 <Textarea
                     id="calendar-opened-event-content"

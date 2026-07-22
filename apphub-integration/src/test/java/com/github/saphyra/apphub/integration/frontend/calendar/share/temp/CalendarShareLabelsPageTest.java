@@ -18,7 +18,6 @@ import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionTy
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -76,10 +75,10 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
         CalendarLabelsPageActions.getLabel(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX)
             .open();
 
-        AwaitilityWrapper.awaitAssert(() ->
-            assertThat(CalendarLabelsPageActions.getEvents(sharedWithDriver))
-                .extracting(WebElement::getText)
-                .containsExactly(parameters.getTitle() + Constants.SHARED_SUFFIX)
-        );
+        AwaitilityWrapper.getWithWait(() -> CalendarLabelsPageActions.getEvent(sharedWithDriver, parameters.getTitle() + Constants.SHARED_SUFFIX))
+            .orElseThrow()
+            .click();
+
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(sharedWithDriver)).isEqualTo(parameters.getTitle() + Constants.SHARED_SUFFIX));
     }
 }

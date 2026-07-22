@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -18,8 +19,12 @@ public class EventDao {
     private final UuidConverter uuidConverter;
 
     public Event findByIdValidated(UUID userId, UUID eventId) {
-        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId)))
+        return findById(userId, eventId)
             .orElseThrow(() -> ExceptionFactory.notFound("Event not found by id " + eventId));
+    }
+
+    public Optional<Event> findById(UUID userId, UUID eventId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId)));
     }
 
     public List<Event> getByUserId(UUID userId) {
