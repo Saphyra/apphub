@@ -77,7 +77,7 @@ class OccurrenceQueryServiceTest {
         given(eventLabelMapping.getEventId()).willReturn(EVENT_ID);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(LABEL_ID, USER_ID));
         given(helper.getOccurrencesToAdd(event, occurrence, CURRENT_DATE, START_DATE, END_DATE)).willReturn(List.of(occurrence));
-        given(occurrenceResponseMapper.toResponse(Map.of(EVENT_ID, event), List.of(occurrence))).willReturn(List.of(response));
+        given(occurrenceResponseMapper.toResponse(USER_ID, Map.of(EVENT_ID, event), List.of(occurrence))).willReturn(List.of(response));
 
         assertThat(underTest.getOccurrences(USER_ID, START_DATE, END_DATE, LABEL_ID)).containsExactly(response);
     }
@@ -90,7 +90,7 @@ class OccurrenceQueryServiceTest {
         given(eventDao.getByIds(USER_ID, Set.of(EVENT_ID))).willReturn(List.of(event));
         given(event.getEventId()).willReturn(EVENT_ID);
         given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, Set.of(EVENT_ID))).willReturn(List.of(eventLabelMapping));
-        given(occurrenceResponseMapper.toResponse(Map.of(EVENT_ID, event), List.of())).willReturn(List.of());
+        given(occurrenceResponseMapper.toResponse(USER_ID, Map.of(EVENT_ID, event), List.of())).willReturn(List.of());
         given(eventLabelMapping.getEventId()).willReturn(EVENT_ID);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(UUID.randomUUID(), USER_ID));
 

@@ -261,6 +261,7 @@ const Occurrence = ({ occurrence, selectedOccurrence, setSelectedOccurrence }) =
             <span className="calendar-opened-event-occurrence-date">
                 {LocalDate.parse(occurrence.date).format()}
             </span>
+            {occurrence.shared && <span className="calendar-opened-event-occurrence-shared">{Constants.ICON_SHARED}</span>}
         </div>
     );
 }

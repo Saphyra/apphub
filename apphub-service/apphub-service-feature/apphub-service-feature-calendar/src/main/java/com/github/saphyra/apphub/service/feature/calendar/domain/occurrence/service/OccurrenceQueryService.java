@@ -51,7 +51,7 @@ public class OccurrenceQueryService {
             .flatMap(entry -> getOccurrences(events.get(entry.getKey()), entry.getValue(), currentDate, startDate, endDate).stream())
             .toList();
 
-        return occurrenceResponseMapper.toResponse(events, occurrences);
+        return occurrenceResponseMapper.toResponse(userId, events, occurrences);
     }
 
     private List<Occurrence> getOccurrences(Event event, List<Occurrence> occurrences, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {

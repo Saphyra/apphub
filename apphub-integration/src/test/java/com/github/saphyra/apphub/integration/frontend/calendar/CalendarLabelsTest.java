@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionTy
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarLabel;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -79,16 +80,18 @@ public class CalendarLabelsTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(driver)).isEqualTo(CreateEventParameters.DEFAULT_TITLE));
 
         //Open occurrence
-        WebElement occurrence = AwaitilityWrapper.getListWithWait(() -> CalendarLabelsPageActions.getOpenedEventOccurrences(driver), occurrences -> !occurrences.isEmpty())
-            .getFirst();
-        LocalDate occurrenceDate = LocalDate.parse(occurrence.getText());
-        occurrence.click();
+        CalendarOpenedEventOccurrence occurrence = AwaitilityWrapper.getSingleItemFromListWithWait(
+            () -> CalendarLabelsPageActions.getOpenedEventOccurrences(driver),
+            occ -> occ.stream().findFirst()
+        );
+        LocalDate occurrenceDate = occurrence.getDate();
+        occurrence.open();
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(driver)).isEqualTo(occurrenceDate));
     }
 
     @Test(groups = {"fe", "calendar"})
-    public void getLabelsWithoutLabel(){
+    public void getLabelsWithoutLabel() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

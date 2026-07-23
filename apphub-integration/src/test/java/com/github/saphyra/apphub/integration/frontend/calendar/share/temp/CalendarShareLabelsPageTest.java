@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -80,5 +81,9 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
             .click();
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(sharedWithDriver)).isEqualTo(parameters.getTitle() + Constants.SHARED_SUFFIX));
+
+        CalendarOpenedEventOccurrence occurrence = AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarLabelsPageActions.getOpenedEventOccurrences(sharedWithDriver));
+
+        assertThat(occurrence.isShared()).isTrue();
     }
 }

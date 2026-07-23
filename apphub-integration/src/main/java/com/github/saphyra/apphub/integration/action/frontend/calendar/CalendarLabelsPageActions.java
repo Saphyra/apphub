@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.calendar;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarLabel;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -43,8 +44,11 @@ public class CalendarLabelsPageActions {
             .getText();
     }
 
-    public static List<WebElement> getOpenedEventOccurrences(WebDriver driver) {
-        return driver.findElements(By.className("calendar-opened-event-occurrence-date"));
+    public static List<CalendarOpenedEventOccurrence> getOpenedEventOccurrences(WebDriver driver) {
+        return driver.findElements(By.className("calendar-opened-event-occurrence"))
+            .stream()
+            .map(CalendarOpenedEventOccurrence::new)
+            .collect(Collectors.toList());
     }
 
     public static LocalDate getOpenedOccurrenceDate(WebDriver driver) {
