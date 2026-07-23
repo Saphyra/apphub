@@ -13,6 +13,7 @@ import confirmOccurrenceDeletion from "../delete_occurrence/DeleteOccurrence";
 import NotificationService from "common/js/notification/NotificationService";
 import { CALENDAR_EDIT_OCCURRENCE_PAGE, CALENDAR_EDIT_OCCURRENCE_STATUS, CALENDAR_GET_OCCURRENCE, CALENDAR_SHARE_PAGE } from "../../CalendarEndpoints";
 import { TYPE_OCCURRENCE } from "../../CalendarConstants";
+import Constants from "common/js/Constants";
 
 const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, setDisplaySpinner, setSelectedOccurrence, refreshCounter, refresh, backUrl }) => {
     console.log("OpenedOccurrence render", { eventId, occurrenceId });
@@ -37,7 +38,7 @@ const OpenedOccurrence = ({ eventId, occurrenceId, setConfirmationDialogData, se
     if (hasValue(occurrence)) {
         return (
             <div id="calendar-opened-occurrence">
-                <div id="calendar-opened-occurrence-title">{occurrence.date}</div>
+                <div id="calendar-opened-occurrence-title">{occurrence.date + (occurrence.shared ? Constants.ICON_SHARED : "")}</div>
 
                 <div id="calendar-opened-occurrence-content">
                     {hasValue(occurrence.time) &&

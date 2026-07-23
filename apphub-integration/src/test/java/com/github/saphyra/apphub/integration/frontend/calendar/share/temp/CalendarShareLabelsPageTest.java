@@ -82,8 +82,16 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(sharedWithDriver)).isEqualTo(parameters.getTitle() + Constants.SHARED_SUFFIX));
 
+        //Verify occurrence is shared
         CalendarOpenedEventOccurrence occurrence = AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarLabelsPageActions.getOpenedEventOccurrences(sharedWithDriver));
 
         assertThat(occurrence.isShared()).isTrue();
+
+        occurrence.open();
+
+        AwaitilityWrapper.awaitAssert(() -> {
+            assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(sharedWithDriver)).isEqualTo(parameters.getStartDate());
+            assertThat(CalendarLabelsPageActions.isOpenedOccurrenceShared(sharedWithDriver)).isTrue();
+        });
     }
 }

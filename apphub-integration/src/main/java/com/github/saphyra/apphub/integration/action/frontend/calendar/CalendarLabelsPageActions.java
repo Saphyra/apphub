@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.calendar;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarLabel;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.By;
@@ -52,7 +53,7 @@ public class CalendarLabelsPageActions {
     }
 
     public static LocalDate getOpenedOccurrenceDate(WebDriver driver) {
-        return LocalDate.parse(driver.findElement(By.id("calendar-opened-occurrence-title")).getText());
+        return LocalDate.parse(driver.findElement(By.id("calendar-opened-occurrence-title")).getText().replace(Constants.SHARED_SUFFIX, ""));
     }
 
     public static void selectNoLabelFilter(WebDriver driver) {
@@ -72,5 +73,11 @@ public class CalendarLabelsPageActions {
     public static void toggleArchiveOpenedEvent(WebDriver driver) {
         driver.findElement(By.id("calendar-opened-event-archive-button"))
             .click();
+    }
+
+    public static boolean isOpenedOccurrenceShared(WebDriver driver) {
+        return driver.findElement(By.id("calendar-opened-occurrence-title"))
+            .getText()
+            .endsWith(Constants.SHARED_SUFFIX);
     }
 }

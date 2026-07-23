@@ -67,6 +67,7 @@ public class OccurrenceQueryService {
     }
 
     public OccurrenceResponse getOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
+        //TODO check if user has access to occurrence
         Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         return occurrenceResponseMapper.toResponse(userId, occurrence);
     }

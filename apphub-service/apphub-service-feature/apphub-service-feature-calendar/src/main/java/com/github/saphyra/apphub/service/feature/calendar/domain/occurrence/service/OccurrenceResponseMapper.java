@@ -66,7 +66,7 @@ class OccurrenceResponseMapper {
     }
 
     public OccurrenceResponse toResponse(UUID userId, Occurrence occurrence) {
-        Event event = eventDao.findByIdValidated(userId, occurrence.getEventId());
+        Event event = queryEvent(userId, occurrence.getEventId());
 
         return toResponse(userId, event, occurrence);
     }
