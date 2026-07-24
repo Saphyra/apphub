@@ -123,4 +123,9 @@ public class CalendarEventPageActions {
         driver.findElement(By.id("calendar-edit-event-create-occurrence-button"))
             .click();
     }
+
+    public static void share(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-event-share"))
+            .click();
+    }
 }
