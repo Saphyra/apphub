@@ -28,7 +28,7 @@ class LabelSharedObjectService implements SharedObjectService {
         try (var _ = accessTokenProvider.set(owner)) {
             Label label = labelDao.findByIdValidated(owner, objectId);
 
-            return new SharedObject(label.getLabelId(), label.getUserId(), label.getLabel());
+            return new SharedObject(label.getLabelId(), label.getUserId(), label.getUserId(), label.getLabel());
         }
     }
 }

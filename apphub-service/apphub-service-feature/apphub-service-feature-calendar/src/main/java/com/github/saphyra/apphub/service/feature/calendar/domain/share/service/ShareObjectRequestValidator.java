@@ -17,6 +17,7 @@ class ShareObjectRequestValidator {
         ValidationUtil.notNull(request.getObjectId(), "objectId");
         ValidationUtil.notNull(request.getType(), "type");
         ValidationUtil.doesNotContainNull(request.getOperations(), "operations");
+        ValidationUtil.notNull(request.getParent(), "parent");
 
         //TODO validate object exists
         //TODo validate user has permission to share object

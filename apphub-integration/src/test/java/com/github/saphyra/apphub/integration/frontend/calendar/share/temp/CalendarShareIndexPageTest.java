@@ -10,14 +10,13 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
-import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOccurrence;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
@@ -25,7 +24,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CalendarShareLabelsPageTest extends SeleniumTest {
+public class CalendarShareIndexPageTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 
     @Test(groups = {"fe", "calendar"})
@@ -70,28 +69,10 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
         CalendarSharePageActions.selectAllOperations(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
-        //Verify label and event are shared
-        CalendarIndexPageActions.toLabelsPage(sharedWithDriver);
-
-        CalendarLabelsPageActions.getLabel(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX)
-            .open();
-
-        AwaitilityWrapper.getWithWait(() -> CalendarLabelsPageActions.getEvent(sharedWithDriver, parameters.getTitle() + Constants.SHARED_SUFFIX))
-            .orElseThrow()
-            .click();
-
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(sharedWithDriver)).isEqualTo(parameters.getTitle() + Constants.SHARED_SUFFIX));
-
-        //Verify occurrence is shared
-        CalendarOpenedEventOccurrence occurrence = AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarLabelsPageActions.getOpenedEventOccurrences(sharedWithDriver));
+        //Verify shared label displayed
+        CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
+        CalendarOccurrence occurrence = AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarIndexPageActions.getDay(sharedWithDriver, parameters.getStartDate()).getOccurrences());
 
         assertThat(occurrence.isShared()).isTrue();
-
-        occurrence.open();
-
-        AwaitilityWrapper.awaitAssert(() -> {
-            assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(sharedWithDriver)).isEqualTo(parameters.getStartDate());
-            assertThat(CalendarLabelsPageActions.isOpenedOccurrenceShared(sharedWithDriver)).isTrue();
-        });
     }
 }

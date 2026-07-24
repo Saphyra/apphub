@@ -18,6 +18,7 @@ public class ShareObjectRequest {
     private UUID sharedWith;
     private UUID owner;
     private UUID objectId;
+    private UUID parent;
     private SharedObjectType type;
     private List<Operation> operations;
 }

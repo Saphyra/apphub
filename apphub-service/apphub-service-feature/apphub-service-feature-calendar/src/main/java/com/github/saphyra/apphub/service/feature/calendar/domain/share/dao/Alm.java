@@ -20,6 +20,7 @@ public class Alm {
     private final UUID objectId;
     private final SharedObjectType objectType;
     private final UUID owner; //Owner of the object shared
+    private final UUID parent; //Parent of the object shared
     private List<Operation> operations;
 
     public void addOperation(Operation operation) {

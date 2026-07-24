@@ -16,5 +16,6 @@ public class SharedObjectResponse {
     private UUID objectId;
     private String name;
     private UUID owner;
+    private UUID parent;
     private List<SharedWithResponse> sharedWith;
 }

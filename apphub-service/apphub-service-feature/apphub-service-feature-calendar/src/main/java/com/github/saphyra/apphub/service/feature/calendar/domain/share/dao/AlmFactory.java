@@ -12,13 +12,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 //TODO unit test
 public class AlmFactory {
-    public Alm createAlm(UUID principal, PrincipalType principalType, UUID objectId, SharedObjectType objectType, UUID owner, List<Operation> operations) {
+    public Alm createAlm(UUID principal, PrincipalType principalType, UUID objectId, SharedObjectType objectType, UUID owner, UUID parent, List<Operation> operations) {
         return Alm.builder()
             .principal(principal)
             .principalType(principalType)
             .objectId(objectId)
             .objectType(objectType)
             .owner(owner)
+            .parent(parent)
             .operations(operations)
             .build();
     }

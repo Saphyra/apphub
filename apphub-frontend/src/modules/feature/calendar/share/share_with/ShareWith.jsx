@@ -105,6 +105,7 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
         const payload = {
             sharedWith: selectedUser.userId,
             owner: objectData.owner,
+            parent: objectData.parent,
             objectId: objectData.objectId,
             type: type,
             operations: selectedOperations

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_OBJECT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_OPERATIONS;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PARENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PRINCIPAL;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_USER_ID;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
@@ -31,6 +32,7 @@ class AlmMapper extends ConverterBase<Map<String, AttributeValue>, Alm> {
         result.put(COLUMN_OBJECT, AttributeValue.builder().s(domain.getObjectType() + "#" + uuidConverter.convertDomain(domain.getObjectId())).build());
         result.put(COLUMN_OPERATIONS, AttributeValue.builder().ss(domain.getOperations().stream().map(Enum::name).toList()).build());
         result.put(COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(domain.getOwner())).build());
+        result.put(COLUMN_PARENT, AttributeValue.builder().s(uuidConverter.convertDomain(domain.getParent())).build());
 
         return result;
     }
@@ -47,6 +49,7 @@ class AlmMapper extends ConverterBase<Map<String, AttributeValue>, Alm> {
             .objectType(SharedObjectType.valueOf(skParts[0]))
             .objectId(uuidConverter.convertEntity(skParts[1]))
             .owner(uuidConverter.convertEntity(userIdParts[1]))
+            .parent(uuidConverter.convertEntity(entity.get(COLUMN_PARENT).s()))
             .operations(entity.get(COLUMN_OPERATIONS).ss().stream().map(Operation::valueOf).toList())
             .build();
     }

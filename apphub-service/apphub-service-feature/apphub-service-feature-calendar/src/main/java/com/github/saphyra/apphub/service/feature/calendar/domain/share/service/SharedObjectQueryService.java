@@ -44,6 +44,7 @@ public class SharedObjectQueryService {
             .objectId(sharedObject.objectId())
             .name(sharedObject.name())
             .owner(sharedObject.owner())
+            .parent(sharedObject.parent())
             .sharedWith(getSharedWith(sharedObject.objectId(), type))
             .build();
     }
