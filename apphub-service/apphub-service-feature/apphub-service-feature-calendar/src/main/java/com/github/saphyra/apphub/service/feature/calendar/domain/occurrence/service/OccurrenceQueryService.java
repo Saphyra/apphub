@@ -3,9 +3,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
@@ -40,6 +40,7 @@ public class OccurrenceQueryService {
     private final EventDao eventDao;
     private final OccurrenceQueryServiceHelper helper;
     private final AlmDao almDao;
+    private final EventFactory eventFactory;
 
     public List<OccurrenceResponse> getOccurrences(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
         Map<UUID, List<Occurrence>> occurrenceMapping = Stream.of(
@@ -105,7 +106,7 @@ public class OccurrenceQueryService {
         return eventDao.findById(userId, eventId)
             .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT).flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)))
             .or(() -> findEventBySharedLabel(userId, eventId))
-            .orElseThrow(() -> ExceptionFactory.notFound(userId + " has no access to event " + eventId + " or event does not exist."));
+            .orElseGet(() -> eventFactory.dummyEvent(userId, eventId));
     }
 
     //TODO verify access rights

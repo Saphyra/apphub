@@ -29,9 +29,9 @@ class CalendarShareControllerImpl implements CalendarShareController {
     private final UnshareObjectService unshareObjectService;
 
     @Override
-    public SharedObjectResponse getSharedItem(SharedObjectType type, UUID id, AccessToken accessToken) {
+    public SharedObjectResponse getSharedItem(SharedObjectType type, UUID id, UUID parent, AccessToken accessToken) {
         log.info("{} wants to query SharedItem {} of type {}", accessToken.getUserId(), id, type);
-        return sharedObjectQueryService.getSharedItem(accessToken.getUserId(), type, id);
+        return sharedObjectQueryService.getSharedItem(accessToken.getUserId(), type, id, parent);
     }
 
     @Override

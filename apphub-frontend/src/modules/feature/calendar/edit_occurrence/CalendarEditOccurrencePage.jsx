@@ -200,7 +200,7 @@ const CalendarEditOccurrencePage = () => {
                         key="share"
                         id="calendar-edit-occurrence-share"
                         label={localizationHandler.get("share")}
-                        onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_OCCURRENCE, id: occurrenceId }, { backUrl: window.location.href })}
+                        onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_OCCURRENCE, id: occurrenceId, parent: eventId }, { backUrl: window.location.href })}
                     />
                 ]}
                 centerButtons={[

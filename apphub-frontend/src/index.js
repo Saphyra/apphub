@@ -349,7 +349,8 @@ const router = createBrowserRouter([
     loader: ({ params }) => {
       return {
         type: params.type,
-        id: params.id
+        id: params.id,
+        parent: params.parent
       }
     }
   },

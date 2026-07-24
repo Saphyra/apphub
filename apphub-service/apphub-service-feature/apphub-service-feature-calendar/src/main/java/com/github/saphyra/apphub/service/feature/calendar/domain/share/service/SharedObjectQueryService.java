@@ -29,15 +29,15 @@ public class SharedObjectQueryService {
     private final AccountClient accountClient;
     private final ExecutorServiceBean executorServiceBean;
 
-    public SharedObjectResponse getSharedItem(UUID userId, SharedObjectType type, UUID objectId) {
+    public SharedObjectResponse getSharedItem(UUID userId, SharedObjectType type, UUID objectId, UUID parent) {
         SharedObjectService sharedObjectService = sharedObjectServiceProvider.getForType(type);
 
         //Find Alm for object
         SharedObject sharedObject = almDao.findForObject(userId, PrincipalType.USER, objectId, type)
             //Search by alm if found
-            .map(alm -> sharedObjectService.getSharedObject(alm.getOwner(), objectId)) //TODO check permission
+            .map(alm -> sharedObjectService.getSharedObject(alm.getOwner(), objectId, parent)) //TODO check permission
             //Search own if not found by alm
-            .or(() -> Optional.of(sharedObjectService.getSharedObject(userId, objectId)))
+            .or(() -> Optional.of(sharedObjectService.getSharedObject(userId, objectId, parent)))
             .orElseThrow(() -> ExceptionFactory.notFound("SharedObject not found for userId %s and objectId %s for type %s".formatted(userId, objectId, type)));
 
         return SharedObjectResponse.builder()

@@ -6,7 +6,7 @@ import Header from "common/component/Header";
 import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import useQueryParams from "common/hook/UseQueryParams";
-import { hasValue } from "common/js/Utils";
+import { hasValue, isNull } from "common/js/Utils";
 import { CALENDAR_GET_SHARED_OBJECT, CALENDAR_PAGE } from "../CalendarEndpoints";
 import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
@@ -18,8 +18,11 @@ import "./calendar_share.css";
 import useRefresh from "common/hook/Refresh";
 
 const CalendarSharePage = () => {
-    const { type, id } = useParams();
+    const { type, id, parent } = useParams();
+
     const queryParams = useQueryParams();
+
+    console.log(null == parent, parent)
 
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title", { type: localizationHandler.get(type) });
@@ -31,7 +34,7 @@ const CalendarSharePage = () => {
     const [objectData, setObjectData] = useState(null);
 
     useLoader({
-        request: CALENDAR_GET_SHARED_OBJECT.createRequest(null, { type: type, id: id }),
+        request: CALENDAR_GET_SHARED_OBJECT.createRequest(null, { type: type, id: id }, isNull(parent) ? null : { parent: parent }),
         mapper: setObjectData,
         setDisplaySpinner: setDisplaySpinner,
         listener: [refreshCounter],

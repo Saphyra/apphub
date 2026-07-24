@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,7 +23,12 @@ import java.util.UUID;
 //TODO API test
 public interface CalendarShareController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_SHARED_ITEM)
-    SharedObjectResponse getSharedItem(@PathVariable("type") SharedObjectType type, @PathVariable("id") UUID id, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    SharedObjectResponse getSharedItem(
+        @PathVariable("type") SharedObjectType type,
+        @PathVariable("id") UUID id,
+        @RequestParam(name = "parent", required = false) UUID parent,
+        @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
+    );
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_OPERATIONS)
     List<Operation> getOperations(@PathVariable("type") SharedObjectType type);

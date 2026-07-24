@@ -29,4 +29,9 @@ public class CalendarOccurrencePageActions {
     public static void setNote(WebDriver driver, String note) {
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-occurrence-note")), note);
     }
+
+    public static void share(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-occurrence-share"))
+            .click();
+    }
 }

@@ -12,10 +12,10 @@ public enum Operation {
     VIEW_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT), //Can query children with real data
     EDIT_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT),
     DELETE_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT),
-    EDIT(SharedObjectType.LABEL, SharedObjectType.EVENT), //Edit the main object
-    DELETE(SharedObjectType.LABEL, SharedObjectType.EVENT),
-    SHARE(SharedObjectType.LABEL, SharedObjectType.EVENT),
-    EDIT_OPERATIONS(SharedObjectType.LABEL, SharedObjectType.EVENT),
+    EDIT(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE), //Edit the main object
+    DELETE(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE),
+    SHARE(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE),
+    EDIT_OPERATIONS(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE),
     ;
 
     @Getter

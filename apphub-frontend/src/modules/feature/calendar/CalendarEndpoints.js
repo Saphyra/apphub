@@ -8,7 +8,7 @@ export const CALENDAR_SEARCH_PAGE = "/web/calendar/search";
 export const CALENDAR_CREATE_EVENT_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/create-event");
 export const CALENDAR_EDIT_EVENT_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/edit-event/{eventId}");
 export const CALENDAR_EDIT_OCCURRENCE_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/edit-occurrence/{eventId}/{occurrenceId}");
-export const CALENDAR_SHARE_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/share/{type}/{id}");
+export const CALENDAR_SHARE_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/share/{type}/{id}/{parent}");
 
 export const CALENDAR_GET_LABELS = new Endpoint(RequestMethod.GET, "/api/calendar/labels");
 export const CALENDAR_CREATE_LABEL = new Endpoint(RequestMethod.PUT, "/api/calendar/labels");

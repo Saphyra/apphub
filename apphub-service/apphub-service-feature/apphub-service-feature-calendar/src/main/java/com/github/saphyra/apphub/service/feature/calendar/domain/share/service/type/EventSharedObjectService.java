@@ -22,7 +22,7 @@ class EventSharedObjectService implements SharedObjectService {
     }
 
     @Override
-    public SharedObject getSharedObject(UUID owner, UUID objectId) {
+    public SharedObject getSharedObject(UUID owner, UUID objectId, UUID parent) {
         Event event = eventDao.findByIdValidated(owner, objectId);
 
         return new SharedObject(event.getEventId(), event.getUserId(), event.getUserId(), event.getTitle());
