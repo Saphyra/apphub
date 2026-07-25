@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.lib.dynamodb.MonitoringFunctionality;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import jakarta.annotation.PostConstruct;
@@ -37,6 +38,7 @@ class LabelDecryptionMigrator extends DynamoDbRepository {
     private final DeprecatedLabelConverter decryptorConverter;
     private final LabelConverter converter;
     private final LabelMapper mapper;
+    private final ErrorReporterService errorReporterService;
 
     LabelDecryptionMigrator(
         CalendarDynamoDbConfiguration configuration,
@@ -45,7 +47,8 @@ class LabelDecryptionMigrator extends DynamoDbRepository {
         AccessTokenProvider accessTokenProvider,
         DeprecatedLabelConverter decryptorConverter,
         LabelConverter converter,
-        LabelMapper mapper
+        LabelMapper mapper,
+        ErrorReporterService errorReporterService
     ) {
         super(configuration.getCalendarTableName(), context);
         this.uuidConverter = uuidConverter;
@@ -53,6 +56,7 @@ class LabelDecryptionMigrator extends DynamoDbRepository {
         this.decryptorConverter = decryptorConverter;
         this.converter = converter;
         this.mapper = mapper;
+        this.errorReporterService = errorReporterService;
     }
 
     @PostConstruct
@@ -66,29 +70,33 @@ class LabelDecryptionMigrator extends DynamoDbRepository {
             return;
         }
 
-        log.info("Initiating Label decryption migration...");
+        try {
+            log.info("Initiating Label decryption migration...");
 
-        ScanRequest request = ScanRequest.builder()
-            .filterExpression("begins_with(#sk, :sk)")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-            .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_LABEL).build()))
-            .build();
+            ScanRequest request = ScanRequest.builder()
+                .filterExpression("begins_with(#sk, :sk)")
+                .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+                .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_LABEL).build()))
+                .build();
 
-        List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
+            List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
 
-        List<WriteRequest> decrypted = result.stream()
-            .map(mapper::convertEntity)
-            .map(this::decrypt)
-            .map(converter::convertDomain)
-            .map(mapper::convertDomain)
-            .map(item -> PutRequest.builder().item(item).build())
-            .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
-            .toList();
-        batchWrite(decrypted, MonitoringFunctionality.UNMONITORED);
+            List<WriteRequest> decrypted = result.stream()
+                .map(mapper::convertEntity)
+                .map(this::decrypt)
+                .map(converter::convertDomain)
+                .map(mapper::convertDomain)
+                .map(item -> PutRequest.builder().item(item).build())
+                .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
+                .toList();
+            batchWrite(decrypted, MonitoringFunctionality.UNMONITORED);
+
+            log.info("Label decryption migration completed. Migrated {} labels.", result.size());
+        } catch (Exception e) {
+            errorReporterService.report("Failed migrating Labels", e);
+        }
 
         putItem(lock, MonitoringFunctionality.UNMONITORED);
-
-        log.info("Label decryption migration completed. Migrated {} labels.", result.size());
     }
 
     @SneakyThrows

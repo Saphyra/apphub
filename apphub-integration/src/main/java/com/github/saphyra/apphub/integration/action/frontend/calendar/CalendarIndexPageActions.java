@@ -147,7 +147,7 @@ public class CalendarIndexPageActions {
             .click();
     }
 
-    public static void editOccurrence(WebDriver driver) {
+    public static void editOpenedOccurrence(WebDriver driver) {
         AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-edit-button"))))
             .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
             .click();

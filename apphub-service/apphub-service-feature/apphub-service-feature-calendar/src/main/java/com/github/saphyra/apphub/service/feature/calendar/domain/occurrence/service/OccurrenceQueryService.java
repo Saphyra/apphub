@@ -119,29 +119,6 @@ public class OccurrenceQueryService {
             .map(mapping -> eventDao.findByIdValidated(mapping.getEventIds().get(eventId), eventId));
     }
 
-    //TODO remove
-    public List<OccurrenceResponse> getOccurrencesOld(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
-        LocalDate currentDate = dateTimeUtil.getCurrentDate();
-
-        Map<UUID, List<Occurrence>> occurrenceMapping = helper.getOccurrencesBetween(userId, startDate, endDate)
-            .stream()
-            .collect(Collectors.groupingBy(Occurrence::getEventId));
-        Map<UUID, Event> events = eventDao.getByIds(userId, occurrenceMapping.keySet())
-            .stream()
-            .collect(Collectors.toMap(Event::getEventId, event -> event));
-        Map<UUID, Collection<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet())
-            .stream()
-            .collect(Collectors.toMap(EventLabelMapping::getEventId, mapping -> mapping.getLabelIds().keySet()));
-
-        List<Occurrence> occurrences = occurrenceMapping.entrySet()
-            .stream()
-            .filter(entry -> isNull(labelId) || labels.get(entry.getKey()).contains(labelId)) //Filter for occurrences of events with given label
-            .flatMap(entry -> getOccurrences(events.get(entry.getKey()), entry.getValue(), currentDate, startDate, endDate).stream())
-            .toList();
-
-        return occurrenceResponseMapper.toResponse(userId, events, occurrences);
-    }
-
     private List<Occurrence> getOccurrences(Event event, List<Occurrence> occurrences, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
         return occurrences.stream()
             .flatMap(occurrence -> helper.getOccurrencesToAdd(event, occurrence, currentDate, startDate, endDate).stream())

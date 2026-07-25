@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_ma
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.lib.dynamodb.MonitoringFunctionality;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,12 @@ class EventLabelMappingMigrator extends DynamoDbRepository {
     private static final String LABEL_EVENT_MAPPING_ADD_UID_TO_LABEL_IDS = "label_event_mapping-add_uid_to_label_ids";
 
     private final ObjectMapper objectMapper;
+    private final ErrorReporterService errorReporterService;
 
-    EventLabelMappingMigrator(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ObjectMapper objectMapper) {
+    EventLabelMappingMigrator(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, ObjectMapper objectMapper, ErrorReporterService errorReporterService) {
         super(configuration.getCalendarTableName(), context);
         this.objectMapper = objectMapper;
+        this.errorReporterService = errorReporterService;
     }
 
     @PostConstruct
@@ -53,38 +56,42 @@ class EventLabelMappingMigrator extends DynamoDbRepository {
             return;
         }
 
-        log.info("Migrating EventLabelMappings...");
+        try {
+            log.info("Migrating EventLabelMappings...");
 
-        ScanRequest request = ScanRequest.builder()
-            .filterExpression("begins_with(#sk, :sk)")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-            .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING).build()))
-            .build();
+            ScanRequest request = ScanRequest.builder()
+                .filterExpression("begins_with(#sk, :sk)")
+                .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+                .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING).build()))
+                .build();
 
-        List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
+            List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
 
-        List<WriteRequest> writeRequests = result.stream()
-            .map(item -> {
-                Map<String, AttributeValue> copy = new HashMap<>(item);
+            List<WriteRequest> writeRequests = result.stream()
+                .map(item -> {
+                    Map<String, AttributeValue> copy = new HashMap<>(item);
 
-                List<String> labelIds = objectMapper.readValue(item.get(COLUMN_LABEL_IDS).s(), List.class);
-                String userId = item.get(COLUMN_PK).s().substring(PREFIX_USER.length());
+                    List<String> labelIds = objectMapper.readValue(item.get(COLUMN_LABEL_IDS).s(), List.class);
+                    String userId = item.get(COLUMN_PK).s().substring(PREFIX_USER.length());
 
-                Map<String, String> newLabelIds = labelIds.stream()
-                    .collect(Collectors.toMap(labelId -> labelId, _ -> userId));
-                copy.put(COLUMN_LABEL_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(newLabelIds)).build());
+                    Map<String, String> newLabelIds = labelIds.stream()
+                        .collect(Collectors.toMap(labelId -> labelId, _ -> userId));
+                    copy.put(COLUMN_LABEL_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(newLabelIds)).build());
 
-                return copy;
-            })
-            .map(item -> WriteRequest.builder()
-                .putRequest(builder -> builder.item(item))
-                .build())
-            .toList();
-        batchWrite(writeRequests, MonitoringFunctionality.UNMONITORED);
+                    return copy;
+                })
+                .map(item -> WriteRequest.builder()
+                    .putRequest(builder -> builder.item(item))
+                    .build())
+                .toList();
+            batchWrite(writeRequests, MonitoringFunctionality.UNMONITORED);
+
+            log.info("{} EventLabelMappings migrated.", result.size());
+        } catch (Exception e) {
+            errorReporterService.report("Failed migrating EventLabelMappings", e);
+        }
 
         putItem(lock, MonitoringFunctionality.UNMONITORED);
-
-        log.info("{} EventLabelMappings migrated.", result.size());
     }
 
     @PostConstruct
@@ -98,37 +105,43 @@ class EventLabelMappingMigrator extends DynamoDbRepository {
             return;
         }
 
-        log.info("Migrating LabelEventMappings...");
+        try {
 
-        ScanRequest request = ScanRequest.builder()
-            .filterExpression("begins_with(#sk, :sk)")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-            .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING).build()))
-            .build();
+            log.info("Migrating LabelEventMappings...");
 
-        List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
+            ScanRequest request = ScanRequest.builder()
+                .filterExpression("begins_with(#sk, :sk)")
+                .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+                .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING).build()))
+                .build();
 
-        List<WriteRequest> writeRequests = result.stream()
-            .map(item -> {
-                Map<String, AttributeValue> copy = new HashMap<>(item);
+            List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
 
-                List<String> eventIds = objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), List.class);
-                String userId = item.get(COLUMN_PK).s().substring(PREFIX_USER.length());
+            List<WriteRequest> writeRequests = result.stream()
+                .map(item -> {
+                    Map<String, AttributeValue> copy = new HashMap<>(item);
 
-                Map<String, String> newEventIds = eventIds.stream()
-                    .collect(Collectors.toMap(labelId -> labelId, _ -> userId));
-                copy.put(COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(newEventIds)).build());
+                    List<String> eventIds = objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), List.class);
+                    String userId = item.get(COLUMN_PK).s().substring(PREFIX_USER.length());
 
-                return copy;
-            })
-            .map(item -> WriteRequest.builder()
-                .putRequest(builder -> builder.item(item))
-                .build())
-            .toList();
-        batchWrite(writeRequests, MonitoringFunctionality.UNMONITORED);
+                    Map<String, String> newEventIds = eventIds.stream()
+                        .collect(Collectors.toMap(labelId -> labelId, _ -> userId));
+                    copy.put(COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(newEventIds)).build());
+
+                    return copy;
+                })
+                .map(item -> WriteRequest.builder()
+                    .putRequest(builder -> builder.item(item))
+                    .build())
+                .toList();
+            batchWrite(writeRequests, MonitoringFunctionality.UNMONITORED);
+
+            log.info("{} LabelEventMappings migrated.", result.size());
+
+        } catch (Exception e) {
+            errorReporterService.report("Failed migrating LabelEventMappings", e);
+        }
 
         putItem(lock, MonitoringFunctionality.UNMONITORED);
-
-        log.info("{} LabelEventMappings migrated.", result.size());
     }
 }

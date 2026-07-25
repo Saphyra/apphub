@@ -60,7 +60,7 @@ class EventResponseMapperTest {
         given(labelQueryService.getByEventId(USER_ID,EVENT_ID_1)).willReturn(List.of(labelResponse));
         given(objectMapper.readValue(REPETITION_DATA_1, Object.class)).willReturn(PARSED_REPETITION_DATA);
 
-        EventResponse result = underTest.toResponse(USER_ID, event, true);
+        EventResponse result = underTest.toResponse(event, true);
 
         assertThat(result)
             .returns(EVENT_ID_1, EventResponse::getEventId)
@@ -89,7 +89,7 @@ class EventResponseMapperTest {
         given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
         given(labelQueryService.getByEventId(USER_ID, EVENT_ID_2)).willReturn(List.of(labelResponse));
 
-        List<EventResponse> result = underTest.toResponse(USER_ID, List.of(new BiWrapper<>(event1, true), new BiWrapper<>(event2, false)));
+        List<EventResponse> result = underTest.toResponse(List.of(new BiWrapper<>(event1, true), new BiWrapper<>(event2, false)));
 
         assertThat(result).hasSize(2);
         assertThat(result.get(0))
@@ -111,7 +111,7 @@ class EventResponseMapperTest {
         Event event = createEvent(EVENT_ID_1, null, false);
         given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
 
-        EventResponse result = underTest.toResponse(USER_ID, event, true);
+        EventResponse result = underTest.toResponse(event, true);
 
         assertThat(result)
             .returns(EVENT_ID_1, EventResponse::getEventId)

@@ -50,7 +50,7 @@ public class EventQueryService {
                 .toList();
         }
 
-        return eventResponseMapper.toResponse(userId, events);
+        return eventResponseMapper.toResponse(events);
     }
 
     private List<BiWrapper<Event, Boolean>> getAllEvents(UUID userId) {
@@ -103,7 +103,7 @@ public class EventQueryService {
             .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT)
                 .flatMap(alm -> eventDao.findById(alm.getOwner(), eventId).map(event -> new BiWrapper<>(event, true))))
             .or(() -> findEventBySharedLabel(userId, eventId))
-            .map(biWrapper -> eventResponseMapper.toResponse(userId, biWrapper.getEntity1(), biWrapper.getEntity2()))
+            .map(biWrapper -> eventResponseMapper.toResponse(biWrapper.getEntity1(), biWrapper.getEntity2()))
             .orElseThrow(() -> ExceptionFactory.notFound(userId + " has no access to event " + eventId + " or event does not exist."));
     }
 

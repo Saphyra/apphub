@@ -31,7 +31,7 @@ public class SearchEventService {
             .map(event -> new BiWrapper<>(event, false))
             .toList();
 
-        return eventResponseMapper.toResponse(userId, events);
+        return eventResponseMapper.toResponse(events);
     }
 
     private boolean occurrenceMatches( UUID eventId, String search) {

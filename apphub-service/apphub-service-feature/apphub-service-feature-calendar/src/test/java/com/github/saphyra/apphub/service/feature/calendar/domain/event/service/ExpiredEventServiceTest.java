@@ -114,7 +114,7 @@ class ExpiredEventServiceTest {
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE);
-        given(eventResponseMapper.toResponse(USER_ID, event, false)).willReturn(eventResponse);
+        given(eventResponseMapper.toResponse(event, false)).willReturn(eventResponse);
 
         assertThat(underTest.getExpiredEvents(USER_ID)).containsExactly(eventResponse);
     }

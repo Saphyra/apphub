@@ -33,6 +33,7 @@ public class LabelQueryService {
     public List<LabelResponse> getByEventId(UUID userId, UUID eventId) {
         Map<UUID, UUID> labelIds = eventLabelMappingDao.getLabelsOfEvent(userId, eventId)
             .getLabelIds();
+        log.info("Labels found for Event {}: {}", eventId, labelIds);
         List<Label> labels = labelDao.getByIds(labelIds);
         return labelToResponseMapper.toResponse(userId, labels);
     }

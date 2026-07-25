@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.lib.dynamodb.MonitoringFunctionality;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import jakarta.annotation.PostConstruct;
@@ -37,6 +38,7 @@ class EventDecryptionMigrator extends DynamoDbRepository {
     private final EventMapper mapper;
     private final AccessTokenProvider accessTokenProvider;
     private final UuidConverter uuidConverter;
+    private final ErrorReporterService errorReporterService;
 
     EventDecryptionMigrator(
         CalendarDynamoDbConfiguration configuration,
@@ -45,7 +47,8 @@ class EventDecryptionMigrator extends DynamoDbRepository {
         EventConverter converter,
         EventMapper mapper,
         AccessTokenProvider accessTokenProvider,
-        UuidConverter uuidConverter
+        UuidConverter uuidConverter,
+        ErrorReporterService errorReporterService
     ) {
         super(configuration.getCalendarTableName(), context);
         this.decryptorConverter = decryptorConverter;
@@ -53,20 +56,21 @@ class EventDecryptionMigrator extends DynamoDbRepository {
         this.mapper = mapper;
         this.accessTokenProvider = accessTokenProvider;
         this.uuidConverter = uuidConverter;
+        this.errorReporterService = errorReporterService;
     }
 
     @PostConstruct
     void migrate() {
-        try {
-            Map<String, AttributeValue> lock = Map.of(
-                COLUMN_PK, AttributeValue.builder().s(MIGRATION).build(),
-                COLUMN_SK, AttributeValue.builder().s(EVENT_DECRYPTION).build()
-            );
-            if (getItem(lock, MonitoringFunctionality.UNMONITORED).isPresent()) {
-                log.info("Event decryption migration already performed.");
-                return;
-            }
+        Map<String, AttributeValue> lock = Map.of(
+            COLUMN_PK, AttributeValue.builder().s(MIGRATION).build(),
+            COLUMN_SK, AttributeValue.builder().s(EVENT_DECRYPTION).build()
+        );
+        if (getItem(lock, MonitoringFunctionality.UNMONITORED).isPresent()) {
+            log.info("Event decryption migration already performed.");
+            return;
+        }
 
+        try {
             log.info("Initiating Event decryption migration...");
 
             ScanRequest request = ScanRequest.builder()
@@ -87,13 +91,12 @@ class EventDecryptionMigrator extends DynamoDbRepository {
                 .toList();
             batchWrite(decrypted, MonitoringFunctionality.UNMONITORED);
 
-            putItem(lock, MonitoringFunctionality.UNMONITORED);
-
             log.info("Event decryption migration completed. Migrated {} events.", result.size());
         } catch (Exception e) {
-            log.error("Event decryption migration failed.", e);
-            throw e;
+            errorReporterService.report("Event decryption migration failed.", e);
         }
+
+        putItem(lock, MonitoringFunctionality.UNMONITORED);
     }
 
     @SneakyThrows

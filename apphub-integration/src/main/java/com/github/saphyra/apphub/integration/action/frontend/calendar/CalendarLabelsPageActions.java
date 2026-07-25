@@ -80,4 +80,14 @@ public class CalendarLabelsPageActions {
             .getText()
             .endsWith(Constants.SHARED_SUFFIX);
     }
+
+    public static void editOpenedEvent(WebDriver driver) {
+        driver.findElement(By.id("calendar-opened-event-edit"))
+            .click();
+    }
+
+    public static void back(WebDriver driver) {
+        driver.findElement(By.id("calendar-labels-back-button"))
+            .click();
+    }
 }

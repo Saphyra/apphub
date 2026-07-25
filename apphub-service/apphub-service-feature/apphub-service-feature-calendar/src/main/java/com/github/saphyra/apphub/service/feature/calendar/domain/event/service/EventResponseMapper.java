@@ -13,7 +13,6 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -22,14 +21,14 @@ class EventResponseMapper {
     private final ObjectMapper objectMapper;
     private final LabelQueryService labelQueryService;
 
-    List<EventResponse> toResponse(UUID userId, List<BiWrapper<Event, Boolean>> events) {
+    List<EventResponse> toResponse(List<BiWrapper<Event, Boolean>> events) {
         return events.stream()
-            .map(bw -> toResponse(bw.getEntity1(), bw.getEntity2(), labelQueryService.getByEventId(userId, bw.getEntity1().getEventId())))
+            .map(bw -> toResponse(bw.getEntity1(), bw.getEntity2(), labelQueryService.getByEventId(bw.getEntity1().getUserId(), bw.getEntity1().getEventId())))
             .toList();
     }
 
-    EventResponse toResponse(UUID userId, Event event, boolean shared) {
-        return toResponse(event, shared, labelQueryService.getByEventId(userId, event.getEventId()));
+    EventResponse toResponse(Event event, boolean shared) {
+        return toResponse(event, shared, labelQueryService.getByEventId(event.getUserId(), event.getEventId()));
     }
 
     EventResponse toResponse(Event event, boolean shared, Collection<LabelResponse> labels) {

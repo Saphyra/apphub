@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.lib.dynamodb.MonitoringFunctionality;
+import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
 import jakarta.annotation.PostConstruct;
@@ -37,6 +38,7 @@ class OccurrenceDecryptionMigrator extends DynamoDbRepository {
     private final DeprecatedOccurrenceConverter decryptorConverter;
     private final OccurrenceConverter converter;
     private final OccurrenceMapper mapper;
+    private final ErrorReporterService errorReporterService;
 
     OccurrenceDecryptionMigrator(
         CalendarDynamoDbConfiguration configuration,
@@ -45,7 +47,8 @@ class OccurrenceDecryptionMigrator extends DynamoDbRepository {
         AccessTokenProvider accessTokenProvider,
         DeprecatedOccurrenceConverter decryptorConverter,
         OccurrenceConverter converter,
-        OccurrenceMapper mapper
+        OccurrenceMapper mapper,
+        ErrorReporterService errorReporterService
     ) {
         super(configuration.getCalendarTableName(), context);
         this.uuidConverter = uuidConverter;
@@ -53,6 +56,7 @@ class OccurrenceDecryptionMigrator extends DynamoDbRepository {
         this.decryptorConverter = decryptorConverter;
         this.converter = converter;
         this.mapper = mapper;
+        this.errorReporterService = errorReporterService;
     }
 
     @PostConstruct
@@ -66,29 +70,33 @@ class OccurrenceDecryptionMigrator extends DynamoDbRepository {
             return;
         }
 
-        log.info("Initiating Occurrence decryption migration...");
+        try {
+            log.info("Initiating Occurrence decryption migration...");
 
-        ScanRequest request = ScanRequest.builder()
-            .filterExpression("begins_with(#sk, :sk)")
-            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-            .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_OCCURRENCE).build()))
-            .build();
+            ScanRequest request = ScanRequest.builder()
+                .filterExpression("begins_with(#sk, :sk)")
+                .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+                .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_OCCURRENCE).build()))
+                .build();
 
-        List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
+            List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
 
-        List<WriteRequest> decrypted = result.stream()
-            .map(mapper::convertEntity)
-            .map(this::decrypt)
-            .map(converter::convertDomain)
-            .map(mapper::convertDomain)
-            .map(item -> PutRequest.builder().item(item).build())
-            .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
-            .toList();
-        batchWrite(decrypted, MonitoringFunctionality.UNMONITORED);
+            List<WriteRequest> decrypted = result.stream()
+                .map(mapper::convertEntity)
+                .map(this::decrypt)
+                .map(converter::convertDomain)
+                .map(mapper::convertDomain)
+                .map(item -> PutRequest.builder().item(item).build())
+                .map(putRequest -> WriteRequest.builder().putRequest(putRequest).build())
+                .toList();
+            batchWrite(decrypted, MonitoringFunctionality.UNMONITORED);
+
+            log.info("Occurrence decryption migration completed. Migrated {} occurrences.", result.size());
+        } catch (Exception e) {
+            errorReporterService.report("Occurrence decryption migration failed.", e);
+        }
 
         putItem(lock, MonitoringFunctionality.UNMONITORED);
-
-        log.info("Occurrence decryption migration completed. Migrated {} occurrences.", result.size());
     }
 
     @SneakyThrows

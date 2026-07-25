@@ -39,4 +39,9 @@ public class CalendarSharePageActions {
     private static List<WebElement> getSharedWith(WebDriver driver) {
         return driver.findElements(By.cssSelector("#calendar-shared-with-list .shared-with-user"));
     }
+
+    public static void back(WebDriver driver) {
+        driver.findElement(By.id("calendar-labels-back-button"))
+            .click();
+    }
 }
