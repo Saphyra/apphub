@@ -101,7 +101,7 @@ public class CalendarIndexPageActions {
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-reference-date")), referenceDate);
     }
 
-    public static void deleteOccurrence(WebDriver driver) {
+    public static void deleteOpenedOccurrence(WebDriver driver) {
         AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-occurrence-delete-button")))
             .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
             .click();

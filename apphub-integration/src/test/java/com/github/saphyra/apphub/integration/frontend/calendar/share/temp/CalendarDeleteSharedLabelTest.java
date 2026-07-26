@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.frontend.calendar.share.temp;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarLabelsPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarOccurrencePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarSharePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
@@ -18,23 +17,18 @@ import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
-import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarLabel;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CalendarEditSharedLabelTest extends SeleniumTest {
+public class CalendarDeleteSharedLabelTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
-    private static final String LABEL_2 = "label-2";
-    private static final String EVENT_TITLE_2 = "event-title-2";
 
     @Test(groups = {"fe", "calendar"})
-    void editSharedLabel() {
+    void deleteSharedLabel() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver ownerDriver = drivers.get(0);
         WebDriver sharedWithDriver = drivers.get(1);
@@ -75,24 +69,27 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
         CalendarSharePageActions.selectAllOperations(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
-        //Edit label
+        //Delete label
         CalendarIndexPageActions.toLabelsPage(sharedWithDriver);
 
         CalendarLabelsPageActions.getLabel(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX)
-            .edit()
-            .newLabel(sharedWithDriver, LABEL_2)
-            .confirmNewLabel(sharedWithDriver);
+            .delete()
+            .confirmDeletion(sharedWithDriver);
 
-        //Verify label edited
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getLabels(sharedWithDriver)).extracting(CalendarLabel::getLabel).containsExactly(LABEL_2 + Constants.SHARED_SUFFIX));
+        //Verify label is deleted
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getLabels(sharedWithDriver)).isEmpty());
 
         CalendarSharePageActions.back(ownerDriver);
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getLabels(ownerDriver)).isEmpty());
+        CalendarLabelsPageActions.back(ownerDriver);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getLabels(ownerDriver)).extracting(CalendarLabel::getLabel).containsExactly(LABEL_2));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getLabels(ownerDriver)).isEmpty());
+        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(ownerDriver, parameters.getStartDate()));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).hasSize(1));
     }
 
     @Test(groups = {"fe", "calendar"})
-    void editSharedLabelEvent() {
+    void deleteSharedLabelEvent() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver ownerDriver = drivers.get(0);
         WebDriver sharedWithDriver = drivers.get(1);
@@ -133,7 +130,7 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
         CalendarSharePageActions.selectAllOperations(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
-        //Edit event
+        //Delete event
         CalendarIndexPageActions.toLabelsPage(sharedWithDriver);
 
         CalendarLabelsPageActions.getLabel(sharedWithDriver, LABEL_1 + Constants.SHARED_SUFFIX)
@@ -143,32 +140,25 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
             .orElseThrow()
             .click();
 
-        AwaitilityWrapper.createDefault()
-            .until(() -> CalendarLabelsPageActions.getOpenedEventTitle(sharedWithDriver).equals(parameters.getTitle() + Constants.SHARED_SUFFIX))
-            .assertTrue("Event not opened");
+        AwaitilityWrapper.retry(() -> CalendarLabelsPageActions.deleteOpenedEvent(sharedWithDriver));
 
-        CalendarLabelsPageActions.editOpenedEvent(sharedWithDriver);
-
-        CreateEventParameters editedParameters = parameters.toBuilder()
-            .title(EVENT_TITLE_2)
-            .build();
-        CalendarEventPageActions.fillForm(sharedWithDriver, editedParameters);
-        CalendarEventPageActions.save(sharedWithDriver);
-        CalendarEventPageActions.confirmSave(sharedWithDriver);
-
-        //Verify event edited
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(sharedWithDriver)).extracting(WebElement::getText).containsExactly(EVENT_TITLE_2 + Constants.SHARED_SUFFIX));
+        //Verify event is deleted
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(sharedWithDriver)).isEmpty());
 
         CalendarSharePageActions.back(ownerDriver);
         AwaitilityWrapper.getWithWait(() -> CalendarLabelsPageActions.getLabel(ownerDriver, LABEL_1))
             .orElseThrow()
             .open();
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(ownerDriver)).extracting(WebElement::getText).containsExactly(EVENT_TITLE_2));
+        assertThat(CalendarLabelsPageActions.getEvents(ownerDriver)).isEmpty();
+
+        CalendarLabelsPageActions.back(ownerDriver);
+        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(ownerDriver, parameters.getStartDate()));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).isEmpty());
     }
 
     @Test(groups = {"fe", "calendar"})
-    void editSharedLabelOccurrence() {
+    void deleteSharedLabelOccurrence() {
         List<WebDriver> drivers = extractDrivers(2);
         WebDriver ownerDriver = drivers.get(0);
         WebDriver sharedWithDriver = drivers.get(1);
@@ -209,24 +199,19 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
         CalendarSharePageActions.selectAllOperations(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
-        //Edit occurrence
+        //Delete occurrence
         CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
-        CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())
-            .getFirst()
+        AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate()))
             .open(sharedWithDriver);
-        CalendarIndexPageActions.editOpenedOccurrence(sharedWithDriver);
 
-        LocalDate newOccurrenceDate = parameters.getStartDate().plusDays(1);
+        CalendarIndexPageActions.deleteOpenedOccurrence(sharedWithDriver);
 
-        CalendarOccurrencePageActions.setDate(sharedWithDriver, newOccurrenceDate);
-        CalendarOccurrencePageActions.save(sharedWithDriver);
-
-        //Verify occurrence edited
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, newOccurrenceDate)).hasSize(1));
+        //Verify occurrence is deleted
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())).isEmpty());
 
         CalendarSharePageActions.back(ownerDriver);
         CalendarLabelsPageActions.back(ownerDriver);
-        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(ownerDriver, parameters.getStartDate()));
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).hasSize(1));
+        CalendarIndexPageActions.setReferenceDate(ownerDriver, parameters.getStartDate());
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate())).isEmpty());
     }
 }

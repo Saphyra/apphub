@@ -90,4 +90,12 @@ public class CalendarLabelsPageActions {
         driver.findElement(By.id("calendar-labels-back-button"))
             .click();
     }
+
+    public static void deleteOpenedEvent(WebDriver driver) {
+        driver.findElement(By.id("calendar-opened-event-delete"))
+            .click();
+
+        driver.findElement(By.id("calendar-event-delete-confirmation-button"))
+            .click();
+    }
 }
