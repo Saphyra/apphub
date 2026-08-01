@@ -31,6 +31,7 @@ public class LabelQueryService {
     private final AccessTokenProvider accessTokenProvider;
 
     public List<LabelResponse> getByEventId(UUID userId, UUID eventId) {
+        //TODO verify access
         Map<UUID, UUID> labelIds = eventLabelMappingDao.getLabelsOfEvent(userId, eventId)
             .getLabelIds();
         log.info("Labels found for Event {}: {}", eventId, labelIds);

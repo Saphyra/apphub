@@ -223,7 +223,9 @@ public class AwaitilityWrapper {
         private final Throwable cause;
 
         public void assertTrue() {
-            assertThat(result).isTrue();
+            if (!result) {
+                throw new IllegalStateException("AwaitResult failed", cause);
+            }
         }
 
         public void assertTrue(String message) {
