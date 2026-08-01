@@ -39,4 +39,9 @@ public class CalendarOccurrencePageActions {
         driver.findElement(By.id("calendar-edit-occurrence-share"))
             .click();
     }
+
+    public static void back(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-occurrence-back-button"))
+            .click();
+    }
 }

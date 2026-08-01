@@ -1,7 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +24,9 @@ class DeleteOccurrenceServiceTest {
     @Mock
     private OccurrenceDao occurrenceDao;
 
+    @Mock
+    private AlmDao almDao;
+
     @InjectMocks
     private DeleteOccurrenceService underTest;
 
@@ -35,5 +40,6 @@ class DeleteOccurrenceServiceTest {
         underTest.deleteOccurrence(EVENT_ID, OCCURRENCE_ID);
 
         then(occurrenceDao).should().delete(List.of(occurrence));
+        then(almDao).should().deleteByObject(OCCURRENCE_ID, SharedObjectType.OCCURRENCE);
     }
 }

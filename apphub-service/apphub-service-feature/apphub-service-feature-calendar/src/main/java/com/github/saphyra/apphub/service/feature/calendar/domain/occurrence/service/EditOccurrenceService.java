@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
@@ -31,15 +31,17 @@ public class EditOccurrenceService {
     private final EventDao eventDao;
     private final AlmDao almDao;
     private final EventLabelMappingDao eventLabelMappingDao;
+    private final EventFactory eventFactory;
 
     public void editOccurrence(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
+        //TODO verify access
         Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         Event event = eventDao.findById(userId, eventId)
             .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT).flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)))
             .or(() -> getEventOfSharedLabel(userId, eventId))
-            .orElseThrow(() -> ExceptionFactory.notFound("Event " + eventId + " does not exist or not available for user " + userId));
+            .orElseGet(() -> eventFactory.dummyEvent(userId, eventId));
 
         occurrence.setDate(request.getDate());
         occurrence.setTime(nullIfEquals(request.getTime(), event.getTime()));
