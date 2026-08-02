@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share;
 
-import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.ShareObjectRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedObjectResponse;
@@ -35,8 +35,8 @@ class CalendarShareControllerImpl implements CalendarShareController {
     }
 
     @Override
-    public List<Operation> getOperations(SharedObjectType type) {
-        return Arrays.stream(Operation.values())
+    public List<Grant> getOperations(SharedObjectType type) {
+        return Arrays.stream(Grant.values())
             .filter(operation -> operation.getObjectTypes().contains(type))
             .toList();
     }
@@ -49,10 +49,10 @@ class CalendarShareControllerImpl implements CalendarShareController {
     }
 
     @Override
-    public void editOperations(List<Operation> operations, SharedObjectType type, UUID id, UUID sharedWith, AccessToken accessToken) {
+    public void editOperations(List<Grant> grants, SharedObjectType type, UUID id, UUID sharedWith, AccessToken accessToken) {
         log.info("{} wants to edit operations of user {} to {} {}", accessToken.getUserId(), sharedWith, type, id);
 
-        editSharedOperationsService.editSharedOperations(accessToken.getUserId(), sharedWith, type, id, operations);
+        editSharedOperationsService.editSharedOperations(accessToken.getUserId(), sharedWith, type, id, grants);
     }
 
     @Override

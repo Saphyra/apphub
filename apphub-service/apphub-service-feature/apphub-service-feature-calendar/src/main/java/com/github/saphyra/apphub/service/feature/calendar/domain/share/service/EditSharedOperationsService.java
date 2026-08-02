@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.service;
 
-import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -17,12 +17,12 @@ import java.util.UUID;
 public class EditSharedOperationsService {
     private final AlmDao almDao;
 
-    public void editSharedOperations(UUID userId, UUID sharedWith, SharedObjectType type, UUID objectId, List<Operation> operations) {
+    public void editSharedOperations(UUID userId, UUID sharedWith, SharedObjectType type, UUID objectId, List<Grant> grants) {
         //TODO verify user has permission to modify roles
 
         Alm alm = almDao.findForObjectValidated(sharedWith, PrincipalType.USER, objectId,type);
 
-        alm.setOperations(operations);
+        alm.setGrants(grants);
         almDao.save(alm);
     }
 }

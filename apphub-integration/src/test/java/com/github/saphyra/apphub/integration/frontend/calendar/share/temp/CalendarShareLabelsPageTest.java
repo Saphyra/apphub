@@ -67,7 +67,7 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
             .share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Verify label and event are shared

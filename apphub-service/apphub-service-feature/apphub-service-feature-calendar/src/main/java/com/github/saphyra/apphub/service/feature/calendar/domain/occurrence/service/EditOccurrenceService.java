@@ -80,6 +80,7 @@ public class EditOccurrenceService {
     public OccurrenceResponse editOccurrenceStatus(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
         ValidationUtil.notNull(status, "status");
 
+        //TODO verify access
         Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         occurrence.setStatus(status);
         occurrenceDao.save(occurrence);
@@ -88,6 +89,7 @@ public class EditOccurrenceService {
     }
 
     public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
+        //TODO verify access
         Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
         occurrence.setReminded(true);
         occurrenceDao.save(occurrence);

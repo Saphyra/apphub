@@ -60,7 +60,7 @@ public class SharedObjectQueryService {
             .userId(account.getUserId())
             .username(account.getUsername())
             .email(account.getEmail())
-            .operations(alm.getOperations())
+            .grants(alm.getGrants())
             .build();
     }
 }

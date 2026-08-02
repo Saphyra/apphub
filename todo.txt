@@ -4,7 +4,7 @@ TODO Move Alm based queries to a dedicated service to reduce code duplication
 TODO test cases:
 Create event to shared label
 Create occurrence to shared event
-Shared event/occurrence appears in search result
 Shared expired event appears only for owner
 Data deletion test
 Role protection test
+Owner of shared label sees event created by shared user

@@ -72,7 +72,7 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
             .share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit label
@@ -130,7 +130,7 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
             .share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit event
@@ -206,7 +206,7 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
             .share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit occurrence

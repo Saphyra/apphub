@@ -21,7 +21,7 @@ public class ShareObjectService {
     public void share(UUID userId, ShareObjectRequest request) {
         shareObjectRequestValidator.validate(userId, request);
 
-        Alm alm = almFactory.createAlm(request.getSharedWith(), PrincipalType.USER, request.getObjectId(), request.getType(), request.getOwner(), request.getParent(), request.getOperations());
+        Alm alm = almFactory.createAlm(request.getSharedWith(), PrincipalType.USER, request.getObjectId(), request.getType(), request.getOwner(), request.getParent(), request.getGrants());
         almDao.save(alm);
     }
 }

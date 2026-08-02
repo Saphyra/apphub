@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.dao;
 
-import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -30,7 +30,7 @@ class AlmMapper extends ConverterBase<Map<String, AttributeValue>, Alm> {
 
         result.put(COLUMN_PRINCIPAL, AttributeValue.builder().s(domain.getPrincipalType() + "#" + uuidConverter.convertDomain(domain.getPrincipal())).build());
         result.put(COLUMN_OBJECT, AttributeValue.builder().s(domain.getObjectType() + "#" + uuidConverter.convertDomain(domain.getObjectId())).build());
-        result.put(COLUMN_OPERATIONS, AttributeValue.builder().ss(domain.getOperations().stream().map(Enum::name).toList()).build());
+        result.put(COLUMN_OPERATIONS, AttributeValue.builder().ss(domain.getGrants().stream().map(Enum::name).toList()).build());
         result.put(COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + uuidConverter.convertDomain(domain.getOwner())).build());
         result.put(COLUMN_PARENT, AttributeValue.builder().s(uuidConverter.convertDomain(domain.getParent())).build());
 
@@ -50,7 +50,7 @@ class AlmMapper extends ConverterBase<Map<String, AttributeValue>, Alm> {
             .objectId(uuidConverter.convertEntity(skParts[1]))
             .owner(uuidConverter.convertEntity(userIdParts[1]))
             .parent(uuidConverter.convertEntity(entity.get(COLUMN_PARENT).s()))
-            .operations(entity.get(COLUMN_OPERATIONS).ss().stream().map(Operation::valueOf).toList())
+            .grants(entity.get(COLUMN_OPERATIONS).ss().stream().map(Grant::valueOf).toList())
             .build();
     }
 }

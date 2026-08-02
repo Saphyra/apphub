@@ -64,7 +64,7 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         CalendarOccurrencePageActions.share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit occurrence

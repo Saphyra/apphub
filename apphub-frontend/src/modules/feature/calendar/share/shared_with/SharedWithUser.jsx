@@ -2,7 +2,7 @@ import { MultiSelect, SelectOption } from "common/component/input/SelectInput";
 import useCache from "common/hook/Cache";
 import Stream from "common/js/collection/Stream";
 import { useState } from "react";
-import { CALENDAR_GET_OPERATIONS, CALENDAR_SHARE_EDIT_OPERATIONS, CALENDAR_UNSHARE_OBJECT } from "../../CalendarEndpoints";
+import { CALENDAR_GET_GRANTS, CALENDAR_SHARE_EDIT_GRANTS, CALENDAR_UNSHARE_OBJECT } from "../../CalendarEndpoints";
 import Button from "common/component/input/Button";
 import NotificationService from "common/js/notification/NotificationService";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
@@ -11,7 +11,7 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
     const [operations, setOperations] = useState([]);
     const [selectedOperations, setSelectedOperations] = useState(user.operations);
 
-    useCache("calendar-share-operations-" + type, CALENDAR_GET_OPERATIONS.createRequest(null, { type, type }), setOperations);
+    useCache("calendar-share-operations-" + type, CALENDAR_GET_GRANTS.createRequest(null, { type, type }), setOperations);
 
     return (
         <div className="shared-with-user">
@@ -52,7 +52,7 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
     }
 
     async function saveOperations() {
-        await CALENDAR_SHARE_EDIT_OPERATIONS.createRequest(selectedOperations, { type: type, id: objectId, sharedWith: user.userId })
+        await CALENDAR_SHARE_EDIT_GRANTS.createRequest(selectedOperations, { type: type, id: objectId, sharedWith: user.userId })
             .send(setDisplaySpinner);
 
         NotificationService.showSuccess(localizationHandler.get("operations-saved"))

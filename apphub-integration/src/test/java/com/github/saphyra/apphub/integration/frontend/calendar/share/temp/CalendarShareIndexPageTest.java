@@ -67,7 +67,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
             .share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Verify shared label displayed
@@ -119,7 +119,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
         CalendarEventPageActions.share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Verify shared event displayed
@@ -169,7 +169,7 @@ public class CalendarShareIndexPageTest extends SeleniumTest {
         CalendarOccurrencePageActions.share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Verify shared event displayed

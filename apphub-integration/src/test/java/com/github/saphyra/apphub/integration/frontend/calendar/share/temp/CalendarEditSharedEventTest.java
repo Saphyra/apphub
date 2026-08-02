@@ -71,7 +71,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         CalendarEventPageActions.share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit event
@@ -142,7 +142,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         CalendarEventPageActions.share(ownerDriver);
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllOperations(ownerDriver);
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit occurrence

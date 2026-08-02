@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.api.feature.calendar.model.request;
 
-import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +20,5 @@ public class ShareObjectRequest {
     private UUID objectId;
     private UUID parent;
     private SharedObjectType type;
-    private List<Operation> operations;
+    private List<Grant> grants;
 }

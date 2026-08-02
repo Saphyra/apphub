@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.integration.action.frontend.calendar;
 
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
+import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,8 +21,8 @@ public class CalendarSharePageActions {
             .click();
     }
 
-    public static void selectAllOperations(WebDriver driver) {
-        driver.findElement(By.cssSelector("#calendar-share-with-selected-user-operations .multi-select-select-all"))
+    public static void selectAllGrants(WebDriver driver) {
+        driver.findElement(By.cssSelector("#calendar-share-with-selected-user-grants .multi-select-select-all"))
             .click();
     }
 
@@ -42,6 +43,12 @@ public class CalendarSharePageActions {
 
     public static void back(WebDriver driver) {
         driver.findElement(By.id("calendar-labels-back-button"))
+            .click();
+    }
+
+    public static void toggleGrant(WebDriver driver, Grant grant) {
+        driver.findElement(By.id("calendar-share-with-selected-user-grants"))
+            .findElement(By.cssSelector("input[value='%s']".formatted(grant.name())))
             .click();
     }
 }

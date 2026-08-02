@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.dao;
 
-import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -21,12 +21,12 @@ public class Alm {
     private final SharedObjectType objectType;
     private final UUID owner; //Owner of the object shared
     private final UUID parent; //Parent of the object shared
-    private List<Operation> operations;
+    private List<Grant> grants;
 
-    public void addOperation(Operation operation) {
-        operations = Stream.concat(
-                Stream.of(operation),
-                operations.stream()
+    public void addOperation(Grant grant) {
+        grants = Stream.concat(
+                Stream.of(grant),
+                grants.stream()
             )
             .distinct()
             .toList();

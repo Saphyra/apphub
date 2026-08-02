@@ -29,9 +29,8 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Component
 @Slf4j
 @Profile("!test")
-//TODO unit test
 class EventDecryptionMigrator extends DynamoDbRepository {
-    private static final String EVENT_DECRYPTION = "event-decryption";
+    static final String EVENT_DECRYPTION = "event-decryption";
 
     private final DeprecatedEventConverter decryptorConverter;
     private final EventConverter converter;

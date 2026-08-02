@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class EventConverter extends ConverterBase<EventEntity, Event> {
     private final UuidConverter uuidConverter;
     private final DateTimeConverter dateTimeConverter;

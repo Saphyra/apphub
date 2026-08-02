@@ -6,7 +6,6 @@ import java.time.LocalTime;
 
 import static java.util.Objects.isNull;
 
-//TODO unit test
 public class DateTimeConverter {
     public String convertDomain(LocalTime time) {
         if (isNull(time)) {

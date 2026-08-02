@@ -5,7 +5,7 @@ import { USER_DATA_SEARCH_ACCOUNT } from "common/js/GenericEndpoints";
 import NotificationService from "common/js/notification/NotificationService";
 import { hasValue } from "common/js/Utils";
 import { useState } from "react";
-import { CALENDAR_GET_OPERATIONS, CALENDAR_SHARE_OBJECT } from "../../CalendarEndpoints";
+import { CALENDAR_GET_GRANTS, CALENDAR_SHARE_OBJECT } from "../../CalendarEndpoints";
 import useCache from "common/hook/Cache";
 import { MultiSelect, SelectOption } from "common/component/input/SelectInput";
 
@@ -13,10 +13,10 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
     const [searchText, setSearchText] = useState("");
     const [searchResult, setSearchResult] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
-    const [operations, setOperations] = useState([]);
-    const [selectedOperations, setSelectedOperations] = useState([]);
+    const [grants, setGrants] = useState([]);
+    const [selectedGrants, setSelectedGrants] = useState([]);
 
-    useCache("calendar-share-operations-" + type, CALENDAR_GET_OPERATIONS.createRequest(null, { type, type }), setOperations);
+    useCache("calendar-share-grants-" + type, CALENDAR_GET_GRANTS.createRequest(null, { type, type }), setGrants);
 
     return (
         <div id="calendar-share-with">
@@ -48,10 +48,10 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
                     <div id="calendar-share-with-selected-user-title">{localizationHandler.get("share-with-user-title", { username: selectedUser.username, email: selectedUser.email })}</div>
 
                     <MultiSelect
-                        id="calendar-share-with-selected-user-operations"
-                        value={selectedOperations}
-                        onchangeCallback={setSelectedOperations}
-                        options={getOperationOptions()}
+                        id="calendar-share-with-selected-user-grants"
+                        value={selectedGrants}
+                        onchangeCallback={setSelectedGrants}
+                        options={getGrantOptions()}
                     />
 
                     <div>
@@ -95,9 +95,9 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
         setSearchResult(null);
     }
 
-    function getOperationOptions() {
-        return new Stream(operations)
-            .map(operation => new SelectOption(localizationHandler.get(operation, { type: localizationHandler.get(type) }), operation))
+    function getGrantOptions() {
+        return new Stream(grants)
+            .map(grant => new SelectOption(localizationHandler.get(grant, { type: localizationHandler.get(type) }), grant))
             .toList();
     }
 
@@ -108,7 +108,7 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
             parent: objectData.parent,
             objectId: objectData.objectId,
             type: type,
-            operations: selectedOperations
+            grants: selectedGrants
         }
 
         await CALENDAR_SHARE_OBJECT.createRequest(payload)
@@ -116,7 +116,7 @@ const ShareWith = ({ localizationHandler, type, setDisplaySpinner, objectData, r
 
         refresh();
         setSelectedUser(null);
-        setSelectedOperations([]);
+        setSelectedGrants([]);
         setSearchText("");
     }
 }

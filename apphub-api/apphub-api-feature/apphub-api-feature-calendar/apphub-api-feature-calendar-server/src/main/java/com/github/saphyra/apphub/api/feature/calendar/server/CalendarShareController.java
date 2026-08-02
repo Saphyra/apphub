@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.api.feature.calendar.server;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.CalendarEndpoints;
-import com.github.saphyra.apphub.api.feature.calendar.model.Operation;
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.ShareObjectRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedObjectResponse;
@@ -30,15 +30,15 @@ public interface CalendarShareController {
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
-    @GetMapping(CalendarEndpoints.CALENDAR_GET_OPERATIONS)
-    List<Operation> getOperations(@PathVariable("type") SharedObjectType type);
+    @GetMapping(CalendarEndpoints.CALENDAR_GET_GRANTS)
+    List<Grant> getOperations(@PathVariable("type") SharedObjectType type);
 
     @PutMapping(CalendarEndpoints.CALENDAR_SHARE_OBJECT)
     void shareObject(@RequestBody ShareObjectRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
-    @PostMapping(CalendarEndpoints.CALENDAR_SHARE_EDIT_OPERATIONS)
+    @PostMapping(CalendarEndpoints.CALENDAR_SHARE_EDIT_GRANTS)
     void editOperations(
-        @RequestBody List<Operation> operations,
+        @RequestBody List<Grant> grants,
         @PathVariable("type") SharedObjectType type,
         @PathVariable("id") UUID id,
         @PathVariable("sharedWith") UUID sharedWith,

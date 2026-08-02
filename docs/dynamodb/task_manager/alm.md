@@ -2,7 +2,7 @@
 
 - `principal`: `princitpalType#principalId`
 - `object`: `objectType#objectId`
-- `operations`: `Set<Operation>`
+- `grants`: `Set<Operation>`
 
 ## GSI-alm-object-principal
 
