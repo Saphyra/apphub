@@ -110,6 +110,11 @@ public class CalendarEventPageActions {
             .click();
     }
 
+    public static void cancelSave(WebDriver driver) {
+        driver.findElement(By.id("calendar-edit-event-confirm-cancel-button"))
+            .click();
+    }
+
     public static void backFromEdit(WebDriver driver) {
         driver.findElement(By.id("calendar-edit-event-back-button"))
             .click();

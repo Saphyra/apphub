@@ -12,6 +12,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Princ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,6 +20,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 //TODO unit test
 public class ObjectQueryService {
+    private static final Map<Operation, Grant> GRANT_FOR_CHILDREN = Map.of(
+        Operation.DELETE, Grant.DELETE_CHILDREN,
+        Operation.EDIT, Grant.EDIT_CHILDREN
+    );
+
     private final EventDao eventDao;
     private final AlmDao almDao;
     private final EventLabelMappingDao eventLabelMappingDao;
@@ -34,8 +40,16 @@ public class ObjectQueryService {
         Optional<Alm> maybeAlm = almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT);
         if (maybeAlm.isPresent()) {
             Alm alm = maybeAlm.get();
-            if (operation == Operation.DELETE && alm.getGrants().contains(Grant.DELETE)) {
-                return eventDao.findById(alm.getOwner(), alm.getObjectId());
+            if (operation == Operation.DELETE) {
+                if (alm.getGrants().contains(Grant.DELETE)) {
+                    return eventDao.findById(alm.getOwner(), alm.getObjectId());
+                }
+            } else if (operation == Operation.EDIT) {
+                if (alm.getGrants().contains(Grant.EDIT)) {
+                    return eventDao.findById(alm.getOwner(), alm.getObjectId());
+                }
+            } else {
+                throw new UnsupportedOperationException("Operation " + operation + " is not supported for shared events.");
             }
         }
 
@@ -47,7 +61,7 @@ public class ObjectQueryService {
             //Filter for labels of event
             .filter(bw -> bw.getEntity2().getEventIds().containsKey(eventId))
             //Filter for label that allows the user deleting its event
-            .filter(bw -> bw.getEntity1().getGrants().contains(Grant.DELETE_CHILDREN))
+            .filter(bw -> bw.getEntity1().getGrants().contains(GRANT_FOR_CHILDREN.get(operation)))
             .findAny()
             //Query the event
             .flatMap(bw -> {

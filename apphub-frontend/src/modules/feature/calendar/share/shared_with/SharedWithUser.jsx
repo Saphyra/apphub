@@ -8,10 +8,10 @@ import NotificationService from "common/js/notification/NotificationService";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 
 const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, objectId, setConfirmationDialogData, itemName, refresh }) => {
-    const [operations, setOperations] = useState([]);
-    const [selectedOperations, setSelectedOperations] = useState(user.operations);
+    const [grants, setGrants] = useState([]);
+    const [selectedGrants, setSelectedGrants] = useState(user.grants);
 
-    useCache("calendar-share-operations-" + type, CALENDAR_GET_GRANTS.createRequest(null, { type, type }), setOperations);
+    useCache("calendar-share-grants-" + type, CALENDAR_GET_GRANTS.createRequest(null, { type, type }), setGrants);
 
     return (
         <div className="shared-with-user">
@@ -22,18 +22,18 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
 
             <div>
                 <MultiSelect
-                    id="calendar-share-with-selected-user-operations"
-                    value={selectedOperations}
-                    onchangeCallback={setSelectedOperations}
+                    id="calendar-share-with-selected-user-grants"
+                    value={selectedGrants}
+                    onchangeCallback={setSelectedGrants}
                     options={getOperationOptions()}
                 />
             </div>
 
-            <div className="calendar-share-with-selected-user-operations">
+            <div className="calendar-share-with-selected-user-grants">
                 <Button
                     className="shared-with-user-save-button"
                     label={localizationHandler.get("save")}
-                    onclick={saveOperations}
+                    onclick={saveGrants}
                 />
 
                 <Button
@@ -46,16 +46,16 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
     );
 
     function getOperationOptions() {
-        return new Stream(operations)
+        return new Stream(grants)
             .map(operation => new SelectOption(localizationHandler.get(operation, { type: localizationHandler.get(type) }), operation))
             .toList();
     }
 
-    async function saveOperations() {
-        await CALENDAR_SHARE_EDIT_GRANTS.createRequest(selectedOperations, { type: type, id: objectId, sharedWith: user.userId })
+    async function saveGrants() {
+        await CALENDAR_SHARE_EDIT_GRANTS.createRequest(selectedGrants, { type: type, id: objectId, sharedWith: user.userId })
             .send(setDisplaySpinner);
 
-        NotificationService.showSuccess(localizationHandler.get("operations-saved"))
+        NotificationService.showSuccess(localizationHandler.get("grants-saved"))
     }
 
     function confirmUnshare() {

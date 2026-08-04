@@ -87,9 +87,9 @@
         "en": "Unshare",
         "hu": "Megosztás visszavonása"
     },
-    "operations-saved": {
-        "en": "Operations saved successfully.",
-        "hu": "A műveletek sikeresen mentésre kerültek."
+    "grants-saved": {
+        "en": "Grants saved successfully.",
+        "hu": "A jogosultságok sikeresen mentésre kerültek."
     },
     "unshare-confirmation-title": {
         "en": "Unshare {type}?",
