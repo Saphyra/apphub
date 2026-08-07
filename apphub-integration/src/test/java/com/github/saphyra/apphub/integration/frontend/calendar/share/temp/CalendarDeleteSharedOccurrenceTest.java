@@ -24,6 +24,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//TODO Check delete children of shared label
 public class CalendarDeleteSharedOccurrenceTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 

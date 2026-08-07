@@ -32,11 +32,6 @@ import static java.util.Objects.nonNull;
 @Slf4j
 //TODO unit test
 public class ObjectQueryService {
-    private static final Map<Operation, List<Grant>> GRANT_FOR_CHILDREN = Map.of(
-        Operation.DELETE, List.of(Grant.DELETE_CHILDREN),
-        Operation.EDIT, List.of(Grant.EDIT_CHILDREN, Grant.VIEW_CHILDREN) //Event can only be edited if the user sees the real data of the event
-    );
-
     private final EventDao eventDao;
     private final AlmDao almDao;
     private final EventLabelMappingDao eventLabelMappingDao;
@@ -55,36 +50,74 @@ public class ObjectQueryService {
         Optional<Alm> maybeAlm = almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT);
         if (maybeAlm.isPresent()) {
             Alm alm = maybeAlm.get();
-            if (operation == Operation.DELETE) {
-                if (alm.getGrants().contains(Grant.DELETE)) {
-                    return eventDao.findById(alm.getOwner(), alm.getObjectId());
-                }
-            } else if (operation == Operation.EDIT) {
-                //User can edit only if they see the real values of the event.
-                if (alm.getGrants().containsAll(List.of(Grant.EDIT, Grant.VIEW))) {
-                    return eventDao.findById(alm.getOwner(), alm.getObjectId());
-                }
-            } else {
-                throw new UnsupportedOperationException("Operation " + operation + " is not supported for shared events.");
-            }
+            return eventDao.findById(alm.getOwner(), alm.getObjectId())
+                .filter(event -> hasGrants(userId, event, operation.getRequiredGrants()));
         }
 
         //Get Labels shared with the user
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
             //Get the events of the shared labels
-            .map(alm -> new BiWrapper<>(alm, eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of())))
+            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .map(LabelEventMapping::getEventIds)
             //Filter for labels of event
-            .filter(bw -> bw.getEntity2().containsKey(eventId))
-            //Filter for label that allows the user deleting its event
-            .filter(bw -> bw.getEntity1().getGrants().containsAll(GRANT_FOR_CHILDREN.get(operation)))
+            .filter(eventIds -> eventIds.containsKey(eventId))
+            .map(eventIds -> eventIds.get(eventId))
             .findAny()
-            //Query the event
-            .flatMap(bw -> {
-                UUID eventsOwnerId = bw.getEntity2()
-                    .get(eventId);
-                return eventDao.findById(eventsOwnerId, eventId);
-            });
+            .flatMap(eventsUserId -> eventDao.findById(eventsUserId, eventId))
+            .filter(event -> hasGrants(userId, event, operation.getRequiredGrants()));
+    }
+
+    private boolean hasGrants(UUID userId, Event event, List<Grant> grants) {
+        //User's own event
+        if (userId.equals(event.getUserId())) {
+            return true;
+        }
+
+        List<Grant> sharedEventGrants = almDao.findForObject(userId, PrincipalType.USER, event.getEventId(), SharedObjectType.EVENT)
+            .map(Alm::getGrants)
+            .orElse(List.of());
+
+        //Shared event has all the necessary grants
+        if (sharedEventGrants.containsAll(grants)) {
+            return true;
+        }
+
+        //List of grants that can be inherited from labels
+        List<Grant> parentSearchFor = grants.stream()
+            .map(Grant::toParent)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .toList();
+
+        //Get grants from labels of event that can be inherited by the event
+        List<Grant> sharedLabelGrants = eventLabelMappingDao.getLabelsOfEvent(event.getUserId(), event.getEventId())
+            .getLabelIds()
+            .keySet()
+            .stream()
+            .map(labelId -> almDao.findForObject(userId, PrincipalType.USER, labelId, SharedObjectType.LABEL))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .flatMap(alm -> alm.getGrants().stream())
+            .distinct()
+            .filter(parentSearchFor::contains)
+            .toList();
+
+        for (Grant requiredGrant : grants) {
+            Optional<Grant> parentGrant = requiredGrant.toParent();
+
+            if (sharedEventGrants.contains(requiredGrant)) {
+                //Shared event has the necessary grant
+            } else if (parentGrant.isPresent() && sharedLabelGrants.contains(parentGrant.get())) {
+                //Shared label has the necessary parent grant
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public List<Event> getEventsOfLabel(UUID userId, UUID labelId) {
