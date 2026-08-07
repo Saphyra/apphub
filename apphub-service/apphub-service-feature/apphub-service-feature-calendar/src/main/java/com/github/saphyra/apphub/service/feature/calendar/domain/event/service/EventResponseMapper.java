@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +13,9 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import static com.github.saphyra.apphub.service.feature.calendar.common.CalendarUtils.mask;
 
 @Component
 @RequiredArgsConstructor
@@ -21,17 +24,18 @@ class EventResponseMapper {
     private final ObjectMapper objectMapper;
     private final LabelQueryService labelQueryService;
 
-    List<EventResponse> toResponse(List<BiWrapper<Event, Boolean>> events) {
+    List<EventResponse> toResponse(UUID userId, List<Event> events) {
         return events.stream()
-            .map(bw -> toResponse(bw.getEntity1(), bw.getEntity2(), labelQueryService.getByEventId(bw.getEntity1().getUserId(), bw.getEntity1().getEventId())))
+            .map(event -> toResponse(userId, event, labelQueryService.getByEventId(event.getUserId(), event.getEventId())))
             .toList();
     }
 
-    EventResponse toResponse(Event event, boolean shared) {
-        return toResponse(event, shared, labelQueryService.getByEventId(event.getUserId(), event.getEventId()));
+    EventResponse toResponse(UUID userId, Event event) {
+        return toResponse(userId, event, labelQueryService.getByEventId(event.getUserId(), event.getEventId()));
     }
 
-    EventResponse toResponse(Event event, boolean shared, Collection<LabelResponse> labels) {
+    //TODO unit test masked data
+    EventResponse toResponse(UUID userId, Event event, Collection<LabelResponse> labels) {
         return EventResponse.builder()
             .eventId(event.getEventId())
             .repetitionType(event.getRepetitionType())
@@ -40,13 +44,13 @@ class EventResponseMapper {
             .startDate(event.getStartDate())
             .endDate(event.getEndDate())
             .time(event.getTime())
-            .title(event.getTitle())
-            .content(event.getContent())
-            .remindMeBeforeDays(event.getRemindMeBeforeDays())
-            .labels(labels)
-            .archived(event.isArchived())
-            .autoDone(event.isAutoDone())
-            .shared(shared)
+            .title(mask(event.isMasked(), event.getTitle(), Constants.QUESTION_MARK))
+            .content(mask(event.isMasked(), event.getContent(), Constants.EMPTY_STRING))
+            .remindMeBeforeDays(mask(event.isMasked(), event.getRemindMeBeforeDays(), null))
+            .labels(mask(event.isMasked(), labels, List.of()))
+            .archived(mask(event.isMasked(), event.isArchived(), null))
+            .autoDone(mask(event.isMasked(), event.isAutoDone(), null))
+            .shared(!event.getUserId().equals(userId))
             .build();
     }
 }

@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
@@ -65,7 +64,7 @@ class SearchEventServiceTest {
     void search_eventMatchesByTitle() {
         given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event1));
         given(event1.getTitle()).willReturn("My Search Text");
-        given(eventResponseMapper.toResponse(List.of(new BiWrapper<>(event1, false)))).willReturn(List.of(eventResponse));
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 
         List<EventResponse> result = underTest.search(USER_ID, SEARCH);
 
@@ -81,7 +80,7 @@ class SearchEventServiceTest {
         given(event1.getContent()).willReturn("content");
         given(occurrenceDao.getByEventId(EVENT_ID_1)).willReturn(List.of(occurrence));
         given(occurrence.getNote()).willReturn("contains SeaRCh here");
-        given(eventResponseMapper.toResponse(List.of(new BiWrapper<>(event1, false)))).willReturn(List.of(eventResponse));
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 
         List<EventResponse> result = underTest.search(USER_ID, SEARCH);
 

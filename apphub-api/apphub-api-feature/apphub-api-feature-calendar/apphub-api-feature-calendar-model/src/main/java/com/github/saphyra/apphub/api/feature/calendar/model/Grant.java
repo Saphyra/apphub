@@ -12,6 +12,8 @@ public enum Grant {
     VIEW_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT), //Can query children with real data
     EDIT_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT),
     DELETE_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT),
+    SEE(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE), //Query the main object with masked data
+    VIEW(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE), //Query the main object
     EDIT(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE), //Edit the main object
     DELETE(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE),
     SHARE(SharedObjectType.LABEL, SharedObjectType.EVENT, SharedObjectType.OCCURRENCE),

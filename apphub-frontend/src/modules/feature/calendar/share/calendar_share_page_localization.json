@@ -51,6 +51,15 @@
         "en": "Can delete children of this {type}.",
         "hu": "Törölheti a {type} gyermek elemeit."
     },
+    "SEE": {
+        
+        "en": "Can see this {type}, but with dummy data.",
+        "hu": "Láthatja ezt a {type}-t, de valótlan adatokkal."
+    },
+    "VIEW": {
+        "en": "Can see this {type} with real data.",
+        "hu": "Láthatja ezt a {type}-t valós adatokkal."
+    },
     "EDIT": {
         "en": "Can edit this {type}.",
         "hu": "Szerkesztheti ezt a {type}-t."

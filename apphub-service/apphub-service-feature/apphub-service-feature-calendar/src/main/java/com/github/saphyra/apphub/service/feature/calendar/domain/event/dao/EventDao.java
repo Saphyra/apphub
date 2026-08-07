@@ -47,4 +47,16 @@ public class EventDao {
     public void delete(UUID userId, List<UUID> eventId) {
         repository.delete(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId));
     }
+
+    /**
+     * @param eventIds List<BiWrapper<userId, eventId>>
+     */
+    //TODO unit test
+    public List<Event> getByIds(List<BiWrapper<UUID, UUID>> eventIds) {
+        List<BiWrapper<String, String>> ids = eventIds.stream()
+            .map(entry -> new BiWrapper<>(uuidConverter.convertDomain(entry.getEntity1()), uuidConverter.convertDomain(entry.getEntity2())))
+            .toList();
+
+        return converter.convertEntity(repository.getByIds(ids));
+    }
 }

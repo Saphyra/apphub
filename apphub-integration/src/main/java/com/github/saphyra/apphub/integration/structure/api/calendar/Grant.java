@@ -5,6 +5,8 @@ public enum Grant {
     VIEW_CHILDREN,
     EDIT_CHILDREN,
     DELETE_CHILDREN,
+    VIEW,
+    SEE,
     EDIT,
     DELETE,
     SHARE,

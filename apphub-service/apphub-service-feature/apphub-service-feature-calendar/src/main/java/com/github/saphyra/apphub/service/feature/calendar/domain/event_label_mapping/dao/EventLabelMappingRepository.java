@@ -18,6 +18,7 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
@@ -42,7 +43,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
         this.eventLabelMappingMapper = eventLabelMappingMapper;
     }
 
-    LabelEventMappingEntity getEventsOfLabel(String userId, String labelId) {
+    Optional<LabelEventMappingEntity> getEventsOfLabel(String userId, String labelId) {
         GetItemRequest request = GetItemRequest.builder()
             .tableName(tableName)
             .key(Map.of(
@@ -52,12 +53,7 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             .build();
 
         return getItem(request, CalendarMonitoringFunctionality.GET_EVENTS_OF_LABEL)
-            .map(labelEventMappingMapper::convertEntity)
-            .orElseGet(() -> LabelEventMappingEntity.builder()
-                .userId(userId)
-                .labelId(labelId)
-                .eventIds(new HashMap<>())
-                .build());
+            .map(labelEventMappingMapper::convertEntity);
     }
 
     List<EventLabelMappingEntity> getLabelsOfEvents(String userId, List<String> eventIds) {

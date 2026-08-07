@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,7 @@ class EventResponseMapperTest {
         given(labelQueryService.getByEventId(USER_ID,EVENT_ID_1)).willReturn(List.of(labelResponse));
         given(objectMapper.readValue(REPETITION_DATA_1, Object.class)).willReturn(PARSED_REPETITION_DATA);
 
-        EventResponse result = underTest.toResponse(event, true);
+        EventResponse result = underTest.toResponse(USER_ID, event);
 
         assertThat(result)
             .returns(EVENT_ID_1, EventResponse::getEventId)
@@ -75,7 +74,7 @@ class EventResponseMapperTest {
             .returns(REMIND_ME_BEFORE_DAYS, EventResponse::getRemindMeBeforeDays)
             .returns(List.of(labelResponse), EventResponse::getLabels)
             .returns(false, EventResponse::getArchived)
-            .returns(true, EventResponse::getShared);
+            .returns(false, EventResponse::getShared);
     }
 
     @Test
@@ -89,7 +88,7 @@ class EventResponseMapperTest {
         given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
         given(labelQueryService.getByEventId(USER_ID, EVENT_ID_2)).willReturn(List.of(labelResponse));
 
-        List<EventResponse> result = underTest.toResponse(List.of(new BiWrapper<>(event1, true), new BiWrapper<>(event2, false)));
+        List<EventResponse> result = underTest.toResponse(USER_ID, List.of(event1, event2));
 
         assertThat(result).hasSize(2);
         assertThat(result.get(0))
@@ -97,7 +96,7 @@ class EventResponseMapperTest {
             .returns(parsedRepetitionData1, EventResponse::getRepetitionData)
             .returns(List.of(labelResponse), EventResponse::getLabels)
             .returns(false, EventResponse::getArchived)
-            .returns(true, EventResponse::getShared);
+            .returns(false, EventResponse::getShared);
         assertThat(result.get(1))
             .returns(EVENT_ID_2, EventResponse::getEventId)
             .returns(parsedRepetitionData2, EventResponse::getRepetitionData)
@@ -111,13 +110,13 @@ class EventResponseMapperTest {
         Event event = createEvent(EVENT_ID_1, null, false);
         given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
 
-        EventResponse result = underTest.toResponse(event, true);
+        EventResponse result = underTest.toResponse(USER_ID, event);
 
         assertThat(result)
             .returns(EVENT_ID_1, EventResponse::getEventId)
             .returns(null, EventResponse::getRepetitionData)
             .returns(List.of(labelResponse), EventResponse::getLabels)
-            .returns(true, EventResponse::getShared);
+            .returns(false, EventResponse::getShared);
         then(objectMapper).should(never()).readValue(anyString(), eq(Object.class));
     }
 

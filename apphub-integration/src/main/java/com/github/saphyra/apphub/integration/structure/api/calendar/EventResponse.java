@@ -29,4 +29,5 @@ public class EventResponse {
     private Boolean archived;
     private Boolean autoDone;
     private Boolean shared;
+    private Boolean masked;
 }

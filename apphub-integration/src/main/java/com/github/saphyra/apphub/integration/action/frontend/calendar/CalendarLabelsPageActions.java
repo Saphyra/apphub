@@ -32,12 +32,12 @@ public class CalendarLabelsPageActions {
         return driver.findElements(By.className("calendar-labels-event-title"));
     }
 
-    public static WebElement getEvent(WebDriver driver, String defaultTitle) {
+    public static WebElement getEvent(WebDriver driver, String title) {
         return getEvents(driver)
             .stream()
-            .filter(event -> event.getText().equals(defaultTitle))
+            .filter(event -> event.getText().equals(title))
             .findAny()
-            .orElseThrow(() -> new IllegalStateException("Event not found: " + defaultTitle));
+            .orElseThrow(() -> new IllegalStateException("Event not found: " + title));
     }
 
     public static String getOpenedEventTitle(WebDriver driver) {

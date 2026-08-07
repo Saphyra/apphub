@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.nonNull;
@@ -21,7 +22,7 @@ public class EventLabelMappingDao {
     private final LabelEventMappingConverter labelEventMappingConverter;
     private final EventLabelMappingConverter eventLabelMappingConverter;
 
-    public LabelEventMapping getEventsOfLabel(UUID userId, UUID labelId) {
+    public Optional<LabelEventMapping> getEventsOfLabel(UUID userId, UUID labelId) {
         return labelEventMappingConverter.convertEntity(repository.getEventsOfLabel(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)));
     }
 

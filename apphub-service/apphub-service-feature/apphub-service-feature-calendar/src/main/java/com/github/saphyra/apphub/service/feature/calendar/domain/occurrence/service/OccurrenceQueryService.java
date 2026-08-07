@@ -3,15 +3,16 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -41,6 +42,7 @@ public class OccurrenceQueryService {
     private final OccurrenceQueryServiceHelper helper;
     private final AlmDao almDao;
     private final EventFactory eventFactory;
+    private final ObjectQueryService objectQueryService;
 
     public List<OccurrenceResponse> getOccurrences(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
         Map<UUID, List<Occurrence>> occurrenceMapping = Stream.of(
@@ -54,7 +56,7 @@ public class OccurrenceQueryService {
             .collect(Collectors.groupingBy(Occurrence::getEventId));
         Map<UUID, Event> events = occurrenceMapping.keySet()
             .stream()
-            .map(eventId -> findEvent(userId, eventId))
+            .map(eventId -> objectQueryService.findEvent(userId, eventId).orElseGet(() -> eventFactory.dummyEvent(userId, eventId)))
             .collect(Collectors.toMap(Event::getEventId, event -> event));
         Map<UUID, Collection<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet())
             .stream()
@@ -74,7 +76,7 @@ public class OccurrenceQueryService {
     private Stream<Occurrence> getSharedLabelOccurrences(UUID userId) {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
-            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).getEventIds())
+            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()))
             .flatMap(eventIds -> eventIds.keySet().stream())
             .distinct()
             .flatMap(eventId -> occurrenceDao.getByEventId(eventId).stream());
@@ -102,21 +104,13 @@ public class OccurrenceQueryService {
     }
 
     //TODO verify access rights
-    private Event findEvent(UUID userId, UUID eventId) {
-        return eventDao.findById(userId, eventId)
-            .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT).flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)))
-            .or(() -> findEventBySharedLabel(userId, eventId))
-            .orElseGet(() -> eventFactory.dummyEvent(userId, eventId));
-    }
-
-    //TODO verify access rights
     private Optional<Event> findEventBySharedLabel(UUID userId, UUID eventId) {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
-            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
-            .filter(mapping -> mapping.getEventIds().containsKey(eventId))
+            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()))
+            .filter(mapping -> mapping.containsKey(eventId))
             .findAny()
-            .map(mapping -> eventDao.findByIdValidated(mapping.getEventIds().get(eventId), eventId));
+            .map(mapping -> eventDao.findByIdValidated(mapping.get(eventId), eventId));
     }
 
     private List<Occurrence> getOccurrences(Event event, List<Occurrence> occurrences, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {

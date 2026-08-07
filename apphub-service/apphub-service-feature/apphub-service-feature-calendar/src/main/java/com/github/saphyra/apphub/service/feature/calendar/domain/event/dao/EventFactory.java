@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,7 +38,7 @@ public class EventFactory {
         return Event.builder()
             .eventId(eventId)
             .userId(userId)
-            .title("?")
+            .title(Constants.QUESTION_MARK)
             .repetitionType(RepetitionType.ONE_TIME)
             .repeatForDays(1)
             .startDate(LocalDate.of(1970, 1, 1))

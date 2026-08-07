@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,8 +60,8 @@ public class EditOccurrenceService {
     private Optional<Event> getEventOfSharedLabel(UUID userId, UUID eventId) {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
-            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
-            .flatMap(mapping -> mapping.getEventIds().entrySet().stream())
+            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()))
+            .flatMap(mapping -> mapping.entrySet().stream())
             .filter(mapping -> mapping.getKey().equals(eventId))
             .findFirst()
             .flatMap(mapping -> eventDao.findById(mapping.getValue(), mapping.getKey()));

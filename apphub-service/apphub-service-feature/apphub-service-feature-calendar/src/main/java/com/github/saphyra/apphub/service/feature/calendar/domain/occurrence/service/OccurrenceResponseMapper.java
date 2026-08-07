@@ -3,10 +3,12 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -21,6 +23,8 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.github.saphyra.apphub.service.feature.calendar.common.CalendarUtils.mask;
 
 @Component
 @RequiredArgsConstructor
@@ -54,10 +58,10 @@ class OccurrenceResponseMapper {
     private Optional<Event> findEventBySharedLabel(UUID userId, UUID eventId) {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
-            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
-            .filter(mapping -> mapping.getEventIds().containsKey(eventId))
+            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()))
+            .filter(mapping -> mapping.containsKey(eventId))
             .findAny()
-            .map(mapping -> eventDao.findByIdValidated(mapping.getEventIds().get(eventId), eventId));
+            .map(mapping -> eventDao.findByIdValidated(mapping.get(eventId), eventId));
     }
 
     public List<OccurrenceResponse> toResponse(UUID userId, Map<UUID, Event> events, List<Occurrence> occurrences) {
@@ -72,6 +76,7 @@ class OccurrenceResponseMapper {
         return toResponse(userId, event, occurrence);
     }
 
+    //TODO unit test masked event
     private OccurrenceResponse toResponse(UUID userId, Event event, Occurrence occurrence) {
         Boolean autoDone = getFromEventIfNull(event, occurrence.getAutoDone(), Event::isAutoDone);
         if (occurrence.getStatus() == OccurrenceStatus.EXPIRED && autoDone) {
@@ -85,8 +90,8 @@ class OccurrenceResponseMapper {
             .date(occurrence.getDate())
             .time(getFromEventIfNull(event, occurrence.getTime(), Event::getTime))
             .status(occurrence.getStatus())
-            .title(event.getTitle())
-            .content(event.getContent())
+            .title(mask(event.isMasked(), event.getTitle(), Constants.QUESTION_MARK))
+            .content(mask(event.isMasked(), event.getContent(), Constants.EMPTY_STRING))
             .note(occurrence.getNote())
             .remindMeBeforeDays(getFromEventIfNull(event, occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
             .reminded(occurrence.isReminded())
@@ -98,6 +103,6 @@ class OccurrenceResponseMapper {
 
     private <T> T getFromEventIfNull(Event event, T value, Function<Event, T> mapper) {
         return Optional.ofNullable(value)
-            .orElseGet(() -> mapper.apply(event));
+            .orElseGet(() -> mask(event.isMasked(), mapper.apply(event), null));
     }
 }

@@ -69,6 +69,8 @@ public class Constants {
     public static final int MAX_LIST_ITEM_CONTENT_LENGTH = 1024 * 100; //100 KB
     public static final int MAX_ORGANIZATION_NAME_LENGTH = 1024;
     public static final int MAX_ORGANIZATION_DESCRIPTION_LENGTH = 1024 * 100; //100 KB
+    public static final String SHARED_SUFFIX = " \uD83D\uDC65\uFE0E";
+    public static final String QUESTION_MARK = "?";
 
     //ModuleIds
     public final String MODULE_ID_TRAINING = "training";
@@ -121,5 +123,4 @@ public class Constants {
     //Monitoring
     public static final String MONITORING_FUNCTIONALITY_MEMORY_STATUS = "MEMORY_STATUS";
     public static final String MONITORING_METRIC_TYPE_SECOND = "SECOND";
-    public static final String SHARED_SUFFIX = " \uD83D\uDC65\uFE0E";
 }
