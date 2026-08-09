@@ -273,4 +273,19 @@ public class ObjectQueryService {
 
         return eventAlmMasking.get() && labelAlmMasking.get();
     }
+
+    public Stream<Event> getLabellessEvents(UUID userId) {
+        Stream<Event> ownEvents = eventLabelMappingDao.getLabelsOfEventsByUserId(userId)
+            .stream()
+            .filter(eventLabelMapping -> eventLabelMapping.getLabelIds().isEmpty())
+            .map(eventLabelMapping -> eventDao.findByIdValidated(eventLabelMapping.getUserId(), eventLabelMapping.getEventId()));
+
+        Stream<Event> sharedEvents = almDao.getByUserIdAndObjectType(userId, SharedObjectType.EVENT)
+            .stream()
+            .filter(alm -> alm.getGrants().contains(Grant.VIEW) || alm.getGrants().contains(Grant.SEE))
+            .filter(alm -> eventLabelMappingDao.getLabelsOfEvent(alm.getOwner(), alm.getObjectId()).getLabelIds().isEmpty())
+            .map(alm -> eventDao.findByIdValidated(alm.getOwner(), alm.getObjectId()).setMasked(!alm.getGrants().contains(Grant.VIEW)));
+
+        return Stream.concat(ownEvents, sharedEvents);
+    }
 }

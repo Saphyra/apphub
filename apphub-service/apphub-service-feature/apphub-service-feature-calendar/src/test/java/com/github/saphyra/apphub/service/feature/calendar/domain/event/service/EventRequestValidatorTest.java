@@ -187,7 +187,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         Map<UUID, UUID> labels = Map.of(LABEL_ID, USER_ID);
         given(request.getLabels()).willReturn(labels);
-        given(labelDao.getByIds(labels)).willReturn(List.of(label));
+        given(labelDao.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).willReturn(List.of(label));
         given(label.getLabelId()).willReturn(LABEL_ID);
         given(request.getAutoDone()).willReturn(false);
 
@@ -286,7 +286,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         Map<UUID, UUID> labels = Map.of(LABEL_ID, USER_ID);
         given(request.getLabels()).willReturn(labels);
-        given(labelDao.getByIds(labels)).willReturn(List.of(label));
+        given(labelDao.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).willReturn(List.of(label));
         given(label.getLabelId()).willReturn(LABEL_ID);
 
         underTest.validate(request);
@@ -307,7 +307,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         Map<UUID, UUID> labels = Map.of(LABEL_ID, USER_ID);
         given(request.getLabels()).willReturn(labels);
-        given(labelDao.getByIds(labels)).willReturn(List.of(label));
+        given(labelDao.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).willReturn(List.of(label));
         given(label.getLabelId()).willReturn(LABEL_ID);
 
         underTest.validate(request);
@@ -376,7 +376,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         Map<UUID, UUID> labels = Map.of(LABEL_ID, USER_ID);
         given(request.getLabels()).willReturn(labels);
-        given(labelDao.getByIds(labels)).willReturn(List.of(label));
+        given(labelDao.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).willReturn(List.of(label));
         given(label.getLabelId()).willReturn(LABEL_ID);
 
         underTest.validate(request);
@@ -392,7 +392,7 @@ class EventRequestValidatorTest {
         given(request.getRemindMeBeforeDays()).willReturn(0);
         Map<UUID, UUID> labels = Map.of(LABEL_ID, USER_ID);
         given(request.getLabels()).willReturn(labels);
-        given(labelDao.getByIds(labels)).willReturn(List.of(label));
+        given(labelDao.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).willReturn(List.of(label));
         given(label.getLabelId()).willReturn(LABEL_ID);
         given(request.getArchived()).willReturn(null);
 

@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import org.junit.jupiter.api.Test;
@@ -102,6 +103,32 @@ class EventResponseMapperTest {
             .returns(parsedRepetitionData2, EventResponse::getRepetitionData)
             .returns(List.of(labelResponse), EventResponse::getLabels)
             .returns(true, EventResponse::getArchived)
+            .returns(false, EventResponse::getShared);
+    }
+
+    @Test
+    void toResponse_maskedData(){
+        Event event = createEvent(EVENT_ID_1, REPETITION_DATA_1, false);
+        event.setMasked(true);
+        given(labelQueryService.getByEventId(USER_ID, EVENT_ID_1)).willReturn(List.of(labelResponse));
+        given(objectMapper.readValue(REPETITION_DATA_1, Object.class)).willReturn(PARSED_REPETITION_DATA);
+
+        EventResponse result = underTest.toResponse(USER_ID, event);
+
+        assertThat(result)
+            .returns(EVENT_ID_1, EventResponse::getEventId)
+            .returns(RepetitionType.DAYS_OF_WEEK, EventResponse::getRepetitionType)
+            .returns(PARSED_REPETITION_DATA, EventResponse::getRepetitionData)
+            .returns(REPEAT_FOR_DAYS, EventResponse::getRepeatForDays)
+            .returns(START_DATE, EventResponse::getStartDate)
+            .returns(END_DATE, EventResponse::getEndDate)
+            .returns(TIME, EventResponse::getTime)
+            .returns(Constants.QUESTION_MARK, EventResponse::getTitle)
+            .returns(Constants.EMPTY_STRING, EventResponse::getContent)
+            .returns(null, EventResponse::getRemindMeBeforeDays)
+            .returns(List.of(), EventResponse::getLabels)
+            .returns(null, EventResponse::getArchived)
+            .returns(null, EventResponse::getAutoDone)
             .returns(false, EventResponse::getShared);
     }
 

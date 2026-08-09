@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.config.CalendarParams;
@@ -58,7 +59,12 @@ class EventRequestValidator {
 
         ValidationUtil.notNull(request.getLabels(), "labels");
         Set<UUID> eventLabels = request.getLabels().keySet();
-        List<UUID> existingLabels = labelDao.getByIds(request.getLabels()).stream().map(Label::getLabelId).toList();
+        List<BiWrapper<UUID, UUID>> labelIds = request.getLabels()
+            .entrySet()
+            .stream()
+            .map(e -> new BiWrapper<>(e.getValue(), e.getKey()))
+            .toList();
+        List<UUID> existingLabels = labelDao.getByIds(labelIds).stream().map(Label::getLabelId).toList();
         ValidationUtil.containsAll(eventLabels, () -> existingLabels, "labels");
     }
 

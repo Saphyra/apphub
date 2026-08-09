@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -32,8 +31,12 @@ public class LabelQueryService {
 
     public List<LabelResponse> getByEventId(UUID userId, UUID eventId) {
         //TODO verify access
-        Map<UUID, UUID> labelIds = eventLabelMappingDao.getLabelsOfEvent(userId, eventId)
-            .getLabelIds();
+        List<BiWrapper<UUID, UUID>> labelIds = eventLabelMappingDao.getLabelsOfEvent(userId, eventId)
+            .getLabelIds()
+            .entrySet()
+            .stream()
+            .map(e -> new BiWrapper<>(e.getValue(), e.getKey()))
+            .toList();
         log.info("Labels found for Event {}: {}", eventId, labelIds);
         List<Label> labels = labelDao.getByIds(labelIds);
         return labelToResponseMapper.toResponse(userId, labels);

@@ -18,7 +18,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class EventLabelMappingMapper extends ConverterBase<Map<String, AttributeValue>, EventLabelMappingEntity> {
     private final ObjectMapper objectMapper;
 

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Component
-//TODO unit test
 class LabelEventMappingConverter extends ConverterBase<LabelEventMappingEntity, LabelEventMapping> {
     private final UuidConverter uuidConverter;
 

@@ -19,6 +19,7 @@ import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocatio
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -93,5 +94,53 @@ public class CalendarShareLabelsPageTest extends SeleniumTest {
             assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(sharedWithDriver)).isEqualTo(parameters.getStartDate());
             assertThat(CalendarLabelsPageActions.isOpenedOccurrenceShared(sharedWithDriver)).isTrue();
         });
+    }
+
+    @Test(groups = {"fe", "calendar"})
+    void sharedLabellessEvent() {
+        List<WebDriver> drivers = extractDrivers(2);
+        WebDriver ownerDriver = drivers.get(0);
+        WebDriver sharedWithDriver = drivers.get(1);
+
+        //Create owner
+        Navigation.toIndexPage(getServerPort(), ownerDriver);
+        RegistrationParameters ownerUserData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(ownerDriver, ownerUserData);
+        ModulesPageActions.openModule(getServerPort(), ownerDriver, ModuleLocation.CALENDAR);
+        CommonUtils.enableTestMode(ownerDriver);
+
+        //Create sharedWith
+        Navigation.toIndexPage(getServerPort(), sharedWithDriver);
+        RegistrationParameters sharedWithUserData = RegistrationParameters.validParameters();
+        IndexPageActions.registerUser(sharedWithDriver, sharedWithUserData);
+        ModulesPageActions.openModule(getServerPort(), sharedWithDriver, ModuleLocation.CALENDAR);
+        CommonUtils.enableTestMode(sharedWithDriver);
+
+        //Create event
+        CalendarIndexPageActions.openCreateEventPage(ownerDriver);
+
+        CreateEventParameters parameters = CreateEventParameters.valid(RepetitionType.ONE_TIME);
+        CalendarEventPageActions.fillForm(ownerDriver, parameters);
+        CalendarEventPageActions.create(ownerDriver);
+        ToastMessageUtil.verifySuccessToast(ownerDriver, LocalizedText.CALENDAR_EVENT_CREATED);
+
+        //Share event
+        CalendarIndexPageActions.setReferenceDate(ownerDriver, parameters.getStartDate());
+
+        AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, parameters.getStartDate()))
+            .open(ownerDriver);
+
+        CalendarIndexPageActions.editEvent(ownerDriver);
+        CalendarEventPageActions.share(ownerDriver);
+
+        CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
+        CalendarSharePageActions.selectAllGrants(ownerDriver);
+        CalendarSharePageActions.share(ownerDriver);
+
+        //Verify event is shared
+        CalendarIndexPageActions.toLabelsPage(sharedWithDriver);
+        CalendarLabelsPageActions.selectNoLabelFilter(sharedWithDriver);
+
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(sharedWithDriver)).extracting(WebElement::getText).containsExactly(parameters.getTitle() + Constants.SHARED_SUFFIX));
     }
 }

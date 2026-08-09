@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class LabelConverter extends ConverterBase<LabelEntity, Label> {
     private final UuidConverter uuidConverter;
 

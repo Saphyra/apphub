@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
-import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,8 +45,11 @@ public class LabelDao {
         repository.delete(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId));
     }
 
-    //TODO unit test
-    public List<Label> getByIds(Map<UUID, UUID> labels) {
-        return converter.convertEntity(repository.getByIds(CollectionUtils.convertMap(labels, uuidConverter::convertDomain, uuidConverter::convertDomain)));
+    public List<Label> getByIds(List<BiWrapper<UUID, UUID>> labelIds) {
+        List<BiWrapper<String, String>> ids = labelIds.stream()
+            .map(labelId -> new BiWrapper<>(uuidConverter.convertDomain(labelId.getEntity1()), uuidConverter.convertDomain(labelId.getEntity2())))
+            .toList();
+
+        return converter.convertEntity(repository.getByIds(ids));
     }
 }

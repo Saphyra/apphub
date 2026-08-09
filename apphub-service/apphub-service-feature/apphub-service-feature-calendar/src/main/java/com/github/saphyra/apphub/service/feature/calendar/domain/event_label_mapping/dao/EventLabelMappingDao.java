@@ -15,7 +15,6 @@ import static java.util.Objects.nonNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EventLabelMappingDao {
     private final UuidConverter uuidConverter;
     private final EventLabelMappingRepository repository;

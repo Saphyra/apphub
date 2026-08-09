@@ -13,7 +13,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
-//TODO unit test
 class LabelMapper extends ConverterBase<Map<String, AttributeValue>, LabelEntity> {
     @Override
     protected Map<String, AttributeValue> processDomainConversion(LabelEntity domain) {

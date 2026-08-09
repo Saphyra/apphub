@@ -51,7 +51,6 @@ public class EventDao {
     /**
      * @param eventIds List<BiWrapper<userId, eventId>>
      */
-    //TODO unit test
     public List<Event> getByIds(List<BiWrapper<UUID, UUID>> eventIds) {
         List<BiWrapper<String, String>> ids = eventIds.stream()
             .map(entry -> new BiWrapper<>(uuidConverter.convertDomain(entry.getEntity1()), uuidConverter.convertDomain(entry.getEntity2())))

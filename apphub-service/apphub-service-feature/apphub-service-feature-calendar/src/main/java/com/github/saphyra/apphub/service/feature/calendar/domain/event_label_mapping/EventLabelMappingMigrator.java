@@ -31,7 +31,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Component
 @Slf4j
 @Profile("!test")
-//TODO unit test
 class EventLabelMappingMigrator extends DynamoDbRepository {
     private static final String EVENT_LABEL_MAPPING_ADD_UID_TO_LABEL_IDS = "event_label_mapping-add_uid_to_label_ids";
     private static final String LABEL_EVENT_MAPPING_ADD_UID_TO_LABEL_IDS = "label_event_mapping-add_uid_to_label_ids";

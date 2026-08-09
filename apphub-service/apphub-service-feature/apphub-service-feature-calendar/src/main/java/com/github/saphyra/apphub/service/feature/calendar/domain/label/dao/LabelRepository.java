@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
@@ -99,14 +100,13 @@ class LabelRepository extends DynamoDbRepository {
 
     /**
      *
-     * @param ids Map<labelId, userId></labelId,>
+     * @param ids List<BiWrapper<userId, labelId>>
      */
-    public List<LabelEntity> getByIds(Map<String, String> ids) {
-        List<Map<String, AttributeValue>> keys = ids.entrySet()
-            .stream()
-            .map(entry -> Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + entry.getValue()).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + entry.getKey()).build()
+    public List<LabelEntity> getByIds(List<BiWrapper<String, String>> ids) {
+        List<Map<String, AttributeValue>> keys = ids.stream()
+            .map(bw -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + bw.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + bw.getEntity2()).build()
             ))
             .toList();
 

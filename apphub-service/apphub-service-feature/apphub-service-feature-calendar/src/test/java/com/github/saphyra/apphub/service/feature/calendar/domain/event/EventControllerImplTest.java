@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.ArchiveEventService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.CreateEventService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.DeleteEventService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.EditEventService;
@@ -53,6 +54,9 @@ class EventControllerImplTest {
 
     @Mock
     private SearchEventService searchEventService;
+
+    @Mock
+    private ArchiveEventService archiveEventService;
 
     @InjectMocks
     private EventControllerImpl underTest;
@@ -157,5 +161,14 @@ class EventControllerImplTest {
         given(searchEventService.search(USER_ID, SEARCH_TEXT)).willReturn(List.of(eventResponse));
 
         assertThat(underTest.searchEvents(new OneParamRequest<>(SEARCH_TEXT), accessToken)).containsExactly(eventResponse);
+    }
+
+    @Test
+    void archiveEvent(){
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
+        underTest.archiveEvent(new OneParamRequest<>(true), EVENT_ID, accessToken);
+
+        then(archiveEventService).should().archive(USER_ID, EVENT_ID, true);
     }
 }

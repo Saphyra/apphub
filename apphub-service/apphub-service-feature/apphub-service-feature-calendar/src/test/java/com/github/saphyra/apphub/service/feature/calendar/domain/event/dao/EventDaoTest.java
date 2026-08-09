@@ -104,4 +104,14 @@ class EventDaoTest {
 
         then(repository).should().delete(USER_ID_STRING, List.of(EVENT_ID_STRING));
     }
+
+    @Test
+    void getByIds_bwList() {
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
+        given(repository.getByIds(List.of(new BiWrapper<>(USER_ID_STRING, EVENT_ID_STRING)))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByIds(USER_ID, List.of(EVENT_ID))).containsExactly(domain);
+    }
 }

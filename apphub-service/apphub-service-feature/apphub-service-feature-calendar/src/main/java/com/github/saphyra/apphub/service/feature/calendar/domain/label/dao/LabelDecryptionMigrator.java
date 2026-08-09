@@ -29,7 +29,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Component
 @Slf4j
 @Profile("!test")
-//TODO unit test
 class LabelDecryptionMigrator extends DynamoDbRepository {
     private static final String LABEL_DECRYPTION = "label-decryption";
 

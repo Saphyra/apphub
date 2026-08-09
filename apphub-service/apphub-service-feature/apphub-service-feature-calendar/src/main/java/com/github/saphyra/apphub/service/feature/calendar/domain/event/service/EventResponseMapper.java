@@ -34,7 +34,6 @@ class EventResponseMapper {
         return toResponse(userId, event, labelQueryService.getByEventId(event.getUserId(), event.getEventId()));
     }
 
-    //TODO unit test masked data
     EventResponse toResponse(UUID userId, Event event, Collection<LabelResponse> labels) {
         return EventResponse.builder()
             .eventId(event.getEventId())
