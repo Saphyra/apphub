@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
-import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class EventQueryServiceTest {
     private EventResponseMapper eventResponseMapper;
 
     @Mock
-    private ObjectQueryService objectQueryService;
+    private EventObjectQueryService eventObjectQueryService;
 
     @InjectMocks
     private EventQueryService underTest;
@@ -39,7 +39,7 @@ class EventQueryServiceTest {
 
     @Test
     void getEvents_nullLabelId() {
-        given(objectQueryService.getEvents(USER_ID)).willReturn(List.of(event));
+        given(eventObjectQueryService.getEvents(USER_ID)).willReturn(List.of(event));
         given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
         assertThat(underTest.getEvents(USER_ID, null)).containsExactly(eventResponse);
@@ -47,7 +47,7 @@ class EventQueryServiceTest {
 
     @Test
     void getEvents_withLabelId() {
-        given(objectQueryService.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(List.of(event));
+        given(eventObjectQueryService.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(List.of(event));
         given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
         assertThat(underTest.getEvents(USER_ID, LABEL_ID)).containsExactly(eventResponse);
@@ -55,7 +55,7 @@ class EventQueryServiceTest {
 
     @Test
     void getLabellessEvents() {
-        given(objectQueryService.getLabellessEvents(USER_ID)).willReturn(Stream.of(event));
+        given(eventObjectQueryService.getLabellessEvents(USER_ID)).willReturn(Stream.of(event));
         given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
         assertThat(underTest.getLabellessEvents(USER_ID)).containsExactly(eventResponse);
@@ -63,7 +63,7 @@ class EventQueryServiceTest {
 
     @Test
     void getEvent_found() {
-        given(objectQueryService.findEvent(USER_ID, LABEL_ID)).willReturn(java.util.Optional.of(event));
+        given(eventObjectQueryService.findEvent(USER_ID, LABEL_ID)).willReturn(java.util.Optional.of(event));
         given(eventResponseMapper.toResponse(USER_ID, event)).willReturn(eventResponse);
 
         assertThat(underTest.getEvent(USER_ID, LABEL_ID)).isEqualTo(eventResponse);
@@ -71,7 +71,7 @@ class EventQueryServiceTest {
 
     @Test
     void getEvent_notFound() {
-        given(objectQueryService.findEvent(USER_ID, LABEL_ID)).willReturn(java.util.Optional.empty());
+        given(eventObjectQueryService.findEvent(USER_ID, LABEL_ID)).willReturn(java.util.Optional.empty());
 
         ExceptionValidator.validateNotFoundException(() -> underTest.getEvent(USER_ID, LABEL_ID));
     }

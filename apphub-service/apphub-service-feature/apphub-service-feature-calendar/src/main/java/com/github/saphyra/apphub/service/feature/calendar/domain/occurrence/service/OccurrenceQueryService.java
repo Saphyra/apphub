@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
-import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
@@ -42,7 +42,7 @@ public class OccurrenceQueryService {
     private final OccurrenceQueryServiceHelper helper;
     private final AlmDao almDao;
     private final EventFactory eventFactory;
-    private final ObjectQueryService objectQueryService;
+    private final EventObjectQueryService eventObjectQueryService;
 
     public List<OccurrenceResponse> getOccurrences(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
         Map<UUID, List<Occurrence>> occurrenceMapping = Stream.of(
@@ -56,7 +56,7 @@ public class OccurrenceQueryService {
             .collect(Collectors.groupingBy(Occurrence::getEventId));
         Map<UUID, Event> events = occurrenceMapping.keySet()
             .stream()
-            .map(eventId -> objectQueryService.findEvent(userId, eventId).orElseGet(() -> eventFactory.dummyEvent(userId, eventId)))
+            .map(eventId -> eventObjectQueryService.findEvent(userId, eventId).orElseGet(() -> eventFactory.dummyEvent(userId, eventId)))
             .collect(Collectors.toMap(Event::getEventId, event -> event));
         Map<UUID, Collection<UUID>> labels = eventLabelMappingDao.getLabelsOfEvents(userId, events.keySet())
             .stream()

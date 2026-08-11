@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -37,7 +37,7 @@ class EditEventServiceTest {
     private EventFieldUpdater eventFieldUpdater;
 
     @Mock
-    private ObjectQueryService objectQueryService;
+    private EventObjectQueryService eventObjectQueryService;
 
     private EditEventService underTest;
 
@@ -56,13 +56,13 @@ class EditEventServiceTest {
             .eventRequestValidator(eventRequestValidator)
             .updateEventContextFactory(updateEventContextFactory)
             .eventFieldUpdaters(List.of(eventFieldUpdater))
-            .objectQueryService(objectQueryService)
+            .eventObjectQueryService(eventObjectQueryService)
             .build();
     }
 
     @Test
     void eventNotFound() {
-        given(objectQueryService.findEvent(USER_ID, EVENT_ID, Operation.EDIT)).willReturn(Optional.empty());
+        given(eventObjectQueryService.findEvent(USER_ID, EVENT_ID, Operation.EDIT)).willReturn(Optional.empty());
 
         ExceptionValidator.validateNotFoundException(() -> underTest.edit(USER_ID, EVENT_ID, request));
 
@@ -71,7 +71,7 @@ class EditEventServiceTest {
 
     @Test
     void edit() {
-        given(objectQueryService.findEvent(USER_ID, EVENT_ID, Operation.EDIT)).willReturn(Optional.of(event));
+        given(eventObjectQueryService.findEvent(USER_ID, EVENT_ID, Operation.EDIT)).willReturn(Optional.of(event));
         given(updateEventContextFactory.create(event)).willReturn(context);
         given(request.getLabels()).willReturn(Map.of(LABEL_ID, USER_ID));
 

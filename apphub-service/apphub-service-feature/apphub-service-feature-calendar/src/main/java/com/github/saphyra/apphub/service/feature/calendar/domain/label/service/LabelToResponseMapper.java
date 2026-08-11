@@ -13,18 +13,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class LabelToResponseMapper {
-    LabelResponse toResponse(Label label, boolean shared) {
+    LabelResponse toResponse(UUID userId, Label label) {
         return LabelResponse.builder()
             .labelId(label.getLabelId())
             .userId(label.getUserId())
             .label(label.getLabel())
-            .shared(shared)
+            .shared(!userId.equals(label.getUserId()))
             .build();
     }
 
     public List<LabelResponse> toResponse(UUID userId, List<Label> labels) {
         return labels.stream()
-            .map(label -> toResponse(label, !userId.equals(label.getUserId())))
+            .map(label -> toResponse(userId, label))
             .toList();
     }
 }

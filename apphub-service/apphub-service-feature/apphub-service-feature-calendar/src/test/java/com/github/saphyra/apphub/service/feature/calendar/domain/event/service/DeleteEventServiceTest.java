@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class DeleteEventServiceTest {
     private CommonCalendarDao commonCalendarDao;
 
     @Mock
-    private ObjectQueryService objectQueryService;
+    private EventObjectQueryService eventObjectQueryService;
 
     @InjectMocks
     private DeleteEventService underTest;
@@ -36,7 +36,7 @@ class DeleteEventServiceTest {
 
     @Test
     void delete() {
-        given(objectQueryService.findEvent(USER_ID, EVENT_ID, Operation.DELETE)).willReturn(Optional.of(event));
+        given(eventObjectQueryService.findEvent(USER_ID, EVENT_ID, Operation.DELETE)).willReturn(Optional.of(event));
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
 

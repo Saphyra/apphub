@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,25 +18,25 @@ import static java.util.Objects.isNull;
 @Slf4j
 public class EventQueryService {
     private final EventResponseMapper eventResponseMapper;
-    private final ObjectQueryService objectQueryService;
+    private final EventObjectQueryService eventObjectQueryService;
 
     public List<EventResponse> getEvents(UUID userId, UUID labelId) {
         List<Event> events;
         if (isNull(labelId)) {
-            events = objectQueryService.getEvents(userId);
+            events = eventObjectQueryService.getEvents(userId);
         } else {
-            events = objectQueryService.getEventsOfLabel(userId, labelId);
+            events = eventObjectQueryService.getEventsOfLabel(userId, labelId);
         }
 
         return eventResponseMapper.toResponse(userId, events);
     }
 
     public List<EventResponse> getLabellessEvents(UUID userId) {
-        return eventResponseMapper.toResponse(userId, objectQueryService.getLabellessEvents(userId).toList());
+        return eventResponseMapper.toResponse(userId, eventObjectQueryService.getLabellessEvents(userId).toList());
     }
 
     public EventResponse getEvent(UUID userId, UUID eventId) {
-        return objectQueryService.findEvent(userId, eventId)
+        return eventObjectQueryService.findEvent(userId, eventId)
             .map(event -> eventResponseMapper.toResponse(userId, event))
             .orElseThrow(() -> ExceptionFactory.notFound(userId + " has no access to event " + eventId + " or event does not exist."));
     }

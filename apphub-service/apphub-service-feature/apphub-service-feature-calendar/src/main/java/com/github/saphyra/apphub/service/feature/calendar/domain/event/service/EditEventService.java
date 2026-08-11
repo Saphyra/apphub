@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.context.UpdateEventContextFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.ObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import lombok.Builder;
@@ -23,12 +23,12 @@ public class EditEventService {
     private final EventRequestValidator eventRequestValidator;
     private final UpdateEventContextFactory updateEventContextFactory;
     private final List<EventFieldUpdater> eventFieldUpdaters;
-    private final ObjectQueryService objectQueryService;
+    private final EventObjectQueryService eventObjectQueryService;
 
     public void edit(UUID userId, UUID eventId, EventRequest request) {
         eventRequestValidator.validateEdit(request);
 
-        Event event = objectQueryService.findEvent(userId, eventId, Operation.EDIT)
+        Event event = eventObjectQueryService.findEvent(userId, eventId, Operation.EDIT)
             .orElseThrow(() -> ExceptionFactory.notFound("Event " + eventId + " does not exist or not available for user " + userId));
 
         event.setExpirationNotified(false);
