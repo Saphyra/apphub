@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.api.feature.calendar.model;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
+@Slf4j
 public enum Grant {
     SEE_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT), //Can query children with masked data
     VIEW_CHILDREN(SharedObjectType.LABEL, SharedObjectType.EVENT), //Can query children with real data

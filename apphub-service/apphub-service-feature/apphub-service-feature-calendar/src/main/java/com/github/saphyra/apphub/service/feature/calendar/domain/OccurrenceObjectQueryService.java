@@ -39,11 +39,14 @@ public class OccurrenceObjectQueryService {
 
     public BiWrapper<Event, Occurrence> getOccurrence(UUID userId, UUID eventId, UUID occurrenceId, Operation operation) {
         List<Grant> requiredGrants = operation.getRequiredGrants();
+        log.info("Required grants: {}", requiredGrants);
 
         BiWrapper<Occurrence, List<Grant>> occurrenceWithGrants = getOccurrenceWithGrants(userId, eventId, occurrenceId);
+        log.info("Occurrence grants: {}", occurrenceWithGrants.getEntity2());
         Occurrence occurrence = occurrenceWithGrants.getEntity1();
 
         BiWrapper<Event, List<Grant>> eventWithGrants = getEventWithGrants(userId, occurrence.getEventId());
+        log.info("Event grants: {}", eventWithGrants.getEntity2());
         Event event = eventWithGrants.getEntity1();
 
         List<Grant> aggregatedGrants = Stream.concat(
@@ -52,6 +55,7 @@ public class OccurrenceObjectQueryService {
             )
             .distinct()
             .toList();
+        log.info("Aggregated grants: {}", aggregatedGrants);
 
         if (aggregatedGrants.containsAll(requiredGrants)) {
             return new BiWrapper<>(event, occurrence);
@@ -64,38 +68,49 @@ public class OccurrenceObjectQueryService {
         //Look for own event
         Optional<Event> maybeEvent = eventDao.findById(userId, eventId);
         if (maybeEvent.isPresent()) {
-            return new BiWrapper<>(maybeEvent.get(), Grant.forType(SharedObjectType.EVENT));
+            List<Grant> grants = Grant.forType(SharedObjectType.EVENT);
+            log.info("Own event found with grants: {}", grants);
+            return new BiWrapper<>(maybeEvent.get(), grants);
         }
 
         //Look for shared event
         Optional<BiWrapper<Event, List<Grant>>> maybeSharedEvent = almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT)
+            //Query event for Alm and pair it with the grants from Alm
             .flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)
-                .map(event -> new BiWrapper<>(event, alm.getGrants())));
+                .map(event -> {
+                        List<Grant> grants = alm.getGrants();
+                        log.info("Shared event found with grants: {}", grants);
+                        return new BiWrapper<>(event, grants);
+                    }
+                ));
 
         //Look for shared label
         Optional<BiWrapper<Event, List<Grant>>> maybeSharedLabelEvent = almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
+            //Filter for labels of event
             .map(alm -> new BiWrapper<>(alm, eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of())))
             .filter(bw -> bw.getEntity2().containsKey(eventId))
+            //Pair eventId with grants of its Alm
             .map(bw -> new TriWrapper<>(bw.getEntity1().getGrants(), bw.getEntity2().get(eventId), eventId))
+            //Merge all grants of the same eventId into one list
             .reduce((a, b) -> new TriWrapper<>(
                 Stream.concat(
                         a.getEntity1().stream(),
                         b.getEntity1().stream()
                     )
                     .distinct()
-                    .flatMap(Grant::projectForChildren)
-                    .distinct()
                     .toList(),
                 a.getEntity2(),
                 a.getEntity3()
             ))
+            //Query an event and pair it with the merged grants
             .map(tw -> new BiWrapper<>(eventDao.findByIdValidated(tw.getEntity2(), tw.getEntity3()), tw.getEntity1()));
 
         //Return the event and the aggregated list of grants, or a dummy event if the event is not shared.
         return Stream.of(maybeSharedEvent, maybeSharedLabelEvent)
             .filter(Optional::isPresent)
             .map(Optional::get)
+            //Merge grants from shared event and shared label
             .reduce((a, b) -> new BiWrapper<>(
                 a.getEntity1(),
                 Stream.concat(
@@ -105,6 +120,16 @@ public class OccurrenceObjectQueryService {
                     .distinct()
                     .toList()
             ))
+            //Project grants for children
+            .map(bw -> {
+                List<Grant> projectedGrants = bw.getEntity2()
+                    .stream()
+                    .flatMap(Grant::projectForChildren)
+                    .distinct()
+                    .toList();
+
+                return new BiWrapper<>(bw.getEntity1(), projectedGrants);
+            })
             .orElseGet(() -> new BiWrapper<>(eventFactory.dummyEvent(userId, eventId), List.of()));
     }
 
