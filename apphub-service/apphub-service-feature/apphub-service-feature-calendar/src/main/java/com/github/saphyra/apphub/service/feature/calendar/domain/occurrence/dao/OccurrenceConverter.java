@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
     private final UuidConverter uuidConverter;
     private final DateTimeUtil dateTimeUtil;
@@ -48,7 +47,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .occurrenceId(uuidConverter.convertEntity(entity.getOccurrenceId()))
             .date(date)
             .time(dateTimeConverter.convertToLocalTime(entity.getTime()))
-            .status(syncStatus(entity, entity.getUserId(), date))
+            .status(syncStatus(entity, date))
             .note(entity.getNote())
             .remindMeBeforeDays(Optional.ofNullable(entity.getRemindMeBeforeDays()).map(Integer::valueOf).orElse(null))
             .reminded(Boolean.parseBoolean(entity.getReminded()))
@@ -56,7 +55,7 @@ class OccurrenceConverter extends ConverterBase<OccurrenceEntity, Occurrence> {
             .build();
     }
 
-    private OccurrenceStatus syncStatus(OccurrenceEntity entity, String userId, LocalDate date) {
+    private OccurrenceStatus syncStatus(OccurrenceEntity entity, LocalDate date) {
         OccurrenceStatus savedStatus = OccurrenceStatus.valueOf(entity.getStatus());
 
         if (savedStatus == OccurrenceStatus.PENDING && dateTimeUtil.getCurrentDate().isAfter(date)) {

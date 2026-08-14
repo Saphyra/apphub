@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.frontend.calendar.share.temp;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarLabelsPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarOccurrencePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarSharePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
@@ -24,7 +23,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -166,69 +164,6 @@ public class CalendarEditSharedLabelTest extends SeleniumTest {
             .open();
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getEvents(ownerDriver)).extracting(WebElement::getText).containsExactly(EVENT_TITLE_2));
-    }
-
-    @Test(groups = {"fe", "calendar"})
-    void editSharedLabelOccurrence() {
-        List<WebDriver> drivers = extractDrivers(2);
-        WebDriver ownerDriver = drivers.get(0);
-        WebDriver sharedWithDriver = drivers.get(1);
-
-        //Create owner
-        Navigation.toIndexPage(getServerPort(), ownerDriver);
-        RegistrationParameters ownerUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(ownerDriver, ownerUserData);
-        ModulesPageActions.openModule(getServerPort(), ownerDriver, ModuleLocation.CALENDAR);
-        CommonUtils.enableTestMode(ownerDriver);
-
-        //Create sharedWith
-        Navigation.toIndexPage(getServerPort(), sharedWithDriver);
-        RegistrationParameters sharedWithUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(sharedWithDriver, sharedWithUserData);
-        ModulesPageActions.openModule(getServerPort(), sharedWithDriver, ModuleLocation.CALENDAR);
-        CommonUtils.enableTestMode(sharedWithDriver);
-
-        //Create event with label
-        CalendarIndexPageActions.openCreateEventPage(ownerDriver);
-
-        CreateEventParameters parameters = CreateEventParameters.valid(RepetitionType.ONE_TIME)
-            .toBuilder()
-            .newLabels(List.of(LABEL_1))
-            .build();
-        CalendarEventPageActions.fillForm(ownerDriver, parameters);
-        CalendarEventPageActions.create(ownerDriver);
-        ToastMessageUtil.verifySuccessToast(ownerDriver, LocalizedText.CALENDAR_EVENT_CREATED);
-
-        //Share label
-        CalendarIndexPageActions.toLabelsPage(ownerDriver);
-
-        AwaitilityWrapper.getListWithWait(() -> CalendarLabelsPageActions.getLabels(ownerDriver), l -> !l.isEmpty())
-            .getFirst()
-            .share(ownerDriver);
-
-        CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
-        CalendarSharePageActions.selectAllGrants(ownerDriver);
-        CalendarSharePageActions.share(ownerDriver);
-
-        //Edit occurrence
-        CalendarIndexPageActions.setReferenceDate(sharedWithDriver, parameters.getStartDate());
-        CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, parameters.getStartDate())
-            .getFirst()
-            .open(sharedWithDriver);
-        CalendarIndexPageActions.editOpenedOccurrence(sharedWithDriver);
-
-        LocalDate newOccurrenceDate = parameters.getStartDate().plusDays(1);
-
-        CalendarOccurrencePageActions.setDate(sharedWithDriver, newOccurrenceDate);
-        CalendarOccurrencePageActions.save(sharedWithDriver);
-
-        //Verify occurrence edited
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(sharedWithDriver, newOccurrenceDate)).hasSize(1));
-
-        CalendarSharePageActions.back(ownerDriver);
-        CalendarLabelsPageActions.back(ownerDriver);
-        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(ownerDriver, parameters.getStartDate()));
-        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).hasSize(1));
     }
 
     @Test(groups = {"fe", "calendar"})

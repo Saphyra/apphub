@@ -29,7 +29,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Component
 @Slf4j
 @Profile("!test")
-//TODO unit test
 class OccurrenceDecryptionMigrator extends DynamoDbRepository {
     private static final String OCCURRENCE_DECRYPTION = "occurrence-decryption";
 

@@ -17,7 +17,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LabelService {
     private final LabelDao labelDao;
     private final LabelFactory labelFactory;

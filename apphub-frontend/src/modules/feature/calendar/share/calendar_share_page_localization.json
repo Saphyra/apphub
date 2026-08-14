@@ -52,7 +52,6 @@
         "hu": "Törölheti a {type} gyermek elemeit."
     },
     "SEE": {
-        
         "en": "Can see this {type}, but with dummy data.",
         "hu": "Láthatja ezt a {type}-t, de valótlan adatokkal."
     },
@@ -71,6 +70,10 @@
     "SHARE": {
         "en": "Can share this {type}.",
         "hu": "Megoszthatja ezt a {type}-t."
+    },
+    "SHARE_CHILDREN": {
+        "en": "Can share children of this {type}.",
+        "hu": "Megoszthatja a {type} gyermekeit."
     },
     "EDIT_OPERATIONS": {
         "en": "Can edit operations of this {type}.",

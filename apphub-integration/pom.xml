@@ -31,7 +31,7 @@
         <versions.gson>2.13.2</versions.gson>
         <versions.jackson-databind>3.0.1</versions.jackson-databind>
 
-        <versions.selenium>4.46.0</versions.selenium>
+        <versions.selenium>4.47.0</versions.selenium>
         <versions.dynamodb>2.44.0</versions.dynamodb>
 
         <!-- Plugin Versions -->
