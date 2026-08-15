@@ -74,6 +74,7 @@ public class CalendarEditSharedEventTest extends SeleniumTest {
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE);
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.EDIT);
+        CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
         CalendarSharePageActions.share(ownerDriver);
 
         //Edit event

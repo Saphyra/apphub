@@ -35,4 +35,12 @@ public class Occurrence {
     private boolean reminded;
     @Nullable //If null Event's value is used
     private Boolean autoDone;
+
+    private boolean masked;
+
+    public Occurrence setMasked(boolean masked) {
+        this.masked = masked;
+
+        return this;
+    }
 }

@@ -20,7 +20,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class EditOccurrenceService {
     private final OccurrenceRequestValidator occurrenceRequestValidator;
     private final OccurrenceDao occurrenceDao;
@@ -30,7 +29,7 @@ public class EditOccurrenceService {
     public void editOccurrence(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.getOccurrence(userId, eventId, occurrenceId, Operation.EDIT);
+        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId, Operation.EDIT);
         Event event = bw.getEntity1();
         Occurrence occurrence = bw.getEntity2();
 
@@ -60,8 +59,8 @@ public class EditOccurrenceService {
     public OccurrenceResponse editOccurrenceStatus(UUID userId, UUID eventId, UUID occurrenceId, OccurrenceStatus status) {
         ValidationUtil.notNull(status, "status");
 
-        //TODO verify access
-        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
+        Occurrence occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId, Operation.EDIT)
+            .getEntity2();
         occurrence.setStatus(status);
         occurrenceDao.save(occurrence);
 
@@ -69,8 +68,8 @@ public class EditOccurrenceService {
     }
 
     public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
-        //TODO verify access
-        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
+        Occurrence occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId, Operation.EDIT)
+            .getEntity2();
         occurrence.setReminded(true);
         occurrenceDao.save(occurrence);
 

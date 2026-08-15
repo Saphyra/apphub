@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
+import com.github.saphyra.apphub.service.feature.calendar.domain.OccurrenceObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -20,12 +23,16 @@ import static org.mockito.BDDMockito.then;
 class DeleteOccurrenceServiceTest {
     private static final UUID OCCURRENCE_ID = UUID.randomUUID();
     private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
     private OccurrenceDao occurrenceDao;
 
     @Mock
     private AlmDao almDao;
+
+    @Mock
+    private OccurrenceObjectQueryService occurrenceObjectQueryService;
 
     @InjectMocks
     private DeleteOccurrenceService underTest;
@@ -35,9 +42,9 @@ class DeleteOccurrenceServiceTest {
 
     @Test
     void deleteOccurrence() {
-        given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
+        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.DELETE)).willReturn(new BiWrapper<>(null, occurrence));
 
-        underTest.deleteOccurrence(EVENT_ID, OCCURRENCE_ID);
+        underTest.deleteOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID);
 
         then(occurrenceDao).should().delete(List.of(occurrence));
         then(almDao).should().deleteByObject(OCCURRENCE_ID, SharedObjectType.OCCURRENCE);

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,15 +39,16 @@ class OccurrenceResponseMapper {
     private final EventFactory eventFactory;
 
     public List<OccurrenceResponse> toResponse(UUID userId, List<Occurrence> occurrences) {
-        Map<UUID, Event> events = occurrences.stream()
+        Collection<Event> events = occurrences.stream()
             .map(Occurrence::getEventId)
             .distinct()
             .map(eventId -> queryEvent(userId, eventId))
-            .collect(Collectors.toMap(Event::getEventId, event -> event));
+            .toList();
 
         return toResponse(userId, events, occurrences);
     }
 
+    //TODO verify access rights
     private Event queryEvent(UUID userId, UUID eventId) {
         return eventDao.findById(userId, eventId)
             .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT).flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)))
@@ -64,9 +66,12 @@ class OccurrenceResponseMapper {
             .map(mapping -> eventDao.findByIdValidated(mapping.get(eventId), eventId));
     }
 
-    public List<OccurrenceResponse> toResponse(UUID userId, Map<UUID, Event> events, List<Occurrence> occurrences) {
+    public List<OccurrenceResponse> toResponse(UUID userId, Collection<Event> events, List<Occurrence> occurrences) {
+        Map<UUID, Event> eventMapping = events.stream()
+            .collect(Collectors.toMap(Event::getEventId, Function.identity()));
+
         return occurrences.stream()
-            .map(occurrence -> toResponse(userId, events.get(occurrence.getEventId()), occurrence))
+            .map(occurrence -> toResponse(userId, eventMapping.get(occurrence.getEventId()), occurrence))
             .toList();
     }
 
@@ -77,6 +82,7 @@ class OccurrenceResponseMapper {
     }
 
     //TODO unit test masked event
+    //TODO mask occurrence's data
     private OccurrenceResponse toResponse(UUID userId, Event event, Occurrence occurrence) {
         Boolean autoDone = getFromEventIfNull(event, occurrence.getAutoDone(), Event::isAutoDone);
         if (occurrence.getStatus() == OccurrenceStatus.EXPIRED && autoDone) {

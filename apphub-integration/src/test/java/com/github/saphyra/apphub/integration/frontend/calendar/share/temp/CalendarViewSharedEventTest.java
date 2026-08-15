@@ -72,6 +72,7 @@ public class CalendarViewSharedEventTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
+        CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW_CHILDREN);
         CalendarSharePageActions.share(ownerDriver);
 
         //Verify event is visible with real data
@@ -124,6 +125,7 @@ public class CalendarViewSharedEventTest extends SeleniumTest {
 
         CalendarSharePageActions.selectUser(ownerDriver, sharedWithUserData.getEmail());
         CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE);
+        CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE_CHILDREN);
         CalendarSharePageActions.share(ownerDriver);
 
         //Verify event is visible with real data

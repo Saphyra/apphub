@@ -58,7 +58,7 @@ class OccurrenceControllerImpl implements OccurrenceController {
     public void deleteOccurrence(UUID eventId, UUID occurrenceId, AccessToken accessToken) {
         log.info("{} wants to delete Occurrence {}", accessToken.getUserId(), occurrenceId);
 
-        deleteOccurrenceService.deleteOccurrence(eventId, occurrenceId);
+        deleteOccurrenceService.deleteOccurrence(accessToken.getUserId(), eventId, occurrenceId);
 
         log.debug("Response: {}", HttpStatus.OK);
     }

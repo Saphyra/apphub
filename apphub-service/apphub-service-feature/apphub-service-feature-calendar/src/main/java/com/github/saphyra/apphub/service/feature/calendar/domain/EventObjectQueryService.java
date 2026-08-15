@@ -31,6 +31,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 @Slf4j
 //TODO unit test
+//TODO facadify
 public class EventObjectQueryService {
     private final EventDao eventDao;
     private final AlmDao almDao;
