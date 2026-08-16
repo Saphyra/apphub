@@ -64,7 +64,10 @@ public class EditOccurrenceService {
         occurrence.setStatus(status);
         occurrenceDao.save(occurrence);
 
-        return occurrenceResponseMapper.toResponse(userId, occurrence);
+        //Re-query is needed because the occurrence and event queried for edition does not contain if records have to be masked or not
+        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId);
+
+        return occurrenceResponseMapper.toResponse(userId, bw.getEntity1(), bw.getEntity2());
     }
 
     public OccurrenceResponse setReminded(UUID userId, UUID eventId, UUID occurrenceId) {
@@ -73,6 +76,9 @@ public class EditOccurrenceService {
         occurrence.setReminded(true);
         occurrenceDao.save(occurrence);
 
-        return occurrenceResponseMapper.toResponse(userId, occurrence);
+        //Re-query is needed because the occurrence and event queried for edition does not contain if records have to be masked or not
+        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId);
+
+        return occurrenceResponseMapper.toResponse(userId, bw.getEntity1(), bw.getEntity2());
     }
 }

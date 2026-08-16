@@ -1,13 +1,13 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.service.feature.calendar.domain.OccurrenceObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -24,10 +24,7 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-//TODO move to helper
 public class OccurrenceQueryService {
-    private final OccurrenceDao occurrenceDao;
     private final DateTimeUtil dateTimeUtil;
     private final EventLabelMappingDao eventLabelMappingDao;
     private final OccurrenceResponseMapper occurrenceResponseMapper;
@@ -65,14 +62,13 @@ public class OccurrenceQueryService {
     }
 
     public List<OccurrenceResponse> getOccurrencesOfEvent(UUID userId, UUID eventId) {
-        List<Occurrence> occurrences = occurrenceDao.getByEventId(eventId);
+        BiWrapper<Event, List<Occurrence>> occurrenceMapping = occurrenceObjectQueryService.getOccurrences(userId, eventId);
 
-        return occurrenceResponseMapper.toResponse(userId, occurrences);
+        return occurrenceResponseMapper.toResponse(userId, occurrenceMapping.getEntity1(), occurrenceMapping.getEntity2());
     }
 
     public OccurrenceResponse getOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
-        //TODO check if user has access to occurrence
-        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId);
-        return occurrenceResponseMapper.toResponse(userId, occurrence);
+        BiWrapper<Event, Occurrence> occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId);
+        return occurrenceResponseMapper.toResponse(userId, occurrence.getEntity1(), occurrence.getEntity2());
     }
 }

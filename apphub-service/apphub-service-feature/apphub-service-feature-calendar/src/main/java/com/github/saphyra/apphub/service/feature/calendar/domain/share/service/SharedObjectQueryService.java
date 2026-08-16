@@ -22,7 +22,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class SharedObjectQueryService {
     private final SharedObjectServiceProvider sharedObjectServiceProvider;
     private final AlmDao almDao;
@@ -35,7 +34,7 @@ public class SharedObjectQueryService {
         //Find Alm for object
         SharedObject sharedObject = almDao.findForObject(userId, PrincipalType.USER, objectId, type)
             //Search by alm if found
-            .map(alm -> sharedObjectService.getSharedObject(alm.getOwner(), objectId, parent)) //TODO check permission
+            .map(alm -> sharedObjectService.getSharedObject(alm.getOwner(), objectId, parent))
             //Search own if not found by alm
             .or(() -> Optional.of(sharedObjectService.getSharedObject(userId, objectId, parent)))
             .orElseThrow(() -> ExceptionFactory.notFound("SharedObject not found for userId %s and objectId %s for type %s".formatted(userId, objectId, type)));

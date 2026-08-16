@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
-import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
-//TODO cache alms of user
 public class AlmDao implements DeleteByUserIdDao {
     private final AlmRepository repository;
 
@@ -35,14 +32,6 @@ public class AlmDao implements DeleteByUserIdDao {
 
     public Optional<Alm> findForObject(UUID principalId, PrincipalType principalType, UUID objectId, SharedObjectType objectType) {
         return repository.findForObject(principalId, principalType, objectId, objectType);
-    }
-
-    public List<Alm> getByObjects(List<UUID> objectIds, SharedObjectType objectType) {
-        List<BiWrapper<UUID, SharedObjectType>> keys = objectIds.stream()
-            .map(objectId -> new BiWrapper<>(objectId, objectType))
-            .toList();
-
-        return repository.getByObjects(keys);
     }
 
     public List<Alm> getByObject(UUID objectId, SharedObjectType objectType) {

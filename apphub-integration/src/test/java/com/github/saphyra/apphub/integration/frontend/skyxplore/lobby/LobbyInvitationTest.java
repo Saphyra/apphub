@@ -17,6 +17,7 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.OnlineFriend;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LobbyInvitationTest extends SeleniumTest {
     private static final String GAME_NAME = "game-name";
 
+    @Ignore("Chrome WebSocket bug breaks the test.") //TODO implement backend test instead
     @Test(groups = {"fe", "skyxplore"})
     public void inviteFriendToLobby() {
         List<WebDriver> drivers = extractDrivers(2);

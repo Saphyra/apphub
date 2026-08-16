@@ -40,6 +40,34 @@ public class OccurrenceObjectQueryService {
     private final EventLabelMappingDao eventLabelMappingDao;
     private final EventFactory eventFactory;
 
+    public BiWrapper<Event, Occurrence> findOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
+        BiWrapper<Occurrence, List<Grant>> occurrenceWithGrants = getOccurrenceWithGrants(userId, eventId, occurrenceId);
+        log.info("Occurrence grants: {}", occurrenceWithGrants.getEntity2());
+        Occurrence occurrence = occurrenceWithGrants.getEntity1();
+
+        BiWrapper<Event, List<Grant>> eventWithGrants = getEventWithGrants(userId, occurrence.getEventId());
+        log.info("Event grants: {}", eventWithGrants.getEntity2());
+        Event event = eventWithGrants.getEntity1();
+
+        Set<Grant> aggregatedGrants = Stream.concat(
+                occurrenceWithGrants.getEntity2().stream(),
+                eventWithGrants.getEntity2()
+                    .stream()
+                    .flatMap(Grant::projectForChildren)
+            )
+            .collect(Collectors.toSet());
+        log.info("Aggregated grants: {}", aggregatedGrants);
+
+        if (!aggregatedGrants.contains(Grant.VIEW) && !aggregatedGrants.contains(Grant.SEE)) {
+            throw ExceptionFactory.forbiddenOperation("User " + userId + " does not have access toor occurrence " + occurrenceId);
+        }
+
+        return new BiWrapper<>(
+            event.setMasked(!eventWithGrants.getEntity2().contains(Grant.VIEW)),
+            occurrence.setMasked(!aggregatedGrants.contains(Grant.VIEW))
+        );
+    }
+
     public BiWrapper<Event, Occurrence> findOccurrence(UUID userId, UUID eventId, UUID occurrenceId, Operation operation) {
         List<Grant> requiredGrants = operation.getRequiredGrants();
         log.info("Required grants: {}", requiredGrants);
@@ -231,5 +259,50 @@ public class OccurrenceObjectQueryService {
         return eventDao.getByUserId(userId)
             .stream()
             .flatMap(event -> occurrenceDao.getByEventId(event.getEventId()).stream());
+    }
+
+    public BiWrapper<Event, List<Occurrence>> getOccurrences(UUID userId, UUID eventId) {
+        List<Occurrence> occurrences = occurrenceDao.getByEventId(eventId);
+        Map<UUID, List<Grant>> occurrenceIdGrantsMapping = almDao.getByUserIdAndObjectType(userId, SharedObjectType.OCCURRENCE)
+            .stream()
+            .collect(Collectors.toMap(Alm::getObjectId, Alm::getGrants));
+        BiWrapper<Event, List<Grant>> eventWithGrants = getEventWithGrants(userId, eventId);
+        Set<Grant> grantsFromEvent = eventWithGrants.getEntity2()
+            .stream()
+            .flatMap(Grant::projectForChildren)
+            .collect(Collectors.toSet());
+
+        return new BiWrapper<>(
+            eventWithGrants.getEntity1()
+                .setMasked(!eventWithGrants.getEntity2().contains(Grant.VIEW)),
+            occurrences.stream()
+                .filter(occurrence ->
+                    occurrence.getUserId().equals(userId) //Own occurrence
+                        || grantsFromEvent.contains(Grant.SEE_CHILDREN) //Event grants access
+                        || grantsFromEvent.contains(Grant.VIEW_CHILDREN) //Event grants access
+                        || occurrenceIdGrantsMapping.getOrDefault(occurrence.getOccurrenceId(), List.of()).contains(Grant.SEE) //Occurrence is explicitly shared
+                        || occurrenceIdGrantsMapping.getOrDefault(occurrence.getOccurrenceId(), List.of()).contains(Grant.VIEW) //Occurrence is explicitly shared
+                )
+                .map(occurrence -> {
+                    //User can view own occurrence
+                    if (occurrence.getUserId().equals(userId)) {
+                        return occurrence;
+                    }
+
+                    //Shared event allows viewing occurrences
+                    if (grantsFromEvent.contains(Grant.VIEW_CHILDREN)) {
+                        return occurrence;
+                    }
+
+                    //Explicitly shared occurrence allows viewing
+                    if (occurrenceIdGrantsMapping.getOrDefault(occurrence.getOccurrenceId(), List.of()).contains(Grant.VIEW)) {
+                        return occurrence;
+                    }
+
+                    //Occurrence is not viewable
+                    return occurrence.setMasked(true);
+                })
+                .toList()
+        );
     }
 }

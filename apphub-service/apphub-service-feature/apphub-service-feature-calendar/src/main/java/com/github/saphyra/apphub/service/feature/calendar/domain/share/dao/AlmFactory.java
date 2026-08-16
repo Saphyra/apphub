@@ -10,9 +10,8 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class AlmFactory {
-    public Alm createAlm(UUID principal, PrincipalType principalType, UUID objectId, SharedObjectType objectType, UUID owner, UUID parent, List<Grant> grants) {
+    public Alm create(UUID principal, PrincipalType principalType, UUID objectId, SharedObjectType objectType, UUID owner, UUID parent, List<Grant> grants) {
         return Alm.builder()
             .principal(principal)
             .principalType(principalType)

@@ -1,18 +1,11 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
-import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,45 +19,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.CalendarUtils.mask;
+import static java.util.Objects.nonNull;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class OccurrenceResponseMapper {
-    private final EventDao eventDao;
     private final OccurrenceDao occurrenceDao;
-    private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
-    private final EventFactory eventFactory;
-
-    public List<OccurrenceResponse> toResponse(UUID userId, List<Occurrence> occurrences) {
-        Collection<Event> events = occurrences.stream()
-            .map(Occurrence::getEventId)
-            .distinct()
-            .map(eventId -> queryEvent(userId, eventId))
-            .toList();
-
-        return toResponse(userId, events, occurrences);
-    }
-
-    //TODO verify access rights
-    private Event queryEvent(UUID userId, UUID eventId) {
-        return eventDao.findById(userId, eventId)
-            .or(() -> almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT).flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)))
-            .or(() -> findEventBySharedLabel(userId, eventId))
-            .orElseGet(() -> eventFactory.dummyEvent(userId, eventId));
-    }
-
-    //TODO verify access rights
-    private Optional<Event> findEventBySharedLabel(UUID userId, UUID eventId) {
-        return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
-            .stream()
-            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()))
-            .filter(mapping -> mapping.containsKey(eventId))
-            .findAny()
-            .map(mapping -> eventDao.findByIdValidated(mapping.get(eventId), eventId));
-    }
 
     public List<OccurrenceResponse> toResponse(UUID userId, Collection<Event> events, List<Occurrence> occurrences) {
         Map<UUID, Event> eventMapping = events.stream()
@@ -75,31 +36,35 @@ class OccurrenceResponseMapper {
             .toList();
     }
 
-    public OccurrenceResponse toResponse(UUID userId, Occurrence occurrence) {
-        Event event = queryEvent(userId, occurrence.getEventId());
-
-        return toResponse(userId, event, occurrence);
+    public List<OccurrenceResponse> toResponse(UUID userId, Event event, List<Occurrence> occurrences) {
+        return occurrences.stream()
+            .map(occurrence -> toResponse(userId, event, occurrence))
+            .toList();
     }
 
-    //TODO unit test masked event
-    //TODO mask occurrence's data
-    private OccurrenceResponse toResponse(UUID userId, Event event, Occurrence occurrence) {
-        Boolean autoDone = getFromEventIfNull(event, occurrence.getAutoDone(), Event::isAutoDone);
-        if (occurrence.getStatus() == OccurrenceStatus.EXPIRED && autoDone) {
+    public OccurrenceResponse toResponse(UUID userId, Event event, Occurrence occurrence) {
+        Boolean autoDone = getFromEventIfNull(event, occurrence.getAutoDone(), Event::isAutoDone, null);
+        if (occurrence.getStatus() == OccurrenceStatus.EXPIRED && nonNull(autoDone) && autoDone) {
+            //Despite being masked, record contains the data so it is safe to edit the original record.
             occurrence.setStatus(OccurrenceStatus.DONE);
             occurrenceDao.save(occurrence);
         }
+
+        boolean occurrenceMasked = occurrence.isMasked();
+        boolean eventMasked = event.isMasked();
+
+        log.info("Mapping occurrence {}. Event masked: {}, occurrence masked: {}", occurrence.getOccurrenceId(), eventMasked, occurrenceMasked);
 
         return OccurrenceResponse.builder()
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
             .date(occurrence.getDate())
-            .time(getFromEventIfNull(event, occurrence.getTime(), Event::getTime))
+            .time(mask(occurrenceMasked, getFromEventIfNull(event, occurrence.getTime(), Event::getTime, null), null))
             .status(occurrence.getStatus())
-            .title(mask(event.isMasked(), event.getTitle(), Constants.QUESTION_MARK))
-            .content(mask(event.isMasked(), event.getContent(), Constants.EMPTY_STRING))
-            .note(occurrence.getNote())
-            .remindMeBeforeDays(getFromEventIfNull(event, occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays))
+            .title(mask(eventMasked, event.getTitle(), Constants.QUESTION_MARK))
+            .content(mask(eventMasked, event.getContent(), Constants.EMPTY_STRING))
+            .note(mask(occurrenceMasked, occurrence.getNote(), Constants.EMPTY_STRING))
+            .remindMeBeforeDays(getFromEventIfNull(event, occurrence.getRemindMeBeforeDays(), Event::getRemindMeBeforeDays, 0))
             .reminded(occurrence.isReminded())
             .eventArchived(event.isArchived())
             .autoDone(autoDone)
@@ -107,8 +72,8 @@ class OccurrenceResponseMapper {
             .build();
     }
 
-    private <T> T getFromEventIfNull(Event event, T value, Function<Event, T> mapper) {
+    private <T> T getFromEventIfNull(Event event, T value, Function<Event, T> mapper, T defaultValue) {
         return Optional.ofNullable(value)
-            .orElseGet(() -> mask(event.isMasked(), mapper.apply(event), null));
+            .orElseGet(() -> mask(event.isMasked(), mapper.apply(event), defaultValue));
     }
 }

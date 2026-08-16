@@ -11,9 +11,15 @@ import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CalendarIndexPageActions {
+    public static Optional<String> getOpenedOccurrenceNote(WebDriver driver) {
+        return WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-note")))
+            .map(WebElement::getText);
+    }
+
     public static void openCreateEventPage(WebDriver driver) {
         AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-date-create-new")))
             .orElseThrow(() -> new IllegalStateException("Open create event page button not found"))

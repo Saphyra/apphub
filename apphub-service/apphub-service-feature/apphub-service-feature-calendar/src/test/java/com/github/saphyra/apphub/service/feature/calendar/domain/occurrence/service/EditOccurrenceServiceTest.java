@@ -121,7 +121,8 @@ class EditOccurrenceServiceTest {
     @Test
     void editOccurrenceStatus() {
         given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.EDIT)).willReturn(new BiWrapper<>(event, occurrence));
-        given(occurrenceResponseMapper.toResponse(USER_ID, occurrence)).willReturn(response);
+        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(event, occurrence));
+        given(occurrenceResponseMapper.toResponse(USER_ID, event, occurrence)).willReturn(response);
 
         assertThat(underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, OccurrenceStatus.DONE)).isEqualTo(response);
 
@@ -132,7 +133,8 @@ class EditOccurrenceServiceTest {
     @Test
     void setReminded() {
         given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.EDIT)).willReturn(new BiWrapper<>(event, occurrence));
-        given(occurrenceResponseMapper.toResponse(USER_ID, occurrence)).willReturn(response);
+        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(event, occurrence));
+        given(occurrenceResponseMapper.toResponse(USER_ID, event, occurrence)).willReturn(response);
 
         assertThat(underTest.setReminded(USER_ID, EVENT_ID, OCCURRENCE_ID)).isEqualTo(response);
 

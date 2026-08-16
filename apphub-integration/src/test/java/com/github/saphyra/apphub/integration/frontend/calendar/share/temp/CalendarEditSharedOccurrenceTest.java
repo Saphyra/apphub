@@ -722,7 +722,6 @@ public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, newOccurrenceDate)).hasSize(1));
     }
 
-    //TODO lego grants from multiple shares
     @DataProvider(parallel = true)
     private static Object[][] lego() {
         return new Object[][]{

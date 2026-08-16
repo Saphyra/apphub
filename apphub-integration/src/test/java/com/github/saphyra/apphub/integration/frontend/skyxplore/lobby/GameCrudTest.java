@@ -16,6 +16,7 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import com.github.saphyra.apphub.integration.structure.view.skyxplore.LobbyPlayer;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class GameCrudTest extends SeleniumTest {
+    @Ignore("Chrome WebSocket bug breaks the test.") //TODO implement backend test instead
     @Test(groups = {"fe", "skyxplore"})
     public void gameCrud() {
         List<WebDriver> drivers = extractDrivers(3);

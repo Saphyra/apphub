@@ -20,7 +20,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class AlmMapper extends ConverterBase<Map<String, AttributeValue>, Alm> {
     private final UuidConverter uuidConverter;
 

@@ -11,7 +11,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class SharedObjectServiceProvider {
     private final List<SharedObjectService> sharedObjectServices;
 

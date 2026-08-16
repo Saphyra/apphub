@@ -3,7 +3,7 @@ import { replaceTabsWithSpaces } from "./TabReplacer";
 
 const Textarea = ({
     id,
-    className,
+    className = "",
     onchangeCallback,
     placeholder,
     value,
