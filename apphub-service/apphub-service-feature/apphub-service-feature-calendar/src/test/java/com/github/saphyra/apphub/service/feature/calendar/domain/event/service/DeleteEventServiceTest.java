@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
-import com.github.saphyra.apphub.service.feature.calendar.domain.Operation;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.common.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

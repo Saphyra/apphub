@@ -21,7 +21,6 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class CalendarShareControllerImpl implements CalendarShareController {
     private final SharedObjectQueryService sharedObjectQueryService;
     private final ShareObjectService shareObjectService;

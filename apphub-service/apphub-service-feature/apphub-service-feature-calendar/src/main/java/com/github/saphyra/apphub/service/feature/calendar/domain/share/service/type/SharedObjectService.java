@@ -8,4 +8,6 @@ public interface SharedObjectService {
     SharedObjectType getType();
 
     SharedObject getSharedObject(UUID userId, UUID objectId, UUID parent);
+
+    boolean exists(UUID parent, UUID objectId);
 }

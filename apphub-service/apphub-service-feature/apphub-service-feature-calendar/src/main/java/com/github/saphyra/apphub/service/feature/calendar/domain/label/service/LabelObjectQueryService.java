@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.feature.calendar.domain;
+package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;

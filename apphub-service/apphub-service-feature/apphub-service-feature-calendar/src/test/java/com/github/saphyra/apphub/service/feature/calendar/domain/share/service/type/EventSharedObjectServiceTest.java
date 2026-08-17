@@ -1,14 +1,16 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
-import com.github.saphyra.apphub.service.feature.calendar.domain.EventObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,6 +27,9 @@ class EventSharedObjectServiceTest {
 
     @Mock
     private EventObjectQueryService eventObjectQueryService;
+
+    @Mock
+    private EventDao eventDao;
 
     @InjectMocks
     private EventSharedObjectService underTest;
@@ -50,5 +55,12 @@ class EventSharedObjectServiceTest {
         assertThat(result.owner()).isEqualTo(USER_ID);
         assertThat(result.parent()).isEqualTo(USER_ID);
         assertThat(result.name()).isEqualTo(TITLE);
+    }
+
+    @Test
+    void exists() {
+        given(eventDao.findById(USER_ID, EVENT_ID)).willReturn(Optional.of(event));
+
+        assertThat(underTest.exists(USER_ID, EVENT_ID)).isTrue();
     }
 }

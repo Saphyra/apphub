@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.feature.calendar.domain;
+package com.github.saphyra.apphub.service.feature.calendar.common;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import lombok.Getter;

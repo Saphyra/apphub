@@ -12,7 +12,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 public class ShareObjectService {
     private final ShareObjectRequestValidator shareObjectRequestValidator;
     private final AlmFactory almFactory;

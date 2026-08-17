@@ -3,8 +3,9 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.share.service.
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
-import com.github.saphyra.apphub.service.feature.calendar.domain.OccurrenceObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.object_query.OccurrenceObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +33,9 @@ class OccurrenceSharedObjectServiceTest {
 
     @Mock
     private DateTimeConverter dateTimeConverter;
+
+    @Mock
+    private OccurrenceDao occurrenceDao;
 
     @InjectMocks
     private OccurrenceSharedObjectService underTest;
@@ -58,5 +63,12 @@ class OccurrenceSharedObjectServiceTest {
         assertThat(result.owner()).isEqualTo(USER_ID);
         assertThat(result.parent()).isEqualTo(EVENT_ID);
         assertThat(result.name()).isEqualTo(DATE_STRING);
+    }
+
+    @Test
+    void exists() {
+        given(occurrenceDao.findById(EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(occurrence));
+
+        assertThat(underTest.exists(EVENT_ID, OCCURRENCE_ID)).isTrue();
     }
 }
