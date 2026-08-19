@@ -21,7 +21,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class LabelObjectQueryService {
     private final EventLabelMappingDao eventLabelMappingDao;
     private final AlmDao almDao;

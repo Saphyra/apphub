@@ -10,8 +10,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_OBJECT;
@@ -49,7 +49,7 @@ class AlmMapperTest {
 			.objectType(SharedObjectType.EVENT)
 			.owner(OWNER)
 			.parent(PARENT)
-			.grants(List.of(Grant.VIEW, Grant.EDIT))
+			.grants(Set.of(Grant.VIEW, Grant.EDIT))
 			.build();
 
 		given(uuidConverter.convertDomain(PRINCIPAL)).willReturn(PRINCIPAL_STRING);

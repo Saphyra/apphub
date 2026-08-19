@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,7 +82,7 @@ class CalendarShareControllerImplTest {
 
         underTest.editOperations(List.of(Grant.DELETE), SharedObjectType.OCCURRENCE, ID, SHARED_WITH, accessToken);
 
-        then(editSharedOperationsService).should().editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.OCCURRENCE, ID, List.of(Grant.DELETE));
+        then(editSharedOperationsService).should().editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.OCCURRENCE, ID, Set.of(Grant.DELETE));
     }
 
     @Test

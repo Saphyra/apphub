@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ class CalendarShareControllerImpl implements CalendarShareController {
     public void editOperations(List<Grant> grants, SharedObjectType type, UUID id, UUID sharedWith, AccessToken accessToken) {
         log.info("{} wants to edit operations of user {} to {} {}", accessToken.getUserId(), sharedWith, type, id);
 
-        editSharedOperationsService.editSharedOperations(accessToken.getUserId(), sharedWith, type, id, grants);
+        editSharedOperationsService.editSharedOperations(accessToken.getUserId(), sharedWith, type, id, new HashSet<>(grants));
     }
 
     @Override

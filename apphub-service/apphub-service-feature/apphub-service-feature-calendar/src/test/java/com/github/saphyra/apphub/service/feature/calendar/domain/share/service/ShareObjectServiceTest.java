@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -52,7 +53,7 @@ class ShareObjectServiceTest {
             .parent(PARENT)
             .grants(List.of(Grant.DELETE))
             .build();
-        given(almFactory.create(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT, OWNER, PARENT, List.of(Grant.DELETE))).willReturn(alm);
+        given(almFactory.create(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT, OWNER, PARENT, Set.of(Grant.DELETE))).willReturn(alm);
 
         underTest.share(USER_ID, request);
 

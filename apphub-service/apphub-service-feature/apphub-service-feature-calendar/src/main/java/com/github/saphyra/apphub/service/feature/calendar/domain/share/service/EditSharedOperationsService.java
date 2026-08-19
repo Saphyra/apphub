@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Princ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
@@ -17,7 +17,7 @@ import java.util.UUID;
 public class EditSharedOperationsService {
     private final AlmDao almDao;
 
-    public void editSharedOperations(UUID userId, UUID sharedWith, SharedObjectType type, UUID objectId, List<Grant> grants) {
+    public void editSharedOperations(UUID userId, UUID sharedWith, SharedObjectType type, UUID objectId, Set<Grant> grants) {
         Alm alm = almDao.findForObjectValidated(sharedWith, PrincipalType.USER, objectId, type);
 
         if (!alm.getOwner().equals(userId)) {

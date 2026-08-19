@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Princ
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.UUID;
 
 @Component
@@ -20,7 +21,7 @@ public class ShareObjectService {
     public void share(UUID userId, ShareObjectRequest request) {
         shareObjectRequestValidator.validate(userId, request);
 
-        Alm alm = almFactory.create(request.getSharedWith(), PrincipalType.USER, request.getObjectId(), request.getType(), request.getOwner(), request.getParent(), request.getGrants());
+        Alm alm = almFactory.create(request.getSharedWith(), PrincipalType.USER, request.getObjectId(), request.getType(), request.getOwner(), request.getParent(), new HashSet<>(request.getGrants()));
         almDao.save(alm);
     }
 }

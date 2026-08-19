@@ -5,13 +5,13 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
 public class AlmFactory {
-    public Alm create(UUID principal, PrincipalType principalType, UUID objectId, SharedObjectType objectType, UUID owner, UUID parent, List<Grant> grants) {
+    public Alm create(UUID principal, PrincipalType principalType, UUID objectId, SharedObjectType objectType, UUID owner, UUID parent, Set<Grant> grants) {
         return Alm.builder()
             .principal(principal)
             .principalType(principalType)

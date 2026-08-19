@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -17,5 +17,5 @@ public class SharedWithResponse {
     private UUID userId;
     private String username;
     private String email;
-    private List<Grant> grants;
+    private Collection<Grant> grants;
 }

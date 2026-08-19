@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,13 +24,13 @@ class AlmFactoryTest {
 
     @Test
     void create() {
-        assertThat(underTest.create(PRINCIPAL, PrincipalType.USER, OBJECT_ID, SharedObjectType.OCCURRENCE, OWNER, PARENT, List.of(Grant.DELETE)))
+        assertThat(underTest.create(PRINCIPAL, PrincipalType.USER, OBJECT_ID, SharedObjectType.OCCURRENCE, OWNER, PARENT, Set.of(Grant.DELETE)))
             .returns(PRINCIPAL, Alm::getPrincipal)
             .returns(PrincipalType.USER, Alm::getPrincipalType)
             .returns(OBJECT_ID, Alm::getObjectId)
             .returns(SharedObjectType.OCCURRENCE, Alm::getObjectType)
             .returns(OWNER, Alm::getOwner)
             .returns(PARENT, Alm::getParent)
-            .returns(List.of(Grant.DELETE), Alm::getGrants);
+            .returns(Set.of(Grant.DELETE), Alm::getGrants);
     }
 }

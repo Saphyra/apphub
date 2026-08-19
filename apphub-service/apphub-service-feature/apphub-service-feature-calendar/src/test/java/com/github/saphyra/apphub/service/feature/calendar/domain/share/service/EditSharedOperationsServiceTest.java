@@ -12,7 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -38,9 +38,9 @@ class EditSharedOperationsServiceTest {
         given(almDao.findForObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
         given(alm.getOwner()).willReturn(USER_ID);
 
-        underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, List.of(Grant.DELETE));
+        underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE));
 
-        then(alm).should().setGrants(List.of(Grant.DELETE));
+        then(alm).should().setGrants(Set.of(Grant.DELETE));
         then(almDao).should().save(alm);
     }
 
@@ -49,6 +49,6 @@ class EditSharedOperationsServiceTest {
         given(almDao.findForObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
         given(alm.getOwner()).willReturn(UUID.randomUUID());
 
-        ExceptionValidator.validateForbiddenOperation(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, List.of(Grant.DELETE)));
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE)));
     }
 }

@@ -10,6 +10,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_OBJECT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_OPERATIONS;
@@ -49,7 +50,7 @@ class AlmMapper extends ConverterBase<Map<String, AttributeValue>, Alm> {
             .objectId(uuidConverter.convertEntity(skParts[1]))
             .owner(uuidConverter.convertEntity(userIdParts[1]))
             .parent(uuidConverter.convertEntity(entity.get(COLUMN_PARENT).s()))
-            .grants(entity.get(COLUMN_OPERATIONS).ss().stream().map(Grant::valueOf).toList())
+            .grants(entity.get(COLUMN_OPERATIONS).ss().stream().map(Grant::valueOf).collect(Collectors.toSet()))
             .build();
     }
 }

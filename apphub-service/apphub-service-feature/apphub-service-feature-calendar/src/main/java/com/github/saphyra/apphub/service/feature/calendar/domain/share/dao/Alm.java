@@ -7,9 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
@@ -21,14 +20,5 @@ public class Alm {
     private final SharedObjectType objectType;
     private final UUID owner; //Owner of the object shared
     private final UUID parent; //Parent of the object shared
-    private List<Grant> grants;
-
-    public void addOperation(Grant grant) {
-        grants = Stream.concat(
-                Stream.of(grant),
-                grants.stream()
-            )
-            .distinct()
-            .toList();
-    }
+    private Set<Grant> grants;
 }

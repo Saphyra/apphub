@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -77,7 +78,7 @@ class SharedObjectQueryServiceTest {
         given(accountResponse.getUserId()).willReturn(SHARED_WITH);
         given(accountResponse.getUsername()).willReturn(USERNAME);
         given(accountResponse.getEmail()).willReturn(EMAIL);
-        given(alm.getGrants()).willReturn(List.of(Grant.DELETE));
+        given(alm.getGrants()).willReturn(Set.of(Grant.DELETE));
 
         SharedObjectResponse result = underTest.getSharedItem(USER_ID, SharedObjectType.EVENT, EVENT_ID, USER_ID);
 
@@ -92,7 +93,7 @@ class SharedObjectQueryServiceTest {
             .returns(SHARED_WITH, SharedWithResponse::getUserId)
             .returns(USERNAME, SharedWithResponse::getUsername)
             .returns(EMAIL, SharedWithResponse::getEmail)
-            .returns(List.of(Grant.DELETE), SharedWithResponse::getGrants);
+            .returns(Set.of(Grant.DELETE), SharedWithResponse::getGrants);
     }
 
     @Test
@@ -110,7 +111,7 @@ class SharedObjectQueryServiceTest {
         given(accountResponse.getUserId()).willReturn(SHARED_WITH);
         given(accountResponse.getUsername()).willReturn(USERNAME);
         given(accountResponse.getEmail()).willReturn(EMAIL);
-        given(alm.getGrants()).willReturn(List.of(Grant.DELETE));
+        given(alm.getGrants()).willReturn(Set.of(Grant.DELETE));
 
         SharedObjectResponse result = underTest.getSharedItem(USER_ID, SharedObjectType.EVENT, EVENT_ID, USER_ID);
 
@@ -125,6 +126,6 @@ class SharedObjectQueryServiceTest {
             .returns(SHARED_WITH, SharedWithResponse::getUserId)
             .returns(USERNAME, SharedWithResponse::getUsername)
             .returns(EMAIL, SharedWithResponse::getEmail)
-            .returns(List.of(Grant.DELETE), SharedWithResponse::getGrants);
+            .returns(Set.of(Grant.DELETE), SharedWithResponse::getGrants);
     }
 }

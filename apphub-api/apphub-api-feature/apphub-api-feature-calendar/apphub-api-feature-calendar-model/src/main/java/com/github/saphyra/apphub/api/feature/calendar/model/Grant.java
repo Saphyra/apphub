@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
@@ -41,10 +43,10 @@ public enum Grant {
         this(parent, Arrays.asList(sharedObjectType));
     }
 
-    public static List<Grant> forType(SharedObjectType sharedObjectType) {
+    public static Set<Grant> forType(SharedObjectType sharedObjectType) {
         return Arrays.stream(values())
             .filter(grant -> grant.getObjectTypes().contains(sharedObjectType))
-            .toList();
+            .collect(Collectors.toSet());
     }
 
     public Optional<Grant> toParent() {

@@ -4,8 +4,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public enum Operation {
@@ -14,9 +13,9 @@ public enum Operation {
     ;
 
     @Getter
-    private final List<Grant> requiredGrants;
+    private final Set<Grant> requiredGrants;
 
     Operation(Grant... requiredGrants) {
-        this(Arrays.asList(requiredGrants));
+        this(Set.of(requiredGrants));
     }
 }
