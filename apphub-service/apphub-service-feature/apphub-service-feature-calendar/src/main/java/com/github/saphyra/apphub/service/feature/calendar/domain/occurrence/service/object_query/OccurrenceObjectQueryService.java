@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -21,7 +22,7 @@ public class OccurrenceObjectQueryService {
     private final FindOccurrenceForOperationService findOccurrenceForOperationService;
     private final GetOccurrencesOfEventService getOccurrencesOfEventService;
 
-    public BiWrapper<Event, Occurrence> findOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
+    public Optional<BiWrapper<Event, Occurrence>> findOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
         return findOccurrenceService.findOccurrence(userId, eventId, occurrenceId);
     }
 

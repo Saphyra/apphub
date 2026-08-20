@@ -11,10 +11,10 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeenTestUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObject;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectServiceProvider;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -65,12 +65,10 @@ class SharedObjectQueryServiceTest {
     private AccountResponse accountResponse;
 
     @Test
-    void getSharedItem_ownRecord() {
+    void getSharedItem() {
         given(sharedObjectServiceProvider.getForType(SharedObjectType.EVENT)).willReturn(sharedObjectService);
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
-
         SharedObject sharedObject = new SharedObject(EVENT_ID, USER_ID, USER_ID, TITLE);
-        given(sharedObjectService.getSharedObject(USER_ID, EVENT_ID, USER_ID)).willReturn(sharedObject);
+        given(sharedObjectService.getSharedObject(USER_ID, EVENT_ID, USER_ID)).willReturn(Optional.of(sharedObject));
 
         given(almDao.getByObject(EVENT_ID, SharedObjectType.EVENT)).willReturn(List.of(alm));
         given(alm.getPrincipal()).willReturn(SHARED_WITH);
@@ -97,35 +95,10 @@ class SharedObjectQueryServiceTest {
     }
 
     @Test
-    void getSharedItem_sharedRecord() {
+    void notFound() {
         given(sharedObjectServiceProvider.getForType(SharedObjectType.EVENT)).willReturn(sharedObjectService);
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm));
-        given(alm.getOwner()).willReturn(USER_ID);
+        given(sharedObjectService.getSharedObject(USER_ID, EVENT_ID, USER_ID)).willReturn(Optional.empty());
 
-        SharedObject sharedObject = new SharedObject(EVENT_ID, USER_ID, USER_ID, TITLE);
-        given(sharedObjectService.getSharedObject(USER_ID, EVENT_ID, USER_ID)).willReturn(sharedObject);
-
-        given(almDao.getByObject(EVENT_ID, SharedObjectType.EVENT)).willReturn(List.of(alm));
-        given(alm.getPrincipal()).willReturn(SHARED_WITH);
-        given(accountClient.getAccountInternal(SHARED_WITH)).willReturn(accountResponse);
-        given(accountResponse.getUserId()).willReturn(SHARED_WITH);
-        given(accountResponse.getUsername()).willReturn(USERNAME);
-        given(accountResponse.getEmail()).willReturn(EMAIL);
-        given(alm.getGrants()).willReturn(Set.of(Grant.DELETE));
-
-        SharedObjectResponse result = underTest.getSharedItem(USER_ID, SharedObjectType.EVENT, EVENT_ID, USER_ID);
-
-        assertThat(result)
-            .returns(EVENT_ID, SharedObjectResponse::getObjectId)
-            .returns(TITLE, SharedObjectResponse::getName)
-            .returns(USER_ID, SharedObjectResponse::getOwner)
-            .returns(USER_ID, SharedObjectResponse::getParent);
-
-        assertThat(result.getSharedWith())
-            .singleElement()
-            .returns(SHARED_WITH, SharedWithResponse::getUserId)
-            .returns(USERNAME, SharedWithResponse::getUsername)
-            .returns(EMAIL, SharedWithResponse::getEmail)
-            .returns(Set.of(Grant.DELETE), SharedWithResponse::getGrants);
+        ExceptionValidator.validateNotFoundException(() -> underTest.getSharedItem(USER_ID, SharedObjectType.EVENT, EVENT_ID, USER_ID));
     }
 }

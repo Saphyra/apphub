@@ -2,13 +2,13 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ class FindOccurrenceService {
     private final EventGrantFinder eventGrantFinder;
     private final OccurrenceGrantFinder occurrenceGrantFinder;
 
-    BiWrapper<Event, Occurrence> findOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
+    Optional<BiWrapper<Event, Occurrence>> findOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
         BiWrapper<Occurrence, Set<Grant>> occurrenceWithGrants = occurrenceGrantFinder.getOccurrenceWithGrants(userId, eventId, occurrenceId);
         log.info("Occurrence grants: {}", occurrenceWithGrants.getEntity2());
         Occurrence occurrence = occurrenceWithGrants.getEntity1();
@@ -40,12 +40,13 @@ class FindOccurrenceService {
         log.info("Aggregated grants: {}", aggregatedGrants);
 
         if (!aggregatedGrants.contains(Grant.VIEW) && !aggregatedGrants.contains(Grant.SEE)) {
-            throw ExceptionFactory.forbiddenOperation("User " + userId + " does not have access to occurrence " + occurrenceId);
+            return Optional.empty();
         }
 
-        return new BiWrapper<>(
+        BiWrapper<Event, Occurrence> bw = new BiWrapper<>(
             event.setMasked(!eventWithGrants.getEntity2().contains(Grant.VIEW)),
             occurrence.setMasked(!aggregatedGrants.contains(Grant.VIEW))
         );
+        return Optional.of(bw);
     }
 }

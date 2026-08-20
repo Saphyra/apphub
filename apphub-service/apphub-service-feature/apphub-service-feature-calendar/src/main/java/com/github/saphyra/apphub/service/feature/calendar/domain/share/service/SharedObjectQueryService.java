@@ -9,15 +9,11 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObject;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectServiceProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -29,23 +25,16 @@ public class SharedObjectQueryService {
     private final ExecutorServiceBean executorServiceBean;
 
     public SharedObjectResponse getSharedItem(UUID userId, SharedObjectType type, UUID objectId, UUID parent) {
-        SharedObjectService sharedObjectService = sharedObjectServiceProvider.getForType(type);
-
-        //Find Alm for object
-        SharedObject sharedObject = almDao.findForObject(userId, PrincipalType.USER, objectId, type)
-            //Search by alm if found
-            .map(alm -> sharedObjectService.getSharedObject(alm.getOwner(), objectId, parent))
-            //Search own if not found by alm
-            .or(() -> Optional.of(sharedObjectService.getSharedObject(userId, objectId, parent)))
-            .orElseThrow(() -> ExceptionFactory.notFound("SharedObject not found for userId %s and objectId %s for type %s".formatted(userId, objectId, type)));
-
-        return SharedObjectResponse.builder()
-            .objectId(sharedObject.objectId())
-            .name(sharedObject.name())
-            .owner(sharedObject.owner())
-            .parent(sharedObject.parent())
-            .sharedWith(getSharedWith(sharedObject.objectId(), type))
-            .build();
+        return sharedObjectServiceProvider.getForType(type)
+            .getSharedObject(userId, objectId, parent)
+            .map(sharedObject -> SharedObjectResponse.builder()
+                .objectId(sharedObject.objectId())
+                .name(sharedObject.name())
+                .owner(sharedObject.owner())
+                .parent(sharedObject.parent())
+                .sharedWith(getSharedWith(sharedObject.objectId(), type))
+                .build())
+            .orElseThrow(() -> ExceptionFactory.notFound(userId + " has no access to " + type + " with id " + objectId + " or it does not exist"));
     }
 
     private List<SharedWithResponse> getSharedWith(UUID id, SharedObjectType objectType) {

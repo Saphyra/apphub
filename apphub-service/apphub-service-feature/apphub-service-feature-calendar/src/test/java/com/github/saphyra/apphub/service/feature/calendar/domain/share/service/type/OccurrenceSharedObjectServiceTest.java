@@ -50,19 +50,20 @@ class OccurrenceSharedObjectServiceTest {
 
     @Test
     void getSharedObject() {
-        given(occurrenceObjectQueryService.findOccurrence(OWNER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(null, occurrence));
+        given(occurrenceObjectQueryService.findOccurrence(OWNER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(new BiWrapper<>(null, occurrence)));
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
         given(occurrence.getUserId()).willReturn(USER_ID);
         given(occurrence.getDate()).willReturn(DATE);
         given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(dateTimeConverter.convertDomain(DATE)).willReturn(DATE_STRING);
 
-        SharedObject result = underTest.getSharedObject(OWNER_ID, OCCURRENCE_ID, EVENT_ID);
+        Optional<SharedObject> result = underTest.getSharedObject(OWNER_ID, OCCURRENCE_ID, EVENT_ID);
 
-        assertThat(result.objectId()).isEqualTo(OCCURRENCE_ID);
-        assertThat(result.owner()).isEqualTo(USER_ID);
-        assertThat(result.parent()).isEqualTo(EVENT_ID);
-        assertThat(result.name()).isEqualTo(DATE_STRING);
+        assertThat(result).isPresent();
+        assertThat(result.get().objectId()).isEqualTo(OCCURRENCE_ID);
+        assertThat(result.get().owner()).isEqualTo(USER_ID);
+        assertThat(result.get().parent()).isEqualTo(EVENT_ID);
+        assertThat(result.get().name()).isEqualTo(DATE_STRING);
     }
 
     @Test

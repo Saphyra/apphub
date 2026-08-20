@@ -50,12 +50,13 @@ class LabelSharedObjectServiceTest {
         given(label.getUserId()).willReturn(USER_ID);
         given(label.getLabel()).willReturn(LABEL);
 
-        SharedObject result = underTest.getSharedObject(OWNER_ID, OBJECT_ID, PARENT_ID);
+        Optional<SharedObject> result = underTest.getSharedObject(OWNER_ID, OBJECT_ID, PARENT_ID);
 
-        assertThat(result.objectId()).isEqualTo(LABEL_ID);
-        assertThat(result.owner()).isEqualTo(USER_ID);
-        assertThat(result.parent()).isEqualTo(USER_ID);
-        assertThat(result.name()).isEqualTo(LABEL);
+        assertThat(result).isPresent();
+        assertThat(result.get().objectId()).isEqualTo(LABEL_ID);
+        assertThat(result.get().owner()).isEqualTo(USER_ID);
+        assertThat(result.get().parent()).isEqualTo(USER_ID);
+        assertThat(result.get().name()).isEqualTo(LABEL);
     }
 
     @Test

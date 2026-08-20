@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -121,7 +122,7 @@ class EditOccurrenceServiceTest {
     @Test
     void editOccurrenceStatus() {
         given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.EDIT)).willReturn(new BiWrapper<>(event, occurrence));
-        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(event, occurrence));
+        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(new BiWrapper<>(event, occurrence)));
         given(occurrenceResponseMapper.toResponse(USER_ID, event, occurrence)).willReturn(response);
 
         assertThat(underTest.editOccurrenceStatus(USER_ID, EVENT_ID, OCCURRENCE_ID, OccurrenceStatus.DONE)).isEqualTo(response);
@@ -133,7 +134,7 @@ class EditOccurrenceServiceTest {
     @Test
     void setReminded() {
         given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.EDIT)).willReturn(new BiWrapper<>(event, occurrence));
-        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(event, occurrence));
+        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(new BiWrapper<>(event, occurrence)));
         given(occurrenceResponseMapper.toResponse(USER_ID, event, occurrence)).willReturn(response);
 
         assertThat(underTest.setReminded(USER_ID, EVENT_ID, OCCURRENCE_ID)).isEqualTo(response);

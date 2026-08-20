@@ -1,14 +1,14 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
-import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -24,11 +24,9 @@ class EventSharedObjectService implements SharedObjectService {
     }
 
     @Override
-    public SharedObject getSharedObject(UUID userId, UUID eventId, UUID parent) {
-        Event event = eventObjectQueryService.findEvent(userId, eventId)
-            .orElseThrow(() -> ExceptionFactory.notFound("Event not found for owner %s and eventId %s".formatted(userId, eventId)));
-
-        return new SharedObject(event.getEventId(), event.getUserId(), event.getUserId(), event.getTitle());
+    public Optional<SharedObject> getSharedObject(UUID principal, UUID eventId, UUID parent) {
+        return eventObjectQueryService.findEvent(principal, eventId)
+            .map(event -> new SharedObject(event.getEventId(), event.getUserId(), event.getUserId(), event.isMasked() ? Constants.QUESTION_MARK : event.getTitle()));
     }
 
     @Override

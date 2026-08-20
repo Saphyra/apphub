@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -87,7 +88,7 @@ class OccurrenceQueryServiceTest {
 
     @Test
     void getOccurrence(){
-        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(event, occurrence));
+        given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(new BiWrapper<>(event, occurrence)));
         given(occurrenceResponseMapper.toResponse(USER_ID, event, occurrence)).willReturn(occurrenceResponse);
 
         assertThat(underTest.getOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).isEqualTo(occurrenceResponse);

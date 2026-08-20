@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,10 +46,6 @@ public enum Grant {
         return Arrays.stream(values())
             .filter(grant -> grant.getObjectTypes().contains(sharedObjectType))
             .collect(Collectors.toSet());
-    }
-
-    public Optional<Grant> toParent() {
-        return Optional.ofNullable(parent);
     }
 
     /**

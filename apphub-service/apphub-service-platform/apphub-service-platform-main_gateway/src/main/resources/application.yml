@@ -357,6 +357,11 @@ role:
         - GET
       requiredRoles:
         - CALENDAR
+    - pattern: /web/calendar/**
+      methods:
+        - GET
+      requiredRoles:
+        - CALENDAR
     - pattern: /api/calendar/**
       methods:
         - GET

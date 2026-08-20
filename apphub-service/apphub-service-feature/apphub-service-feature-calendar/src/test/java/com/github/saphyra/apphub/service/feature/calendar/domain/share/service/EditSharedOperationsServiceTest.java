@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.share.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
@@ -32,6 +33,21 @@ class EditSharedOperationsServiceTest {
 
     @Mock
     private Alm alm;
+
+    @Test
+    void nullGrants() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, null), "grants", "must not be null");
+    }
+
+    @Test
+    void grantsContainsNull() {
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, CollectionUtils.toSet(Grant.DELETE, null)), "grants", "must not contain null values");
+    }
+
+    @Test
+    void emptyGrants(){
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of()), "grants", "must not be empty");
+    }
 
     @Test
     void editSharedOperations() {

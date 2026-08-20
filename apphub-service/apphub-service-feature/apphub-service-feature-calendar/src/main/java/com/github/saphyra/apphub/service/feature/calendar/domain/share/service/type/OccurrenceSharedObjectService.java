@@ -1,13 +1,14 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.object_query.OccurrenceObjectQueryService;
-import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.object_query.OccurrenceObjectQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -23,11 +24,10 @@ class OccurrenceSharedObjectService implements SharedObjectService {
     }
 
     @Override
-    public SharedObject getSharedObject(UUID userId, UUID occurrenceId, UUID eventId) {
-        Occurrence occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId)
-            .getEntity2();
-
-        return new SharedObject(occurrence.getOccurrenceId(), occurrence.getUserId(), occurrence.getEventId(), dateTimeConverter.convertDomain(occurrence.getDate()));
+    public Optional<SharedObject> getSharedObject(UUID principal, UUID occurrenceId, UUID eventId) {
+        return occurrenceObjectQueryService.findOccurrence(principal, eventId, occurrenceId)
+            .map(BiWrapper::getEntity2)
+            .map(occurrence -> new SharedObject(occurrence.getOccurrenceId(), occurrence.getUserId(), occurrence.getEventId(), dateTimeConverter.convertDomain(occurrence.getDate())));
     }
 
     @Override

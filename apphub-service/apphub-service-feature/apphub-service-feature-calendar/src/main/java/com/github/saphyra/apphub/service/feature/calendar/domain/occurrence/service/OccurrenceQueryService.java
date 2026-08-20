@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.object_query.OccurrenceObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
@@ -68,7 +69,8 @@ public class OccurrenceQueryService {
     }
 
     public OccurrenceResponse getOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
-        BiWrapper<Event, Occurrence> occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId);
+        BiWrapper<Event, Occurrence> occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId)
+            .orElseThrow(() -> ExceptionFactory.notFound("Occurrence not found for userId " + userId + ", eventId " + eventId + ", occurrenceId " + occurrenceId + " or user has no access to it."));
         return occurrenceResponseMapper.toResponse(userId, occurrence.getEntity1(), occurrence.getEntity2());
     }
 }

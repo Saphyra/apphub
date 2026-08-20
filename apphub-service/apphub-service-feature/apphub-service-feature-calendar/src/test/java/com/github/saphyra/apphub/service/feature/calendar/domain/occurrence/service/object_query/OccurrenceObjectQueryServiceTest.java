@@ -12,6 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,9 +47,10 @@ class OccurrenceObjectQueryServiceTest {
 
     @Test
     void findOccurrence() {
-        given(findOccurrenceService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(event, occurrence));
+        given(findOccurrenceService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(new BiWrapper<>(event, occurrence)));
 
         assertThat(underTest.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID))
+            .get()
             .returns(event, BiWrapper::getEntity1)
             .returns(occurrence, BiWrapper::getEntity2);
     }

@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.UUID;
 
-//TODO role protection test
-//TODO API test
 public interface CalendarShareController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_SHARED_ITEM)
     SharedObjectResponse getSharedItem(
@@ -33,9 +31,11 @@ public interface CalendarShareController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_GRANTS)
     List<Grant> getOperations(@PathVariable("type") SharedObjectType type);
 
+    //TODO API test
     @PutMapping(CalendarEndpoints.CALENDAR_SHARE_OBJECT)
     void shareObject(@RequestBody ShareObjectRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
+    //TODO API test
     @PostMapping(CalendarEndpoints.CALENDAR_SHARE_EDIT_GRANTS)
     void editOperations(
         @RequestBody List<Grant> grants,
@@ -45,6 +45,7 @@ public interface CalendarShareController {
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
+    //TODO API test
     @DeleteMapping(CalendarEndpoints.CALENDAR_UNSHARE)
     void unshare(
         @PathVariable("type") SharedObjectType type,

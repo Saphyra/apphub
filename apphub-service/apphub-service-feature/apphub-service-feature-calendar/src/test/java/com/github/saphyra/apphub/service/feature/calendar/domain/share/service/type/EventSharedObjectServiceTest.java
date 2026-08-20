@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
@@ -48,13 +49,31 @@ class EventSharedObjectServiceTest {
         given(event.getEventId()).willReturn(EVENT_ID);
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getTitle()).willReturn(TITLE);
+        given(event.isMasked()).willReturn(false);
 
-        SharedObject result = underTest.getSharedObject(OWNER_ID, OBJECT_ID, PARENT_ID);
+        Optional<SharedObject> result = underTest.getSharedObject(OWNER_ID, OBJECT_ID, PARENT_ID);
 
-        assertThat(result.objectId()).isEqualTo(EVENT_ID);
-        assertThat(result.owner()).isEqualTo(USER_ID);
-        assertThat(result.parent()).isEqualTo(USER_ID);
-        assertThat(result.name()).isEqualTo(TITLE);
+        assertThat(result).isPresent();
+        assertThat(result.get().objectId()).isEqualTo(EVENT_ID);
+        assertThat(result.get().owner()).isEqualTo(USER_ID);
+        assertThat(result.get().parent()).isEqualTo(USER_ID);
+        assertThat(result.get().name()).isEqualTo(TITLE);
+    }
+
+    @Test
+    void getSharedObject_masked() {
+        given(eventObjectQueryService.findEvent(OWNER_ID, OBJECT_ID)).willReturn(java.util.Optional.of(event));
+        given(event.getEventId()).willReturn(EVENT_ID);
+        given(event.getUserId()).willReturn(USER_ID);
+        given(event.isMasked()).willReturn(true);
+
+        Optional<SharedObject> result = underTest.getSharedObject(OWNER_ID, OBJECT_ID, PARENT_ID);
+
+        assertThat(result).isPresent();
+        assertThat(result.get().objectId()).isEqualTo(EVENT_ID);
+        assertThat(result.get().owner()).isEqualTo(USER_ID);
+        assertThat(result.get().parent()).isEqualTo(USER_ID);
+        assertThat(result.get().name()).isEqualTo(Constants.QUESTION_MARK);
     }
 
     @Test

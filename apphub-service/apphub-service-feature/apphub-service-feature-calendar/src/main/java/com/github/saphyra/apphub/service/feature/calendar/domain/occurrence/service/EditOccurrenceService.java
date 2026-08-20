@@ -65,7 +65,8 @@ public class EditOccurrenceService {
         occurrenceDao.save(occurrence);
 
         //Re-query is needed because the occurrence and event queried for edition does not contain if records have to be masked or not
-        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId);
+        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId)
+            .orElseThrow(() -> new IllegalStateException("Previously modified occurrence not found."));
 
         return occurrenceResponseMapper.toResponse(userId, bw.getEntity1(), bw.getEntity2());
     }
@@ -77,7 +78,8 @@ public class EditOccurrenceService {
         occurrenceDao.save(occurrence);
 
         //Re-query is needed because the occurrence and event queried for edition does not contain if records have to be masked or not
-        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId);
+        BiWrapper<Event, Occurrence> bw = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId)
+            .orElseThrow(() -> new IllegalStateException("Previously modified occurrence not found."));
 
         return occurrenceResponseMapper.toResponse(userId, bw.getEntity1(), bw.getEntity2());
     }
