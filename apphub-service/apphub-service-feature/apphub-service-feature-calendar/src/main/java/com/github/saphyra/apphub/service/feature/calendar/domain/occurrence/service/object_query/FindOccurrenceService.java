@@ -17,7 +17,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FindOccurrenceService {
     private final EventGrantFinder eventGrantFinder;
     private final OccurrenceGrantFinder occurrenceGrantFinder;
@@ -27,7 +26,7 @@ class FindOccurrenceService {
         log.info("Occurrence grants: {}", occurrenceWithGrants.getEntity2());
         Occurrence occurrence = occurrenceWithGrants.getEntity1();
 
-        BiWrapper<Event, Set<Grant>> eventWithGrants = eventGrantFinder.getEventWithGrants(userId, occurrence.getEventId());
+        BiWrapper<Event, Set<Grant>> eventWithGrants = eventGrantFinder.getEventWithGrants(userId, eventId);
         log.info("Event grants: {}", eventWithGrants.getEntity2());
         Event event = eventWithGrants.getEntity1();
 
@@ -41,7 +40,7 @@ class FindOccurrenceService {
         log.info("Aggregated grants: {}", aggregatedGrants);
 
         if (!aggregatedGrants.contains(Grant.VIEW) && !aggregatedGrants.contains(Grant.SEE)) {
-            throw ExceptionFactory.forbiddenOperation("User " + userId + " does not have access toor occurrence " + occurrenceId);
+            throw ExceptionFactory.forbiddenOperation("User " + userId + " does not have access to occurrence " + occurrenceId);
         }
 
         return new BiWrapper<>(

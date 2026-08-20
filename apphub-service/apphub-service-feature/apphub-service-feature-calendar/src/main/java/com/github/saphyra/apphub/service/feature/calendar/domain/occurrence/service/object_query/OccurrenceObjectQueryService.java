@@ -15,7 +15,6 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 public class OccurrenceObjectQueryService {
     private final FindOccurrenceService findOccurrenceService;
     private final GetOccurrencesOfUserService getOccurrencesOfUserService;

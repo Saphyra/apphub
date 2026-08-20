@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class FindOccurrenceForOperationService {
     private final OccurrenceGrantFinder occurrenceGrantFinder;
     private final EventGrantFinder eventGrantFinder;
@@ -32,7 +31,7 @@ class FindOccurrenceForOperationService {
         log.info("Occurrence grants: {}", occurrenceWithGrants.getEntity2());
         Occurrence occurrence = occurrenceWithGrants.getEntity1();
 
-        BiWrapper<Event, Set<Grant>> eventWithGrants = eventGrantFinder.getEventWithGrants(userId, occurrence.getEventId());
+        BiWrapper<Event, Set<Grant>> eventWithGrants = eventGrantFinder.getEventWithGrants(userId, eventId);
         log.info("Event grants: {}", eventWithGrants.getEntity2());
         Event event = eventWithGrants.getEntity1();
 

@@ -16,7 +16,6 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-//TODO unit test
 class OccurrenceGrantFinder {
     private final OccurrenceDao occurrenceDao;
     private final AlmDao almDao;

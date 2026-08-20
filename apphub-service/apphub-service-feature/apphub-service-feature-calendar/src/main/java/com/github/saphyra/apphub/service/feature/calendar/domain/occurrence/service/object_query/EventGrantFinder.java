@@ -25,7 +25,6 @@ import java.util.stream.Stream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-//TODO unit test
 class EventGrantFinder {
     private final EventDao eventDao;
     private final AlmDao almDao;
@@ -64,15 +63,16 @@ class EventGrantFinder {
             //Pair eventId with grants of its Alm
             .map(bw -> new TriWrapper<>(bw.getEntity1().getGrants(), bw.getEntity2().get(eventId), eventId))
             //Merge all grants of the same eventId into one list
-            .reduce((a, b) -> new TriWrapper<>(
-                Stream.concat(
-                        a.getEntity1().stream(),
-                        b.getEntity1().stream()
-                    )
-                    .collect(Collectors.toSet()),
-                a.getEntity2(),
-                a.getEntity3()
-            ))
+            .reduce((a, b) -> {
+                    Set<Grant> aggregatedGrants = Stream.concat(
+                            a.getEntity1().stream(),
+                            b.getEntity1().stream()
+                        )
+                        .collect(Collectors.toSet());
+
+                    return new TriWrapper<>(aggregatedGrants, a.getEntity2(), a.getEntity3());
+                }
+            )
             //Project grants for children
             .map(tw -> {
                     Set<Grant> projectedGrants = tw.getEntity1()
