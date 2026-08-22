@@ -38,7 +38,7 @@ public class CalendarShareActions {
             .put(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_SHARE_OBJECT));
     }
 
-    public static Response getEditOperationsResponse(int serverPort, String accessToken, SharedObjectType type, UUID objectId, UUID sharedWith, Set<Grant> grants) {
+    public static Response getEditSharedObjectResponse(int serverPort, String accessToken, SharedObjectType type, UUID objectId, UUID sharedWith, Set<Grant> grants) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .body(grants)
             .post(UrlFactory.create(
@@ -80,9 +80,21 @@ public class CalendarShareActions {
     }
 
     public static void editOperations(int serverPort, String accessToken, SharedObjectType type, UUID labelId, UUID sharedWith, Set<Grant> grants) {
-        Response response = getEditOperationsResponse(serverPort, accessToken, type, labelId, sharedWith, grants);
+        Response response = getEditSharedObjectResponse(serverPort, accessToken, type, labelId, sharedWith, grants);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
+    }
+
+    public static void editSharedObject(int serverPort, String accessToken, SharedObjectType type, UUID objectId, UUID sharedWith, Set<Grant> grants) {
+        Response response = getEditSharedObjectResponse(serverPort, accessToken, type, objectId, sharedWith, grants);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
+
+    public static void unshareObject(int serverPort, String accessToken, SharedObjectType type, UUID objectId, UUID sharedWith) {
+        Response response = getUnshareResponse(serverPort, accessToken, type, objectId, sharedWith);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
     }
 }

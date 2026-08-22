@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.ShareObjectRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedObjectResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.EditSharedOperationsService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.EditSharedObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.ShareObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.SharedObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.UnshareObjectService;
@@ -37,7 +37,7 @@ class CalendarShareControllerImplTest {
     private ShareObjectService shareObjectService;
 
     @Mock
-    private EditSharedOperationsService editSharedOperationsService;
+    private EditSharedObjectService editSharedObjectService;
 
     @Mock
     private UnshareObjectService unshareObjectService;
@@ -80,9 +80,9 @@ class CalendarShareControllerImplTest {
     void editOperations() {
         given(accessToken.getUserId()).willReturn(USER_ID);
 
-        underTest.editOperations(List.of(Grant.DELETE), SharedObjectType.OCCURRENCE, ID, SHARED_WITH, accessToken);
+        underTest.editGrants(List.of(Grant.DELETE), SharedObjectType.OCCURRENCE, ID, SHARED_WITH, accessToken);
 
-        then(editSharedOperationsService).should().editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.OCCURRENCE, ID, Set.of(Grant.DELETE));
+        then(editSharedObjectService).should().editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.OCCURRENCE, ID, Set.of(Grant.DELETE));
     }
 
     @Test

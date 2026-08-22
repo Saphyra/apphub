@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -20,5 +20,5 @@ public class ShareObjectRequest {
     private UUID objectId;
     private UUID parent;
     private SharedObjectType type;
-    private List<Grant> grants;
+    private Set<Grant> grants;
 }

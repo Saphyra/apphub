@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.request.ShareObjectR
 import com.github.saphyra.apphub.api.feature.calendar.model.response.SharedObjectResponse;
 import com.github.saphyra.apphub.api.feature.calendar.server.CalendarShareController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.EditSharedOperationsService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.EditSharedObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.ShareObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.SharedObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.UnshareObjectService;
@@ -25,7 +25,7 @@ import java.util.UUID;
 class CalendarShareControllerImpl implements CalendarShareController {
     private final SharedObjectQueryService sharedObjectQueryService;
     private final ShareObjectService shareObjectService;
-    private final EditSharedOperationsService editSharedOperationsService;
+    private final EditSharedObjectService editSharedObjectService;
     private final UnshareObjectService unshareObjectService;
 
     @Override
@@ -49,10 +49,10 @@ class CalendarShareControllerImpl implements CalendarShareController {
     }
 
     @Override
-    public void editOperations(List<Grant> grants, SharedObjectType type, UUID id, UUID sharedWith, AccessToken accessToken) {
+    public void editGrants(List<Grant> grants, SharedObjectType type, UUID id, UUID sharedWith, AccessToken accessToken) {
         log.info("{} wants to edit operations of user {} to {} {}", accessToken.getUserId(), sharedWith, type, id);
 
-        editSharedOperationsService.editSharedOperations(accessToken.getUserId(), sharedWith, type, id, new HashSet<>(grants));
+        editSharedObjectService.editSharedObject(accessToken.getUserId(), sharedWith, type, id, new HashSet<>(grants));
     }
 
     @Override

@@ -19,8 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.mockito.BDDMockito.given;
@@ -28,7 +28,6 @@ import static org.mockito.BDDMockito.given;
 @ExtendWith(MockitoExtension.class)
 class ShareObjectRequestValidatorTest {
     private static final UUID USER_ID = UUID.randomUUID();
-    private static final UUID OWNER_ID = UUID.randomUUID();
     private static final UUID SHARED_WITH = UUID.randomUUID();
     private static final UUID OBJECT_ID = UUID.randomUUID();
     private static final UUID PARENT = UUID.randomUUID();
@@ -107,7 +106,7 @@ class ShareObjectRequestValidatorTest {
     @Test
     void grantsContainsNull() {
         ShareObjectRequest request = createValidRequest();
-        request.setGrants(CollectionUtils.toList(Grant.DELETE, null, Grant.DELETE_CHILDREN));
+        request.setGrants(CollectionUtils.toSet(Grant.DELETE, null, Grant.DELETE_CHILDREN));
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "grants", "must not contain null values");
     }
@@ -118,14 +117,6 @@ class ShareObjectRequestValidatorTest {
         request.setParent(null);
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(USER_ID, request), "parent", "must not be null");
-    }
-
-    @Test
-    void notOwnRecord() {
-        ShareObjectRequest request = createValidRequest();
-        request.setOwner(UUID.randomUUID());
-
-        ExceptionValidator.validateForbiddenOperation(() -> underTest.validate(USER_ID, request));
     }
 
     @Test
@@ -172,7 +163,7 @@ class ShareObjectRequestValidatorTest {
         request.setObjectId(OBJECT_ID);
         request.setType(TYPE);
         request.setParent(PARENT);
-        request.setGrants(List.of(Grant.DELETE));
+        request.setGrants(Set.of(Grant.DELETE));
         return request;
     }
 }

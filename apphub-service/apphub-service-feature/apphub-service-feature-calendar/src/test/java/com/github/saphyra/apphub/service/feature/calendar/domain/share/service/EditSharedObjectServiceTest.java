@@ -20,7 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
-class EditSharedOperationsServiceTest {
+class EditSharedObjectServiceTest {
     private static final UUID SHARED_WITH = UUID.randomUUID();
     private static final UUID OBJECT_ID = UUID.randomUUID();
     private static final UUID USER_ID = UUID.randomUUID();
@@ -29,24 +29,24 @@ class EditSharedOperationsServiceTest {
     private AlmDao almDao;
 
     @InjectMocks
-    private EditSharedOperationsService underTest;
+    private EditSharedObjectService underTest;
 
     @Mock
     private Alm alm;
 
     @Test
     void nullGrants() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, null), "grants", "must not be null");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, null), "grants", "must not be null");
     }
 
     @Test
     void grantsContainsNull() {
-        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, CollectionUtils.toSet(Grant.DELETE, null)), "grants", "must not contain null values");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, CollectionUtils.toSet(Grant.DELETE, null)), "grants", "must not contain null values");
     }
 
     @Test
     void emptyGrants(){
-        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of()), "grants", "must not be empty");
+        ExceptionValidator.validateInvalidParam(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of()), "grants", "must not be empty");
     }
 
     @Test
@@ -54,7 +54,7 @@ class EditSharedOperationsServiceTest {
         given(almDao.findForObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
         given(alm.getOwner()).willReturn(USER_ID);
 
-        underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE));
+        underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE));
 
         then(alm).should().setGrants(Set.of(Grant.DELETE));
         then(almDao).should().save(alm);
@@ -65,6 +65,6 @@ class EditSharedOperationsServiceTest {
         given(almDao.findForObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
         given(alm.getOwner()).willReturn(UUID.randomUUID());
 
-        ExceptionValidator.validateForbiddenOperation(() -> underTest.editSharedOperations(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE)));
+        ExceptionValidator.validateForbiddenOperation(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE)));
     }
 }

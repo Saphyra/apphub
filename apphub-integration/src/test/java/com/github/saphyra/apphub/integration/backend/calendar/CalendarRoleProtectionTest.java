@@ -68,7 +68,7 @@ public class CalendarRoleProtectionTest extends BackEndTest {
         //Share
         CommonUtils.verifyMissingRole(() -> CalendarShareActions.getGetSharedObjectResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), null));
         CommonUtils.verifyMissingRole(() -> CalendarShareActions.getShareObjectResponse(getServerPort(), accessToken, new ShareObjectRequest()));
-        CommonUtils.verifyMissingRole(() -> CalendarShareActions.getEditOperationsResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), UUID.randomUUID(), Set.of()));
+        CommonUtils.verifyMissingRole(() -> CalendarShareActions.getEditSharedObjectResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), UUID.randomUUID(), Set.of()));
         CommonUtils.verifyMissingRole(() -> CalendarShareActions.getUnshareResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), UUID.randomUUID()));
     }
 

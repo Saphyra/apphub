@@ -31,13 +31,11 @@ public interface CalendarShareController {
     @GetMapping(CalendarEndpoints.CALENDAR_GET_GRANTS)
     List<Grant> getOperations(@PathVariable("type") SharedObjectType type);
 
-    //TODO API test
     @PutMapping(CalendarEndpoints.CALENDAR_SHARE_OBJECT)
     void shareObject(@RequestBody ShareObjectRequest request, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
-    //TODO API test
     @PostMapping(CalendarEndpoints.CALENDAR_SHARE_EDIT_GRANTS)
-    void editOperations(
+    void editGrants(
         @RequestBody List<Grant> grants,
         @PathVariable("type") SharedObjectType type,
         @PathVariable("id") UUID id,
@@ -45,7 +43,6 @@ public interface CalendarShareController {
         @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken
     );
 
-    //TODO API test
     @DeleteMapping(CalendarEndpoints.CALENDAR_UNSHARE)
     void unshare(
         @PathVariable("type") SharedObjectType type,

@@ -15,10 +15,10 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class EditSharedOperationsService {
+public class EditSharedObjectService {
     private final AlmDao almDao;
 
-    public void editSharedOperations(UUID userId, UUID sharedWith, SharedObjectType type, UUID objectId, Set<Grant> grants) {
+    public void editSharedObject(UUID userId, UUID sharedWith, SharedObjectType type, UUID objectId, Set<Grant> grants) {
         ValidationUtil.doesNotContainNull(grants, "grants");
         ValidationUtil.notEmpty(grants, "grants");
 

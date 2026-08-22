@@ -27,11 +27,8 @@ class ShareObjectRequestValidator {
         ValidationUtil.notNull(request.getObjectId(), "objectId");
         ValidationUtil.notNull(request.getType(), "type");
         ValidationUtil.doesNotContainNull(request.getGrants(), "grants");
+        ValidationUtil.notEmpty(request.getGrants(), "grants");
         ValidationUtil.notNull(request.getParent(), "parent");
-
-        if (!userId.equals(request.getOwner())) {
-            throw ExceptionFactory.forbiddenOperation(userId + " must not share " + request.getType() + " " + request.getObjectId());
-        }
 
         if (userId.equals(request.getSharedWith())) {
             throw ExceptionFactory.invalidParam("sharedWith", "must not be self");

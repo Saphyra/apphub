@@ -13,7 +13,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -51,7 +50,7 @@ class ShareObjectServiceTest {
             .type(SharedObjectType.EVENT)
             .owner(OWNER)
             .parent(PARENT)
-            .grants(List.of(Grant.DELETE))
+            .grants(Set.of(Grant.DELETE))
             .build();
         given(almFactory.create(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT, OWNER, PARENT, Set.of(Grant.DELETE))).willReturn(alm);
 
