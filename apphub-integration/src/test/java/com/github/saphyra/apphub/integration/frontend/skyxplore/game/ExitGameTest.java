@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreModifySurfaceActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
@@ -37,8 +37,8 @@ public class ExitGameTest extends SeleniumTest {
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver, registrationParameters.getUsername());
-        SkyXploreLobbyActions.setReady(driver);
-        SkyXploreLobbyActions.startGameCreation(driver);
+        SkyXploreLobbyPageActions.setReady(driver);
+        SkyXploreLobbyPageActions.startGameCreation(driver);
 
         AwaitilityWrapper.create(60, 1)
             .until(() -> SkyXploreGameActions.isGameLoaded(driver))
@@ -99,8 +99,8 @@ public class ExitGameTest extends SeleniumTest {
             .get(0)
             .load(driver);
 
-        SkyXploreLobbyActions.setReady(driver);
-        SkyXploreLobbyActions.startGameCreation(driver);
+        SkyXploreLobbyPageActions.setReady(driver);
+        SkyXploreLobbyPageActions.startGameCreation(driver);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreGameActions.isGameLoaded(driver));

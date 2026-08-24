@@ -22,7 +22,7 @@ import static com.github.saphyra.apphub.integration.framework.WebElementUtils.se
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-public class SkyXploreLobbyActions {
+public class SkyXploreLobbyPageActions {
     public static void startGameCreation(WebDriver driver) {
         AwaitilityWrapper.getWithWait(() -> LobbyPage.startGameCreationButton(driver))
             .orElseThrow(() -> new RuntimeException("Start game creation button not found"))
@@ -76,7 +76,7 @@ public class SkyXploreLobbyActions {
     }
 
     public static OnlineFriend getOnlineFriend(WebDriver driver, String username) {
-        return AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getOnlineFriends(driver), webElements -> !webElements.isEmpty(), 15, 1)
+        return AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyPageActions.getOnlineFriends(driver), webElements -> !webElements.isEmpty(), 15, 1)
             .stream()
             .filter(element -> element.getName().equals(username))
             .findFirst()

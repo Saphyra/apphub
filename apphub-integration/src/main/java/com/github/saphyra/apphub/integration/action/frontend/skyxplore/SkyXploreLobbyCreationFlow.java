@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore;
 
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
@@ -35,9 +35,9 @@ public class SkyXploreLobbyCreationFlow {
         SkyXploreMainMenuActions.createLobby(hostDriver, gameName);
 
         Arrays.stream(players)
-            .peek(biWrapper -> SkyXploreLobbyActions.inviteFriend(hostDriver, biWrapper.getEntity2()))
+            .peek(biWrapper -> SkyXploreLobbyPageActions.inviteFriend(hostDriver, biWrapper.getEntity2()))
             .parallel()
             .peek(biWrapper -> SkyXploreMainMenuActions.acceptInvitation(biWrapper.getEntity1(), hostName))
-            .forEach(biWrapper -> AwaitilityWrapper.createDefault().until(() -> SkyXploreLobbyActions.pageLoaded(biWrapper.getEntity1())).assertTrue("Failed joining lobby"));
+            .forEach(biWrapper -> AwaitilityWrapper.createDefault().until(() -> SkyXploreLobbyPageActions.pageLoaded(biWrapper.getEntity1())).assertTrue("Failed joining lobby"));
     }
 }

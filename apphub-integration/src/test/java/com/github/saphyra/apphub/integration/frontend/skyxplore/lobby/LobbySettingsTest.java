@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbySettingsHelper;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -50,28 +50,28 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(GAME_NAME, driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
-        SkyXploreLobbyActions.findPlayerValidated(driver1, userData1.getUsername())
+        SkyXploreLobbyPageActions.findPlayerValidated(driver1, userData1.getUsername())
             .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver1, userData1.getUsername()).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyPageActions.findPlayerValidated(driver1, userData1.getUsername()).getAlliance().equals("1"))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyPageActions.findPlayerValidated(driver2, userData1.getUsername()).getAlliance().equals("1"))
             .assertTrue();
 
-        assertThat(SkyXploreLobbyActions.findPlayerValidated(driver2, userData1.getUsername()).allianceChangeEnabled()).isFalse();
+        assertThat(SkyXploreLobbyPageActions.findPlayerValidated(driver2, userData1.getUsername()).allianceChangeEnabled()).isFalse();
 
-        SkyXploreLobbyActions.getPlayer(driver1, userData2.getUsername())
+        SkyXploreLobbyPageActions.getPlayer(driver1, userData2.getUsername())
             .changeAllianceTo(Constants.NO_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getPlayer(driver1, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
+            .until(() -> SkyXploreLobbyPageActions.getPlayer(driver1, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getPlayer(driver2, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
+            .until(() -> SkyXploreLobbyPageActions.getPlayer(driver2, userData2.getUsername()).getAlliance().equals(Constants.NO_ALLIANCE_LABEL))
             .assertTrue();
     }
 
@@ -215,10 +215,10 @@ public class LobbySettingsTest extends SeleniumTest {
 
     private void setAndVerifyLobbySettings(String testCase, WebDriver hostDriver, WebDriver memberDriver, SkyXploreGameSettings toSet, SkyXploreGameSettings shouldBeVisible) {
         try {
-            SkyXploreLobbyActions.setSettings(hostDriver, toSet);
+            SkyXploreLobbyPageActions.setSettings(hostDriver, toSet);
 
-            SkyXploreLobbyActions.verifySettings(hostDriver, shouldBeVisible);
-            SkyXploreLobbyActions.verifySettings(memberDriver, shouldBeVisible);
+            SkyXploreLobbyPageActions.verifySettings(hostDriver, shouldBeVisible);
+            SkyXploreLobbyPageActions.verifySettings(memberDriver, shouldBeVisible);
         } catch (Throwable e) {
             throw new RuntimeException(testCase + " failed.", e);
         }
@@ -243,22 +243,22 @@ public class LobbySettingsTest extends SeleniumTest {
     }
 
     private static void aiValidation(WebDriver driver1) {
-        SkyXploreLobbyActions.fillNewAiName(driver1, "aa");
-        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too short. (Minimum 3 characters)");
+        SkyXploreLobbyPageActions.fillNewAiName(driver1, "aa");
+        SkyXploreLobbyPageActions.verifyInvalidAiName(driver1, "Character name too short. (Minimum 3 characters)");
 
-        SkyXploreLobbyActions.fillNewAiName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
-        SkyXploreLobbyActions.verifyInvalidAiName(driver1, "Character name too long. (Maximum 30 characters)");
+        SkyXploreLobbyPageActions.fillNewAiName(driver1, Stream.generate(() -> "a").limit(31).collect(Collectors.joining()));
+        SkyXploreLobbyPageActions.verifyInvalidAiName(driver1, "Character name too long. (Maximum 30 characters)");
     }
 
     private void createAndRemoveAi(WebDriver driver1, WebDriver driver2) {
-        assertThat(SkyXploreLobbyActions.isCreateAiPanelPresent(driver2)).isFalse();
+        assertThat(SkyXploreLobbyPageActions.isCreateAiPanelPresent(driver2)).isFalse();
 
         Stream.iterate(0, integer -> integer + 1)
             .limit(10)
             .map(integer -> String.format(AI_NAME, integer))
             .forEach(aiName -> createAi(driver1, driver2, aiName));
 
-        assertThat(SkyXploreLobbyActions.isCreateAiPanelPresent(driver1)).isFalse();
+        assertThat(SkyXploreLobbyPageActions.isCreateAiPanelPresent(driver1)).isFalse();
 
         Stream.iterate(0, integer -> integer + 1)
             .limit(10)
@@ -267,55 +267,55 @@ public class LobbySettingsTest extends SeleniumTest {
     }
 
     private static void setAlliance(WebDriver driver1, WebDriver driver2) {
-        SkyXploreLobbyActions.createAi(driver1, AI_NAME);
+        SkyXploreLobbyPageActions.createAi(driver1, AI_NAME);
 
-        AiPlayerElement aiPlayer = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findAiByName(driver1, AI_NAME), Optional::isPresent)
+        AiPlayerElement aiPlayer = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyPageActions.findAiByName(driver1, AI_NAME), Optional::isPresent)
             .map(Optional::get)
             .orElseThrow(() -> new RuntimeException("AiPlayer not found with name " + AI_NAME));
 
         aiPlayer.setAlliance(Constants.NEW_ALLIANCE_LABEL);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByNameValidated(driver1, AI_NAME).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyPageActions.findAiByNameValidated(driver1, AI_NAME).getAlliance().equals("1"))
             .assertTrue("Alliance is not changed.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByNameValidated(driver2, AI_NAME).getAlliance().equals("1"))
+            .until(() -> SkyXploreLobbyPageActions.findAiByNameValidated(driver2, AI_NAME).getAlliance().equals("1"))
             .assertTrue("Alliance is not changed.");
     }
 
     private void createAi(WebDriver hostDriver, WebDriver playerDriver, String aiName) {
-        SkyXploreLobbyActions.createAi(hostDriver, aiName);
+        SkyXploreLobbyPageActions.createAi(hostDriver, aiName);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByName(hostDriver, aiName).isPresent())
+            .until(() -> SkyXploreLobbyPageActions.findAiByName(hostDriver, aiName).isPresent())
             .assertTrue("Ai not found with name " + aiName);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByName(playerDriver, aiName).isPresent())
+            .until(() -> SkyXploreLobbyPageActions.findAiByName(playerDriver, aiName).isPresent())
             .assertTrue("Ai not found with name " + aiName);
     }
 
     private void removeAi(WebDriver hostDriver, WebDriver playerDriver, String aiName) {
-        SkyXploreLobbyActions.findAiByName(hostDriver, aiName)
+        SkyXploreLobbyPageActions.findAiByName(hostDriver, aiName)
             .orElseThrow(() -> new RuntimeException("Ai not found with name " + aiName))
             .remove();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByName(hostDriver, aiName).isEmpty())
+            .until(() -> SkyXploreLobbyPageActions.findAiByName(hostDriver, aiName).isEmpty())
             .assertTrue("Ai with name " + aiName + " is still present.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByName(playerDriver, aiName).isEmpty())
+            .until(() -> SkyXploreLobbyPageActions.findAiByName(playerDriver, aiName).isEmpty())
             .assertTrue("Ai with name " + aiName + " is still present.");
     }
 
     private void renameAi(WebDriver driver1, WebDriver driver2) {
-        SkyXploreLobbyActions.findAiByNameValidated(driver1, AI_NAME)
+        SkyXploreLobbyPageActions.findAiByNameValidated(driver1, AI_NAME)
             .rename(NEW_AI_NAME);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findAiByName(driver2, NEW_AI_NAME).isPresent())
+            .until(() -> SkyXploreLobbyPageActions.findAiByName(driver2, NEW_AI_NAME).isPresent())
             .assertTrue("Ai is not renamed");
     }
 
@@ -335,18 +335,18 @@ public class LobbySettingsTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.createLobby(driver, GAME_NAME);
 
-        SkyXploreLobbyActions.createAi(driver, AI_NAME);
+        SkyXploreLobbyPageActions.createAi(driver, AI_NAME);
 
-        SkyXploreLobbyActions.findPlayerValidated(driver, userData.getUsername())
+        SkyXploreLobbyPageActions.findPlayerValidated(driver, userData.getUsername())
             .changeAllianceTo(Constants.NEW_ALLIANCE_LABEL);
 
-        SkyXploreLobbyActions.findAiByName(driver, AI_NAME)
+        SkyXploreLobbyPageActions.findAiByName(driver, AI_NAME)
             .orElseThrow()
             .setAlliance("1");
 
-        SkyXploreLobbyActions.setReady(driver);
+        SkyXploreLobbyPageActions.setReady(driver);
 
-        SkyXploreLobbyActions.startGameCreation(driver);
+        SkyXploreLobbyPageActions.startGameCreation(driver);
 
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.SKYXPLORE_LOBBY_ONLY_ONE_ALLIANCE);
     }

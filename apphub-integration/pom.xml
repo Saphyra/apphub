@@ -143,6 +143,12 @@
             <artifactId>jackson-databind</artifactId>
             <version>${versions.jackson-databind}</version>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>RELEASE</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

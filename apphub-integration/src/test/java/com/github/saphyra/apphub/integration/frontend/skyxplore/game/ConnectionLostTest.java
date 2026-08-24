@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreGameActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
@@ -20,7 +20,6 @@ import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocatio
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Ignore("Chrome WebSocket bug breaks the test.") //TODO implement backend test instead
 public class ConnectionLostTest extends SeleniumTest {
     @Test(groups = {"fe", "skyxplore"})
     public void playerDisconnected() {
@@ -109,9 +107,9 @@ public class ConnectionLostTest extends SeleniumTest {
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(driver1, userData1.getUsername(), new BiWrapper<>(driver2, userData2.getUsername()));
 
         Stream.of(driver1, driver2)
-            .forEach(SkyXploreLobbyActions::setReady);
+            .forEach(SkyXploreLobbyPageActions::setReady);
 
-        SkyXploreLobbyActions.startGameCreation(driver1);
+        SkyXploreLobbyPageActions.startGameCreation(driver1);
 
         AwaitilityWrapper.create(10, 1)
             .until(() -> Stream.of(player1, player2).allMatch(player -> SkyXploreGameActions.isGameLoaded(player.getEntity1())))

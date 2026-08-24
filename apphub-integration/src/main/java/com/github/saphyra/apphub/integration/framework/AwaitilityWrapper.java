@@ -172,6 +172,15 @@ public class AwaitilityWrapper {
             .assertTrue("Assertions failed.");
     }
 
+    public static void awaitAssert(Runnable supplier, int timeoutSeconds) {
+        create(timeoutSeconds, 1)
+            .until(() -> {
+                supplier.run();
+                return true;
+            })
+            .assertTrue("Assertions failed.");
+    }
+
     public static void retry(Runnable task) {
         AwaitilityWrapper.createDefault()
             .until(() -> {

@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreLobbyCreationFlow;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -52,12 +52,12 @@ public class ExitFromLobbyTest extends SeleniumTest {
     }
 
     private static void memberLeft(WebDriver driver3, WebDriver driver4, RegistrationParameters userData4) {
-        SkyXploreLobbyActions.inviteFriend(driver3, userData4.getUsername());
+        SkyXploreLobbyPageActions.inviteFriend(driver3, userData4.getUsername());
         AwaitilityWrapper.createDefault()
             .until(() -> !SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
             .assertTrue("Invitation did not arrive.");
 
-        SkyXploreLobbyActions.exitLobby(driver3);
+        SkyXploreLobbyPageActions.exitLobby(driver3);
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
@@ -65,11 +65,11 @@ public class ExitFromLobbyTest extends SeleniumTest {
     }
 
     private static void hostLeft(WebDriver driver1, WebDriver driver2, WebDriver driver4, RegistrationParameters userData4) {
-        SkyXploreLobbyActions.inviteFriend(driver2, userData4.getUsername());
+        SkyXploreLobbyPageActions.inviteFriend(driver2, userData4.getUsername());
         AwaitilityWrapper.createDefault()
             .until(() -> !SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
             .assertTrue("Invitation did not arrive.");
-        SkyXploreLobbyActions.exitLobby(driver1);
+        SkyXploreLobbyPageActions.exitLobby(driver1);
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreMainMenuActions.getInvitations(driver4).isEmpty())
             .assertTrue("Invitation is till present.");
