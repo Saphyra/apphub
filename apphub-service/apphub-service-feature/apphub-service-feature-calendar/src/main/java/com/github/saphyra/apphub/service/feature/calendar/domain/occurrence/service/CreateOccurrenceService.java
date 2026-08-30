@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.OccurrenceRequest;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceFactory;
@@ -21,9 +22,9 @@ import java.util.UUID;
 public class CreateOccurrenceService {
     private final List<OccurrenceCreator> occurrenceCreators;
     private final OccurrenceRequestValidator occurrenceRequestValidator;
-    private final EventDao eventDao;
     private final OccurrenceFactory occurrenceFactory;
     private final OccurrenceDao occurrenceDao;
+    private final EventObjectQueryService eventObjectQueryService;
 
     /**
      * Creates occurrences for the newly created event.
@@ -39,7 +40,8 @@ public class CreateOccurrenceService {
     public UUID createOccurrence(UUID userId, UUID eventId, OccurrenceRequest request) {
         occurrenceRequestValidator.validate(request);
 
-        eventDao.findByIdValidated(userId, eventId); // Ensure the event exists and belongs to the user
+        eventObjectQueryService.findEvent(userId, eventId)
+            .orElseThrow(() -> ExceptionFactory.notFound("Event not found for userId %s and eventId %s or user has no access to it".formatted(userId, eventId)));
 
         Occurrence occurrence = occurrenceFactory.create(userId, eventId, request.getDate(), request.getTime(), request.getRemindMeBeforeDays(), request.getNote(), request.getAutoDone());
         occurrenceDao.save(occurrence);

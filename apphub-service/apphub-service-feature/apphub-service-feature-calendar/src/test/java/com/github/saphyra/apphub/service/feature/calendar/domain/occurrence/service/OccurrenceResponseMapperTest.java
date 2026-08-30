@@ -79,7 +79,7 @@ class OccurrenceResponseMapperTest {
 
         OccurrenceResponse result = underTest.toResponse(USER_ID, event, maskedOccurrence);
 
-        assertThat(result.getTime()).isNull();
+        assertThat(result.getTime()).isEqualTo(event.getTime());
         assertThat(result.getNote()).isEqualTo("");
         assertThat(result.getTitle()).isEqualTo("title");
         assertThat(result.getContent()).isEqualTo("content");

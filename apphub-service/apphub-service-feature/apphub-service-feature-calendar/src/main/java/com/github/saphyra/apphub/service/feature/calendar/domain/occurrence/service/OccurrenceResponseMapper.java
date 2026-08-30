@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +60,7 @@ class OccurrenceResponseMapper {
             .occurrenceId(occurrence.getOccurrenceId())
             .eventId(occurrence.getEventId())
             .date(occurrence.getDate())
-            .time(mask(occurrenceMasked, getFromEventIfNull(event, occurrence.getTime(), Event::getTime, null), null))
+            .time(getTime(event, occurrence))
             .status(occurrence.getStatus())
             .title(mask(eventMasked, event.getTitle(), Constants.QUESTION_MARK))
             .content(mask(eventMasked, event.getContent(), Constants.EMPTY_STRING))
@@ -70,6 +71,17 @@ class OccurrenceResponseMapper {
             .autoDone(autoDone)
             .shared(!userId.equals(occurrence.getUserId()))
             .build();
+    }
+
+    private LocalTime getTime(Event event, Occurrence occurrence) {
+        Optional<LocalTime> eventTime = Optional.ofNullable(event.getTime())
+            .filter(_ -> !event.isMasked());
+
+        Optional<LocalTime> occurrenceTime = Optional.ofNullable(occurrence.getTime())
+            .filter(_ -> !occurrence.isMasked());
+
+        return occurrenceTime.or(() -> eventTime)
+            .orElse(null);
     }
 
     private <T> T getFromEventIfNull(Event event, T value, Function<Event, T> mapper, T defaultValue) {

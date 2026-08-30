@@ -54,6 +54,6 @@ class FindOccurrenceForOperationServiceTest {
         given(occurrenceGrantFinder.getOccurrenceWithGrants(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(new BiWrapper<>(occurrence, Set.of(Grant.EDIT)));
         given(eventGrantFinder.getEventWithGrants(USER_ID, EVENT_ID)).willReturn(new BiWrapper<>(event, Set.of()));
 
-        ExceptionValidator.validateForbiddenOperation(() -> underTest.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.EDIT));
+        ExceptionValidator.validateNotFoundException(() -> underTest.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID, Operation.EDIT));
     }
 }

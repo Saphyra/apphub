@@ -47,7 +47,7 @@ class FindOccurrenceForOperationService {
         if (aggregatedGrants.containsAll(requiredGrants)) {
             return new BiWrapper<>(event, occurrence);
         } else {
-            throw ExceptionFactory.forbiddenOperation("User " + userId + " does not have required grants " + Arrays.toString(requiredGrants.toArray()) + " for occurrence " + occurrenceId + " to perform operation " + operation);
+            throw ExceptionFactory.notFound("User " + userId + " does not have required grants " + Arrays.toString(requiredGrants.toArray()) + " for occurrence " + occurrenceId + " to perform operation " + operation);
         }
     }
 }
