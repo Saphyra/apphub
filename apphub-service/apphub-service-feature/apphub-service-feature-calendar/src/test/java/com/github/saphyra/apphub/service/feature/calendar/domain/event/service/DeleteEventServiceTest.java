@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalen
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.common.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,5 +44,12 @@ class DeleteEventServiceTest {
         underTest.delete(USER_ID, EVENT_ID);
 
         then(commonCalendarDao).should().deleteEvents(USER_ID, List.of(EVENT_ID));
+    }
+
+    @Test
+    void delete_notFound() {
+        given(eventObjectQueryService.findEvent(USER_ID, EVENT_ID, Operation.DELETE)).willReturn(Optional.empty());
+
+        ExceptionValidator.validateNotFoundException(() -> underTest.delete(USER_ID, EVENT_ID));
     }
 }

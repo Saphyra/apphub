@@ -36,8 +36,8 @@ public class GetSharedOccurrenceTest extends BackEndTest {
     private static final String NOTE = "note";
     private static final String LABEL = "label";
 
-    @Test(groups = {"be", "calendar"}, dataProvider = "getSharedOccurrenceOfSharedParentData")
-    void getSharedOccurrenceOfSharedParent(
+    @Test(groups = {"be", "calendar"}, dataProvider = "getSharedOccurrenceData")
+    void getSharedOccurrence(
         Set<Grant> labelGrants,
         Set<Grant> eventGrants,
         Set<Grant> occurrenceGrants,
@@ -134,7 +134,7 @@ public class GetSharedOccurrenceTest extends BackEndTest {
     }
 
     @DataProvider(parallel = true)
-    public static Object[][] getSharedOccurrenceOfSharedParentData() {
+    public static Object[][] getSharedOccurrenceData() {
         return new Object[][]{
             //Share occurrence
             new Object[]{Set.of(), Set.of(), Set.of(Grant.VIEW), QUESTION_MARK, "", null, NOTE, 0, false, false, null},

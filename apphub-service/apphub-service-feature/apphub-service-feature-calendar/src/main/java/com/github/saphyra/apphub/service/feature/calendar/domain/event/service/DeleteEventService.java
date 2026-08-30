@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
+import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.common.Operation;
@@ -19,7 +20,12 @@ public class DeleteEventService {
 
     public void delete(UUID userId, UUID eventId) {
         eventObjectQueryService.findEvent(userId, eventId, Operation.DELETE)
-            .ifPresent(event -> delete(event.getUserId(), List.of(event.getEventId())));
+            .ifPresentOrElse(
+                event -> delete(event.getUserId(), List.of(event.getEventId())),
+                () -> {
+                    throw ExceptionFactory.notFound("Event not found for userId %s and eventId %s or user has no access".formatted(userId, eventId));
+                }
+            );
     }
 
     public void delete(UUID userId, List<UUID> deletedEventIds) {
