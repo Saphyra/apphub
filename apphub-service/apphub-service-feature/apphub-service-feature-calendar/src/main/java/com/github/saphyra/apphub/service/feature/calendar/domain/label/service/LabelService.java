@@ -35,7 +35,12 @@ public class LabelService {
 
     public void deleteLabel(UUID userId, UUID labelId) {
         labelObjectQueryService.findLabel(userId, labelId, Grant.DELETE)
-            .ifPresent(label -> commonCalendarDao.deleteLabel(label.getUserId(), label.getLabelId()));
+            .ifPresentOrElse(
+                label -> commonCalendarDao.deleteLabel(label.getUserId(), label.getLabelId()),
+                () -> {
+                    throw ExceptionFactory.notFound("Label %s not found or user %s has no permission to delete it".formatted(labelId, userId));
+                }
+            );
     }
 
     public void editLabel(UUID userId, UUID labelId, String labelText) {

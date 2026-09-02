@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
@@ -9,6 +10,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_map
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -20,7 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,6 +62,9 @@ class CommonCalendarDaoTest {
 
     @Mock
     private AlmDao almDao;
+
+    @Mock
+    private LabelObjectQueryService labelObjectQueryService;
 
     @InjectMocks
     private CommonCalendarDao underTest;
@@ -136,8 +143,8 @@ class CommonCalendarDaoTest {
             .build();
 
         LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, LABEL_ID, Map.of());
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(labelEventMapping));
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, null)));
+        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
 
         underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
@@ -155,9 +162,9 @@ class CommonCalendarDaoTest {
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, null)));
         LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, OTHER_LABEL_ID, Map.of(EVENT_ID, USER_ID, OTHER_EVENT_ID, USER_ID));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(labelEventMapping));
+        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
 
         underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
@@ -175,9 +182,9 @@ class CommonCalendarDaoTest {
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, null)));
         LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, LABEL_ID, Map.of(EVENT_ID, USER_ID));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(labelEventMapping));
+        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
 
         underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 

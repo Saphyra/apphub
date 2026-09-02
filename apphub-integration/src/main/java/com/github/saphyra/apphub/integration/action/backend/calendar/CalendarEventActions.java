@@ -82,15 +82,15 @@ public class CalendarEventActions {
         assertThat(response.getStatusCode()).isEqualTo(200);
     }
 
-    public static List<EventResponse> getEvents(int serverPort, String accessToken, UUID labelId) {
-        Response response = getGetEventsResponse(serverPort, accessToken, labelId);
+    public static List<EventResponse> getEventsOfLabel(int serverPort, String accessToken, UUID labelId) {
+        Response response = getGetEventsOfLabelResponse(serverPort, accessToken, labelId);
 
         assertThat(response.getStatusCode()).isEqualTo(200);
 
         return Arrays.asList(response.getBody().as(EventResponse[].class));
     }
 
-    private static Response getGetEventsResponse(int serverPort, String accessToken, UUID labelId) {
+    private static Response getGetEventsOfLabelResponse(int serverPort, String accessToken, UUID labelId) {
         return RequestFactory.createAuthorizedRequest(accessToken)
             .get(UrlFactory.create(serverPort, CalendarEndpoints.CALENDAR_GET_EVENTS, Map.of(), Map.of("labelId", labelId)));
     }

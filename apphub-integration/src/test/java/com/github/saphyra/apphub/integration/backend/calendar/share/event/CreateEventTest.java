@@ -3,13 +3,15 @@ package com.github.saphyra.apphub.integration.backend.calendar.share.event;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLabelActions;
+import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarOccurrenceActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarShareActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
-import com.github.saphyra.apphub.integration.structure.api.calendar.LabelResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.calendar.ShareObjectRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.SharedObjectType;
@@ -35,7 +37,7 @@ public class CreateEventTest extends BackEndTest {
         String sharedWithToken = IndexPageActions.registerAndLogin(getServerPort(), sharedWithData);
         UUID sharedWithUserId = UserDynamoDbRepository.getUserIdByEmail(sharedWithData.getEmail());
 
-        //Create event
+        //Create label
         UUID labelId = CalendarLabelActions.createLabel(getServerPort(), ownerToken, LABEL_1)
             .getLabelId();
 
@@ -46,7 +48,7 @@ public class CreateEventTest extends BackEndTest {
             .objectId(labelId)
             .parent(ownerId)
             .type(SharedObjectType.LABEL)
-            .grants(Set.of(Grant.VIEW))
+            .grants(Set.of(Grant.VIEW, Grant.VIEW_CHILDREN))
             .build();
         CalendarShareActions.shareObject(getServerPort(), ownerToken, shareLabelRequest);
 
@@ -55,10 +57,33 @@ public class CreateEventTest extends BackEndTest {
             .toBuilder()
             .labels(Map.of(labelId, ownerId))
             .build();
-        UUID newEventId = CalendarEventActions.createEvent(getServerPort(), sharedWithToken, createEventRequest);
+        UUID eventId = CalendarEventActions.createEvent(getServerPort(), sharedWithToken, createEventRequest);
 
-        assertThat(CalendarEventActions.getEvent(getServerPort(), sharedWithToken, newEventId).getLabels())
+        //Get event by labelId
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), sharedWithToken, labelId))
             .singleElement()
-            .returns(LABEL_1, LabelResponse::getLabel);
+            .returns(eventId, EventResponse::getEventId);
+
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), ownerToken, labelId))
+            .singleElement()
+            .returns(eventId, EventResponse::getEventId);
+
+        //Get occurrence of event
+        assertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), sharedWithToken, eventId))
+            .singleElement()
+            .returns(createEventRequest.getTitle(), OccurrenceResponse::getTitle);
+
+        assertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), ownerToken, eventId))
+            .singleElement()
+            .returns(createEventRequest.getTitle(), OccurrenceResponse::getTitle);
+
+        //Get occurrences in time range
+        assertThat(CalendarOccurrenceActions.getOccurrences(getServerPort(), sharedWithToken, createEventRequest.getStartDate().minusDays(1), createEventRequest.getStartDate().plusDays(1)))
+            .singleElement()
+            .returns(createEventRequest.getTitle(), OccurrenceResponse::getTitle);
+
+        assertThat(CalendarOccurrenceActions.getOccurrences(getServerPort(), ownerToken, createEventRequest.getStartDate().minusDays(1), createEventRequest.getStartDate().plusDays(1)))
+            .singleElement()
+            .returns(createEventRequest.getTitle(), OccurrenceResponse::getTitle);
     }
 }

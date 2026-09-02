@@ -9,6 +9,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,20 +20,23 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class GetOccurrencesOfEventService {
     private final OccurrenceDao occurrenceDao;
     private final EventGrantFinder eventGrantFinder;
     private final AlmDao almDao;
 
     BiWrapper<Event, List<Occurrence>> getOccurrences(UUID userId, UUID eventId) {
-        Map<UUID, Set<Grant>> occurrenceIdGrantsMapping = almDao.getByUserIdAndObjectType(userId, SharedObjectType.OCCURRENCE)
-            .stream()
-            .collect(Collectors.toMap(Alm::getObjectId, Alm::getGrants));
+        Map<UUID, Set<Grant>> occurrenceIdGrantsMapping = getOccurrenceIdsWithGrants(userId);
+
         BiWrapper<Event, Set<Grant>> eventWithGrants = eventGrantFinder.getEventWithGrants(userId, eventId);
+        log.info("Event {} found with grants: {}", eventWithGrants.getEntity1().getEventId(), eventWithGrants.getEntity2());
+
         Set<Grant> grantsFromEvent = eventWithGrants.getEntity2()
             .stream()
             .flatMap(Grant::projectForChildren)
             .collect(Collectors.toSet());
+        log.info("Grants from event {} for occurrences: {}", eventWithGrants.getEntity1().getEventId(), grantsFromEvent);
 
         Event event = eventWithGrants.getEntity1()
             .setMasked(!eventWithGrants.getEntity2().contains(Grant.VIEW));
@@ -68,5 +72,17 @@ class GetOccurrencesOfEventService {
             .toList();
 
         return new BiWrapper<>(event, occurrences);
+    }
+
+    private Map<UUID, Set<Grant>> getOccurrenceIdsWithGrants(UUID userId) {
+        Map<UUID, Set<Grant>> occurrenceIdGrantsMapping = almDao.getByUserIdAndObjectType(userId, SharedObjectType.OCCURRENCE)
+            .stream()
+            .collect(Collectors.toMap(Alm::getObjectId, Alm::getGrants));
+        if (occurrenceIdGrantsMapping.isEmpty()) {
+            log.info("No shared occurrences found for user: {}", userId);
+        } else {
+            occurrenceIdGrantsMapping.forEach((occurrenceId, grants) -> log.info("Shared occurrence found: {} for userId: {} with grants: {}", occurrenceId, userId, grants));
+        }
+        return occurrenceIdGrantsMapping;
     }
 }

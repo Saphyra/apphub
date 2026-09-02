@@ -74,6 +74,13 @@ class LabelServiceTest {
     }
 
     @Test
+    void deleteLabel_notFound() {
+        given(labelObjectQueryService.findLabel(USER_ID, LABEL_ID, Grant.DELETE)).willReturn(Optional.empty());
+
+        ExceptionValidator.validateNotFoundException(() -> underTest.deleteLabel(USER_ID, LABEL_ID));
+    }
+
+    @Test
     void editLabel_found() {
         given(labelObjectQueryService.findLabel(USER_ID, LABEL_ID, Grant.VIEW, Grant.EDIT)).willReturn(java.util.Optional.of(label));
 

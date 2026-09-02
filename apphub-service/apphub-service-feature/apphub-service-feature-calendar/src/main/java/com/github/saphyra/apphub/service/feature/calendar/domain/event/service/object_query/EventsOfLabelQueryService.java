@@ -54,10 +54,15 @@ class EventsOfLabelQueryService {
             log.info("Found: {}", labelEventMapping);
             Alm alm = maybeAlm.orElse(null);
 
-            List<BiWrapper<UUID, UUID>> eventIds = labelEventMapping.getEventIds().entrySet().stream().map(e -> new BiWrapper<>(e.getValue(), e.getKey())).toList();
+            List<BiWrapper<UUID, UUID>> eventIds = labelEventMapping.getEventIds()
+                .entrySet()
+                .stream()
+                .map(e -> new BiWrapper<>(e.getValue(), e.getKey()))
+                .toList();
+
             return eventDao.getByIds(eventIds)
                 .stream()
-                .map(event -> event.setMasked(eventMaskedChecker.isMasked_labelAlm(userId, event, alm)))
+                .map(event -> event.setMasked(eventMaskedChecker.isMasked_labelAlm(userId, event, alm, labelId)))
                 .toList();
         } else {
             log.info("LabelEventMapping not found for userId {} and labelId {}. Alm: {}", userId, labelId, maybeAlm);

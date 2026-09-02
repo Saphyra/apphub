@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,8 @@ public class LabelQueryService {
 
     public List<LabelResponse> getByUserId(UUID userId) {
         return labelObjectQueryService.getByUserId(userId)
+            .filter(bw -> bw.getEntity2().contains(Grant.VIEW))
+            .map(BiWrapper::getEntity1)
             .map(label -> labelToResponseMapper.toResponse(userId, label))
             .toList();
     }

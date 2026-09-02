@@ -2,8 +2,11 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service.
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
@@ -12,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -22,14 +26,15 @@ import static java.util.Objects.nonNull;
 class EventMaskedChecker {
     private final AlmDao almDao;
     private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelObjectQueryService labelObjectQueryService;
 
-    boolean isMasked_labelAlm(UUID userId, Event event, @Nullable Alm labelAlm) {
+    boolean isMasked_labelAlm(UUID userId, Event event, @Nullable Alm labelAlm, UUID labelId) {
         //No masking when own event
         if (userId.equals(event.getUserId())) {
             return false;
         }
 
-        //Event is shared
+        //Label is shared
         if (nonNull(labelAlm)) {
             return !labelAlm.getGrants().contains(Grant.VIEW_CHILDREN)
                 //If Label does not allow viewing the event, check if the event is explicitly shared with view grant
@@ -38,7 +43,16 @@ class EventMaskedChecker {
                 .isEmpty();
         }
 
-        throw new IllegalStateException("Event is not owned by the user and Alm is null. UserId: " + userId + " eventId: " + event.getEventId());
+
+        //Event is not the user's, but the label is owned or shared with the user.
+        Optional<BiWrapper<Label, Set<Grant>>> maybeLabelWithGrants = labelObjectQueryService.findLabel(userId, labelId);
+        if (maybeLabelWithGrants.isPresent()) {
+            return !maybeLabelWithGrants.get()
+                .getEntity2()
+                .contains(Grant.VIEW_CHILDREN);
+        }
+
+        throw new IllegalStateException("Event is not owned by the user, label is not owned by or shared with the user, and Alm is null. UserId: " + userId + " eventId: " + event.getEventId());
     }
 
     boolean isMasked_eventAlm(UUID userId, Event event, Alm eventAlm) {

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -48,7 +50,7 @@ class LabelQueryServiceTest {
 
     @Test
     void getByUserId() {
-        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(label));
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, Set.of(Grant.VIEW)), new BiWrapper<>(label, Set.of(Grant.EDIT))));
         given(labelToResponseMapper.toResponse(USER_ID, label)).willReturn(labelResponse);
 
         assertThat(underTest.getByUserId(USER_ID)).containsExactly(labelResponse);

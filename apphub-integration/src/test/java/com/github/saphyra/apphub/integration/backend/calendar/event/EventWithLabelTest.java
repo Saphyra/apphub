@@ -35,7 +35,7 @@ public class EventWithLabelTest extends BackEndTest {
         createEvent(accessToken, EVENT_WITHOUT_LABEL_TITLE, Map.of());
         UUID eventWithLabel = createEvent(accessToken, EVENT_WITH_LABEL_TITLE, Map.of(label1.getLabelId(), label1.getUserId()));
 
-        CustomAssertions.singleListAssertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, label1.getLabelId()))
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label1.getLabelId()))
             .returns(EVENT_WITH_LABEL_TITLE, EventResponse::getTitle)
             .returns(List.of(label1), EventResponse::getLabels);
 
@@ -44,17 +44,17 @@ public class EventWithLabelTest extends BackEndTest {
 
         editEvent(accessToken, eventWithLabel, Map.of(label2.getLabelId(), label2.getUserId()));
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, label1.getLabelId())).isEmpty();
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label1.getLabelId())).isEmpty();
 
-        CustomAssertions.singleListAssertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, label2.getLabelId()))
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label2.getLabelId()))
             .returns(List.of(label2), EventResponse::getLabels);
 
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).hasSize(2);
 
         editEvent(accessToken, eventWithLabel, Map.of());
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, label1.getLabelId())).isEmpty();
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, label2.getLabelId())).isEmpty();
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label1.getLabelId())).isEmpty();
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label2.getLabelId())).isEmpty();
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).hasSize(2);
     }
 

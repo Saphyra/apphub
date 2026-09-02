@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -40,14 +41,26 @@ public class LabelObjectQueryService {
         return labelDao.getByIds(labelIds);
     }
 
-    public Stream<Label> getByUserId(UUID userId) {
+    //TODO unit test
+    public Stream<BiWrapper<Label, Set<Grant>>> getByUserId(UUID userId) {
         return Stream.concat(
-            labelDao.getByUserId(userId).stream(),
+            labelDao.getByUserId(userId).stream()
+                .map(label -> new BiWrapper<>(label, Grant.forType(SharedObjectType.LABEL))),
             almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
                 .stream()
-                .filter(alm -> alm.getGrants().contains(Grant.VIEW))
-                .map(alm -> labelDao.findByIdValidated(alm.getOwner(), alm.getObjectId()))
+                .map(alm -> new BiWrapper<>(
+                    labelDao.findByIdValidated(alm.getOwner(), alm.getObjectId()),
+                    alm.getGrants()
+                ))
         );
+    }
+
+    //TODO unit test
+    public Optional<BiWrapper<Label, Set<Grant>>> findLabel(UUID userId, UUID labelId) {
+        return labelDao.findById(userId, labelId)
+            .map(label -> new BiWrapper<>(label, Grant.forType(SharedObjectType.LABEL)))
+            .or(() -> almDao.findForObject(userId, PrincipalType.USER, labelId, SharedObjectType.LABEL)
+                .map(alm -> new BiWrapper<>(labelDao.findByIdValidated(alm.getOwner(), alm.getObjectId()), alm.getGrants())));
     }
 
     public Optional<Label> findLabel(UUID userId, UUID labelId, Grant... requiredGrants) {

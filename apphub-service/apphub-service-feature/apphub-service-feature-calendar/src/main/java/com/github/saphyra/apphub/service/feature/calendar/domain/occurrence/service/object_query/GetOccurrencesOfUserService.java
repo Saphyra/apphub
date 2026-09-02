@@ -27,6 +27,7 @@ class GetOccurrencesOfUserService {
 
     Map<Event, List<Occurrence>> getOccurrences(UUID userId) {
         List<Occurrence> occurrences = helper.getOccurrences(userId);
+        log.info("Occurrences found: {}", occurrences.stream().map(Occurrence::getOccurrenceId).toList());
 
         return occurrences.stream()
             .map(Occurrence::getEventId)

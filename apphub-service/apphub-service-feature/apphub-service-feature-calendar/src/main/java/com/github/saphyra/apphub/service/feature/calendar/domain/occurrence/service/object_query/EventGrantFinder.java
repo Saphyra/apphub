@@ -9,6 +9,8 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ class EventGrantFinder {
     private final AlmDao almDao;
     private final EventLabelMappingDao eventLabelMappingDao;
     private final EventFactory eventFactory;
+    private final LabelObjectQueryService labelObjectQueryService;
 
     /**
      * @return the event, and all the grants of the event combined from the Alm of the event and Alms of labels of the events.
@@ -86,8 +89,39 @@ class EventGrantFinder {
             //Query an event and pair it with the merged grants
             .map(tw -> new BiWrapper<>(eventDao.findByIdValidated(tw.getEntity2(), tw.getEntity3()), tw.getEntity1()));
 
+        //Look for event labelled with visible label
+        //Get visible labels
+        Optional<BiWrapper<Event, Set<Grant>>> maybeEventOfVisibleLabel = labelObjectQueryService.getByUserId(userId)
+            .flatMap(bw -> {
+                Label label = bw.getEntity1();
+                Set<Grant> labelGrants = bw.getEntity2();
+
+                //Get events of visible label
+                Map<UUID, UUID> eventIds = eventLabelMappingDao.getEventsOfLabel(label.getUserId(), label.getLabelId())
+                    .map(LabelEventMapping::getEventIds)
+                    .orElse(Map.of());
+
+                if (eventIds.containsKey(eventId)) {
+                    Set<Grant> eventGrants = labelGrants.stream()
+                        .flatMap(Grant::projectForChildren)
+                        .collect(Collectors.toSet());
+
+                    //Label makes event visible, return eventId with projected grants
+                    return Stream.of(new BiWrapper<>(eventIds.get(eventId), eventGrants));
+                } else {
+                    //Visible label is not label of event
+                    return Stream.empty();
+                }
+            })
+            //Create an aggregated list of grants for the event
+            .reduce((a, b) -> new BiWrapper<>(a.getEntity1(), Stream.concat(a.getEntity2().stream(), b.getEntity2().stream()).collect(Collectors.toSet())))
+            .map(bw -> new BiWrapper<>(
+                eventDao.findByIdValidated(bw.getEntity1(), eventId),
+                bw.getEntity2()
+            ));
+
         //Return the event and the aggregated list of grants, or a dummy event if the event is not shared.
-        return Stream.of(maybeSharedEvent, maybeSharedLabelEvent)
+        return Stream.of(maybeSharedEvent, maybeSharedLabelEvent, maybeEventOfVisibleLabel)
             .filter(Optional::isPresent)
             .map(Optional::get)
             //Merge grants from shared event and shared label

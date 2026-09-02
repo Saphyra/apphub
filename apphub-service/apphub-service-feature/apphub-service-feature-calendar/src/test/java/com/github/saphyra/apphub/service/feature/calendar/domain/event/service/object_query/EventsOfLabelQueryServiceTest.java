@@ -61,7 +61,7 @@ class EventsOfLabelQueryServiceTest {
         given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, USER_ID));
         given(eventDao.getByIds(List.of(new BiWrapper<>(USER_ID, EVENT_ID)))).willReturn(List.of(event));
-        given(eventMaskedChecker.isMasked_labelAlm(USER_ID, event, null)).willReturn(false);
+        given(eventMaskedChecker.isMasked_labelAlm(USER_ID, event, null, LABEL_ID)).willReturn(false);
         given(event.setMasked(false)).willReturn(event);
 
         assertThat(underTest.getEventsOfLabel(USER_ID, LABEL_ID)).containsExactly(event);
@@ -83,7 +83,7 @@ class EventsOfLabelQueryServiceTest {
         given(alm.getGrants()).willReturn(Set.of(Grant.VIEW_CHILDREN));
         given(alm.getOwner()).willReturn(USER_ID);
         given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
-        given(eventMaskedChecker.isMasked_labelAlm(SHARED_WITH, event, alm)).willReturn(false);
+        given(eventMaskedChecker.isMasked_labelAlm(SHARED_WITH, event, alm, LABEL_ID)).willReturn(false);
         given(event.setMasked(false)).willReturn(event);
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, USER_ID));
         given(eventDao.getByIds(List.of(new BiWrapper<>(USER_ID, EVENT_ID)))).willReturn(List.of(event));

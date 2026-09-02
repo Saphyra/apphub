@@ -2,9 +2,11 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service.
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
@@ -37,6 +39,9 @@ class EventMaskedCheckerTest {
     @Mock
     private EventLabelMappingDao eventLabelMappingDao;
 
+    @Mock
+    private LabelObjectQueryService labelObjectQueryService;
+
     @InjectMocks
     private EventMaskedChecker underTest;
 
@@ -56,12 +61,28 @@ class EventMaskedCheckerTest {
     void isMasked_labelAlm_ownEvent() {
         given(event.getUserId()).willReturn(USER_ID);
 
-        assertThat(underTest.isMasked_labelAlm(USER_ID, event, alm1)).isFalse();
+        assertThat(underTest.isMasked_labelAlm(USER_ID, event, alm1, LABEL_ID)).isFalse();
     }
 
     @Test
-    void isMasked_labelAlm_nullAlm() {
-        assertThat(catchThrowable(() -> underTest.isMasked_labelAlm(SHARED_WITH, event, null))).isInstanceOf(IllegalStateException.class);
+    void isMasked_labelAlm_nullAlm_labelAvailable_hasViewGrant() {
+        given(labelObjectQueryService.findLabel(SHARED_WITH, LABEL_ID)).willReturn(Optional.of(new BiWrapper<>(null, Set.of(Grant.VIEW_CHILDREN))));
+
+        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, null, LABEL_ID)).isFalse();
+    }
+
+    @Test
+    void isMasked_labelAlm_nullAlm_labelAvailable_hasNoViewGrant() {
+        given(labelObjectQueryService.findLabel(SHARED_WITH, LABEL_ID)).willReturn(Optional.of(new BiWrapper<>(null, Set.of(Grant.SEE_CHILDREN))));
+
+        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, null, LABEL_ID)).isTrue();
+    }
+
+    @Test
+    void isMasked_labelAlm_nullAlm_labelUnavailable() {
+        given(labelObjectQueryService.findLabel(SHARED_WITH, LABEL_ID)).willReturn(Optional.empty());
+
+        assertThat(catchThrowable(() -> underTest.isMasked_labelAlm(SHARED_WITH, event, null, LABEL_ID))).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -69,7 +90,7 @@ class EventMaskedCheckerTest {
         given(event.getUserId()).willReturn(USER_ID);
         given(alm1.getGrants()).willReturn(Set.of(Grant.VIEW_CHILDREN));
 
-        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1)).isFalse();
+        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1, LABEL_ID)).isFalse();
     }
 
     @Test
@@ -80,7 +101,7 @@ class EventMaskedCheckerTest {
         given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
         given(alm2.getGrants()).willReturn(Set.of(Grant.VIEW));
 
-        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1)).isFalse();
+        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1, LABEL_ID)).isFalse();
     }
 
     @Test
@@ -91,7 +112,7 @@ class EventMaskedCheckerTest {
         given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
         given(alm2.getGrants()).willReturn(Set.of(Grant.SEE));
 
-        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1)).isTrue();
+        assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1, LABEL_ID)).isTrue();
     }
 
     @Test

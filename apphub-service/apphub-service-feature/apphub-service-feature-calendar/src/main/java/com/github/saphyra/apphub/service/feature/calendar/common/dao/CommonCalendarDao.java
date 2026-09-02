@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.DeleteByUserIdDao;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
@@ -10,6 +11,7 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_map
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -38,6 +40,7 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
     @Getter
     private final LabelDao labelDao;
     private final AlmDao almDao;
+    private final LabelObjectQueryService labelObjectQueryService;
 
     @Override
     public void deleteByUserId(UUID userId) {
@@ -119,14 +122,13 @@ public class CommonCalendarDao implements DeleteByUserIdDao {
         eventLabelMappingDao.saveLabelsOfEvent(newMapping);
 
         //Get labels available for user
-        List<UUID> labelsOfUser = labelDao.getByUserId(userId)
-            .stream()
-            .map(Label::getLabelId)
-            .toList();
-
-        //Iterate through labels to see which one needs to be changed
-        List<LabelEventMapping> modifiedMappings = eventLabelMappingDao.getEventsOfLabels(userId, labelsOfUser)
-            .stream()
+        List<LabelEventMapping> modifiedMappings = labelObjectQueryService.getByUserId(userId)
+            .map(BiWrapper::getEntity1)
+            .map(label -> new BiWrapper<>(label.getUserId(), label.getLabelId()))
+            .map(bw -> eventLabelMappingDao.getEventsOfLabel(bw.getEntity1(), bw.getEntity2()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            //Iterate through labels to see which one needs to be changed
             .map(mapping -> {
                 //Label is added to event, add event to LabelEventMapping
                 if (labelIds.containsKey(mapping.getLabelId()) && !mapping.getEventIds().containsKey(eventId)) {
