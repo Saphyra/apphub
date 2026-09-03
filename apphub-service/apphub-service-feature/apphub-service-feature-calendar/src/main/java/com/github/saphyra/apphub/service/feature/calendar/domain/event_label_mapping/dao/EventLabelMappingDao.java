@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,8 +25,12 @@ public class EventLabelMappingDao {
         return labelEventMappingConverter.convertEntity(repository.getEventsOfLabel(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)));
     }
 
-    public List<EventLabelMapping> getLabelsOfEvents(UUID userId, Collection<UUID> eventIds) {
-        return eventLabelMappingConverter.convertEntity(repository.getLabelsOfEvents(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventIds)));
+    public List<EventLabelMapping> getLabelsOfEvents(List<BiWrapper<UUID, UUID>> ids) {
+        List<BiWrapper<String, String>> stringIds = ids.stream()
+            .map(id -> new BiWrapper<>(uuidConverter.convertDomain(id.getEntity1()), uuidConverter.convertDomain(id.getEntity2())))
+            .toList();
+
+        return eventLabelMappingConverter.convertEntity(repository.getLabelsOfEvents(stringIds));
     }
 
     public EventLabelMapping getLabelsOfEvent(UUID userId, UUID eventId) {
@@ -89,10 +93,6 @@ public class EventLabelMappingDao {
 
     public void saveEventsOfLabel(LabelEventMapping mapping) {
         repository.saveEventsOfLabels(labelEventMappingConverter.convertDomain(mapping));
-    }
-
-    public List<LabelEventMapping> getEventsOfLabels(UUID userId, List<UUID> labelIds) {
-        return labelEventMappingConverter.convertEntity(repository.getEventsOfLabels(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelIds)));
     }
 
     public void saveEventsOfLabels(List<LabelEventMapping> mappings) {

@@ -1,5 +1,4 @@
 TODO test cases:
-Create event to shared label
 Create occurrence to shared event
 Shared expired event appears only for owner
 Data deletion test

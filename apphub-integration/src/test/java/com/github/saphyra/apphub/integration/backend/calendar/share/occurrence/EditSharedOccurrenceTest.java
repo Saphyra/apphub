@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
+import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.calendar.ShareObjectRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.SharedObjectType;
@@ -93,13 +94,34 @@ public class EditSharedOccurrenceTest extends BackEndTest {
             CalendarShareActions.shareObject(getServerPort(), ownerToken, shareOccurrenceRequest);
         }
 
+        //Edit occurrence
         OccurrenceRequest occurrenceRequest = OccurrenceRequestFactory.fromResponse(occurrenceResponse)
             .note(NOTE)
+            .remindMeBeforeDays(2)
+            .status(OccurrenceStatus.PENDING)
             .build();
         CalendarOccurrenceActions.editOccurrence(getServerPort(), sharedWithToken, eventId, occurrenceId, occurrenceRequest);
 
         assertThat(CalendarOccurrenceActions.getOccurrence(getServerPort(), ownerToken, eventId, occurrenceId))
             .returns(NOTE, OccurrenceResponse::getNote);
+
+        //Set reminded
+        CalendarOccurrenceActions.setReminded(getServerPort(), sharedWithToken, eventId, occurrenceId);
+
+        assertThat(CalendarOccurrenceActions.getOccurrence(getServerPort(), sharedWithToken, eventId, occurrenceId))
+            .returns(true, OccurrenceResponse::getReminded);
+
+        assertThat(CalendarOccurrenceActions.getOccurrence(getServerPort(), ownerToken, eventId, occurrenceId))
+            .returns(true, OccurrenceResponse::getReminded);
+
+        //Set status
+        CalendarOccurrenceActions.editOccurrenceStatus(getServerPort(), sharedWithToken, eventId, occurrenceId, OccurrenceStatus.SNOOZED);
+
+        assertThat(CalendarOccurrenceActions.getOccurrence(getServerPort(), sharedWithToken, eventId, occurrenceId))
+            .returns(OccurrenceStatus.SNOOZED, OccurrenceResponse::getStatus);
+
+        assertThat(CalendarOccurrenceActions.getOccurrence(getServerPort(), ownerToken, eventId, occurrenceId))
+            .returns(OccurrenceStatus.SNOOZED, OccurrenceResponse::getStatus);
     }
 
     @Test(groups = {"be", "calendar"}, dataProvider = "editSharedOccurrence_noGrantData")
@@ -118,6 +140,7 @@ public class EditSharedOccurrenceTest extends BackEndTest {
         EventRequest eventRequest = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .labels(Map.of(labelId, ownerId))
+            .remindMeBeforeDays(3)
             .build();
         UUID eventId = CalendarEventActions.createEvent(getServerPort(), ownerToken, eventRequest);
         OccurrenceResponse occurrenceResponse = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), ownerToken, eventId)
@@ -164,10 +187,14 @@ public class EditSharedOccurrenceTest extends BackEndTest {
             CalendarShareActions.shareObject(getServerPort(), ownerToken, shareOccurrenceRequest);
         }
 
+        //Edit occurrence
         OccurrenceRequest occurrenceRequest = OccurrenceRequestFactory.fromResponse(occurrenceResponse)
             .note(NOTE)
             .build();
         ResponseValidator.verifyNotFound(CalendarOccurrenceActions.getEditOccurrenceResponse(getServerPort(), sharedWithToken, eventId, occurrenceId, occurrenceRequest));
+
+        ResponseValidator.verifyNotFound(CalendarOccurrenceActions.getSetRemindedResponse(getServerPort(), sharedWithToken, eventId, occurrenceId));
+        ResponseValidator.verifyNotFound(CalendarOccurrenceActions.getEditOccurrenceStatusResponse(getServerPort(), sharedWithToken, eventId, occurrenceId, OccurrenceStatus.SNOOZED));
     }
 
     @DataProvider(parallel = true)

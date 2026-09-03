@@ -67,8 +67,9 @@ class OccurrenceQueryServiceTest {
     @Test
     void getOccurrences() {
         given(occurrenceObjectQueryService.getOccurrences(USER_ID)).willReturn(Map.of(event, List.of(occurrence)));
+        given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(eventLabelMappingDao.getLabelsOfEvents(USER_ID, List.of(EVENT_ID))).willReturn(List.of(eventLabelMapping));
+        given(eventLabelMappingDao.getLabelsOfEvents(List.of(new BiWrapper<>(USER_ID, EVENT_ID)))).willReturn(List.of(eventLabelMapping));
         given(eventLabelMapping.getEventId()).willReturn(EVENT_ID);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(LABEL_ID, USER_ID));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
@@ -87,7 +88,7 @@ class OccurrenceQueryServiceTest {
     }
 
     @Test
-    void getOccurrence(){
+    void getOccurrence() {
         given(occurrenceObjectQueryService.findOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID)).willReturn(Optional.of(new BiWrapper<>(event, occurrence)));
         given(occurrenceResponseMapper.toResponse(USER_ID, event, occurrence)).willReturn(occurrenceResponse);
 

@@ -41,7 +41,6 @@ public class LabelObjectQueryService {
         return labelDao.getByIds(labelIds);
     }
 
-    //TODO unit test
     public Stream<BiWrapper<Label, Set<Grant>>> getByUserId(UUID userId) {
         return Stream.concat(
             labelDao.getByUserId(userId).stream()
@@ -55,7 +54,6 @@ public class LabelObjectQueryService {
         );
     }
 
-    //TODO unit test
     public Optional<BiWrapper<Label, Set<Grant>>> findLabel(UUID userId, UUID labelId) {
         return labelDao.findById(userId, labelId)
             .map(label -> new BiWrapper<>(label, Grant.forType(SharedObjectType.LABEL)))
@@ -64,10 +62,8 @@ public class LabelObjectQueryService {
     }
 
     public Optional<Label> findLabel(UUID userId, UUID labelId, Grant... requiredGrants) {
-        return labelDao.findById(userId, labelId)
-            .or(() -> almDao.findForObject(userId, PrincipalType.USER, labelId, SharedObjectType.LABEL)
-                .filter(alm -> alm.getGrants().containsAll(Arrays.asList(requiredGrants)))
-                .flatMap(alm -> labelDao.findById(alm.getOwner(), alm.getObjectId()))
-            );
+        return findLabel(userId, labelId)
+            .filter(bw -> bw.getEntity2().containsAll(Arrays.asList(requiredGrants)))
+            .map(BiWrapper::getEntity1);
     }
 }

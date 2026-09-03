@@ -2,10 +2,13 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.ser
 
 import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
@@ -23,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -47,6 +51,9 @@ class GetOccurrencesOfUserServiceHelperTest {
     @Mock
     private EventDao eventDao;
 
+    @Mock
+    private LabelObjectQueryService labelObjectQueryService;
+
     @InjectMocks
     private GetOccurrencesOfUserServiceHelper underTest;
 
@@ -61,6 +68,9 @@ class GetOccurrencesOfUserServiceHelperTest {
 
     @Mock
     private Event event;
+
+    @Mock
+    private Label label;
 
     @ParameterizedTest
     @EnumSource(value = Grant.class, names = {"VIEW_CHILDREN", "SEE_CHILDREN"})
@@ -130,5 +140,25 @@ class GetOccurrencesOfUserServiceHelperTest {
         given(occurrenceDao.getByEventId(event.getEventId())).willReturn(List.of(occurrence));
 
         assertThat(underTest.getOwnOccurrences(USER_ID)).containsExactly(occurrence);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = Grant.class, names = {"VIEW_CHILDREN", "SEE_CHILDREN"})
+    void getVisibleLabelOccurrences(Grant grant){
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, Set.of(grant))));
+        given(label.getUserId()).willReturn(OWNER);
+        given(label.getLabelId()).willReturn(LABEL_ID);
+        given(eventLabelMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
+        given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, OWNER));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+
+        assertThat(underTest.getVisibleLabelOccurrences(USER_ID)).containsExactly(occurrence);
+    }
+
+    @Test
+    void getVisibleLabelOccurrences_noGrat(){
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, Set.of(Grant.EDIT))));
+
+        assertThat(underTest.getVisibleLabelOccurrences(USER_ID)).isEmpty();
     }
 }

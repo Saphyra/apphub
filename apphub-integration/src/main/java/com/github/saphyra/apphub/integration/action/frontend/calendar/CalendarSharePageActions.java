@@ -3,11 +3,13 @@ package com.github.saphyra.apphub.integration.action.frontend.calendar;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
+import com.github.saphyra.apphub.integration.structure.view.calendar.SharedWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
+import java.util.Optional;
 
 public class CalendarSharePageActions {
     public static void selectUser(WebDriver driver, String credential) {
@@ -37,7 +39,7 @@ public class CalendarSharePageActions {
             .assertTrue("Item is not shared with user.");
     }
 
-    private static List<WebElement> getSharedWith(WebDriver driver) {
+    public static List<WebElement> getSharedWith(WebDriver driver) {
         return driver.findElements(By.cssSelector("#calendar-shared-with-list .shared-with-user"));
     }
 
@@ -50,5 +52,13 @@ public class CalendarSharePageActions {
         driver.findElement(By.id("calendar-share-with-selected-user-grants"))
             .findElement(By.cssSelector("input[value='%s']".formatted(grant.name())))
             .click();
+    }
+
+    public static Optional<SharedWith> findSharedWith(WebDriver driver, String email) {
+        return driver.findElements(By.className("shared-with-user"))
+            .stream()
+            .map(SharedWith::new)
+            .filter(sharedWith -> sharedWith.getEmail().equals(email))
+            .findFirst();
     }
 }

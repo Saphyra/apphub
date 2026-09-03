@@ -92,7 +92,7 @@ class LabelObjectQueryServiceTest {
         given(alm.getGrants()).willReturn(Set.of(Grant.VIEW));
         given(alm.getOwner()).willReturn(OTHER_USER_ID);
         given(alm.getObjectId()).willReturn(SHARED_LABEL_ID);
-        given(labelDao.findById(OTHER_USER_ID, SHARED_LABEL_ID)).willReturn(Optional.of(sharedLabel));
+        given(labelDao.findByIdValidated(OTHER_USER_ID, SHARED_LABEL_ID)).willReturn(sharedLabel);
 
         assertThat(underTest.findLabel(USER_ID, SHARED_LABEL_ID, Grant.VIEW)).contains(sharedLabel);
     }
@@ -104,5 +104,20 @@ class LabelObjectQueryServiceTest {
         given(alm.getGrants()).willReturn(Set.of());
 
         assertThat(underTest.findLabel(USER_ID, SHARED_LABEL_ID, Grant.VIEW)).isEmpty();
+    }
+
+    @Test
+    void getByUserId(){
+        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(ownLabel));
+        given(almDao.getByUserIdAndObjectType(USER_ID, SharedObjectType.LABEL)).willReturn(List.of(alm));
+        given(alm.getOwner()).willReturn(OTHER_USER_ID);
+        given(alm.getObjectId()).willReturn(SHARED_LABEL_ID);
+        given(alm.getGrants()).willReturn(Set.of(Grant.VIEW));
+        given(labelDao.findByIdValidated(OTHER_USER_ID, SHARED_LABEL_ID)).willReturn(sharedLabel);
+
+        assertThat(underTest.getByUserId(USER_ID)).containsExactlyInAnyOrder(
+            new BiWrapper<>(ownLabel, Grant.forType(SharedObjectType.LABEL)),
+            new BiWrapper<>(sharedLabel, Set.of(Grant.VIEW))
+        );
     }
 }

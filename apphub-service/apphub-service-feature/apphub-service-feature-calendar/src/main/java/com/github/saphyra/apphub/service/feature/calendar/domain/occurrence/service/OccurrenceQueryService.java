@@ -34,8 +34,15 @@ public class OccurrenceQueryService {
 
     public List<OccurrenceResponse> getOccurrences(UUID userId, LocalDate startDate, LocalDate endDate, UUID labelId) {
         Map<Event, List<Occurrence>> occurrenceMapping = occurrenceObjectQueryService.getOccurrences(userId);
+        if (occurrenceMapping.isEmpty()) {
+            log.info("occurrenceMapping is empty.");
+            return List.of();
+        } else {
+            occurrenceMapping.forEach((event, occurrences) -> log.info("occurrenceMapping: eventId: {}, occurrences: {}", event.getEventId(), occurrences.stream().map(Occurrence::getOccurrenceId).toList()));
+        }
 
-        Map<UUID, Collection<UUID>> labels = getLabels(userId, occurrenceMapping.keySet());
+        Map<UUID, Collection<UUID>> labels = getLabels(occurrenceMapping.keySet());
+        log.info("Labels: {}", labels);
 
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
         List<Occurrence> occurrences = occurrenceMapping.entrySet()
@@ -47,11 +54,11 @@ public class OccurrenceQueryService {
         return occurrenceResponseMapper.toResponse(userId, occurrenceMapping.keySet(), occurrences);
     }
 
-    private Map<UUID, Collection<UUID>> getLabels(UUID userId, Collection<Event> events) {
-        List<UUID> eventIds = events.stream()
-            .map(Event::getEventId)
+    private Map<UUID, Collection<UUID>> getLabels(Collection<Event> events) {
+        List<BiWrapper<UUID, UUID>> ids = events.stream()
+            .map(event -> new BiWrapper<>(event.getUserId(), event.getEventId()))
             .toList();
-        return eventLabelMappingDao.getLabelsOfEvents(userId, eventIds)
+        return eventLabelMappingDao.getLabelsOfEvents(ids)
             .stream()
             .collect(Collectors.toMap(EventLabelMapping::getEventId, mapping -> mapping.getLabelIds().keySet()));
     }

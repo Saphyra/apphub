@@ -28,7 +28,6 @@ import java.util.List;
 import static java.util.Objects.nonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 
-//TODO add editOccurrenceStatus and setReminded cases
 public class CalendarEditSharedOccurrenceTest extends SeleniumTest {
     private static final String LABEL_1 = "label-1";
 

@@ -51,11 +51,11 @@ public class CalendarEventPageActions {
     }
 
     private static void addLabel(WebDriver driver, String label) {
-        driver.findElements(By.cssSelector(".calendar-event-available-labels .calendar-label"))
-            .stream()
+        List<WebElement> availableLabels = driver.findElements(By.cssSelector("#calendar-event-available-labels .calendar-label"));
+        availableLabels.stream()
             .filter(element -> element.getText().equals(label))
             .findAny()
-            .orElseThrow(() -> new IllegalStateException("Label not found: " + label))
+            .orElseThrow(() -> new IllegalStateException("Label not found: '" + label + "'. Available labels: " + availableLabels.stream().map(WebElement::getText).map("'%s'"::formatted).toList()))
             .click();
     }
 

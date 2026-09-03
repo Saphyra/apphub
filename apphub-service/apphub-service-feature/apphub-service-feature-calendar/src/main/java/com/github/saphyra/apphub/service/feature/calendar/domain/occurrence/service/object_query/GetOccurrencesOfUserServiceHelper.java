@@ -33,7 +33,7 @@ class GetOccurrencesOfUserServiceHelper {
                 getSharedOccurrences(userId),
                 getSharedEventOccurrences(userId),
                 getSharedLabelOccurrences(userId),
-                getVisibleLabelOccurrences(userId) //TODO unit test
+                getVisibleLabelOccurrences(userId)
             )
             .flatMap(s -> s)
             .distinct()
@@ -41,7 +41,7 @@ class GetOccurrencesOfUserServiceHelper {
     }
 
     //Return occurrences of events created by another users using the user's shared label.
-    private Stream<Occurrence> getVisibleLabelOccurrences(UUID userId) {
+    Stream<Occurrence> getVisibleLabelOccurrences(UUID userId) {
         return labelObjectQueryService.getByUserId(userId)
             .filter(bw -> bw.getEntity2().contains(Grant.VIEW_CHILDREN) || bw.getEntity2().contains(Grant.SEE_CHILDREN))
             .map(BiWrapper::getEntity1)

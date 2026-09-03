@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
@@ -56,11 +57,11 @@ class EventLabelMappingRepository extends DynamoDbRepository {
             .map(labelEventMappingMapper::convertEntity);
     }
 
-    List<EventLabelMappingEntity> getLabelsOfEvents(String userId, List<String> eventIds) {
-        List<Map<String, AttributeValue>> keys = eventIds.stream()
-            .map(id -> Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING + id).build()
+    List<EventLabelMappingEntity> getLabelsOfEvents(List<BiWrapper<String, String>> ids) {
+        List<Map<String, AttributeValue>> keys = ids.stream()
+            .map(bw -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + bw.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT_LABEL_MAPPING + bw.getEntity2()).build()
             ))
             .toList();
 

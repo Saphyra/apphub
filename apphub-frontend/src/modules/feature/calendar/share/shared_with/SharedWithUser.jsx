@@ -22,7 +22,7 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
 
             <div>
                 <MultiSelect
-                    id="calendar-share-with-selected-user-grants"
+                    className="calendar-share-with-selected-user-grants"
                     value={selectedGrants}
                     onchangeCallback={setSelectedGrants}
                     options={getOperationOptions()}
@@ -74,6 +74,7 @@ const SharedWithUser = ({ user, localizationHandler, type, setDisplaySpinner, ob
             [
                 <Button
                     key="unshare"
+                    id="calendar-share-unshare-confirmation-dialog-unshare-button"
                     label={localizationHandler.get("unshare")}
                     onclick={unshare}
                 />,
