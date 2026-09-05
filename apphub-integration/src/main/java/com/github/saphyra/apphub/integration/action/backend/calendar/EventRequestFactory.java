@@ -21,7 +21,7 @@ public class EventRequestFactory {
     public static final Integer DEFAULT_EVENT_DURATION = 20;
     public static final LocalDate DEFAULT_END_DATE = DEFAULT_START_DATE.plusDays(DEFAULT_EVENT_DURATION);
     public static final LocalDate NEW_END_DATE = DEFAULT_END_DATE.plusDays(1);
-    public static final Integer MAX_EVENT_DURATION_DAYS = 730;
+    public static final Integer MAX_EVENT_DURATION_DAYS = 36500;
     public static final LocalDate NEW_START_DATE = DEFAULT_START_DATE.plusDays(1);
     public static final String NEW_TITLE = "new-title";
     public static final String NEW_CONTENT = "new-content";

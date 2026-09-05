@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "calendar")
 public class CalendarParams {
     private Integer maxEventDurationDays;
+    private Integer defaultEventDurationDays;
 }

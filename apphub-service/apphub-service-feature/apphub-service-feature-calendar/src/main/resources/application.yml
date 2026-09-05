@@ -6,4 +6,5 @@ liquibase:
   schema: calendar
 
 calendar:
-  maxEventDurationDays: 730 # 2 years
+  maxEventDurationDays: 36500 # 100 years
+  defaultEventDurationDays: 730 # 2 years

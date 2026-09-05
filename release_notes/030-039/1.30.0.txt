@@ -2,6 +2,7 @@
     Calendar
         Auto-done occurrences
         Share your calendar
+        Extend Event duration limit
     ApphubCI
         Database backup and restoration tool
 
