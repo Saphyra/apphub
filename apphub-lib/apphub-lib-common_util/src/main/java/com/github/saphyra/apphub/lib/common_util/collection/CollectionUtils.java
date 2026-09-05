@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -98,5 +99,11 @@ public class CollectionUtils {
         }
         in.forEach((k, vs) -> result.put(k, new ArrayList<>(vs)));
         return result;
+    }
+
+    public static <KeyIn, ValueIn, KeyOut, ValueOut> Map<KeyOut, ValueOut> convertMap(Map<KeyIn, ValueIn> map, Function<KeyIn, KeyOut> keyMapper, Function<ValueIn, ValueOut> valueMapper) {
+        return map.entrySet()
+            .stream()
+            .collect(Collectors.toMap(entry -> keyMapper.apply(entry.getKey()), entry -> valueMapper.apply(entry.getValue())));
     }
 }

@@ -5,7 +5,7 @@ import Stream from "common/js/collection/Stream";
 import ErrorReportListItem from "./item/ErrorReportListItem";
 import InputField from "common/component/input/InputField";
 
-const ErrorReportList = ({ totalCount, errorReports, refreshCallback, selectedErrorReports, setSelectedErrorReports, setConfirmationDialogData }) => {
+const ErrorReportList = ({ totalCount, errorReports, refreshCallback, selectedErrorReports, setSelectedErrorReports, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const selectAll = () => {
@@ -25,6 +25,7 @@ const ErrorReportList = ({ totalCount, errorReports, refreshCallback, selectedEr
                 setSelectedErrorReports={setSelectedErrorReports}
                 refreshCallback={refreshCallback}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

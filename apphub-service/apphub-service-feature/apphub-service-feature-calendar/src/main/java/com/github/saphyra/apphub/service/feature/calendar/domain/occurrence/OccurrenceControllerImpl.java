@@ -58,15 +58,14 @@ class OccurrenceControllerImpl implements OccurrenceController {
     public void deleteOccurrence(UUID eventId, UUID occurrenceId, AccessToken accessToken) {
         log.info("{} wants to delete Occurrence {}", accessToken.getUserId(), occurrenceId);
 
-        deleteOccurrenceService.deleteOccurrence(eventId, occurrenceId);
+        deleteOccurrenceService.deleteOccurrence(accessToken.getUserId(), eventId, occurrenceId);
 
         log.debug("Response: {}", HttpStatus.OK);
     }
 
     @Override
     public List<OccurrenceResponse> getOccurrences(LocalDate startDate, LocalDate endDate, UUID labelId, AccessToken accessToken) {
-        log.info("{} wants to get Occurrences for label {}", accessToken.getUserId(), labelId);
-        log.info("labelId: {}, startDate: {}, endDate: {}", labelId, startDate, endDate);
+        log.info("{} wants to get Occurrences for label {}. startDate: {}, endDate: {}", accessToken.getUserId(), labelId, startDate, endDate);
 
         List<OccurrenceResponse> occurrences = occurrenceQueryService.getOccurrences(accessToken.getUserId(), startDate, endDate, labelId);
         log.debug("Response: {}", occurrences);

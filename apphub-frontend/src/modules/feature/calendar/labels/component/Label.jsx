@@ -5,10 +5,10 @@ import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import NotificationService from "common/js/notification/NotificationService";
 import { isBlank } from "common/js/Utils";
 import { useState } from "react";
-import { MAX_LABEL_LENGTH } from "../../CalendarConstants";
-import Stream from "common/js/collection/Stream";
+import { MAX_LABEL_LENGTH, TYPE_LABEL } from "../../CalendarConstants";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
-import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL } from "../../CalendarEndpoints";
+import { CALENDAR_DELETE_LABEL, CALENDAR_EDIT_LABEL, CALENDAR_LABELS_PAGE, CALENDAR_SHARE_PAGE } from "../../CalendarEndpoints";
+import Constants from "common/js/Constants";
 
 const Label = ({
     labelId,
@@ -19,7 +19,8 @@ const Label = ({
     labels,
     setLabels,
     selected,
-    setSelectedLabel
+    setSelectedLabel,
+    shared
 }) => {
     const [newLabel, setNewLabel] = useState(label);
     const [displayEditDialog, setDisplayEditDialog] = useState(false);
@@ -30,7 +31,7 @@ const Label = ({
                 onClick={() => setSelectedLabel((labelId))}
                 className={"calendar-labels-label dynamic button" + (selected ? " selected" : "")}
             >
-                <span className="calendar-labels-label-title">{label}</span>
+                <span className="calendar-labels-label-title">{label + (shared ? " " + Constants.ICON_SHARED : "")}</span>
 
                 <div className="calendar-labels-label-operations">
                     <Button
@@ -49,7 +50,7 @@ const Label = ({
             {displayEditDialog &&
                 <ConfirmationDialog
                     id={"calendar-labels-edit-label"}
-                    title={localizationHandler.get("rename-label")}
+                    title={localizationHandler.get("edit-label")}
                     content={
                         <PreLabeledInputField
                             label={localizationHandler.get("new-label")}
@@ -67,6 +68,12 @@ const Label = ({
                             id="calendar-labels-edit-label-save"
                             label={localizationHandler.get("save")}
                             onclick={() => renameLabel()}
+                        />,
+                        <Button
+                            key="share"
+                            id="calendar-labels-edit-label-share"
+                            label={localizationHandler.get("share")}
+                            onclick={()=> window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({type: TYPE_LABEL, id: labelId, parent: null}, {backUrl: CALENDAR_LABELS_PAGE})}
                         />,
                         <Button
                             key="cancel"
@@ -88,11 +95,6 @@ const Label = ({
 
         if (newLabel.length > MAX_LABEL_LENGTH) {
             NotificationService.showError(localizationHandler.get("label-too-long"));
-            return;
-        }
-
-        if (new Stream(labels).anyMatch(l => l.label === newLabel)) {
-            NotificationService.showError(localizationHandler.get("label-already-exists"));
             return;
         }
 

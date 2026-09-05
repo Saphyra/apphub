@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 class LabelEntity {
+    private String userId;
     private String labelId;
     private String label; //Encrypted
 }

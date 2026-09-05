@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TaskManagerOrganizationTest extends SeleniumTest {
     private static final String ORGANIZATION_NAME = "organization-name";
 
-    @Test(groups = {"be", "task-manager"})
+    @Test(groups = {"fe", "task-manager"})
     public void createAndJoinOrganization() {
         List<WebDriver> driverList = extractDrivers(3);
         WebDriver driver1 = driverList.get(0);

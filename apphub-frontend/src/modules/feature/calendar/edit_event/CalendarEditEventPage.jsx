@@ -32,8 +32,9 @@ import Spinner from "common/component/Spinner";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import saveEvent from "./saveEvent";
 import Optional from "common/js/collection/Optional";
-import { CALENDAR_GET_EVENT, CALENDAR_PAGE } from "../CalendarEndpoints";
+import { CALENDAR_GET_EVENT, CALENDAR_PAGE, CALENDAR_SHARE_PAGE } from "../CalendarEndpoints";
 import EventAutoDone from "../common/event/EventAutoDone";
+import { TYPE_EVENT } from "../CalendarConstants";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -217,6 +218,12 @@ const CalendarEditEventPage = () => {
                             () => { },
                             () => window.location.href = CALENDAR_PAGE
                         )}
+                    />,
+                    <Button
+                        key="share"
+                        id="calendar-edit-event-share"
+                        label={localizationHandler.get("share")}
+                        onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_EVENT, id: eventId, parent: null }, { backUrl: window.location.href })}
                     />
                 ]}
                 centerButtons={[

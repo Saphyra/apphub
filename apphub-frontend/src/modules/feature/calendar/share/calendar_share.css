@@ -1,0 +1,67 @@
+#calendar-share main {
+    padding: 0;
+}
+
+#calendar-share-with {
+    border-bottom: 3px ridge white;
+}
+
+#calendar-share-with-inputs {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    margin: auto;
+}
+
+#calendar-share-with-search-input {
+    flex-grow: 2;
+}
+
+#calendar-share-with-search-result-empty {
+    text-align: center;
+    font-size: 24px;
+    padding: 5px;
+}
+
+.calendar-share-with-search-result-item {
+    display: block;
+    margin: 5px auto;
+}
+
+#calendar-share-with-selected-user {
+    padding: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#calendar-shared-with-search {
+    display: block;
+    margin: 5px auto;
+    width: 75%;
+}
+
+#calendar-shared-with-title {
+    text-align: center;
+}
+
+#calendar-shared-with-list {
+    display: flex;
+    flex-wrap: nowrap
+}
+
+.shared-with-user {
+    border: 3px ridge white;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.shared-with-user-title {
+    border-bottom: 3px ridge white;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.calendar-share-with-selected-user-operations {
+    display: flex;
+    justify-content: space-evenly;
+}

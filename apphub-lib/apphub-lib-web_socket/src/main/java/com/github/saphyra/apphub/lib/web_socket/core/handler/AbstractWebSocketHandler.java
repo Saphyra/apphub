@@ -11,7 +11,9 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -73,7 +75,7 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
 
     protected void handleMessage(UUID userId, WebSocketEvent event, String sessionId) {
         if (event.getEventName() == WebSocketEventName.PING) {
-            log.info("Ping arrived from {} to {}", userId, getEndpoint());
+            log.debug("Ping arrived from {} to {}", userId, getEndpoint());
         } else {
             log.info("Unhandled event: {} in: {}", event.getEventName(), getEndpoint());
         }
@@ -91,7 +93,7 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void sendPingRequest() {
-        log.info("Sending ping requests to {}...", getEndpoint());
+        log.debug("Sending ping requests to {}...", getEndpoint());
         WebSocketEvent event = WebSocketEvent.builder()
             .eventName(WebSocketEventName.PING)
             .build();
@@ -100,23 +102,31 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
     }
 
     public void cleanUp() {
-        log.info("Cleaning up expired webSocketSessions in {}", getEndpoint());
+        log.debug("Cleaning up expired webSocketSessions in {}", getEndpoint());
+        LocalDateTime currentTime = context.getDateTimeUtil()
+            .getCurrentDateTime();
         List<String> expiredSessions = sessions.entrySet()
             .stream()
-            .filter(this::isExpired)
+            .filter(entry -> isExpired(currentTime, entry.getValue().getLastUpdate()))
             .map(Map.Entry::getKey)
             .toList();
 
-        expiredSessions.forEach(sessions::remove);
+        expiredSessions.forEach(sessionId -> {
+            UUID userId = getUserId(sessionId);
+            log.info("Session of user {} timed out for endpoint {}", userId, getEndpoint());
+
+            afterDisconnection(userId, sessionId);
+
+            sessions.remove(sessionId);
+        });
     }
 
-    private boolean isExpired(Map.Entry<String, WebSocketSessionWrapper> entry) {
-        LocalDateTime expiration = context.getDateTimeUtil()
-            .getCurrentDateTime()
-            .minusSeconds(context.getWebSocketSessionExpirationSeconds());
-        return entry.getValue()
-            .getLastUpdate()
-            .isBefore(expiration);
+    private boolean isExpired(LocalDateTime currentTime, LocalDateTime lastUpdate) {
+        LocalDateTime expiration = currentTime.minus(context.getWebSocketSessionExpirationMillis(), ChronoUnit.MILLIS);
+
+        log.debug("Last update: {}, Expiration: {}, Current time: {}, Remaining: {} ms", lastUpdate, expiration, currentTime, Math.abs(Duration.between(currentTime, lastUpdate).toMillis()));
+
+        return lastUpdate.isBefore(expiration);
     }
 
     public void sendEvent(List<UUID> recipients, WebSocketEventName eventName) {
@@ -170,7 +180,7 @@ public abstract class AbstractWebSocketHandler extends TextWebSocketHandler {
                     session.sendMessage(textMessage);
                 }
             }
-            sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime());
+            //sessionWrapper.setLastUpdate(context.getDateTimeUtil().getCurrentDateTime());
         } catch (Exception e) {
             context.getErrorReporterService()
                 .report(String.format("Failed to send %s event to %s in messageGroup %s", event.getEventName(), session.getPrincipal().getName(), getEndpoint()), e);

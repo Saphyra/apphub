@@ -111,7 +111,7 @@ public class ApphubWsClient extends WebSocketClient {
     public void send(WebSocketEvent event) {
         AwaitilityWrapper.createDefault()
             .until(this::isOpen)
-            .assertTrue(name + " - WebSocket is not connected. Failed sending event " + event.getPayload());
+            .assertTrue(name + " - WebSocket is not connected. Failed sending event " + event);
 
         String payload = TestBase.OBJECT_MAPPER_WRAPPER.writeValueAsString(event);
 

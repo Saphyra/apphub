@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.FUNCTIONALITY_METRIC_COUNT;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_AVERAGE_SIZE;
 import static com.github.saphyra.apphub.lib.monitoring.MonitoringProperties.KEY_MAX_SIZE;
+import static java.util.Objects.isNull;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +34,10 @@ public class MetricRegistry {
     private final PutMetricRequestFactory putMetricRequestFactory;
 
     public void reportMetric(Feature feature, String functionality, List<MetricPropertyModel> properties) {
+        if (isNull(functionality)) {
+            return;
+        }
+
         LocalDateTime timestamp = dateTimeUtil.getCurrentDateTime()
             .withNano(0);
 

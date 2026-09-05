@@ -16,7 +16,7 @@ async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, ne
 
     payload.labels = new Stream(existingLabels)
         .addAll(newLabelIds)
-        .toList()
+        .toMap(l => l.labelId, l => l.userId);
 
     await CALENDAR_EDIT_EVENT.createRequest(payload, { eventId: eventId })
         .send(setDisplaySpinner);
@@ -25,12 +25,12 @@ async function saveEvent(eventId, payload, existingLabels, setDisplaySpinner, ne
     window.location.href = backUrl;
 
     async function createLabels() {
-        return await Promise.all(newLabels.map(label => createLabel(label)));
+        return await Promise.all(newLabels.map(label => createLabel(label.label)));
 
         async function createLabel(label) {
             return CALENDAR_CREATE_LABEL.createRequest({ value: label })
                 .send(setDisplaySpinner)
-                .then(response => response.value);
+                .then(response => { return { labelId: response.labelId, userId: response.userId } });
         }
     }
 

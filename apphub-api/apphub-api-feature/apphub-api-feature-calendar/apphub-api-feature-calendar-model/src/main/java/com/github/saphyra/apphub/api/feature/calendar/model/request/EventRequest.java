@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -25,7 +25,7 @@ public class EventRequest {
     private String title;
     private String content;
     private Integer remindMeBeforeDays;
-    private List<UUID> labels;
+    private Map<UUID, UUID> labels; //Map<labelId, userId>
     private Boolean archived;
     private Boolean autoDone;
 }

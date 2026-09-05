@@ -40,7 +40,7 @@ class CalendarEventControllerImplTest {
         SendEventRequest<DeleteAccountEvent> request = SendEventRequest.<DeleteAccountEvent>builder()
             .payload(new DeleteAccountEvent(USER_ID))
             .build();
-        given(accessTokenProvider.set(any())).willReturn(accessTokenProvider);
+        given(accessTokenProvider.set(any(AccessToken.class))).willReturn(accessTokenProvider);
 
         underTest.deleteAccountEvent(request);
 

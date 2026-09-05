@@ -72,7 +72,7 @@ defaultLocale: en
 fileUpload:
   maxFileSize: 209_715_200 #200MB
 webSocketSession:
-  expirationSeconds: 30
+  expirationMillis: 3000
 authorization:
   accessTokenExpiration: PT15M
 

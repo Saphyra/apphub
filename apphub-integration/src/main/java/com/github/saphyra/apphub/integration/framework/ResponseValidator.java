@@ -93,4 +93,8 @@ public class ResponseValidator {
         ErrorResponse errorResponse = edit_columnHeadNotFoundResponse.getBody().as(ErrorResponse.class);
         assertThat(errorResponse.getErrorCode()).isEqualTo(ErrorCode.LIST_ITEM_NOT_FOUND.name());
     }
+
+    public static void verifyNotFound(Response response) {
+        verifyErrorResponse(response, 404, ErrorCode.DATA_NOT_FOUND);
+    }
 }

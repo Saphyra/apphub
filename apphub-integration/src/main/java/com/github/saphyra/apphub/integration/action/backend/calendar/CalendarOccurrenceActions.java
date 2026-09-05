@@ -149,4 +149,18 @@ public class CalendarOccurrenceActions {
 
         return response.getBody().as(OccurrenceResponse.class);
     }
+
+    public static OccurrenceResponse getOccurrence(int serverPort, String accessToken, UUID eventId, UUID occurrenceId) {
+        Response response = getGetOccurrenceResponse(serverPort, accessToken, eventId, occurrenceId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+
+        return response.getBody().as(OccurrenceResponse.class);
+    }
+
+    public static void deleteOccurrence(int serverPort, String accessToken, UUID eventId, UUID occurrenceId) {
+        Response response = getDeleteOccurrenceResponse(serverPort, accessToken, eventId, occurrenceId);
+
+        assertThat(response.getStatusCode()).isEqualTo(200);
+    }
 }

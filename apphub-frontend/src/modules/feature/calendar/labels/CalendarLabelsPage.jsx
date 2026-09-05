@@ -89,7 +89,7 @@ const CalendarLabelsPage = () => {
                     />
                 }
 
-                {hasValue(selectedOccurrence) &&
+                {hasValue(selectedEvent) && hasValue(selectedOccurrence) &&
                     <OpenedOccurrence
                         eventId={selectedEvent}
                         occurrenceId={selectedOccurrence}

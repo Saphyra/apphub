@@ -23,7 +23,11 @@ public class CalendarDaoConstants {
     public static final String COLUMN_NOTE = "note";
     public static final String COLUMN_REMINDED = "reminded";
     public static final String COLUMN_USER_ID = "user_id";
+    public static final String COLUMN_PARENT = "parent";
     public static final String COLUMN_AUTO_DONE = "auto_done";
+    public static final String COLUMN_PRINCIPAL = "principal";
+    public static final String COLUMN_OBJECT = "object";
+    public static final String COLUMN_OPERATIONS = "operations";
 
     public static final String PREFIX_USER = "USER#";
     public static final String PREFIX_EVENT = "EVENT#";
@@ -33,4 +37,7 @@ public class CalendarDaoConstants {
     public static final String PREFIX_OCCURRENCE = "OCCURRENCE#";
 
     public static final String GSI_USER_ID_DATE_BUCKET = "GSI-user_id-date_bucket";
+    public static final String GSI_ALM_OBJECT_PRINCIPAL = "GSI-alm-object-principal";
+
+    public static final String MIGRATION = "MIGRATION";
 }

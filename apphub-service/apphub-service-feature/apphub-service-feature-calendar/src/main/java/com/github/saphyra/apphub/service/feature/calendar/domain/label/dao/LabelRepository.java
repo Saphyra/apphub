@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDynamoDbConfiguration;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_LABEL;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_LABEL;
@@ -23,8 +23,11 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 
 @Component
 class LabelRepository extends DynamoDbRepository {
-    LabelRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
-        super(configuration.getTableName(), context);
+    private final LabelMapper labelMapper;
+
+    LabelRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context, LabelMapper labelMapper) {
+        super(configuration.getCalendarTableName(), context);
+        this.labelMapper = labelMapper;
     }
 
     List<LabelEntity> getByLabelIds(String userId, List<String> labelIds) {
@@ -35,23 +38,16 @@ class LabelRepository extends DynamoDbRepository {
             ))
             .toList();
 
-        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_IDS)
+        return batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_USER_IDS_AND_LABEL_IDS)
             .stream()
-            .map(item -> LabelEntity.builder()
-                .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
-                .label(item.get(COLUMN_LABEL).s())
-                .build())
+            .map(labelMapper::convertEntity)
             .toList();
     }
 
-    void save(String userId, LabelEntity label) {
+    void save(LabelEntity label) {
         PutItemRequest request = PutItemRequest.builder()
             .tableName(tableName)
-            .item(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + userId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + label.getLabelId()).build(),
-                COLUMN_LABEL, AttributeValue.builder().s(label.getLabel()).build()
-            ))
+            .item(labelMapper.convertDomain(label))
             .build();
 
         putItem(request, CalendarMonitoringFunctionality.SAVE_LABEL);
@@ -67,12 +63,7 @@ class LabelRepository extends DynamoDbRepository {
             .build();
 
         return getItem(request, CalendarMonitoringFunctionality.FIND_LABEL_BY_ID)
-            .map(item ->
-                LabelEntity.builder()
-                    .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
-                    .label(item.get(COLUMN_LABEL).s())
-                    .build()
-            );
+            .map(labelMapper::convertEntity);
     }
 
     List<LabelEntity> getByUserId(String userId) {
@@ -91,10 +82,7 @@ class LabelRepository extends DynamoDbRepository {
 
         return query(request, CalendarMonitoringFunctionality.GET_LABELS_BY_USER_ID)
             .stream()
-            .map(item -> LabelEntity.builder()
-                .labelId(item.get(COLUMN_SK).s().substring(PREFIX_LABEL.length()))
-                .label(item.get(COLUMN_LABEL).s())
-                .build())
+            .map(labelMapper::convertEntity)
             .toList();
     }
 
@@ -108,5 +96,20 @@ class LabelRepository extends DynamoDbRepository {
             .build();
 
         deleteItem(request, CalendarMonitoringFunctionality.DELETE_LABEL);
+    }
+
+    /**
+     *
+     * @param ids List<BiWrapper<userId, labelId>>
+     */
+    public List<LabelEntity> getByIds(List<BiWrapper<String, String>> ids) {
+        List<Map<String, AttributeValue>> keys = ids.stream()
+            .map(bw -> Map.of(
+                COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + bw.getEntity1()).build(),
+                COLUMN_SK, AttributeValue.builder().s(PREFIX_LABEL + bw.getEntity2()).build()
+            ))
+            .toList();
+
+        return labelMapper.convertEntity(batchGetItem(keys, CalendarMonitoringFunctionality.GET_LABELS_BY_USER_IDS_AND_LABEL_IDS));
     }
 }

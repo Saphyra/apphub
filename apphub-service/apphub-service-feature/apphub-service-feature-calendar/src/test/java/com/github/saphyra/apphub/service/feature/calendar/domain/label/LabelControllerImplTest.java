@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelService;
 import org.junit.jupiter.api.Test;
@@ -43,11 +42,10 @@ class LabelControllerImplTest {
 
     @Test
     void createLabel() {
-        given(labelService.createLabel(USER_ID, LABEL)).willReturn(LABEL_ID);
+        given(labelService.createLabel(USER_ID, LABEL)).willReturn(labelResponse);
         given(accessToken.getUserId()).willReturn(USER_ID);
 
-        assertThat(underTest.createLabel(new OneParamRequest<>(LABEL), accessToken))
-            .returns(LABEL_ID, OneParamResponse::getValue);
+        assertThat(underTest.createLabel(new OneParamRequest<>(LABEL), accessToken)).isEqualTo(labelResponse);
     }
 
     @Test

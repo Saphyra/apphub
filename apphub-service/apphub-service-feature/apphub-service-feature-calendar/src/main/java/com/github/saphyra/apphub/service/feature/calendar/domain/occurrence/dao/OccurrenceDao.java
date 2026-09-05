@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -34,8 +35,12 @@ public class OccurrenceDao {
     }
 
     public Occurrence findByIdValidated(UUID eventId, UUID occurrenceId) {
-        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(eventId), uuidConverter.convertDomain(occurrenceId)))
+        return findById(eventId, occurrenceId)
             .orElseThrow(() -> ExceptionFactory.notFound("Occurrence not found by id " + occurrenceId + " in event " + eventId));
+    }
+
+    public Optional<Occurrence> findById(UUID eventId, UUID occurrenceId) {
+        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(eventId), uuidConverter.convertDomain(occurrenceId)));
     }
 
     public List<Occurrence> getByBuckets(UUID userId, List<String> buckets) {

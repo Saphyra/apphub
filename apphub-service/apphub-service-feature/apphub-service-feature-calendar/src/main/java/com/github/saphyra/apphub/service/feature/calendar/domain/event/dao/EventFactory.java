@@ -1,11 +1,14 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.dao;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Component
@@ -28,6 +31,18 @@ public class EventFactory {
             .content(request.getContent())
             .remindMeBeforeDays(request.getRemindMeBeforeDays())
             .autoDone(request.getAutoDone())
+            .build();
+    }
+
+    public Event dummyEvent(UUID userId, UUID eventId) {
+        return Event.builder()
+            .eventId(eventId)
+            .userId(userId)
+            .title(Constants.QUESTION_MARK)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .repeatForDays(1)
+            .startDate(LocalDate.of(1970, 1, 1))
+            .content("")
             .build();
     }
 }

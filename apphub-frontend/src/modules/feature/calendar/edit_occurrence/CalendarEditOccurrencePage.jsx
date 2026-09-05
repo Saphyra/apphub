@@ -31,7 +31,8 @@ import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "../CalendarEndpoints";
+import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE, CALENDAR_SHARE_PAGE } from "../CalendarEndpoints";
+import { TYPE_OCCURRENCE } from "../CalendarConstants";
 
 const CalendarEditOccurrencePage = () => {
     const { eventId, occurrenceId } = useParams();
@@ -194,6 +195,12 @@ const CalendarEditOccurrencePage = () => {
                             () => { },
                             () => window.location.href = CALENDAR_PAGE
                         )}
+                    />,
+                    <Button
+                        key="share"
+                        id="calendar-edit-occurrence-share"
+                        label={localizationHandler.get("share")}
+                        onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_OCCURRENCE, id: occurrenceId, parent: eventId }, { backUrl: window.location.href })}
                     />
                 ]}
                 centerButtons={[

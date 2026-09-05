@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.integration.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -44,15 +44,15 @@ public class LobbyInvitationTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.createLobby(driver1, GAME_NAME);
 
-        assertThat(SkyXploreLobbyActions.getOnlineFriends(driver1)).isEmpty();
+        AwaitilityWrapper.awaitAssert(() -> assertThat(SkyXploreLobbyPageActions.getOnlineFriends(driver1)).isEmpty(), 30);
 
         ModulesPageActions.openModule(getServerPort(), driver2, ModuleLocation.SKYXPLORE);
 
-        OnlineFriend onlineFriend = SkyXploreLobbyActions.getOnlineFriend(driver1, userData2.getUsername());
+        OnlineFriend onlineFriend = SkyXploreLobbyPageActions.getOnlineFriend(driver1, userData2.getUsername());
 
         onlineFriend.invite();
 
-        LobbyPlayer invitedMember = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyActions.findPlayer(driver1, userData2.getUsername()), Optional::isPresent)
+        LobbyPlayer invitedMember = AwaitilityWrapper.getWithWait(() -> SkyXploreLobbyPageActions.findPlayer(driver1, userData2.getUsername()), Optional::isPresent)
             .orElseThrow()
             .orElseThrow();
         assertThat(invitedMember.getStatus()).isEqualTo(LobbyPlayerStatus.INVITED);
@@ -67,7 +67,7 @@ public class LobbyInvitationTest extends SeleniumTest {
             .assertTrue("Invited member was not redirected to lobby.");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findPlayerValidated(driver1, userData2.getUsername()).getStatus() == LobbyPlayerStatus.NOT_READY)
+            .until(() -> SkyXploreLobbyPageActions.findPlayerValidated(driver1, userData2.getUsername()).getStatus() == LobbyPlayerStatus.NOT_READY)
             .assertTrue("Lobby member status is not 'NOT_READY'");
     }
 
@@ -96,22 +96,22 @@ public class LobbyInvitationTest extends SeleniumTest {
 
         SkyXploreMainMenuActions.createLobby(driver1, GAME_NAME);
 
-        SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
+        SkyXploreLobbyPageActions.inviteFriend(driver1, userData2.getUsername());
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
-        SkyXploreLobbyActions.inviteFriend(driver2, userData3.getUsername());
+        SkyXploreLobbyPageActions.inviteFriend(driver2, userData3.getUsername());
 
         AwaitilityWrapper.createDefault()
             .until(() -> SkyXploreMainMenuActions.getInvitations(driver3).size() == 1)
             .assertTrue("Invitation not arrived");
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getPlayer(driver1, userData3.getUsername()).getStatus() == LobbyPlayerStatus.INVITED)
+            .until(() -> SkyXploreLobbyPageActions.getPlayer(driver1, userData3.getUsername()).getStatus() == LobbyPlayerStatus.INVITED)
             .assertTrue("Invitation did not appear for host");
 
-        SkyXploreLobbyActions.exitLobby(driver2);
+        SkyXploreLobbyPageActions.exitLobby(driver2);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.findPlayer(driver1, userData3.getUsername()).isEmpty())
+            .until(() -> SkyXploreLobbyPageActions.findPlayer(driver1, userData3.getUsername()).isEmpty())
             .assertTrue("Invitation did not disappear for host");
 
         AwaitilityWrapper.createDefault()

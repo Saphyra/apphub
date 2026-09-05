@@ -141,10 +141,11 @@ public abstract class TestBase {
 
     @AfterSuite(alwaysRun = true)
     public void tearDownSuite() {
+        StatusLogger.logTestStartOrder();
+
         WebDriverProvider.stopDrivers();
         ConnectionProvider.shutdownCaches();
 
-        StatusLogger.logTestStartOrder();
         deleteTestUsers();
     }
 

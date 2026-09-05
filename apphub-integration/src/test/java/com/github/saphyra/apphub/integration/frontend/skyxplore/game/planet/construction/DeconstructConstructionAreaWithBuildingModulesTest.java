@@ -9,7 +9,7 @@ import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyX
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreMapActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXplorePlanetActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.game.SkyXploreSolarSystemActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
@@ -34,8 +34,8 @@ public class DeconstructConstructionAreaWithBuildingModulesTest extends Selenium
 
         SkyXploreCharacterActions.createCharacter(driver);
         SkyXploreLobbyCreationFlow.setUpLobbyWithPlayers(Constants.DEFAULT_GAME_NAME, driver, registrationParameters.getUsername());
-        SkyXploreLobbyActions.setReady(driver);
-        SkyXploreLobbyActions.startGameCreation(driver);
+        SkyXploreLobbyPageActions.setReady(driver);
+        SkyXploreLobbyPageActions.startGameCreation(driver);
 
         AwaitilityWrapper.create(60, 1)
             .until(() -> SkyXploreGameActions.isGameLoaded(driver))

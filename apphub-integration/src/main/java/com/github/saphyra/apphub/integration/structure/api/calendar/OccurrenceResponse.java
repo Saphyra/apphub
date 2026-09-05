@@ -26,4 +26,5 @@ public class OccurrenceResponse {
     private Boolean reminded;
     private Boolean eventArchived;
     private Boolean autoDone;
+    private Boolean shared;
 }

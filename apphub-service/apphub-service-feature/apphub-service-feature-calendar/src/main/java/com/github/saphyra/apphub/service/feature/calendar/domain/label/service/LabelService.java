@@ -1,5 +1,7 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.service;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
+import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
@@ -19,29 +21,36 @@ public class LabelService {
     private final LabelFactory labelFactory;
     private final LabelValidator labelValidator;
     private final CommonCalendarDao commonCalendarDao;
+    private final LabelToResponseMapper labelToResponseMapper;
+    private final LabelObjectQueryService labelObjectQueryService;
 
-    public UUID createLabel(UUID userId, String label) {
-        labelValidator.validate(userId, label);
+    public LabelResponse createLabel(UUID userId, String label) {
+        labelValidator.validate(label);
 
-        Label domain = labelFactory.create(label);
-        commonCalendarDao.saveLabel(userId, domain);
+        Label domain = labelFactory.create(userId, label);
+        commonCalendarDao.saveLabel(domain);
 
-        return domain.getLabelId();
+        return labelToResponseMapper.toResponse(userId, domain);
     }
 
     public void deleteLabel(UUID userId, UUID labelId) {
-        commonCalendarDao.deleteLabel(userId, labelId);
+        labelObjectQueryService.findLabel(userId, labelId, Grant.DELETE)
+            .ifPresentOrElse(
+                label -> commonCalendarDao.deleteLabel(label.getUserId(), label.getLabelId()),
+                () -> {
+                    throw ExceptionFactory.notFound("Label %s not found or user %s has no permission to delete it".formatted(labelId, userId));
+                }
+            );
     }
 
-    public void editLabel(UUID userId, UUID labelId, String label) {
-        Label domain = labelValidator.validate(userId, label)
-            .stream()
-            .filter(l -> l.getLabelId().equals(labelId))
-            .findAny()
-            .orElseThrow(() -> ExceptionFactory.notFound("Label not found by id " + labelId));
+    public void editLabel(UUID userId, UUID labelId, String labelText) {
+        labelValidator.validate(labelText);
 
-        domain.setLabel(label);
+        Label label = labelObjectQueryService.findLabel(userId, labelId, Grant.VIEW, Grant.EDIT)
+            .orElseThrow(() -> ExceptionFactory.notFound("Label %s not found or user %s has no permission to edit it".formatted(labelId, userId)));
 
-        labelDao.save(userId, domain);
+        label.setLabel(labelText);
+
+        labelDao.save(label);
     }
 }

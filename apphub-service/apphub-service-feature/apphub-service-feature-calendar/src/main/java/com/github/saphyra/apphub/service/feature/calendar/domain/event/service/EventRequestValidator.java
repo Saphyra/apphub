@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.config.CalendarParams;
@@ -31,13 +32,13 @@ class EventRequestValidator {
     private final CalendarParams calendarParams;
     private final LabelDao labelDao;
 
-    public void validateEdit(UUID userId, EventRequest request) {
-        validate(userId, request);
+    public void validateEdit(EventRequest request) {
+        validate(request);
 
         ValidationUtil.notNull(request.getArchived(), "archived");
     }
 
-    void validate(UUID userId, EventRequest request) {
+    void validate(EventRequest request) {
         ValidationUtil.notNull(request.getRepetitionType(), "repetitionType");
         validateRepetitionData(request.getRepetitionType(), request.getRepetitionData());
 
@@ -56,7 +57,15 @@ class EventRequestValidator {
         ValidationUtil.atLeast(request.getRemindMeBeforeDays(), 0, "remindMeBeforeDays");
         ValidationUtil.notNull(request.getAutoDone(), "autoDone");
 
-        ValidationUtil.containsAll(request.getLabels(), () -> labelDao.getByLabelIds(userId, request.getLabels()).stream().map(Label::getLabelId).toList(), "labels");
+        ValidationUtil.notNull(request.getLabels(), "labels");
+        Set<UUID> eventLabels = request.getLabels().keySet();
+        List<BiWrapper<UUID, UUID>> labelIds = request.getLabels()
+            .entrySet()
+            .stream()
+            .map(e -> new BiWrapper<>(e.getValue(), e.getKey()))
+            .toList();
+        List<UUID> existingLabels = labelDao.getByIds(labelIds).stream().map(Label::getLabelId).toList();
+        ValidationUtil.containsAll(eventLabels, () -> existingLabels, "labels");
     }
 
     public void validateDates(LocalDate startDate, LocalDate endDate) {

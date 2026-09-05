@@ -38,5 +38,9 @@
     "false": {
         "en": "No",
         "hu": "Nem"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

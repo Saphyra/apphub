@@ -1,6 +1,7 @@
 package com.github.saphyra.apphub.integration.action.backend.calendar;
 
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
 
 import java.time.LocalDate;
@@ -40,5 +41,16 @@ public class OccurrenceRequestFactory {
             .remindMeBeforeDays(NEW_REMIND_ME_BEFORE_DAYS)
             .reminded(NEW_REMINDED)
             .build();
+    }
+
+    public static OccurrenceRequest.OccurrenceRequestBuilder fromResponse(OccurrenceResponse occurrenceResponse) {
+        return OccurrenceRequest.builder()
+            .date(occurrenceResponse.getDate())
+            .time(occurrenceResponse.getTime())
+            .status(occurrenceResponse.getStatus())
+            .note(occurrenceResponse.getNote())
+            .remindMeBeforeDays(occurrenceResponse.getRemindMeBeforeDays())
+            .reminded(occurrenceResponse.getReminded())
+            .autoDone(occurrenceResponse.getAutoDone());
     }
 }

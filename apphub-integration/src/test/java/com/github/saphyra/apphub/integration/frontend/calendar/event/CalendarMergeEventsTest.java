@@ -14,8 +14,8 @@ import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
@@ -63,10 +63,10 @@ public class CalendarMergeEventsTest extends SeleniumTest {
         assertThat(CalendarLabelsPageActions.getEvents(driver)).hasSize(3);
 
         assertThat(CalendarLabelsPageActions.getOpenedEventOccurrences(driver))
-            .extracting(WebElement::getText)
+            .extracting(CalendarOpenedEventOccurrence::getDate)
             .containsExactlyInAnyOrder(
-                REFERENCE_DATE.toString(),
-                REFERENCE_DATE.plusDays(1).toString()
+                REFERENCE_DATE,
+                REFERENCE_DATE.plusDays(1)
             );
     }
 
