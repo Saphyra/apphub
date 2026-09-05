@@ -38,6 +38,7 @@ class CommonCalendarDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final UUID EVENT_ID = UUID.randomUUID();
     private static final UUID OTHER_EVENT_ID = UUID.randomUUID();
+    private static final UUID OCCURRENCE_ID = UUID.randomUUID();
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final String LABEL = "label";
     private static final UUID OTHER_LABEL_ID = UUID.randomUUID();
@@ -77,14 +78,26 @@ class CommonCalendarDaoTest {
 
     @Test
     void deleteByUserId() {
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
+
         given(event.getEventId()).willReturn(EVENT_ID);
+        given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
+        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
         given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
         underTest.deleteByUserId(USER_ID);
 
-        then(occurrenceDao).should().deleteByEventId(EVENT_ID);
         then(eventDao).should().delete(USER_ID, List.of(EVENT_ID));
+        then(occurrenceDao).should().delete(List.of(occurrence));
+        then(almDao).should().deleteByObject(OCCURRENCE_ID, SharedObjectType.OCCURRENCE);
+        then(almDao).should().deleteByObject(EVENT_ID, SharedObjectType.EVENT);
+        then(almDao).should().deleteByObject(LABEL_ID, SharedObjectType.LABEL);
         then(commonCalendarRepository).should().deleteByUserId(USER_ID_STRING);
     }
 
@@ -102,12 +115,15 @@ class CommonCalendarDaoTest {
 
     @Test
     void deleteEvents() {
+        given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
 
         underTest.deleteEvents(USER_ID, List.of(EVENT_ID));
 
         then(eventDao).should().delete(USER_ID, List.of(EVENT_ID));
         then(occurrenceDao).should().delete(List.of(occurrence));
+        then(almDao).should().deleteByObject(OCCURRENCE_ID, SharedObjectType.OCCURRENCE);
+        then(almDao).should().deleteByObject(EVENT_ID, SharedObjectType.EVENT);
         then(eventLabelMappingDao).should().deleteByEventId(USER_ID, List.of(EVENT_ID));
     }
 

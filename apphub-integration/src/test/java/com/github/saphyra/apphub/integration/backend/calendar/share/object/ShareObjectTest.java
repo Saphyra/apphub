@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.backend.calendar.share;
+package com.github.saphyra.apphub.integration.backend.calendar.share.object;
 
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;

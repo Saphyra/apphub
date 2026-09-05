@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.integration.backend.calendar.share.event;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLabelActions;
-import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarOccurrenceActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarShareActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.EventRequestFactory;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
@@ -11,7 +10,6 @@ import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbR
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
-import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.calendar.ShareObjectRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.SharedObjectType;
@@ -58,10 +56,6 @@ public class GetSharedEventTest extends BackEndTest {
             .labels(Map.of(labelId, ownerId))
             .build();
         UUID eventId = CalendarEventActions.createEvent(getServerPort(), ownerToken, eventRequest);
-        OccurrenceResponse occurrenceResponse = CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), ownerToken, eventId)
-            .getFirst();
-        UUID occurrenceId = occurrenceResponse
-            .getOccurrenceId();
 
         //Share label
         if (!labelGrants.isEmpty()) {
