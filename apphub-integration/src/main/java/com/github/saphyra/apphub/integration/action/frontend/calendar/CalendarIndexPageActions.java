@@ -174,8 +174,12 @@ public class CalendarIndexPageActions {
         return driver.findElements(By.className("calendar-label"));
     }
 
+    public static Optional<WebElement> expiredEventsButton(WebDriver driver) {
+        return WebElementUtils.getIfPresent(driver, By.id("calendar-expired-events-button"));
+    }
+
     public static void toExpiredEventsPage(WebDriver driver) {
-        WebElementUtils.getIfPresent(driver, By.id("calendar-expired-events-button"))
+        expiredEventsButton(driver)
             .orElseThrow(() -> new IllegalStateException("No expired event found"))
             .click();
     }

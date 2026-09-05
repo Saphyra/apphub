@@ -1,21 +1,17 @@
-package com.github.saphyra.apphub.integration.frontend.calendar.share.temp;
+package com.github.saphyra.apphub.integration.frontend.calendar.share.label;
 
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarFlow;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarLabelsPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarSharePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.CommonUtils;
-import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
-import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -30,22 +26,11 @@ public class CalendarViewSharedLabelTest extends SeleniumTest {
     @Test(groups = {"fe", "calendar"})
     public void viewSharedLabel_noGrant() {
         List<WebDriver> drivers = extractDrivers(2);
-        WebDriver ownerDriver = drivers.get(0);
-        WebDriver sharedWithDriver = drivers.get(1);
 
-        //Create owner
-        Navigation.toIndexPage(getServerPort(), ownerDriver);
-        RegistrationParameters ownerUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(ownerDriver, ownerUserData);
-        ModulesPageActions.openModule(getServerPort(), ownerDriver, ModuleLocation.CALENDAR);
-        CommonUtils.enableTestMode(ownerDriver);
-
-        //Create sharedWith
-        Navigation.toIndexPage(getServerPort(), sharedWithDriver);
-        RegistrationParameters sharedWithUserData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(sharedWithDriver, sharedWithUserData);
-        ModulesPageActions.openModule(getServerPort(), sharedWithDriver, ModuleLocation.CALENDAR);
-        CommonUtils.enableTestMode(sharedWithDriver);
+        List<CalendarFlow.Context> contexts = CalendarFlow.init(getServerPort(), drivers);
+        WebDriver ownerDriver = contexts.get(0).driver();
+        RegistrationParameters sharedWithUserData = contexts.get(1).userData();
+        WebDriver sharedWithDriver = contexts.get(1).driver();
 
         //Create event with label
         CalendarIndexPageActions.openCreateEventPage(ownerDriver);
