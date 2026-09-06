@@ -57,7 +57,7 @@
         </preConditions>
 
         <sql>
-            CREATE INDEX "index-star_system-star_name" ON elite_base.star_system USING gin (star_name gin_trgm_ops);
+            CREATE INDEX "index-star_system-star_name" ON elite_base.star_system USING gin (star_name elite_base.gin_trgm_ops);
         </sql>
     </changeSet>
 

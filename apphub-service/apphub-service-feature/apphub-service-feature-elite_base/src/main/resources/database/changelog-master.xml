@@ -5,13 +5,13 @@
         </sql>
 
         <rollback>
-            DROP SCHEMA IF EXIST elite_base CASCADE
+            DROP SCHEMA IF EXISTS elite_base CASCADE
         </rollback>
     </changeSet>
 
     <changeSet id="enable-extension-pg_trgm" author="Saphyra" dbms="postgresql">
         <sql>
-            CREATE EXTENSION IF NOT EXISTS pg_trgm;
+            CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA elite_base;
         </sql>
     </changeSet>
 
