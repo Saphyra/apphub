@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.controller;
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.service.db_backup.DbBackupFacade;
+import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,7 @@ class DbBackupController {
 
     private final DbBackupFacade dbBackupFacade;
     private final PropertyDao propertyDao;
+    private final TaskQueue taskQueue;
 
     @GetMapping
     ModelAndView dbBackupPage(@RequestParam(name = "success", required = false) String success) {
@@ -125,7 +127,7 @@ class DbBackupController {
         String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
         String s3Bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
 
-        dbBackupFacade.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version);
+        taskQueue.add(() -> dbBackupFacade.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version));
 
         return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=backup_started";
     }
@@ -253,7 +255,7 @@ class DbBackupController {
         String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
         String s3Bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
 
-        dbBackupFacade.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database,version, backup, tables);
+        taskQueue.add(() -> dbBackupFacade.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
 
         return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=restoration_started";
     }
