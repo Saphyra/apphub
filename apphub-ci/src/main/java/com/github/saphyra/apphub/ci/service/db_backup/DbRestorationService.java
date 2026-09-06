@@ -31,7 +31,7 @@ class DbRestorationService {
     private final ObjectMapper objectMapper;
 
     @SneakyThrows
-    void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String backup, List<String> tables) {
+    void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
         String dbUrl = DbBackupUtil.getDbUrl(dbHost, dbName);
         log.info("Restoring tables {}", tables);
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -39,25 +39,25 @@ class DbRestorationService {
         log.info("Batches: {}", objectMapper.writeValueAsString(tableBatches));
 
         try (S3Client s3Client = DbBackupUtil.createS3Client(s3AccessKey, s3SecretKey)) {
-            tableBatches.forEach(batch -> restoreBatch(dbUrl, username, password, s3Client, s3Bucket, database, backup, batch));
+            tableBatches.forEach(batch -> restoreBatch(dbUrl, username, password, s3Client, s3Bucket, database, version, backup, batch));
         }
 
         stopwatch.stop();
         log.info("{} tables restored in {} seconds", tables.size(), stopwatch.elapsed(TimeUnit.SECONDS));
     }
 
-    private void restoreBatch(String dbUrl, String username, String password, S3Client s3Client, String s3Bucket, String database, String backup, List<String> tables) {
+    private void restoreBatch(String dbUrl, String username, String password, S3Client s3Client, String s3Bucket, String database, String version, String backup, List<String> tables) {
         List<FutureWrapper<Void>> futures = tables.stream()
-            .map(table -> workerPool.execute(() -> restore(dbUrl, username, password, s3Client, s3Bucket, database, backup, table)))
+            .map(table -> workerPool.execute(() -> restore(dbUrl, username, password, s3Client, s3Bucket, database, version, backup, table)))
             .toList();
 
         futures.forEach(fw -> fw.get().getOrThrow());
     }
 
-    private void restore(String dbUrl, String username, String password, S3Client s3Client, String s3Bucket, String database, String backup, String table) {
-        log.info("Restoring {}/{}/{} to {} from bucket {}", database, backup, table, dbUrl, s3Bucket);
+    private void restore(String dbUrl, String username, String password, S3Client s3Client, String s3Bucket, String database, String version, String backup, String table) {
+        log.info("Restoring {}/{}/{}/{} to {} from bucket {}", database, version,  backup, table, dbUrl, s3Bucket);
         Stopwatch stopwatch = Stopwatch.createStarted();
-        String key = database + "/" + backup + "/" + table + ".bin.gz";
+        String key = database + "/" + version + "/" + backup + "/" + table + ".bin.gz";
 
         try (
             Connection conn = DriverManager.getConnection(dbUrl, username, password);

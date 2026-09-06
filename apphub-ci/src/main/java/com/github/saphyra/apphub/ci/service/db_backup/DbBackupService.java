@@ -45,9 +45,9 @@ class DbBackupService {
     private final ExecutorServiceBean writerExecutor;
 
     @SneakyThrows
-    void backup(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, List<String> tables) {
+    void backup(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, List<String> tables, String version) {
         String dbUrl = DbBackupUtil.getDbUrl(dbHost, dbName);
-        String directory = dbName + "/" + LocalDateTime.now().withNano(0);
+        String directory = dbName + "/" + version + "/" + LocalDateTime.now().withNano(0);
         log.info("Backing up tables [{}] from database {} to bucket {} directory {}", tables, dbUrl, s3Bucket, directory);
         Stopwatch stopwatch = Stopwatch.createStarted();
         try (S3Client s3Client = createS3Client(s3AccessKey, s3SecretKey)) {

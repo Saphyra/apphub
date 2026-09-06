@@ -22,27 +22,31 @@ public class DbBackupFacade {
         return tableQueryService.getTables(dbHost, dbName, username, password);
     }
 
-    public void backup(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, List<String> tables) {
-        executorServiceBean.execute(() -> dbBackupService.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables));
+    public void backup(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, List<String> tables, String version) {
+        executorServiceBean.execute(() -> dbBackupService.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version));
     }
 
-    public void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String backup, List<String> tables) {
-        executorServiceBean.execute(() -> dbRestorationService.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, backup, tables));
+    public void restore(String dbHost, String dbName, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, List<String> tables) {
+        executorServiceBean.execute(() -> dbRestorationService.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
     }
 
     public List<String> getDatabases(String s3AccessKey, String s3SecretKey, String bucket) {
         return s3ListService.readDir(s3AccessKey, s3SecretKey, bucket, "");
     }
 
-    public List<String> getBackups(String s3AccessKey, String s3SecretKey, String bucket, String database) {
+    public List<String> getVersions(String s3AccessKey, String s3SecretKey, String bucket, String database) {
         return s3ListService.readDir(s3AccessKey, s3SecretKey, bucket, database + "/");
+    }
+
+    public List<String> getBackups(String s3AccessKey, String s3SecretKey, String bucket, String database, String version) {
+        return s3ListService.readDir(s3AccessKey, s3SecretKey, bucket, database + "/" + version + "/");
     }
 
     /**
      * @return list of tables in the given backup of given database
      */
-    public List<String> getTables(String s3AccessKey, String s3SecretKey, String bucket, String database, String backup) {
-        return s3ListService.readDir(s3AccessKey, s3SecretKey, bucket, database + "/" + backup + "/")
+    public List<String> getTables(String s3AccessKey, String s3SecretKey, String bucket, String database, String version, String backup) {
+        return s3ListService.readDir(s3AccessKey, s3SecretKey, bucket, database + "/" + version + "/" + backup + "/")
             .stream()
             .map(table -> table.replace(".bin.gz", ""))
             .toList();

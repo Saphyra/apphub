@@ -12,7 +12,9 @@
     <span th:text="${s3bucket}"></span>
     <span>and database</span>
     <span th:text="${database}"></span>
-    <span>using backup</span>
+    <span>using version</span>
+    <span th:text="${version}"></span>
+    <span>and using backup</span>
     <span th:text="${backup}"></span>
 </h1>
 
@@ -21,11 +23,11 @@
 
 <div class="menu">
     <div>
-        <a th:href="@{|/db-backup/restore/${database}|}">Back</a>
+        <a th:href="@{|/db-backup/restore/${database}/${version}|}">Back</a>
     </div>
 
     <div>
-        <form th:action="@{|/db-backup/restore/${database}/${backup}|}" method="POST">
+        <form th:action="@{|/db-backup/restore/${database}/${version}/${backup}|}" method="POST">
             <fieldset>
                 <legend>Select tables</legend>
 
