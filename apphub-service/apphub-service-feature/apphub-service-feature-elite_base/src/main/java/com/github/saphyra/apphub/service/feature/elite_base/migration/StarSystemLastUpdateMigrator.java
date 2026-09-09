@@ -55,6 +55,7 @@ class StarSystemLastUpdateMigrator {
 
             saveLastUpdate(batch);
             clearLastUpdate(batch);
+            log.info("Processed batch of size {}. Total: {}", batch.size(), totalCount);
         } while (!batch.isEmpty());
 
         log.info("{} StarSystems migrated", totalCount);

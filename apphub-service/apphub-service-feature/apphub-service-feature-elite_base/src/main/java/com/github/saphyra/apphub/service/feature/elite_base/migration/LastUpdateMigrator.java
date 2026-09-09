@@ -51,6 +51,7 @@ class LastUpdateMigrator {
 
             save(batch);
             delete(batch);
+            log.info("Processed batch of size {}. Total: {}", batch.size(), totalCount);
         } while (!batch.isEmpty());
 
         log.info("{} records are migrated to LastUpdateV2", totalCount);

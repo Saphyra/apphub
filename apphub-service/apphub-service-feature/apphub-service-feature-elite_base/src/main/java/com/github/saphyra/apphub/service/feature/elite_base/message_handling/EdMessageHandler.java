@@ -5,9 +5,10 @@ import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
@@ -68,8 +69,9 @@ public class EdMessageHandler implements MessageHandler {
         }
     }
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     void scheduleChecked() {
+        log.info("Starting scheduled check for incoming messages. Check interval: {}", eliteBaseProperties.getIncomingMessageCheckInterval());
         scheduledExecutorServiceBean.scheduleFixedRate(this::shutdownIfTimeout, eliteBaseProperties.getIncomingMessageCheckInterval());
     }
 

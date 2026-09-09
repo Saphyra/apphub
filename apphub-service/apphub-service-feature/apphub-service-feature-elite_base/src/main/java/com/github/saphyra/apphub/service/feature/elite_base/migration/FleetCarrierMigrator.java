@@ -62,6 +62,7 @@ class FleetCarrierMigrator {
 
             save(batch);
             delete(batch);
+            log.info("Processed batch of size {}. Total: {}", batch.size(), totalCount);
         } while (!batch.isEmpty());
 
         log.info("{} records are migrated to FleetCarrierV2", totalCount);

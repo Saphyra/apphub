@@ -34,7 +34,7 @@
             <column name="body_name"/>
         </createIndex>
 
-        <createIndex schemaName="elite_base" tableName="body" indexName="index-body_v2-star_system_id">
+        <createIndex schemaName="elite_base" tableName="body_v2" indexName="index-body_v2-star_system_id">
             <column name="star_system_id"/>
         </createIndex>
     </changeSet>

@@ -9,11 +9,12 @@ import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBeanFactory;
 import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.concurrency.ScheduledExecutorServiceBean;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
-import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -105,7 +106,7 @@ public class BufferSynchronizationService {
         );
     }
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     void schedule() {
         Duration interval = properties.getCache()
             .getBufferSynchronizationCheckInterval();
