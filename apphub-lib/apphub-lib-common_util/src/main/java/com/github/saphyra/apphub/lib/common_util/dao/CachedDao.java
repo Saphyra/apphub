@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.lib.common_util.dao;
 
-import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
+import com.google.common.cache.Cache;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.ArrayList;
@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class CachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepository<ENTITY, ID>> extends AbstractDao<ENTITY, DOMAIN, ID, REPOSITORY> {
-    protected final AbstractCache<ID, DOMAIN> cache;
+    protected final Cache<ID, DOMAIN> cache;
 
-    protected CachedDao(Converter<ENTITY, DOMAIN> converter, REPOSITORY repository, boolean preLoad, AbstractCache<ID, DOMAIN> cache) {
+    protected CachedDao(Converter<ENTITY, DOMAIN> converter, REPOSITORY repository, boolean preLoad, Cache<ID, DOMAIN> cache) {
         super(converter, repository);
         this.cache = cache;
         if (preLoad) {
@@ -28,7 +28,7 @@ public abstract class CachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepos
 
     @Override
     public void deleteAll() {
-        cache.clear();
+        cache.invalidateAll();
         super.deleteAll();
     }
 
@@ -58,7 +58,7 @@ public abstract class CachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepos
         List<DOMAIN> result = new ArrayList<>();
         List<ID> missing = new ArrayList<>();
 
-        ids.forEach(id -> cache.getIfPresent(id)
+        ids.forEach(id -> Optional.ofNullable(cache.getIfPresent(id))
             .ifPresentOrElse(
                 result::add,
                 () -> missing.add(id)
@@ -77,7 +77,7 @@ public abstract class CachedDao<ENTITY, DOMAIN, ID, REPOSITORY extends CrudRepos
 
     @Override
     public Optional<DOMAIN> findById(ID id) {
-        Optional<DOMAIN> result = cache.getIfPresent(id);
+        Optional<DOMAIN> result = Optional.ofNullable(cache.getIfPresent(id));
 
         if (result.isEmpty()) {
             result = super.findById(id);

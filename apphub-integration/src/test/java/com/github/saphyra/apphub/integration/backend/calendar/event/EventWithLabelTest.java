@@ -14,6 +14,7 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,31 +30,31 @@ public class EventWithLabelTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID labelId1 = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL_1);
-        UUID labelId2 = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL_2);
-        createEvent(accessToken, EVENT_WITHOUT_LABEL_TITLE, List.of());
-        UUID eventWithLabel = createEvent(accessToken, EVENT_WITH_LABEL_TITLE, List.of(labelId1));
+        LabelResponse label1 = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL_1);
+        LabelResponse label2 = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL_2);
+        createEvent(accessToken, EVENT_WITHOUT_LABEL_TITLE, Map.of());
+        UUID eventWithLabel = createEvent(accessToken, EVENT_WITH_LABEL_TITLE, Map.of(label1.getLabelId(), label1.getUserId()));
 
-        CustomAssertions.singleListAssertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, labelId1))
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label1.getLabelId()))
             .returns(EVENT_WITH_LABEL_TITLE, EventResponse::getTitle)
-            .returns(List.of(labelId1), EventResponse::getLabels);
+            .returns(List.of(label1), EventResponse::getLabels);
 
         CustomAssertions.singleListAssertThat(CalendarLabelActions.getLabelsOfEvent(getServerPort(), accessToken, eventWithLabel))
             .returns(LABEL_1, LabelResponse::getLabel);
 
-        editEvent(accessToken, eventWithLabel, List.of(labelId2));
+        editEvent(accessToken, eventWithLabel, Map.of(label2.getLabelId(), label2.getUserId()));
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, labelId1)).isEmpty();
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label1.getLabelId())).isEmpty();
 
-        CustomAssertions.singleListAssertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, labelId2))
-            .returns(List.of(labelId2), EventResponse::getLabels);
+        CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label2.getLabelId()))
+            .returns(List.of(label2), EventResponse::getLabels);
 
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).hasSize(2);
 
-        editEvent(accessToken, eventWithLabel, List.of());
+        editEvent(accessToken, eventWithLabel, Map.of());
 
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, labelId1)).isEmpty();
-        assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken, labelId2)).isEmpty();
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label1.getLabelId())).isEmpty();
+        assertThat(CalendarEventActions.getEventsOfLabel(getServerPort(), accessToken, label2.getLabelId())).isEmpty();
         assertThat(CalendarEventActions.getEvents(getServerPort(), accessToken)).hasSize(2);
     }
 
@@ -62,17 +63,17 @@ public class EventWithLabelTest extends BackEndTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
 
-        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL_1);
+        LabelResponse label = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL_1);
 
-        createEvent(accessToken, EVENT_WITH_LABEL_TITLE, List.of(labelId));
-        UUID eventWithoutLabel = createEvent(accessToken, EVENT_WITHOUT_LABEL_TITLE, List.of());
+        createEvent(accessToken, EVENT_WITH_LABEL_TITLE, Map.of(label.getLabelId(), label.getUserId()));
+        UUID eventWithoutLabel = createEvent(accessToken, EVENT_WITHOUT_LABEL_TITLE, Map.of());
 
         CustomAssertions.singleListAssertThat(CalendarEventActions.getEventsWithoutLabel(getServerPort(), accessToken))
             .returns(eventWithoutLabel, EventResponse::getEventId)
             .returns(EVENT_WITHOUT_LABEL_TITLE, EventResponse::getTitle);
     }
 
-    private void editEvent(String accessToken, UUID eventWithLabel, List<UUID> labelIds) {
+    private void editEvent(String accessToken, UUID eventWithLabel, Map<UUID, UUID> labelIds) {
         EventRequest request = EventRequestFactory.editRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .labels(labelIds)
@@ -81,7 +82,7 @@ public class EventWithLabelTest extends BackEndTest {
         CalendarEventActions.editEvent(getServerPort(), accessToken, eventWithLabel, request);
     }
 
-    private UUID createEvent(String accessToken, String eventWithoutLabelTitle, List<UUID> labelIds) {
+    private UUID createEvent(String accessToken, String eventWithoutLabelTitle, Map<UUID, UUID> labelIds) {
         EventRequest request = EventRequestFactory.validRequest(RepetitionType.ONE_TIME)
             .toBuilder()
             .title(eventWithoutLabelTitle)

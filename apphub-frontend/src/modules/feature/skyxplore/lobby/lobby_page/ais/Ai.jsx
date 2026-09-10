@@ -7,7 +7,7 @@ import PreLabeledInputField from "common/component/input/PreLabeledInputField";
 import { SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI, SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_REMOVE_AI } from "../../SkyXploreLobbyEndpoints";
 import { SKYXPLORE_LOBBY_TYPE_LOAD } from "../../SkyXploreLobbyConstants";
 
-const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
+const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType, setDisplaySpinner }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [aiName, setAiName] = useState(ai.name);
 
@@ -17,19 +17,19 @@ const Ai = ({ ai, localizationHandler, alliances, isHost, lobbyType }) => {
         const allianceValue = event.target.value;
 
         SKYXPLORE_LOBBY_CHANGE_ALLIANCE_OF_AI.createRequest({ value: allianceValue }, { userId: ai.userId })
-            .send();
+            .send(setDisplaySpinner);
     }
 
     const removeAi = () => {
         SKYXPLORE_LOBBY_REMOVE_AI.createRequest(null, { userId: ai.userId })
-            .send();
+            .send(setDisplaySpinner);
     }
 
     const changeAiName = () => {
         if (aiName.length >= 3) {
             ai.name = aiName;
             SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest(ai)
-                .send();
+                .send(setDisplaySpinner);
         } else {
             setAiName(ai.name);
         }

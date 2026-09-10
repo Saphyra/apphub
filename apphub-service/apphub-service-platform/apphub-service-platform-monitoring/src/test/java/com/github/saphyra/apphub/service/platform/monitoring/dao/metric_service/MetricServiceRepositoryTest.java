@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric_service;
 
-import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.lib.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;

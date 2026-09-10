@@ -7,7 +7,7 @@ const fromEpochSeconds = (epoch) => {
 }
 
 const fromLocalDateTime = (localDateTime) => {
-    return create(new Date(localDateTime));
+    return create(new Date(localDateTime + "Z"));
 }
 
 const create = (date) => {

@@ -7,7 +7,7 @@ import SolarSystemHeader from "./header/SolarSystemHeader";
 import "./solar_system.css";
 import { SKYXPLORE_GET_SOLAR_SYSTEM } from "../../SkyXploreGameEndpoints";
 
-const SolarSystem = ({ solarSystemId, footer, closePage, openPage }) => {
+const SolarSystem = ({ solarSystemId, footer, closePage, openPage, setDisplaySpinner }) => {
     const [solarSystemName, setSolarSystemName] = useState("");
     const [radius, setRadius] = useState(0);
     const [planets, setPlanets] = useState([]);
@@ -18,7 +18,7 @@ const SolarSystem = ({ solarSystemId, footer, closePage, openPage }) => {
     const loadSolarSystem = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_GET_SOLAR_SYSTEM.createRequest(null, { solarSystemId: solarSystemId })
-                .send();
+                .send(setDisplaySpinner);
 
             setSolarSystemName(response.systemName);
             setRadius(response.radius);
@@ -65,6 +65,7 @@ const SolarSystem = ({ solarSystemId, footer, closePage, openPage }) => {
                 solarSystemName={solarSystemName}
                 closePage={closePage}
                 setSolarSystemName={setSolarSystemName}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <main id="skyxplore-game-solar-system">

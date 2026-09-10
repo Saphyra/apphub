@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.feature.calendar.model.OccurrenceStatus;
 import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.OccurrenceResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,146 +14,148 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
 class OccurrenceResponseMapperTest {
-	private static final UUID USER_ID = UUID.randomUUID();
-	private static final UUID EVENT_ID_1 = UUID.randomUUID();
-	private static final UUID EVENT_ID_2 = UUID.randomUUID();
-	private static final UUID OCCURRENCE_ID_1 = UUID.randomUUID();
-	private static final UUID OCCURRENCE_ID_2 = UUID.randomUUID();
-	private static final LocalDate DATE_1 = LocalDate.of(2030, 1, 2);
-	private static final LocalDate DATE_2 = LocalDate.of(2030, 1, 3);
-	private static final LocalTime EVENT_TIME_1 = LocalTime.of(8, 15);
-	private static final LocalTime EVENT_TIME_2 = LocalTime.of(9, 30);
-	private static final LocalTime OCCURRENCE_TIME_2 = LocalTime.of(10, 45);
-	private static final OccurrenceStatus STATUS_1 = OccurrenceStatus.PENDING;
-	private static final OccurrenceStatus STATUS_2 = OccurrenceStatus.DONE;
-	private static final String NOTE_1 = "note-1";
-	private static final String NOTE_2 = "note-2";
-	private static final Integer EVENT_REMIND_ME_BEFORE_DAYS_1 = 2;
-	private static final Integer EVENT_REMIND_ME_BEFORE_DAYS_2 = 4;
-	private static final Integer OCCURRENCE_REMIND_ME_BEFORE_DAYS_2 = 7;
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID OTHER_USER_ID = UUID.randomUUID();
+    private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID OCCURRENCE_ID = UUID.randomUUID();
 
-	@Mock
-	private EventDao eventDao;
+    private static final LocalDate START_DATE = LocalDate.of(2026, 6, 1);
+    private static final LocalDate OCCURRENCE_DATE = LocalDate.of(2026, 6, 3);
+    private static final LocalTime EVENT_TIME = LocalTime.of(15, 0);
+    private static final LocalTime OCCURRENCE_TIME = LocalTime.of(14, 30);
 
-	@InjectMocks
-	private OccurrenceResponseMapper underTest;
+    private static final String TITLE = "title";
+    private static final String CONTENT = "content";
+    private static final String NOTE = "note";
 
-	@Test
-	void toResponse_userId_occurrence() {
-		Event event = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, true, "title-1", "content-1");
-		Occurrence occurrence = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false);
-		given(eventDao.findByIdValidated(USER_ID, EVENT_ID_1)).willReturn(event);
+    @Mock
+    private OccurrenceDao occurrenceDao;
 
-		OccurrenceResponse result = underTest.toResponse(USER_ID, occurrence);
+    @InjectMocks
+    private OccurrenceResponseMapper underTest;
 
-		assertThat(result)
-			.returns(OCCURRENCE_ID_1, OccurrenceResponse::getOccurrenceId)
-			.returns(EVENT_ID_1, OccurrenceResponse::getEventId)
-			.returns(DATE_1, OccurrenceResponse::getDate)
-			.returns(EVENT_TIME_1, OccurrenceResponse::getTime)
-			.returns(STATUS_1, OccurrenceResponse::getStatus)
-			.returns("title-1", OccurrenceResponse::getTitle)
-			.returns("content-1", OccurrenceResponse::getContent)
-			.returns(NOTE_1, OccurrenceResponse::getNote)
-			.returns(EVENT_REMIND_ME_BEFORE_DAYS_1, OccurrenceResponse::getRemindMeBeforeDays)
-			.returns(false, OccurrenceResponse::getReminded)
-			.returns(true, OccurrenceResponse::getEventArchived);
-	}
+    @Test
+    void autoDoneOccurrence() {
+        Occurrence expiredOccurrence = createOccurrence(OTHER_USER_ID, false, OccurrenceStatus.EXPIRED, 2, false, true);
+        Event event = createEvent(false, false, true);
 
-	@Test
-	void toResponse_userId_occurrences() {
-		Event event1 = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, false, "title-1", "content-1");
-		Event event2 = createEvent(EVENT_ID_2, EVENT_TIME_2, EVENT_REMIND_ME_BEFORE_DAYS_2, true, "title-2", "content-2");
-		Occurrence occurrence1 = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false);
-		Occurrence occurrence2 = createOccurrence(EVENT_ID_2, OCCURRENCE_ID_2, DATE_2, OCCURRENCE_TIME_2, STATUS_2, NOTE_2, OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, true);
-		given(eventDao.getByIds(USER_ID, List.of(EVENT_ID_1, EVENT_ID_2))).willReturn(List.of(event1, event2));
+        OccurrenceResponse result = underTest.toResponse(USER_ID, event, expiredOccurrence);
 
-		List<OccurrenceResponse> result = underTest.toResponse(USER_ID, List.of(occurrence1, occurrence2));
+        assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.DONE);
+        assertThat(expiredOccurrence.getStatus()).isEqualTo(OccurrenceStatus.DONE);
+        then(occurrenceDao).should().save(expiredOccurrence);
+        assertThat(result.getAutoDone()).isTrue();
+    }
 
-		assertThat(result).hasSize(2);
-		assertThat(result.get(0))
-			.returns(OCCURRENCE_ID_1, OccurrenceResponse::getOccurrenceId)
-			.returns(EVENT_ID_1, OccurrenceResponse::getEventId)
-			.returns(DATE_1, OccurrenceResponse::getDate)
-			.returns(EVENT_TIME_1, OccurrenceResponse::getTime)
-			.returns(STATUS_1, OccurrenceResponse::getStatus)
-			.returns("title-1", OccurrenceResponse::getTitle)
-			.returns("content-1", OccurrenceResponse::getContent)
-			.returns(NOTE_1, OccurrenceResponse::getNote)
-			.returns(EVENT_REMIND_ME_BEFORE_DAYS_1, OccurrenceResponse::getRemindMeBeforeDays)
-			.returns(false, OccurrenceResponse::getReminded)
-			.returns(false, OccurrenceResponse::getEventArchived);
-		assertThat(result.get(1))
-			.returns(OCCURRENCE_ID_2, OccurrenceResponse::getOccurrenceId)
-			.returns(EVENT_ID_2, OccurrenceResponse::getEventId)
-			.returns(DATE_2, OccurrenceResponse::getDate)
-			.returns(OCCURRENCE_TIME_2, OccurrenceResponse::getTime)
-			.returns(STATUS_2, OccurrenceResponse::getStatus)
-			.returns("title-2", OccurrenceResponse::getTitle)
-			.returns("content-2", OccurrenceResponse::getContent)
-			.returns(NOTE_2, OccurrenceResponse::getNote)
-			.returns(OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, OccurrenceResponse::getRemindMeBeforeDays)
-			.returns(true, OccurrenceResponse::getReminded)
-			.returns(true, OccurrenceResponse::getEventArchived);
+    @Test
+    void maskedEvent() {
+        Event maskedEvent = createEvent(true, true, false);
+        Occurrence occurrence = createOccurrence(USER_ID, false, OccurrenceStatus.PENDING, 2, false, null);
 
-		then(eventDao).should().getByIds(USER_ID, List.of(EVENT_ID_1, EVENT_ID_2));
-	}
+        OccurrenceResponse result = underTest.toResponse(USER_ID, maskedEvent, occurrence);
 
-	@Test
-	void toResponse_events() {
-		Event event1 = createEvent(EVENT_ID_1, EVENT_TIME_1, EVENT_REMIND_ME_BEFORE_DAYS_1, false, "title-1", "content-1");
-		Event event2 = createEvent(EVENT_ID_2, EVENT_TIME_2, EVENT_REMIND_ME_BEFORE_DAYS_2, true, "title-2", "content-2");
-		Occurrence occurrence1 = createOccurrence(EVENT_ID_1, OCCURRENCE_ID_1, DATE_1, null, STATUS_1, NOTE_1, null, false);
-		Occurrence occurrence2 = createOccurrence(EVENT_ID_2, OCCURRENCE_ID_2, DATE_2, OCCURRENCE_TIME_2, STATUS_2, NOTE_2, OCCURRENCE_REMIND_ME_BEFORE_DAYS_2, true);
+        assertThat(result.getTitle()).isEqualTo("?");
+        assertThat(result.getContent()).isEqualTo("");
+        assertThat(result.getEventArchived()).isTrue();
+        assertThat(result.getTime()).isEqualTo(OCCURRENCE_TIME);
+        assertThat(result.getNote()).isEqualTo(NOTE);
+        assertThat(result.getRemindMeBeforeDays()).isEqualTo(2);
+        assertThat(result.getShared()).isFalse();
+    }
 
-		List<OccurrenceResponse> result = underTest.toResponse(Map.of(EVENT_ID_1, event1, EVENT_ID_2, event2), List.of(occurrence1, occurrence2));
+    @Test
+    void maskedOccurrence() {
+        Event event = createEvent(false, false, false);
+        Occurrence maskedOccurrence = createOccurrence(USER_ID, true, OccurrenceStatus.PENDING, 2, true, null);
 
-		assertThat(result).hasSize(2);
-		assertThat(result.get(0).getTime()).isEqualTo(EVENT_TIME_1);
-		assertThat(result.get(0).getRemindMeBeforeDays()).isEqualTo(EVENT_REMIND_ME_BEFORE_DAYS_1);
-		assertThat(result.get(1).getTime()).isEqualTo(OCCURRENCE_TIME_2);
-		assertThat(result.get(1).getRemindMeBeforeDays()).isEqualTo(OCCURRENCE_REMIND_ME_BEFORE_DAYS_2);
-	}
+        OccurrenceResponse result = underTest.toResponse(USER_ID, event, maskedOccurrence);
 
-	private Event createEvent(UUID eventId, LocalTime time, Integer remindMeBeforeDays, boolean archived, String title, String content) {
-		return Event.builder()
-			.eventId(eventId)
-			.userId(USER_ID)
-			.time(time)
-			.remindMeBeforeDays(remindMeBeforeDays)
-			.title(title)
-			.content(content)
-			.archived(archived)
-			.repetitionType(RepetitionType.ONE_TIME)
-			.repetitionData(null)
-			.repeatForDays(0)
-			.startDate(LocalDate.of(2030, 1, 1))
-			.endDate(null)
-			.expirationNotified(false)
-			.build();
-	}
+        assertThat(result.getTime()).isEqualTo(event.getTime());
+        assertThat(result.getNote()).isEqualTo("");
+        assertThat(result.getTitle()).isEqualTo("title");
+        assertThat(result.getContent()).isEqualTo("content");
+        assertThat(result.getReminded()).isTrue();
+    }
 
-	private Occurrence createOccurrence(UUID eventId, UUID occurrenceId, LocalDate date, LocalTime time, OccurrenceStatus status, String note, Integer remindMeBeforeDays, boolean reminded) {
-		return Occurrence.builder()
-			.userId(USER_ID)
-			.eventId(eventId)
-			.occurrenceId(occurrenceId)
-			.date(date)
-			.time(time)
-			.status(status)
-			.note(note)
-			.remindMeBeforeDays(remindMeBeforeDays)
-			.reminded(reminded)
-			.build();
-	}
+    @Test
+    void maskedEventAndOccurrence() {
+        Event maskedEvent = createEvent(true, false, false);
+        Occurrence maskedOccurrence = createOccurrence(OTHER_USER_ID, true, OccurrenceStatus.PENDING, 2, false, null);
+
+        OccurrenceResponse result = underTest.toResponse(USER_ID, maskedEvent, maskedOccurrence);
+
+        assertThat(result.getTitle()).isEqualTo("?");
+        assertThat(result.getContent()).isEqualTo("");
+        assertThat(result.getTime()).isNull();
+        assertThat(result.getNote()).isEqualTo("");
+        assertThat(result.getShared()).isTrue();
+    }
+
+    @Test
+    void normalMapping() {
+        Event event = createEvent(false, false, false);
+        Occurrence occurrence = createOccurrence(USER_ID, false, OccurrenceStatus.PENDING, null, false, null);
+
+        OccurrenceResponse result = underTest.toResponse(USER_ID, event, occurrence);
+
+        assertThat(result.getOccurrenceId()).isEqualTo(OCCURRENCE_ID);
+        assertThat(result.getEventId()).isEqualTo(EVENT_ID);
+        assertThat(result.getDate()).isEqualTo(OCCURRENCE_DATE);
+        assertThat(result.getTime()).isEqualTo(OCCURRENCE_TIME);
+        assertThat(result.getStatus()).isEqualTo(OccurrenceStatus.PENDING);
+        assertThat(result.getTitle()).isEqualTo(TITLE);
+        assertThat(result.getContent()).isEqualTo(CONTENT);
+        assertThat(result.getNote()).isEqualTo(NOTE);
+        assertThat(result.getRemindMeBeforeDays()).isEqualTo(3);
+        assertThat(result.getReminded()).isFalse();
+        assertThat(result.getEventArchived()).isFalse();
+        assertThat(result.getAutoDone()).isFalse();
+        assertThat(result.getShared()).isFalse();
+        then(occurrenceDao).should(never()).save(any(Occurrence.class));
+    }
+
+    private Event createEvent(boolean masked, boolean archived, boolean autoDone) {
+        return Event.builder()
+            .eventId(EVENT_ID)
+            .userId(USER_ID)
+            .repetitionType(RepetitionType.ONE_TIME)
+            .repetitionData(null)
+            .repeatForDays(0)
+            .startDate(START_DATE)
+            .endDate(null)
+            .time(EVENT_TIME)
+            .title(TITLE)
+            .content(CONTENT)
+            .remindMeBeforeDays(3)
+            .expirationNotified(false)
+            .archived(archived)
+            .autoDone(autoDone)
+            .build()
+            .setMasked(masked);
+    }
+
+    private Occurrence createOccurrence(UUID userId, boolean masked, OccurrenceStatus status, Integer remindMeBeforeDays, boolean reminded, Boolean autoDone) {
+        return Occurrence.builder()
+            .userId(userId)
+            .eventId(EVENT_ID)
+            .occurrenceId(OCCURRENCE_ID)
+            .date(OCCURRENCE_DATE)
+            .time(OCCURRENCE_TIME)
+            .status(status)
+            .note(NOTE)
+            .remindMeBeforeDays(remindMeBeforeDays)
+            .reminded(reminded)
+            .autoDone(autoDone)
+            .build()
+            .setMasked(masked);
+    }
 }

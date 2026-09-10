@@ -7,13 +7,13 @@ import ConstructionCost from "../../../common/component/construction_cost/Constr
 import Button from "common/component/input/Button";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCT_CONSTRUCTION_AREA } from "../../../SkyXploreGameEndpoints";
 
-const ConstructionArea = ({ constructionArea, surfaceId, closePage }) => {
+const ConstructionArea = ({ constructionArea, surfaceId, closePage, setDisplaySpinner }) => {
     const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const construct = async () => {
         await SKYXPLORE_PLANET_SURFACE_CONSTRUCT_CONSTRUCTION_AREA.createRequest({ value: constructionArea.id }, { surfaceId: surfaceId })
-            .send();
+            .send(setDisplaySpinner);
 
         closePage();
     }
@@ -30,6 +30,7 @@ const ConstructionArea = ({ constructionArea, surfaceId, closePage }) => {
             <div className="skyxplore-game-modify-surface-construction-area-slots-wrapper">
                 <ConstructionAreaSlots
                     slots={constructionArea.slots}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </div>
 

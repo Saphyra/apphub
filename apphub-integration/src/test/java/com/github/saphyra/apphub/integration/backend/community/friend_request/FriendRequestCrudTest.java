@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.action.backend.community.BlacklistA
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendshipActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -27,11 +27,11 @@ public class FriendRequestCrudTest extends BackEndTest {
 
         RegistrationParameters friendUserData = RegistrationParameters.validParameters();
         String friendUserAccessToken = IndexPageActions.registerAndLogin(getServerPort(), friendUserData);
-        UUID friendUserId = DynamoDbUtil.getUserIdByEmail(friendUserData.getEmail());
+        UUID friendUserId = UserDynamoDbRepository.getUserIdByEmail(friendUserData.getEmail());
 
         RegistrationParameters blockedUserData = RegistrationParameters.validParameters();
         String blockedUserAccessToken = IndexPageActions.registerAndLogin(getServerPort(), blockedUserData);
-        UUID blockedUserId = DynamoDbUtil.getUserIdByEmail(blockedUserData.getEmail());
+        UUID blockedUserId = UserDynamoDbRepository.getUserIdByEmail(blockedUserData.getEmail());
 
         create_userNotFound(accessToken);
         create_blocked(accessToken, blockedUserId);

@@ -26,5 +26,21 @@
     "reset": {
         "en": "Reset",
         "hu": "Visszaállítás"
+    },
+    "auto-done": {
+        "en": "Mark done when expired",
+        "hu": "Teljesítés lejáratkor"
+    },
+    "true": {
+        "en": "Yes",
+        "hu": "Igen"
+    },
+    "false": {
+        "en": "No",
+        "hu": "Nem"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

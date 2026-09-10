@@ -11,7 +11,8 @@ const FileColumn = ({
     editingEnabled = true,
     selectType,
     localizationHandler,
-    addFileToColum
+    addFileToColum,
+    setDisplaySpinner
 }) => {
     const [file, setFile] = useState(null);
     const [fileMetadata, setFileMetadata] = useState(null);
@@ -35,7 +36,7 @@ const FileColumn = ({
 
         const fetch = async () => {
             const response = await STORAGE_GET_METADATA.createRequest(null, { storedFileId: columnData.data.storedFileId })
-                .send();
+                .send(setDisplaySpinner);
             setFileMetadata(response);
         }
         fetch();

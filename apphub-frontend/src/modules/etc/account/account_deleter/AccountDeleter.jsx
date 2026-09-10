@@ -11,7 +11,7 @@ import InputField from "common/component/input/InputField";
 import { ACCOUNT_DELETE_ACCOUNT } from "../AccountEndpoints";
 import { INDEX_PAGE } from "common/js/GenericEndpoints";
 
-const AccountDeleter = ({ setConfirmationDialogData }) => {
+const AccountDeleter = ({ setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [password, setPassword] = useState("");
@@ -46,7 +46,7 @@ const AccountDeleter = ({ setConfirmationDialogData }) => {
     const deleteAccount = async () => {
         try {
             await ACCOUNT_DELETE_ACCOUNT.createRequest({ value: password })
-                .send();
+                .send(setDisplaySpinner);
 
             sessionStorage.successText = localizationHandler.get("account-deleted");
 

@@ -1,42 +1,40 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
+import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
+import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.github.saphyra.apphub.service.feature.calendar.common.CalendarUtils.mask;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 class EventResponseMapper {
     private final ObjectMapper objectMapper;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelQueryService labelQueryService;
 
     List<EventResponse> toResponse(UUID userId, List<Event> events) {
-        List<UUID> eventIds = events.stream()
-            .map(Event::getEventId)
-            .toList();
-
-        Map<UUID, List<UUID>> labelMapping = eventLabelMappingDao.getLabelsOfEvents(userId, eventIds);
-
         return events.stream()
-            .map(event -> toResponse(event, labelMapping.get(event.getEventId())))
+            .map(event -> toResponse(userId, event, labelQueryService.getByEventId(event.getUserId(), event.getEventId())))
             .toList();
     }
 
-    EventResponse toResponse(Event event) {
-        return toResponse(event, eventLabelMappingDao.getLabelsOfEvent(event.getUserId(), event.getEventId()));
+    EventResponse toResponse(UUID userId, Event event) {
+        return toResponse(userId, event, labelQueryService.getByEventId(event.getUserId(), event.getEventId()));
     }
 
-    EventResponse toResponse(Event event, List<UUID> labels) {
+    EventResponse toResponse(UUID userId, Event event, Collection<LabelResponse> labels) {
         return EventResponse.builder()
             .eventId(event.getEventId())
             .repetitionType(event.getRepetitionType())
@@ -45,11 +43,13 @@ class EventResponseMapper {
             .startDate(event.getStartDate())
             .endDate(event.getEndDate())
             .time(event.getTime())
-            .title(event.getTitle())
-            .content(event.getContent())
-            .remindMeBeforeDays(event.getRemindMeBeforeDays())
-            .labels(labels)
-            .archived(event.isArchived())
+            .title(mask(event.isMasked(), event.getTitle(), Constants.QUESTION_MARK))
+            .content(mask(event.isMasked(), event.getContent(), Constants.EMPTY_STRING))
+            .remindMeBeforeDays(mask(event.isMasked(), event.getRemindMeBeforeDays(), null))
+            .labels(mask(event.isMasked(), labels, List.of()))
+            .archived(mask(event.isMasked(), event.isArchived(), null))
+            .autoDone(mask(event.isMasked(), event.isAutoDone(), null))
+            .shared(!event.getUserId().equals(userId))
             .build();
     }
 }

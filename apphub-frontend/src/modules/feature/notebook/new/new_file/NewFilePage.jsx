@@ -63,6 +63,7 @@ const NewFilePage = () => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="notebook-new-file-content-wrapper">

@@ -10,10 +10,13 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const BanPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [users, setUsers] = useState([]);
 
@@ -26,6 +29,7 @@ const BanPage = () => {
             <main>
                 <BanSearch
                     setUsers={setUsers}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <BanUsers
@@ -45,6 +49,8 @@ const BanPage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

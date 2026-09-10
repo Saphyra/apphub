@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSolarSystemActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.CitizenStat;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
@@ -38,7 +38,7 @@ public class PopulationTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1))
             .get(accessToken1);

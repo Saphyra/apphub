@@ -11,9 +11,12 @@ import Modules from "./modules_page/Modules";
 import Footer from "common/component/Footer";
 import { ToastContainer } from "react-toastify";
 import { MODULES_GET } from "./ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const ModulesPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [modules, setModules] = useState([]);
 
@@ -23,7 +26,7 @@ const ModulesPage = () => {
     const fetchModules = () => {
         const fetch = async () => {
             const response = await MODULES_GET.createRequest()
-                .send();
+                .send(setDisplaySpinner);
 
             setModules(response);
         };
@@ -36,7 +39,7 @@ const ModulesPage = () => {
         key={"logout-button"}
         id="logout-button"
         label={localizationHandler.get("logout")}
-        onclick={() => logout()}
+        onclick={() => logout(setDisplaySpinner)}
     />
 
     return (
@@ -48,17 +51,21 @@ const ModulesPage = () => {
                     pageLocalizationHandler={localizationHandler}
                     modules={modules}
                     updateModules={setModules}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
                 <Modules
                     pageLocalizationHandler={localizationHandler}
                     modules={modules}
                     updateModules={setModules}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 
             <Footer rightButtons={[logoutButton]} />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

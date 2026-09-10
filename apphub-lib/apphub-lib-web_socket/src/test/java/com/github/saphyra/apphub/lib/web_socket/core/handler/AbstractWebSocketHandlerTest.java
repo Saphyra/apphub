@@ -19,6 +19,7 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +31,7 @@ import static org.mockito.BDDMockito.then;
 @ExtendWith(MockitoExtension.class)
 class AbstractWebSocketHandlerTest {
     private static final String ENDPOINT = "endpoint";
-    private static final int SESSION_EXPIRATION_SECONDS = 23;
+    private static final long SESSION_EXPIRATION_MILLIS = 234L;
     private static final String AFTER_CONNECTION = "after-connection";
     private static final String AFTER_DISCONNECTION = "after-disconnection";
     private static final LocalDateTime CURRENT_TIME = LocalDateTime.now();
@@ -71,7 +72,7 @@ class AbstractWebSocketHandlerTest {
         WebSocketHandlerContext context = WebSocketHandlerContext.builder()
             .dateTimeUtil(dateTimeUtil)
             .errorReporterService(errorReporterService)
-            .webSocketSessionExpirationSeconds(SESSION_EXPIRATION_SECONDS)
+            .webSocketSessionExpirationMillis(SESSION_EXPIRATION_MILLIS)
             .objectMapper(objectMapper)
             .uuidConverter(uuidConverter)
             .build();
@@ -113,7 +114,6 @@ class AbstractWebSocketHandlerTest {
     @Test
     void sendPingRequest() throws IOException {
         given(objectMapper.writeValueAsString(any())).willReturn(SERIALIZED_EVENT);
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
 
         WebSocketSessionWrapper sessionWrapper = WebSocketSessionWrapper.builder().session(session).build();
         underTest.sessions.put(SESSION_ID, sessionWrapper);
@@ -127,7 +127,6 @@ class AbstractWebSocketHandlerTest {
         assertThat(event.getEventName()).isEqualTo(WebSocketEventName.PING);
 
         then(session).should().sendMessage(new TextMessage(SERIALIZED_EVENT));
-        assertThat(sessionWrapper.getLastUpdate()).isEqualTo(CURRENT_TIME);
     }
 
     @Test
@@ -158,13 +157,11 @@ class AbstractWebSocketHandlerTest {
         given(principal.getName()).willReturn(USER_ID_STRING);
         given(objectMapper.writeValueAsString(event)).willReturn(SERIALIZED_EVENT);
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
         given(session.isOpen()).willReturn(true);
 
         underTest.sendEvent(USER_ID, event);
 
         then(session).should().sendMessage(new TextMessage(SERIALIZED_EVENT));
-        assertThat(sessionWrapper.getLastUpdate()).isEqualTo(CURRENT_TIME);
     }
 
     @Test
@@ -188,7 +185,7 @@ class AbstractWebSocketHandlerTest {
     @Test
     void cleanup_valid() {
         WebSocketSessionWrapper sessionWrapper = WebSocketSessionWrapper.builder()
-            .lastUpdate(CURRENT_TIME.minusSeconds(SESSION_EXPIRATION_SECONDS - 1))
+            .lastUpdate(CURRENT_TIME.minus(SESSION_EXPIRATION_MILLIS - 1, ChronoUnit.MILLIS))
             .session(session)
             .build();
         underTest.sessions.put(SESSION_ID, sessionWrapper);
@@ -202,16 +199,19 @@ class AbstractWebSocketHandlerTest {
     @Test
     void cleanup_expired() {
         WebSocketSessionWrapper sessionWrapper = WebSocketSessionWrapper.builder()
-            .lastUpdate(CURRENT_TIME.minusSeconds(SESSION_EXPIRATION_SECONDS + 1))
+            .lastUpdate(CURRENT_TIME.minusSeconds(SESSION_EXPIRATION_MILLIS + 1))
             .session(session)
             .build();
         underTest.sessions.put(SESSION_ID, sessionWrapper);
         given(dateTimeUtil.getCurrentDateTime()).willReturn(CURRENT_TIME);
-
+        given(session.getPrincipal()).willReturn(principal);
+        given(principal.getName()).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertEntity(USER_ID_STRING)).willReturn(USER_ID);
 
         underTest.cleanUp();
 
         assertThat(underTest.sessions).isEmpty();
+        then(methodInterceptor).should().methodCall(AFTER_DISCONNECTION, USER_ID);
     }
 
     private static class TestWebSocketHandler extends AbstractWebSocketHandler {

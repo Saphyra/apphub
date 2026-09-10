@@ -15,7 +15,8 @@ const SortCitizens = ({
     setCitizenComparator,
     orderSetting,
     updateOrder,
-    planetId
+    planetId,
+    setDisplaySpinner
 }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
@@ -64,7 +65,7 @@ const SortCitizens = ({
         }
 
         SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
     }
 
     const deleteSetting = async (location) => {
@@ -74,7 +75,7 @@ const SortCitizens = ({
         }
 
         const response = await SKYXPLORE_DATA_DELETE_SETTING.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         updateOrder(response.value);
     }

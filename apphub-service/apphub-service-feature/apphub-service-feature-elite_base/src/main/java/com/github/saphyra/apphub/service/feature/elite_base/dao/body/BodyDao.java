@@ -19,10 +19,6 @@ public class BodyDao extends AbstractDao<BodyEntity, Body, String, BodyRepositor
         this.uuidConverter = uuidConverter;
     }
 
-    public Optional<Body> findByStarSystemIdAndBodyId(UUID starSystemId, Long bodyId) {
-        return converter.convertEntity(repository.findByStarSystemIdAndBodyId(uuidConverter.convertDomain(starSystemId), bodyId));
-    }
-
     public Optional<Body> findByBodyName(String bodyName) {
         return converter.convertEntity(repository.findByBodyName(bodyName));
     }

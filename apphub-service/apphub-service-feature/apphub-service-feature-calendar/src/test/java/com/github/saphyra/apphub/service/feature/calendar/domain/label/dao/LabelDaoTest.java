@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
@@ -55,12 +56,11 @@ class LabelDaoTest {
 
     @Test
     void save() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(converter.convertDomain(domain)).willReturn(entity);
 
-        underTest.save(USER_ID, domain);
+        underTest.save(domain);
 
-        then(repository).should().save(USER_ID_STRING, entity);
+        then(repository).should().save(entity);
     }
 
     @Test
@@ -100,6 +100,16 @@ class LabelDaoTest {
         underTest.delete(USER_ID, LABEL_ID);
 
         then(repository).should().delete(USER_ID_STRING, LABEL_ID_STRING);
+    }
+
+    @Test
+    void getByIds(){
+        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
+        given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
+        given(repository.getByIds(List.of(new BiWrapper<>(USER_ID_STRING, LABEL_ID_STRING)))).willReturn(List.of(entity));
+        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+
+        assertThat(underTest.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).containsExactly(domain);
     }
 }
 

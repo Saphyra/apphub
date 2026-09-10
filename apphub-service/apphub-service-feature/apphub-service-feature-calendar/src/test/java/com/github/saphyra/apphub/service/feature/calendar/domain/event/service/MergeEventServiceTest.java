@@ -57,7 +57,7 @@ class MergeEventServiceTest {
     void merge() {
         Event parent = event(PARENT_EVENT_ID, " Parent ", RepetitionType.ONE_TIME, "parent-content", LocalTime.of(8, 0), 1);
         Event matching1 = event(MATCHING_EVENT_ID_1, "parent", RepetitionType.ONE_TIME, "content-1", LocalTime.of(12, 30), 5);
-        Event matching2 = event(MATCHING_EVENT_ID_2, "PARENT", RepetitionType.ONE_TIME, "   ", null, null);
+        Event matching2 = event(MATCHING_EVENT_ID_2, "PARENT", RepetitionType.ONE_TIME, "   ", null, 0);
         Event differentTitle = event(DIFFERENT_TITLE_EVENT_ID, "Other", RepetitionType.ONE_TIME, "ignored", LocalTime.MIDNIGHT, 9);
         Event differentType = event(DIFFERENT_TYPE_EVENT_ID, "parent", RepetitionType.DAYS_OF_WEEK, "ignored", LocalTime.MIDNIGHT, 9);
 
@@ -90,16 +90,19 @@ class MergeEventServiceTest {
         assertThat(savedOccurrences.getFirst().getNote()).isEqualTo("content-1\n\nnote-1");
         assertThat(savedOccurrences.getFirst().getTime()).isEqualTo(LocalTime.of(12, 30));
         assertThat(savedOccurrences.getFirst().getRemindMeBeforeDays()).isEqualTo(5);
+        assertThat(savedOccurrences.getFirst().getAutoDone()).isTrue();
 
         assertThat(savedOccurrences.get(1).getEventId()).isEqualTo(PARENT_EVENT_ID);
         assertThat(savedOccurrences.get(1).getNote()).isEqualTo("content-1");
         assertThat(savedOccurrences.get(1).getTime()).isEqualTo(LocalTime.of(11, 5));
         assertThat(savedOccurrences.get(1).getRemindMeBeforeDays()).isEqualTo(7);
+        assertThat(savedOccurrences.get(1).getAutoDone()).isTrue();
 
         assertThat(savedOccurrences.get(2).getEventId()).isEqualTo(PARENT_EVENT_ID);
         assertThat(savedOccurrences.get(2).getNote()).isEqualTo("note-3");
         assertThat(savedOccurrences.get(2).getTime()).isNull();
-        assertThat(savedOccurrences.get(2).getRemindMeBeforeDays()).isNull();
+        assertThat(savedOccurrences.get(2).getRemindMeBeforeDays()).isZero();
+        assertThat(savedOccurrences.get(2).getAutoDone()).isTrue();
 
         then(occurrenceDao).should().getByEventId(MATCHING_EVENT_ID_1);
         then(occurrenceDao).should().getByEventId(MATCHING_EVENT_ID_2);
@@ -118,6 +121,7 @@ class MergeEventServiceTest {
             .content(content)
             .time(time)
             .remindMeBeforeDays(remindMeBeforeDays)
+            .autoDone(true)
             .build();
     }
 
@@ -131,6 +135,7 @@ class MergeEventServiceTest {
             .note(note)
             .time(time)
             .remindMeBeforeDays(remindMeBeforeDays)
+            .autoDone(null)
             .build();
     }
 }

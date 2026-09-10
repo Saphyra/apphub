@@ -16,10 +16,13 @@ import Footer from "common/component/Footer";
 import create from "./service/NewChecklistSaver";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
+import Spinner from "common/component/Spinner";
 
 const NewChecklistPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const { parent } = useParams();
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
@@ -54,6 +57,7 @@ const NewChecklistPage = () => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="notebook-new-checklist-content-wrapper">
@@ -70,7 +74,7 @@ const NewChecklistPage = () => {
                     <Button
                         id="notebook-new-checklist-create-button"
                         label={localizationHandler.get("create")}
-                        onclick={() => create(listItemTitle, parentId, items)}
+                        onclick={() => create(listItemTitle, parentId, items, setDisplaySpinner)}
                     />
                 }
 
@@ -91,6 +95,8 @@ const NewChecklistPage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

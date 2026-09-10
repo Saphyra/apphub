@@ -29,7 +29,7 @@ const create = async (listItemTitle, file, parent, setDisplaySpinner) => {
     }
 
     const storedFileResponse = await NOTEBOOK_CREATE_IMAGE.createRequest(payload)
-        .send();
+        .send(setDisplaySpinner);
 
     return uploadFile(file, storedFileResponse.value, setDisplaySpinner)
 }

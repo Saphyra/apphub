@@ -42,13 +42,13 @@ public class SearchService {
             .map(listItem -> executorServiceBean.asyncProcess(() -> new BiWrapper<>(listItem, isMatching(userId, searchValueLower, listItem))))
             .toList();
 
-        return futures.stream()
+        List<ListItem> listItems = futures.stream()
             .map(FutureWrapper::get)
             .map(ExecutionResult::getOrThrow)
             .filter(BiWrapper::getEntity2)
             .map(BiWrapper::getEntity1)
-            .map(notebookViewFactory::create)
             .toList();
+        return notebookViewFactory.create(listItems);
     }
 
     @SneakyThrows

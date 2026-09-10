@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreF
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreLobbyActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreGameChatActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.InvitationMessage;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.LobbyPlayerResponse;
@@ -43,9 +43,9 @@ public class GetPlayersTest extends BackEndTest {
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, characterModel3);
 
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
-        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
+        UUID userId3 = UserDynamoDbRepository.getUserIdByEmail(userData3.getEmail());
 
         SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken2, userId2);
         SkyXploreFriendActions.setUpFriendship(getServerPort(), accessToken1, accessToken3, userId3);

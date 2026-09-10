@@ -53,6 +53,7 @@ class EventFactoryTest {
             .title(TITLE)
             .content(CONTENT)
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
+            .autoDone(true)
             .build();
 
         given(idGenerator.randomUuid()).willReturn(EVENT_ID);
@@ -71,5 +72,6 @@ class EventFactoryTest {
         assertThat(result.getTitle()).isEqualTo(TITLE);
         assertThat(result.getContent()).isEqualTo(CONTENT);
         assertThat(result.getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
+        assertThat(result.isAutoDone()).isTrue();
     }
 }

@@ -2,7 +2,7 @@ import React from "react";
 import RoleManagementSearchResultUser from "./RoleManagementSearchResultUser";
 import Stream from "common/js/collection/Stream";
 
-const RoleManagementSearchResult = ({ localizationHandler, users, setUsers, query }) => {
+const RoleManagementSearchResult = ({ localizationHandler, users, setUsers, query, setDisplaySpinner }) => {
     if (users.length == 0) {
         return (
             <div id="role-management-no-search-result">
@@ -20,6 +20,7 @@ const RoleManagementSearchResult = ({ localizationHandler, users, setUsers, quer
                 users={users}
                 setUsers={setUsers}
                 query={query}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

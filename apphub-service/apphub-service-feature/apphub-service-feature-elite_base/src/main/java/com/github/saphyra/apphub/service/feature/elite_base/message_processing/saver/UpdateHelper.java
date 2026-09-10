@@ -14,9 +14,16 @@ class UpdateHelper {
         this.updater = updater;
     }
 
-    void modify() {
+    /**
+     * @return true if modification happened, false otherwise
+     */
+    boolean modify() {
         if (!checker.check()) {
             updater.run();
+
+            return true;
         }
+
+        return false;
     }
 }

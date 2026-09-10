@@ -9,7 +9,7 @@ import InputField from "common/component/input/InputField";
 import Button from "common/component/input/Button";
 import { ACCOUNT_BAN_SEARCH } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
-const BanSearch = ({ setUsers }) => {
+const BanSearch = ({ setUsers, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [query, setQuery] = useState("");
@@ -35,7 +35,7 @@ const BanSearch = ({ setUsers }) => {
             }
 
             const response = await ACCOUNT_BAN_SEARCH.createRequest({ value: query }, {}, { includeMarkedForDeletion: true, includeSelf: true })
-                .send();
+                .send(setDisplaySpinner);
 
             setUsers(response);
         }

@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.integration.frontend.admin_panel;
 
+import com.github.saphyra.apphub.integration.action.frontend.AccessTokenActions;
 import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
-import com.github.saphyra.apphub.integration.framework.SleepUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
@@ -22,9 +22,9 @@ public class AdminPanelRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
-        SleepUtil.sleep(3000);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.removeRoleByEmail(userData.getEmail(), role);
+        AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE);
         CommonUtils.verifyMissingRole(getServerPort(), driver, AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE);

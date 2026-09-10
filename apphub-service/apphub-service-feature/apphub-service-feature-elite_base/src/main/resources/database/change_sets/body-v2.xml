@@ -1,0 +1,41 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_v2" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_v2">
+            <column name="id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="star_system_id" type="varchar(37)"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="body_id" type="numeric"/>
+            <column name="body_name" type="varchar(255)"/>
+            <column name="distance_from_star" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_v2" columnNames="id" constraintName="body_v2-pk"/>
+        <addUniqueConstraint schemaName="elite_base" tableName="body_v2" columnNames="body_name" constraintName="unique-body_v2-body_name"/>
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="body_v2"
+                baseColumnNames="star_system_id"
+                constraintName="fk-body_v2-star_system_id"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="star_system"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+
+        <createIndex schemaName="elite_base" tableName="body_v2" indexName="index-body_v2-body_name">
+            <column name="body_name"/>
+        </createIndex>
+
+        <createIndex schemaName="elite_base" tableName="body_v2" indexName="index-body_v2-star_system_id">
+            <column name="star_system_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

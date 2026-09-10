@@ -6,10 +6,10 @@ import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPage
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.UserEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -73,7 +73,7 @@ public class DeleteAccountTest extends SeleniumTest {
     private static void delete(WebDriver driver, RegistrationParameters userData) {
         int serverPort = getServerPort();
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.awaitAssert(() -> {

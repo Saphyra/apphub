@@ -42,7 +42,7 @@ const ExitGameButton = ({ setConfirmationDialogData, isHost, setDisplaySpinner }
 
     const exit = async () => {
         await SKYXPLORE_EXIT_GAME.createRequest()
-            .send();
+            .send(setDisplaySpinner);
 
         window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
@@ -51,7 +51,7 @@ const ExitGameButton = ({ setConfirmationDialogData, isHost, setDisplaySpinner }
         setDisplaySpinner(true);
 
         await SKYXPLORE_GAME_SAVE.createRequest()
-            .send();
+            .send(setDisplaySpinner);
 
         exit();
     }

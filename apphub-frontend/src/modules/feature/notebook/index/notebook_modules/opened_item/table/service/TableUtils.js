@@ -3,7 +3,7 @@ import Button from "common/component/input/Button";
 import { loadTable } from "./TableDao";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 
-export const discard = (setConfirmationDialogData, localizationHandler, setEditingEnabled, listItemId, setDataFromResponse) => {
+export const discard = (setConfirmationDialogData, localizationHandler, setEditingEnabled, listItemId, setDataFromResponse, setDisplaySpinner) => {
     setConfirmationDialogData(new ConfirmationDialogData(
         "notebook-content-table-discard-confirmation",
         localizationHandler.get("confirm-discard-title"),
@@ -15,7 +15,7 @@ export const discard = (setConfirmationDialogData, localizationHandler, setEditi
                 label={localizationHandler.get("discard")}
                 onclick={() => {
                     setEditingEnabled(false);
-                    loadTable(listItemId, setDataFromResponse);
+                    loadTable(listItemId, setDataFromResponse, setDisplaySpinner);
                     setConfirmationDialogData(null);
                 }}
             />,

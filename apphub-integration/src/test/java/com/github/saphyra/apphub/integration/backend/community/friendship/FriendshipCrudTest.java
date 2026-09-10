@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendshipActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -27,7 +27,7 @@ public class FriendshipCrudTest extends BackEndTest {
 
         RegistrationParameters friendUserData = RegistrationParameters.validParameters();
         String friendUserAccessTokenId = IndexPageActions.registerAndLogin(serverPort, friendUserData);
-        UUID friendUserId = DynamoDbUtil.getUserIdByEmail(friendUserData.getEmail());
+        UUID friendUserId = UserDynamoDbRepository.getUserIdByEmail(friendUserData.getEmail());
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
         String testUserAccessTokenId = IndexPageActions.registerAndLogin(serverPort, testUserData);

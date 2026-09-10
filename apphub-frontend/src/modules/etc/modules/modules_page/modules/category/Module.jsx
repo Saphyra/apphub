@@ -1,7 +1,7 @@
 import Button from "common/component/input/Button";
 import { MODULES_SET_FAVORITE } from "modules/etc/modules/ModulesEndpoints";
 
-const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
+const Module = ({ moduleLocalizationHandler, module, updateModules, setDisplaySpinner }) => {
     const favoriteClassName = module.favorite ? "favorite" : "non-favorite"
 
     const setFavorite = async () => {
@@ -15,7 +15,7 @@ const Module = ({ moduleLocalizationHandler, module, updateModules }) => {
         };
 
         const newModules = await MODULES_SET_FAVORITE.createRequest(body, pathVariables)
-            .send();
+            .send(setDisplaySpinner);
 
         updateModules(newModules);
     }

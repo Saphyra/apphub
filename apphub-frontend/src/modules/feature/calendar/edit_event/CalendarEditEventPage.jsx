@@ -32,7 +32,9 @@ import Spinner from "common/component/Spinner";
 import ConfirmationDialogData from "common/component/confirmation_dialog/ConfirmationDialogData";
 import saveEvent from "./saveEvent";
 import Optional from "common/js/collection/Optional";
-import { CALENDAR_GET_EVENT, CALENDAR_PAGE } from "../CalendarEndpoints";
+import { CALENDAR_GET_EVENT, CALENDAR_PAGE, CALENDAR_SHARE_PAGE } from "../CalendarEndpoints";
+import EventAutoDone from "../common/event/EventAutoDone";
+import { TYPE_EVENT } from "../CalendarConstants";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -70,6 +72,8 @@ const CalendarEditEventPage = () => {
     const [repetitionData, setRepetitionData] = useExtractAsync(o => o.repetitionData, event);
     const [repeatForDays, setRepeatForDays] = useExtractAsync(o => o.repeatForDays, event, 1);
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, event, 0);
+    const [autoDone, setAutoDone] = useExtractAsync(o => o.autoDone, event, false);
+
     const [archived, setArchived] = useExtractAsync(o => o.archived, event, false);
     const [existingLabels, setExistingLabels] = useExtractAsync(o => o.labels, event, []);
 
@@ -78,7 +82,8 @@ const CalendarEditEventPage = () => {
             request: CALENDAR_GET_EVENT.createRequest(null, { eventId: eventId }),
             mapper: setEvent,
             condition: () => hasValue(eventId),
-            listener: [eventId, refreshCounter]
+            listener: [eventId, refreshCounter],
+            setDisplaySpinner: setDisplaySpinner
         }
     );
 
@@ -148,6 +153,11 @@ const CalendarEditEventPage = () => {
                         remindMeBeforeDays={remindMeBeforeDays}
                         setRemindMeBeforeDays={setRemindMeBeforeDays}
                     />
+
+                    <EventAutoDone
+                        value={autoDone}
+                        setValue={setAutoDone}
+                    />
                 </fieldset>
 
                 <fieldset>
@@ -208,6 +218,12 @@ const CalendarEditEventPage = () => {
                             () => { },
                             () => window.location.href = CALENDAR_PAGE
                         )}
+                    />,
+                    <Button
+                        key="share"
+                        id="calendar-edit-event-share"
+                        label={localizationHandler.get("share")}
+                        onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_EVENT, id: eventId, parent: null }, { backUrl: window.location.href })}
                     />
                 ]}
                 centerButtons={[
@@ -265,7 +281,8 @@ const CalendarEditEventPage = () => {
                             title: title,
                             content: content,
                             remindMeBeforeDays: remindMeBeforeDays,
-                            archived: archived
+                            archived: archived,
+                            autoDone: autoDone
                         },
                         existingLabels,
                         setDisplaySpinner,

@@ -23,5 +23,6 @@
     <modules>
         <module>apphub-lib-test-service</module>
         <module>apphub-lib-test-common</module>
+        <module>apphub-lib-test-repository</module>
     </modules>
 </project>

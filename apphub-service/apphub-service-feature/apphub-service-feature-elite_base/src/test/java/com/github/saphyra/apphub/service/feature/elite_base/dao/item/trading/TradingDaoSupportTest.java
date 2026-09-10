@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading;
 
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.Commodity;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.CommodityDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.CommodityFactory;
@@ -58,43 +58,43 @@ class TradingDaoSupportTest {
     void getByMarketId() {
         given(commodityDao.getByMarketId(MARKET_ID)).willAnswer(_ -> List.of(commodity));
 
-        assertThat(underTest.getByMarketId(ItemType.COMMODITY, MARKET_ID)).containsExactly(commodity);
+        assertThat(underTest.getByMarketId(ObjectType.COMMODITY, MARKET_ID)).containsExactly(commodity);
     }
 
     @Test
     void getByMarketId_unsupported() {
-        assertThat(catchThrowable(() -> underTest.getByMarketId(ItemType.EQUIPMENT, MARKET_ID))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.getByMarketId(ObjectType.EQUIPMENT, MARKET_ID))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void deleteAll() {
-        underTest.deleteAll(ItemType.COMMODITY, List.of(commodity));
+        underTest.deleteAll(ObjectType.COMMODITY, List.of(commodity));
 
         then(commodityDao).should().deleteAllTradeables(List.of(commodity));
     }
 
     @Test
     void deleteAll_unsupported() {
-        assertThat(catchThrowable(() -> underTest.deleteAll(ItemType.EQUIPMENT, List.of()))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.deleteAll(ObjectType.EQUIPMENT, List.of()))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void create_commodity() {
         given(commodityFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).willReturn(commodity);
 
-        assertThat(underTest.create(ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).isEqualTo(commodity);
+        assertThat(underTest.create(ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).isEqualTo(commodity);
     }
 
     @Test
     void create_fcMaterial() {
         given(fcMaterialFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).willReturn(fcMaterial);
 
-        assertThat(underTest.create(ItemType.FC_MATERIAL, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).isEqualTo(fcMaterial);
+        assertThat(underTest.create(ObjectType.FC_MATERIAL, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)).isEqualTo(fcMaterial);
     }
 
     @Test
     void create_unsupported() {
-        assertThat(catchThrowable(() -> underTest.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)))
+        assertThat(catchThrowable(() -> underTest.create(ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, BUY_PRICE, SELL_PRICE, DEMAND, STOCK, STAR_SYSTEM_ID)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -102,13 +102,13 @@ class TradingDaoSupportTest {
     void saveAll() {
         List<Tradeable> commodities = List.of(commodity);
 
-        underTest.saveAll(ItemType.COMMODITY, commodities);
+        underTest.saveAll(ObjectType.COMMODITY, commodities);
 
         then(commodityDao).should().saveAll(commodities);
     }
 
     @Test
     void saveAll_unsupported() {
-        assertThat(catchThrowable(() -> underTest.saveAll(ItemType.EQUIPMENT, List.of()))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.saveAll(ObjectType.EQUIPMENT, List.of()))).isInstanceOf(IllegalArgumentException.class);
     }
 }

@@ -5,8 +5,9 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.UserSettingsActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.RefreshTokenDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.api.user.SetUserSettingsRequest;
 import org.testng.annotations.Test;
@@ -45,7 +46,7 @@ public class AccountDataDeletedWithUserTest extends BackEndTest {
     public void accountDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         SetUserSettingsRequest setUserSettingsRequest = SetUserSettingsRequest.builder()
             .category("notebook")
@@ -58,12 +59,12 @@ public class AccountDataDeletedWithUserTest extends BackEndTest {
 
         AwaitilityWrapper.awaitAssert(() -> {
             assertThat(DatabaseUtil.getRowCountByValue(userId, "apphub_user", "settings", "user_id")).isZero();
-            assertThat(DynamoDbUtil.getRefreshTokenCountOfUser(userId)).isZero();
-            assertThat(DynamoDbUtil.profileExists(userId)).isFalse();
-            assertThat(DynamoDbUtil.credentialExists(userData.getEmail())).isFalse();
-            assertThat(DynamoDbUtil.credentialExists(userData.getUsername())).isFalse();
-            assertThat(DynamoDbUtil.getRolesByUserId(userId)).isEmpty();
-            assertThat(DynamoDbUtil.markedForDeletionExists(userId)).isFalse();
+            assertThat(RefreshTokenDynamoDbRepository.getRefreshTokenCountOfUser(userId)).isZero();
+            assertThat(UserDynamoDbRepository.profileExists(userId)).isFalse();
+            assertThat(UserDynamoDbRepository.credentialExists(userData.getEmail())).isFalse();
+            assertThat(UserDynamoDbRepository.credentialExists(userData.getUsername())).isFalse();
+            assertThat(UserDynamoDbRepository.getRolesByUserId(userId)).isEmpty();
+            assertThat(UserDynamoDbRepository.markedForDeletionExists(userId)).isFalse();
         });
     }
 }

@@ -16,8 +16,9 @@ class DynamoDbRepositoryDeleteItemUtil {
     private final DynamoDbClient client;
     private final DynamoDbMonitoringInstruments instruments;
 
-    void deleteItem(DeleteItemRequest request, String monitoringFunctionality) {
+    void deleteItem(String tableName, DeleteItemRequest request, String monitoringFunctionality) {
         request = request.toBuilder()
+            .tableName(tableName)
             .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
             .build();
 

@@ -44,11 +44,11 @@ public class PinService {
             .map(PinGroup::getListItemIds)
             .orElse(Set.of());
 
-        return listItemDao.getByUserId(userId)
+        List<ListItem> listItems = listItemDao.getByUserId(userId)
             .stream()
             .filter(ListItem::isPinned)
             .filter(listItem -> isNull(pinGroupId) || groupMembers.contains(listItem.getListItemId()))
-            .map(notebookViewFactory::create)
             .collect(Collectors.toList());
+        return notebookViewFactory.create(listItems);
     }
 }

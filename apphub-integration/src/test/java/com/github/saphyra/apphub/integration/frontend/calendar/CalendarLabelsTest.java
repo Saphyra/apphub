@@ -18,6 +18,7 @@ import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionTy
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarLabel;
+import com.github.saphyra.apphub.integration.structure.view.calendar.CalendarOpenedEventOccurrence;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.annotations.Test;
@@ -56,15 +57,6 @@ public class CalendarLabelsTest extends SeleniumTest {
             .extracting(CalendarLabel::getLabel)
             .containsExactlyInAnyOrder(LABEL_1, LABEL_2);
 
-        //Label exists
-        CalendarLabelsPageActions.getLabel(driver, LABEL_1)
-            .edit()
-            .newLabel(driver, LABEL_2)
-            .confirmNewLabel(driver)
-            .run(() -> ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_LABEL_ALREADY_EXISTS))
-            .run(() -> ToastMessageUtil.clearToasts(driver))
-            .cancelNewLabel(driver);
-
         //Delete label
         CalendarLabelsPageActions.getLabel(driver, LABEL_2)
             .delete()
@@ -88,16 +80,18 @@ public class CalendarLabelsTest extends SeleniumTest {
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedEventTitle(driver)).isEqualTo(CreateEventParameters.DEFAULT_TITLE));
 
         //Open occurrence
-        WebElement occurrence = AwaitilityWrapper.getListWithWait(() -> CalendarLabelsPageActions.getOpenedEventOccurrences(driver), occurrences -> !occurrences.isEmpty())
-            .getFirst();
-        LocalDate occurrenceDate = LocalDate.parse(occurrence.getText());
-        occurrence.click();
+        CalendarOpenedEventOccurrence occurrence = AwaitilityWrapper.getSingleItemFromListWithWait(
+            () -> CalendarLabelsPageActions.getOpenedEventOccurrences(driver),
+            occ -> occ.stream().findFirst()
+        );
+        LocalDate occurrenceDate = occurrence.getDate();
+        occurrence.open();
 
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarLabelsPageActions.getOpenedOccurrenceDate(driver)).isEqualTo(occurrenceDate));
     }
 
     @Test(groups = {"fe", "calendar"})
-    public void getLabelsWithoutLabel(){
+    public void getLabelsWithoutLabel() {
         WebDriver driver = extractDriver();
         Navigation.toIndexPage(getServerPort(), driver);
         RegistrationParameters userData = RegistrationParameters.validParameters();

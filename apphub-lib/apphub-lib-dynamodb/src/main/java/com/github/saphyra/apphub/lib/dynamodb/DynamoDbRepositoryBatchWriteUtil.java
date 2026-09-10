@@ -3,12 +3,9 @@ package com.github.saphyra.apphub.lib.dynamodb;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.SleepService;
-import com.github.saphyra.apphub.lib.concurrency.ExecutionResult;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.lib.concurrency.FutureWrapper;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,15 +40,12 @@ class DynamoDbRepositoryBatchWriteUtil {
         }
 
         Stopwatch operationStopwatch = Stopwatch.createStarted();
-        List<FutureWrapper<TransactionMetrics>> futures = Lists.partition(requests, Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE)
-            .stream()
-            .map(batch -> executorServiceBean.asyncProcess(() -> this.batchWrite(tableName, batch)))
-            .toList();
-
-        List<TransactionMetrics> transactionMetrics = futures.stream()
-            .map(FutureWrapper::get)
-            .map(ExecutionResult::getOrThrow)
-            .toList();
+        List<TransactionMetrics> transactionMetrics = executorServiceBean.processBatch(
+            requests,
+            batch -> List.of(batchWrite(tableName, batch)),
+            Constants.DYNAMO_DB_WRITE_MAX_BATCH_SIZE,
+            Constants.DYNAMO_DB_PARALLELISM_BOUNDARY
+        );
 
         operationStopwatch.stop();
         long operationLatency = operationStopwatch.elapsed(TimeUnit.MILLISECONDS);

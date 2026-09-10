@@ -9,7 +9,7 @@ import InputField from "common/component/input/InputField";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { SKYXPLORE_ACCEPT_FRIEND_REQUEST, SKYXPLORE_ADD_FRIEND, SKYXPLORE_CANCEL_FRIEND_REQUEST, SKYXPLORE_GET_FRIENDS, SKYXPLORE_GET_INCOMING_FRIEND_REQUEST, SKYXPLORE_GET_SENT_FRIEND_REQUEST, SKYXPLORE_REMOVE_FRIEND, SKYXPLORE_SEARCH_FOR_FRIENDS } from "../SkyXploreMainMenuEndpoints";
 
-const Contacts = ({ localizationHandler }) => {
+const Contacts = ({ localizationHandler, setDisplaySpinner }) => {
     const [friendQuery, setFriendQuery] = useState("");
     const [shouldDisplaySearchResult, setShouldDisplaySearchResult] = useState(false);
     const [friendCandidates, setFriendCandidates] = useState(null);
@@ -59,7 +59,7 @@ const Contacts = ({ localizationHandler }) => {
             () => {
                 const fetch = async () => {
                     const result = await SKYXPLORE_SEARCH_FOR_FRIENDS.createRequest({ value: friendQuery })
-                        .send();
+                        .send(setDisplaySpinner);
 
                     setFriendCandidates(result);
                 }
@@ -77,7 +77,7 @@ const Contacts = ({ localizationHandler }) => {
     const loadIncomingFriendRequests = () => {
         const fetch = async () => {
             const result = await SKYXPLORE_GET_INCOMING_FRIEND_REQUEST.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setIncomingFriendRequests(result);
         }
         fetch();
@@ -86,7 +86,7 @@ const Contacts = ({ localizationHandler }) => {
     const loadSentFriendRequests = () => {
         const fetch = async () => {
             const result = await SKYXPLORE_GET_SENT_FRIEND_REQUEST.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setSentFriendRequests(result);
         }
         fetch();
@@ -95,7 +95,7 @@ const Contacts = ({ localizationHandler }) => {
     const loadFriendships = () => {
         const fetch = async () => {
             const result = await SKYXPLORE_GET_FRIENDS.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setFriendships(result);
         }
         fetch();
@@ -104,7 +104,7 @@ const Contacts = ({ localizationHandler }) => {
     //Operations
     const sendFriendRequest = async (characterId) => {
         const newSentFriendRequest = await SKYXPLORE_ADD_FRIEND.createRequest({ value: characterId })
-            .send();
+            .send(setDisplaySpinner);
 
         sentFriendRequests.push(newSentFriendRequest);
 
@@ -114,13 +114,13 @@ const Contacts = ({ localizationHandler }) => {
 
     const cancelFriendRequest = async (friendRequestId) => {
         await SKYXPLORE_CANCEL_FRIEND_REQUEST.createRequest(null, { friendRequestId: friendRequestId })
-            .send();
+            .send(setDisplaySpinner);
         removeFriendRequest(friendRequestId)
     }
 
     const acceptFriendRequest = async (friendRequestId) => {
         const newFriendship = await SKYXPLORE_ACCEPT_FRIEND_REQUEST.createRequest(null, { friendRequestId: friendRequestId })
-            .send();
+            .send(setDisplaySpinner);
 
         friendships.push(newFriendship);
         setFriendships(friendships);
@@ -136,7 +136,7 @@ const Contacts = ({ localizationHandler }) => {
 
     const cancelFriendship = async (friendshipId) => {
         await SKYXPLORE_REMOVE_FRIEND.createRequest(null, { friendshipId: friendshipId })
-            .send();
+            .send(setDisplaySpinner);
         removeFriendship(friendshipId);
         setRemoveFriendConfirmationDialogSettings({ shouldDisplay: false });
     }

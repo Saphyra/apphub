@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 @Builder
 public class FleetCarrier implements ItemLocationData {
     private final UUID id;
-    private LocalDateTime lastUpdate;
     private String carrierId;
     private String carrierName;
     private UUID starSystemId;

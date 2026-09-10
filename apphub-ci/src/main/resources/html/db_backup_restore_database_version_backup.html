@@ -1,0 +1,78 @@
+<html>
+<head>
+    <title>Database Backup - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>
+    <span>Restoring</span>
+    <span th:text="${dbhost}"></span>
+    <span th:text="${dbname}"></span>
+    <span>from bucket</span>
+    <span th:text="${s3bucket}"></span>
+    <span>and database</span>
+    <span th:text="${database}"></span>
+    <span>using version</span>
+    <span th:text="${version}"></span>
+    <span>and using backup</span>
+    <span th:text="${backup}"></span>
+</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<div class="menu">
+    <div>
+        <a th:href="@{|/db-backup/restore/${database}/${version}|}">Back</a>
+    </div>
+
+    <div>
+        <form th:action="@{|/db-backup/restore/${database}/${version}/${backup}|}" method="POST">
+            <fieldset>
+                <legend>Select tables</legend>
+
+                <div>
+                    <input type="checkbox" id="unselect-all" onclick="unselectAll(event)"/>
+                    /
+                    <input type="checkbox" id="select-all" checked onclick="selectAll(event)"/>
+                </div>
+
+                <div th:each="table : ${tables}">
+                    <label>
+                        <input type="checkbox" class="table" name="tables" th:value="${table}">
+                        <span th:text="${table}"></span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <div class="red">
+                Restoration truncates the selected (and dependent) tables, and requires downtime.
+            </div>
+
+            <div>
+                <input type="submit" value="Restore"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function unselectAll(e) {
+        select(e, false)
+    }
+
+    function selectAll(e) {
+        select(e, true)
+    }
+
+    function select(e, checked) {
+        e.preventDefault();
+
+        const checkboxes = document.getElementsByClassName("table");
+        for (let checkbox of checkboxes) {
+            checkbox.checked = checked;
+        }
+    }
+</script>
+</body>
+</html>

@@ -27,7 +27,7 @@ const PinGroupManager = ({ localizationHandler, openedListItem, setOpenedListIte
         }
     }, [isInFocus]);
 
-    useLoader({ request: NOTEBOOK_GET_PIN_GROUPS.createRequest(), mapper: setPinGroups, listener: [loadPinGroupsTrigger] });
+    useLoader({ request: NOTEBOOK_GET_PIN_GROUPS.createRequest(), mapper: setPinGroups, listener: [loadPinGroupsTrigger], setDisplaySpinner });
 
     const createPinGroup = async () => {
         const validationResult = validatePinGroupName(newPinGroupName);

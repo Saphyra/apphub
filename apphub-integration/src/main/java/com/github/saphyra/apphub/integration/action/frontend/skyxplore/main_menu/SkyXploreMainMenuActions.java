@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu;
 
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.character.SkyXploreCharacterActions;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreLobbyEndpoints;
@@ -32,7 +32,7 @@ public class SkyXploreMainMenuActions {
         submitGameCreationForm(driver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.pageLoaded(driver))
+            .until(() -> SkyXploreLobbyPageActions.pageLoaded(driver))
             .assertTrue("LobbyPage not loaded.");
     }
 

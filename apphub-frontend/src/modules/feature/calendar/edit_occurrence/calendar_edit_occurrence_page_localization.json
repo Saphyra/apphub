@@ -90,5 +90,13 @@
     "empty-date": {
         "en": "Date is empty.",
         "hu": "A dátum üres."
+    },
+    "auto-done": {
+        "en": "Mark done when expired",
+        "hu": "Jelezd késznek, ha lejárt"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

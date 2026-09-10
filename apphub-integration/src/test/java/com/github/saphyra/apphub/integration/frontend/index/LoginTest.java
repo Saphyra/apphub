@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.ModulesEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
 import com.github.saphyra.apphub.integration.structure.api.LoginParameters;
@@ -100,7 +100,7 @@ public class LoginTest extends SeleniumTest {
         IndexPageActions.login(getServerPort(), driver, loginParameters);
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(registrationParameters.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(registrationParameters.getEmail());
 
         IndexPageActions.login(getServerPort(), driver, loginParameters);
 

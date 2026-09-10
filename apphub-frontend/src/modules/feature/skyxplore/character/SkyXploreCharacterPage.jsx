@@ -37,7 +37,7 @@ const SkyXploreCharacterPage = () => {
     useEffect(() => runValidation(), [characterName]);
 
     const checkRedirection = () => {
-        Redirection.forCharacter()
+        Redirection.forCharacter(setDisplaySpinner);
     }
 
     const fetchCharacterExistence = () => {
@@ -52,12 +52,12 @@ const SkyXploreCharacterPage = () => {
     const prefillCharacterName = () => {
         const fetchCharacterName = async () => {
             const response = await SKYXPLORE_GET_CHARACTER_NAME.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setCharacterName(response.value);
         }
         const fetchUsername = async () => {
             const response = await USER_DATA_GET_USERNAME.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setCharacterName(response.value);
         }
         hasCharacter ? fetchCharacterName() : fetchUsername();

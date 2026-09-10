@@ -19,7 +19,8 @@ const PlanetOverview = ({
     planetSize,
     priorities,
     setPriorities,
-    openPage
+    openPage,
+    setDisplaySpinner
 }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
@@ -48,7 +49,7 @@ const PlanetOverview = ({
         };
 
         SKYXPLORE_DATA_CREATE_SETTING.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
     }
 
     useLoadSetting(
@@ -58,7 +59,8 @@ const PlanetOverview = ({
             if (hasValue(setting)) {
                 setTabSettings(setting.data);
             }
-        }
+        },
+        setDisplaySpinner
     );
 
     return (
@@ -93,6 +95,7 @@ const PlanetOverview = ({
                 planetId={planetId}
                 tabSettings={tabSettings}
                 updateTabSettings={updateTabSettings}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <Button

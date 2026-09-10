@@ -20,7 +20,6 @@ import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
 import ErrorHandler from "common/js/dao/ErrorHandler";
 import ResponseStatus from "common/js/dao/ResponseStatus";
-import { type } from "@testing-library/user-event/dist/type";
 
 const NotebookPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);

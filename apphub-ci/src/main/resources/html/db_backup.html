@@ -1,0 +1,75 @@
+<html>
+<head>
+    <title>Database Backup - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Database Backup</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<div class="menu">
+    <div>
+        <a href="/">Back</a>
+    </div>
+
+    <fieldset>
+        <legend>Connection settings</legend>
+
+        <form action="/db-backup" method="POST">
+            <div>
+                <fieldset>
+                    <legend>Database access</legend>
+
+                    <label>
+                        Database host:
+                        <input type="text" name="dbhost" th:value="${dbhost}" placeholder="Database host" required>
+                    </label>
+                    <label>
+                        Database name:
+                        <input type="text" name="dbname" th:value="${dbname}" placeholder="Database name" required>
+                    </label>
+                    <label>
+                        Username:
+                        <input type="text" name="username" th:value="${username}" placeholder="Username" required>
+                    </label>
+                    <label>
+                        Password:
+                        <input type="password" name="password" th:value="${password}" placeholder="Password" required>
+                    </label>
+                </fieldset>
+
+                <fieldset>
+                    <legend>S3 bucket</legend>
+
+                    <label>
+                        Access key:
+                        <input type="text" name="s3accesskey" th:value="${s3accesskey}" placeholder="Access key" required>
+                    </label>
+
+                    <label>
+                        Secret key:
+                        <input type="text" name="s3secretkey" th:value="${s3secretkey}" placeholder="Secret key" required>
+                    </label>
+
+                    <label>
+                        Bucket:
+                        <input type="text" name="s3bucket" th:value="${s3bucket}" placeholder="Bucket" required>
+                    </label>
+                </fieldset>
+            </div>
+
+            <div>
+                <input type="submit" value="Save">
+            </div>
+        </form>
+    </fieldset>
+</div>
+
+<ul class="menu">
+    <li><a href="/db-backup/backup">Backup</a></li>
+    <li><a href="/db-backup/restore">Restore</a></li>
+</ul>
+</body>
+</html>

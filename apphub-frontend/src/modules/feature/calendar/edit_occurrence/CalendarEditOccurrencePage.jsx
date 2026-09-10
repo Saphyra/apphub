@@ -31,7 +31,8 @@ import { ToastContainer } from "react-toastify";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import Spinner from "common/component/Spinner";
 import Stream from "common/js/collection/Stream";
-import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE } from "../CalendarEndpoints";
+import { CALENDAR_GET_OCCURRENCE, CALENDAR_PAGE, CALENDAR_SHARE_PAGE } from "../CalendarEndpoints";
+import { TYPE_OCCURRENCE } from "../CalendarConstants";
 
 const CalendarEditOccurrencePage = () => {
     const { eventId, occurrenceId } = useParams();
@@ -59,13 +60,15 @@ const CalendarEditOccurrencePage = () => {
     const [note, setNote] = useExtractAsync(o => o.note, occurrence, "");
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useExtractAsync(o => o.remindMeBeforeDays, occurrence, 0);
     const [reminded, setReminded] = useExtractAsync(o => o.reminded, occurrence, false);
+    const [autoDone, setAutoDone] = useExtractAsync(o => o.autoDone, occurrence, false);
 
     useLoader(
         {
-            request: CALENDAR_GET_OCCURRENCE.createRequest(null, {eventId: eventId, occurrenceId: occurrenceId }),
+            request: CALENDAR_GET_OCCURRENCE.createRequest(null, { eventId: eventId, occurrenceId: occurrenceId }),
             mapper: setOccurrence,
             condition: () => hasValue(occurrenceId),
-            listener: [occurrenceId, refreshCounter]
+            listener: [occurrenceId, refreshCounter],
+            setDisplaySpinner: setDisplaySpinner
         }
     );
 
@@ -132,7 +135,7 @@ const CalendarEditOccurrencePage = () => {
                     />
                 </fieldset>
 
-                <fieldset>
+                <fieldset id="calendar-edit-occurrence-settings">
                     <legend>{localizationHandler.get("settings")}</legend>
 
                     <div>
@@ -155,6 +158,16 @@ const CalendarEditOccurrencePage = () => {
                             type="checkbox"
                             checked={reminded}
                             onchangeCallback={setReminded}
+                        />}
+                    />
+
+                    <PostLabeledInputField
+                        label={localizationHandler.get("auto-done")}
+                        input={<InputField
+                            id="calendar-edit-occurrence-auto-done"
+                            type="checkbox"
+                            checked={autoDone}
+                            onchangeCallback={setAutoDone}
                         />}
                     />
                 </fieldset>
@@ -182,6 +195,12 @@ const CalendarEditOccurrencePage = () => {
                             () => { },
                             () => window.location.href = CALENDAR_PAGE
                         )}
+                    />,
+                    <Button
+                        key="share"
+                        id="calendar-edit-occurrence-share"
+                        label={localizationHandler.get("share")}
+                        onclick={() => window.location.href = CALENDAR_SHARE_PAGE.assembleUrl({ type: TYPE_OCCURRENCE, id: occurrenceId, parent: eventId }, { backUrl: window.location.href })}
                     />
                 ]}
                 centerButtons={[

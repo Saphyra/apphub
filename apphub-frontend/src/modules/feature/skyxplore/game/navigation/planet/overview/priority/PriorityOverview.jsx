@@ -8,7 +8,7 @@ import LabelWrappedInputField from "common/component/input/LabelWrappedInputFiel
 import NumberInput from "common/component/input/NumberInput";
 import { SKYXPLORE_PLANET_UPDATE_PRIORITY } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, updateTabSettings }) => {
+const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, updateTabSettings, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [displayDetails, setDisplayDetails] = useState(true);
@@ -29,7 +29,7 @@ const PriorityOverview = ({ priorities, setPriorities, planetId, tabSettings, up
 
     const setValue = async (priorityType, newPriority) => {
         await SKYXPLORE_PLANET_UPDATE_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, priorityType: priorityType })
-            .send();
+            .send(setDisplaySpinner);
 
         const copy = new MapStream(priorities)
             .add(priorityType, newPriority)

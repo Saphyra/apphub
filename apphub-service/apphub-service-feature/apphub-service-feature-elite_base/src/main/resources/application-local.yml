@@ -1,9 +1,8 @@
 server:
   port: 8087
-
 elite-base:
   messageHandler:
-    enabled: true
+    enabled: false
   messageExpiration: P30D
   messageProcessorBatchSize: 500
   executor:

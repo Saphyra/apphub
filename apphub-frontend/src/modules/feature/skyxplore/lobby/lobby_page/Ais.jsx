@@ -11,7 +11,7 @@ import validate from "common/js/validation/Validator";
 import { SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI, SKYXPLORE_LOBBY_GET_AIS } from "../SkyXploreLobbyEndpoints";
 import { SKYXPLORE_LOBBY_TYPE_NEW } from "../SkyXploreLobbyConstants";
 
-const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType }) => {
+const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType, setDisplaySpinner }) => {
     const [aiName, setAiName] = useState("");
     const [validationResult, setValidationResult] = useState({});
 
@@ -32,7 +32,7 @@ const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType })
     const loadAis = () => {
         const fetch = async () => {
             const result = await SKYXPLORE_LOBBY_GET_AIS.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setAis(result);
         }
         fetch();
@@ -49,6 +49,7 @@ const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType })
                     alliances={alliances}
                     isHost={isHost}
                     lobbyType={lobbyType}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             )
             .toList();
@@ -56,7 +57,7 @@ const Ais = ({ localizationHandler, alliances, isHost, ais, setAis, lobbyType })
 
     const createAi = async () => {
         await SKYXPLORE_LOBBY_CREATE_OR_MODIFY_AI.createRequest({ name: aiName })
-            .send();
+            .send(setDisplaySpinner);
 
         setAiName("");
     }

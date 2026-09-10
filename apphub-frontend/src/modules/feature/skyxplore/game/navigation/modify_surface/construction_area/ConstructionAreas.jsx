@@ -4,7 +4,7 @@ import { SKYXPLORE_DATA_CONSTRUCTION_AREAS } from "modules/feature/skyxplore/Sky
 import { useState } from "react";
 import ConstructionArea from "./ConstructionArea";
 
-const ConstructionAreas = ({ surfaceType,  surfaceId, closePage }) => {
+const ConstructionAreas = ({ surfaceType, surfaceId, closePage, setDisplaySpinner }) => {
     const [constructionAreas, setConstructionAreas] = useState([]);
 
     useCache(
@@ -20,6 +20,7 @@ const ConstructionAreas = ({ surfaceType,  surfaceId, closePage }) => {
                 constructionArea={constructionArea}
                 surfaceId={surfaceId}
                 closePage={closePage}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

@@ -62,6 +62,7 @@ public class MergeEventService {
             .note(assembleNote(originalEvent.getContent(), occurrence.getNote()))
             .time(CommonUtils.firstNotNull(occurrence.getTime(), originalEvent.getTime()))
             .remindMeBeforeDays(CommonUtils.firstNotNull(occurrence.getRemindMeBeforeDays(), originalEvent.getRemindMeBeforeDays()))
+            .autoDone(CommonUtils.firstNotNull(occurrence.getAutoDone(), originalEvent.isAutoDone()))
             .build();
 
         modifiedOccurrences.add(cloned);

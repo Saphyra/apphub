@@ -144,7 +144,7 @@ const ListItem = ({ localizationHandler, data, setOpenedListItem, setLastEvent, 
 
     const handleOnDrop = (e) => {
         const movedItemId = e.dataTransfer.getData("id");
-        moveListItem(movedItemId, data.id, setLastEvent);
+        moveListItem(movedItemId, data.id, setLastEvent, setDisplaySpinner);
     }
 
     const toggleSelected = (checked, e) => {

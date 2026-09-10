@@ -1,12 +1,11 @@
 import Button from "common/component/input/Button";
-import Constants from "common/js/Constants";
 import "./saved_game.css";
 import { SKYXPLORE_LOBBY_LOAD_GAME, SKYXPLORE_LOBBY_PAGE } from "modules/feature/skyxplore/lobby/SkyXploreLobbyEndpoints";
 
-const SavedGame = ({ localizationHandler, savedGame, deleteGameCallback }) => {
+const SavedGame = ({ localizationHandler, savedGame, deleteGameCallback, setDisplaySpinner }) => {
     const loadSavedGame = async () => {
         await SKYXPLORE_LOBBY_LOAD_GAME.createRequest(null, { gameId: savedGame.gameId })
-            .send();
+            .send(setDisplaySpinner);
 
         window.location.href = SKYXPLORE_LOBBY_PAGE;
     }

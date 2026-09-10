@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActi
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreAdminEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreGameEndpoints;
@@ -30,7 +30,7 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
+        UserDynamoDbRepository.removeRoleByEmail(userData.getEmail(), role);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreDataEndpoints.SKYXPLORE_MAIN_MENU_PAGE);
@@ -47,8 +47,8 @@ public class SkyXploreRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
-        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.removeRoleByEmail(userData.getEmail(), role);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
 
         CommonUtils.verifyMissingRole(getServerPort(), driver, SkyXploreAdminEndpoints.SKYXPLORE_GAME_ADMIN_MAIN_PAGE);

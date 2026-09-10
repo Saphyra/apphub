@@ -6,9 +6,9 @@ import com.github.saphyra.apphub.integration.action.backend.community.GroupActio
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupInvitationType;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupListResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.GroupMemberResponse;
@@ -29,19 +29,19 @@ public class GroupMemberCrudTest extends BackEndTest {
     public void groupMemberCrud() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters friendData1 = RegistrationParameters.validParameters();
         String friendAccessTokenId1 = IndexPageActions.registerAndLogin(getServerPort(), friendData1);
-        UUID friendUserId1 = DynamoDbUtil.getUserIdByEmail(friendData1.getEmail());
+        UUID friendUserId1 = UserDynamoDbRepository.getUserIdByEmail(friendData1.getEmail());
 
         RegistrationParameters friendData2 = RegistrationParameters.validParameters();
         String friendAccessTokenId2 = IndexPageActions.registerAndLogin(getServerPort(), friendData2);
-        UUID friendUserId2 = DynamoDbUtil.getUserIdByEmail(friendData2.getEmail());
+        UUID friendUserId2 = UserDynamoDbRepository.getUserIdByEmail(friendData2.getEmail());
 
         RegistrationParameters friendOfFriendData = RegistrationParameters.validParameters();
         String friendOfFriendAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), friendOfFriendData);
-        UUID friendOfFriendUserId = DynamoDbUtil.getUserIdByEmail(friendOfFriendData.getEmail());
+        UUID friendOfFriendUserId = UserDynamoDbRepository.getUserIdByEmail(friendOfFriendData.getEmail());
 
         CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId1, friendUserId1);
         CommunityActions.setUpFriendship(getServerPort(), accessToken, friendAccessTokenId2, friendUserId2);

@@ -24,8 +24,9 @@ const BanDetailsPage = () => {
     document.title = localizationHandler.get("title");
 
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
-    const [userData, setUserdata] = useState(null);
     const [displaySpinner, setDisplaySpinner] = useState(false);
+
+    const [userData, setUserdata] = useState(null);
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useLoader({ request: ACCOUNT_GET_BANS.createRequest(null, { userId: userId }), mapper: setUserdata, setDisplaySpinner: setDisplaySpinner });
@@ -44,16 +45,19 @@ const BanDetailsPage = () => {
                         userData={userData}
                         setUserData={setUserdata}
                         setConfirmationDialogData={setConfirmationDialogData}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
 
                     <BanUserRole
                         userData={userData}
                         setUserData={setUserdata}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
 
                     <BanUserBannedRoles
                         userData={userData}
                         setUserData={setUserdata}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
                 </main>
             }

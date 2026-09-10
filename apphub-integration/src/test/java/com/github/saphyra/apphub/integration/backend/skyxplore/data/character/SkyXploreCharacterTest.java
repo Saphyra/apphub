@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.integration.backend.skyxplore.data.character;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import io.restassured.response.Response;
@@ -23,7 +23,7 @@ public class SkyXploreCharacterTest extends BackEndTest {
     public void createAndEditCharacter() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);

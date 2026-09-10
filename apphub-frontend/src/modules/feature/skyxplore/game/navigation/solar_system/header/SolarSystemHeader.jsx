@@ -9,7 +9,7 @@ import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
 import { SKYXPLORE_SOLAR_SYSTEM_RENAME } from "../../../SkyXploreGameEndpoints";
 
-const SolarSystemHeader = ({ solarSystemId, solarSystemName, closePage, setSolarSystemName }) => {
+const SolarSystemHeader = ({ solarSystemId, solarSystemName, closePage, setSolarSystemName, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [enableEditing, setEnableEditing] = useState(false);
@@ -29,7 +29,7 @@ const SolarSystemHeader = ({ solarSystemId, solarSystemName, closePage, setSolar
         }
 
         await SKYXPLORE_SOLAR_SYSTEM_RENAME.createRequest({ value: modifiedName }, { solarSystemId: solarSystemId })
-            .send();
+            .send(setDisplaySpinner);
 
         setSolarSystemName(modifiedName);
         setEnableEditing(false);

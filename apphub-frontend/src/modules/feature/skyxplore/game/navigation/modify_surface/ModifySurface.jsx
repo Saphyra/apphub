@@ -5,7 +5,7 @@ import Button from "common/component/input/Button";
 import ConstructionAreas from "./construction_area/ConstructionAreas";
 import TerraformingPossibilities from "./terraformin_possibilities/TerraforminPossibilities";
 
-const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType }) => {
+const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     return (
@@ -26,6 +26,7 @@ const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType }) 
                     surfaceType={surfaceType}
                     surfaceId={surfaceId}
                     closePage={closePage}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <TerraformingPossibilities
@@ -33,6 +34,7 @@ const ModifySurface = ({ closePage, footer, planetId, surfaceId, surfaceType }) 
                     planetId={planetId}
                     surfaceId={surfaceId}
                     closePage={closePage}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 

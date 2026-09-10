@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFlow;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.skyxplore.SkyXploreDataEndpoints;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -29,19 +29,19 @@ public class UserDeletedDuringTheGameTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         SkyXploreCharacterModel characterModel2 = SkyXploreCharacterModel.valid();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, characterModel2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         Map<String, ApphubWsClient> gameWsClients = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1), new Player(accessToken2, userId2));
         ApphubWsClient memberClient = gameWsClients.get(accessToken2);
 
         AccountActions.deleteAccount(getServerPort(), accessToken1, userData1.getPassword());
-        DynamoDbUtil.markForDeletionByEmail(userData1.getEmail());
+        UserDynamoDbRepository.markForDeletionByEmail(userData1.getEmail());
 
         WebSocketEvent event = memberClient.awaitForEvent(WebSocketEventName.REDIRECT)
             .orElseThrow(() -> new RuntimeException("Redirect event not arrived"));

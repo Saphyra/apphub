@@ -1,78 +1,91 @@
-body{
+body {
     background: black;
     color: white;
 }
 
-.menu, .menu button, .menu input, .menu select{
+.menu, .menu button, .menu input, .menu select {
     font-size: 24px;
 }
 
-.menu > *{
+.menu > * {
     margin: 10px;
 }
 
-.menu li{
+.menu li {
     margin: 16px 0;
 }
 
-a, button, select{
+a, button, select {
     color: white;
     border: 3px outset white;
     padding: 3px;
 }
 
-option{
+option {
     background: black;
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-button, select{
+button, select {
     background: transparent;
 }
 
-a:hover, button:hover{
+a:hover, button:hover {
     border-color: red;
 }
 
-a:active, button:active{
+a:active, button:active {
     border: 3px inset orange;
 }
 
-input{
+input {
     color: white;
     background: transparent;
     border: 3px outset white;
     outline: none;
 }
 
-input:focus{
+input:focus {
     border: 3px inset red;
 }
 
-form{
+form {
     margin-bottom: 0;
 }
 
-.error{
+.error {
     color: red;
 }
 
-.success{
+.success {
     color: lime;
 }
 
-label{
+label {
     display: block;
+    margin: 5px;
 }
 
-.menu input[type=checkbox]{
+.menu input[type=checkbox] {
     transform: scale(1.5);
 }
 
-fieldset{
+fieldset {
     display: inline-block;
     margin: 10px 0;
+}
+
+.block {
+    display: block;
+}
+
+.inline {
+    display: inline;
+}
+
+.red {
+    color: red;
 }

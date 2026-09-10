@@ -23,7 +23,7 @@ public class CreateEventService {
     private final CommonCalendarDao commonCalendarDao;
 
     public UUID create(UUID userId, EventRequest request) {
-        eventRequestValidator.validate(userId, request);
+        eventRequestValidator.validate(request);
 
         Event event = eventFactory.create(userId, request);
 

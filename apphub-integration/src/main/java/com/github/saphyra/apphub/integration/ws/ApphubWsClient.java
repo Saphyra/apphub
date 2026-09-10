@@ -109,9 +109,12 @@ public class ApphubWsClient extends WebSocketClient {
     }
 
     public void send(WebSocketEvent event) {
-        AwaitilityWrapper.createDefault()
-            .until(this::isOpen)
-            .assertTrue(name + " - WebSocket is not connected. Failed sending event " + event.getPayload());
+        AwaitilityWrapper.AwaitResult awaitResult = AwaitilityWrapper.createDefault()
+            .until(this::isOpen);
+
+        if (event.getEventName() != WebSocketEventName.PING) {
+            awaitResult.assertTrue(name + " - Connection is not open for endpoint " + endpoint);
+        }
 
         String payload = TestBase.OBJECT_MAPPER_WRAPPER.writeValueAsString(event);
 

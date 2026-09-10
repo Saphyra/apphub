@@ -3,20 +3,19 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.co
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
+import com.google.common.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 import static java.util.Objects.isNull;
 
 @Component
 @Slf4j
 public class CommodityAveragePriceDao extends CachedDao<CommodityAveragePriceEntity, CommodityAveragePrice, String, CommodityAveragePriceRepository> {
-    CommodityAveragePriceDao(CommodityAveragePriceConverter converter, CommodityAveragePriceRepository repository, CommodityAveragePriceCache cache) {
+    CommodityAveragePriceDao(CommodityAveragePriceConverter converter, CommodityAveragePriceRepository repository, Cache<String, CommodityAveragePrice> cache) {
         super(converter, repository, true, cache);
     }
 
@@ -31,19 +30,9 @@ public class CommodityAveragePriceDao extends CachedDao<CommodityAveragePriceEnt
             return false;
         }
 
-        Optional<CommodityAveragePrice> maybeStored = findById(extractId(commodityAveragePrice));
-        if (maybeStored.isEmpty()) {
-            return true;
-        }
-
-        CommodityAveragePrice stored = maybeStored.get();
-        LocalDateTime lastUpdate = Optional.ofNullable(commodityAveragePrice.getLastUpdate())
-            .orElse(LocalDateTime.MIN);
-        if (lastUpdate.isBefore(stored.getLastUpdate())) {
-            return false;
-        }
-
-        return !Objects.equals(maybeStored.get().getAveragePrice(), commodityAveragePrice.getAveragePrice());
+        return findById(extractId(commodityAveragePrice))
+            .filter(averagePrice -> Objects.equals(averagePrice.getAveragePrice(), commodityAveragePrice.getAveragePrice()))
+            .isEmpty();
     }
 
     public CommodityAveragePrice findByIdValidated(String commodityName) {

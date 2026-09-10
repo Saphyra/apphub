@@ -2,7 +2,6 @@ package com.github.saphyra.apphub.service.notebook.service.category;
 
 import com.github.saphyra.apphub.api.feature.notebook.model.ListItemType;
 import com.github.saphyra.apphub.api.feature.notebook.model.response.ChildrenOfCategoryResponse;
-import com.github.saphyra.apphub.api.feature.notebook.model.response.NotebookView;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItem;
 import com.github.saphyra.apphub.service.notebook.dao.list_item.list_item.ListItemDao;
@@ -26,11 +25,10 @@ public class CategoryChildrenQueryService {
 
     public ChildrenOfCategoryResponse getChildrenOfCategory(UUID userId, UUID categoryId, String type, UUID exclude) {
         List<ListItemType> query = parseTypes(type);
-        List<NotebookView> children = listItemDao.getByUserIdAndParent(userId, categoryId)
+        List<ListItem> children = listItemDao.getByUserIdAndParent(userId, categoryId)
             .stream()
             .filter(listItem -> query.contains(listItem.getType()))
             .filter(listItem -> !listItem.getListItemId().equals(exclude))
-            .map(notebookViewFactory::create)
             .collect(Collectors.toList());
 
         Optional<ListItem> category = Optional.ofNullable(categoryId)
@@ -39,7 +37,7 @@ public class CategoryChildrenQueryService {
             .parent(category.map(ListItem::getParent).orElse(null))
             .title(category.map(ListItem::getTitle).orElse(null))
             .listItemType(category.map(ListItem::getType).orElse(ListItemType.CATEGORY))
-            .children(children)
+            .children(notebookViewFactory.create(children))
             .build();
     }
 

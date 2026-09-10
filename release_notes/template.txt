@@ -10,5 +10,7 @@
 
 ===Manual Release Steps===
     Pre deployment
+        Backup Database
         Restart ApphubCI
     Post deployment
+        Backup Database

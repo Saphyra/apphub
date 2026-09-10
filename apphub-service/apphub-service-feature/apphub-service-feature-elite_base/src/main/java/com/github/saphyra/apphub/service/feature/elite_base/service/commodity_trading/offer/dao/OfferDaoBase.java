@@ -24,7 +24,7 @@ import com.github.saphyra.apphub.lib.sql_builder.operation.SumSegment;
 import com.github.saphyra.apphub.lib.sql_builder.value.WrappedValue;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.service.commodity_trading.offer.Offer;
 import com.github.saphyra.apphub.service.feature.elite_base.util.ConversionUtils;
@@ -50,13 +50,13 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_STAR_NAME;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_STAR_SYSTEM_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_STOCK;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_TYPE;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_OBJECT_TYPE;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_X_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_Y_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_Z_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_ITEM_COMMODITY;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 
 @Slf4j
@@ -154,7 +154,7 @@ abstract class OfferDaoBase implements OfferDao {
             ))
             .and()
             .condition(new OperationCondition(
-                new QualifiedColumn(TABLE_LAST_UPDATE, COLUMN_LAST_UPDATE),
+                new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_LAST_UPDATE),
                 Operation.GREATER_OR_EQUAL,
                 new WrappedValue(dateTimeConverter.convertDomain(dateTimeUtil.getCurrentDateTime().minus(maxAge)))
             ))
@@ -168,14 +168,14 @@ abstract class OfferDaoBase implements OfferDao {
 
     private void addJoins(SelectQuery query) {
         query.innerJoin(
-            new QualifiedTable(SCHEMA, TABLE_LAST_UPDATE),
+            new QualifiedTable(SCHEMA, TABLE_LAST_UPDATE_V2),
             new Equation(
                 new QualifiedColumn(TABLE_ITEM_COMMODITY, COLUMN_EXTERNAL_REFERENCE),
-                new QualifiedColumn(TABLE_LAST_UPDATE, COLUMN_EXTERNAL_REFERENCE)
+                new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_EXTERNAL_REFERENCE)
             ),
             new Equation(
-                new QualifiedColumn(TABLE_LAST_UPDATE, COLUMN_TYPE),
-                new WrappedValue(ItemType.COMMODITY.name())
+                new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_OBJECT_TYPE),
+                new WrappedValue(ObjectType.COMMODITY.name())
             )
         );
         query.innerJoin(
@@ -195,7 +195,7 @@ abstract class OfferDaoBase implements OfferDao {
             )
             .forEach(column -> query.column(new QualifiedColumn(TABLE_ITEM_COMMODITY, column)));
 
-        query.column(new QualifiedColumn(TABLE_LAST_UPDATE, COLUMN_LAST_UPDATE));
+        query.column(new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_LAST_UPDATE));
         query.column(new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_STAR_NAME));
         query.column(new NamedColumn(
             new SquareRootSegment(

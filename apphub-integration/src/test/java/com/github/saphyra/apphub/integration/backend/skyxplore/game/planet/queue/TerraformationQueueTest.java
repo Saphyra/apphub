@@ -9,8 +9,8 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXploreSurfaceActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.QueueResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -33,7 +33,7 @@ public class TerraformationQueueTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken, userId1));
 

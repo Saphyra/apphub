@@ -24,7 +24,7 @@ class ArchivedUpdater implements EventFieldUpdater {
 
     @Override
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
-        log.info("Updating archived of DeprecatedEvent {}", event.getEventId());
+        log.info("Updating archived of Event {}", event.getEventId());
 
         event.setArchived(request.getArchived());
     }

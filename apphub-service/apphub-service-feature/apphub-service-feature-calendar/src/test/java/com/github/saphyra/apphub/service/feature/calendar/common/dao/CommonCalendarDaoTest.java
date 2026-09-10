@@ -1,14 +1,19 @@
 package com.github.saphyra.apphub.service.feature.calendar.common.dao;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,12 +21,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,8 +38,10 @@ class CommonCalendarDaoTest {
     private static final String USER_ID_STRING = "user-id";
     private static final UUID EVENT_ID = UUID.randomUUID();
     private static final UUID OTHER_EVENT_ID = UUID.randomUUID();
+    private static final UUID OCCURRENCE_ID = UUID.randomUUID();
     private static final UUID LABEL_ID = UUID.randomUUID();
     private static final String LABEL = "label";
+    private static final UUID OTHER_LABEL_ID = UUID.randomUUID();
 
     @Mock
     private UuidConverter uuidConverter;
@@ -51,6 +61,12 @@ class CommonCalendarDaoTest {
     @Mock
     private LabelDao labelDao;
 
+    @Mock
+    private AlmDao almDao;
+
+    @Mock
+    private LabelObjectQueryService labelObjectQueryService;
+
     @InjectMocks
     private CommonCalendarDao underTest;
 
@@ -62,14 +78,26 @@ class CommonCalendarDaoTest {
 
     @Test
     void deleteByUserId() {
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
+
         given(event.getEventId()).willReturn(EVENT_ID);
+        given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
+        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
         given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
 
         underTest.deleteByUserId(USER_ID);
 
-        then(occurrenceDao).should().deleteByEventId(EVENT_ID);
         then(eventDao).should().delete(USER_ID, List.of(EVENT_ID));
+        then(occurrenceDao).should().delete(List.of(occurrence));
+        then(almDao).should().deleteByObject(OCCURRENCE_ID, SharedObjectType.OCCURRENCE);
+        then(almDao).should().deleteByObject(EVENT_ID, SharedObjectType.EVENT);
+        then(almDao).should().deleteByObject(LABEL_ID, SharedObjectType.LABEL);
         then(commonCalendarRepository).should().deleteByUserId(USER_ID_STRING);
     }
 
@@ -78,21 +106,24 @@ class CommonCalendarDaoTest {
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
 
-        underTest.saveNewEvent(event, List.of(occurrence), List.of(LABEL_ID));
+        underTest.saveNewEvent(event, List.of(occurrence), Map.of(LABEL_ID, USER_ID));
 
         then(eventDao).should().save(event);
         then(occurrenceDao).should().save(List.of(occurrence));
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
     }
 
     @Test
     void deleteEvents() {
+        given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
         given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
 
         underTest.deleteEvents(USER_ID, List.of(EVENT_ID));
 
         then(eventDao).should().delete(USER_ID, List.of(EVENT_ID));
         then(occurrenceDao).should().delete(List.of(occurrence));
+        then(almDao).should().deleteByObject(OCCURRENCE_ID, SharedObjectType.OCCURRENCE);
+        then(almDao).should().deleteByObject(EVENT_ID, SharedObjectType.EVENT);
         then(eventLabelMappingDao).should().deleteByEventId(USER_ID, List.of(EVENT_ID));
     }
 
@@ -102,56 +133,78 @@ class CommonCalendarDaoTest {
 
         then(labelDao).should().delete(USER_ID, LABEL_ID);
         then(eventLabelMappingDao).should().deleteByLabelId(USER_ID, LABEL_ID);
+        then(almDao).should().deleteByObject(LABEL_ID, SharedObjectType.LABEL);
     }
 
     @Test
     void saveLabel() {
         Label label = Label.builder()
+            .userId(USER_ID)
             .labelId(LABEL_ID)
             .label(LABEL)
             .build();
 
-        underTest.saveLabel(USER_ID, label);
+        underTest.saveLabel(label);
 
-        then(labelDao).should().save(USER_ID, label);
-        then(eventLabelMappingDao).should().saveEventsOfLabel(USER_ID, LABEL_ID, List.of());
+        then(labelDao).should().save(label);
+        then(eventLabelMappingDao).should().saveEventsOfLabel(new LabelEventMapping(USER_ID, LABEL_ID, Map.of()));
     }
 
     @Test
     void editLabelsOfEvent_addEventToLabel() {
-        Label label = Label.builder().labelId(LABEL_ID).label(LABEL).build();
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID))));
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
 
-        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, LABEL_ID, Map.of());
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, null)));
+        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
 
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
-        then(eventLabelMappingDao).should().saveEventsOfLabels(USER_ID, List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID, EVENT_ID))));
+        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
+        then(eventLabelMappingDao).should().saveEventsOfLabels(List.of(labelEventMapping));
+        assertThat(labelEventMapping.getEventIds())
+            .hasSize(1)
+            .containsEntry(EVENT_ID, USER_ID);
     }
 
     @Test
     void editLabelsOfEvent_removeEventFromLabel() {
-        Label label = Label.builder().labelId(LABEL_ID).label(LABEL).build();
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(EVENT_ID, OTHER_EVENT_ID))));
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, null)));
+        LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, OTHER_LABEL_ID, Map.of(EVENT_ID, USER_ID, OTHER_EVENT_ID, USER_ID));
+        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
 
-        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, List.of());
+        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of());
-        then(eventLabelMappingDao).should().saveEventsOfLabels(USER_ID, List.of(new BiWrapper<>(LABEL_ID, List.of(OTHER_EVENT_ID))));
-
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
+        then(eventLabelMappingDao).should().saveEventsOfLabels(List.of(labelEventMapping));
+        assertThat(labelEventMapping.getEventIds())
+            .hasSize(1)
+            .containsEntry(OTHER_EVENT_ID, USER_ID);
     }
 
     @Test
     void editLabelsOfEvent_noModifiedMappings() {
-        Label label = Label.builder().labelId(LABEL_ID).label(LABEL).build();
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(label));
-        given(eventLabelMappingDao.getEventsOfLabels(USER_ID, List.of(LABEL_ID))).willReturn(List.of(new BiWrapper<>(LABEL_ID, List.of(EVENT_ID, OTHER_EVENT_ID))));
+        Label label = Label.builder()
+            .userId(USER_ID)
+            .labelId(LABEL_ID)
+            .label(LABEL)
+            .build();
+        given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, null)));
+        LabelEventMapping labelEventMapping = new LabelEventMapping(USER_ID, LABEL_ID, Map.of(EVENT_ID, USER_ID));
+        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
 
-        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        underTest.editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
 
-        then(eventLabelMappingDao).should().saveLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
-        then(eventLabelMappingDao).should(never()).saveEventsOfLabels(any(), anyList());
+        then(eventLabelMappingDao).should().saveLabelsOfEvent(new EventLabelMapping(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID)));
+        then(eventLabelMappingDao).should(never()).saveEventsOfLabels(any());
     }
 }

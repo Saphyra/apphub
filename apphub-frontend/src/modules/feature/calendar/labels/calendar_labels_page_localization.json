@@ -31,9 +31,9 @@
         "en": "Cancel",
         "hu": "Mégse"
     },
-    "rename-label": {
-        "en": "Rename label",
-        "hu": "Címke átnevezése"
+    "edit-label": {
+        "en": "Edit label",
+        "hu": "Címke szerkesztése"
     },
     "new-label": {
         "en": "New label",
@@ -50,10 +50,6 @@
     "label-too-long": {
         "en": "Label too long. (Maximum 255 characters)",
         "hu": "A címke túl hosszú. (Maximum 255 karakter)"
-    },
-    "label-already-exists": {
-        "en": "Label already exists.",
-        "hu": "A címke már létezik."
     },
     "events-of-label": {
         "en": "Events of label {label}",
@@ -94,5 +90,9 @@
     "events-without-label": {
         "en": "Events without label",
         "hu": "Címke nélküli események"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

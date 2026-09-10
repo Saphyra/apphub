@@ -5,7 +5,7 @@ import confirmDeconstructConstructionArea from "./DeconstructConstructionAreaSer
 import NavigationHistoryItem from "modules/feature/skyxplore/game/navigation/NavigationHistoryItem";
 import PageName from "modules/feature/skyxplore/game/navigation/PageName";
 
-const ConstructionAreeaIdleFooter = ({ localizationHandler, constructionArea, setConfirmationDialogData, openPage }) => {
+const ConstructionAreeaIdleFooter = ({ localizationHandler, constructionArea, setConfirmationDialogData, openPage, setDisplaySpinner }) => {
     const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
 
     return (
@@ -18,7 +18,8 @@ const ConstructionAreeaIdleFooter = ({ localizationHandler, constructionArea, se
                     localizationHandler,
                     constructionAreaLocalizationHandler,
                     constructionArea,
-                    setConfirmationDialogData
+                    setConfirmationDialogData,
+                    setDisplaySpinner
                 )}
             />
             <Button

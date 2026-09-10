@@ -45,7 +45,7 @@ spring:
                 /web/utils/json-formatter,\
                 /web/elite-base,\
                 /web/elite-base/*,\
-                /web/utils/direction,\
+                /web/utils/random-direction,\
                 /web/calendar,\
                 /web/calendar/**,\
                 /web/task-manager,\
@@ -353,6 +353,11 @@ role:
         - COMMUNITY
     #Calendar
     - pattern: /web/calendar
+      methods:
+        - GET
+      requiredRoles:
+        - CALENDAR
+    - pattern: /web/calendar/**
       methods:
         - GET
       requiredRoles:

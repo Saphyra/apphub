@@ -1,0 +1,41 @@
+package com.github.saphyra.apphub.service.feature.elite_base.dao.item.type;
+
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@ExtendWith(MockitoExtension.class)
+class ObjectTypeConverterTest {
+    private static final String ITEM_NAME = "item-name";
+
+    @InjectMocks
+    private ItemTypeConverter underTest;
+
+    @Test
+    void convertDomain() {
+        ItemTypeDto domain = ItemTypeDto.builder()
+            .itemName(ITEM_NAME)
+            .type(ObjectType.COMMODITY)
+            .build();
+
+        assertThat(underTest.convertDomain(domain))
+            .returns(ITEM_NAME, ItemTypeEntity::getItemName)
+            .returns(ObjectType.COMMODITY, ItemTypeEntity::getType);
+    }
+
+    @Test
+    void convertEntity() {
+        ItemTypeEntity entity = ItemTypeEntity.builder()
+            .itemName(ITEM_NAME)
+            .type(ObjectType.COMMODITY)
+            .build();
+
+        assertThat(underTest.convertEntity(entity))
+            .returns(ITEM_NAME, ItemTypeDto::getItemName)
+            .returns(ObjectType.COMMODITY, ItemTypeDto::getType);
+    }
+}

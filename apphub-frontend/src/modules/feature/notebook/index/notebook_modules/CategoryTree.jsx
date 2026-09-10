@@ -67,6 +67,7 @@ const CategoryTree = ({ localizationHandler, setOpenedListItem, lastEvent, setLa
                 setOpenedListItem={setOpenedListItem}
                 setLastEvent={setLastEvent}
                 userSettings={userSettings}
+                setDisplaySpinner={setDisplaySpinner}
             />
         </div>
     );

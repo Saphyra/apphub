@@ -4,7 +4,7 @@ import { UserSettings } from "modules/feature/calendar/common/UserSettings";
 import moveListItem from "modules/feature/notebook/common/MoveListItemService";
 import OpenedPageType from "modules/feature/notebook/common/OpenedPageType";
 
-const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setLastEvent, userSettings }) => {
+const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setLastEvent, userSettings, setDisplaySpinner }) => {
     const hasLeaves = category.children.length > 0;
     const isOpened = openedLeaves.indexOf(category.categoryId) > -1;
 
@@ -24,6 +24,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
                                 setOpenedListItem={setOpenedListItem}
                                 setLastEvent={setLastEvent}
                                 userSettings={userSettings}
+                                setDisplaySpinner={setDisplaySpinner}
                             />
                         )
                         .toList()
@@ -70,7 +71,7 @@ const Leaf = ({ category, openedLeaves, setOpenedLeaves, setOpenedListItem, setL
     const handleOnDrop = (e) => {
         e.stopPropagation();
         const movedItemId = e.dataTransfer.getData("id");
-        moveListItem(movedItemId, category.categoryId, setLastEvent);
+        moveListItem(movedItemId, category.categoryId, setLastEvent, setDisplaySpinner);
     }
 
     return (

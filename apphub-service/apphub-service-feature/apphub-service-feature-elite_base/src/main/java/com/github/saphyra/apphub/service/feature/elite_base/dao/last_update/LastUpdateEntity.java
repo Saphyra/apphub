@@ -8,12 +8,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE_V2;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "last_update")
+@Table(schema = SCHEMA, name = TABLE_LAST_UPDATE_V2)
 class LastUpdateEntity {
     @EmbeddedId
     private LastUpdateId id;

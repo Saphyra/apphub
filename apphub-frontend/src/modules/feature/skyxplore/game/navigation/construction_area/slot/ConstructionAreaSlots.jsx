@@ -6,7 +6,7 @@ import Stream from "common/js/collection/Stream";
 import ConstructionAreaSlotBuilding from "./ConstructionAreaSlotBuilding";
 import ConstructionAreaSlotEmpty from "./ConstructionAreaSlotEmpty";
 
-const ConstructionAreaSlots = ({ openPage, buildingModuleCategory, amount, constructionArea, buildings, setBuildings, setConfirmationDialogData }) => {
+const ConstructionAreaSlots = ({ openPage, buildingModuleCategory, amount, constructionArea, buildings, setBuildings, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const buildingModuleCategoryLocalizationHandler = new LocalizationHandler(buildingModuleCategoryLocalizationData);
 
@@ -21,6 +21,7 @@ const ConstructionAreaSlots = ({ openPage, buildingModuleCategory, amount, const
                     building={building}
                     setBuildings={setBuildings}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             )
             .forEach(building => result.push(building));

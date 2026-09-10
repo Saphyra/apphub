@@ -2,10 +2,10 @@ import Button from "common/component/input/Button";
 import ProgressBar from "common/component/progress_bar/ProgressBar";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF_BUILDING_MODULE } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const BuildingDeconstruction = ({ deconstruction, localizationHandler, setBuildings }) => {
+const BuildingDeconstruction = ({ deconstruction, localizationHandler, setBuildings, setDisplaySpinner }) => {
     const cancelDeconstruction = async () => {
         const response = await SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CANCEL_DECONSTRUCTION_OF_BUILDING_MODULE.createRequest(null, { deconstructionId: deconstruction.deconstructionId })
-            .send();
+            .send(setDisplaySpinner);
 
         setBuildings(response);
     }

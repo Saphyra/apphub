@@ -3,7 +3,7 @@ import ConstructionAreaConstructionFooter from "./ConstructionAreaConstructionFo
 import ConstructionAreaDeconstructionFooter from "./ConstructionAreaDeconstructionFooter";
 import ConstructionAreeaIdleFooter from "./ConstructionAreeaIdleFooter";
 
-const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationDialogData, openPage }) => {
+const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationDialogData, openPage, setDisplaySpinner }) => {
     const constructionArea = surface.constructionArea;
 
     if (hasValue(constructionArea.construction)) {
@@ -11,12 +11,14 @@ const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationD
             surface={surface}
             localizationHandler={localizationHandler}
             setConfirmationDialogData={setConfirmationDialogData}
+            setDisplaySpinner={setDisplaySpinner}
         />
     } else if (hasValue(constructionArea.deconstruction)) {
         return <ConstructionAreaDeconstructionFooter
             surface={surface}
             localizationHandler={localizationHandler}
             setConfirmationDialogData={setConfirmationDialogData}
+            setDisplaySpinner={setDisplaySpinner}
         />
     } else {
         return <ConstructionAreeaIdleFooter
@@ -24,6 +26,7 @@ const ConstructionAreaFooter = ({ surface, localizationHandler, setConfirmationD
             constructionArea={surface.constructionArea}
             setConfirmationDialogData={setConfirmationDialogData}
             openPage={openPage}
+            setDisplaySpinner={setDisplaySpinner}
         />
     }
 }

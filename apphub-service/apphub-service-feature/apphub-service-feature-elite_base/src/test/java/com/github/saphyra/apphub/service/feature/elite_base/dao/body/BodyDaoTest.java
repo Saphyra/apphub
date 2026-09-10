@@ -42,15 +42,6 @@ class BodyDaoTest {
     private Body domain;
 
     @Test
-    void findByStarSystemIdAndBodyId() {
-        given(uuidConverter.convertDomain(STAR_SYSTEM_ID)).willReturn(STAR_SYSTEM_ID_STRING);
-        given(repository.findByStarSystemIdAndBodyId(STAR_SYSTEM_ID_STRING, BODY_ID)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
-
-        assertThat(underTest.findByStarSystemIdAndBodyId(STAR_SYSTEM_ID, BODY_ID)).contains(domain);
-    }
-
-    @Test
     void findByBodyName() {
         given(repository.findByBodyName(BODY_NAME)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));

@@ -24,7 +24,7 @@ class RepetitionTypeUpdater implements EventFieldUpdater {
 
     @Override
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
-        log.info("Updating repetitionType of DeprecatedEvent {}", event.getEventId());
+        log.info("Updating repetitionType of Event {}", event.getEventId());
 
         event.setRepetitionType(request.getRepetitionType());
 

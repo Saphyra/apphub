@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.platform.monitoring.dao.metric_data;
 
 import com.github.saphyra.apphub.api.platform.monitoring.model.MetricDataType;
-import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.lib.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;

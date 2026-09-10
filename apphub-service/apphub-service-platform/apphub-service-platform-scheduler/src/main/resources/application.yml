@@ -18,8 +18,8 @@ interval:
       deletion: 60000 #1 minute
   platform:
     webSocket:
-      pingRequest: 30000
-      connectionCleanup: 600000
+      pingRequest: 1000
+      connectionCleanup: 3000
   monitoring:
     aggregateSecondMetrics: 0 * * * * ? #Every minute
     aggregateMinuteMetrics: 0 0 * * * ? #Every hour
@@ -31,4 +31,3 @@ interval:
     processMessages: PT5S
     resetUnhandledMessages: P7D
     deleteExpiredMessages: PT1H
-    orphanedRecordCleanup: 0 0 3 * * * #Every day at 3AM

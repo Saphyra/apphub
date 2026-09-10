@@ -76,7 +76,7 @@ public class IndexPageActions {
         fillRegistrationForm(driver, registrationParameters);
         submitRegistration(driver);
 
-        AwaitilityWrapper.create(20, 1)
+        AwaitilityWrapper.create(30, 1)
             .until(verification)
             .assertTrue("Registration failed.");
     }

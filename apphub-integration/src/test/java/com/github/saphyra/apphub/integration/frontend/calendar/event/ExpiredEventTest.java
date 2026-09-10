@@ -2,16 +2,15 @@ package com.github.saphyra.apphub.integration.frontend.calendar.event;
 
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarExpiredEventsPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarFlow;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
+import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarSharePageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CreateEventParameters;
-import com.github.saphyra.apphub.integration.action.frontend.index.IndexPageActions;
-import com.github.saphyra.apphub.integration.action.frontend.modules.ModulesPageActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.*;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
+import com.github.saphyra.apphub.integration.structure.api.calendar.Grant;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
-import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
-import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -26,12 +25,7 @@ public class ExpiredEventTest extends SeleniumTest {
 
     @Test(groups = {"fe", "calendar"})
     public void hideExpiredEvent() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(getServerPort(), driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
-        CommonUtils.enableTestMode(driver);
+        WebDriver driver = CalendarFlow.init(getServerPort(), extractDriver()).driver();
 
         createExpiredEvent(driver);
 
@@ -54,32 +48,36 @@ public class ExpiredEventTest extends SeleniumTest {
 
     @Test(groups = {"fe", "calendar"})
     void extendExpiredEvent() {
-        WebDriver driver = extractDriver();
-        Navigation.toIndexPage(getServerPort(), driver);
-        RegistrationParameters userData = RegistrationParameters.validParameters();
-        IndexPageActions.registerUser(driver, userData);
-        ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.CALENDAR);
-        CommonUtils.enableTestMode(driver);
+        List<CalendarFlow.Context> contexts = CalendarFlow.init(getServerPort(), extractDrivers(2));
+        CalendarFlow.Context ownerContext = contexts.get(0);
+        CalendarFlow.Context sharedWithContext = contexts.get(1);
+        WebDriver ownerDriver = ownerContext.driver();
+        WebDriver sharedWithDriver = sharedWithContext.driver();
 
-        createExpiredEvent(driver);
+        CreateEventParameters event = createExpiredEvent(ownerDriver);
+        shareEventWithUser(ownerDriver, event.getTitle(), sharedWithContext.userData().getEmail());
 
-        CalendarIndexPageActions.toExpiredEventsPage(driver);
+        verifyExpiredEventNotificationIsPresent(ownerDriver);
 
-        AwaitilityWrapper.getListWithWait(() -> CalendarExpiredEventsPageActions.getEvents(driver), webElements -> !webElements.isEmpty())
+        verifyExpiredEventNotificationIsNotPresent(sharedWithDriver);
+
+        CalendarIndexPageActions.toExpiredEventsPage(ownerDriver);
+
+        AwaitilityWrapper.getListWithWait(() -> CalendarExpiredEventsPageActions.getEvents(ownerDriver), webElements -> !webElements.isEmpty())
             .getFirst()
             .click();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> WebElementUtils.getIfPresent(driver, By.id("calendar-opened-event")).isPresent())
+            .until(() -> WebElementUtils.getIfPresent(ownerDriver, By.id("calendar-opened-event")).isPresent())
             .assertTrue("Expired event is not opened.");
 
-        emptyExtendUntil(driver);
+        emptyExtendUntil(ownerDriver);
 
-        CalendarExpiredEventsPageActions.setExtendUntil(driver, CURRENT_DATE.plusWeeks(2));
-        CalendarExpiredEventsPageActions.extendExpiredEvent(driver);
+        CalendarExpiredEventsPageActions.setExtendUntil(ownerDriver, CURRENT_DATE.plusWeeks(2));
+        CalendarExpiredEventsPageActions.extendExpiredEvent(ownerDriver);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> CalendarExpiredEventsPageActions.getEvents(driver).isEmpty())
+            .until(() -> CalendarExpiredEventsPageActions.getEvents(ownerDriver).isEmpty())
             .assertTrue("Expired event is not hidden.");
     }
 
@@ -89,7 +87,41 @@ public class ExpiredEventTest extends SeleniumTest {
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.CALENDAR_EMPTY_EXTEND_UNTIL_DATE);
     }
 
-    private static void createExpiredEvent(WebDriver driver) {
+    private static void verifyExpiredEventNotificationIsPresent(WebDriver driver) {
+        AwaitilityWrapper.createDefault()
+            .until(() -> CalendarIndexPageActions.expiredEventsButton(driver).isPresent())
+            .assertTrue("Expired event notification is not present for owner.");
+    }
+
+    private static void verifyExpiredEventNotificationIsNotPresent(WebDriver driver) {
+        WebElementUtils.waitForSpinnerToDisappear(driver);
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> CalendarIndexPageActions.expiredEventsButton(driver).isEmpty())
+            .assertTrue("Expired event notification is present for shared-with user.");
+    }
+
+    private static void shareEventWithUser(WebDriver ownerDriver, String title, String email) {
+        CalendarIndexPageActions.setReferenceDate(ownerDriver, CURRENT_DATE);
+
+        AwaitilityWrapper.getListWithWait(() -> CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, CURRENT_DATE), occurrences -> occurrences.stream().anyMatch(occurrence -> occurrence.getTitle().equals(title)))
+            .stream()
+            .filter(occurrence -> occurrence.getTitle().equals(title))
+            .findFirst()
+            .orElseThrow(() -> new IllegalStateException("Occurrence not found: " + title))
+            .open(ownerDriver);
+
+        CalendarIndexPageActions.editEvent(ownerDriver);
+        CalendarEventPageActions.share(ownerDriver);
+        CalendarSharePageActions.selectUser(ownerDriver, email);
+        CalendarSharePageActions.toggleGrant(ownerDriver, Grant.VIEW);
+        CalendarSharePageActions.toggleGrant(ownerDriver, Grant.SEE_CHILDREN);
+        CalendarSharePageActions.share(ownerDriver);
+        CalendarSharePageActions.back(ownerDriver);
+        CalendarEventPageActions.backFromEdit(ownerDriver);
+    }
+
+    private static CreateEventParameters createExpiredEvent(WebDriver driver) {
         CalendarIndexPageActions.openCreateEventPage(driver);
         CreateEventParameters event = CreateEventParameters.valid(RepetitionType.DAYS_OF_WEEK)
             .toBuilder()
@@ -100,5 +132,7 @@ public class ExpiredEventTest extends SeleniumTest {
         CalendarEventPageActions.fillForm(driver, event);
         CalendarEventPageActions.create(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_EVENT_CREATED);
+
+        return event;
     }
 }

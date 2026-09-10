@@ -10,7 +10,7 @@ const useLoader = (args) => {
     const condition = args.condition || (() => true);
     const alternativeResult = args.alternativeResult;
     const errorHandler = args.errorHandler;
-    const setDisplaySpinner = args.setDisplaySpinner;
+    const setDisplaySpinner = args.setDisplaySpinner || (() => { throw new Error("setDisplaySpinner must not be null"); })();
 
     useEffect(() => loader(), listener);
 

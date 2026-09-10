@@ -38,7 +38,10 @@ const SkyXploreLobbyPage = () => {
         ownUserId: null,
         expectedPlayers: []
     });
-    const [displaySpinner, setDisplaySpinner] = useState(false);
+    const [displaySpinner, setDisplaySpinner] = useState(0);
+    const updateDisplaySpinner = (display) => {
+        setDisplaySpinner(prev => prev + (display ? 1 : -1));
+    };
     const [displayStartGameDialog, setDisplayStartGameDialog] = useState(false);
 
     //Chat
@@ -78,13 +81,13 @@ const SkyXploreLobbyPage = () => {
     useEffect(() => loadLobbyData(), []);
     useEffect(() => loadAlliances(), []);
 
-    useLoader({ request: SKYXPLORE_LOBBY_GET_SETTINGS.createRequest(), mapper: setSettings });
+    useLoader({ request: SKYXPLORE_LOBBY_GET_SETTINGS.createRequest(), mapper: setSettings, setDisplaySpinner: updateDisplaySpinner });
 
     //Load
     const loadLobbyData = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_LOBBY_VIEW_FOR_PAGE.createRequest()
-                .send();
+                .send(updateDisplaySpinner);
             setLobbyData(response);
         }
         fetch();
@@ -93,7 +96,7 @@ const SkyXploreLobbyPage = () => {
     const loadAlliances = () => {
         const fecth = async () => {
             const result = await SKYXPLORE_LOBBY_GET_ALLIANCES.createRequest()
-                .send();
+                .send(updateDisplaySpinner);
             setAlliances(result);
         }
         fecth();
@@ -101,7 +104,7 @@ const SkyXploreLobbyPage = () => {
 
     //Platform
     const checkRedirection = () => {
-        Redirection.forLobby()
+        Redirection.forLobby(updateDisplaySpinner);
     }
 
     //WebSocket event handlers
@@ -111,7 +114,7 @@ const SkyXploreLobbyPage = () => {
                 processAllianceCreatedEvent(event.payload, alliances, setAlliances, ais, setAis, players, setPlayers);
                 break;
             case WebSocketEventName.SKYXPLORE_LOBBY_GAME_CREATION_INITIATED:
-                setDisplaySpinner(true);
+                updateDisplaySpinner(true);
                 break;
             case WebSocketEventName.SKYXPLORE_LOBBY_GAME_LOADED:
                 window.location.href = SKYXPLORE_GAME_PAGE;
@@ -157,7 +160,7 @@ const SkyXploreLobbyPage = () => {
         }
 
         const response = await SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
-            .send();
+            .send(updateDisplaySpinner);
 
         if (response.length > 0) {
             setDisplayStartGameDialog(true);
@@ -168,7 +171,7 @@ const SkyXploreLobbyPage = () => {
 
     const sendStartGameRequest = () => {
         SKYXPLORE_LOBBY_START_GAME.createRequest()
-            .send();
+            .send(updateDisplaySpinner);
     }
 
     const setReadyStatus = (status) => {
@@ -184,7 +187,7 @@ const SkyXploreLobbyPage = () => {
 
     const exit = async () => {
         await SKYXPLORE_LOBBY_EXIT.createRequest()
-            .send();
+            .send(updateDisplaySpinner);
 
         window.location.href = SKYXPLORE_MAIN_MENU_PAGE;
     }
@@ -237,6 +240,7 @@ const SkyXploreLobbyPage = () => {
                                 localizationHandler={localizationHandler}
                                 isHost={lobbyData.host}
                                 settings={settings}
+                                setDisplaySpinner={updateDisplaySpinner}
                             />}
                         <Ais
                             localizationHandler={localizationHandler}
@@ -245,6 +249,7 @@ const SkyXploreLobbyPage = () => {
                             lobbyType={lobbyData.lobbyType}
                             ais={ais}
                             setAis={setAis}
+                            setDisplaySpinner={updateDisplaySpinner}
                         />
                     </div>
 
@@ -253,6 +258,7 @@ const SkyXploreLobbyPage = () => {
                             localizationHandler={localizationHandler}
                             friends={friends}
                             setFriends={setFriends}
+                            setDisplaySpinner={updateDisplaySpinner}
                         />
 
                         <Players
@@ -262,6 +268,7 @@ const SkyXploreLobbyPage = () => {
                             lobbyType={lobbyData.lobbyType}
                             players={players}
                             setPlayers={setPlayers}
+                            setDisplaySpinner={updateDisplaySpinner}
                         />
                     </div>
                 </main>
@@ -273,7 +280,7 @@ const SkyXploreLobbyPage = () => {
                 />
             </div>
 
-            {displaySpinner && <Spinner />}
+            {displaySpinner > 0 && <Spinner />}
 
             {displayStartGameDialog &&
                 <ConfirmationDialog

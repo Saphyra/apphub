@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -20,7 +21,8 @@ public class ListItemQueryService {
 
     public NotebookView findListItem(UUID userId, UUID listItemId) {
         return listItemDao.findById(userId, listItemId)
-            .map(notebookViewFactory::create)
+            .map(listItem -> notebookViewFactory.create(List.of(listItem)))
+            .map(List::getFirst)
             .orElseThrow(() -> ExceptionFactory.notLoggedException(HttpStatus.NOT_FOUND, ErrorCode.DATA_NOT_FOUND, "ListItem not found by listItemId " + listItemId));
     }
 }

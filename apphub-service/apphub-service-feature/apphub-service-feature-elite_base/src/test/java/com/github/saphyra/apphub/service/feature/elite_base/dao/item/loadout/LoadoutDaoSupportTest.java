@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout;
 
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.equipment.Equipment;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.equipment.EquipmentDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.equipment.EquipmentFactory;
@@ -54,38 +54,38 @@ class LoadoutDaoSupportTest {
     void getByMarketId() {
         given(equipmentDao.getByMarketId(MARKET_ID)).willAnswer(_ -> List.of(equipment));
 
-        assertThat(underTest.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).containsExactly(equipment);
+        assertThat(underTest.getByMarketId(ObjectType.EQUIPMENT, MARKET_ID)).containsExactly(equipment);
     }
 
     @Test
     void getByMarketId_unsupportedType() {
-        assertThat(catchThrowable(() -> underTest.getByMarketId(ItemType.COMMODITY, MARKET_ID))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.getByMarketId(ObjectType.COMMODITY, MARKET_ID))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void create_equipment() {
         given(equipmentFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).willReturn(equipment);
 
-        assertThat(underTest.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).isEqualTo(equipment);
+        assertThat(underTest.create(ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).isEqualTo(equipment);
     }
 
     @Test
     void create_spaceship() {
         given(spaceshipFactory.create(ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).willReturn(spaceship);
 
-        assertThat(underTest.create(ItemType.SPACESHIP, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).isEqualTo(spaceship);
+        assertThat(underTest.create(ObjectType.SPACESHIP, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, NAME, STAR_SYSTEM_ID)).isEqualTo(spaceship);
     }
 
     @Test
     void create_unsupported() {
-        assertThat(catchThrowable(() -> underTest.create(ItemType.COMMODITY, null, null, null, null, STAR_SYSTEM_ID))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.create(ObjectType.COMMODITY, null, null, null, null, STAR_SYSTEM_ID))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void deleteAll() {
         List<Loadout> loadouts = List.of(equipment);
 
-        underTest.deleteAll(ItemType.EQUIPMENT, loadouts);
+        underTest.deleteAll(ObjectType.EQUIPMENT, loadouts);
 
         then(equipmentDao).should().deleteAllLoadout(loadouts);
     }
@@ -94,14 +94,14 @@ class LoadoutDaoSupportTest {
     void deleteAll_unsupported() {
         List<Loadout> loadouts = List.of(equipment);
 
-        assertThat(catchThrowable(() -> underTest.deleteAll(ItemType.COMMODITY, loadouts))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.deleteAll(ObjectType.COMMODITY, loadouts))).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void saveAll() {
         List<Loadout> loadouts = List.of(spaceship);
 
-        underTest.saveAll(ItemType.SPACESHIP, loadouts);
+        underTest.saveAll(ObjectType.SPACESHIP, loadouts);
 
         then(spaceshipDao).should().saveAllLoadout(loadouts);
     }
@@ -110,6 +110,6 @@ class LoadoutDaoSupportTest {
     void saveAll_unsupported() {
         List<Loadout> loadouts = List.of(spaceship);
 
-        assertThat(catchThrowable(() -> underTest.saveAll(ItemType.COMMODITY, loadouts))).isInstanceOf(IllegalArgumentException.class);
+        assertThat(catchThrowable(() -> underTest.saveAll(ObjectType.COMMODITY, loadouts))).isInstanceOf(IllegalArgumentException.class);
     }
 }

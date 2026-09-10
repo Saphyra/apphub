@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -41,7 +41,7 @@ public class RemoveFriendTest extends BackEndTest {
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, model2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         friendNotFound(accessToken1);
         UUID friendshipId = forbiddenOperation(accessToken1, accessToken2, accessToken3, userId2);

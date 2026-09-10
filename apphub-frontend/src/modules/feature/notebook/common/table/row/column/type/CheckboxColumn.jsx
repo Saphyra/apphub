@@ -10,12 +10,13 @@ const CheckboxColumn = ({
     updateColumn,
     editingEnabled = true,
     selectType,
-    localizationHandler
+    localizationHandler,
+    setDisplaySpinner
 }) => {
     const updateData = (checked) => {
         if (!editingEnabled) {
             NOTEBOOK_TABLE_SET_CHECKBOX_COLUMN_STATUS.createRequest({ value: checked }, { listItemId: openedItem.id, rowId: rowId, columnId: columnData.columnId })
-                .send();
+                .send(setDisplaySpinner);
         }
 
         columnData.data = checked;

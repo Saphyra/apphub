@@ -3,7 +3,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.powerplay.m
 import com.github.saphyra.apphub.api.feature.elite_base.model.ReserveLevel;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.MiningMeritFarmResponse;
 import com.github.saphyra.apphub.api.feature.elite_base.model.merit_farm.PowerplayActivityType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.Commodity;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
@@ -67,7 +67,7 @@ class ReinforcementOfferCollector {
                     .commodityName(offer.getItemName())
                     .demand(offer.getDemand())
                     .price(offer.getBuyPrice())
-                    .lastUpdate(lastUpdateDao.findByIdValidated(offer.getExternalReference(), ItemType.COMMODITY).getLastUpdate())
+                    .lastUpdate(lastUpdateDao.findByIdOrDefault(offer.getExternalReference(), ObjectType.COMMODITY).getLastUpdate())
                     .activityType(PowerplayActivityType.REINFORCEMENT)
                     .build();
             })
