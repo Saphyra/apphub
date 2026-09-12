@@ -2,13 +2,9 @@ package com.github.saphyra.apphub.service.feature.elite_base.migration;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
-import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
-import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
 import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
-import com.github.saphyra.apphub.lib.sql_builder.value.WrappedValue;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdatePartitionCreator;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +25,6 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_MINOR_FACTION_STATE;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_MINOR_FACTION_STATE_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.MAX_BATCH_SIZE;
-import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.THREAD_COUNT;
 
 @Component
 @RequiredArgsConstructor
@@ -40,7 +35,6 @@ class MinorFactionStateMigrator {
     @SuppressWarnings("unused")
     private final LastUpdatePartitionCreator lastUpdatePartitionCreator;
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ExecutorServiceBean executorServiceBean;
     private final ErrorReporterService errorReporterService;
 
     @PostConstruct
@@ -62,37 +56,42 @@ class MinorFactionStateMigrator {
     }
 
     private void delete(List<Map<String, Object>> batch) {
-        List<String> sqls = batch.stream()
-            .map(entry -> SqlBuilder.delete()
-                .from(new QualifiedTable(SCHEMA, TABLE_MINOR_FACTION_STATE))
-                .condition(new Equation(new DefaultColumn(COLUMN_MINOR_FACTION_ID), new WrappedValue(entry.get(COLUMN_MINOR_FACTION_ID))))
-                .and()
-                .condition(new Equation(new DefaultColumn(COLUMN_STATUS), new WrappedValue(entry.get(COLUMN_STATUS))))
-                .and()
-                .condition(new Equation(new DefaultColumn(COLUMN_STATE), new WrappedValue(entry.get(COLUMN_STATE))))
-                .build()
-            )
-            .toList();
+        String sql = "DELETE FROM %s.%s WHERE %s = :%s AND %s = :%s AND %s = :%s".formatted(
+            SCHEMA,
+            TABLE_MINOR_FACTION_STATE,
+            COLUMN_MINOR_FACTION_ID,
+            COLUMN_MINOR_FACTION_ID,
+            COLUMN_STATUS,
+            COLUMN_STATUS,
+            COLUMN_STATE,
+            COLUMN_STATE
+        );
 
-        executorServiceBean.processCollectionWithWait(sqls, sql -> jdbcTemplate.update(sql, Map.of()), THREAD_COUNT);
+        try {
+            jdbcTemplate.batchUpdate(
+                sql,
+                batch.toArray(Map[]::new)
+            );
+        } catch (Exception e) {
+            errorReporterService.report("Failed to execute SQL: " + sql, e);
+        }
     }
 
     private void save(List<Map<String, Object>> batch) {
-        executorServiceBean.processCollectionWithWait(
-            batch,
-            record -> {
-                String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_MINOR_FACTION_STATE_V2), record.keySet()).build();
+        if (batch.isEmpty()) {
+            return;
+        }
 
-                try {
-                    jdbcTemplate.update(sql, record);
-                } catch (Exception e) {
-                    errorReporterService.report("Failed to execute SQL: " + sql, e);
-                }
+        String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_MINOR_FACTION_STATE_V2), batch.getFirst().keySet()).build();
 
-                return null;
-            },
-            THREAD_COUNT
-        );
+        try {
+            jdbcTemplate.batchUpdate(
+                sql,
+                batch.toArray(Map[]::new)
+            );
+        } catch (Exception e) {
+            errorReporterService.report("Failed to execute SQL: " + sql, e);
+        }
     }
 
     private List<Map<String, Object>> fetchBatch() {

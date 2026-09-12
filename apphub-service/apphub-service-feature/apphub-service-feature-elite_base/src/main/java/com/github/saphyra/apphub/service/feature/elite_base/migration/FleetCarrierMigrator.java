@@ -3,13 +3,9 @@ package com.github.saphyra.apphub.service.feature.elite_base.migration;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
-import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
-import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
 import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
-import com.github.saphyra.apphub.lib.sql_builder.value.WrappedValue;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdatePartitionCreator;
 import jakarta.annotation.PostConstruct;
@@ -36,7 +32,6 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_FLEET_CARRIER_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.MAX_BATCH_SIZE;
-import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.THREAD_COUNT;
 
 @RequiredArgsConstructor
 @Component
@@ -47,7 +42,6 @@ class FleetCarrierMigrator {
     @SuppressWarnings("unused")
     private final LastUpdatePartitionCreator lastUpdatePartitionCreator;
     private final NamedParameterJdbcTemplate jdbcTemplate;
-    private final ExecutorServiceBean executorServiceBean;
     private final ErrorReporterService errorReporterService;
 
     @PostConstruct
@@ -69,15 +63,23 @@ class FleetCarrierMigrator {
     }
 
     private void delete(List<TriWrapper<String, String, Map<String, Object>>> batch) {
-        List<String> sqls = batch.stream()
-            .map(TriWrapper::getEntity1)
-            .map(id -> SqlBuilder.delete()
-                .from(new QualifiedTable(SCHEMA, TABLE_FLEET_CARRIER))
-                .condition(new Equation(new DefaultColumn(COLUMN_ID), new WrappedValue(id)))
-                .build())
-            .toList();
+        String sql = "DELETE FROM %s.%s WHERE %s = :id".formatted(
+            SCHEMA,
+            TABLE_FLEET_CARRIER,
+            COLUMN_ID
+        );
 
-        executorServiceBean.processCollectionWithWait(sqls, sql -> jdbcTemplate.update(sql, Map.of()), THREAD_COUNT);
+        try {
+            jdbcTemplate.batchUpdate(
+                sql,
+                batch.stream()
+                    .map(TriWrapper::getEntity1)
+                    .map(id -> Map.<String, Object>of("id", id))
+                    .toArray(Map[]::new)
+            );
+        } catch (Exception e) {
+            errorReporterService.report("Failed to execute SQL: " + sql, e);
+        }
     }
 
     private void save(List<TriWrapper<String, String, Map<String, Object>>> batch) {
@@ -93,21 +95,19 @@ class FleetCarrierMigrator {
     }
 
     private void saveEntities(List<Map<String, Object>> entities) {
-        executorServiceBean.processCollectionWithWait(
-            entities,
-            entity -> {
+        if (entities.isEmpty()) {
+            return;
+        }
 
-                String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_FLEET_CARRIER_V2), entity.keySet()).build();
-                try {
-                    jdbcTemplate.update(sql, entity);
-                } catch (Exception e) {
-                    errorReporterService.report("Failed to execute SQL: " + sql, e);
-                }
-
-                return null;
-            },
-            THREAD_COUNT
-        );
+        String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_FLEET_CARRIER_V2), entities.getFirst().keySet()).build();
+        try {
+            jdbcTemplate.batchUpdate(
+                sql,
+                entities.toArray(Map[]::new)
+            );
+        } catch (Exception e) {
+            errorReporterService.report("Failed to execute SQL: " + sql, e);
+        }
     }
 
     private void saveLastUpdates(List<BiWrapper<String, String>> lastUpdates) {
@@ -117,26 +117,20 @@ class FleetCarrierMigrator {
             )
             .build();
 
-        executorServiceBean.processCollectionWithWait(
-            lastUpdates,
-            record -> {
-                try {
-                    jdbcTemplate.update(
-                        sql,
-                        Map.of(
-                            COLUMN_EXTERNAL_REFERENCE, record.getEntity1(),
-                            COLUMN_LAST_UPDATE, record.getEntity2(),
-                            COLUMN_OBJECT_TYPE, ObjectType.FLEET_CARRIER.name()
-                        )
-                    );
-                } catch (Exception e) {
-                    errorReporterService.report("Failed to execute SQL: " + sql, e);
-                }
-
-                return null;
-            },
-            THREAD_COUNT
-        );
+        try {
+            jdbcTemplate.batchUpdate(
+                sql,
+                lastUpdates.stream()
+                    .map(record -> Map.<String, Object>of(
+                        COLUMN_EXTERNAL_REFERENCE, record.getEntity1(),
+                        COLUMN_LAST_UPDATE, record.getEntity2(),
+                        COLUMN_OBJECT_TYPE, ObjectType.FLEET_CARRIER.name()
+                    ))
+                    .toArray(Map[]::new)
+            );
+        } catch (Exception e) {
+            errorReporterService.report("Failed to execute SQL: " + sql, e);
+        }
     }
 
     private List<TriWrapper<String, String, Map<String, Object>>> fetchBatch() {
