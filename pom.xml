@@ -58,6 +58,7 @@
         <versions.jackson-databind>3.0.1</versions.jackson-databind>
         <versions.commons-net>3.12.0</versions.commons-net>
         <versions.jsonwebetoken>0.13.0</versions.jsonwebetoken>
+        <versions.caffeineCache>3.2.4</versions.caffeineCache>
 
         <!-- AWS -->
         <versions.dynamodb>2.44.5</versions.dynamodb>

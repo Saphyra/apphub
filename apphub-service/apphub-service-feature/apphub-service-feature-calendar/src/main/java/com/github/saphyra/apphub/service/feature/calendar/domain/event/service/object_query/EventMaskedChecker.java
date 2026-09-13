@@ -4,12 +4,11 @@ import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 class EventMaskedChecker {
     private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
     private final LabelObjectQueryService labelObjectQueryService;
 
     boolean isMasked_labelAlm(UUID userId, Event event, @Nullable Alm labelAlm, UUID labelId) {
@@ -38,7 +37,7 @@ class EventMaskedChecker {
         if (nonNull(labelAlm)) {
             return !labelAlm.getGrants().contains(Grant.VIEW_CHILDREN)
                 //If Label does not allow viewing the event, check if the event is explicitly shared with view grant
-                && almDao.findForObject(userId, PrincipalType.USER, event.getEventId(), SharedObjectType.EVENT)
+                && almDao.findSharedObject(userId, event.getEventId(), SharedObjectType.EVENT)
                 .filter(eventAlm -> eventAlm.getGrants().contains(Grant.VIEW))
                 .isEmpty();
         }
@@ -64,7 +63,7 @@ class EventMaskedChecker {
                 //Filter labels that allow viewing events
                 .filter(alm -> alm.getGrants().contains(Grant.VIEW_CHILDREN))
                 //Get events for the labels
-                .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
+                .map(alm -> labelEventMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .flatMap(labelEventMapping -> labelEventMapping.getEventIds().keySet().stream())

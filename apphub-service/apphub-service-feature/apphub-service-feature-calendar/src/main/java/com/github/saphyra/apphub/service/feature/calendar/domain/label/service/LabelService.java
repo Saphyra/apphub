@@ -36,6 +36,7 @@ public class LabelService {
     public void deleteLabel(UUID userId, UUID labelId) {
         labelObjectQueryService.findLabel(userId, labelId, Grant.DELETE)
             .ifPresentOrElse(
+                //TODO test case: SharedWith deletes shared label, labelId should be removed from both user's own event
                 label -> commonCalendarDao.deleteLabel(label.getUserId(), label.getLabelId()),
                 () -> {
                     throw ExceptionFactory.notFound("Label %s not found or user %s has no permission to delete it".formatted(labelId, userId));

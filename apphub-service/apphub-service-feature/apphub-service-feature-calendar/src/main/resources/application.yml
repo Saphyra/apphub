@@ -8,3 +8,4 @@ liquibase:
 calendar:
   maxEventDurationDays: 36500 # 100 years
   defaultEventDurationDays: 730 # 2 years
+  cacheExpirationDuration: PT24H

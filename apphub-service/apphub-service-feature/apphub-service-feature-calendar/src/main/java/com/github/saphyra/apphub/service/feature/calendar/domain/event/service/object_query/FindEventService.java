@@ -5,11 +5,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +22,7 @@ import java.util.stream.Collectors;
 class FindEventService {
     private final EventDao eventDao;
     private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
     private final EventMaskedChecker eventMaskedChecker;
 
     /**
@@ -37,7 +36,7 @@ class FindEventService {
         }
 
         //Check if event is shared with the user and user has necessary grants.
-        Optional<Alm> maybeAlm = almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT)
+        Optional<Alm> maybeAlm = almDao.findSharedObject(userId, eventId, SharedObjectType.EVENT)
             .filter(alm -> alm.getGrants().contains(Grant.VIEW) || alm.getGrants().contains(Grant.SEE));
         if (maybeAlm.isPresent()) {
             Alm alm = maybeAlm.get();
@@ -52,7 +51,7 @@ class FindEventService {
             //Filter for label that allows the user viewing its event
             .filter(alm -> alm.getGrants().contains(Grant.VIEW_CHILDREN) || alm.getGrants().contains(Grant.SEE_CHILDREN))
             //Get the events of the shared labels
-            .map(alm -> new BiWrapper<>(alm, eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of())))
+            .map(alm -> new BiWrapper<>(alm, labelEventMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of())))
             //Filter for labels of event
             .filter(bw -> bw.getEntity2().containsKey(eventId))
             //BiWrapper<EventsOwnerId, Masked>

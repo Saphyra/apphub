@@ -7,10 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
-import static java.util.Objects.nonNull;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -18,31 +18,39 @@ import static java.util.Objects.nonNull;
 public class EventLabelMappingDao {
     private final UuidConverter uuidConverter;
     private final EventLabelMappingRepository repository;
-    private final LabelEventMappingConverter labelEventMappingConverter;
     private final EventLabelMappingConverter eventLabelMappingConverter;
+    private final EventLabelMappingCache eventLabelMappingCache;
 
-    public Optional<LabelEventMapping> getEventsOfLabel(UUID userId, UUID labelId) {
-        return labelEventMappingConverter.convertEntity(repository.getEventsOfLabel(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)));
-    }
-
+    /**
+     * @param ids List<BiWrapper<UserId, EventId>></UserId,>
+     */
     public List<EventLabelMapping> getLabelsOfEvents(List<BiWrapper<UUID, UUID>> ids) {
-        List<BiWrapper<String, String>> stringIds = ids.stream()
-            .map(id -> new BiWrapper<>(uuidConverter.convertDomain(id.getEntity1()), uuidConverter.convertDomain(id.getEntity2())))
+        return ids.stream()
+            .map(bw -> getLabelsOfEvent(bw.getEntity1(), bw.getEntity2()))
             .toList();
-
-        return eventLabelMappingConverter.convertEntity(repository.getLabelsOfEvents(stringIds));
     }
 
     public EventLabelMapping getLabelsOfEvent(UUID userId, UUID eventId) {
-        return eventLabelMappingConverter.convertEntity(repository.getLabelsOfEvent(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(eventId)));
+        return Optional.ofNullable(getByUserId(userId).get(eventId))
+            .orElseGet(() -> EventLabelMapping.builder()
+                .userId(userId)
+                .eventId(eventId)
+                .labelIds(Map.of())
+                .build());
     }
 
-    public List<EventLabelMapping> getLabelsOfEventsByUserId(UUID userId) {
-        return eventLabelMappingConverter.convertEntity(repository.getLabelsOfEventsByUserId(uuidConverter.convertDomain(userId)));
+    public Map<UUID, EventLabelMapping> getByUserId(UUID userId) {
+        return eventLabelMappingCache.get(
+            userId,
+            () -> eventLabelMappingConverter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)))
+                .stream()
+                .collect(Collectors.toMap(EventLabelMapping::getEventId, e -> e))
+        );
     }
 
     public void saveLabelsOfEvent(EventLabelMapping mapping) {
         repository.saveLabelsOfEvent(eventLabelMappingConverter.convertDomain(mapping));
+        eventLabelMappingCache.invalidate(mapping.getUserId());
     }
 
     /**
@@ -55,47 +63,26 @@ public class EventLabelMappingDao {
         String userIdString = uuidConverter.convertDomain(userId);
         List<String> eventIdsString = uuidConverter.convertDomain(eventIds);
 
-        repository.deleteLabelsOfEvents(userIdString, uuidConverter.convertDomain(eventIds));
-
-        List<LabelEventMappingEntity> modifiedMappings = repository.getEventsOfLabelsByUserId(userIdString)
-            .stream()
-            .filter(labelEventMapping -> {
-                List<Boolean> removed = eventIdsString.stream()
-                    .map(eventId -> nonNull(labelEventMapping.getEventIds().remove(eventId)))
-                    .toList();
-
-                return removed.stream().anyMatch(Boolean::booleanValue);
-            })
-            .toList();
-        if (!modifiedMappings.isEmpty()) {
-            repository.saveEventsOfLabels(modifiedMappings);
-        }
+        repository.deleteLabelsOfEvents(userIdString, eventIdsString);
+        eventLabelMappingCache.invalidate(userId);
     }
 
     public void deleteByLabelId(UUID userId, UUID labelId) {
-        log.info("Deleting mappings of label {} of user {}.", labelId, userId);
+        log.info("Deleting EventLabelMapping of user {} and label {}.", userId, labelId);
 
-        String userIdString = uuidConverter.convertDomain(userId);
-        String labelIdString = uuidConverter.convertDomain(labelId);
-
-        repository.deleteEventsOfLabel(userIdString, labelIdString);
-
-        List<EventLabelMappingEntity> modifiedMappings = repository.getLabelsOfEventsByUserId(userIdString)
+        List<EventLabelMapping> modifiedMappings = getByUserId(userId)
+            .values()
             .stream()
-            //If item was removed, remove returns the item. If returned item not null, item was removed, so record was modified
-            .filter(bw -> nonNull(bw.getLabelIds().remove(labelIdString)))
+            .filter(bw -> bw.getLabelIds().containsKey(labelId))
+            .map(mapping -> mapping.removeLabelId(labelId))
             .peek(bw -> log.info("Labels mapped to event {} modified. New labels: {}", bw.getEventId(), bw.getLabelIds()))
             .toList();
         if (!modifiedMappings.isEmpty()) {
-            repository.saveLabelsOfEvents(modifiedMappings);
+            modifiedMappings.forEach(this::saveLabelsOfEvent);
         }
     }
 
-    public void saveEventsOfLabel(LabelEventMapping mapping) {
-        repository.saveEventsOfLabels(labelEventMappingConverter.convertDomain(mapping));
-    }
-
-    public void saveEventsOfLabels(List<LabelEventMapping> mappings) {
-        repository.saveEventsOfLabels(labelEventMappingConverter.convertDomain(mappings));
+    public void invalidate(UUID userId) {
+        eventLabelMappingCache.invalidate(userId);
     }
 }

@@ -4,9 +4,9 @@ import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 class GetOccurrencesOfUserServiceHelper {
     private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
     private final OccurrenceDao occurrenceDao;
     private final EventDao eventDao;
     private final LabelObjectQueryService labelObjectQueryService;
@@ -45,23 +45,23 @@ class GetOccurrencesOfUserServiceHelper {
         return labelObjectQueryService.getByUserId(userId)
             .filter(bw -> bw.getEntity2().contains(Grant.VIEW_CHILDREN) || bw.getEntity2().contains(Grant.SEE_CHILDREN))
             .map(BiWrapper::getEntity1)
-            .flatMap(label -> eventLabelMappingDao.getEventsOfLabel(label.getUserId(), label.getLabelId()).map(LabelEventMapping::getEventIds).orElse(Map.of()).keySet().stream())
-            .flatMap(eventId -> occurrenceDao.getByEventId(eventId).stream());
+            .flatMap(label -> labelEventMappingDao.getEventsOfLabel(label.getUserId(), label.getLabelId()).map(LabelEventMapping::getEventIds).orElse(Map.of()).keySet().stream())
+            .flatMap(eventId -> occurrenceDao.getByEventId(eventId).values().stream());
     }
 
     Stream<Occurrence> getSharedLabelOccurrences(UUID userId) {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
             .filter(alm -> alm.getGrants().contains(Grant.VIEW_CHILDREN) || alm.getGrants().contains(Grant.SEE_CHILDREN))
-            .flatMap(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()).keySet().stream())
-            .flatMap(eventId -> occurrenceDao.getByEventId(eventId).stream());
+            .flatMap(alm -> labelEventMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of()).keySet().stream())
+            .flatMap(eventId -> occurrenceDao.getByEventId(eventId).values().stream());
     }
 
     Stream<Occurrence> getSharedEventOccurrences(UUID userId) {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.EVENT)
             .stream()
             .filter(alm -> alm.getGrants().contains(Grant.VIEW_CHILDREN) || alm.getGrants().contains(Grant.SEE_CHILDREN))
-            .flatMap(alm -> occurrenceDao.getByEventId(alm.getObjectId()).stream());
+            .flatMap(alm -> occurrenceDao.getByEventId(alm.getObjectId()).values().stream());
     }
 
     Stream<Occurrence> getSharedOccurrences(UUID userId) {
@@ -73,7 +73,8 @@ class GetOccurrencesOfUserServiceHelper {
 
     Stream<Occurrence> getOwnOccurrences(UUID userId) {
         return eventDao.getByUserId(userId)
+            .values()
             .stream()
-            .flatMap(event -> occurrenceDao.getByEventId(event.getEventId()).stream());
+            .flatMap(event -> occurrenceDao.getByEventId(event.getEventId()).values().stream());
     }
 }

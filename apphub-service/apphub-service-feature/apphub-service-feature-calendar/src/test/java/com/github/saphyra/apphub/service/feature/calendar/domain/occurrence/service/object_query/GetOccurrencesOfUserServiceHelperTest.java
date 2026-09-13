@@ -5,10 +5,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
@@ -43,7 +43,7 @@ class GetOccurrencesOfUserServiceHelperTest {
     private AlmDao almDao;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private LabelEventMappingDao labelEventMappingDao;
 
     @Mock
     private OccurrenceDao occurrenceDao;
@@ -79,9 +79,9 @@ class GetOccurrencesOfUserServiceHelperTest {
         given(alm.getGrants()).willReturn(Set.of(grant));
         given(alm.getOwner()).willReturn(OWNER);
         given(alm.getObjectId()).willReturn(LABEL_ID);
-        given(eventLabelMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
+        given(labelEventMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, OWNER));
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(OCCURRENCE_ID, occurrence));
 
         assertThat(underTest.getSharedLabelOccurrences(USER_ID)).containsExactly(occurrence);
     }
@@ -100,7 +100,7 @@ class GetOccurrencesOfUserServiceHelperTest {
         given(almDao.getByUserIdAndObjectType(USER_ID, SharedObjectType.EVENT)).willReturn(List.of(alm));
         given(alm.getGrants()).willReturn(Set.of(grant));
         given(alm.getObjectId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(OCCURRENCE_ID, occurrence));
 
         assertThat(underTest.getSharedEventOccurrences(USER_ID)).containsExactly(occurrence);
     }
@@ -135,9 +135,9 @@ class GetOccurrencesOfUserServiceHelperTest {
 
     @Test
     void getOwnOccurrences() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, event));
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(event.getEventId())).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(event.getEventId())).willReturn(Map.of(OCCURRENCE_ID, occurrence));
 
         assertThat(underTest.getOwnOccurrences(USER_ID)).containsExactly(occurrence);
     }
@@ -148,9 +148,9 @@ class GetOccurrencesOfUserServiceHelperTest {
         given(labelObjectQueryService.getByUserId(USER_ID)).willReturn(Stream.of(new BiWrapper<>(label, Set.of(grant))));
         given(label.getUserId()).willReturn(OWNER);
         given(label.getLabelId()).willReturn(LABEL_ID);
-        given(eventLabelMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
+        given(labelEventMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, OWNER));
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(OCCURRENCE_ID, occurrence));
 
         assertThat(underTest.getVisibleLabelOccurrences(USER_ID)).containsExactly(occurrence);
     }

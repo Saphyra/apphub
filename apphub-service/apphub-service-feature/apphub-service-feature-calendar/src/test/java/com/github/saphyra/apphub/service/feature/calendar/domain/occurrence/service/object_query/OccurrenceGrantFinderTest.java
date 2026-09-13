@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -56,7 +55,7 @@ class OccurrenceGrantFinderTest {
     void sharedOccurrence() {
         given(occurrenceDao.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).willReturn(occurrence);
         given(occurrence.getUserId()).willReturn(UUID.randomUUID());
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, OCCURRENCE_ID, SharedObjectType.OCCURRENCE)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(USER_ID, OCCURRENCE_ID, SharedObjectType.OCCURRENCE)).willReturn(Optional.of(alm));
         given(alm.getGrants()).willReturn(Set.of(Grant.SEE));
 
         assertThat(underTest.getOccurrenceWithGrants(USER_ID, EVENT_ID, OCCURRENCE_ID))

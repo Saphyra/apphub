@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -56,7 +57,7 @@ class GetOccurrencesOfEventServiceTest {
 
     @Test
     void ownOccurrence() {
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(OCCURRENCE_ID, occurrence));
         given(almDao.getByUserIdAndObjectType(USER_ID, SharedObjectType.OCCURRENCE)).willReturn(List.of());
         given(eventGrantFinder.getEventWithGrants(USER_ID, EVENT_ID)).willReturn(new BiWrapper<>(event, Grant.forType(SharedObjectType.EVENT)));
         given(event.setMasked(false)).willReturn(event);
@@ -70,7 +71,7 @@ class GetOccurrencesOfEventServiceTest {
     @ParameterizedTest
     @MethodSource("sharedOccurrenceProvider")
     void sharedOccurrence(Set<Grant> eventGrants, boolean eventMasked, Set<Grant> occurrenceGrants, boolean occurrenceMasked) {
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(OCCURRENCE_ID, occurrence));
         given(almDao.getByUserIdAndObjectType(SHARED_WITH, SharedObjectType.OCCURRENCE)).willReturn(List.of(alm));
         given(eventGrantFinder.getEventWithGrants(SHARED_WITH, EVENT_ID)).willReturn(new BiWrapper<>(event, eventGrants));
         given(event.setMasked(eventMasked)).willReturn(event);

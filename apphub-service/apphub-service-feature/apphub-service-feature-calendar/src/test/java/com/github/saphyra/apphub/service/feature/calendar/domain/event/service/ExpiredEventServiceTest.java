@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,7 +66,7 @@ class ExpiredEventServiceTest {
 
     @Test
     void getExpiredEvents_expirationNotified() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, event));
         given(event.isExpirationNotified()).willReturn(true);
 
         assertThat(underTest.getExpiredEvents(USER_ID)).isEmpty();
@@ -74,7 +74,7 @@ class ExpiredEventServiceTest {
 
     @Test
     void getExpiredEvents_oneTime() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, event));
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.ONE_TIME);
 
@@ -83,22 +83,22 @@ class ExpiredEventServiceTest {
 
     @Test
     void getExpiredEvents_noOccurrence() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, event));
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of());
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of());
 
         assertThat(underTest.getExpiredEvents(USER_ID)).isEmpty();
     }
 
     @Test
     void getExpiredEvents_notExpired() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, event));
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(UUID.randomUUID(), occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE.plusDays(1));
 
@@ -107,11 +107,11 @@ class ExpiredEventServiceTest {
 
     @Test
     void getExpiredEvents_expired() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, event));
         given(event.isExpirationNotified()).willReturn(false);
         given(event.getRepetitionType()).willReturn(RepetitionType.EVERY_X_DAYS);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(UUID.randomUUID(), occurrence));
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
         given(occurrence.getDate()).willReturn(CURRENT_DATE);
         given(eventResponseMapper.toResponse(USER_ID, event)).willReturn(eventResponse);

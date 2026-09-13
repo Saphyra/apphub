@@ -5,7 +5,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.feature.calendar.config.CalendarParams;
+import com.github.saphyra.apphub.service.feature.calendar.config.CalendarProperties;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import static java.util.Objects.isNull;
 @Slf4j
 class EventRequestValidator {
     private final ObjectMapper objectMapper;
-    private final CalendarParams calendarParams;
+    private final CalendarProperties calendarProperties;
     private final LabelDao labelDao;
 
     public void validateEdit(EventRequest request) {
@@ -47,7 +47,7 @@ class EventRequestValidator {
 
         if (request.getRepetitionType() != RepetitionType.ONE_TIME) {
             if (isNull(request.getEndDate())) {
-                request.setEndDate(request.getStartDate().plusDays(calendarParams.getMaxEventDurationDays()));
+                request.setEndDate(request.getStartDate().plusDays(calendarProperties.getMaxEventDurationDays()));
             }
             validateDates(request.getStartDate(), request.getEndDate());
         }
@@ -73,7 +73,7 @@ class EventRequestValidator {
         if (startDate.isAfter(endDate)) {
             throw ExceptionFactory.invalidParam("startDate", "startDate cannot be after endDate");
         }
-        if (ChronoUnit.DAYS.between(startDate, endDate) > calendarParams.getMaxEventDurationDays()) {
+        if (ChronoUnit.DAYS.between(startDate, endDate) > calendarProperties.getMaxEventDurationDays()) {
             throw ExceptionFactory.invalidParam("eventDuration", "too long");
         }
     }

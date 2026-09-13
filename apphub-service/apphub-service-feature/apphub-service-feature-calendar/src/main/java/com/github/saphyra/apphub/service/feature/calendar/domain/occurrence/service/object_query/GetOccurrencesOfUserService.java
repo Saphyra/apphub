@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -52,7 +51,7 @@ class GetOccurrencesOfUserService {
                                 //Own occurrence
                                 && !occurrence.getUserId().equals(userId)
                                 //Shared occurrence allows viewing
-                                && almDao.findForObject(userId, PrincipalType.USER, occurrence.getOccurrenceId(), SharedObjectType.OCCURRENCE).filter(alm -> alm.getGrants().contains(Grant.VIEW)).isEmpty()
+                                && almDao.findSharedObject(userId, occurrence.getOccurrenceId(), SharedObjectType.OCCURRENCE).filter(alm -> alm.getGrants().contains(Grant.VIEW)).isEmpty()
                         ) {
                             log.info("User {} does not have VIEW grant for occurrence {}, masking occurrence", userId, occurrence.getOccurrenceId());
                             occurrence.setMasked(true);

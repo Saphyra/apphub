@@ -22,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -70,7 +70,7 @@ class SharedObjectQueryServiceTest {
         SharedObject sharedObject = new SharedObject(EVENT_ID, USER_ID, USER_ID, TITLE);
         given(sharedObjectService.getSharedObject(USER_ID, EVENT_ID, USER_ID)).willReturn(Optional.of(sharedObject));
 
-        given(almDao.getByObject(EVENT_ID, SharedObjectType.EVENT)).willReturn(List.of(alm));
+        given(almDao.getByObjectId(EVENT_ID, SharedObjectType.EVENT)).willReturn(Map.of(USER_ID, alm));
         given(alm.getPrincipal()).willReturn(SHARED_WITH);
         given(accountClient.getAccountInternal(SHARED_WITH)).willReturn(accountResponse);
         given(accountResponse.getUserId()).willReturn(SHARED_WITH);

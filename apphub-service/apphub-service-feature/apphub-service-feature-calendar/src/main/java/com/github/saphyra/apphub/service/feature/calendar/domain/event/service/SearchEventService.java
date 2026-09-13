@@ -24,7 +24,8 @@ public class SearchEventService {
     public List<EventResponse> search(UUID userId, String search) {
         ValidationUtil.minLength(search, 3, "searchText");
 
-        List<Event> events =  eventDao.getByUserId(userId)
+        List<Event> events = eventDao.getByUserId(userId)
+            .values()
             .stream()
             .filter(event -> eventMatches(event, search) || occurrenceMatches(event.getEventId(), search))
             .toList();
@@ -32,8 +33,9 @@ public class SearchEventService {
         return eventResponseMapper.toResponse(userId, events);
     }
 
-    private boolean occurrenceMatches( UUID eventId, String search) {
+    private boolean occurrenceMatches(UUID eventId, String search) {
         return occurrenceDao.getByEventId(eventId)
+            .values()
             .stream()
             .anyMatch(occurrence -> occurrenceMatches(occurrence, search));
     }

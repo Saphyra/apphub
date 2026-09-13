@@ -4,12 +4,11 @@ import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +36,7 @@ class EventMaskedCheckerTest {
     private AlmDao almDao;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private LabelEventMappingDao labelEventMappingDao;
 
     @Mock
     private LabelObjectQueryService labelObjectQueryService;
@@ -98,7 +97,7 @@ class EventMaskedCheckerTest {
         given(event.getUserId()).willReturn(USER_ID);
         given(alm1.getGrants()).willReturn(Set.of());
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
         given(alm2.getGrants()).willReturn(Set.of(Grant.VIEW));
 
         assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1, LABEL_ID)).isFalse();
@@ -109,7 +108,7 @@ class EventMaskedCheckerTest {
         given(event.getUserId()).willReturn(USER_ID);
         given(alm1.getGrants()).willReturn(Set.of());
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
         given(alm2.getGrants()).willReturn(Set.of(Grant.SEE));
 
         assertThat(underTest.isMasked_labelAlm(SHARED_WITH, event, alm1, LABEL_ID)).isTrue();
@@ -129,7 +128,7 @@ class EventMaskedCheckerTest {
         given(alm2.getGrants()).willReturn(Set.of(Grant.VIEW_CHILDREN));
         given(alm2.getOwner()).willReturn(USER_ID);
         given(alm2.getObjectId()).willReturn(LABEL_ID);
-        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
+        given(labelEventMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, USER_ID));
         given(event.getEventId()).willReturn(EVENT_ID);
 

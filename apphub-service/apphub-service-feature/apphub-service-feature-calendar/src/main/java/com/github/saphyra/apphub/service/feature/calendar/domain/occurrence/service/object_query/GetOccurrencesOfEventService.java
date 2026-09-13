@@ -42,6 +42,7 @@ class GetOccurrencesOfEventService {
             .setMasked(!eventWithGrants.getEntity2().contains(Grant.VIEW));
 
         List<Occurrence> occurrences = occurrenceDao.getByEventId(eventId)
+            .values()
             .stream()
             .filter(occurrence ->
                 occurrence.getUserId().equals(userId) //Own occurrence

@@ -20,7 +20,8 @@ class GetLabellessEventsService {
     private final AlmDao almDao;
 
     Stream<Event> getLabellessEvents(UUID userId) {
-        Stream<Event> ownEvents = eventLabelMappingDao.getLabelsOfEventsByUserId(userId)
+        Stream<Event> ownEvents = eventLabelMappingDao.getByUserId(userId)
+            .values()
             .stream()
             .filter(eventLabelMapping -> eventLabelMapping.getLabelIds().isEmpty())
             .map(eventLabelMapping -> eventDao.findByIdValidated(userId, eventLabelMapping.getEventId()));

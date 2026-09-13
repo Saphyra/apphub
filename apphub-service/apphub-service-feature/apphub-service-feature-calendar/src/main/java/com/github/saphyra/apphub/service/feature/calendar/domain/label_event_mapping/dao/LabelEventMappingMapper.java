@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao;
+package com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao;
 
 import com.github.saphyra.apphub.lib.common_util.collection.StringStringMap;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;

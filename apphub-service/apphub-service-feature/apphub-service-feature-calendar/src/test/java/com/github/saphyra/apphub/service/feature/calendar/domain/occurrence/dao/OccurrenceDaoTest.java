@@ -5,15 +5,19 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -37,6 +41,9 @@ class OccurrenceDaoTest {
     @Mock
     private OccurrenceRepository repository;
 
+    @Mock
+    private OccurrenceCache occurrenceCache;
+
     @InjectMocks
     private OccurrenceDao underTest;
 
@@ -47,57 +54,62 @@ class OccurrenceDaoTest {
     private OccurrenceEntity entity;
     @Test
     void save() {
+        given(occurrence.getEventId()).willReturn(EVENT_ID);
         given(converter.convertDomain(occurrence)).willReturn(entity);
 
         underTest.save(occurrence);
 
         then(repository).should().save(entity);
+        then(occurrenceCache).should().invalidate(EVENT_ID);
     }
 
     @Test
     void getByEventId() {
+        given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
+        given(occurrenceCache.get(eq(EVENT_ID), any())).willReturn(Map.of(OCCURRENCE_ID, occurrence));
+
         given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
         given(repository.getByEventId(EVENT_ID_STRING)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(occurrence));
 
-        assertThat(underTest.getByEventId(EVENT_ID)).containsExactly(occurrence);
+        assertThat(underTest.getByEventId(EVENT_ID)).containsEntry(OCCURRENCE_ID, occurrence);
+        ArgumentCaptor<Supplier<Map<UUID, Occurrence>>> argumentCaptor = ArgumentCaptor.forClass(Supplier.class);
+        then(occurrenceCache).should().get(eq(EVENT_ID), argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().get()).containsEntry(OCCURRENCE_ID, occurrence);
     }
 
     @Test
-    void delete_partitionsOccurrenceIds() {
+    void delete_multiple() {
         given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
         given(uuidConverter.convertDomain(List.of(OCCURRENCE_ID))).willReturn(List.of(OCCURRENCE_ID_STRING));
 
         underTest.delete(EVENT_ID, List.of(OCCURRENCE_ID));
 
         then(repository).should().delete(EVENT_ID_STRING, List.of(OCCURRENCE_ID_STRING));
+        then(occurrenceCache).should().invalidate(EVENT_ID);
     }
 
     @Test
-    void save_partitionsOccurrences() {
+    void save_multiple() {
         given(converter.convertDomain(List.of(occurrence))).willReturn(List.of(entity));
+        given(occurrence.getEventId()).willReturn(EVENT_ID);
 
         underTest.save(List.of(occurrence));
 
         then(repository).should().save(List.of(entity));
+        then(occurrenceCache).should().invalidate(EVENT_ID);
     }
 
     @Test
     void findByIdValidated_notFound() {
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
-        given(uuidConverter.convertDomain(OCCURRENCE_ID)).willReturn(OCCURRENCE_ID_STRING);
-        given(repository.findById(EVENT_ID_STRING, OCCURRENCE_ID_STRING)).willReturn(Optional.empty());
-        given(converter.convertEntity(Optional.empty())).willReturn(Optional.empty());
+        given(occurrenceCache.get(eq(EVENT_ID), any())).willReturn(Map.of());
 
         ExceptionValidator.validateNotFoundException(() -> underTest.findByIdValidated(EVENT_ID, OCCURRENCE_ID));
     }
 
     @Test
     void findByIdValidated() {
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
-        given(uuidConverter.convertDomain(OCCURRENCE_ID)).willReturn(OCCURRENCE_ID_STRING);
-        given(repository.findById(EVENT_ID_STRING, OCCURRENCE_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(occurrence));
+        given(occurrenceCache.get(eq(EVENT_ID), any())).willReturn(Map.of(OCCURRENCE_ID, occurrence));
 
         assertThat(underTest.findByIdValidated(EVENT_ID, OCCURRENCE_ID)).isEqualTo(occurrence);
     }
@@ -121,6 +133,7 @@ class OccurrenceDaoTest {
         underTest.delete(List.of(occurrence));
 
         then(repository).should().delete(List.of(new BiWrapper<>(EVENT_ID_STRING, OCCURRENCE_ID_STRING)));
+        then(occurrenceCache).should().invalidate(EVENT_ID);
     }
 
     @Test
@@ -132,5 +145,6 @@ class OccurrenceDaoTest {
         underTest.deleteByEventId(EVENT_ID);
 
         then(repository).should().delete(EVENT_ID_STRING, List.of(OCCURRENCE_ID_STRING));
+        then(occurrenceCache).should().invalidate(EVENT_ID);
     }
 }

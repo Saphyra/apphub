@@ -8,8 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -18,13 +20,20 @@ public class LabelDao {
     private final UuidConverter uuidConverter;
     private final LabelConverter converter;
     private final LabelRepository repository;
+    private final LabelCache labelCache;
 
     public List<Label> getByLabelIds(UUID userId, List<UUID> labelIds) {
-        return converter.convertEntity(repository.getByLabelIds(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelIds)));
+        return getByUserId(userId)
+            .entrySet()
+            .stream()
+            .filter(entry -> labelIds.contains(entry.getKey()))
+            .map(Map.Entry::getValue)
+            .toList();
     }
 
     public void save(Label label) {
         repository.save(converter.convertDomain(label));
+        labelCache.invalidate(label.getUserId());
     }
 
     public Label findByIdValidated(UUID userId, UUID labelId) {
@@ -33,23 +42,31 @@ public class LabelDao {
     }
 
     public Optional<Label> findById(UUID userId, UUID labelId) {
-        return converter.convertEntity(repository.findById(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId)));
+        return Optional.ofNullable(getByUserId(userId).get(labelId));
     }
 
-    public List<Label> getByUserId(UUID userId) {
-        return converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)));
+    public Map<UUID, Label> getByUserId(UUID userId) {
+        return labelCache.get(
+            userId,
+            () -> converter.convertEntity(repository.getByUserId(uuidConverter.convertDomain(userId)))
+                .stream()
+                .collect(Collectors.toMap(Label::getLabelId, e -> e))
+        );
     }
 
     public void delete(UUID userId, UUID labelId) {
         log.info("Deleting label {} of user {}.", labelId, userId);
         repository.delete(uuidConverter.convertDomain(userId), uuidConverter.convertDomain(labelId));
+        labelCache.invalidate(userId);
     }
 
     public List<Label> getByIds(List<BiWrapper<UUID, UUID>> labelIds) {
-        List<BiWrapper<String, String>> ids = labelIds.stream()
-            .map(labelId -> new BiWrapper<>(uuidConverter.convertDomain(labelId.getEntity1()), uuidConverter.convertDomain(labelId.getEntity2())))
+        return labelIds.stream()
+            .flatMap(labelId -> findById(labelId.getEntity1(), labelId.getEntity2()).stream())
             .toList();
+    }
 
-        return converter.convertEntity(repository.getByIds(ids));
+    public void invalidate(UUID userId) {
+        labelCache.invalidate(userId);
     }
 }

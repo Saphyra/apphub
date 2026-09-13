@@ -9,7 +9,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -68,7 +67,7 @@ class LabelObjectQueryServiceTest {
     void getLabelsOfEvent() {
         given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID)).willReturn(eventLabelMapping);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(OWN_LABEL_ID, USER_ID, SHARED_LABEL_ID, OTHER_USER_ID));
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, SHARED_LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(USER_ID, SHARED_LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm));
         given(alm.getGrants()).willReturn(Set.of(Grant.VIEW));
         given(labelDao.getByIds(anyList())).willReturn(List.of(ownLabel, sharedLabel));
 
@@ -88,7 +87,7 @@ class LabelObjectQueryServiceTest {
     @Test
     void findLabel_shared() {
         given(labelDao.findById(USER_ID, SHARED_LABEL_ID)).willReturn(Optional.empty());
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, SHARED_LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(USER_ID, SHARED_LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm));
         given(alm.getGrants()).willReturn(Set.of(Grant.VIEW));
         given(alm.getOwner()).willReturn(OTHER_USER_ID);
         given(alm.getObjectId()).willReturn(SHARED_LABEL_ID);
@@ -100,7 +99,7 @@ class LabelObjectQueryServiceTest {
     @Test
     void findLabel_shared_noGrant() {
         given(labelDao.findById(USER_ID, SHARED_LABEL_ID)).willReturn(Optional.empty());
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, SHARED_LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(USER_ID, SHARED_LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm));
         given(alm.getGrants()).willReturn(Set.of());
 
         assertThat(underTest.findLabel(USER_ID, SHARED_LABEL_ID, Grant.VIEW)).isEmpty();
@@ -108,7 +107,7 @@ class LabelObjectQueryServiceTest {
 
     @Test
     void getByUserId(){
-        given(labelDao.getByUserId(USER_ID)).willReturn(List.of(ownLabel));
+        given(labelDao.getByUserId(USER_ID)).willReturn(Map.of(OWN_LABEL_ID, ownLabel));
         given(almDao.getByUserIdAndObjectType(USER_ID, SharedObjectType.LABEL)).willReturn(List.of(alm));
         given(alm.getOwner()).willReturn(OTHER_USER_ID);
         given(alm.getObjectId()).willReturn(SHARED_LABEL_ID);

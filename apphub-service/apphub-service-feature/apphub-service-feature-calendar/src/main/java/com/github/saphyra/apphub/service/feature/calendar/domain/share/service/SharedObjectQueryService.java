@@ -38,7 +38,7 @@ public class SharedObjectQueryService {
     }
 
     private List<SharedWithResponse> getSharedWith(UUID id, SharedObjectType objectType) {
-        return executorServiceBean.processCollectionWithWait(almDao.getByObject(id, objectType), this::mapAlm);
+        return executorServiceBean.processCollectionWithWait(almDao.getByObjectId(id, objectType).values(), this::mapAlm);
     }
 
     private SharedWithResponse mapAlm(Alm alm) {

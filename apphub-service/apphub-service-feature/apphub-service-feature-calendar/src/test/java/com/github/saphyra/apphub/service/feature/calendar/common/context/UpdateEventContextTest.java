@@ -58,7 +58,7 @@ class UpdateEventContextTest {
     void setUp(){
         given(event.getEventId()).willReturn(EVENT_ID);
         given(commonCalendarDao.getOccurrenceDao()).willReturn(occurrenceDao);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(deletedOccurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(DELETED_OCCURRENCE_ID, deletedOccurrence));
         given(deletedOccurrence.getOccurrenceId()).willReturn(DELETED_OCCURRENCE_ID);
         given(modifiedOccurrence.getOccurrenceId()).willReturn(MODIFIED_OCCURRENCE_ID);
 

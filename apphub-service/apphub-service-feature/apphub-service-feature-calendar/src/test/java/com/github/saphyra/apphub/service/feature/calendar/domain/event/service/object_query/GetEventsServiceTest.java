@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.api.feature.calendar.model.Grant;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class GetEventsServiceTest {
     private AlmDao almDao;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private LabelEventMappingDao labelEventMappingDao;
 
     @InjectMocks
     private GetEventsService underTest;
@@ -59,7 +59,7 @@ class GetEventsServiceTest {
 
     @Test
     void getEvents() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(ownEvent));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID, ownEvent));
         given(ownEvent.setMasked(false)).willReturn(ownEvent);
 
         given(almDao.getByUserIdAndObjectType(USER_ID, SharedObjectType.EVENT)).willReturn(List.of(eventAlm));
@@ -71,7 +71,7 @@ class GetEventsServiceTest {
         given(almDao.getByUserIdAndObjectType(USER_ID, SharedObjectType.LABEL)).willReturn(List.of(labelAlm));
         given(labelAlm.getOwner()).willReturn(OWNER);
         given(labelAlm.getObjectId()).willReturn(LABEL_ID);
-        given(eventLabelMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
+        given(labelEventMappingDao.getEventsOfLabel(OWNER, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, OWNER));
         given(sharedEvent.getUserId()).willReturn(OWNER);
         given(labelAlm.getGrants()).willReturn(Set.of(Grant.VIEW_CHILDREN));

@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.share.service;
 import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +34,7 @@ class UnshareObjectServiceTest {
 
     @Test
     void unshareOwnAlm() {
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(SHARED_WITH, OBJECT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm));
         given(alm.getOwner()).willReturn(USER_ID);
 
         underTest.unshareObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID);
@@ -45,7 +44,7 @@ class UnshareObjectServiceTest {
 
     @Test
     void unshareOthersAlm() {
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(SHARED_WITH, OBJECT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm));
         given(alm.getOwner()).willReturn(UUID.randomUUID());
 
         underTest.unshareObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID);

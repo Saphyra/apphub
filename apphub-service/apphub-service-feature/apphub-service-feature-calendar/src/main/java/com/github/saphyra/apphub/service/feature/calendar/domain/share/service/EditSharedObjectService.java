@@ -22,7 +22,7 @@ public class EditSharedObjectService {
         ValidationUtil.doesNotContainNull(grants, "grants");
         ValidationUtil.notEmpty(grants, "grants");
 
-        Alm alm = almDao.findForObjectValidated(sharedWith, PrincipalType.USER, objectId, type);
+        Alm alm = almDao.findSharedObjectValidated(sharedWith, PrincipalType.USER, objectId, type);
 
         if (!alm.getOwner().equals(userId)) {
             throw ExceptionFactory.forbiddenOperation(userId + " must not edit Alm");

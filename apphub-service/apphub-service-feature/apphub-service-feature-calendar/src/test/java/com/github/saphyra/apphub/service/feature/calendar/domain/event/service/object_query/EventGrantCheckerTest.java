@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_map
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -62,7 +61,7 @@ class EventGrantCheckerTest {
     void sharedEventContainsAllGrants() {
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm1));
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm1));
         given(alm1.getGrants()).willReturn(Set.of(Grant.DELETE));
 
         assertThat(underTest.hasGrants(SHARED_WITH, event, List.of(Grant.DELETE))).isTrue();
@@ -72,10 +71,10 @@ class EventGrantCheckerTest {
     void sharedLabelContainsAllGrants() {
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
         given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID)).willReturn(eventLabelMapping);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(LABEL_ID, USER_ID));
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm1));
+        given(almDao.findSharedObject(SHARED_WITH, LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm1));
         given(alm1.getGrants()).willReturn(Set.of(Grant.DELETE_CHILDREN));
 
         assertThat(underTest.hasGrants(SHARED_WITH, event, List.of(Grant.DELETE))).isTrue();
@@ -85,10 +84,10 @@ class EventGrantCheckerTest {
     void requiredGrantMissing() {
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
         given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID)).willReturn(eventLabelMapping);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(LABEL_ID, USER_ID));
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm1));
+        given(almDao.findSharedObject(SHARED_WITH, LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm1));
         given(alm1.getGrants()).willReturn(Set.of(Grant.DELETE_CHILDREN));
 
         assertThat(underTest.hasGrants(SHARED_WITH, event, List.of(Grant.DELETE, Grant.VIEW))).isFalse();
@@ -98,11 +97,11 @@ class EventGrantCheckerTest {
     void legoGrants() {
         given(event.getUserId()).willReturn(USER_ID);
         given(event.getEventId()).willReturn(EVENT_ID);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(alm2));
         given(alm2.getGrants()).willReturn(Set.of(Grant.VIEW));
         given(eventLabelMappingDao.getLabelsOfEvent(USER_ID, EVENT_ID)).willReturn(eventLabelMapping);
         given(eventLabelMapping.getLabelIds()).willReturn(Map.of(LABEL_ID, USER_ID));
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm1));
+        given(almDao.findSharedObject(SHARED_WITH, LABEL_ID, SharedObjectType.LABEL)).willReturn(Optional.of(alm1));
         given(alm1.getGrants()).willReturn(Set.of(Grant.DELETE_CHILDREN));
 
         assertThat(underTest.hasGrants(SHARED_WITH, event, List.of(Grant.DELETE, Grant.VIEW))).isTrue();

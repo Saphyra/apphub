@@ -8,7 +8,6 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectServiceProvider;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -57,7 +56,7 @@ class ShareObjectRequestValidatorTest {
 
         given(sharedObjectServiceProvider.getForType(TYPE)).willReturn(sharedObjectService);
         given(sharedObjectService.exists(PARENT, OBJECT_ID)).willReturn(true);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, OBJECT_ID, TYPE)).willReturn(Optional.empty());
+        given(almDao.findSharedObject(SHARED_WITH, OBJECT_ID, TYPE)).willReturn(Optional.empty());
         given(accountClient.userExists(SHARED_WITH)).willReturn(true);
 
         underTest.validate(USER_ID, request);
@@ -151,7 +150,7 @@ class ShareObjectRequestValidatorTest {
         given(accountClient.userExists(SHARED_WITH)).willReturn(true);
         given(sharedObjectServiceProvider.getForType(TYPE)).willReturn(sharedObjectService);
         given(sharedObjectService.exists(PARENT, OBJECT_ID)).willReturn(true);
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, OBJECT_ID, TYPE)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(SHARED_WITH, OBJECT_ID, TYPE)).willReturn(Optional.of(alm));
 
         ExceptionValidator.validateNotLoggedException(() -> underTest.validate(USER_ID, request), HttpStatus.BAD_REQUEST, ErrorCode.ALREADY_EXISTS);
     }

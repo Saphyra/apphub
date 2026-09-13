@@ -19,13 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EVENT_IDS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_LABEL_IDS;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_SK;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.MIGRATION;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_EVENT_LABEL_MAPPING;
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_LABEL_EVENT_MAPPING;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.PREFIX_USER;
 
 @Component
@@ -33,7 +31,6 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Profile("!test")
 class EventLabelMappingMigrator extends DynamoDbRepository {
     private static final String EVENT_LABEL_MAPPING_ADD_UID_TO_LABEL_IDS = "event_label_mapping-add_uid_to_label_ids";
-    private static final String LABEL_EVENT_MAPPING_ADD_UID_TO_LABEL_IDS = "label_event_mapping-add_uid_to_label_ids";
 
     private final ObjectMapper objectMapper;
     private final ErrorReporterService errorReporterService;
@@ -88,57 +85,6 @@ class EventLabelMappingMigrator extends DynamoDbRepository {
             log.info("{} EventLabelMappings migrated.", result.size());
         } catch (Exception e) {
             errorReporterService.report("Failed migrating EventLabelMappings", e);
-        }
-
-        putItem(lock, MonitoringFunctionality.UNMONITORED);
-    }
-
-    @PostConstruct
-    void migrateLabelEventMapping() {
-        Map<String, AttributeValue> lock = Map.of(
-            COLUMN_PK, AttributeValue.builder().s(MIGRATION).build(),
-            COLUMN_SK, AttributeValue.builder().s(LABEL_EVENT_MAPPING_ADD_UID_TO_LABEL_IDS).build()
-        );
-        if (getItem(lock, MonitoringFunctionality.UNMONITORED).isPresent()) {
-            log.info("LabelEventMapping migration already performed.");
-            return;
-        }
-
-        try {
-
-            log.info("Migrating LabelEventMappings...");
-
-            ScanRequest request = ScanRequest.builder()
-                .filterExpression("begins_with(#sk, :sk)")
-                .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
-                .expressionAttributeValues(Map.of(":sk", AttributeValue.builder().s(PREFIX_LABEL_EVENT_MAPPING).build()))
-                .build();
-
-            List<Map<String, AttributeValue>> result = scan(request, MonitoringFunctionality.UNMONITORED);
-
-            List<WriteRequest> writeRequests = result.stream()
-                .map(item -> {
-                    Map<String, AttributeValue> copy = new HashMap<>(item);
-
-                    List<String> eventIds = objectMapper.readValue(item.get(COLUMN_EVENT_IDS).s(), List.class);
-                    String userId = item.get(COLUMN_PK).s().substring(PREFIX_USER.length());
-
-                    Map<String, String> newEventIds = eventIds.stream()
-                        .collect(Collectors.toMap(labelId -> labelId, _ -> userId));
-                    copy.put(COLUMN_EVENT_IDS, AttributeValue.builder().s(objectMapper.writeValueAsString(newEventIds)).build());
-
-                    return copy;
-                })
-                .map(item -> WriteRequest.builder()
-                    .putRequest(builder -> builder.item(item))
-                    .build())
-                .toList();
-            batchWrite(writeRequests, MonitoringFunctionality.UNMONITORED);
-
-            log.info("{} LabelEventMappings migrated.", result.size());
-
-        } catch (Exception e) {
-            errorReporterService.report("Failed migrating LabelEventMappings", e);
         }
 
         putItem(lock, MonitoringFunctionality.UNMONITORED);

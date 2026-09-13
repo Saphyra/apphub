@@ -36,6 +36,7 @@ public class MergeEventService {
         List<Occurrence> modifiedOccurrences = new ArrayList<>();
         List<UUID> deletedEventIds = new ArrayList<>();
         eventDao.getByUserId(parent.getUserId())
+            .values()
             .stream()
             .filter(event -> !event.getEventId().equals(eventId))
             .filter(event -> event.getRepetitionType() == RepetitionType.ONE_TIME)
@@ -49,7 +50,7 @@ public class MergeEventService {
 
     private void merge(Event originalEvent, UUID newEventId, List<Occurrence> modifiedOccurrences, List<Occurrence> occurrencesToDelete, List<UUID> deletedEventIds) {
         occurrenceDao.getByEventId(originalEvent.getEventId())
-            .forEach(occurrence -> merge(originalEvent, newEventId, occurrence, modifiedOccurrences, occurrencesToDelete));
+            .forEach((_, occurrence) -> merge(originalEvent, newEventId, occurrence, modifiedOccurrences, occurrencesToDelete));
 
         deletedEventIds.add(originalEvent.getEventId());
     }

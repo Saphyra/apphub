@@ -58,7 +58,7 @@ class GetLabellessEventsServiceTest {
 
     @Test
     void getLabellessEvents() {
-        given(eventLabelMappingDao.getLabelsOfEventsByUserId(USER_ID)).willReturn(List.of(ownMapping));
+        given(eventLabelMappingDao.getByUserId(USER_ID)).willReturn(Map.of(OWN_EVENT_ID, ownMapping));
         given(ownMapping.getLabelIds()).willReturn(Map.of());
         given(ownMapping.getEventId()).willReturn(OWN_EVENT_ID);
         given(eventDao.findByIdValidated(USER_ID, OWN_EVENT_ID)).willReturn(ownEvent);

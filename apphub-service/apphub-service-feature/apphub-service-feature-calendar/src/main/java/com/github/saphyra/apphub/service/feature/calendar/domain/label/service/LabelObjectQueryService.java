@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_map
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -35,7 +34,7 @@ public class LabelObjectQueryService {
             .stream()
             .map(e -> new BiWrapper<>(e.getValue(), e.getKey()))
             //Filter for visible labels
-            .filter(bw -> bw.getEntity1().equals(userId) || almDao.findForObject(userId, PrincipalType.USER, bw.getEntity2(), SharedObjectType.LABEL).filter(alm -> alm.getGrants().contains(Grant.VIEW)).isPresent())
+            .filter(bw -> bw.getEntity1().equals(userId) || almDao.findSharedObject(userId, bw.getEntity2(), SharedObjectType.LABEL).filter(alm -> alm.getGrants().contains(Grant.VIEW)).isPresent())
             .toList();
 
         return labelDao.getByIds(labelIds);
@@ -43,7 +42,9 @@ public class LabelObjectQueryService {
 
     public Stream<BiWrapper<Label, Set<Grant>>> getByUserId(UUID userId) {
         return Stream.concat(
-            labelDao.getByUserId(userId).stream()
+            labelDao.getByUserId(userId)
+                .values()
+                .stream()
                 .map(label -> new BiWrapper<>(label, Grant.forType(SharedObjectType.LABEL))),
             almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
                 .stream()
@@ -57,7 +58,7 @@ public class LabelObjectQueryService {
     public Optional<BiWrapper<Label, Set<Grant>>> findLabel(UUID userId, UUID labelId) {
         return labelDao.findById(userId, labelId)
             .map(label -> new BiWrapper<>(label, Grant.forType(SharedObjectType.LABEL)))
-            .or(() -> almDao.findForObject(userId, PrincipalType.USER, labelId, SharedObjectType.LABEL)
+            .or(() -> almDao.findSharedObject(userId, labelId, SharedObjectType.LABEL)
                 .map(alm -> new BiWrapper<>(labelDao.findByIdValidated(alm.getOwner(), alm.getObjectId()), alm.getGrants())));
     }
 

@@ -41,7 +41,7 @@ public class UpdateEventContext {
         this.event = event;
         this.commonCalendarDao = commonCalendarDao;
         this.recreateOccurrenceService = recreateOccurrenceService;
-        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(commonCalendarDao.getOccurrenceDao().getByEventId(event.getEventId())));
+        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(commonCalendarDao.getOccurrenceDao().getByEventId(event.getEventId()).values()));
     }
 
     public List<Occurrence> getOccurrences() {

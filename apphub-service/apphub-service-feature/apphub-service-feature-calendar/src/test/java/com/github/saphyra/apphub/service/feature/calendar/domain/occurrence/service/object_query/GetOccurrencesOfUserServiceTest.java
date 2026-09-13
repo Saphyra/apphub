@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -80,7 +79,7 @@ class GetOccurrencesOfUserServiceTest {
         given(eventGrantFinder.getEventWithGrants(USER_ID, EVENT_ID)).willReturn(new BiWrapper<>(event, Set.of(Grant.SEE)));
         given(occurrence.getUserId()).willReturn(UUID.randomUUID());
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, OCCURRENCE_ID, SharedObjectType.OCCURRENCE)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(USER_ID, OCCURRENCE_ID, SharedObjectType.OCCURRENCE)).willReturn(Optional.of(alm));
         given(alm.getGrants()).willReturn(Set.of(Grant.VIEW));
 
         assertThat(underTest.getOccurrences(USER_ID)).containsEntry(event, List.of(occurrence));
@@ -93,7 +92,7 @@ class GetOccurrencesOfUserServiceTest {
         given(eventGrantFinder.getEventWithGrants(USER_ID, EVENT_ID)).willReturn(new BiWrapper<>(event, Set.of(Grant.SEE)));
         given(occurrence.getUserId()).willReturn(UUID.randomUUID());
         given(occurrence.getOccurrenceId()).willReturn(OCCURRENCE_ID);
-        given(almDao.findForObject(USER_ID, PrincipalType.USER, OCCURRENCE_ID, SharedObjectType.OCCURRENCE)).willReturn(Optional.of(alm));
+        given(almDao.findSharedObject(USER_ID, OCCURRENCE_ID, SharedObjectType.OCCURRENCE)).willReturn(Optional.of(alm));
         given(alm.getGrants()).willReturn(Set.of(Grant.SEE));
 
         assertThat(underTest.getOccurrences(USER_ID)).containsEntry(event, List.of(occurrence));

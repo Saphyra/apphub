@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -23,11 +23,12 @@ import java.util.stream.Stream;
 class GetEventsService {
     private final EventDao eventDao;
     private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
 
     List<Event> getEvents(UUID userId) {
         //Query own events
         List<BiWrapper<Event, Boolean>> ownEvents = eventDao.getByUserId(userId)
+            .values()
             .stream()
             .map(event -> new BiWrapper<>(event, false))
             .toList();
@@ -43,7 +44,7 @@ class GetEventsService {
         List<BiWrapper<Event, Boolean>> eventsOfSharedLabels = almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
             .filter(alm -> alm.getGrants().contains(Grant.SEE_CHILDREN) || alm.getGrants().contains(Grant.VIEW_CHILDREN))
-            .flatMap(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId())
+            .flatMap(alm -> labelEventMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId())
                 .map(LabelEventMapping::getEventIds)
                 .orElse(Map.of())
                 .entrySet()

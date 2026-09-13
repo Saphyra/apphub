@@ -32,6 +32,7 @@ import software.amazon.awssdk.services.dynamodb.model.ResourceNotFoundException;
 import software.amazon.awssdk.services.dynamodb.model.ScalarAttributeType;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -133,7 +134,7 @@ class AlmRepository extends DynamoDbRepository {
             .toList();
     }
 
-    void delete(List<Alm> alms) {
+    void delete(Collection<Alm> alms) {
         List<WriteRequest> requests = alms.stream()
             .map(almMapper::convertDomain)
             .map(item -> WriteRequest.builder()
@@ -149,7 +150,7 @@ class AlmRepository extends DynamoDbRepository {
         batchWrite(requests, CalendarMonitoringFunctionality.DELETE_ALMS);
     }
 
-    List<Alm> getForObject(UUID objectId, SharedObjectType objectType) {
+    List<Alm> getForObjectId(UUID objectId, SharedObjectType objectType) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .indexName(GSI_ALM_OBJECT_PRINCIPAL)

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.DeleteRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import software.amazon.awssdk.services.dynamodb.model.PutRequest;
 import software.amazon.awssdk.services.dynamodb.model.QueryRequest;
@@ -17,7 +16,6 @@ import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_PK;
@@ -90,19 +88,7 @@ class OccurrenceRepository extends DynamoDbRepository {
         batchWrite(requests, CalendarMonitoringFunctionality.SAVE_OCCURRENCES);
     }
 
-    Optional<OccurrenceEntity> findById(String eventId, String occurrenceId) {
-        GetItemRequest request = GetItemRequest.builder()
-            .tableName(tableName)
-            .key(Map.of(
-                COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + eventId).build(),
-                COLUMN_SK, AttributeValue.builder().s(PREFIX_OCCURRENCE + occurrenceId).build()
-            ))
-            .build();
-
-        return mapper.convertEntity(getItem(request, CalendarMonitoringFunctionality.FIND_OCCURRENCE_BY_ID));
-    }
-
-    public List<OccurrenceEntity> getByBucket(String userId, String bucket) {
+    List<OccurrenceEntity> getByBucket(String userId, String bucket) {
         QueryRequest request = QueryRequest.builder()
             .tableName(tableName)
             .indexName(GSI_USER_ID_DATE_BUCKET)

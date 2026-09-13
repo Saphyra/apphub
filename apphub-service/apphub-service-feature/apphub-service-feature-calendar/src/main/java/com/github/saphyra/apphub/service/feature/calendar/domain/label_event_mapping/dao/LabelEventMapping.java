@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao;
+package com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,9 +24,12 @@ public class LabelEventMapping {
     }
 
     public void removeEvent(UUID eventId) {
-        Map<UUID, UUID> map = new HashMap<>(eventIds);
-        map.remove(eventId);
+        if (eventIds.containsKey(eventId)) {
+            if (!(eventIds instanceof HashMap<UUID, UUID>)) {
+                this.eventIds = new HashMap<>(eventIds);
+            }
 
-        this.eventIds = map;
+            eventIds.remove(eventId);
+        }
     }
 }

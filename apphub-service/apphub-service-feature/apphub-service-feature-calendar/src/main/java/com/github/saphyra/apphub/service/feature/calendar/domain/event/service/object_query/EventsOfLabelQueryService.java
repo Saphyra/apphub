@@ -5,11 +5,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,19 +21,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 class EventsOfLabelQueryService {
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
     private final AlmDao almDao;
     private final EventDao eventDao;
     private final EventMaskedChecker eventMaskedChecker;
 
     List<Event> getEventsOfLabel(UUID userId, UUID labelId) {
-        Optional<LabelEventMapping> maybeLabelEventMapping = eventLabelMappingDao.getEventsOfLabel(userId, labelId);
+        Optional<LabelEventMapping> maybeLabelEventMapping = labelEventMappingDao.getEventsOfLabel(userId, labelId);
         Optional<Alm> maybeAlm = Optional.empty();
         if (maybeLabelEventMapping.isPresent()) {
             log.info("Found: {}", maybeLabelEventMapping.get());
         } else {
             log.info("LabelEventMapping not found for userId {} and labelId {}. Check if label is shared with the user.", userId, labelId);
-            maybeAlm = almDao.findForObject(userId, PrincipalType.USER, labelId, SharedObjectType.LABEL)
+            maybeAlm = almDao.findSharedObject(userId, labelId, SharedObjectType.LABEL)
                 .map(alm -> {
                     log.info("Found: {}", alm);
 
@@ -46,7 +45,7 @@ class EventsOfLabelQueryService {
 
                     return alm;
                 });
-            maybeLabelEventMapping = maybeAlm.flatMap(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), labelId));
+            maybeLabelEventMapping = maybeAlm.flatMap(alm -> labelEventMappingDao.getEventsOfLabel(alm.getOwner(), labelId));
         }
 
         if (maybeLabelEventMapping.isPresent()) {

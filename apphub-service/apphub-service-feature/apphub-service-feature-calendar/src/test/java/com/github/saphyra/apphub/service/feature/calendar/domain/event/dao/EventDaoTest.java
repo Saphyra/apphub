@@ -6,17 +6,21 @@ import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -36,6 +40,9 @@ class EventDaoTest {
     @Mock
     private UuidConverter uuidConverter;
 
+    @Mock
+    private EventCache eventCache;
+
     @InjectMocks
     private EventDao underTest;
 
@@ -47,10 +54,7 @@ class EventDaoTest {
 
     @Test
     void findByIdValidated_notFound() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
-        given(repository.findById(USER_ID_STRING, EVENT_ID_STRING)).willReturn(Optional.empty());
-        given(converter.convertEntity(Optional.empty())).willReturn(Optional.empty());
+        given(eventCache.get(eq(USER_ID), any())).willReturn(Map.of());
 
         Throwable ex = catchThrowable(() -> underTest.findByIdValidated(USER_ID, EVENT_ID));
 
@@ -59,10 +63,7 @@ class EventDaoTest {
 
     @Test
     void findByIdValidated() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
-        given(repository.findById(USER_ID_STRING, EVENT_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+        given(eventCache.get(eq(USER_ID), any())).willReturn(Map.of(EVENT_ID, domain));
 
         assertThat(underTest.findByIdValidated(USER_ID, EVENT_ID)).isEqualTo(domain);
     }
@@ -72,27 +73,25 @@ class EventDaoTest {
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.getByUserId(USER_ID_STRING)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+        given(domain.getEventId()).willReturn(EVENT_ID);
+        given(eventCache.get(eq(USER_ID), any())).willReturn(Map.of(EVENT_ID, domain));
 
-        assertThat(underTest.getByUserId(USER_ID)).containsExactly(domain);
-    }
+        assertThat(underTest.getByUserId(USER_ID)).containsEntry(EVENT_ID, domain);
 
-    @Test
-    void getByIds() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
-        given(repository.getByIds(List.of(new BiWrapper<>(USER_ID_STRING, EVENT_ID_STRING)))).willReturn(List.of(entity));
-        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
-
-        assertThat(underTest.getByIds(USER_ID, List.of(EVENT_ID))).containsExactly(domain);
+        ArgumentCaptor<Supplier<Map<UUID, Event>>> argumentCaptor = ArgumentCaptor.forClass(Supplier.class);
+        then(eventCache).should().get(eq(USER_ID), argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().get()).containsEntry(EVENT_ID, domain);
     }
 
     @Test
     void save() {
+        given(domain.getUserId()).willReturn(USER_ID);
         given(converter.convertDomain(domain)).willReturn(entity);
 
         underTest.save(domain);
 
         then(repository).should().save(entity);
+        then(eventCache).should().invalidate(USER_ID);
     }
 
     @Test
@@ -103,15 +102,20 @@ class EventDaoTest {
         underTest.delete(USER_ID, List.of(EVENT_ID));
 
         then(repository).should().delete(USER_ID_STRING, List.of(EVENT_ID_STRING));
+        then(eventCache).should().invalidate(USER_ID);
     }
 
     @Test
     void getByIds_bwList() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(EVENT_ID)).willReturn(EVENT_ID_STRING);
-        given(repository.getByIds(List.of(new BiWrapper<>(USER_ID_STRING, EVENT_ID_STRING)))).willReturn(List.of(entity));
-        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+        given(eventCache.get(eq(USER_ID), any())).willReturn(Map.of(EVENT_ID, domain));
 
-        assertThat(underTest.getByIds(USER_ID, List.of(EVENT_ID))).containsExactly(domain);
+        assertThat(underTest.getByIds(List.of(new BiWrapper<>(USER_ID, EVENT_ID)))).containsExactly(domain);
+    }
+
+    @Test
+    void invalidate() {
+        underTest.invalidate(USER_ID);
+
+        then(eventCache).should().invalidate(USER_ID);
     }
 }

@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,7 +25,6 @@ import static org.mockito.BDDMockito.then;
 class SearchEventServiceTest {
     private static final UUID USER_ID = UUID.randomUUID();
     private static final UUID EVENT_ID_1 = UUID.randomUUID();
-    private static final UUID EVENT_ID_2 = UUID.randomUUID();
     private static final String SEARCH = "search";
 
     @Mock
@@ -43,9 +43,6 @@ class SearchEventServiceTest {
     private Event event1;
 
     @Mock
-    private Event event2;
-
-    @Mock
     private Occurrence occurrence;
 
     @Mock
@@ -62,7 +59,7 @@ class SearchEventServiceTest {
 
     @Test
     void search_eventMatchesByTitle() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event1));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID_1, event1));
         given(event1.getTitle()).willReturn("My Search Text");
         given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 
@@ -74,11 +71,11 @@ class SearchEventServiceTest {
 
     @Test
     void search_eventMatchesByOccurrenceNote() {
-        given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event1));
+        given(eventDao.getByUserId(USER_ID)).willReturn(Map.of(EVENT_ID_1, event1));
         given(event1.getEventId()).willReturn(EVENT_ID_1);
         given(event1.getTitle()).willReturn("title");
         given(event1.getContent()).willReturn("content");
-        given(occurrenceDao.getByEventId(EVENT_ID_1)).willReturn(List.of(occurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID_1)).willReturn(Map.of(UUID.randomUUID(), occurrence));
         given(occurrence.getNote()).willReturn("contains SeaRCh here");
         given(eventResponseMapper.toResponse(USER_ID, List.of(event1))).willReturn(List.of(eventResponse));
 

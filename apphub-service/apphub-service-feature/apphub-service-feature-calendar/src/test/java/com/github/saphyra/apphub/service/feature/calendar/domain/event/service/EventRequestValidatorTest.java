@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.calendar.model.RepetitionType;
 import com.github.saphyra.apphub.api.feature.calendar.model.request.EventRequest;
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
-import com.github.saphyra.apphub.service.feature.calendar.config.CalendarParams;
+import com.github.saphyra.apphub.service.feature.calendar.config.CalendarProperties;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.LabelDao;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
@@ -34,7 +34,7 @@ class EventRequestValidatorTest {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Mock
-    private CalendarParams calendarParams;
+    private CalendarProperties calendarProperties;
 
     @Mock
     private LabelDao labelDao;
@@ -236,7 +236,7 @@ class EventRequestValidatorTest {
         given(request.getRepeatForDays()).willReturn(1);
         given(request.getStartDate()).willReturn(LocalDate.now());
         given(request.getEndDate()).willReturn(LocalDate.now().plusDays(31));
-        given(calendarParams.getMaxEventDurationDays()).willReturn(30);
+        given(calendarProperties.getMaxEventDurationDays()).willReturn(30);
 
         ExceptionValidator.validateInvalidParam(() -> underTest.validate(request), "eventDuration", "too long");
     }
@@ -279,7 +279,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionData()).willReturn(CollectionUtils.toSet(DayOfWeek.MONDAY));
         given(request.getRepeatForDays()).willReturn(1);
         given(request.getStartDate()).willReturn(LocalDate.now());
-        given(calendarParams.getMaxEventDurationDays()).willReturn(30);
+        given(calendarProperties.getMaxEventDurationDays()).willReturn(30);
         given(request.getEndDate()).willReturn(LocalDate.now().plusDays(1));
         given(request.getTitle()).willReturn("title");
         given(request.getContent()).willReturn("content");
@@ -298,7 +298,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionData()).willReturn(CollectionUtils.toSet(DayOfWeek.MONDAY));
         given(request.getRepeatForDays()).willReturn(1);
         given(request.getStartDate()).willReturn(LocalDate.now());
-        given(calendarParams.getMaxEventDurationDays()).willReturn(30);
+        given(calendarProperties.getMaxEventDurationDays()).willReturn(30);
         given(request.getEndDate())
             .willReturn(null)
             .willReturn(LocalDate.now());
@@ -369,7 +369,7 @@ class EventRequestValidatorTest {
         given(request.getRepetitionData()).willReturn(CollectionUtils.toList(1, 31));
         given(request.getRepeatForDays()).willReturn(1);
         given(request.getStartDate()).willReturn(LocalDate.now());
-        given(calendarParams.getMaxEventDurationDays()).willReturn(30);
+        given(calendarProperties.getMaxEventDurationDays()).willReturn(30);
         given(request.getEndDate()).willReturn(LocalDate.now().plusDays(1));
         given(request.getTitle()).willReturn("title");
         given(request.getContent()).willReturn("content");

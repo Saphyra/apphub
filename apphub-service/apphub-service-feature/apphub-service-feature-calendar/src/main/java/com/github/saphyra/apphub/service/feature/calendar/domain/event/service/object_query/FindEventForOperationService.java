@@ -4,11 +4,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.service.feature.calendar.common.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,7 @@ import java.util.UUID;
 class FindEventForOperationService {
     private final EventDao eventDao;
     private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
     private final EventGrantChecker eventGrantChecker;
 
     /**
@@ -34,7 +33,7 @@ class FindEventForOperationService {
         }
 
         //Check if event is shared with user. If yes, check if user has the required grant for the operation. If yes, return the event.
-        Optional<Alm> maybeAlm = almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT);
+        Optional<Alm> maybeAlm = almDao.findSharedObject(userId, eventId, SharedObjectType.EVENT);
         if (maybeAlm.isPresent()) {
             Alm alm = maybeAlm.get();
             return eventDao.findById(alm.getOwner(), alm.getObjectId())
@@ -45,7 +44,7 @@ class FindEventForOperationService {
         return almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
             //Get the events of the shared labels
-            .map(alm -> eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
+            .map(alm -> labelEventMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .map(LabelEventMapping::getEventIds)

@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event
 import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,7 @@ class EventGrantChecker {
             return true;
         }
 
-        Set<Grant> sharedEventGrants = almDao.findForObject(userId, PrincipalType.USER, event.getEventId(), SharedObjectType.EVENT)
+        Set<Grant> sharedEventGrants = almDao.findSharedObject(userId, event.getEventId(), SharedObjectType.EVENT)
             .map(Alm::getGrants)
             .orElse(Set.of());
 
@@ -43,7 +42,7 @@ class EventGrantChecker {
             .getLabelIds()
             .keySet()
             .stream()
-            .map(labelId -> almDao.findForObject(userId, PrincipalType.USER, labelId, SharedObjectType.LABEL))
+            .map(labelId -> almDao.findSharedObject(userId, labelId, SharedObjectType.LABEL))
             .filter(Optional::isPresent)
             .map(Optional::get)
             .flatMap(alm -> alm.getGrants().stream())

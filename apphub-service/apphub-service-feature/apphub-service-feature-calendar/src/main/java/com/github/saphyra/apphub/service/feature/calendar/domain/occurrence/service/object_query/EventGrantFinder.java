@@ -7,12 +7,11 @@ import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventFactory;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.dao.Label;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,7 @@ import java.util.stream.Stream;
 class EventGrantFinder {
     private final EventDao eventDao;
     private final AlmDao almDao;
-    private final EventLabelMappingDao eventLabelMappingDao;
+    private final LabelEventMappingDao labelEventMappingDao;
     private final EventFactory eventFactory;
     private final LabelObjectQueryService labelObjectQueryService;
 
@@ -47,7 +46,7 @@ class EventGrantFinder {
         }
 
         //Look for shared event
-        Optional<BiWrapper<Event, Set<Grant>>> maybeSharedEvent = almDao.findForObject(userId, PrincipalType.USER, eventId, SharedObjectType.EVENT)
+        Optional<BiWrapper<Event, Set<Grant>>> maybeSharedEvent = almDao.findSharedObject(userId, eventId, SharedObjectType.EVENT)
             //Query event for Alm and pair it with the grants from Alm
             .flatMap(alm -> eventDao.findById(alm.getOwner(), eventId)
                 .map(event -> {
@@ -61,7 +60,7 @@ class EventGrantFinder {
         Optional<BiWrapper<Event, Set<Grant>>> maybeSharedLabelEvent = almDao.getByUserIdAndObjectType(userId, SharedObjectType.LABEL)
             .stream()
             //Filter for labels of event
-            .map(alm -> new BiWrapper<>(alm, eventLabelMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of())))
+            .map(alm -> new BiWrapper<>(alm, labelEventMappingDao.getEventsOfLabel(alm.getOwner(), alm.getObjectId()).map(LabelEventMapping::getEventIds).orElse(Map.of())))
             .filter(bw -> bw.getEntity2().containsKey(eventId))
             //Pair eventId with grants of its Alm
             .map(bw -> new TriWrapper<>(bw.getEntity1().getGrants(), bw.getEntity2().get(eventId), eventId))
@@ -97,7 +96,7 @@ class EventGrantFinder {
                 Set<Grant> labelGrants = bw.getEntity2();
 
                 //Get events of visible label
-                Map<UUID, UUID> eventIds = eventLabelMappingDao.getEventsOfLabel(label.getUserId(), label.getLabelId())
+                Map<UUID, UUID> eventIds = labelEventMappingDao.getEventsOfLabel(label.getUserId(), label.getLabelId())
                     .map(LabelEventMapping::getEventIds)
                     .orElse(Map.of());
 

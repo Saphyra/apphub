@@ -51,7 +51,7 @@ class EditSharedObjectServiceTest {
 
     @Test
     void editSharedOperations() {
-        given(almDao.findForObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
+        given(almDao.findSharedObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
         given(alm.getOwner()).willReturn(USER_ID);
 
         underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE));
@@ -62,7 +62,7 @@ class EditSharedObjectServiceTest {
 
     @Test
     void editSharedOperations_notOwner() {
-        given(almDao.findForObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
+        given(almDao.findSharedObjectValidated(SHARED_WITH, PrincipalType.USER, OBJECT_ID, SharedObjectType.EVENT)).willReturn(alm);
         given(alm.getOwner()).willReturn(UUID.randomUUID());
 
         ExceptionValidator.validateForbiddenOperation(() -> underTest.editSharedObject(USER_ID, SHARED_WITH, SharedObjectType.EVENT, OBJECT_ID, Set.of(Grant.DELETE)));

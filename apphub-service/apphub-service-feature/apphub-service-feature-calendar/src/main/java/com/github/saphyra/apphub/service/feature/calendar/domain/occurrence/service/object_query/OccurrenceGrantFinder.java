@@ -7,7 +7,6 @@ import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +28,7 @@ class OccurrenceGrantFinder {
         if (occurrence.getUserId().equals(userId)) {
             grants = Grant.forType(SharedObjectType.OCCURRENCE);
         } else {
-            grants = almDao.findForObject(userId, PrincipalType.USER, occurrenceId, SharedObjectType.OCCURRENCE)
+            grants = almDao.findSharedObject(userId, occurrenceId, SharedObjectType.OCCURRENCE)
                 .map(Alm::getGrants)
                 .orElse(Set.of());
         }

@@ -4,11 +4,10 @@ import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
 import com.github.saphyra.apphub.service.feature.calendar.common.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMapping;
+import com.github.saphyra.apphub.service.feature.calendar.domain.label_event_mapping.dao.LabelEventMappingDao;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.Alm;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,7 +36,7 @@ class FindEventForOperationServiceTest {
     private AlmDao almDao;
 
     @Mock
-    private EventLabelMappingDao eventLabelMappingDao;
+    private LabelEventMappingDao labelEventMappingDao;
 
     @Mock
     private EventGrantChecker eventGrantChecker;
@@ -67,7 +66,7 @@ class FindEventForOperationServiceTest {
     @Test
     void sharedEventFound() {
         given(eventDao.findById(SHARED_WITH, EVENT_ID)).willReturn(Optional.empty());
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(eventAlm));
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.of(eventAlm));
         given(eventAlm.getOwner()).willReturn(USER_ID);
         given(eventAlm.getObjectId()).willReturn(EVENT_ID);
         given(eventDao.findById(USER_ID, EVENT_ID)).willReturn(Optional.of(event));
@@ -79,11 +78,11 @@ class FindEventForOperationServiceTest {
     @Test
     void sharedLabelFound() {
         given(eventDao.findById(SHARED_WITH, EVENT_ID)).willReturn(Optional.empty());
-        given(almDao.findForObject(SHARED_WITH, PrincipalType.USER, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
+        given(almDao.findSharedObject(SHARED_WITH, EVENT_ID, SharedObjectType.EVENT)).willReturn(Optional.empty());
         given(almDao.getByUserIdAndObjectType(SHARED_WITH, SharedObjectType.LABEL)).willReturn(List.of(labelAlm));
         given(labelAlm.getOwner()).willReturn(USER_ID);
         given(labelAlm.getObjectId()).willReturn(LABEL_ID);
-        given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
+        given(labelEventMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(Optional.of(labelEventMapping));
         given(labelEventMapping.getEventIds()).willReturn(Map.of(EVENT_ID, USER_ID));
         given(eventDao.findById(USER_ID, EVENT_ID)).willReturn(Optional.of(event));
         given(eventGrantChecker.hasGrants(SHARED_WITH, event, Operation.EDIT.getRequiredGrants())).willReturn(true);

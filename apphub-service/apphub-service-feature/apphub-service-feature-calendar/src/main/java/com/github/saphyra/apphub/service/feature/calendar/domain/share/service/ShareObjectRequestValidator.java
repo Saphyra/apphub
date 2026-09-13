@@ -6,7 +6,6 @@ import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.PrincipalType;
 import com.github.saphyra.apphub.service.feature.calendar.domain.share.service.type.SharedObjectServiceProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,7 @@ class ShareObjectRequestValidator {
             throw ExceptionFactory.notFound(request.getType() + " not found with id " + request.getObjectId() + " for parent " + request.getParent());
         }
 
-        if (almDao.findForObject(request.getSharedWith(), PrincipalType.USER, request.getObjectId(), request.getType()).isPresent()) {
+        if (almDao.findSharedObject(request.getSharedWith(), request.getObjectId(), request.getType()).isPresent()) {
             throw ExceptionFactory.notLoggedException(HttpStatus.BAD_REQUEST, ErrorCode.ALREADY_EXISTS);
         }
     }
