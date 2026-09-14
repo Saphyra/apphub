@@ -50,6 +50,7 @@
     </changeSet>
 
     <changeSet id="create-trigram-index-on-star_name-to-star_system" author="Saphyra" dbms="postgresql">
+        <validCheckSum>9:2e4817d84b023fa7c2be320f9792b086</validCheckSum>
         <preConditions onFail="MARK_RAN">
             <not>
                 <indexExists indexName="index-star_system-star_name"/>

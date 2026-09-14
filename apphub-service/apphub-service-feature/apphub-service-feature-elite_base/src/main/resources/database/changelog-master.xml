@@ -10,6 +10,7 @@
     </changeSet>
 
     <changeSet id="enable-extension-pg_trgm" author="Saphyra" dbms="postgresql">
+        <validCheckSum>9:c84d46d4c4c4ac2e0694e5cb255bfeaf</validCheckSum>
         <sql>
             CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA elite_base;
         </sql>

@@ -75,7 +75,7 @@ public class CalendarFlow {
     }
 
     public static void shareEvent(WebDriver ownerDriver, LocalDate date, String sharedWithEmail, Consumer<WebDriver> grantSetup) {
-        CalendarIndexPageActions.setReferenceDate(ownerDriver, date);
+        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(ownerDriver, date));
         AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, date))
             .open(ownerDriver);
 
@@ -88,7 +88,7 @@ public class CalendarFlow {
     }
 
     public static void shareOccurrence(WebDriver ownerDriver, LocalDate date, String sharedWithEmail, Consumer<WebDriver> grantSetup) {
-        CalendarIndexPageActions.setReferenceDate(ownerDriver, date);
+        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(ownerDriver, date));
         AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarIndexPageActions.getOccurrencesOnDate(ownerDriver, date))
             .open(ownerDriver);
 
@@ -101,7 +101,7 @@ public class CalendarFlow {
     }
 
     public static void deleteOccurrence(WebDriver driver, LocalDate date) {
-        CalendarIndexPageActions.setReferenceDate(driver, date);
+        AwaitilityWrapper.retry(() -> CalendarIndexPageActions.setReferenceDate(driver, date));
         AwaitilityWrapper.getSingleItemFromListWithWait(() -> CalendarIndexPageActions.getOccurrencesOnDate(driver, date))
             .open(driver);
 
