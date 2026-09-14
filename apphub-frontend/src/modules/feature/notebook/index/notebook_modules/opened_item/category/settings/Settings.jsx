@@ -10,7 +10,8 @@ const Settings = ({
     openedListItem,
     setOpenedListItem,
     userSettings,
-    changeUserSettings
+    changeUserSettings,
+    setDisplaySpinner
 }) => {
     const [settingsDisplayed, setSettingsDispalyed] = useState(false);
     const [searchText, setSearchText] = useState(openedListItem.type === OpenedPageType.SEARCH ? openedListItem.id : "");
@@ -63,6 +64,7 @@ const Settings = ({
                     localizationHandler={localizationHandler}
                     userSettings={userSettings}
                     changeUserSettings={changeUserSettings}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             }
         </div>

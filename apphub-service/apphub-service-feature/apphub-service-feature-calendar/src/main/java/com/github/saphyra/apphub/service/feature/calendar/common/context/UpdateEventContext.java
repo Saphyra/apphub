@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -40,7 +41,7 @@ public class UpdateEventContext {
         this.event = event;
         this.commonCalendarDao = commonCalendarDao;
         this.recreateOccurrenceService = recreateOccurrenceService;
-        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(commonCalendarDao.getOccurrenceDao().getByEventId(event.getEventId())));
+        this.occurrences = new LazyLoadedField<>(() -> new ArrayList<>(commonCalendarDao.getOccurrenceDao().getByEventId(event.getEventId()).values()));
     }
 
     public List<Occurrence> getOccurrences() {
@@ -90,7 +91,7 @@ public class UpdateEventContext {
         modifiedOccurrences.add(occurrence.getOccurrenceId());
     }
 
-    public void processChanges(List<UUID> labels) {
+    public void processChanges(Map<UUID, UUID> labels) {
         processChanges();
 
         commonCalendarDao.editLabelsOfEvent(event.getUserId(), event.getEventId(), labels);

@@ -19,7 +19,7 @@ const TextColumn = ({
                 <div className="notebook-table-column-wrapper">
                     <div className="notebook-table-column-content">
                         <Textarea
-                            className={"notebook-table-column-input resizable" + (custom ? " notebook-table-column-input" : "")}
+                            className="notebook-table-column-input resizable"
                             onchangeCallback={updateContent}
                             value={columnData.data}
                             onKeyDownCallback={e => {

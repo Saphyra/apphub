@@ -24,7 +24,7 @@ class ContentUpdater implements EventFieldUpdater {
 
     @Override
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
-        log.info("Updating content of DeprecatedEvent {}", event.getEventId());
+        log.info("Updating content of Event {}", event.getEventId());
 
         event.setContent(request.getContent());
     }

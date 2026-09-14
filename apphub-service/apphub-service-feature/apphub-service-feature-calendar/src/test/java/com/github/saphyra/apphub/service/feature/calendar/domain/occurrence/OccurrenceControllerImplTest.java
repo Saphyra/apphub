@@ -76,9 +76,11 @@ class OccurrenceControllerImplTest {
 
     @Test
     void deleteOccurrence() {
+        given(accessToken.getUserId()).willReturn(USER_ID);
+
         underTest.deleteOccurrence(EVENT_ID, OCCURRENCE_ID, accessToken);
 
-        then(deleteOccurrenceService).should().deleteOccurrence(EVENT_ID, OCCURRENCE_ID);
+        then(deleteOccurrenceService).should().deleteOccurrence(USER_ID, EVENT_ID, OCCURRENCE_ID);
     }
 
     @Test

@@ -107,7 +107,7 @@ const Category = ({
 
     const handleOnDrop = (e) => {
         const movedItemId = e.dataTransfer.getData("id");
-        moveListItem(movedItemId, openedCategoryContent.parent, setLastEvent);
+        moveListItem(movedItemId, openedCategoryContent.parent, setLastEvent, setDisplaySpinner);
     }
 
     return (
@@ -118,6 +118,7 @@ const Category = ({
                 setOpenedListItem={setOpenedListItem}
                 userSettings={userSettings}
                 changeUserSettings={changeUserSettings}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <CategoryNavigation

@@ -7,7 +7,8 @@ import { SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA } from "m
 const confirmCancelDeconstruction = (
     localizationHandler,
     constructionArea,
-    setConfirmationDialogData
+    setConfirmationDialogData,
+    setDisplaySpinner
 ) => {
     const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
 
@@ -20,7 +21,7 @@ const confirmCancelDeconstruction = (
                 key="cancel-deconstruction"
                 id="skyxplore-game-planet-cancel-deconstruction-button"
                 label={localizationHandler.get("cancel-deconstruction")}
-                onclick={() => cancelDeconstruction(constructionArea.deconstruction.deconstructionId, setConfirmationDialogData)}
+                onclick={() => cancelDeconstruction(constructionArea.deconstruction.deconstructionId, setConfirmationDialogData, setDisplaySpinner)}
             />,
             <Button
                 key="continue-construction"
@@ -34,9 +35,9 @@ const confirmCancelDeconstruction = (
     setConfirmationDialogData(confirmationDialogData);
 }
 
-const cancelDeconstruction = async (deconstructionId, setConfirmationDialogData) => {
+const cancelDeconstruction = async (deconstructionId, setConfirmationDialogData, setDisplaySpinner) => {
     await SKYXPLORE_PLANET_SURFACE_CANCEL_DECONSTRUCT_CONSTRUCTION_AREA.createRequest(null, { deconstructionId: deconstructionId })
-        .send();
+        .send(setDisplaySpinner);
 
     setConfirmationDialogData(null);
 }

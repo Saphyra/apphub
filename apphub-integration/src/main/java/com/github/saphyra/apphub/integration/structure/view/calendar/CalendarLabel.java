@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.view.calendar;
 
+import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import lombok.RequiredArgsConstructor;
 import org.openqa.selenium.By;
@@ -59,5 +60,16 @@ public class CalendarLabel {
 
     public void open() {
         webElement.click();
+    }
+
+    public void share(WebDriver driver) {
+        edit();
+
+        driver.findElement(By.id("calendar-labels-edit-label-share"))
+            .click();
+
+        AwaitilityWrapper.createDefault()
+            .until(() -> WebElementUtils.isPresent(driver, By.id("calendar-share")))
+            .assertTrue("Share page is not opened.");
     }
 }

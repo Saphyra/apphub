@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.TradingDaoSupport;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdate;
@@ -57,7 +57,7 @@ class CommodityDataTransformerTest {
         given(commodityData.getStock()).willReturn(STOCK);
 
         given(tradingDaoSupport.create(
-            ItemType.COMMODITY,
+            ObjectType.COMMODITY,
             ItemLocationType.STATION,
             EXTERNAL_REFERENCE,
             MARKET_ID,
@@ -72,21 +72,21 @@ class CommodityDataTransformerTest {
 
     @Test
     void noStored() {
-        assertThat(underTest.transform(null, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).contains(created);
+        assertThat(underTest.transform(null, CURRENT_TIME, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).contains(created);
     }
 
     @Test
     void outdatedData() {
         given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.plusMinutes(1));
 
-        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).isEmpty();
+        assertThat(underTest.transform(existing, CURRENT_TIME, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).isEmpty();
     }
 
     @Test
     void dataNotModified() {
         given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.minusMinutes(1));
         given(tradingDaoSupport.create(
-            ItemType.COMMODITY,
+            ObjectType.COMMODITY,
             ItemLocationType.STATION,
             EXTERNAL_REFERENCE,
             MARKET_ID,
@@ -98,13 +98,13 @@ class CommodityDataTransformerTest {
             STAR_SYSTEM_ID
         )).willReturn(existing);
 
-        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).isEmpty();
+        assertThat(underTest.transform(existing, CURRENT_TIME, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).isEmpty();
     }
 
     @Test
     void newData() {
         given(originalLastUpdate.getLastUpdate()).willReturn(CURRENT_TIME.minusMinutes(1));
 
-        assertThat(underTest.transform(existing, CURRENT_TIME, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).contains(created);
+        assertThat(underTest.transform(existing, CURRENT_TIME, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, commodityData, originalLastUpdate, STAR_SYSTEM_ID)).contains(created);
     }
 }

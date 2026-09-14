@@ -25,6 +25,7 @@ const NewTablePage = ({ checklist, custom }) => {
     document.title = localizationHandler.get("title");
 
     const { parent } = useParams();
+
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
     const [listItemTitle, setListItemTitle] = useState("");
     const [tableHeads, setTableHeads] = useState([new TableHeadData(0)]);
@@ -62,10 +63,11 @@ const NewTablePage = ({ checklist, custom }) => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="notebook-new-table-content-wrapper">
-                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile)}
+                    {getTable(checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile, setDisplaySpinner)}
                 </div>
             </main>
 

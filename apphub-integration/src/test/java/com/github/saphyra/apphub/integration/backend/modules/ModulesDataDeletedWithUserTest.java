@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
@@ -19,7 +19,7 @@ public class ModulesDataDeletedWithUserTest extends BackEndTest {
     public void modulesDataDeletedWithUser(){
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         ModulesActions.setAsFavorite(getServerPort(), accessToken, "account", true);
 

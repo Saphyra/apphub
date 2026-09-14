@@ -37,6 +37,9 @@ const Constants = {
     GRAPH_HEIGHT: 200,
 
     SETTINGS_KEY_COLLAPSED_MODULES: "collapsed-modules",
+
+    //Characters / icons
+    ICON_SHARED: " 👥\uFE0E",
 }
 
 export default Constants;

@@ -8,15 +8,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_COMMODITY_AVERAGE_PRICE;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "commodity_average_price")
+@Table(schema = SCHEMA, name = TABLE_COMMODITY_AVERAGE_PRICE)
 class CommodityAveragePriceEntity {
     @Id
     private String commodityName;
-    private String lastUpdate;
     private Integer averagePrice;
 }

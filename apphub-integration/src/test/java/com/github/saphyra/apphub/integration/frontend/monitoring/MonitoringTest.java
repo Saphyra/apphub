@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.integration.action.frontend.monitoring.Monitori
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.modules.ModuleLocation;
 import com.github.saphyra.apphub.integration.structure.api.monitoring.Feature;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -25,7 +25,7 @@ public class MonitoringTest extends SeleniumTest {
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.MONITORING);
 

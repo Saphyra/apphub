@@ -5,13 +5,13 @@ import Button from "common/component/input/Button";
 import Stream from "common/js/collection/Stream";
 import { SKYXPLORE_INVITE_TO_LOBBY, SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS } from "../SkyXploreLobbyEndpoints";
 
-const Friends = ({ localizationHandler, friends, setFriends }) => {
+const Friends = ({ localizationHandler, friends, setFriends, setDisplaySpinner }) => {
     useEffect(() => loadFriends(), []);
 
     const loadFriends = () => {
         const fetch = async () => {
             const result = await SKYXPLORE_LOBBY_GET_ACTIVE_FRIENDS.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setFriends(result);
         }
         fetch();
@@ -19,7 +19,7 @@ const Friends = ({ localizationHandler, friends, setFriends }) => {
 
     const inviteFriend = (friendId) => {
         SKYXPLORE_INVITE_TO_LOBBY.createRequest(null, { friendId: friendId })
-            .send();
+            .send(setDisplaySpinner);
     }
 
     const getFriends = () => {

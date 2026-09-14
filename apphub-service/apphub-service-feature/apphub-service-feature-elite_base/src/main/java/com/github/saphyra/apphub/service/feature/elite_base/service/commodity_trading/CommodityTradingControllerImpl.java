@@ -7,7 +7,7 @@ import com.github.saphyra.apphub.api.platform.monitoring.model.Feature;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.common.PerformanceReportingKey;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePriceDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ class CommodityTradingControllerImpl implements CommodityTradingController {
     public Collection<String> getCommodities(AccessToken accessToken) {
         log.info("{} wants to know the trading item names.", accessToken.getUserId());
 
-        return itemTypeDao.getItemNames(ItemType.TRADING_TYPES);
+        return itemTypeDao.getItemNames(ObjectType.TRADING_TYPES);
     }
 
     @Override

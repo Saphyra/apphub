@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.feature.calendar;
 import com.github.saphyra.apphub.lib.config.common.GenericEndpoints;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
 import com.github.saphyra.apphub.service.feature.calendar.common.dao.CommonCalendarDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import com.github.saphyra.apphub.test.rest_assured.RequestFactory;
 import com.github.saphyra.apphub.test.rest_assured.UrlFactory;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,9 @@ public class CalendarApplicationTest {
 
     @MockitoBean
     private CommonCalendarDao commonCalendarDao;
+
+    @MockitoBean
+    private AlmDao almDao;
 
     @MockitoBean
     private DynamoDbRepositoryContext dynamoDbRepositoryContext;

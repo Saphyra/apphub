@@ -1,7 +1,7 @@
 import SurfaceTileContentFooterProgressBar from "../progress_bar/SurfaceTileContentFooterProgressBar";
 import confirmCancelDeconstruction from "./CancelDeconstructionService";
 
-const ConstructionAreaDeconstructionFooter = ({ surface, localizationHandler, setConfirmationDialogData }) => {
+const ConstructionAreaDeconstructionFooter = ({ surface, localizationHandler, setConfirmationDialogData, setDisplaySpinner }) => {
     const constructionArea = surface.constructionArea;
     const deconstruction = constructionArea.deconstruction;
 
@@ -12,7 +12,8 @@ const ConstructionAreaDeconstructionFooter = ({ surface, localizationHandler, se
         cancelCallback={() => confirmCancelDeconstruction(
             localizationHandler,
             constructionArea,
-            setConfirmationDialogData
+            setConfirmationDialogData,
+            setDisplaySpinner
         )}
     />
 }

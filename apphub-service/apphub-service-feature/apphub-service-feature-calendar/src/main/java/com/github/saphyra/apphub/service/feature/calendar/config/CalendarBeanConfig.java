@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.feature.calendar.config;
 
+import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.IdGenerator;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import org.springframework.context.annotation.Bean;
@@ -15,5 +16,10 @@ public class CalendarBeanConfig {
     @Bean
     IdGenerator idGenerator() {
         return new IdGenerator();
+    }
+
+    @Bean
+    DateTimeConverter dateTimeConverter() {
+        return new DateTimeConverter();
     }
 }

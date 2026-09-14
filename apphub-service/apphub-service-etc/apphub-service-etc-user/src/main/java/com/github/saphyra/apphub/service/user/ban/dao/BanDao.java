@@ -18,7 +18,7 @@ import java.util.UUID;
 public class BanDao extends AbstractDao<BanEntity, Ban, String, BanRepository> implements DeleteByUserIdDao {
     private final UuidConverter uuidConverter;
 
-    public BanDao(BanConverter converter, BanRepository repository, UuidConverter uuidConverter) {
+    BanDao(BanConverter converter, BanRepository repository, UuidConverter uuidConverter) {
         super(converter, repository);
         this.uuidConverter = uuidConverter;
     }

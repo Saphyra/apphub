@@ -10,7 +10,7 @@ import PlanetSurface from "./surface/PlanetSurface";
 import PlanetQueue from "./queue/PlanetQueue";
 import { SKYXPLORE_PLANET_GET_OVERVIEW } from "../../SkyXploreGameEndpoints";
 
-const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData }) => {
+const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogData, setDisplaySpinner }) => {
     //Planet data
     const [planetName, setPlanetName] = useState("");
     const [storage, setStorage] = useState(null);
@@ -40,7 +40,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
     const loadPlanet = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_PLANET_GET_OVERVIEW.createRequest(null, { planetId: planetId })
-                .send();
+                .send(setDisplaySpinner);
 
             setPlanetName(response.planetName);
             setStorage(response.storage);
@@ -88,6 +88,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                 planetName={planetName}
                 setPlanetName={setPlanetName}
                 closePage={closePage}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <main id="skyxplore-game-planet">
@@ -100,6 +101,7 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                     setPriorities={setPriorities}
                     planetId={planetId}
                     openPage={openPage}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <PlanetSurface
@@ -107,12 +109,14 @@ const Planet = ({ footer, planetId, closePage, openPage, setConfirmationDialogDa
                     setConfirmationDialogData={setConfirmationDialogData}
                     planetId={planetId}
                     openPage={openPage}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <PlanetQueue
                     queue={queue}
                     planetId={planetId}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 

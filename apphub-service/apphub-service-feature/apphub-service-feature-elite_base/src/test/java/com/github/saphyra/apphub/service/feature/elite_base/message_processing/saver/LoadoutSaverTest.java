@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.Loadout;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.loadout.LoadoutDaoSupport;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
@@ -58,16 +58,16 @@ class LoadoutSaverTest {
 
     @Test
     void nullMarketId() {
-        assertThat(catchThrowable(() -> underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(ITEM_NAME_1), STAR_SYSTEM_ID)))
+        assertThat(catchThrowable(() -> underTest.save(TIMESTAMP, ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(ITEM_NAME_1), STAR_SYSTEM_ID)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void outdatedMessage() {
-        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).willReturn(Optional.of(lastUpdate));
+        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).willReturn(Optional.of(lastUpdate));
         given(lastUpdate.getLastUpdate()).willReturn(TIMESTAMP.plusSeconds(1));
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
+        underTest.save(TIMESTAMP, ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
 
         then(loadoutDaoSupport).shouldHaveNoInteractions();
     }
@@ -75,46 +75,46 @@ class LoadoutSaverTest {
 
     @Test
     void saveNew() {
-        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).willReturn(Optional.empty());
-        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ItemType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
-        given(loadoutDaoSupport.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).willReturn(List.of());
-        given(loadoutDaoSupport.create(ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, ITEM_NAME_1.toLowerCase(), STAR_SYSTEM_ID)).willReturn(newLoadout);
+        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).willReturn(Optional.empty());
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
+        given(loadoutDaoSupport.getByMarketId(ObjectType.EQUIPMENT, MARKET_ID)).willReturn(List.of());
+        given(loadoutDaoSupport.create(ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, ITEM_NAME_1.toLowerCase(), STAR_SYSTEM_ID)).willReturn(newLoadout);
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
+        underTest.save(TIMESTAMP, ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
 
         then(lastUpdateDao).should().save(lastUpdate);
-        then(itemTypeDao).should().saveAll(ItemType.EQUIPMENT, List.of(ITEM_NAME_1.toLowerCase()));
-        then(loadoutDaoSupport).should().deleteAll(ItemType.EQUIPMENT, List.of());
-        then(loadoutDaoSupport).should().saveAll(ItemType.EQUIPMENT, List.of(newLoadout));
+        then(itemTypeDao).should().saveAll(ObjectType.EQUIPMENT, List.of(ITEM_NAME_1.toLowerCase()));
+        then(loadoutDaoSupport).should().deleteAll(ObjectType.EQUIPMENT, List.of());
+        then(loadoutDaoSupport).should().saveAll(ObjectType.EQUIPMENT, List.of(newLoadout));
     }
 
     @Test
     void shouldNotSaveExisting() {
-        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).willReturn(Optional.empty());
-        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ItemType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
-        given(loadoutDaoSupport.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).willReturn(List.of(existingLoadout));
+        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).willReturn(Optional.empty());
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
+        given(loadoutDaoSupport.getByMarketId(ObjectType.EQUIPMENT, MARKET_ID)).willReturn(List.of(existingLoadout));
         given(existingLoadout.getItemName()).willReturn(ITEM_NAME_1.toLowerCase());
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
+        underTest.save(TIMESTAMP, ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(ITEM_NAME_1), STAR_SYSTEM_ID);
 
         then(lastUpdateDao).should().save(lastUpdate);
-        then(itemTypeDao).should().saveAll(ItemType.EQUIPMENT, List.of(ITEM_NAME_1.toLowerCase()));
-        then(loadoutDaoSupport).should().deleteAll(ItemType.EQUIPMENT, List.of());
-        then(loadoutDaoSupport).should().saveAll(ItemType.EQUIPMENT, List.of());
+        then(itemTypeDao).should().saveAll(ObjectType.EQUIPMENT, List.of(ITEM_NAME_1.toLowerCase()));
+        then(loadoutDaoSupport).should().deleteAll(ObjectType.EQUIPMENT, List.of());
+        then(loadoutDaoSupport).should().saveAll(ObjectType.EQUIPMENT, List.of());
     }
 
     @Test
     void delete() {
-        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.EQUIPMENT)).willReturn(Optional.empty());
-        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ItemType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
-        given(loadoutDaoSupport.getByMarketId(ItemType.EQUIPMENT, MARKET_ID)).willReturn(List.of(existingLoadout));
+        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT)).willReturn(Optional.empty());
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ObjectType.EQUIPMENT, TIMESTAMP)).willReturn(lastUpdate);
+        given(loadoutDaoSupport.getByMarketId(ObjectType.EQUIPMENT, MARKET_ID)).willReturn(List.of(existingLoadout));
         given(existingLoadout.getItemName()).willReturn(ITEM_NAME_1.toLowerCase());
 
-        underTest.save(TIMESTAMP, ItemType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(), STAR_SYSTEM_ID);
+        underTest.save(TIMESTAMP, ObjectType.EQUIPMENT, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, List.of(), STAR_SYSTEM_ID);
 
         then(lastUpdateDao).should().save(lastUpdate);
-        then(itemTypeDao).should().saveAll(ItemType.EQUIPMENT, List.of());
-        then(loadoutDaoSupport).should().deleteAll(ItemType.EQUIPMENT, List.of(existingLoadout));
-        then(loadoutDaoSupport).should().saveAll(ItemType.EQUIPMENT, List.of());
+        then(itemTypeDao).should().saveAll(ObjectType.EQUIPMENT, List.of());
+        then(loadoutDaoSupport).should().deleteAll(ObjectType.EQUIPMENT, List.of(existingLoadout));
+        then(loadoutDaoSupport).should().saveAll(ObjectType.EQUIPMENT, List.of());
     }
 }

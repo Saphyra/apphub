@@ -9,7 +9,7 @@ import Button from "common/component/input/Button";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { ACCOUNT_MARK_FOR_DELETION, ACCOUNT_UNMARK_FOR_DELETION } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
-const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) => {
+const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [markForDeletionAt, setMarkForDeletionAt] = useState("");
@@ -39,7 +39,7 @@ const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) =
         }
 
         const response = await ACCOUNT_MARK_FOR_DELETION.createRequest(payload, { userId: userData.userId })
-            .send();
+            .send(setDisplaySpinner);
 
         setUserData(response);
         setDisplayConfirmDeletionDialog(false);
@@ -96,7 +96,7 @@ const BanUserDeletion = ({ userData, setUserData, setConfirmationDialogData }) =
 
     const cancelDeletion = async () => {
         const response = await ACCOUNT_UNMARK_FOR_DELETION.createRequest(null, { userId: userData.userId })
-            .send();
+            .send(setDisplaySpinner);
 
         setUserData(response);
         setConfirmationDialogData(null);

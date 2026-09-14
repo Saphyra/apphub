@@ -24,19 +24,17 @@ public class CalendarLabelsTest extends BackEndTest {
 
         create_blank(accessToken);
         create_tooLong(accessToken);
-        UUID labelId = create(accessToken);
-        create_alreadyExists(accessToken);
+        LabelResponse label = create(accessToken);
 
-        getLabels(accessToken, labelId);
+        getLabels(accessToken, label.getLabelId());
 
-        edit_blank(accessToken, labelId);
-        edit_tooLong(accessToken, labelId);
-        edit_alreadyExists(accessToken, labelId);
-        edit(accessToken, labelId);
+        edit_blank(accessToken, label.getLabelId());
+        edit_tooLong(accessToken, label.getLabelId());
+        edit(accessToken, label.getLabelId());
 
-        getLabel(accessToken, labelId);
+        getLabel(accessToken, label.getLabelId());
 
-        delete(accessToken, labelId);
+        delete(accessToken, label.getLabelId());
     }
 
     private void delete(String accessToken, UUID labelId) {
@@ -47,10 +45,6 @@ public class CalendarLabelsTest extends BackEndTest {
         CustomAssertions.singleListAssertThat(CalendarLabelActions.editLabel(getServerPort(), accessToken, labelId, NEW_LABEL))
             .returns(labelId, LabelResponse::getLabelId)
             .returns(NEW_LABEL, LabelResponse::getLabel);
-    }
-
-    private void edit_alreadyExists(String accessToken, UUID labelId) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getEditLabelResponse(getServerPort(), accessToken, labelId, LABEL), "label", "already exists");
     }
 
     private void edit_tooLong(String accessToken, UUID labelId) {
@@ -74,15 +68,11 @@ public class CalendarLabelsTest extends BackEndTest {
             .returns(LABEL, LabelResponse::getLabel);
     }
 
-    private void create_alreadyExists(String accessToken) {
-        ResponseValidator.verifyInvalidParam(CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, LABEL), "label", "already exists");
-    }
+    private LabelResponse create(String accessToken) {
+        LabelResponse label = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL);
+        assertThat(label).isNotNull();
 
-    private UUID create(String accessToken) {
-        UUID labelId = CalendarLabelActions.createLabel(getServerPort(), accessToken, LABEL);
-        assertThat(labelId).isNotNull();
-
-        return labelId;
+        return label;
     }
 
     private void create_tooLong(String accessToken) {

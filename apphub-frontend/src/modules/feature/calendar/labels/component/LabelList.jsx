@@ -52,6 +52,7 @@ const LabelList = ({ selectedLabel, setSelectedLabel, localizationHandler, setDi
                 label={label.label}
                 labelId={label.labelId}
                 selected={label.labelId === selectedLabel}
+                shared={label.shared}
                 setSelectedLabel={setSelectedLabel}
             />)
             .toList();

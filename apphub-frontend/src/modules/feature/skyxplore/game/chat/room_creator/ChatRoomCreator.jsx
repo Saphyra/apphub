@@ -9,7 +9,7 @@ import NotificationService from "common/js/notification/NotificationService";
 import InputField from "common/component/input/InputField";
 import { SKYXPLORE_GAME_CREATE_CHAT_ROOM, SKYXPLORE_GAME_GET_PLAYERS } from "../../SkyXploreGameEndpoints";
 
-const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
+const ChatRoomCreator = ({ setDisplayRoomCreator, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const [roomId, setRoomId] = useState("");
     const [players, setPlayers] = useState([]);
@@ -20,7 +20,7 @@ const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
     const loadPlayers = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_GAME_GET_PLAYERS.createRequest(null, null, { excludeSelf: true })
-                .send();
+                .send(setDisplaySpinner);
             setPlayers(response);
         }
         fetch();
@@ -101,7 +101,7 @@ const ChatRoomCreator = ({ setDisplayRoomCreator }) => {
         }
 
         await SKYXPLORE_GAME_CREATE_CHAT_ROOM.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         setDisplayRoomCreator(false);
     }

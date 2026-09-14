@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,9 +32,10 @@ public class ExpiredEventService {
 
     public List<EventResponse> getExpiredEvents(UUID userId) {
         return eventDao.getByUserId(userId)
+            .values()
             .stream()
             .filter(this::isExpired)
-            .map(eventResponseMapper::toResponse)
+            .map(event -> eventResponseMapper.toResponse(userId, event))
             .toList();
     }
 
@@ -48,7 +50,8 @@ public class ExpiredEventService {
 
         LocalDate currentDate = dateTimeUtil.getCurrentDate();
 
-        List<Occurrence> occurrences = occurrenceDao.getByEventId(event.getEventId());
+        Collection<Occurrence> occurrences = occurrenceDao.getByEventId(event.getEventId())
+            .values();
 
         if (occurrences.isEmpty()) {
             return false;

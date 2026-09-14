@@ -59,7 +59,8 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(NEW_TITLE, EventResponse::getTitle)
             .returns(NEW_CONTENT, EventResponse::getContent)
             .returns(0, EventResponse::getRemindMeBeforeDays)
-            .returns(List.of(), EventResponse::getLabels);
+            .returns(List.of(), EventResponse::getLabels)
+            .returns(true,  EventResponse::getAutoDone);
 
         CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, OccurrenceResponse::getEventId)
@@ -70,7 +71,8 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(NEW_CONTENT, OccurrenceResponse::getContent)
             .returns("", OccurrenceResponse::getNote)
             .returns(0, OccurrenceResponse::getRemindMeBeforeDays)
-            .returns(false, OccurrenceResponse::getReminded);
+            .returns(false, OccurrenceResponse::getReminded)
+            .returns(true,  OccurrenceResponse::getAutoDone);
     }
 
     private void delete(String accessToken, UUID eventId) {
@@ -98,7 +100,8 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(EventRequestFactory.DEFAULT_TITLE, EventResponse::getTitle)
             .returns(EventRequestFactory.DEFAULT_CONTENT, EventResponse::getContent)
             .returns(0, EventResponse::getRemindMeBeforeDays)
-            .returns(List.of(), EventResponse::getLabels);
+            .returns(List.of(), EventResponse::getLabels)
+            .returns(false, EventResponse::getAutoDone);
 
         CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrencesOfEvent(getServerPort(), accessToken, eventId))
             .returns(eventId, OccurrenceResponse::getEventId)
@@ -109,7 +112,8 @@ public class BasicOneTimeEventTest extends BackEndTest {
             .returns(EventRequestFactory.DEFAULT_CONTENT, OccurrenceResponse::getContent)
             .returns("", OccurrenceResponse::getNote)
             .returns(0, OccurrenceResponse::getRemindMeBeforeDays)
-            .returns(false, OccurrenceResponse::getReminded);
+            .returns(false, OccurrenceResponse::getReminded)
+            .returns(false, OccurrenceResponse::getAutoDone);
 
         return eventId;
     }

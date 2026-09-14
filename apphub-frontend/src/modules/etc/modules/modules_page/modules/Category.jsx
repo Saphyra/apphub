@@ -7,7 +7,7 @@ import Stream from "common/js/collection/Stream";
 import Button from "common/component/input/Button";
 import { GET_USER_SETTINGS, SET_USER_SETTINGS } from "common/js/GenericEndpoints";
 
-const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, categoryId, modules, query = [], updateModules, favorite = false }) => {
+const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, categoryId, modules, query = [], updateModules, favorite = false, setDisplaySpinner }) => {
     const [collapsed, setCollapsed] = useState(false);
 
     useCache(
@@ -24,7 +24,7 @@ const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, cate
         };
 
         await SET_USER_SETTINGS.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         setCollapsed(newCollapsed);
     }
@@ -38,6 +38,7 @@ const Category = ({ categoryLocalizationHandler, moduleLocalizationHandler, cate
                 moduleLocalizationHandler={moduleLocalizationHandler}
                 module={module}
                 updateModules={updateModules}
+                setDisplaySpinner={setDisplaySpinner}
             />
         )
         .toList();

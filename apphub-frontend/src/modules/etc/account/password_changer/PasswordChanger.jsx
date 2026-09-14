@@ -11,7 +11,7 @@ import Button from "common/component/input/Button";
 import { ACCOUNT_CHANGE_PASSWORD } from "../AccountEndpoints";
 import { INDEX_PAGE } from "common/js/GenericEndpoints";
 
-const PasswordChanger = () => {
+const PasswordChanger = ({ setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [newPassword, setNewPassword] = useState("");
@@ -35,7 +35,7 @@ const PasswordChanger = () => {
         }
 
         await ACCOUNT_CHANGE_PASSWORD.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         const successMessage = localizationHandler.get("password-changed");
 

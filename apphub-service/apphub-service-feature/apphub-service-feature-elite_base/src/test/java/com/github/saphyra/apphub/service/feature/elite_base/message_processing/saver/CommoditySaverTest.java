@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.message_processing.
 
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.TradingDaoSupport;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
@@ -97,15 +97,15 @@ class CommoditySaverTest {
 
     @Test
     void nullMarketId() {
-        assertThat(catchThrowable(() -> underTest.saveAll(TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(existingCommodityData), STAR_SYSTEM_ID)))
+        assertThat(catchThrowable(() -> underTest.saveAll(TIMESTAMP, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, null, List.of(existingCommodityData), STAR_SYSTEM_ID)))
             .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
     void emptyCommodity() {
-        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ItemType.COMMODITY)).willReturn(Optional.of(originalLastUpdate));
-        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ItemType.COMMODITY, TIMESTAMP)).willReturn(newLastUpdate);
-        given(tradingDaoSupport.getByMarketId(ItemType.COMMODITY, MARKET_ID)).willReturn(List.of(existingCommodity, modifiedCommodity, corruptedCommodity, deletedCommodity));
+        given(lastUpdateDao.findById(EXTERNAL_REFERENCE, ObjectType.COMMODITY)).willReturn(Optional.of(originalLastUpdate));
+        given(lastUpdateFactory.create(EXTERNAL_REFERENCE, ObjectType.COMMODITY, TIMESTAMP)).willReturn(newLastUpdate);
+        given(tradingDaoSupport.getByMarketId(ObjectType.COMMODITY, MARKET_ID)).willReturn(List.of(existingCommodity, modifiedCommodity, corruptedCommodity, deletedCommodity));
 
         given(existingCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
         given(modifiedCommodity.getExternalReference()).willReturn(EXTERNAL_REFERENCE);
@@ -130,16 +130,16 @@ class CommoditySaverTest {
         given(newCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
         given(modifiedCommodityData.getAveragePrice()).willReturn(AVERAGE_PRICE);
 
-        given(commodityDataTransformer.transform(null, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
+        given(commodityDataTransformer.transform(null, TIMESTAMP, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, newCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
             .willReturn(Optional.of(newCommodity));
-        given(commodityDataTransformer.transform(existingCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
+        given(commodityDataTransformer.transform(existingCommodity, TIMESTAMP, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, existingCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
             .willReturn(Optional.empty());
-        given(commodityDataTransformer.transform(modifiedCommodity, TIMESTAMP, ItemType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, modifiedCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
+        given(commodityDataTransformer.transform(modifiedCommodity, TIMESTAMP, ObjectType.COMMODITY, ItemLocationType.STATION, EXTERNAL_REFERENCE, MARKET_ID, modifiedCommodityData, originalLastUpdate, STAR_SYSTEM_ID))
             .willReturn(Optional.of(modifiedCommodity));
 
         underTest.saveAll(
             TIMESTAMP,
-            ItemType.COMMODITY,
+            ObjectType.COMMODITY,
             ItemLocationType.STATION,
             EXTERNAL_REFERENCE,
             MARKET_ID,
@@ -148,10 +148,10 @@ class CommoditySaverTest {
         );
 
         then(lastUpdateDao).should().save(newLastUpdate);
-        then(tradingDaoSupport).should().deleteAll(ItemType.COMMODITY, List.of(corruptedCommodity));
+        then(tradingDaoSupport).should().deleteAll(ObjectType.COMMODITY, List.of(corruptedCommodity));
         then(commodityAveragePriceSaver).should().saveAveragePrices(TIMESTAMP, Map.of(EXISTING_COMMODITY_NAME, AVERAGE_PRICE, NEW_COMMODITY_NAME, AVERAGE_PRICE, MODIFIED_COMMODITY_NAME, AVERAGE_PRICE));
-        then(itemTypeDao).should().saveAll(ItemType.COMMODITY, List.of(EXISTING_COMMODITY_NAME, NEW_COMMODITY_NAME, MODIFIED_COMMODITY_NAME));
-        then(tradingDaoSupport).should().deleteAll(ItemType.COMMODITY, List.of(deletedCommodity));
-        then(tradingDaoSupport).should().saveAll(ItemType.COMMODITY, List.of(newCommodity, modifiedCommodity));
+        then(itemTypeDao).should().saveAll(ObjectType.COMMODITY, List.of(EXISTING_COMMODITY_NAME, NEW_COMMODITY_NAME, MODIFIED_COMMODITY_NAME));
+        then(tradingDaoSupport).should().deleteAll(ObjectType.COMMODITY, List.of(deletedCommodity));
+        then(tradingDaoSupport).should().saveAll(ObjectType.COMMODITY, List.of(newCommodity, modifiedCommodity));
     }
 }

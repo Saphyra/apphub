@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.community.BlacklistActions;
 import com.github.saphyra.apphub.integration.action.backend.community.FriendRequestActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.community.FriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.community.SearchResultItem;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -23,7 +23,7 @@ public class FriendCandidateSearchTest extends BackEndTest {
 
         RegistrationParameters testUserData = RegistrationParameters.validParameters();
         String testUserAccessTokenId = IndexPageActions.registerAndLogin(getServerPort(), testUserData);
-        UUID testUserId = DynamoDbUtil.getUserIdByEmail(testUserData.getEmail());
+        UUID testUserId = UserDynamoDbRepository.getUserIdByEmail(testUserData.getEmail());
 
         search(accessToken, testUserData, testUserId);
         FriendRequestResponse friendRequestResponse = friendRequestAlreadySent(accessToken, testUserId);

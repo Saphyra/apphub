@@ -54,7 +54,7 @@ public class ExpiredEventTest extends BackEndTest {
     }
 
     private void eventDurationTooLong(String accessToken, UUID eventId) {
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, CURRENT_DATE.plusYears(3)), "eventDuration", "too long");
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getExtendExpiredEventResponse(getServerPort(), accessToken, eventId, CURRENT_DATE.plusYears(101)), "eventDuration", "too long");
     }
 
     private void nullExtendUntil(String accessToken, UUID eventId) {

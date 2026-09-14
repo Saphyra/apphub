@@ -18,7 +18,7 @@ import Stream from "common/js/collection/Stream";
 import Button from "common/component/input/Button";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES, SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA } from "../../SkyXploreGameEndpoints";
 
-const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setConfirmationDialogData }) => {
+const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const constructionAreaLocalizationHandler = new LocalizationHandler(constructionAreaLocalizationData);
     const buildingModuleCategoryLocalizationHandler = new LocalizationHandler(buildingModuleCategoryLocalizationData);
@@ -33,7 +33,8 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
     );
     useLoader({
         request: SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_GET_BUILDING_MODULES.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId }),
-        mapper: setBuildingModules
+        mapper: setBuildingModules,
+        setDisplaySpinner: setDisplaySpinner
     });
 
     useConnectToWebSocket(
@@ -79,6 +80,7 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
                 buildings={new Stream(buildingModules).filter(building => building.buildingModuleCategory === buildingModulecategory).toList()}
                 setBuildings={setBuildingModules}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }
@@ -105,7 +107,7 @@ const ConstructionArea = ({ openPage, closePage, footer, constructionArea, setCo
 
     const deconstruct = async () => {
         await SKYXPLORE_PLANET_SURFACE_DECONSTRUCT_CONSTRUCTION_AREA.createRequest(null, { constructionAreaId: constructionArea.constructionAreaId })
-            .send();
+            .send(setDisplaySpinner);
 
         setConfirmationDialogData(null);
         closePage();

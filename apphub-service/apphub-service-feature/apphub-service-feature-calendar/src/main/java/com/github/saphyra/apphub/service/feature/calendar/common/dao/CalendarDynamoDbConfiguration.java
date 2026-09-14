@@ -10,17 +10,20 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Getter
 public class CalendarDynamoDbConfiguration implements DynamoDbRepositoryConfiguration {
-    private final String tableName;
+    private final String calendarTableName;
+    private final String almTableName;
     private final int maxBatchRetryCount;
     private final long batchRetryDelayMs;
 
     CalendarDynamoDbConfiguration(
-        @Value("${aws.dynamoDb.calendar.tableName}") String tableName,
+        @Value("${aws.dynamoDb.calendar.tableName}") String calendarTableName,
+        @Value("${aws.dynamoDb.alm.tableName}") String almTableName,
         @Value("${aws.dynamoDb.maxBatchRetryCount}") int maxBatchRetryCount,
         @Value("${aws.dynamoDb.batchRetryDelayMs}") long batchRetryDelayMs
     ) {
-        this.tableName = tableName;
+        this.calendarTableName = calendarTableName;
         this.maxBatchRetryCount = maxBatchRetryCount;
         this.batchRetryDelayMs = batchRetryDelayMs;
+        this.almTableName = almTableName;
     }
 }

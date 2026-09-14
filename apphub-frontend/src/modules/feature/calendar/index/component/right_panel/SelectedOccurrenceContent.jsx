@@ -85,6 +85,7 @@ const SelectedOccurrenceContent = ({
                                 <span>: </span>
                                 {
                                     new Stream(labels)
+                                        .sorted((a, b) => a.label.localeCompare(b.label))
                                         .map(label => <span key={label.labelId}>{label.label}</span>)
                                         .joinToArray(() => <span key={generateRandomId()}>, </span>)
                                 }

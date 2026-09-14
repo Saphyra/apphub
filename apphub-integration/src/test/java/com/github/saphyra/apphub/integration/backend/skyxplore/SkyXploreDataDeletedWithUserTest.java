@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreC
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -21,17 +21,17 @@ public class SkyXploreDataDeletedWithUserTest extends BackEndTest {
     public void skyXploreDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, SkyXploreCharacterModel.valid());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
-        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = UserDynamoDbRepository.getUserIdByEmail(userData3.getEmail());
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, SkyXploreCharacterModel.valid());
 
         skyXploreTables(accessToken, userId2, accessToken3, userId3);

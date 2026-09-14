@@ -10,12 +10,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY_DATA;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "body_data")
+@Table(schema = SCHEMA, name = TABLE_BODY_DATA)
  class BodyDataEntity {
     @Id
     private String bodyId;

@@ -27,4 +27,11 @@ public class CalendarEndpoints {
     public static final String CALENDAR_MERGE_EVENTS = "/api/calendar/events/{eventId}/merge";
     public static final String CALENDAR_SEARCH_EVENTS = "/api/calendar/events/search";
     public static final String CALENDAR_ARCHIVE_EVENT = "/api/calendar/events/{eventId}/archive";
+
+    //Share
+    public static final String CALENDAR_GET_SHARED_ITEM = "/api/calendar/shared/{type}/{id}";
+    public static final String CALENDAR_GET_GRANTS = "/api/calendar/shared/{type}/grants";
+    public static final String CALENDAR_SHARE_OBJECT = "/api/calendar/shared";
+    public static final String CALENDAR_SHARE_EDIT_GRANTS = "/api/calendar/shared/{type}/{id}/grants/{sharedWith}";
+    public static final String CALENDAR_UNSHARE = "/api/calendar/shared/{type}/{id}/grants/{sharedWith}";
 }

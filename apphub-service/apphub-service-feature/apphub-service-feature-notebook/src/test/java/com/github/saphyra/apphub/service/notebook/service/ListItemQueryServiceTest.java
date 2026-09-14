@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ class ListItemQueryServiceTest {
     @Test
     void findListItem() {
         given(listItemDao.findById(USER_ID, LIST_ITEM_ID)).willReturn(Optional.of(listItem));
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem))).willReturn(List.of(notebookView));
 
         assertThat(underTest.findListItem(USER_ID, LIST_ITEM_ID)).isEqualTo(notebookView);
     }

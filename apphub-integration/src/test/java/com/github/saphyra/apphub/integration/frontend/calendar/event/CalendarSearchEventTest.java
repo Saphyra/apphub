@@ -63,7 +63,7 @@ public class CalendarSearchEventTest extends SeleniumTest {
         AwaitilityWrapper.getWithWait(() -> CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, createEventParameters.getStartDate(), createEventParameters.getTitle()))
             .orElseThrow(() -> new IllegalStateException("Occurrence not found"))
             .open(driver);
-        CalendarIndexPageActions.editOccurrence(driver);
+        CalendarIndexPageActions.editOpenedOccurrence(driver);
 
         CalendarOccurrencePageActions.setNote(driver, SEARCH_TEXT);
         CalendarOccurrencePageActions.save(driver);

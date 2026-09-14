@@ -22,6 +22,7 @@ import static java.util.Objects.nonNull;
 class OccurrenceQueryServiceHelper {
     private final OccurrenceDao occurrenceDao;
 
+    @Deprecated(forRemoval = true)
     List<Occurrence> getOccurrencesBetween(UUID userId, LocalDate startDate, LocalDate endDate) {
         List<String> buckets = getBuckets(startDate, endDate);
 

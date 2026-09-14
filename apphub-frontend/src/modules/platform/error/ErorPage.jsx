@@ -16,6 +16,8 @@ import Footer from "common/component/Footer";
 import { CHECK_SESSION, INDEX_PAGE } from "common/js/GenericEndpoints";
 import { ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE } from "modules/etc/admin_panel/AdminPanelEndpoints";
 import ResponseStatus from "common/js/dao/ResponseStatus";
+import { ToastContainer } from "react-toastify";
+import Spinner from "common/component/Spinner";
 
 const ErrorPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -23,6 +25,8 @@ const ErrorPage = () => {
     document.title = localizationHandler.get("page-title");
 
     const [searchParams] = useSearchParams();
+
+    const [displaySpinner, setDisplaySpinner] = useState(true);
 
     const [errorCode, setErrorCode] = useState("UNKNOWN_ERROR");
     const [userLoggedIn, setUserLoggedIn] = useState(false);
@@ -39,7 +43,8 @@ const ErrorPage = () => {
         request: ACCOUNT_BAN_GET_DETAILS_FOR_ERROR_PAGE.createRequest({ userId: userId, requiredRoles: requiredRoles }),
         mapper: setBannedDetails,
         listener: [userId, requiredRoles],
-        condition: () => hasValue(userId) && hasValue(requiredRoles)
+        condition: () => hasValue(userId) && hasValue(requiredRoles),
+        setDisplaySpinner: setDisplaySpinner
     });
 
     const checkUserLoggedIn = () => {
@@ -49,7 +54,7 @@ const ErrorPage = () => {
                     response => response.status === ResponseStatus.UNAUTHORIZED,
                     () => setUserLoggedIn(false)
                 ))
-                .send();
+                .send(setDisplaySpinner);
 
             setUserLoggedIn(true);
         }
@@ -64,7 +69,7 @@ const ErrorPage = () => {
         return <Button
             id="error-logout-button"
             label={localizationHandler.get("logout")}
-            onclick={() => logout()}
+            onclick={() => logout(setDisplaySpinner)}
         />
     }
 
@@ -103,6 +108,10 @@ const ErrorPage = () => {
                 }
                 rightButtons={getLogoutButton()}
             />
+
+            <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

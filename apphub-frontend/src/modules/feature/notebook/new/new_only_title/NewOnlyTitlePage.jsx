@@ -11,6 +11,7 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import { NOTEBOOK_CREATE_ONLY_TITLE, NOTEBOOK_NEW_PAGE, NOTEBOOK_PAGE } from "../../NotebookEndpoints";
+import Spinner from "common/component/Spinner";
 
 const NewOnlyTitlePage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -18,6 +19,8 @@ const NewOnlyTitlePage = () => {
 
     const { parent } = useParams();
     const [parentId, setParentId] = useState(parent === "null" ? null : parent);
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [listItemTitle, setListItemTitle] = useState("");
 
@@ -35,7 +38,7 @@ const NewOnlyTitlePage = () => {
             title: listItemTitle
         }
         await NOTEBOOK_CREATE_ONLY_TITLE.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         window.location.href = NOTEBOOK_PAGE;
     }
@@ -55,6 +58,7 @@ const NewOnlyTitlePage = () => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 
@@ -85,6 +89,8 @@ const NewOnlyTitlePage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

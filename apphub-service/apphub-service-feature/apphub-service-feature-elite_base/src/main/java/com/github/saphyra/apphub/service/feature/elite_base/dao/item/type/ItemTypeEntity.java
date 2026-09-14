@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.item.type;
 
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,5 +24,5 @@ class ItemTypeEntity {
     @Id
     private String itemName;
     @Enumerated(EnumType.STRING)
-    private ItemType type;
+    private ObjectType type;
 }

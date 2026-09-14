@@ -24,7 +24,7 @@ class TitleUpdater implements EventFieldUpdater {
 
     @Override
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
-        log.info("Updating title of DeprecatedEvent {}", event.getEventId());
+        log.info("Updating title of Event {}", event.getEventId());
 
         event.setTitle(request.getTitle());
     }

@@ -24,7 +24,7 @@ class EndDateUpdater implements EventFieldUpdater {
 
     @Override
     public void doUpdate(UpdateEventContext context, EventRequest request, Event event) {
-        log.info("Updating endDate of DeprecatedEvent {}", event.getEventId());
+        log.info("Updating endDate of Event {}", event.getEventId());
 
         event.setEndDate(request.getEndDate());
 

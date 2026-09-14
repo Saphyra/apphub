@@ -37,7 +37,7 @@ import static com.github.saphyra.apphub.service.feature.calendar.common.dao.Cale
 @Profile("!test")
 class CommonCalendarRepository extends DynamoDbRepository {
     CommonCalendarRepository(CalendarDynamoDbConfiguration configuration, DynamoDbRepositoryContext context) {
-        super(configuration.getTableName(), context);
+        super(configuration.getCalendarTableName(), context);
     }
 
     void deleteByUserId(String userId) {

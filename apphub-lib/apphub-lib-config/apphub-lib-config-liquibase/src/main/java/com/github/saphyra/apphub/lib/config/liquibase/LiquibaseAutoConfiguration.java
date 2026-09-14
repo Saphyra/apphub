@@ -15,14 +15,14 @@ import static java.util.Objects.isNull;
 
 @AutoConfiguration
 @Slf4j
-class LiquibaseAutoConfiguration {
+public class LiquibaseAutoConfiguration {
     private static final String CREATE_SCHEMA_SQL = "create schema if not exists %s";
 
     @Bean
     SpringLiquibase liquibase(
         DataSource dataSource,
-        @Value("${liquibase.changelog.location}") String changeLogLocation,
-        @Value("${liquibase.schema}") String schema
+        @Value("${liquibase.changelog.location:classpath:database/changelog-master.xml}") String changeLogLocation,
+        @Value("${liquibase.schema:test}") String schema
     ) {
         log.debug("ChangeLogLocation: {}", changeLogLocation);
         createSchema(dataSource, schema);

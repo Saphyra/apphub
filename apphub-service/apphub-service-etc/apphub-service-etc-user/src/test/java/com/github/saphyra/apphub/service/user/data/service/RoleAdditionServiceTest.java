@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
@@ -45,6 +46,9 @@ public class RoleAdditionServiceTest {
     @Mock
     private RoleRequestValidator roleRequestValidator;
 
+    @Mock
+    private AuthorizationClient authorizationClient;
+
     @InjectMocks
     private RoleAdditionService underTest;
 
@@ -77,5 +81,6 @@ public class RoleAdditionServiceTest {
 
         assertThat(user.getRoles()).containsExactly(Role.TEST);
         then(userDao).should().addRole(USER_ID, Role.TEST);
+        then(authorizationClient).should().invalidateAllAccessTokens(USER_ID);
     }
 }

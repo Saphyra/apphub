@@ -5,9 +5,9 @@ import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskMan
 import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskManagerNotificationActions;
 import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskManagerOrganizationActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.invitation.InvitationResponse;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.NotificationResponse;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.NotificationStatus;
@@ -31,11 +31,11 @@ public class TaskManagerInvitationTest extends BackEndTest {
     void acceptInvitation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         UUID organizationId = createOrganization(userId2, accessToken1);
 
@@ -60,11 +60,11 @@ public class TaskManagerInvitationTest extends BackEndTest {
     void rejectInvitation() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         UUID organizationId = createOrganization(userId2, accessToken1);
 

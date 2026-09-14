@@ -61,9 +61,8 @@ class MinorFactionFactoryTest {
         given(minorFactionStateFactory.create(ID, StateStatus.PENDING, List.of(pendingFactionState))).willReturn(List.of(pendingState));
         given(minorFactionStateFactory.create(ID, StateStatus.RECOVERING, List.of(recoveringFactionState))).willReturn(List.of(recoveringState));
 
-        assertThat(underTest.create(LAST_UPDATE, FACTION_NAME, FactionStateEnum.BLIGHT, INFLUENCE, Allegiance.ALLIANCE, List.of(activeFactionState), List.of(pendingFactionState), List.of(recoveringFactionState)))
+        assertThat(underTest.create(FACTION_NAME, FactionStateEnum.BLIGHT, INFLUENCE, Allegiance.ALLIANCE, List.of(activeFactionState), List.of(pendingFactionState), List.of(recoveringFactionState)))
             .returns(ID, MinorFaction::getId)
-            .returns(LAST_UPDATE, MinorFaction::getLastUpdate)
             .returns(FACTION_NAME, MinorFaction::getFactionName)
             .returns(FactionStateEnum.BLIGHT, MinorFaction::getState)
             .returns(INFLUENCE, MinorFaction::getInfluence)

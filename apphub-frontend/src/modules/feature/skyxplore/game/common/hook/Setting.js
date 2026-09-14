@@ -1,7 +1,7 @@
 import useLoader from "common/hook/Loader";
 import { SKYXPLORE_DATA_GET_SETTING } from "../../SkyXploreGameEndpoints";
 
-const useLoadSetting = (type, location, callback) => {
+const useLoadSetting = (type, location, callback, setDisplaySpinner) => {
     const payload = {
         type: type,
         location: location
@@ -9,7 +9,8 @@ const useLoadSetting = (type, location, callback) => {
 
     useLoader({
         request: SKYXPLORE_DATA_GET_SETTING.createRequest(payload),
-        mapper: response => callback(response.value)
+        mapper: response => callback(response.value),
+        setDisplaySpinner: setDisplaySpinner
     });
 }
 

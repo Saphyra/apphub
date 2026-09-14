@@ -5,3 +5,5 @@ aws:
     url: ~
     calendar:
       tableName: apphub-preprod-calendar
+    alm:
+      tableName: apphub-calendar-preprod-alm

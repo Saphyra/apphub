@@ -11,6 +11,7 @@ const confirmCancelConstructionAreaConstruction = (
     localizationHandler,
     constructionId,
     setConfirmationDialogData,
+    setDisplaySpinner
 ) => {
     setConfirmationDialogData(new ConfirmationDialogData(
         "skyxplore-game-planet-confirm-cancel-construction-area-construction",
@@ -21,7 +22,7 @@ const confirmCancelConstructionAreaConstruction = (
                 key="cancel-construction"
                 id="skyxplore-game-planet-cancel-construction-area-construction-button"
                 label={localizationHandler.get("cancel-construction")}
-                onclick={() => cancelConstruction(constructionId, setConfirmationDialogData)}
+                onclick={() => cancelConstruction(constructionId, setConfirmationDialogData, setDisplaySpinner)}
             />,
             <Button
                 key="constinue-construction"
@@ -33,9 +34,9 @@ const confirmCancelConstructionAreaConstruction = (
     ));
 }
 
-const cancelConstruction = async (constructionId, setConfirmationDialogData) => {
+const cancelConstruction = async (constructionId, setConfirmationDialogData, setDisplaySpinner) => {
     await SKYXPLORE_PLANET_SURFACE_CANCEL_CONSTRUCTION_AREA_CONSTRUCTION.createRequest(null, { constructionId: constructionId })
-        .send();
+        .send(setDisplaySpinner);
 
     setConfirmationDialogData(null);
 }

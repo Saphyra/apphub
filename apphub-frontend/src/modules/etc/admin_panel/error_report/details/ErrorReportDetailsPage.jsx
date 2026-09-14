@@ -16,17 +16,19 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import { ToastContainer } from "react-toastify";
 import { ADMIN_PANEL_DELETE_ERROR_REPORTS, ADMIN_PANEL_ERROR_REPORT_PAGE, ADMIN_PANEL_GET_ERROR_REPORT, ADMIN_PANEL_MARK_ERROR_REPORTS } from "../../AdminPanelEndpoints";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const ErrorReportDetailsPage = () => {
     const { errorReportId } = useParams();
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
+    const [displaySpinner, setDisplaySpinner] = useState(false);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
     const [errorReport, setErrorReport] = useState({});
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
-    useLoader({ request: ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), mapper: setErrorReport });
+    useLoader({ request: ADMIN_PANEL_GET_ERROR_REPORT.createRequest(null, { id: errorReportId }), mapper: setErrorReport, setDisplaySpinner: setDisplaySpinner });
 
     const openDeleteConfirmation = () => {
         setConfirmationDialogData(new ConfirmationDialogData(
@@ -52,14 +54,14 @@ const ErrorReportDetailsPage = () => {
 
     const deleteErrorReport = async () => {
         await ADMIN_PANEL_DELETE_ERROR_REPORTS.createRequest([errorReportId])
-            .send();
+            .send(setDisplaySpinner);
 
         window.close();
     }
 
     const mark = async (status) => {
         await ADMIN_PANEL_MARK_ERROR_REPORTS.createRequest([errorReportId], { status: status })
-            .send();
+            .send(setDisplaySpinner);
 
         NotificationService.showSuccess(localizationHandler.get("error-report-updated"))
     }
@@ -168,6 +170,8 @@ const ErrorReportDetailsPage = () => {
             }
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

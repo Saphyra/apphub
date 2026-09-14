@@ -6,14 +6,14 @@ import { useQuery } from "react-query";
 import TerraformingPossibility from "./terraformin_possibility/TerraformingPossibility";
 import { SKYXPLORE_GAME_TERRAFORM_SURFACE } from "../../../SkyXploreGameEndpoints";
 
-const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage }) => {
+const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage, setDisplaySpinner }) => {
     const [terraformingPossibilities, setTerraformingPossibilities] = useState([]);
 
     const { data: terraformingData } = useQuery(
         "terraforming-possibility-" + surfaceType,
         async () => {
             return await SKYXPLORE_DATA_TERRAFORMING_POSSIBILITIES.createRequest(null, { surfaceType: surfaceType })
-                .send()
+                .send(setDisplaySpinner)
         },
         {
             staleTime: Infinity,
@@ -32,7 +32,7 @@ const TerraformingPossibilities = ({ surfaceType, planetId, surfaceId, closePage
 
     const terraform = async (targetSurfaceType) => {
         await SKYXPLORE_GAME_TERRAFORM_SURFACE.createRequest({ value: targetSurfaceType }, { planetId: planetId, surfaceId: surfaceId })
-            .send();
+            .send(setDisplaySpinner);
 
         closePage();
     }

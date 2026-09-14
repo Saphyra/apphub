@@ -42,16 +42,24 @@ public abstract class DynamoDbRepository {
         this.deleteItemUtil = context.getDeleteItemUtil();
     }
 
+    protected void putItem(Map<String, AttributeValue> item, MonitoringFunctionality monitoringFunctionality) {
+        PutItemRequest request = PutItemRequest.builder()
+            .item(item)
+            .build();
+
+        putItemUtil.putItem(tableName, request, monitoringFunctionality.assemble(tableName));
+    }
+
     protected void putItem(PutItemRequest request, MonitoringFunctionality monitoringFunctionality) {
-        putItemUtil.putItem(request, monitoringFunctionality.assemble(tableName));
+        putItemUtil.putItem(tableName, request, monitoringFunctionality.assemble(tableName));
     }
 
     protected List<Map<String, AttributeValue>> query(QueryRequest queryRequest, MonitoringFunctionality monitoringFunctionality) {
-        return queryUtil.query(queryRequest, monitoringFunctionality.assemble(tableName));
+        return queryUtil.query(tableName, queryRequest, monitoringFunctionality.assemble(tableName));
     }
 
     protected List<Map<String, AttributeValue>> scan(ScanRequest scanRequest, MonitoringFunctionality monitoringFunctionality) {
-        return scanUtil.scan(scanRequest, monitoringFunctionality.assemble(tableName));
+        return scanUtil.scan(tableName, scanRequest, monitoringFunctionality.assemble(tableName));
     }
 
     protected void batchWrite(List<WriteRequest> requests, MonitoringFunctionality monitoringFunctionality) {
@@ -62,11 +70,27 @@ public abstract class DynamoDbRepository {
         return batchGetItemUtil.batchGetItem(tableName, keys, monitoringFunctionality.assemble(tableName));
     }
 
+    protected Optional<Map<String, AttributeValue>> getItem(Map<String, AttributeValue> key, MonitoringFunctionality monitoringFunctionality) {
+        GetItemRequest request = GetItemRequest.builder()
+            .key(key)
+            .build();
+
+        return getItem(request, monitoringFunctionality);
+    }
+
     protected Optional<Map<String, AttributeValue>> getItem(GetItemRequest request, MonitoringFunctionality monitoringFunctionality) {
-        return getItemUtil.getItem(request, monitoringFunctionality.assemble(tableName));
+        return getItemUtil.getItem(tableName, request, monitoringFunctionality.assemble(tableName));
+    }
+
+    protected void deleteItem(Map<String, AttributeValue> key, MonitoringFunctionality monitoringFunctionality) {
+        DeleteItemRequest request = DeleteItemRequest.builder()
+            .key(key)
+            .build();
+
+        deleteItemUtil.deleteItem(tableName, request, monitoringFunctionality.assemble(tableName));
     }
 
     protected void deleteItem(DeleteItemRequest request, MonitoringFunctionality monitoringFunctionality) {
-        deleteItemUtil.deleteItem(request, monitoringFunctionality.assemble(tableName));
+        deleteItemUtil.deleteItem(tableName, request, monitoringFunctionality.assemble(tableName));
     }
 }

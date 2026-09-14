@@ -3,7 +3,6 @@ package com.github.saphyra.apphub.service.feature.elite_base.common;
 import com.github.saphyra.apphub.api.feature.elite_base.server.EliteBaseEventController;
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.OrphanedRecordCleanerScheduler;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.MessageStatus;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor.EdMessageProcessor;
@@ -26,7 +25,6 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     private final EliteBaseProperties properties;
     private final EdMessageProcessor edMessageProcessor;
     private final ExecutorServiceBean executorServiceBean;
-    private final OrphanedRecordCleanerScheduler orphanedRecordCleanerScheduler;
 
     @Override
     public void processMessages() {
@@ -57,12 +55,5 @@ class EliteBaseEventControllerImpl implements EliteBaseEventController {
     public void resetError() {
         log.info("resetError event arrived");
         messageDao.resetError();
-    }
-
-    @Override
-    public void cleanupOrphanedRecords() {
-        log.info("cleanupOrphanedRecords event arrived");
-
-        //executorServiceBean.execute(orphanedRecordCleanerScheduler::cleanup);
     }
 }

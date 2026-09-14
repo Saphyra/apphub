@@ -23,8 +23,9 @@ class DynamoDbRepositoryQueryUtil {
     private final DynamoDbClient client;
     private final DynamoDbMonitoringInstruments monitoringInstruments;
 
-    List<Map<String, AttributeValue>> query(QueryRequest request, String monitoringFunctionality) {
+    List<Map<String, AttributeValue>> query(String tableName, QueryRequest request, String monitoringFunctionality) {
         request = request.toBuilder()
+            .tableName(tableName)
             .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
             .build();
 

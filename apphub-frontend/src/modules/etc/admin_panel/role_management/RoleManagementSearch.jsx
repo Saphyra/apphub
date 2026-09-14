@@ -3,14 +3,14 @@ import InputField from "common/component/input/InputField";
 import React from "react";
 import { USER_DATA_GET_USER_ROLES } from "../AdminPanelEndpoints";
 
-const RoleManagementSearch = ({ localizationHandler, query, setQuery, setUsers }) => {
+const RoleManagementSearch = ({ localizationHandler, query, setQuery, setUsers, setDisplaySpinner }) => {
     const search = async () => {
         if (query.length < 3) {
             return;
         }
 
         const response = await USER_DATA_GET_USER_ROLES.createRequest({ value: query }, {}, { includeSelf: true })
-            .send();
+            .send(setDisplaySpinner);
 
         setUsers(response);
     }

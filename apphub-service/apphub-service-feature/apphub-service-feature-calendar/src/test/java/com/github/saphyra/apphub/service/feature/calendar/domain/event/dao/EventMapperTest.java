@@ -9,6 +9,7 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import java.util.Map;
 
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_ARCHIVED;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_CONTENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_END_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EXPIRATION_NOTIFIED;
@@ -40,6 +41,7 @@ class EventMapperTest {
     private static final String REMIND_ME_BEFORE_DAYS = "2";
     private static final String EXPIRATION_NOTIFIED = "false";
     private static final String ARCHIVED = "false";
+    private static final String AUTO_DONE = "auto-done";
 
     @InjectMocks
     private EventMapper underTest;
@@ -60,6 +62,7 @@ class EventMapperTest {
             .remindMeBeforeDays(REMIND_ME_BEFORE_DAYS)
             .expirationNotified(EXPIRATION_NOTIFIED)
             .archived(ARCHIVED)
+            .autoDone(AUTO_DONE)
             .build();
 
         Map<String, AttributeValue> result = underTest.convertDomain(domain);
@@ -77,6 +80,7 @@ class EventMapperTest {
         assertThat(result.get(COLUMN_REMIND_ME_BEFORE_DAYS).s()).isEqualTo(REMIND_ME_BEFORE_DAYS);
         assertThat(result.get(COLUMN_EXPIRATION_NOTIFIED).s()).isEqualTo(EXPIRATION_NOTIFIED);
         assertThat(result.get(COLUMN_ARCHIVED).s()).isEqualTo(ARCHIVED);
+        assertThat(result.get(COLUMN_AUTO_DONE).s()).isEqualTo(AUTO_DONE);
     }
 
     @Test
@@ -94,7 +98,8 @@ class EventMapperTest {
             Map.entry(COLUMN_CONTENT, AttributeValue.builder().s(CONTENT).build()),
             Map.entry(COLUMN_REMIND_ME_BEFORE_DAYS, AttributeValue.builder().s(REMIND_ME_BEFORE_DAYS).build()),
             Map.entry(COLUMN_EXPIRATION_NOTIFIED, AttributeValue.builder().s(EXPIRATION_NOTIFIED).build()),
-            Map.entry(COLUMN_ARCHIVED, AttributeValue.builder().s(ARCHIVED).build())
+            Map.entry(COLUMN_ARCHIVED, AttributeValue.builder().s(ARCHIVED).build()),
+            Map.entry(COLUMN_AUTO_DONE, AttributeValue.builder().s(AUTO_DONE).build())
         );
 
         EventEntity result = underTest.convertEntity(entity);
@@ -112,5 +117,6 @@ class EventMapperTest {
         assertThat(result.getRemindMeBeforeDays()).isEqualTo(REMIND_ME_BEFORE_DAYS);
         assertThat(result.getExpirationNotified()).isEqualTo(EXPIRATION_NOTIFIED);
         assertThat(result.getArchived()).isEqualTo(ARCHIVED);
+        assertThat(result.getAutoDone()).isEqualTo(AUTO_DONE);
     }
 }

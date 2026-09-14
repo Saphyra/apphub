@@ -57,6 +57,7 @@ export const MultiSelect = ({
             {!disabled &&
                 <div className="multi-select-operations">
                     <InputField
+                        className="multi-select-deselect-all"
                         type="checkbox"
                         checked={false}
                         onchangeCallback={(t, e) => e.preventDefault()}
@@ -64,6 +65,7 @@ export const MultiSelect = ({
                     />
                     <span> / </span>
                     <InputField
+                        className="multi-select-select-all"
                         type="checkbox"
                         checked={true}
                         onchangeCallback={(t, e) => e.preventDefault()}

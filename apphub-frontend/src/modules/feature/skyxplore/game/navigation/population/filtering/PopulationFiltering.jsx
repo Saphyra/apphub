@@ -11,7 +11,8 @@ const PopulationFiltering = ({
     updateHidden,
     orderSetting,
     updateOrder,
-    planetId
+    planetId,
+    setDisplaySpinner
 }) => {
     return (
         <div id="skyxplore-game-population-filtering">
@@ -21,6 +22,7 @@ const PopulationFiltering = ({
                 hideSetting={hideSetting}
                 updateHidden={updateHidden}
                 planetId={planetId}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <SortCitizens
@@ -29,6 +31,7 @@ const PopulationFiltering = ({
                 orderSetting={orderSetting}
                 updateOrder={updateOrder}
                 planetId={planetId}
+                setDisplaySpinner={setDisplaySpinner}
             />
         </div>
     );

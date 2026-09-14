@@ -82,5 +82,9 @@
     "occurrence-created": {
         "en": "Occurrence created.",
         "hu": "Előfordulás létrehozva."
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

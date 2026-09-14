@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.integration.framework;
 
 
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 
@@ -34,13 +34,17 @@ public class UrlFactory {
             return uri;
         }
 
-        uri += "?";
-
-        uri += queryParams.entrySet()
+        List<String> queryParamList = queryParams.entrySet()
             .stream()
             .filter(entry -> !isNull(entry.getValue()))
             .map(entry -> String.join("=", entry.getKey(), entry.getValue().toString()))
-            .collect(Collectors.joining("&"));
+            .toList();
+
+        if (!queryParamList.isEmpty()) {
+            uri += "?";
+
+            uri += String.join("&", queryParamList);
+        }
 
         return uri;
     }

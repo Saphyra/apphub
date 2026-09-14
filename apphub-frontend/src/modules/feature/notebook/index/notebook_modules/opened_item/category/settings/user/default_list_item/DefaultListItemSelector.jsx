@@ -4,7 +4,7 @@ import ParentSelector from "modules/feature/notebook/common/parent_selector/Pare
 import UserSettings from "modules/feature/notebook/common/UserSettings";
 import { useState } from "react";
 
-const DefaultListItemSelector = ({ localizationHandler, defaultListItemId, setDefaultListItemId, setEditingEnabled, changeUserSettings }) => {
+const DefaultListItemSelector = ({ localizationHandler, defaultListItemId, setEditingEnabled, changeUserSettings, setDisplaySpinner }) => {
     const [listItemId, setListItemId] = useState(defaultListItemId);
 
     return (
@@ -14,6 +14,7 @@ const DefaultListItemSelector = ({ localizationHandler, defaultListItemId, setDe
                 setParentId={setListItemId}
                 onlyCategory={false}
                 excludedListItemTypes={[OpenedPageType.LINK, OpenedPageType.ONLY_TITLE]}
+                setDisplaySpinner={setDisplaySpinner}
             />
 
             <Button

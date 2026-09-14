@@ -12,7 +12,7 @@ import LabelWrappedInputField from "common/component/input/LabelWrappedInputFiel
 import RangeInput from "common/component/input/RangeInput";
 import { SKYXPLORE_PLANET_DELETE_STORAGE_SETTING, SKYXPLORE_PLANET_EDIT_STORAGE_SETTING } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDialogData }) => {
+const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const resourceLocalizationHandler = new LocalizationHandler(resourceLocalizationData);
 
@@ -36,7 +36,7 @@ const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDia
         }
 
         const response = await SKYXPLORE_PLANET_EDIT_STORAGE_SETTING.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         setStorageSettings(response);
 
@@ -69,7 +69,7 @@ const StorageSetting = ({ storageSetting, setStorageSettings, setConfirmationDia
 
     const deleteStorageSetting = async () => {
         const response = await SKYXPLORE_PLANET_DELETE_STORAGE_SETTING.createRequest(null, { storageSettingId: storageSetting.storageSettingId })
-            .send();
+            .send(setDisplaySpinner);
         setStorageSettings(response);
         setConfirmationDialogData(null);
     }

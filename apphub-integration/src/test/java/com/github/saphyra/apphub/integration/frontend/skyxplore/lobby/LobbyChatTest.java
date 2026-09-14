@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.integration.frontend.skyxplore.lobby;
 
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.SkyXploreUtils;
-import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyActions;
+import com.github.saphyra.apphub.integration.action.frontend.skyxplore.lobby.SkyXploreLobbyPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreFriendshipActions;
 import com.github.saphyra.apphub.integration.action.frontend.skyxplore.main_menu.SkyXploreMainMenuActions;
 import com.github.saphyra.apphub.integration.core.SeleniumTest;
@@ -43,48 +43,48 @@ public class LobbyChatTest extends SeleniumTest {
         SkyXploreMainMenuActions.createLobby(driver1, GAME_NAME);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getSystemMessages(driver1).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData1.getUsername())))
+            .until(() -> SkyXploreLobbyPageActions.getSystemMessages(driver1).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData1.getUsername())))
             .assertTrue();
 
-        SkyXploreLobbyActions.inviteFriend(driver1, userData2.getUsername());
+        SkyXploreLobbyPageActions.inviteFriend(driver1, userData2.getUsername());
 
         SkyXploreMainMenuActions.acceptInvitation(driver2, userData1.getUsername());
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getSystemMessages(driver1).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
+            .until(() -> SkyXploreLobbyPageActions.getSystemMessages(driver1).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
             .assertTrue();
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getSystemMessages(driver2).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
+            .until(() -> SkyXploreLobbyPageActions.getSystemMessages(driver2).contains(String.format(USER_JOINED_TO_LOBBY_TEMPLATE, userData2.getUsername())))
             .assertTrue();
 
         //Message too long
-        SkyXploreLobbyActions.sendMessage(driver1, Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()));
+        SkyXploreLobbyPageActions.sendMessage(driver1, Stream.generate(() -> "a").limit(1025).collect(Collectors.joining()));
         ToastMessageUtil.verifyErrorToast(driver1, LocalizedText.SKYXPLORE_CHAT_MESSAGE_TOO_LONG);
 
         //Send message
-        SkyXploreLobbyActions.sendMessage(driver1, MESSAGE_TEXT_1);
+        SkyXploreLobbyPageActions.sendMessage(driver1, MESSAGE_TEXT_1);
 
-        List<LobbyChatMessage> hostMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver1), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
+        List<LobbyChatMessage> hostMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyPageActions.getMessages(driver1), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
         assertThat(hostMessages).hasSize(1);
         verifyChatMessage(hostMessages.get(0), userData1.getUsername(), true, MESSAGE_TEXT_1);
 
-        List<LobbyChatMessage> memberMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver2), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
+        List<LobbyChatMessage> memberMessages = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyPageActions.getMessages(driver2), lobbyChatMessages -> !lobbyChatMessages.isEmpty());
         assertThat(memberMessages).hasSize(1);
         verifyChatMessage(memberMessages.get(0), userData1.getUsername(), false, MESSAGE_TEXT_1);
 
-        SkyXploreLobbyActions.sendMessage(driver2, MESSAGE_TEXT_2);
+        SkyXploreLobbyPageActions.sendMessage(driver2, MESSAGE_TEXT_2);
 
-        List<LobbyChatMessage> hostMessages3 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver1), lobbyChatMessages -> lobbyChatMessages.size() == 2);
+        List<LobbyChatMessage> hostMessages3 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyPageActions.getMessages(driver1), lobbyChatMessages -> lobbyChatMessages.size() == 2);
         verifyChatMessage(hostMessages3.get(0), userData2.getUsername(), false, MESSAGE_TEXT_2);
 
-        List<LobbyChatMessage> memberMessages3 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyActions.getMessages(driver2), lobbyChatMessages -> lobbyChatMessages.size() == 2);
+        List<LobbyChatMessage> memberMessages3 = AwaitilityWrapper.getListWithWait(() -> SkyXploreLobbyPageActions.getMessages(driver2), lobbyChatMessages -> lobbyChatMessages.size() == 2);
         verifyChatMessage(memberMessages3.get(0), userData2.getUsername(), true, MESSAGE_TEXT_2);
 
-        SkyXploreLobbyActions.exitLobby(driver2);
+        SkyXploreLobbyPageActions.exitLobby(driver2);
 
         AwaitilityWrapper.createDefault()
-            .until(() -> SkyXploreLobbyActions.getSystemMessages(driver1).contains(String.format(USER_LEFT_LOBBY_TEMPLATE, userData2.getUsername())))
+            .until(() -> SkyXploreLobbyPageActions.getSystemMessages(driver1).contains(String.format(USER_LEFT_LOBBY_TEMPLATE, userData2.getUsername())))
             .assertTrue();
     }
 

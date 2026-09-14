@@ -21,6 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class SkyXploreFlow {
+    /**
+     * @return Map<accessToken, ApphubWsClient>
+     */
     public static Map<String, ApphubWsClient> startGame(int serverPort, Player host, Player... players) {
         return startGame(serverPort, Constants.DEFAULT_GAME_NAME, host, players);
     }

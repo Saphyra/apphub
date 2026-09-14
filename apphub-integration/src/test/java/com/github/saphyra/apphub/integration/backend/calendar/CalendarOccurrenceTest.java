@@ -66,8 +66,8 @@ public class CalendarOccurrenceTest extends BackEndTest {
     }
 
     private void get(String accessToken, UUID eventId, UUID occurrenceId) {
-        LocalDate startDate = OccurrenceRequestFactory.NEW_DATE.minusDays(1);
-        LocalDate endDate = OccurrenceRequestFactory.NEW_DATE.plusDays(1);
+        LocalDate startDate = OccurrenceRequestFactory.NEW_DATE;
+        LocalDate endDate = OccurrenceRequestFactory.NEW_DATE;
 
         CustomAssertions.singleListAssertThat(CalendarOccurrenceActions.getOccurrences(getServerPort(), accessToken, startDate, endDate))
             .returns(occurrenceId, OccurrenceResponse::getOccurrenceId)

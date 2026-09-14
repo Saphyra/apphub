@@ -6,8 +6,8 @@ import com.github.saphyra.apphub.integration.core.SeleniumTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
@@ -22,7 +22,7 @@ public class ModulesRoleProtectionTest extends SeleniumTest {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
 
-        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
+        UserDynamoDbRepository.removeRoleByEmail(userData.getEmail(), Constants.ROLE_ACCESS);
         AccessTokenActions.invalidateAccessToken(driver, serverPort);
 
         AwaitilityWrapper.awaitAssert(() -> CommonUtils.verifyMissingRole(serverPort, driver.getCurrentUrl()));

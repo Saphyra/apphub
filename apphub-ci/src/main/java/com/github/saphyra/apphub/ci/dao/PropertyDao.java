@@ -11,7 +11,9 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -176,5 +178,12 @@ public class PropertyDao {
         return propertyRepository.findById(propertyName)
             .map(Property::getValue)
             .orElse("");
+    }
+
+    public Map<String, String> getDbBackupParams() {
+        return propertyRepository.findById(PropertyName.DB_BACKUP)
+            .map(Property::getValue)
+            .map(value -> objectMapper.readValue(value, Map.class))
+            .orElseGet(HashMap::new);
     }
 }

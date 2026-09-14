@@ -172,6 +172,15 @@ public class AwaitilityWrapper {
             .assertTrue("Assertions failed.");
     }
 
+    public static void awaitAssert(Runnable supplier, int timeoutSeconds) {
+        create(timeoutSeconds, 1)
+            .until(() -> {
+                supplier.run();
+                return true;
+            })
+            .assertTrue("Assertions failed.");
+    }
+
     public static void retry(Runnable task) {
         AwaitilityWrapper.createDefault()
             .until(() -> {
@@ -223,7 +232,9 @@ public class AwaitilityWrapper {
         private final Throwable cause;
 
         public void assertTrue() {
-            assertThat(result).isTrue();
+            if (!result) {
+                throw new IllegalStateException("AwaitResult failed", cause);
+            }
         }
 
         public void assertTrue(String message) {

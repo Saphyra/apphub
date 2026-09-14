@@ -37,7 +37,7 @@ const create = async (listItemTitle, tableHeads, parent, checklist, rows, custom
     }
 
     const fileUploadResponse = await NOTEBOOK_CREATE_TABLE.createRequest(payload)
-        .send();
+        .send(setDisplaySpinner);
 
     if (fileUploadResponse.length > 0) {
         await uploadFiles(setDisplaySpinner, fileUploadResponse, files);

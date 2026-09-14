@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelRespon
 import com.github.saphyra.apphub.api.feature.calendar.server.LabelController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.label.service.LabelService;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +21,11 @@ class LabelControllerImpl implements LabelController {
     private final LabelService labelService;
 
     @Override
-    public OneParamResponse<UUID> createLabel(OneParamRequest<String> label, AccessToken accessToken) {
+    public LabelResponse createLabel(OneParamRequest<String> label, AccessToken accessToken) {
         log.info("{} wants to create a new label.", accessToken.getUserId());
         log.debug(label.toString());
 
-        UUID labelId = labelService.createLabel(accessToken.getUserId(), label.getValue());
-        OneParamResponse<UUID> response = new OneParamResponse<>(labelId);
+        LabelResponse response = labelService.createLabel(accessToken.getUserId(), label.getValue());
         log.debug("Response: {}", response);
 
         return response;

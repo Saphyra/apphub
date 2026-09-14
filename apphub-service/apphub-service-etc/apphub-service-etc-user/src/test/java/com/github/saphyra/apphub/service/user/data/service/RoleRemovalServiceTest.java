@@ -1,8 +1,9 @@
 package com.github.saphyra.apphub.service.user.data.service;
 
-import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.etc.user.model.role.RoleRequest;
+import com.github.saphyra.apphub.api.platform.authorization.client.AuthorizationClient;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.data.dao.user.User;
 import com.github.saphyra.apphub.service.user.data.dao.user.UserDao;
@@ -46,6 +47,9 @@ public class RoleRemovalServiceTest {
     @Mock
     private UserDao userDao;
 
+    @Mock
+    private AuthorizationClient authorizationClient;
+
     @InjectMocks
     private RoleRemovalService underTest;
 
@@ -76,10 +80,12 @@ public class RoleRemovalServiceTest {
     public void removeRole() {
         List<Role> roles = new ArrayList<>(List.of(Role.TEST));
         given(user.getRoles()).willReturn(roles);
+        given(user.getUserId()).willReturn(USER_ID);
 
         assertThat(underTest.removeRole(ADMIN_USER_ID, ROLE_REQUEST)).isEqualTo(user);
 
         then(userDao).should().removeRole(USER_ID, Role.TEST);
         assertThat(roles.isEmpty()).isTrue();
+        then(authorizationClient).should().invalidateAllAccessTokens(USER_ID);
     }
 }

@@ -8,6 +8,8 @@ aws:
     url: http://localhost:8000
     calendar:
       tableName: apphub-local-calendar
+    alm:
+      tableName: apphub-calendar-local-alm
 
 logging:
   level:

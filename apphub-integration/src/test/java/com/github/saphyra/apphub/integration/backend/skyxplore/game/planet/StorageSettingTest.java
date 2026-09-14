@@ -10,8 +10,8 @@ import com.github.saphyra.apphub.integration.action.backend.skyxplore.game.SkyXp
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.PlanetLocationResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.Player;
@@ -37,7 +37,7 @@ public class StorageSettingTest extends BackEndTest {
         SkyXploreCharacterModel characterModel1 = SkyXploreCharacterModel.valid();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken1, characterModel1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken1, userId1))
             .get(accessToken1);
@@ -156,7 +156,7 @@ public class StorageSettingTest extends BackEndTest {
         SkyXploreCharacterModel characterModel = SkyXploreCharacterModel.valid();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken, characterModel);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         ApphubWsClient wsClient = SkyXploreFlow.startGame(getServerPort(), GAME_NAME, new Player(accessToken, userId))
             .get(accessToken);

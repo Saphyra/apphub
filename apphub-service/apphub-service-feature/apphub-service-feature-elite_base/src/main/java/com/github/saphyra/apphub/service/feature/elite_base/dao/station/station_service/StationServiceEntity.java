@@ -13,12 +13,15 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STATION_SERVICE;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "station_service")
+@Table(schema = SCHEMA, name = TABLE_STATION_SERVICE)
 @IdClass(StationServiceEntity.class)
 class StationServiceEntity implements Serializable {
     @Id

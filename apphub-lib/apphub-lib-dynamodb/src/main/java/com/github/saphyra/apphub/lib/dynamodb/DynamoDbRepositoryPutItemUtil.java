@@ -16,8 +16,9 @@ class DynamoDbRepositoryPutItemUtil {
     private final DynamoDbClient client;
     private final DynamoDbMonitoringInstruments instruments;
 
-    void putItem(PutItemRequest request, String monitoringFunctionality) {
+    void putItem(String tableName, PutItemRequest request, String monitoringFunctionality) {
         request = request.toBuilder()
+            .tableName(tableName)
             .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
             .build();
 

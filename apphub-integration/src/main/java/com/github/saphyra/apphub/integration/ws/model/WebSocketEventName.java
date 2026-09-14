@@ -44,6 +44,7 @@ public enum WebSocketEventName {
     SKYXPLORE_GAME_USER_LEFT("skyxplore-game-user-left"),
     SKYXPLORE_GAME_CHAT_ROOM_CREATED("skyxplore-game-chat-room-created"),
     SKYXPLORE_GAME_PAUSED("skyxplore-game-paused"),
+    SKYXPLORE_GAME_PLAYER_DISCONNECTED("skyxplore-game-player-disconnected"),
 
     //SkyXplore GameEvent
     SKYXPLORE_GAME_PLANET_OPENED("skyxplore-game-planet-opened"),

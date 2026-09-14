@@ -59,7 +59,7 @@ class OccurrenceFactoryTest {
         given(idGenerator.randomUuid()).willReturn(OCCURRENCE_ID);
         given(dateTimeUtil.getCurrentDate()).willReturn(CURRENT_DATE);
 
-        assertThat(underTest.create(USER_ID, EVENT_ID, EXPIRED_DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE))
+        assertThat(underTest.create(USER_ID, EVENT_ID, EXPIRED_DATE, TIME, REMIND_ME_BEFORE_DAYS, NOTE, false))
             .returns(USER_ID, Occurrence::getUserId)
             .returns(EVENT_ID, Occurrence::getEventId)
             .returns(OCCURRENCE_ID, Occurrence::getOccurrenceId)

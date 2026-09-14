@@ -4,19 +4,23 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarEventActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarLabelActions;
 import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarOccurrenceActions;
+import com.github.saphyra.apphub.integration.action.backend.calendar.CalendarShareActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CommonUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
+import com.github.saphyra.apphub.integration.structure.api.calendar.ShareObjectRequest;
+import com.github.saphyra.apphub.integration.structure.api.calendar.SharedObjectType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.time.LocalDate;
+import java.util.Set;
 import java.util.UUID;
 
 public class CalendarRoleProtectionTest extends BackEndTest {
@@ -24,11 +28,10 @@ public class CalendarRoleProtectionTest extends BackEndTest {
     public void calendarRoleProtection(String role) {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(getServerPort(), userData.toRegistrationRequest());
-        DynamoDbUtil.removeRoleByEmail(userData.getEmail(), role);
+        UserDynamoDbRepository.removeRoleByEmail(userData.getEmail(), role);
         TokenResponse tokenResponse = IndexPageActions.login(getServerPort(), userData.toLoginRequest());
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
-
 
         //Labels
         CommonUtils.verifyMissingRole(() -> CalendarLabelActions.getCreateLabelResponse(getServerPort(), accessToken, ""));
@@ -61,6 +64,12 @@ public class CalendarRoleProtectionTest extends BackEndTest {
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getGetOccurrencesOfEventResponse(getServerPort(), accessToken, UUID.randomUUID()));
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getEditOccurrenceStatusResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID(), OccurrenceStatus.DONE));
         CommonUtils.verifyMissingRole(() -> CalendarOccurrenceActions.getSetRemindedResponse(getServerPort(), accessToken, UUID.randomUUID(), UUID.randomUUID()));
+
+        //Share
+        CommonUtils.verifyMissingRole(() -> CalendarShareActions.getGetSharedObjectResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), null));
+        CommonUtils.verifyMissingRole(() -> CalendarShareActions.getShareObjectResponse(getServerPort(), accessToken, new ShareObjectRequest()));
+        CommonUtils.verifyMissingRole(() -> CalendarShareActions.getEditSharedObjectResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), UUID.randomUUID(), Set.of()));
+        CommonUtils.verifyMissingRole(() -> CalendarShareActions.getUnshareResponse(getServerPort(), accessToken, SharedObjectType.OCCURRENCE, UUID.randomUUID(), UUID.randomUUID()));
     }
 
     @DataProvider(parallel = true)

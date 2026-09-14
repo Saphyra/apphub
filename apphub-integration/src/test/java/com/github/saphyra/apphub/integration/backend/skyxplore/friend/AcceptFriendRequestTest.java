@@ -4,8 +4,8 @@ import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreCharacterActions;
 import com.github.saphyra.apphub.integration.action.backend.skyxplore.SkyXploreFriendActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.FriendshipResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SentFriendRequestResponse;
 import com.github.saphyra.apphub.integration.structure.api.skyxplore.SkyXploreCharacterModel;
@@ -31,7 +31,7 @@ public class AcceptFriendRequestTest extends BackEndTest {
     public void acceptFriendRequest() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
@@ -44,7 +44,7 @@ public class AcceptFriendRequestTest extends BackEndTest {
 
         SkyXploreCharacterModel model2 = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken2, model2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         SkyXploreCharacterModel model3 = SkyXploreCharacterModel.valid();
         SkyXploreCharacterActions.createOrUpdateCharacter(getServerPort(), accessToken3, model3);

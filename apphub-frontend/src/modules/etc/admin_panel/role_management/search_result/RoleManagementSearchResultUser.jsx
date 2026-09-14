@@ -10,7 +10,7 @@ import { hasValue } from "common/js/Utils";
 import ConfirmationDialog from "common/component/confirmation_dialog/ConfirmationDialog";
 import { USER_DATA_ADD_ROLE, USER_DATA_REMOVE_ROLE } from "../../AdminPanelEndpoints";
 
-const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setUsers, query }) => {
+const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setUsers, query, setDisplaySpinner }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
 
     const [password, setPassword] = useState("");
@@ -63,7 +63,7 @@ const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setU
         }
 
         const response = await USER_DATA_ADD_ROLE.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         updateUser(response);
         setRoleToGrant(null);
@@ -86,7 +86,7 @@ const RoleManagementSearchResultUser = ({ localizationHandler, user, users, setU
         }
 
         const response = await USER_DATA_REMOVE_ROLE.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         updateUser(response);
         setRoleToRevoke(null);

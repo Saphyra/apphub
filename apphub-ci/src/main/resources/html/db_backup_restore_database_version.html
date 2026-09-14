@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>Database Backup - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>
+    <span>Restoring</span>
+    <span th:text="${dbhost}"></span>
+    <span th:text="${dbname}"></span>
+    <span>from bucket</span>
+    <span th:text="${s3bucket}"></span>
+    <span>and database</span>
+    <span th:text="${database}"></span>
+    <span>using version</span>
+    <span th:text="${version}"></span>
+</h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<div class="menu">
+    <div>
+        <a href="/db-backup/restore">Back</a>
+    </div>
+
+    <div>
+        <fieldset>
+            <legend>Backups</legend>
+
+            <ul class="menu">
+                <li th:each="backup : ${backups}">
+                    <a th:href="@{|/db-backup/restore/${database}/${version}/${backup}|}" th:text="${backup}"></a>
+                </li>
+            </ul>
+        </fieldset>
+    </div>
+</div>
+</body>
+</html>

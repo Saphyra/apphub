@@ -12,6 +12,7 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import { ToastContainer } from "react-toastify";
 import { ADMIN_PANEL_MIGRATION_DELETE_TASK, ADMIN_PANEL_MIGRATION_GET_TASKS, ADMIN_PANEL_MIGRATION_TRIGGER_TASK } from "../AdminPanelEndpoints";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const MigrationTasksPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -19,6 +20,7 @@ const MigrationTasksPage = () => {
 
     const [migrationTasks, setMigrationTasks] = useState([]);
     const [confirmationDialogData, setConfirmationDialogData] = useState(null);
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => loadMigrationTasks(), []);
@@ -26,7 +28,7 @@ const MigrationTasksPage = () => {
     const loadMigrationTasks = () => {
         const fetch = async () => {
             const response = await ADMIN_PANEL_MIGRATION_GET_TASKS.createRequest()
-                .send();
+                .send(setDisplaySpinner);
 
             setMigrationTasks(response);
         }
@@ -71,7 +73,7 @@ const MigrationTasksPage = () => {
 
     const deleteTask = async (event) => {
         const response = await ADMIN_PANEL_MIGRATION_DELETE_TASK.createRequest(null, { event: event })
-            .send();
+            .send(setDisplaySpinner);
 
         setMigrationTasks(response);
         setConfirmationDialogData(null)
@@ -103,7 +105,7 @@ const MigrationTasksPage = () => {
 
     const triggerTask = async (event) => {
         const response = await ADMIN_PANEL_MIGRATION_TRIGGER_TASK.createRequest(null, { event: event })
-            .send();
+            .send(setDisplaySpinner);
 
         setMigrationTasks(response);
         setConfirmationDialogData(null)
@@ -155,6 +157,8 @@ const MigrationTasksPage = () => {
             }
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

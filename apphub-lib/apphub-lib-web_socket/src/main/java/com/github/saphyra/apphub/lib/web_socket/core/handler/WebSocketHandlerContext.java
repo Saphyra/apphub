@@ -17,7 +17,7 @@ public class WebSocketHandlerContext {
     private final DateTimeUtil dateTimeUtil;
     private final ErrorReporterService errorReporterService;
 
-    private final int webSocketSessionExpirationSeconds;
+    private final long webSocketSessionExpirationMillis;
 
     @Builder
     WebSocketHandlerContext(
@@ -25,12 +25,12 @@ public class WebSocketHandlerContext {
         UuidConverter uuidConverter,
         DateTimeUtil dateTimeUtil,
         ErrorReporterService errorReporterService,
-        @Value("${webSocketSession.expirationSeconds}") int webSocketSessionExpirationSeconds
+        @Value("${webSocketSession.expirationMillis}") long webSocketSessionExpirationMillis
     ) {
         this.objectMapper = objectMapper;
         this.uuidConverter = uuidConverter;
         this.dateTimeUtil = dateTimeUtil;
         this.errorReporterService = errorReporterService;
-        this.webSocketSessionExpirationSeconds = webSocketSessionExpirationSeconds;
+        this.webSocketSessionExpirationMillis = webSocketSessionExpirationMillis;
     }
 }

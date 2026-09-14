@@ -14,12 +14,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM_DATA;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "star_system_data")
+@Table(schema = SCHEMA, name = TABLE_STAR_SYSTEM_DATA)
 class StarSystemDataEntity {
     @Id
     private String starSystemId;

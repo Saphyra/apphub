@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.commodity_t
 
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingRequest;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.star_system_data.PowerplayState;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ class CommodityTradingRequestValidator {
     void validate(CommodityTradingRequest request) {
         ValidationUtil.notNull(request.getTradeMode(), "tradeMode");
         ValidationUtil.notNull(request.getReferenceStarId(), "referenceStarId");
-        ValidationUtil.contains(request.getItemName(), itemTypeDao.getItemNames(ItemType.TRADING_TYPES), "commodity");
+        ValidationUtil.contains(request.getItemName(), itemTypeDao.getItemNames(ObjectType.TRADING_TYPES), "commodity");
         ValidationUtil.notNull(request.getMaxStarSystemDistance(), "maxStarSystemDistance");
         ValidationUtil.notNull(request.getMaxStationDistance(), "maxStationDistance");
         ValidationUtil.notNull(request.getIncludeUnknownStationDistance(), "includeUnknownStationDistance");

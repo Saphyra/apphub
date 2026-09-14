@@ -9,7 +9,7 @@ import Button from "common/component/input/Button";
 import InputField from "common/component/input/InputField";
 import { SKYXPLORE_PLANET_RENAME } from "../../../SkyXploreGameEndpoints";
 
-const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
+const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const [enableEditing, setEnableEditing] = useState(false);
@@ -29,7 +29,7 @@ const PlanetHeader = ({ planetId, planetName, setPlanetName, closePage }) => {
         }
 
         await SKYXPLORE_PLANET_RENAME.createRequest({ value: modifiedName }, { planetId: planetId })
-            .send();
+            .send(setDisplaySpinner);
 
         setPlanetName(modifiedName);
         setEnableEditing(false);

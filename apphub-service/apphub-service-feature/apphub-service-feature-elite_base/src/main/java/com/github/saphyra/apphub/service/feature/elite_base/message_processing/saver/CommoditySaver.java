@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.service.feature.elite_base.message_processing.
 
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemLocationType;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.Tradeable;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.TradingDaoSupport;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
@@ -38,7 +38,7 @@ public class CommoditySaver {
     private final CommodityAveragePriceSaver commodityAveragePriceSaver;
     private final ItemTypeDao itemTypeDao;
 
-    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, EdCommodity[] commodities, UUID starSystemId) {
+    public void saveAll(LocalDateTime timestamp, ObjectType type, ItemLocationType locationType, UUID externalReference, Long marketId, EdCommodity[] commodities, UUID starSystemId) {
         List<CommodityData> commodityDataList = Arrays.stream(commodities)
             .map(edCommodity -> CommodityData.builder()
                 .name(edCommodity.getName())
@@ -54,7 +54,7 @@ public class CommoditySaver {
     }
 
     @SneakyThrows
-    public void saveAll(LocalDateTime timestamp, ItemType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<CommodityData> commodities, UUID starSystemId) {
+    public void saveAll(LocalDateTime timestamp, ObjectType type, ItemLocationType locationType, UUID externalReference, Long marketId, List<CommodityData> commodities, UUID starSystemId) {
         if (isNull(marketId)) {
             throw new IllegalArgumentException("Both locationType or externalReference and marketId is null");
         }
@@ -128,7 +128,7 @@ public class CommoditySaver {
         }
     }
 
-    private void saveLastUpdate(LocalDateTime timestamp, ItemType type, UUID externalReference) {
+    private void saveLastUpdate(LocalDateTime timestamp, ObjectType type, UUID externalReference) {
         LastUpdate lastUpdate = lastUpdateFactory.create(externalReference, type, timestamp);
         lastUpdateDao.save(lastUpdate);
         log.debug("LastUpdate saved for location {} and type {}", externalReference, type);
@@ -140,7 +140,7 @@ public class CommoditySaver {
             .toList();
     }
 
-    private List<Tradeable> getExistingCommodities(UUID externalReference, ItemType type, Long marketId) {
+    private List<Tradeable> getExistingCommodities(UUID externalReference, ObjectType type, Long marketId) {
         List<Tradeable> commodities = tradingDaoSupport.getByMarketId(type, marketId);
 
         List<Tradeable> incorrectCommodities = commodities.stream()
@@ -189,6 +189,6 @@ public class CommoditySaver {
     @Data
     private static class LockKey {
         private final UUID externalReference;
-        private final ItemType itemType;
+        private final ObjectType objectType;
     }
 }

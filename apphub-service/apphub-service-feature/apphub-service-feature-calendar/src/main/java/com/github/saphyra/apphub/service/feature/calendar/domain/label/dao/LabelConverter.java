@@ -2,34 +2,30 @@ package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
-import com.github.saphyra.apphub.lib.encryption.impl.StringEncryptor;
-import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_LABEL;
 
 @Component
 @RequiredArgsConstructor
 class LabelConverter extends ConverterBase<LabelEntity, Label> {
     private final UuidConverter uuidConverter;
-    private final StringEncryptor stringEncryptor;
-    private final AccessTokenProvider accessTokenProvider;
 
     @Override
     protected LabelEntity processDomainConversion(Label domain) {
         String labelId = uuidConverter.convertDomain(domain.getLabelId());
         return LabelEntity.builder()
+            .userId(uuidConverter.convertDomain(domain.getUserId()))
             .labelId(labelId)
-            .label(stringEncryptor.encrypt(domain.getLabel(), accessTokenProvider.getUserIdAsString(), labelId, COLUMN_LABEL))
+            .label(domain.getLabel())
             .build();
     }
 
     @Override
     protected Label processEntityConversion(LabelEntity entity) {
         return Label.builder()
+            .userId(uuidConverter.convertEntity(entity.getUserId()))
             .labelId(uuidConverter.convertEntity(entity.getLabelId()))
-            .label(stringEncryptor.decrypt(entity.getLabel(), accessTokenProvider.getUserIdAsString(), entity.getLabelId(), COLUMN_LABEL))
+            .label(entity.getLabel())
             .build();
     }
 }

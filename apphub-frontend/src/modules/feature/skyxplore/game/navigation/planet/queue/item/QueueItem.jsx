@@ -10,7 +10,7 @@ import LabelWrappedInputField from "common/component/input/LabelWrappedInputFiel
 import NumberInput from "common/component/input/NumberInput";
 import { SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM, SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY } from "modules/feature/skyxplore/game/SkyXploreGameEndpoints";
 
-const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
+const QueueItem = ({ queueItem, planetId, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const [priority, setPriority] = useState(5);
 
@@ -18,7 +18,7 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
 
     const changePriority = (newPriority) => {
         SKYXPLORE_PLANET_SET_QUEUE_ITEM_PRIORITY.createRequest({ value: newPriority }, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
-            .send();
+            .send(setDisplaySpinner);
     }
 
     const confirmCancelQueueItem = () => {
@@ -47,7 +47,7 @@ const QueueItem = ({ queueItem, planetId, setConfirmationDialogData }) => {
 
     const cancelQueueItem = async () => {
         await SKYXPLORE_PLANET_CANCEL_QUEUE_ITEM.createRequest(null, { planetId: planetId, type: queueItem.type, itemId: queueItem.itemId })
-            .send();
+            .send(setDisplaySpinner);
 
         setConfirmationDialogData(null);
     }

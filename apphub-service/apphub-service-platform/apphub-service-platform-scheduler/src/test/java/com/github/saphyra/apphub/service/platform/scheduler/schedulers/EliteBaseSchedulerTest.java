@@ -11,11 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.Duration;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,18 +48,5 @@ class EliteBaseSchedulerTest {
         underTest.deleteExpiredMessages();
 
         then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_DELETE_EXPIRED_MESSAGES).build());
-    }
-
-    @Test
-    void orphanedRecordCleanup() {
-        given(schedulerProperties.getInitialDelay()).willReturn(INITIAL_DELAY);
-        given(scheduledExecutorServiceBean.schedule(any(Runnable.class), eq(Duration.ofMillis(INITIAL_DELAY)))).willAnswer(invocationOnMock -> {
-            invocationOnMock.getArgument(0, Runnable.class).run();
-            return null;
-        });
-
-        underTest.orphanedRecordCleanup();
-
-        then(eventGatewayApi).should().sendEvent(SendEventRequest.builder().eventName(EmptyEvent.ELITE_BASE_ORPHANED_RECORD_CLEANUP).build());
     }
 }

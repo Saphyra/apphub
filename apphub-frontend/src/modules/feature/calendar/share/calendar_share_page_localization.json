@@ -1,0 +1,126 @@
+{
+    "title": {
+        "en": "Share {type} - Calendar - Apphub",
+        "hu": "{type} megosztása - Naptár - Apphub"
+    },
+    "page-title": {
+        "en": "Share {name} {type}",
+        "hu": "{name} {type} megosztása"
+    },
+    "LABEL": {
+        "en": "Label",
+        "hu": "Címke"
+    },
+    "back": {
+        "en": "Back",
+        "hu": "Vissza"
+    },
+    "search-placeholder": {
+        "en": "Who do you want to share this {type} with?",
+        "hu": "Kivel szeretnéd megosztani ezt a {type}-t?"
+    },
+    "search": {
+        "en": "Search",
+        "hu": "Keresés"
+    },
+    "search-text-too-short": {
+        "en": "Search text must be at least 3 characters long.",
+        "hu": "A keresési szövegnek legalább 3 karakter hosszúnak kell lennie."
+    },
+    "search-result-empty": {
+        "en": "No users found.",
+        "hu": "Nincs találat."
+    },
+    "share-with-user-title": {
+        "en": "What do you want to allow to user {username} ('{email}')?",
+        "hu": "Mit szeretnél engedélyezni a {username} ('{email}') felhasználónak?"
+    },
+    "SEE_CHILDREN": {
+        "en": "Can see children of this {type}, but with dummy data.",
+        "hu": "Láthatja a {type} gyermek elemeit, de valótlan adatokkal."
+    },
+    "VIEW_CHILDREN": {
+        "en": "Can see children of this {type} with real data.",
+        "hu": "Láthatja a {type} gyermek elemeit valós adatokkal."
+    },
+    "EDIT_CHILDREN": {
+        "en": "Can edit children of this {type}.",
+        "hu": "Szerkesztheti a {type} gyermek elemeit."
+    },
+    "DELETE_CHILDREN": {
+        "en": "Can delete children of this {type}.",
+        "hu": "Törölheti a {type} gyermek elemeit."
+    },
+    "SEE": {
+        "en": "Can see this {type}, but with dummy data.",
+        "hu": "Láthatja ezt a {type}-t, de valótlan adatokkal."
+    },
+    "VIEW": {
+        "en": "Can see this {type} with real data.",
+        "hu": "Láthatja ezt a {type}-t valós adatokkal."
+    },
+    "EDIT": {
+        "en": "Can edit this {type}.",
+        "hu": "Szerkesztheti ezt a {type}-t."
+    },
+    "DELETE": {
+        "en": "Can delete this {type}.",
+        "hu": "Törölheti ezt a {type}-t."
+    },
+    "SHARE": {
+        "en": "Can share this {type}.",
+        "hu": "Megoszthatja ezt a {type}-t."
+    },
+    "SHARE_CHILDREN": {
+        "en": "Can share children of this {type}.",
+        "hu": "Megoszthatja a {type} gyermekeit."
+    },
+    "EDIT_OPERATIONS": {
+        "en": "Can edit operations of this {type}.",
+        "hu": "Szerkesztheti a {type} műveleteit."
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
+    },
+    "filter-placeholder": {
+        "en": "Filter by name or email",
+        "hu": "Szűrés név vagy e-mail alapján"
+    },
+    "shared-with": {
+        "en": "This {type} is shared with:",
+        "hu": "Ez a {type} meg van osztva a következőkkel:"
+    },
+    "save": {
+        "en": "Save",
+        "hu": "Mentés"
+    },
+    "unshare": {
+        "en": "Unshare",
+        "hu": "Megosztás visszavonása"
+    },
+    "grants-saved": {
+        "en": "Grants saved successfully.",
+        "hu": "A jogosultságok sikeresen mentésre kerültek."
+    },
+    "unshare-confirmation-title": {
+        "en": "Unshare {type}?",
+        "hu": "{type} megosztásának visszavonása?"
+    },
+    "unshare-confirmation-detail": {
+        "en": "Are you sure you want to unshare {type} '{name}' with user {username} ('{email}')?",
+        "hu": "Biztosan vissza szeretnéd vonni a '{name}' {type} megosztását a {username} ('{email}') felhasználótól?"
+    },
+    "cancel": {
+        "en": "Cancel",
+        "hu": "Mégse"
+    },
+    "EVENT": {
+        "en": "Event",
+        "hu": "Esemény"
+    },
+    "OCCURRENCE": {
+        "en": "Occurrence",
+        "hu": "Előfordulás"
+    }
+}

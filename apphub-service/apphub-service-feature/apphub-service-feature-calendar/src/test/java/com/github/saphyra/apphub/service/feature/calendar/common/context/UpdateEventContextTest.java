@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -57,7 +58,7 @@ class UpdateEventContextTest {
     void setUp(){
         given(event.getEventId()).willReturn(EVENT_ID);
         given(commonCalendarDao.getOccurrenceDao()).willReturn(occurrenceDao);
-        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(List.of(deletedOccurrence));
+        given(occurrenceDao.getByEventId(EVENT_ID)).willReturn(Map.of(DELETED_OCCURRENCE_ID, deletedOccurrence));
         given(deletedOccurrence.getOccurrenceId()).willReturn(DELETED_OCCURRENCE_ID);
         given(modifiedOccurrence.getOccurrenceId()).willReturn(MODIFIED_OCCURRENCE_ID);
 
@@ -86,12 +87,12 @@ class UpdateEventContextTest {
         given(commonCalendarDao.getEventDao()).willReturn(eventDao);
         given(event.getUserId()).willReturn(USER_ID);
 
-        underTest.processChanges(List.of(LABEL_ID));
+        underTest.processChanges(Map.of(LABEL_ID, USER_ID));
 
         then(recreateOccurrenceService).should(never()).recreateOccurrences(any());
         then(eventDao).should().save(event);
         then(occurrenceDao).should().delete(EVENT_ID, Set.of(DELETED_OCCURRENCE_ID));
         then(occurrenceDao).should().save(List.of(modifiedOccurrence));
-        then(commonCalendarDao).should().editLabelsOfEvent(USER_ID, EVENT_ID, List.of(LABEL_ID));
+        then(commonCalendarDao).should().editLabelsOfEvent(USER_ID, EVENT_ID, Map.of(LABEL_ID, USER_ID));
     }
 }

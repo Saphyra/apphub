@@ -27,13 +27,7 @@ public class ExecutionResult<T> {
         }
 
         throw Optional.ofNullable(exception)
-            .map(e -> {
-                if (e instanceof RuntimeException) {
-                    return (RuntimeException) e;
-                }
-
-                return new RuntimeException(e);
-            })
+            .map(e -> new RuntimeException("Async process failed", e))
             .orElseGet(() -> new IllegalStateException("Both value and exception was null of this result."));
     }
 }

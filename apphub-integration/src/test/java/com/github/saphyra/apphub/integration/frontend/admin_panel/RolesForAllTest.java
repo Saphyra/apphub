@@ -11,10 +11,10 @@ import com.github.saphyra.apphub.integration.core.testng.PermitCount;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.DataConstants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -42,7 +42,7 @@ public class RolesForAllTest extends SeleniumTest {
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, adminUserData);
-        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.ROLES_FOR_ALL);
 
@@ -74,7 +74,7 @@ public class RolesForAllTest extends SeleniumTest {
         RolesForAllActions.confirmAddToAll(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ROLES_FOR_ALL_ROLE_ADDED);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(DynamoDbUtil.getRolesByEmail(referenceUserData.getEmail())).contains(Constants.ROLE_TEST));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(UserDynamoDbRepository.getRolesByEmail(referenceUserData.getEmail())).contains(Constants.ROLE_TEST));
     }
 
     private void addToAll_incorrectPassword(WebDriver driver, RegistrationParameters userData) {
@@ -100,7 +100,7 @@ public class RolesForAllTest extends SeleniumTest {
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
 
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
@@ -125,7 +125,7 @@ public class RolesForAllTest extends SeleniumTest {
         RolesForAllActions.confirmRevokeFromAll(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.ROLES_FOR_ALL_ROLE_REVOKED);
 
-        AwaitilityWrapper.awaitAssert(() -> assertThat(DynamoDbUtil.getRolesByEmail(referenceUserData.getEmail())).doesNotContain(Constants.ROLE_TEST));
+        AwaitilityWrapper.awaitAssert(() -> assertThat(UserDynamoDbRepository.getRolesByEmail(referenceUserData.getEmail())).doesNotContain(Constants.ROLE_TEST));
     }
 
     private void revokeFromAll_emptyPassword(WebDriver driver) {
@@ -162,7 +162,7 @@ public class RolesForAllTest extends SeleniumTest {
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         ToastMessageUtil.verifyErrorToast(driver, LocalizedText.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
 
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()

@@ -6,6 +6,11 @@
     width: 48px;
 }
 
-#calendar-edit-occurrence-reminded{
+#calendar-edit-occurrence-settings input[type="checkbox"] {
     transform: scale(1.5);
+}
+
+#calendar-edit-occurrence-settings label {
+    display: block;
+    margin: 10px 0;
 }

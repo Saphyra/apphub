@@ -8,7 +8,9 @@ import com.github.saphyra.apphub.integration.action.backend.notebook.PinActions;
 import com.github.saphyra.apphub.integration.action.backend.notebook.TableActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.notebook.NotebookListItemDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.notebook.NotebookPinGroupDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ColumnType;
 import com.github.saphyra.apphub.integration.structure.api.notebook.CreateTableRequest;
 import com.github.saphyra.apphub.integration.structure.api.notebook.ListItemType;
@@ -34,7 +36,7 @@ public class NotebookDataDeletedWithUserTest extends BackEndTest {
     public void notebookDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         UUID tableId = createTable(accessToken);
         UUID checklistId = createChecklist(accessToken);
@@ -44,10 +46,10 @@ public class NotebookDataDeletedWithUserTest extends BackEndTest {
         AccountActions.deleteAccount(getServerPort(), accessToken, userData.getPassword());
 
         AwaitilityWrapper.awaitAssert(() -> {
-            assertThat(DynamoDbUtil.listItemExists(userId)).isFalse();
-            assertThat(DynamoDbUtil.listItemHasChildren(tableId)).isFalse();
-            assertThat(DynamoDbUtil.listItemHasChildren(checklistId)).isFalse();
-            assertThat(DynamoDbUtil.getPinGroups(userId)).isEmpty();
+            assertThat(NotebookListItemDynamoDbRepository.listItemExists(userId)).isFalse();
+            assertThat(NotebookListItemDynamoDbRepository.listItemHasChildren(tableId)).isFalse();
+            assertThat(NotebookListItemDynamoDbRepository.listItemHasChildren(checklistId)).isFalse();
+            assertThat(NotebookPinGroupDynamoDbRepository.getPinGroups(userId)).isEmpty();
         });
     }
 

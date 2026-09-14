@@ -11,9 +11,15 @@ import org.openqa.selenium.WebElement;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class CalendarIndexPageActions {
+    public static Optional<String> getOpenedOccurrenceNote(WebDriver driver) {
+        return WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-note")))
+            .map(WebElement::getText);
+    }
+
     public static void openCreateEventPage(WebDriver driver) {
         AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-date-create-new")))
             .orElseThrow(() -> new IllegalStateException("Open create event page button not found"))
@@ -101,7 +107,7 @@ public class CalendarIndexPageActions {
         WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-reference-date")), referenceDate);
     }
 
-    public static void deleteOccurrence(WebDriver driver) {
+    public static void deleteOpenedOccurrence(WebDriver driver) {
         AwaitilityWrapper.getWithWait(() -> driver.findElement(By.id("calendar-selected-occurrence-delete-button")))
             .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
             .click();
@@ -147,7 +153,7 @@ public class CalendarIndexPageActions {
             .click();
     }
 
-    public static void editOccurrence(WebDriver driver) {
+    public static void editOpenedOccurrence(WebDriver driver) {
         AwaitilityWrapper.getOptionalWithWait(() -> WebElementUtils.getIfPresent(() -> driver.findElement(By.id("calendar-selected-occurrence-edit-button"))))
             .orElseThrow(() -> new IllegalStateException("No opened occurrence"))
             .click();
@@ -168,8 +174,12 @@ public class CalendarIndexPageActions {
         return driver.findElements(By.className("calendar-label"));
     }
 
+    public static Optional<WebElement> expiredEventsButton(WebDriver driver) {
+        return WebElementUtils.getIfPresent(driver, By.id("calendar-expired-events-button"));
+    }
+
     public static void toExpiredEventsPage(WebDriver driver) {
-        WebElementUtils.getIfPresent(driver, By.id("calendar-expired-events-button"))
+        expiredEventsButton(driver)
             .orElseThrow(() -> new IllegalStateException("No expired event found"))
             .click();
     }

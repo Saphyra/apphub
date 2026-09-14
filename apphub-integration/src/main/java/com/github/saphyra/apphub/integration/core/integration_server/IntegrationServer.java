@@ -28,7 +28,8 @@ public class IntegrationServer {
     }
 
     public static void reportTestCaseRun(Method method, long duration, boolean passed) {
-        if (TestConfiguration.INTEGRATION_SERVER_ENABLED) {
+        //Do not report test cases too fast, they are probably not implemented yet
+        if (TestConfiguration.INTEGRATION_SERVER_ENABLED && duration > 10) {
             String testCaseName = TestUtils.getTestCaseName(method);
             String methodIdentifier = TestUtils.getMethodIdentifier(method);
             List<String> groups = Arrays.asList(method.getAnnotation(Test.class).groups());

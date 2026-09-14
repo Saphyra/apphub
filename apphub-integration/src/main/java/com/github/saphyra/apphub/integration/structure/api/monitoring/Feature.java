@@ -10,4 +10,5 @@ public enum Feature {
     ELITE_BASE_QUERY,
     ELITE_BASE_ORPHANED_RECORD_CLEANUP,
     ERROR_REPORT,
+    CACHE,
 }

@@ -13,17 +13,20 @@ import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import { USER_DATA_GET_DISABLED_ROLES } from "../AdminPanelEndpoints";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const DisabledRoleManagementPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
     document.title = localizationHandler.get("title");
 
+    const [displaySpinner, setDisplaySpinner] = useState(false);
+
     const [roles, setRoles] = useState([]);
 
     useEffect(() => NotificationService.displayStoredMessages(), []);
 
-    useLoader({ request: USER_DATA_GET_DISABLED_ROLES.createRequest(), mapper: setRoles })
+    useLoader({ request: USER_DATA_GET_DISABLED_ROLES.createRequest(), mapper: setRoles, setDisplaySpinner: setDisplaySpinner });
 
     const getContent = () => {
         return new Stream(roles)
@@ -34,6 +37,7 @@ const DisabledRoleManagementPage = () => {
                 role={role.role}
                 enabled={!role.disabled}
                 setRoles={setRoles}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }
@@ -68,6 +72,8 @@ const DisabledRoleManagementPage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

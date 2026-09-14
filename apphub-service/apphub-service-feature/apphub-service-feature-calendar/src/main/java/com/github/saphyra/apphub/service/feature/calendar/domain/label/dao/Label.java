@@ -13,6 +13,8 @@ import java.util.UUID;
 @Builder
 public class Label {
     @NonNull
+    private final UUID userId;
+    @NonNull
     private final UUID labelId;
     @NonNull
     private String label;

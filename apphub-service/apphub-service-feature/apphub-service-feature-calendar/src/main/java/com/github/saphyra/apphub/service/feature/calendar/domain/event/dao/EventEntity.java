@@ -11,15 +11,16 @@ import lombok.Data;
 class EventEntity {
     private String userId;
     private String eventId;
-    private String repetitionType; //Encrypted
-    private String repetitionData; //Encrypted
-    private String repeatForDays; //Encrypted
-    private String startDate; //Encrypted
-    private String endDate; //Encrypted
-    private String time; //Encrypted
-    private String title; //Encrypted
-    private String content; //Encrypted
-    private String remindMeBeforeDays; //Encrypted
-    private String expirationNotified; //Encrypted
-    private String archived; //Encrypted
+    private String repetitionType;
+    private String repetitionData;
+    private String repeatForDays;
+    private String startDate;
+    private String endDate;
+    private String time;
+    private String title;
+    private String content;
+    private String remindMeBeforeDays;
+    private String expirationNotified;
+    private String archived;
+    private String autoDone;
 }

@@ -7,7 +7,7 @@ import Button from "common/component/input/Button";
 import NavigationHistoryItem from "../../../NavigationHistoryItem";
 import PageName from "../../../PageName";
 
-const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage }) => {
+const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const isEmpty = () => {
@@ -29,6 +29,7 @@ const SurfaceTile = ({ surface, setConfirmationDialogData, planetId, openPage })
                 setConfirmationDialogData={setConfirmationDialogData}
                 planetId={planetId}
                 openPage={openPage}
+                setDisplaySpinner={setDisplaySpinner}
             />
         }
     }

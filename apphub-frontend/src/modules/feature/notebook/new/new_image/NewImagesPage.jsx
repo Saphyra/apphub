@@ -70,6 +70,7 @@ const NewImagesPage = ()  => {
                 <ParentSelector
                     parentId={parentId}
                     setParentId={setParentId}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <div id="notebook-new-files-content-wrapper">

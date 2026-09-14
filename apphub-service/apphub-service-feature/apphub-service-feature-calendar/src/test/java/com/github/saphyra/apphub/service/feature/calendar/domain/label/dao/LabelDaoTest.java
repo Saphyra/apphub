@@ -1,18 +1,23 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.label.dao;
 
+import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
 import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 
@@ -32,6 +37,9 @@ class LabelDaoTest {
     @Mock
     private LabelRepository repository;
 
+    @Mock
+    private LabelCache labelCache;
+
     @InjectMocks
     private LabelDao underTest;
 
@@ -43,10 +51,7 @@ class LabelDaoTest {
 
     @Test
     void getByLabelIds() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(List.of(LABEL_ID))).willReturn(List.of(LABEL_ID_STRING));
-        given(repository.getByLabelIds(USER_ID_STRING, List.of(LABEL_ID_STRING))).willReturn(List.of(entity));
-        given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+        given(labelCache.get(eq(USER_ID), any())).willReturn(Map.of(LABEL_ID, domain));
 
         List<Label> result = underTest.getByLabelIds(USER_ID, List.of(LABEL_ID));
 
@@ -55,41 +60,42 @@ class LabelDaoTest {
 
     @Test
     void save() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(converter.convertDomain(domain)).willReturn(entity);
+        given(domain.getUserId()).willReturn(USER_ID);
 
-        underTest.save(USER_ID, domain);
+        underTest.save(domain);
 
-        then(repository).should().save(USER_ID_STRING, entity);
+        then(repository).should().save(entity);
+        then(labelCache).should().invalidate(USER_ID);
     }
 
     @Test
     void findByIdValidated_notFound() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
-        given(repository.findById(USER_ID_STRING, LABEL_ID_STRING)).willReturn(Optional.empty());
-        given(converter.convertEntity(Optional.empty())).willReturn(Optional.empty());
+        given(labelCache.get(eq(USER_ID), any())).willReturn(Map.of());
 
         ExceptionValidator.validateNotFoundException(() -> underTest.findByIdValidated(USER_ID, LABEL_ID));
     }
 
     @Test
     void findByIdValidated() {
-        given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
-        given(uuidConverter.convertDomain(LABEL_ID)).willReturn(LABEL_ID_STRING);
-        given(repository.findById(USER_ID_STRING, LABEL_ID_STRING)).willReturn(Optional.of(entity));
-        given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(domain));
+        given(labelCache.get(eq(USER_ID), any())).willReturn(Map.of(LABEL_ID, domain));
 
         assertThat(underTest.findByIdValidated(USER_ID, LABEL_ID)).isEqualTo(domain);
     }
 
     @Test
     void getByUserId() {
+        given(labelCache.get(eq(USER_ID), any())).willReturn(Map.of(LABEL_ID, domain));
         given(uuidConverter.convertDomain(USER_ID)).willReturn(USER_ID_STRING);
         given(repository.getByUserId(USER_ID_STRING)).willReturn(List.of(entity));
         given(converter.convertEntity(List.of(entity))).willReturn(List.of(domain));
+        given(domain.getLabelId()).willReturn(LABEL_ID);
 
-        assertThat(underTest.getByUserId(USER_ID)).containsExactly(domain);
+        assertThat(underTest.getByUserId(USER_ID)).containsEntry(LABEL_ID, domain);
+
+        ArgumentCaptor<Supplier<Map<UUID, Label>>> argumentCaptor = ArgumentCaptor.forClass(Supplier.class);
+        then(labelCache).should().get(eq(USER_ID), argumentCaptor.capture());
+        assertThat(argumentCaptor.getValue().get()).containsEntry(LABEL_ID, domain);
     }
 
     @Test
@@ -100,6 +106,14 @@ class LabelDaoTest {
         underTest.delete(USER_ID, LABEL_ID);
 
         then(repository).should().delete(USER_ID_STRING, LABEL_ID_STRING);
+        then(labelCache).should().invalidate(USER_ID);
+    }
+
+    @Test
+    void getByIds() {
+        given(labelCache.get(eq(USER_ID), any())).willReturn(Map.of(LABEL_ID, domain));
+
+        assertThat(underTest.getByIds(List.of(new BiWrapper<>(USER_ID, LABEL_ID)))).containsExactly(domain);
     }
 }
 

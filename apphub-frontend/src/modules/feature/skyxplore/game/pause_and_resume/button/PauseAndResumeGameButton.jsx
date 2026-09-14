@@ -4,12 +4,12 @@ import "./pause_and_resume.css";
 import Button from "common/component/input/Button";
 import { SKYXPLORE_GAME_PAUSE } from "../../SkyXploreGameEndpoints";
 
-const PauseAndResumeGameButton = ({ isHost, paused }) => {
+const PauseAndResumeGameButton = ({ isHost, paused, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData)
 
     const updatePaused = (newStatus) => {
         SKYXPLORE_GAME_PAUSE.createRequest({ value: newStatus })
-            .send();
+            .send(setDisplaySpinner);
     }
 
     if (isHost) {

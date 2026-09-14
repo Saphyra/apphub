@@ -6,7 +6,7 @@ import PageName from "../PageName";
 import "./map.css";
 import { SKYXPLORE_GAME_MAP } from "../../SkyXploreGameEndpoints";
 
-const Map = ({ openPage, footer }) => {
+const Map = ({ openPage, footer, setDisplaySpinner }) => {
     const [universeSize, setUniverseSize] = useState(0);
     const [solarSystems, setSolarSystems] = useState([]);
 
@@ -15,7 +15,7 @@ const Map = ({ openPage, footer }) => {
     const loadUniverse = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_GAME_MAP.createRequest()
-                .send();
+                .send(setDisplaySpinner);
 
             setUniverseSize(response.universeSize);
             setSolarSystems(response.solarSystems);

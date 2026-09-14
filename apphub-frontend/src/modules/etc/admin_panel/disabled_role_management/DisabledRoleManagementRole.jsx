@@ -7,7 +7,7 @@ import roleLocalizationData from "modules/etc/admin_panel/role_localization.json
 import { useState } from "react";
 import { USER_DATA_DISABLE_ROLE, USER_DATA_ENABLE_ROLE } from "../AdminPanelEndpoints";
 
-const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRoles }) => {
+const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRoles, setDisplaySpinner }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
 
     const [password, setPassword] = useState("");
@@ -31,7 +31,7 @@ const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRol
         setPassword("");
 
         const response = await USER_DATA_ENABLE_ROLE.createRequest({ value: password }, { role: role })
-            .send();
+            .send(setDisplaySpinner);
 
         setRoles(response);
         setDisplayEnableConfirmation(false);
@@ -47,7 +47,7 @@ const DisabledRoleManagementRole = ({ role, enabled, localizationHandler, setRol
         setPassword("");
 
         const response = await USER_DATA_DISABLE_ROLE.createRequest({ value: password }, { role: role })
-            .send();
+            .send(setDisplaySpinner);
 
         setRoles(response);
         setDisplayDisableConfirmation(false);

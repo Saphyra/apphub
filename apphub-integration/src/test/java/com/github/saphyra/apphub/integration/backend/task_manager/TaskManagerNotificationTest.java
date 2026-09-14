@@ -7,8 +7,8 @@ import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskMan
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.CustomAssertions;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.NotificationResponse;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.NotificationStatus;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.notification.SetNotificationStatusRequest;
@@ -33,7 +33,7 @@ public class TaskManagerNotificationTest extends BackEndTest {
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         UUID organizationId = createOrganization(accessToken1, userId2);
         TaskManagerInvitationActions.acceptInvitation(getServerPort(), accessToken2, organizationId);

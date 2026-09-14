@@ -13,6 +13,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.saphyra</groupId>
+            <artifactId>apphub-lib-test-repository</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${versions.guava}</version>

@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Data
 @Builder
+@EqualsAndHashCode(exclude = "masked")
 public class Event {
     @NonNull
     private final UUID eventId;
@@ -36,7 +38,16 @@ public class Event {
     private String title;
     @NonNull
     private String content;
-    private Integer remindMeBeforeDays;
+    private int remindMeBeforeDays;
     private boolean expirationNotified;
     private boolean archived;
+    private boolean autoDone;
+
+    private boolean masked;
+
+    public Event setMasked(boolean masked) {
+        this.masked = masked;
+
+        return this;
+    }
 }

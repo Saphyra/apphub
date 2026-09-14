@@ -53,7 +53,7 @@ public class CalendarReminderTest extends SeleniumTest {
 
         CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle())
             .open(driver);
-        CalendarIndexPageActions.editOccurrence(driver);
+        CalendarIndexPageActions.editOpenedOccurrence(driver);
         AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarOccurrencePageActions.isReminded(driver)).isTrue());
     }
 }

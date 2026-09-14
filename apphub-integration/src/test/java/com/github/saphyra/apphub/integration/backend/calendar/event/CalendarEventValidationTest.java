@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.integration.action.backend.calendar.EventReques
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.calendar.EventRequest;
 import com.github.saphyra.apphub.integration.structure.api.calendar.RepetitionType;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -14,6 +15,7 @@ import org.testng.annotations.Test;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class CalendarEventValidationTest extends BackEndTest {
@@ -21,19 +23,20 @@ public class CalendarEventValidationTest extends BackEndTest {
     public void calendarEventValidation() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
-        oneTime(accessToken);
-        everyXDays(accessToken);
-        daysOfWeek(accessToken);
-        daysOfMonth(accessToken);
+        oneTime(accessToken, userId);
+        everyXDays(accessToken, userId);
+        daysOfWeek(accessToken, userId);
+        daysOfMonth(accessToken, userId);
     }
 
-    private void daysOfMonth(String accessToken) {
-        create_generic(accessToken, RepetitionType.DAYS_OF_MONTH);
+    private void daysOfMonth(String accessToken, UUID userId) {
+        create_generic(accessToken, RepetitionType.DAYS_OF_MONTH, userId);
         create_endDate(accessToken, RepetitionType.DAYS_OF_MONTH);
         create_daysOfMonth_repetitionData(accessToken);
         UUID eventId = create(accessToken, RepetitionType.DAYS_OF_MONTH);
-        edit_generic(accessToken, eventId, RepetitionType.DAYS_OF_MONTH);
+        edit_generic(accessToken, eventId, RepetitionType.DAYS_OF_MONTH, userId);
         edit_endDate(accessToken, eventId, RepetitionType.DAYS_OF_MONTH);
         edit_daysOfMonth_repetitionData(accessToken, eventId);
         edit(accessToken, eventId, RepetitionType.DAYS_OF_MONTH);
@@ -129,12 +132,12 @@ public class CalendarEventValidationTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not be empty");
     }
 
-    private void daysOfWeek(String accessToken) {
-        create_generic(accessToken, RepetitionType.DAYS_OF_WEEK);
+    private void daysOfWeek(String accessToken, UUID userId) {
+        create_generic(accessToken, RepetitionType.DAYS_OF_WEEK, userId);
         create_endDate(accessToken, RepetitionType.DAYS_OF_WEEK);
         create_daysOfWeek_repetitionData(accessToken);
         UUID eventId = create(accessToken, RepetitionType.DAYS_OF_WEEK);
-        edit_generic(accessToken, eventId, RepetitionType.DAYS_OF_WEEK);
+        edit_generic(accessToken, eventId, RepetitionType.DAYS_OF_WEEK, userId);
         edit_endDate(accessToken, eventId, RepetitionType.DAYS_OF_WEEK);
         edit_daysOfWeek_repetitionData(accessToken, eventId);
         edit(accessToken, eventId, RepetitionType.DAYS_OF_WEEK);
@@ -190,12 +193,12 @@ public class CalendarEventValidationTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not be empty");
     }
 
-    private void everyXDays(String accessToken) {
-        create_generic(accessToken, RepetitionType.EVERY_X_DAYS);
+    private void everyXDays(String accessToken, UUID userId) {
+        create_generic(accessToken, RepetitionType.EVERY_X_DAYS, userId);
         create_endDate(accessToken, RepetitionType.EVERY_X_DAYS);
         create_everyXDays_repetitionData(accessToken);
         UUID eventId = create(accessToken, RepetitionType.EVERY_X_DAYS);
-        edit_generic(accessToken, eventId, RepetitionType.EVERY_X_DAYS);
+        edit_generic(accessToken, eventId, RepetitionType.EVERY_X_DAYS, userId);
         edit_endDate(accessToken, eventId, RepetitionType.EVERY_X_DAYS);
         edit_everyXDays_repetitionData(accessToken, eventId);
         edit(accessToken, eventId, RepetitionType.EVERY_X_DAYS);
@@ -315,10 +318,10 @@ public class CalendarEventValidationTest extends BackEndTest {
         ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "repetitionData", "must not be null");
     }
 
-    private void oneTime(String accessToken) {
-        create_generic(accessToken, RepetitionType.ONE_TIME);
+    private void oneTime(String accessToken, UUID userId) {
+        create_generic(accessToken, RepetitionType.ONE_TIME, userId);
         UUID eventId = create(accessToken, RepetitionType.ONE_TIME);
-        edit_generic(accessToken, eventId, RepetitionType.ONE_TIME);
+        edit_generic(accessToken, eventId, RepetitionType.ONE_TIME, userId);
         edit(accessToken, eventId, RepetitionType.ONE_TIME);
     }
 
@@ -328,7 +331,7 @@ public class CalendarEventValidationTest extends BackEndTest {
         CalendarEventActions.editEvent(getServerPort(), accessToken, eventId, request);
     }
 
-    private void edit_generic(String accessToken, UUID eventId, RepetitionType repetitionType) {
+    private void edit_generic(String accessToken, UUID eventId, RepetitionType repetitionType, UUID userId) {
         edit_nullRepetitionType(accessToken, eventId);
         edit_nullRepeatForDays(accessToken, eventId, repetitionType);
         edit_repeatForDaysTooLow(accessToken, eventId, repetitionType);
@@ -337,28 +340,18 @@ public class CalendarEventValidationTest extends BackEndTest {
         edit_nullRemindMeBeforeDays(accessToken, eventId, repetitionType);
         edit_remindMeBeforeDaysTooLow(accessToken, eventId, repetitionType);
         edit_nullLabels(accessToken, eventId, repetitionType);
-        edit_labelsContainNull(accessToken, eventId, repetitionType);
-        edit_labelDoesNotExist(accessToken, eventId, repetitionType);
+        edit_labelDoesNotExist(accessToken, eventId, repetitionType, userId);
         edit_nullArchived(accessToken, eventId, repetitionType);
     }
 
-    private void edit_labelDoesNotExist(String accessToken, UUID eventId, RepetitionType repetitionType) {
+    private void edit_labelDoesNotExist(String accessToken, UUID eventId, RepetitionType repetitionType, UUID userId) {
         UUID labelId = UUID.randomUUID();
         EventRequest request = EventRequestFactory.validRequest(repetitionType)
             .toBuilder()
-            .labels(List.of(labelId))
+            .labels(Map.of(labelId, userId))
             .build();
 
         ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", "Unsupported values: " + List.of(labelId));
-    }
-
-    private void edit_labelsContainNull(String accessToken, UUID eventId, RepetitionType repetitionType) {
-        EventRequest request = EventRequestFactory.validRequest(repetitionType)
-            .toBuilder()
-            .labels(CollectionUtils.toList(UUID.randomUUID(), null))
-            .build();
-
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getEditEventResponse(getServerPort(), accessToken, eventId, request), "labels", "must not contain null values");
     }
 
     private void edit_nullLabels(String accessToken, UUID eventId, RepetitionType repetitionType) {
@@ -437,7 +430,7 @@ public class CalendarEventValidationTest extends BackEndTest {
         return CalendarEventActions.createEvent(getServerPort(), accessToken, EventRequestFactory.validRequest(repetitionType));
     }
 
-    private void create_generic(String accessToken, RepetitionType repetitionType) {
+    private void create_generic(String accessToken, RepetitionType repetitionType, UUID userId) {
         create_nullRepetitionType(accessToken);
         create_nullRepeatForDays(accessToken, repetitionType);
         create_repeatForDaysTooLow(accessToken, repetitionType);
@@ -446,27 +439,27 @@ public class CalendarEventValidationTest extends BackEndTest {
         create_nullRemindMeBeforeDays(accessToken, repetitionType);
         create_remindMeBeforeDaysTooLow(accessToken, repetitionType);
         create_nullLabels(accessToken, repetitionType);
-        create_labelsContainNull(accessToken, repetitionType);
-        create_labelDoesNotExist(accessToken, repetitionType);
+        create_labelDoesNotExist(accessToken, repetitionType, userId);
+        create_nullAutoDone(accessToken, repetitionType);
     }
 
-    private void create_labelDoesNotExist(String accessToken, RepetitionType repetitionType) {
+    private void create_nullAutoDone(String accessToken, RepetitionType repetitionType) {
+        EventRequest request = EventRequestFactory.validRequest(repetitionType)
+            .toBuilder()
+            .autoDone(null)
+            .build();
+
+        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "autoDone", "must not be null");
+    }
+
+    private void create_labelDoesNotExist(String accessToken, RepetitionType repetitionType, UUID userId) {
         UUID labelId = UUID.randomUUID();
         EventRequest request = EventRequestFactory.validRequest(repetitionType)
             .toBuilder()
-            .labels(List.of(labelId))
+            .labels(Map.of(labelId, userId))
             .build();
 
         ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", "Unsupported values: " + List.of(labelId));
-    }
-
-    private void create_labelsContainNull(String accessToken, RepetitionType repetitionType) {
-        EventRequest request = EventRequestFactory.validRequest(repetitionType)
-            .toBuilder()
-            .labels(CollectionUtils.toList(UUID.randomUUID(), null))
-            .build();
-
-        ResponseValidator.verifyInvalidParam(CalendarEventActions.getCreateEventResponse(getServerPort(), accessToken, request), "labels", "must not contain null values");
     }
 
     private void create_nullLabels(String accessToken, RepetitionType repetitionType) {

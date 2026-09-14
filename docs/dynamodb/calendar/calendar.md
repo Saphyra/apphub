@@ -43,8 +43,8 @@ Double-mapping for bidirectional query (Query events of label and label of event
 
 - `pk`: `USER#userId`
 - `sk`: `EVENT_LABEL_MAPPING|EVENT#eventId`
-- `labelIds`: `uuid[]`
+- `labelIds`: `Map<LabelId, UserId>`
 
 - `pk`: `USER#userId`
-- `sk`: `EVENT_LABEL_MAPPING|LABEL#labelId|`
-- `eventIds`: `uuid[]`
+- `sk`: `LABEL_EVENT_MAPPING|LABEL#labelId|`
+- `eventIds`: `Map<EventId, UserId>`

@@ -20,6 +20,7 @@ import Optional from "common/js/collection/Optional";
 import Spinner from "common/component/Spinner";
 import { ToastContainer } from "react-toastify";
 import { CALENDAR_PAGE } from "../CalendarEndpoints";
+import EventAutoDone from "../common/event/EventAutoDone";
 
 const CalendarCreateEventPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
@@ -40,6 +41,8 @@ const CalendarCreateEventPage = () => {
     const [repetitionData, setRepetitionData] = useState("");
     const [repeatForDays, setRepeatForDays] = useState(1);
     const [remindMeBeforeDays, setRemindMeBeforeDays] = useState(0);
+    const [autoDone, setAutoDone] = useState(false);
+
     const [existingLabels, setExistingLabels] = useState([]);
     const [newLabels, setNewLabels] = useState([]);
 
@@ -96,6 +99,11 @@ const CalendarCreateEventPage = () => {
                         remindMeBeforeDays={remindMeBeforeDays}
                         setRemindMeBeforeDays={setRemindMeBeforeDays}
                     />
+
+                    <EventAutoDone
+                        value={autoDone}
+                        setValue={setAutoDone}
+                    />
                 </fieldset>
 
                 <fieldset>
@@ -126,7 +134,8 @@ const CalendarCreateEventPage = () => {
                                 time: new Optional(time).map(d => d.formatWithoutSeconds()).orElse(null),
                                 title: title,
                                 content: content,
-                                remindMeBeforeDays: remindMeBeforeDays
+                                remindMeBeforeDays: remindMeBeforeDays,
+                                autoDone: autoDone
                             },
                             existingLabels,
                             setDisplaySpinner,

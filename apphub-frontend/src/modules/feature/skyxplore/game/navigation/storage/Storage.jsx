@@ -4,7 +4,7 @@ import "./storage.css";
 import Button from "common/component/input/Button";
 import StorageSettings from "./storage_settings/StorageSettings";
 
-const Storage = ({ closePage, planetId, footer, setConfirmationDialogData }) => {
+const Storage = ({ closePage, planetId, footer, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     return (
@@ -24,6 +24,7 @@ const Storage = ({ closePage, planetId, footer, setConfirmationDialogData }) => 
                 <StorageSettings
                     planetId={planetId}
                     setConfirmationDialogData={setConfirmationDialogData}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 

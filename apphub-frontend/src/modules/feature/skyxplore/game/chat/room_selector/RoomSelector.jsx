@@ -5,13 +5,13 @@ import Stream from "common/js/collection/Stream";
 import "./room_selector.css";
 import { SKYXPLORE_GAME_GET_CHAT_ROOMS, SKYXPLORE_GAME_LEAVE_CHAT_ROOM } from "../../SkyXploreGameEndpoints";
 
-const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, chatRooms, setChatRooms }) => {
+const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, setDisplayRoomCreator, chatRooms, setChatRooms, setDisplaySpinner }) => {
     useEffect(() => loadChatRooms(), []);
 
     const loadChatRooms = () => {
         const fetch = async () => {
             const response = await SKYXPLORE_GAME_GET_CHAT_ROOMS.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             setChatRooms(response);
         }
         fetch();
@@ -19,7 +19,7 @@ const RoomSelector = ({ currentChatRoom, setCurrentChatRoom, unreadMessages, set
 
     const exitChatRoom = async (roomId) => {
         await SKYXPLORE_GAME_LEAVE_CHAT_ROOM.createRequest(null, { roomId: roomId })
-            .send();
+            .send(setDisplaySpinner);
 
         removeAndSet(chatRooms, (chatRoom) => chatRoom.roomId === roomId, setChatRooms);
     }

@@ -6,9 +6,11 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
+import static com.github.saphyra.apphub.lib.dynamodb.AttributeValueUtils.createString;
+import static com.github.saphyra.apphub.lib.dynamodb.AttributeValueUtils.getString;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_ARCHIVED;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_CONTENT;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_END_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_EXPIRATION_NOTIFIED;
@@ -30,19 +32,20 @@ class EventMapper extends ConverterBase<Map<String, AttributeValue>, EventEntity
     protected Map<String, AttributeValue> processDomainConversion(EventEntity domain) {
         Map<String, AttributeValue> result = new HashMap<>();
 
-        result.put(COLUMN_PK, AttributeValue.builder().s(PREFIX_USER + domain.getUserId()).build());
-        result.put(COLUMN_SK, AttributeValue.builder().s(PREFIX_EVENT + domain.getEventId()).build());
-        result.put(COLUMN_REPETITION_TYPE, AttributeValue.builder().s(domain.getRepetitionType()).build());
-        result.put(COLUMN_REPETITION_DATA, AttributeValue.builder().s(domain.getRepetitionData()).build());
-        result.put(COLUMN_REPEAT_FOR_DAYS, AttributeValue.builder().s(domain.getRepeatForDays()).build());
-        result.put(COLUMN_START_DATE, AttributeValue.builder().s(domain.getStartDate()).build());
-        result.put(COLUMN_TIME, AttributeValue.builder().s(domain.getTime()).build());
-        result.put(COLUMN_TITLE, AttributeValue.builder().s(domain.getTitle()).build());
-        result.put(COLUMN_CONTENT, AttributeValue.builder().s(domain.getContent()).build());
-        result.put(COLUMN_REMIND_ME_BEFORE_DAYS, AttributeValue.builder().s(domain.getRemindMeBeforeDays()).build());
-        result.put(COLUMN_EXPIRATION_NOTIFIED, AttributeValue.builder().s(domain.getExpirationNotified()).build());
-        result.put(COLUMN_ARCHIVED, AttributeValue.builder().s(domain.getArchived()).build());
-        result.put(COLUMN_END_DATE, AttributeValue.builder().s(domain.getEndDate()).build());
+        result.put(COLUMN_PK, createString(PREFIX_USER + domain.getUserId()));
+        result.put(COLUMN_SK, createString(PREFIX_EVENT + domain.getEventId()));
+        result.put(COLUMN_REPETITION_TYPE, createString(domain.getRepetitionType()));
+        result.put(COLUMN_REPETITION_DATA, createString(domain.getRepetitionData()));
+        result.put(COLUMN_REPEAT_FOR_DAYS, createString(domain.getRepeatForDays()));
+        result.put(COLUMN_START_DATE, createString(domain.getStartDate()));
+        result.put(COLUMN_TIME, createString(domain.getTime()));
+        result.put(COLUMN_TITLE, createString(domain.getTitle()));
+        result.put(COLUMN_CONTENT, createString(domain.getContent()));
+        result.put(COLUMN_REMIND_ME_BEFORE_DAYS, createString(domain.getRemindMeBeforeDays()));
+        result.put(COLUMN_EXPIRATION_NOTIFIED, createString(domain.getExpirationNotified()));
+        result.put(COLUMN_ARCHIVED, createString(domain.getArchived()));
+        result.put(COLUMN_END_DATE, createString(domain.getEndDate()));
+        result.put(COLUMN_AUTO_DONE, createString(domain.getAutoDone()));
 
         return result;
     }
@@ -50,19 +53,20 @@ class EventMapper extends ConverterBase<Map<String, AttributeValue>, EventEntity
     @Override
     protected EventEntity processEntityConversion(Map<String, AttributeValue> entity) {
         return EventEntity.builder()
-            .userId(entity.get(COLUMN_PK).s().substring(PREFIX_USER.length()))
-            .eventId(entity.get(COLUMN_SK).s().substring(PREFIX_EVENT.length()))
-            .repetitionType(entity.get(COLUMN_REPETITION_TYPE).s())
-            .repetitionData(entity.get(COLUMN_REPETITION_DATA).s())
-            .repeatForDays(entity.get(COLUMN_REPEAT_FOR_DAYS).s())
-            .startDate(entity.get(COLUMN_START_DATE).s())
-            .time(entity.get(COLUMN_TIME).s())
-            .endDate(Optional.ofNullable(entity.get(COLUMN_END_DATE)).map(AttributeValue::s).orElse(null))
-            .title(entity.get(COLUMN_TITLE).s())
-            .content(entity.get(COLUMN_CONTENT).s())
-            .remindMeBeforeDays(entity.get(COLUMN_REMIND_ME_BEFORE_DAYS).s())
-            .expirationNotified(entity.get(COLUMN_EXPIRATION_NOTIFIED).s())
-            .archived(entity.get(COLUMN_ARCHIVED).s())
+            .userId(getString(entity, COLUMN_PK).substring(PREFIX_USER.length()))
+            .eventId(getString(entity, COLUMN_SK).substring(PREFIX_EVENT.length()))
+            .repetitionType(getString(entity, COLUMN_REPETITION_TYPE))
+            .repetitionData(getString(entity, COLUMN_REPETITION_DATA))
+            .repeatForDays(getString(entity, COLUMN_REPEAT_FOR_DAYS))
+            .startDate(getString(entity, COLUMN_START_DATE))
+            .time(getString(entity, COLUMN_TIME))
+            .endDate(getString(entity, COLUMN_END_DATE))
+            .title(getString(entity, COLUMN_TITLE))
+            .content(getString(entity, COLUMN_CONTENT))
+            .remindMeBeforeDays(getString(entity, COLUMN_REMIND_ME_BEFORE_DAYS))
+            .expirationNotified(getString(entity, COLUMN_EXPIRATION_NOTIFIED))
+            .archived(getString(entity, COLUMN_ARCHIVED))
+            .autoDone(getString(entity, COLUMN_AUTO_DONE))
             .build();
     }
 }

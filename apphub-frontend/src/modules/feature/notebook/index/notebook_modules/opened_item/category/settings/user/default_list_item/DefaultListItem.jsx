@@ -7,7 +7,7 @@ import DefaultListItemSelector from "./DefaultListItemSelector";
 import UserSettings from "modules/feature/notebook/common/UserSettings";
 import { NOTEBOOK_GET_LIST_ITEM } from "modules/feature/notebook/NotebookEndpoints";
 
-const DefaultListItem = ({ localizationHandler, userSettings, changeUserSettings }) => {
+const DefaultListItem = ({ localizationHandler, userSettings, changeUserSettings, setDisplaySpinner }) => {
     const [defaultListItemId, setDefaultListItemId] = useState(null);
     const [defaultListItem, setDefaultListItem] = useState(null);
     const [editingEnabled, setEditingEnabled] = useState(false);
@@ -18,7 +18,8 @@ const DefaultListItem = ({ localizationHandler, userSettings, changeUserSettings
         request: NOTEBOOK_GET_LIST_ITEM.createRequest(null, { listItemId: userSettings[UserSettings.DEFAULT_LIST_ITEM_ID] }),
         mapper: setDefaultListItem,
         listener: [defaultListItemId],
-        condition: () => hasValue(defaultListItemId)
+        condition: () => hasValue(defaultListItemId),
+        setDisplaySpinner: setDisplaySpinner
     });
 
     return (
@@ -41,9 +42,9 @@ const DefaultListItem = ({ localizationHandler, userSettings, changeUserSettings
                 <DefaultListItemSelector
                     localizationHandler={localizationHandler}
                     defaultListItemId={defaultListItemId}
-                    setDefaultListItemId={setDefaultListItemId}
                     setEditingEnabled={setEditingEnabled}
                     changeUserSettings={changeUserSettings}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             }
         </div>

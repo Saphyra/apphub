@@ -14,7 +14,7 @@ import Textarea from "common/component/input/Textarea";
 import Button from "common/component/input/Button";
 import { ACCOUNT_BAN_USER } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
-const BanUserRole = ({ userData, setUserData }) => {
+const BanUserRole = ({ userData, setUserData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
 
@@ -64,7 +64,7 @@ const BanUserRole = ({ userData, setUserData }) => {
         }
 
         const response = await ACCOUNT_BAN_USER.createRequest(payload)
-            .send();
+            .send(setDisplaySpinner);
 
         setRoleToBan("");
         setPermanent(false);

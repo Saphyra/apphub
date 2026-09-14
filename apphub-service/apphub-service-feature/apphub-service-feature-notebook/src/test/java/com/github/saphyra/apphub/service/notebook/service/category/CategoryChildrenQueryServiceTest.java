@@ -15,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,7 +62,7 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_1)
             .build();
         given(listItemDao.getByUserIdAndParent(USER_ID, CATEGORY_ID)).willReturn(Collections.singletonList(listItem));
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem))).willReturn(List.of(notebookView));
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, "", null);
 
@@ -87,7 +88,7 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_1)
             .build();
         given(listItemDao.getByUserIdAndParent(USER_ID, null)).willReturn(Arrays.asList(listItem1, listItem2));
-        given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem2))).willReturn(List.of(notebookView));
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, null, ListItemType.CATEGORY.name(), null);
 
@@ -128,7 +129,7 @@ public class CategoryChildrenQueryServiceTest {
             .title(TITLE_2)
             .build();
         given(listItemDao.findById(USER_ID, CATEGORY_ID)).willReturn(Optional.of(parent));
-        given(notebookViewFactory.create(listItem2)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem2))).willReturn(List.of(notebookView));
 
         ChildrenOfCategoryResponse result = underTest.getChildrenOfCategory(USER_ID, CATEGORY_ID, ListItemType.CATEGORY.name(), LIST_ITEM_ID_3);
 

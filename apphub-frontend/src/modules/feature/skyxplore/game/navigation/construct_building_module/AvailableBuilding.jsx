@@ -8,7 +8,7 @@ import ConstructionCost from "../../common/component/construction_cost/Construct
 import Button from "common/component/input/Button";
 import { SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE } from "../../SkyXploreGameEndpoints";
 
-const AvailableBuilding = ({ closePage, localizationHandler, dataId, constructionAreaId }) => {
+const AvailableBuilding = ({ closePage, localizationHandler, dataId, constructionAreaId, setDisplaySpinner }) => {
     const buildingModuleLocalizationHandler = new LocalizationHandler(buildingModuleLocalizationData);
 
     const [buildingModuleData, setBuildingModuleData] = useState(null);
@@ -21,7 +21,7 @@ const AvailableBuilding = ({ closePage, localizationHandler, dataId, constructio
 
     const constructBuilding = async () => {
         await SKYXPLORE_PLANET_SURFACE_CONSTRUCTION_AREA_CONSTRUCT_BUILDING_MODULE.createRequest({ value: dataId }, { constructionAreaId: constructionAreaId })
-            .send();
+            .send(setDisplaySpinner);
 
         closePage();
     }

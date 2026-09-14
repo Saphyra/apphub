@@ -1,6 +1,9 @@
 package com.github.saphyra.apphub.service.feature.elite_base.message_processing.saver;
 
 import com.github.saphyra.apphub.service.feature.elite_base.common.MessageProcessingDelayedException;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateDao;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdateFactory;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystem;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystemDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.star_system.StarSystemFactory;
@@ -17,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
+import java.util.stream.Stream;
 
 import static java.util.Objects.isNull;
 
@@ -28,6 +32,8 @@ public class StarSystemSaver {
 
     private final StarSystemDao starSystemDao;
     private final StarSystemFactory starSystemFactory;
+    private final LastUpdateDao lastUpdateDao;
+    private final LastUpdateFactory lastUpdateFactory;
 
     public StarSystem save(LocalDateTime timestamp, String starName) {
         return save(timestamp, null, starName, null);
@@ -42,29 +48,31 @@ public class StarSystemSaver {
             throw new IllegalArgumentException("starName must not be null.");
         }
 
-        Optional<Lock> starNameLock = Optional.of(starName)
-            .map(STAR_NAME_LOCK::get);
-
-        starNameLock.ifPresent(this::lock);
+        Lock starNameLock = STAR_NAME_LOCK.get(starName);
+        lock(starNameLock);
 
         log.debug("Saving starSystem {}", starName);
 
         try {
-            StarSystem starSystem = starSystemDao.findByStarName(starName)
-                .orElseGet(() -> {
-                    StarSystem created = starSystemFactory.create(timestamp, starId, starName, starPosition, starType);
-                    log.debug("Saving new {}", created);
-                    starSystemDao.save(created);
-                    return created;
-                });
+            Optional<StarSystem> maybeStarSystem = starSystemDao.findByStarName(starName);
+            if (maybeStarSystem.isPresent()) {
+                StarSystem starSystem = maybeStarSystem.get();
 
-            updateMissingFields(timestamp, starSystem, starId, starName, starPosition, starType);
+                updateFields(timestamp, starSystem, starId, starName, starPosition, starType);
 
-            log.debug("Saved starSystem {}", starName);
+                return starSystem;
+            } else {
+                StarSystem created = starSystemFactory.create(starId, starName, starPosition, starType);
+                log.debug("Saving new {}", created);
 
-            return starSystem;
+                starSystemDao.save(created);
+
+                saveLastUpdate(timestamp, created);
+
+                return created;
+            }
         } finally {
-            starNameLock.ifPresent(Lock::unlock);
+            starNameLock.unlock();
         }
     }
 
@@ -75,23 +83,32 @@ public class StarSystemSaver {
         }
     }
 
-    private void updateMissingFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, StarType starType) {
-        if (timestamp.isBefore(starSystem.getLastUpdate())) {
+    private void updateFields(LocalDateTime timestamp, StarSystem starSystem, Long starId, String starName, Double[] starPosition, StarType starType) {
+        LocalDateTime lastUpdated = lastUpdateDao.findByIdOrDefault(starSystem.getId(), ObjectType.STAR_SYSTEM).getLastUpdate();
+        if ( timestamp.isBefore(lastUpdated)) {
             log.debug("StarSystem {} has newer data than {}", starSystem.getId(), timestamp);
             return;
         }
 
+        saveLastUpdate(timestamp, starSystem);
+
         StarSystemPosition starSystemPosition = StarSystemPosition.parse(starPosition);
 
-        List.of(
-                new UpdateHelper(new DefaultChecker(timestamp, starSystem::getLastUpdate), () -> starSystem.setLastUpdate(timestamp)),
+        List<Boolean> results = Stream.of(
                 new UpdateHelper(new DefaultChecker(starId, starSystem::getStarId), () -> starSystem.setStarId(starId)),
                 new UpdateHelper(new DefaultChecker(starName, starSystem::getStarName), () -> starSystem.setStarName(starName)),
                 new UpdateHelper(new DefaultChecker(starSystemPosition, starSystem::getPosition), () -> starSystem.setPosition(starSystemPosition)),
                 new UpdateHelper(new DefaultChecker(starType, starSystem::getStarType), () -> starSystem.setStarType(starType))
             )
-            .forEach(UpdateHelper::modify);
+            .map(UpdateHelper::modify)
+            .toList();
 
-        starSystemDao.save(starSystem);
+        if (results.stream().anyMatch(Boolean::booleanValue)) {
+            starSystemDao.save(starSystem);
+        }
+    }
+
+    private void saveLastUpdate(LocalDateTime timestamp, StarSystem starSystem) {
+        lastUpdateDao.save(lastUpdateFactory.create(starSystem.getId(), ObjectType.STAR_SYSTEM, timestamp));
     }
 }

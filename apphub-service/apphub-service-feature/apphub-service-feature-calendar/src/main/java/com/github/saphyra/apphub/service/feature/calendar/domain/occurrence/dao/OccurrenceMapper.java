@@ -7,6 +7,9 @@ import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.lib.dynamodb.AttributeValueUtils.createString;
+import static com.github.saphyra.apphub.lib.dynamodb.AttributeValueUtils.getString;
+import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_AUTO_DONE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_DATE_BUCKET;
 import static com.github.saphyra.apphub.service.feature.calendar.common.dao.CalendarDaoConstants.COLUMN_NOTE;
@@ -26,16 +29,17 @@ class OccurrenceMapper extends ConverterBase<Map<String, AttributeValue>, Occurr
     @Override
     protected Map<String, AttributeValue> processDomainConversion(OccurrenceEntity occurrence) {
         Map<String, AttributeValue> result = new HashMap<>();
-        result.put(COLUMN_PK, AttributeValue.builder().s(PREFIX_EVENT + occurrence.getEventId()).build());
-        result.put(COLUMN_SK, AttributeValue.builder().s(PREFIX_OCCURRENCE + occurrence.getOccurrenceId()).build());
-        result.put(COLUMN_USER_ID, AttributeValue.builder().s(PREFIX_USER + occurrence.getUserId()).build());
-        result.put(COLUMN_DATE_BUCKET, AttributeValue.builder().s(occurrence.getDateBucket()).build());
-        result.put(COLUMN_DATE, AttributeValue.builder().s(occurrence.getDate()).build());
-        result.put(COLUMN_TIME, AttributeValue.builder().s(occurrence.getTime()).build());
-        result.put(COLUMN_STATUS, AttributeValue.builder().s(occurrence.getStatus()).build());
-        result.put(COLUMN_NOTE, AttributeValue.builder().s(occurrence.getNote()).build());
-        result.put(COLUMN_REMIND_ME_BEFORE_DAYS, AttributeValue.builder().s(occurrence.getRemindMeBeforeDays()).build());
-        result.put(COLUMN_REMINDED, AttributeValue.builder().s(occurrence.getReminded()).build());
+        result.put(COLUMN_PK, createString(PREFIX_EVENT + occurrence.getEventId()));
+        result.put(COLUMN_SK, createString(PREFIX_OCCURRENCE + occurrence.getOccurrenceId()));
+        result.put(COLUMN_USER_ID, createString(PREFIX_USER + occurrence.getUserId()));
+        result.put(COLUMN_DATE_BUCKET, createString(occurrence.getDateBucket()));
+        result.put(COLUMN_DATE, createString(occurrence.getDate()));
+        result.put(COLUMN_TIME, createString(occurrence.getTime()));
+        result.put(COLUMN_STATUS, createString(occurrence.getStatus()));
+        result.put(COLUMN_NOTE, createString(occurrence.getNote()));
+        result.put(COLUMN_REMIND_ME_BEFORE_DAYS, createString(occurrence.getRemindMeBeforeDays()));
+        result.put(COLUMN_REMINDED, createString(occurrence.getReminded()));
+        result.put(COLUMN_AUTO_DONE, createString(occurrence.getAutoDone()));
 
         return result;
     }
@@ -43,16 +47,17 @@ class OccurrenceMapper extends ConverterBase<Map<String, AttributeValue>, Occurr
     @Override
     protected OccurrenceEntity processEntityConversion(Map<String, AttributeValue> entity) {
         return OccurrenceEntity.builder()
-            .eventId(entity.get(COLUMN_PK).s().substring(PREFIX_EVENT.length()))
-            .occurrenceId(entity.get(COLUMN_SK).s().substring(PREFIX_OCCURRENCE.length()))
-            .userId(entity.get(COLUMN_USER_ID).s().substring(PREFIX_USER.length()))
-            .date(entity.get(COLUMN_DATE).s())
-            .dateBucket(entity.get(COLUMN_DATE_BUCKET).s())
-            .time(entity.get(COLUMN_TIME).s())
-            .status(entity.get(COLUMN_STATUS).s())
-            .note(entity.get(COLUMN_NOTE).s())
-            .remindMeBeforeDays(entity.get(COLUMN_REMIND_ME_BEFORE_DAYS).s())
-            .reminded(entity.get(COLUMN_REMINDED).s())
+            .eventId(getString(entity, COLUMN_PK).substring(PREFIX_EVENT.length()))
+            .occurrenceId(getString(entity, COLUMN_SK).substring(PREFIX_OCCURRENCE.length()))
+            .userId(getString(entity, COLUMN_USER_ID).substring(PREFIX_USER.length()))
+            .date(getString(entity, COLUMN_DATE))
+            .dateBucket(getString(entity, COLUMN_DATE_BUCKET))
+            .time(getString(entity, COLUMN_TIME))
+            .status(getString(entity, COLUMN_STATUS))
+            .note(getString(entity, COLUMN_NOTE))
+            .remindMeBeforeDays(getString(entity, COLUMN_REMIND_ME_BEFORE_DAYS))
+            .reminded(getString(entity, COLUMN_REMINDED))
+            .autoDone(getString(entity, COLUMN_AUTO_DONE))
             .build();
     }
 }

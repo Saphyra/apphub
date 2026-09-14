@@ -49,4 +49,10 @@
             <column name="repeatable" valueBoolean="true"/>
         </insert>
     </changeSet>
+
+    <changeSet id="delete-migration-task-elite_base_orphaned_record_cleanup" author="Saphyra">
+        <delete schemaName="admin_panel" tableName="migration_task">
+            <where>event = 'elite-base-orphaned-record-cleanup'</where>
+        </delete>
+    </changeSet>
 </databaseChangeLog>

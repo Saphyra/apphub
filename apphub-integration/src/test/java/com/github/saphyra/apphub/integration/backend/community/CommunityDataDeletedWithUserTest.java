@@ -10,8 +10,8 @@ import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.BiWrapper;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DatabaseUtil;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.DatabaseUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
 
@@ -33,20 +33,20 @@ public class CommunityDataDeletedWithUserTest extends BackEndTest {
     public void communityDataDeletedWithUser() {
         RegistrationParameters userData = RegistrationParameters.validParameters();
         String accessToken = IndexPageActions.registerAndLogin(getServerPort(), userData);
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         RegistrationParameters adminUserData = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), adminUserData);
-        UUID adminUserId = DynamoDbUtil.getUserIdByEmail(adminUserData.getEmail());
-        DynamoDbUtil.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
+        UUID adminUserId = UserDynamoDbRepository.getUserIdByEmail(adminUserData.getEmail());
+        UserDynamoDbRepository.addRoleByEmail(adminUserData.getEmail(), Constants.ROLE_ADMIN);
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
-        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = UserDynamoDbRepository.getUserIdByEmail(userData3.getEmail());
 
         communityTables(accessToken, adminUserId, userId2, accessToken3, userId3);
 

@@ -30,11 +30,17 @@ public class UserActiveNotificationService {
     private final SkyXploreLobbyWebSocketHandler lobbyWebSocketHandler;
 
     public void userOnline(UUID userId) {
-        lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE, userId));
+        List<UUID> recipients = getRecipients(userId);
+        if (!recipients.isEmpty()) {
+            lobbyWebSocketHandler.sendEvent(recipients, createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_ONLINE, userId));
+        }
     }
 
     public void userOffline(UUID userId) {
-        lobbyWebSocketHandler.sendEvent(getRecipients(userId), createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE, userId));
+        List<UUID> recipients = getRecipients(userId);
+        if (!recipients.isEmpty()) {
+            lobbyWebSocketHandler.sendEvent(recipients, createEvent(WebSocketEventName.SKYXPLORE_LOBBY_USER_OFFLINE, userId));
+        }
     }
 
     private List<UUID> getRecipients(UUID userId) {

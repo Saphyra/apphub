@@ -5,14 +5,14 @@ import MapStream from "common/js/collection/MapStream";
 import Stream from "common/js/collection/Stream";
 import { SKYXPLORE_LOBBY_GET_PLAYERS } from "../SkyXploreLobbyEndpoints";
 
-const Players = ({ localizationHandler, alliances, isHost, lobbyType, players, setPlayers }) => {
+const Players = ({ localizationHandler, alliances, isHost, lobbyType, players, setPlayers, setDisplaySpinner }) => {
     useEffect(() => loadPlayers(), []);
 
     //Load
     const loadPlayers = () => {
         const fetch = async () => {
             const result = await SKYXPLORE_LOBBY_GET_PLAYERS.createRequest()
-                .send();
+                .send(setDisplaySpinner);
             const playerMap = new Stream(result)
                 .toMap((player) => player.userId);
 
@@ -31,6 +31,7 @@ const Players = ({ localizationHandler, alliances, isHost, lobbyType, players, s
                     alliances={alliances}
                     isHost={isHost}
                     lobbyType={lobbyType}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             )
             .toList();

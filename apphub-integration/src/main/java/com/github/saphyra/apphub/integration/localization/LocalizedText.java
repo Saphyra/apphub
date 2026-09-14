@@ -86,6 +86,7 @@ public enum LocalizedText {
     CALENDAR_OCCURRENCE_SAVED("Occurrence saved."),
     CALENDAR_OCCURRENCE_CREATED("Occurrence created."),
     CALENDAR_EMPTY_EXTEND_UNTIL_DATE("Pick an end date!"),
+    CALENDAR_SHARE_GRANTS_SAVED("Grants saved successfully."),
 
     //TASK_MANAGER
     TASK_MANAGER_ORGANIZATION_NAME_MISSING("Organization name is required"),

@@ -10,10 +10,13 @@ import Footer from "common/component/Footer";
 import Button from "common/component/input/Button";
 import { ToastContainer } from "react-toastify";
 import { MODULES_PAGE } from "modules/etc/modules/ModulesEndpoints";
+import Spinner from "common/component/Spinner";
 
 const RoleManagementPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
+
+    const [displaySpinner, setDisplaySpinner] = useState(false);
 
     const [query, setQuery] = useState("");
     const [users, setUsers] = useState([]);
@@ -30,6 +33,7 @@ const RoleManagementPage = () => {
                     query={query}
                     setQuery={setQuery}
                     setUsers={setUsers}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
 
                 <RoleManagementSearchResult
@@ -37,6 +41,7 @@ const RoleManagementPage = () => {
                     users={users}
                     setUsers={setUsers}
                     query={query}
+                    setDisplaySpinner={setDisplaySpinner}
                 />
             </main>
 
@@ -51,6 +56,8 @@ const RoleManagementPage = () => {
             />
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

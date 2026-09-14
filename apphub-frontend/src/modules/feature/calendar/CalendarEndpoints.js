@@ -8,6 +8,7 @@ export const CALENDAR_SEARCH_PAGE = "/web/calendar/search";
 export const CALENDAR_CREATE_EVENT_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/create-event");
 export const CALENDAR_EDIT_EVENT_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/edit-event/{eventId}");
 export const CALENDAR_EDIT_OCCURRENCE_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/edit-occurrence/{eventId}/{occurrenceId}");
+export const CALENDAR_SHARE_PAGE = new Endpoint(RequestMethod.GET, "/web/calendar/share/{type}/{id}/{parent}");
 
 export const CALENDAR_GET_LABELS = new Endpoint(RequestMethod.GET, "/api/calendar/labels");
 export const CALENDAR_CREATE_LABEL = new Endpoint(RequestMethod.PUT, "/api/calendar/labels");
@@ -35,3 +36,8 @@ export const CALENDAR_EXTEND_EXPIRED_EVENT = new Endpoint(RequestMethod.POST, "/
 export const CALENDAR_MERGE_EVENTS = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/merge");
 export const CALENDAR_ARCHIVE_EVENT = new Endpoint(RequestMethod.POST, "/api/calendar/events/{eventId}/archive");
 export const CALENDAR_SEARCH_EVENTS = new Endpoint(RequestMethod.POST, "/api/calendar/events/search");
+export const CALENDAR_GET_SHARED_OBJECT = new Endpoint(RequestMethod.GET, "/api/calendar/shared/{type}/{id}");
+export const CALENDAR_GET_GRANTS = new Endpoint(RequestMethod.GET, "/api/calendar/shared/{type}/grants");
+export const CALENDAR_SHARE_OBJECT = new Endpoint(RequestMethod.PUT, "/api/calendar/shared");
+export const CALENDAR_SHARE_EDIT_GRANTS = new Endpoint(RequestMethod.POST, "/api/calendar/shared/{type}/{id}/grants/{sharedWith}");
+export const CALENDAR_UNSHARE_OBJECT = new Endpoint(RequestMethod.DELETE, "/api/calendar/shared/{type}/{id}/grants/{sharedWith}");

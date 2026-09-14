@@ -6,7 +6,7 @@ const useCache = (key, request, mapper = () => { }, enabled = true) => {
     const { data, refetch } = useQuery(
         key,
         async () => {
-            return await request.send()
+            return await request.send(() => { });
         },
         {
             staleTime: Infinity,

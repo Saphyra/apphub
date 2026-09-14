@@ -5,8 +5,8 @@ import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskMan
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.CollectionUtils;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ResponseValidator;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.organization.CreateOrganizationRequest;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.organization.OrganizationResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
@@ -66,7 +66,7 @@ public class TaskManagerOrganizationTest extends BackEndTest {
     }
 
     private void create_selfInvitation(String accessToken, RegistrationParameters userData) {
-        UUID userId = DynamoDbUtil.getUserIdByEmail(userData.getEmail());
+        UUID userId = UserDynamoDbRepository.getUserIdByEmail(userData.getEmail());
 
         CreateOrganizationRequest request = validRequest()
             .toBuilder()

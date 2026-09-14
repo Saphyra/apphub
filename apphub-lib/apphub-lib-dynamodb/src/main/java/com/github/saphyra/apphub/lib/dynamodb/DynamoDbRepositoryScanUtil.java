@@ -22,8 +22,9 @@ class DynamoDbRepositoryScanUtil {
     private final DynamoDbClient client;
     private final DynamoDbMonitoringInstruments monitoringInstruments;
 
-    List<Map<String, AttributeValue>> scan(ScanRequest scanRequest, String monitoringFunctionality) {
+    List<Map<String, AttributeValue>> scan(String tableName, ScanRequest scanRequest, String monitoringFunctionality) {
         scanRequest = scanRequest.toBuilder()
+            .tableName(tableName)
             .returnConsumedCapacity(ReturnConsumedCapacity.TOTAL)
             .build();
 

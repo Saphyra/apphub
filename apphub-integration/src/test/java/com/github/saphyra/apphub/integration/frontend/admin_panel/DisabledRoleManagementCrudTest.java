@@ -9,10 +9,10 @@ import com.github.saphyra.apphub.integration.core.feature_lock.Feature;
 import com.github.saphyra.apphub.integration.core.feature_lock.FeatureLocked;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
 import com.github.saphyra.apphub.integration.framework.Constants;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.Navigation;
 import com.github.saphyra.apphub.integration.framework.ToastMessageUtil;
 import com.github.saphyra.apphub.integration.framework.UrlFactory;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.framework.endpoints.AdminPanelEndpoints;
 import com.github.saphyra.apphub.integration.framework.endpoints.GenericEndpoints;
 import com.github.saphyra.apphub.integration.localization.LocalizedText;
@@ -36,7 +36,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
 
         RegistrationParameters userData = RegistrationParameters.validParameters();
         IndexPageActions.registerUser(driver, userData);
-        DynamoDbUtil.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
+        UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
         AccessTokenActions.invalidateAccessToken(driver, getServerPort());
         ModulesPageActions.openModule(getServerPort(), driver, ModuleLocation.DISABLED_ROLE_MANAGEMENT);
 
@@ -79,7 +79,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             }
         );
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
 
         AwaitilityWrapper.createDefault()
@@ -127,7 +127,7 @@ public class DisabledRoleManagementCrudTest extends SeleniumTest {
             }
         );
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
         IndexPageActions.login(serverPort, driver, LoginParameters.fromRegistrationParameters(userData));
         AwaitilityWrapper.createDefault()
             .until(() -> driver.getCurrentUrl().endsWith(AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE))

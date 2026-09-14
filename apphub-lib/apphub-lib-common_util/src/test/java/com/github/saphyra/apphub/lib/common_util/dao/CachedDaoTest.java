@@ -1,8 +1,7 @@
 package com.github.saphyra.apphub.lib.common_util.dao;
 
-import com.github.saphyra.apphub.lib.common_util.cache.AbstractCache;
 import com.github.saphyra.apphub.lib.common_util.converter.Converter;
-import com.github.saphyra.apphub.lib.common_util.dao.CachedDao;
+import com.google.common.cache.Cache;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class CachedDaoTest {
     private CrudRepository<Entity, String> repository;
 
     @Mock
-    private AbstractCache<String, Entity> cache;
+    private Cache<String, Entity> cache;
 
     @InjectMocks
     private CachedDaoImpl underTest;
@@ -53,7 +52,7 @@ class CachedDaoTest {
     void deleteAll() {
         underTest.deleteAll();
 
-        then(cache).should().clear();
+        then(cache).should().invalidateAll();
         then(repository).should().deleteAll();
     }
 
@@ -95,8 +94,8 @@ class CachedDaoTest {
         Entity entity2 = new Entity(KEY_2, VALUE_2, false);
         given(repository.findAllById(List.of(KEY_2))).willReturn(List.of(entity2));
         given(converter.convertEntity(List.of(entity2))).willReturn(List.of(entity2));
-        given(cache.getIfPresent(KEY_1)).willReturn(Optional.of(entity1));
-        given(cache.getIfPresent(KEY_2)).willReturn(Optional.empty());
+        given(cache.getIfPresent(KEY_1)).willReturn(entity1);
+        given(cache.getIfPresent(KEY_2)).willReturn(null);
 
         assertThat(underTest.findAllById(List.of(KEY_1, KEY_2))).containsExactlyInAnyOrder(entity1, entity2);
 
@@ -106,7 +105,7 @@ class CachedDaoTest {
     @Test
     void findById_loadFromCache() {
         Entity entity = new Entity(KEY_1, VALUE_1, false);
-        given(cache.getIfPresent(KEY_1)).willReturn(Optional.of(entity));
+        given(cache.getIfPresent(KEY_1)).willReturn(entity);
 
         assertThat(underTest.findById(KEY_1)).contains(entity);
 
@@ -116,7 +115,7 @@ class CachedDaoTest {
     @Test
     void findById_loadToCache() {
         Entity entity = new Entity(KEY_1, VALUE_1, false);
-        given(cache.getIfPresent(KEY_1)).willReturn(Optional.empty());
+        given(cache.getIfPresent(KEY_1)).willReturn(null);
         given(repository.findById(KEY_1)).willReturn(Optional.of(entity));
         given(converter.convertEntity(Optional.of(entity))).willReturn(Optional.of(entity));
 
@@ -160,7 +159,7 @@ class CachedDaoTest {
     }
 
     static class CachedDaoImpl extends CachedDao<Entity, Entity, String, CrudRepository<Entity, String>> {
-        CachedDaoImpl(Converter<Entity, Entity> converter, CrudRepository<Entity, String> repository, AbstractCache<String, Entity> cache) {
+        CachedDaoImpl(Converter<Entity, Entity> converter, CrudRepository<Entity, String> repository, Cache<String, Entity> cache) {
             super(converter, repository, false, cache);
         }
 

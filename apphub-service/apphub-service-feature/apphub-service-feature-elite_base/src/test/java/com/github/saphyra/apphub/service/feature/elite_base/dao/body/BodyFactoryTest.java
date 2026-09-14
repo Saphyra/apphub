@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +14,6 @@ import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class BodyFactoryTest {
-    private static final LocalDateTime LAST_UPDATE = LocalDateTime.now();
     private static final UUID STAR_SYSTEM_ID = UUID.randomUUID();
     private static final UUID ID = UUID.randomUUID();
     private static final Long BODY_ID = 324L;
@@ -32,9 +30,8 @@ class BodyFactoryTest {
     void create() {
         given(idGenerator.randomUuid()).willReturn(ID);
 
-        assertThat(underTest.create(LAST_UPDATE, STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR))
+        assertThat(underTest.create(STAR_SYSTEM_ID, BodyType.PLANET, BODY_ID, BODY_NAME, DISTANCE_FROM_STAR))
             .returns(ID, Body::getId)
-            .returns(LAST_UPDATE, Body::getLastUpdate)
             .returns(STAR_SYSTEM_ID, Body::getStarSystemId)
             .returns(BodyType.PLANET, Body::getType)
             .returns(BODY_ID, Body::getBodyId)

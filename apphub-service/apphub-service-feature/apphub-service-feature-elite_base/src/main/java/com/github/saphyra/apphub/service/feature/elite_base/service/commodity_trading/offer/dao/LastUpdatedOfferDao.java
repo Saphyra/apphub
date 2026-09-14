@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_LAST_UPDATE;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_LAST_UPDATE_V2;
 
 @Component
 @Slf4j
@@ -18,7 +18,7 @@ class LastUpdatedOfferDao extends OfferDaoBase {
 
     @Override
     protected QualifiedColumn getOrderByColumn(TradeMode tradeMode) {
-        return new QualifiedColumn(TABLE_LAST_UPDATE, COLUMN_LAST_UPDATE);
+        return new QualifiedColumn(TABLE_LAST_UPDATE_V2, COLUMN_LAST_UPDATE);
     }
 
     @Override

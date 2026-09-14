@@ -34,9 +34,8 @@ class StarSystemFactoryTest {
         given(idGenerator.randomUuid()).willReturn(ID);
         Double[] starPosition = {X_POS, Y_POS, Z_POS};
 
-        assertThat(underTest.create(LAST_UPDATE, STAR_ID, STAR_NAME, starPosition, StarType.A))
+        assertThat(underTest.create(STAR_ID, STAR_NAME, starPosition, StarType.A))
             .returns(ID, StarSystem::getId)
-            .returns(LAST_UPDATE, StarSystem::getLastUpdate)
             .returns(STAR_ID, StarSystem::getStarId)
             .returns(STAR_NAME, StarSystem::getStarName)
             .returns(StarSystemPosition.parse(starPosition), StarSystem::getPosition)

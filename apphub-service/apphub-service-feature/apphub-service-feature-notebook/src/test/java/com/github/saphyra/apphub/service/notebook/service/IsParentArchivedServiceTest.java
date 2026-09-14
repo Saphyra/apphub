@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +34,7 @@ class IsParentArchivedServiceTest {
 
     @Test
     void nullParentId() {
-        assertThat(underTest.isAnyOfParentsArchived(USER_ID, null)).isFalse();
+        assertThat(underTest.isAnyOfParentsArchived(new HashMap<>(), USER_ID, null)).isFalse();
     }
 
     @Test
@@ -44,7 +45,7 @@ class IsParentArchivedServiceTest {
         given(listItemDao.findByIdValidated(USER_ID, PARENT_ID_2)).willReturn(listItem2);
         given(listItem2.isArchived()).willReturn(true);
 
-        assertThat(underTest.isAnyOfParentsArchived(USER_ID, PARENT_ID_1)).isTrue();
+        assertThat(underTest.isAnyOfParentsArchived(new HashMap<>(), USER_ID, PARENT_ID_1)).isTrue();
     }
 
     @Test
@@ -55,6 +56,6 @@ class IsParentArchivedServiceTest {
         given(listItemDao.findByIdValidated(USER_ID, PARENT_ID_2)).willReturn(listItem2);
         given(listItem2.isArchived()).willReturn(false);
 
-        assertThat(underTest.isAnyOfParentsArchived(USER_ID, PARENT_ID_1)).isFalse();
+        assertThat(underTest.isAnyOfParentsArchived(new HashMap<>(), USER_ID, PARENT_ID_1)).isFalse();
     }
 }

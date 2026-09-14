@@ -10,4 +10,5 @@ public enum Feature {
     ELITE_BASE_ORPHANED_RECORD_CLEANUP,
     DYNAMO_DB,
     ERROR_REPORT,
+    CACHE,
 }

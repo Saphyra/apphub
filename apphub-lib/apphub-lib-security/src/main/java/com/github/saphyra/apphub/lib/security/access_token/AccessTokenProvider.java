@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -50,5 +51,13 @@ public class AccessTokenProvider implements AutoCloseable {
     @Override
     public void close() throws Exception {
         clear();
+    }
+
+    public AutoCloseable set(UUID userId) {
+        AccessToken accessToken = AccessToken.builder()
+            .userId(userId)
+            .build();
+
+        return set(accessToken);
     }
 }

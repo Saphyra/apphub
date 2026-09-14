@@ -10,17 +10,19 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_FLEET_CARRIER_V2;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
 @Entity
-@Table(schema = "elite_base", name = "fleet_carrier")
+@Table(schema = SCHEMA, name = TABLE_FLEET_CARRIER_V2)
 public class FleetCarrierEntity {
     @Id
     private String id;
     private String carrierId;
-    private String lastUpdate;
     private String carrierName;
     private String starSystemId;
     @Enumerated(EnumType.STRING)

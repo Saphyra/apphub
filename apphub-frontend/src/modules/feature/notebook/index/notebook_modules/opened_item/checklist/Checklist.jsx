@@ -29,7 +29,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
         if (isInFocus && !editingEnabled) {
-            loadChecklist(openedListItem.id, setDataFromResponse);
+            loadChecklist(openedListItem.id, setDataFromResponse, setDisplaySpinner);
         }
     }, [isInFocus]);
 

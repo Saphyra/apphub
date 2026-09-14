@@ -113,7 +113,7 @@ function getChoices(args) {
 
     async function editStatus(newStatus) {
         const response = await CALENDAR_EDIT_OCCURRENCE_STATUS.createRequest({ value: newStatus }, {eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId })
-            .send();
+            .send(setDisplaySpinner);
 
         setOccurrence(response);
         refresh();
@@ -121,7 +121,7 @@ function getChoices(args) {
 
     async function setReminded() {
         const response = await CALENDAR_OCCURRENCE_REMINDED.createRequest(null, {eventId: occurrence.eventId, occurrenceId: occurrence.occurrenceId })
-            .send();
+            .send(setDisplaySpinner);
 
         setOccurrence(response);
         refresh();

@@ -102,7 +102,7 @@ modules:
       roles:
       - ELITE_BASE
     - name: random-direction
-      url: /web/util/random-direction
+      url: /web/utils/random-direction
     - name: test
       url: /web/test
       roles:

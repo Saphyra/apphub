@@ -6,7 +6,11 @@ import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskMan
 import com.github.saphyra.apphub.integration.action.backend.task_manager.TaskManagerOrganizationActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
 import com.github.saphyra.apphub.integration.framework.AwaitilityWrapper;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.task_manager.TaskManagerAlmDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.task_manager.TaskManagerInvitationDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.task_manager.TaskManagerNotificationDynamoDbRepository;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.task_manager.TaskManagerOrganizationDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.task_manager.organization.CreateOrganizationRequest;
 import com.github.saphyra.apphub.integration.structure.api.user.RegistrationParameters;
 import org.testng.annotations.Test;
@@ -24,15 +28,15 @@ public class TaskManagerDataDeletedWithUserTest extends BackEndTest {
     public void dataDeletedWithUser() {
         RegistrationParameters userData1 = RegistrationParameters.validParameters();
         String accessToken1 = IndexPageActions.registerAndLogin(getServerPort(), userData1);
-        UUID userId1 = DynamoDbUtil.getUserIdByEmail(userData1.getEmail());
+        UUID userId1 = UserDynamoDbRepository.getUserIdByEmail(userData1.getEmail());
 
         RegistrationParameters userData2 = RegistrationParameters.validParameters();
         String accessToken2 = IndexPageActions.registerAndLogin(getServerPort(), userData2);
-        UUID userId2 = DynamoDbUtil.getUserIdByEmail(userData2.getEmail());
+        UUID userId2 = UserDynamoDbRepository.getUserIdByEmail(userData2.getEmail());
 
         RegistrationParameters userData3 = RegistrationParameters.validParameters();
         String accessToken3 = IndexPageActions.registerAndLogin(getServerPort(), userData3);
-        UUID userId3 = DynamoDbUtil.getUserIdByEmail(userData3.getEmail());
+        UUID userId3 = UserDynamoDbRepository.getUserIdByEmail(userData3.getEmail());
 
         UUID organizationId = createOrganization(accessToken1, userId2, userId3);
         acceptInvitation(accessToken2, organizationId);
@@ -40,10 +44,10 @@ public class TaskManagerDataDeletedWithUserTest extends BackEndTest {
         AccountActions.deleteAccount(getServerPort(), accessToken1, userData1.getPassword());
 
         AwaitilityWrapper.awaitAssert(() -> {
-            assertThat(DynamoDbUtil.findOrganization(organizationId)).isEmpty();
-            assertThat(DynamoDbUtil.getAlmsByObject(organizationId, "ORGANIZATION")).isEmpty();
-            assertThat(DynamoDbUtil.getInvitationsByUserId(userId3)).isEmpty();
-            assertThat(DynamoDbUtil.getNotificationsByUserId(userId1)).isEmpty();
+            assertThat(TaskManagerOrganizationDynamoDbRepository.findOrganization(organizationId)).isEmpty();
+            assertThat(TaskManagerAlmDynamoDbRepository.getAlmsByObject(organizationId, "ORGANIZATION")).isEmpty();
+            assertThat(TaskManagerInvitationDynamoDbRepository.getInvitationsByUserId(userId3)).isEmpty();
+            assertThat(TaskManagerNotificationDynamoDbRepository.getNotificationsByUserId(userId1)).isEmpty();
         });
     }
 

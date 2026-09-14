@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.feature.skyxplore.data.setting.dao;
 
 import com.github.saphyra.apphub.api.feature.skyxplore.model.data.setting.SettingType;
-import com.github.saphyra.apphub.test.repository.RepositoryTestConfiguration;
+import com.github.saphyra.apphub.lib.test.repository.RepositoryTestConfiguration;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;

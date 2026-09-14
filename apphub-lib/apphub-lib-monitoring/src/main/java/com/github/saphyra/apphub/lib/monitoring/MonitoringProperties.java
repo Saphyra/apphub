@@ -15,6 +15,9 @@ public class MonitoringProperties {
     public static final String KEY_AVERAGE_TIME  = "averageTime";
     public static final String KEY_MAX_SIZE = "maxSize";
     public static final String KEY_AVERAGE_SIZE = "averageSize";
+    public static final String KEY_CACHE_ACCESS_COUNT = "cacheAccessCount";
+    public static final String KEY_CACHE_HIT_COUNT = "cacheHitCount";
+    public static final String KEY_CACHE_MISS_COUNT = "cacheMissCount";
 
     public static final String FUNCTIONALITY_METRIC_COUNT = "metricCount";
 }

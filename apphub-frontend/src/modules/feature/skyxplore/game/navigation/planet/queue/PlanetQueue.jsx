@@ -4,7 +4,7 @@ import "./planet_queue.css";
 import Stream from "common/js/collection/Stream";
 import QueueItem from "./item/QueueItem";
 
-const PlanetQueue = ({ queue, planetId, setConfirmationDialogData }) => {
+const PlanetQueue = ({ queue, planetId, setConfirmationDialogData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getContent = () => {
@@ -15,6 +15,7 @@ const PlanetQueue = ({ queue, planetId, setConfirmationDialogData }) => {
                 queueItem={queueItem}
                 planetId={planetId}
                 setConfirmationDialogData={setConfirmationDialogData}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

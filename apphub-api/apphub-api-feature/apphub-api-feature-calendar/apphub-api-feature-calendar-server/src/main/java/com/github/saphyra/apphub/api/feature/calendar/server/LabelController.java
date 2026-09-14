@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.api.feature.calendar.server;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.CalendarEndpoints;
 import com.github.saphyra.apphub.api.feature.calendar.model.response.LabelResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Constants;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
-import com.github.saphyra.apphub.lib.common_domain.OneParamResponse;
-import com.github.saphyra.apphub.api.feature.calendar.model.CalendarEndpoints;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +18,7 @@ import java.util.UUID;
 
 public interface LabelController {
     @PutMapping(CalendarEndpoints.CALENDAR_CREATE_LABEL)
-    OneParamResponse<UUID> createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
+    LabelResponse createLabel(@RequestBody OneParamRequest<String> label, @RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);
 
     @GetMapping(CalendarEndpoints.CALENDAR_GET_LABELS)
     List<LabelResponse> getLabels(@RequestHeader(Constants.ACCESS_TOKEN_HEADER) AccessToken accessToken);

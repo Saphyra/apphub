@@ -82,5 +82,13 @@
     "occurrences": {
         "en": "Occurrences",
         "hu": "Alkalmak"
+    },
+    "auto-done": {
+        "en": "Mark occurrences automatically done",
+        "hu": "Alkalmak automatikus teljesítése"
+    },
+    "share": {
+        "en": "Share",
+        "hu": "Megosztás"
     }
 }

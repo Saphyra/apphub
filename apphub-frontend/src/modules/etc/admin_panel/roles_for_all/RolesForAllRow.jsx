@@ -7,7 +7,7 @@ import roleLocalizationData from "modules/etc/admin_panel/role_localization.json
 import { useState } from "react";
 import { USER_DATA_ADD_ROLE_TO_ALL, USER_DATA_REMOVE_ROLE_FROM_ALL } from "../AdminPanelEndpoints";
 
-const RolesForAllRow = ({ localizationHandler, role }) => {
+const RolesForAllRow = ({ localizationHandler, role, setDisplaySpinner }) => {
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
 
     const [displayAddToAllConfirmation, setDisplayAddToAllConfirmation] = useState(false);
@@ -23,7 +23,7 @@ const RolesForAllRow = ({ localizationHandler, role }) => {
         setPassword("");
 
         await USER_DATA_ADD_ROLE_TO_ALL.createRequest({ value: password }, { role: role })
-            .send();
+            .send(setDisplaySpinner);
 
         NotificationService.showSuccess(localizationHandler.get("role-added-to-all"));
         setDisplayAddToAllConfirmation(false);
@@ -38,7 +38,7 @@ const RolesForAllRow = ({ localizationHandler, role }) => {
         setPassword("");
 
         await USER_DATA_REMOVE_ROLE_FROM_ALL.createRequest({ value: password }, { role: role })
-            .send();
+            .send(setDisplaySpinner);
 
         NotificationService.showSuccess(localizationHandler.get("role-revoked-from-all"));
         setDisplayRemoveFromAllConfirmation(false);

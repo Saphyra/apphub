@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -13,7 +12,6 @@ import java.util.UUID;
 @Data
 public class StarSystem {
     private final UUID id;
-    private LocalDateTime lastUpdate;
     private Long starId;
     private String starName;
     private StarSystemPosition position;

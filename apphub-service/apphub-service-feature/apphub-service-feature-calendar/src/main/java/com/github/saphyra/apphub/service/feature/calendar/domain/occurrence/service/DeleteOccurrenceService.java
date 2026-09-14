@@ -1,7 +1,11 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service;
 
+import com.github.saphyra.apphub.api.feature.calendar.model.SharedObjectType;
+import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.service.object_query.OccurrenceObjectQueryService;
+import com.github.saphyra.apphub.service.feature.calendar.common.Operation;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.Occurrence;
 import com.github.saphyra.apphub.service.feature.calendar.domain.occurrence.dao.OccurrenceDao;
+import com.github.saphyra.apphub.service.feature.calendar.domain.share.dao.AlmDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -14,9 +18,14 @@ import java.util.UUID;
 @Slf4j
 public class DeleteOccurrenceService {
     private final OccurrenceDao occurrenceDao;
+    private final AlmDao almDao;
+    private final OccurrenceObjectQueryService occurrenceObjectQueryService;
 
-    public void deleteOccurrence(UUID eventId, UUID occurrenceId) {
-        Occurrence occurrence = occurrenceDao.findByIdValidated(eventId, occurrenceId); //Query to validate ownership
+    public void deleteOccurrence(UUID userId, UUID eventId, UUID occurrenceId) {
+        Occurrence occurrence = occurrenceObjectQueryService.findOccurrence(userId, eventId, occurrenceId, Operation.DELETE)
+            .getEntity2();
         occurrenceDao.delete(List.of(occurrence));
+
+        almDao.deleteByObject(occurrenceId, SharedObjectType.OCCURRENCE);
     }
 }

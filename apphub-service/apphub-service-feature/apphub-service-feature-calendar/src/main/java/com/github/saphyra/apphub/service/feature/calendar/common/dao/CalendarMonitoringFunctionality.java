@@ -28,6 +28,7 @@ public enum CalendarMonitoringFunctionality implements MonitoringFunctionality {
     FIND_LABEL_BY_ID,
     GET_LABELS_BY_USER_ID,
     DELETE_LABEL,
+    GET_LABELS_BY_USER_IDS_AND_LABEL_IDS,
 
     //EventLabelMapping
     GET_EVENTS_OF_LABEL,
@@ -40,6 +41,17 @@ public enum CalendarMonitoringFunctionality implements MonitoringFunctionality {
     DELETE_EVENTS_OF_LABEL,
     GET_EVENTS_OF_LABELS_BY_USER_ID,
     SAVE_EVENTS_OF_LABEL,
+    SAVE_LABELS_OF_EVENTS,
+    GET_LABELS_OF_EVENT,
+
+    //Alm
+    SAVE_ALM,
+    GET_ALM_BY_PRINCIPAL_AND_OBJECT_TYPE,
+    FIND_ALM_FOR_OBJECT,
+    GET_ALMS_BY_PRINCIPAL,
+    GET_ALMS_BY_OBJECTS,
+    DELETE_ALMS,
+    GET_ALMS_BY_OBJECT,
     ;
 
     @Override

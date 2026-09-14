@@ -7,7 +7,8 @@ const confirmCancelTerraformation = (
     surfaceLocalizationHandler,
     surface,
     setConfirmationDialogData,
-    planetId
+    planetId,
+    setDisplaySpinner
 ) => {
     const confirmationDialogData = new ConfirmationDialogData(
         "skyxplore-game-planet-confirm-cancel-terraformation",
@@ -18,7 +19,7 @@ const confirmCancelTerraformation = (
                 key="cancel"
                 id="skyxplore-game-planet-cancel-terraformation-button"
                 label={localizationHandler.get("cancel-terraformation")}
-                onclick={() => cancelTerraformation(planetId, surface, setConfirmationDialogData)}
+                onclick={() => cancelTerraformation(planetId, surface, setConfirmationDialogData, setDisplaySpinner)}
             />,
             <Button
                 key="continue"
@@ -32,9 +33,9 @@ const confirmCancelTerraformation = (
     setConfirmationDialogData(confirmationDialogData);
 }
 
-const cancelTerraformation = async (planetId, surface, setConfirmationDialogData) => {
+const cancelTerraformation = async (planetId, surface, setConfirmationDialogData, setDisplaySpinner) => {
     await SKYXPLORE_GAME_CANCEL_TERRAFORMATION.createRequest(null, { planetId: planetId, surfaceId: surface.surfaceId })
-        .send();
+        .send(setDisplaySpinner);
 
     setConfirmationDialogData(null);
 }

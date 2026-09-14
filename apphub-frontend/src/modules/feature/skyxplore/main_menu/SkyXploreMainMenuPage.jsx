@@ -11,14 +11,16 @@ import Contacts from "./main_menu_page/Contacts";
 import Invitations from "./main_menu_page/Invitations";
 import { ToastContainer } from "react-toastify";
 import "../skyxplore.css";
+import Spinner from "common/component/Spinner";
 
 const SkyXploreMainMenuPage = () => {
     const localizationHandler = new LocalizationHandler(localizationData);
     document.title = localizationHandler.get("title");
 
+    const [displaySpinner, setDisplaySpinner] = useState(false);
     const [displaynNewGameConfirmationDialog, setDisplaynNewGameConfirmationDialog] = useState(false);
 
-    useEffect(() => Redirection.forMainMenu(), []);
+    useEffect(() => Redirection.forMainMenu(setDisplaySpinner), []);
     useEffect(() => NotificationService.displayStoredMessages(), []);
     useEffect(() => { delete sessionStorage.skyXplorePageHistory }, [])
 
@@ -33,14 +35,17 @@ const SkyXploreMainMenuPage = () => {
                     <MainMenuButtons
                         localizationHandler={localizationHandler}
                         setDisplaynNewGameConfirmationDialog={setDisplaynNewGameConfirmationDialog}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
 
                     <Contacts
                         localizationHandler={localizationHandler}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
 
                     <Invitations
                         localizationHandler={localizationHandler}
+                        setDisplaySpinner={setDisplaySpinner}
                     />
                 </main>
             </div>
@@ -48,9 +53,12 @@ const SkyXploreMainMenuPage = () => {
             {displaynNewGameConfirmationDialog && <NewGameConfirmationDialog
                 localizationHandler={localizationHandler}
                 setDisplaynNewGameConfirmationDialog={setDisplaynNewGameConfirmationDialog}
+                setDisplaySpinner={setDisplaySpinner}
             />}
 
             <ToastContainer />
+
+            {displaySpinner && <Spinner />}
         </div>
     );
 }

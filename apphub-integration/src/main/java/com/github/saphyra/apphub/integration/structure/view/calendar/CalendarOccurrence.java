@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.integration.structure.view.calendar;
 
+import com.github.saphyra.apphub.integration.framework.Constants;
 import com.github.saphyra.apphub.integration.framework.WebElementUtils;
 import com.github.saphyra.apphub.integration.structure.api.calendar.OccurrenceStatus;
 import lombok.RequiredArgsConstructor;
@@ -41,5 +42,9 @@ public class CalendarOccurrence {
     public boolean isArchived() {
         return WebElementUtils.getClasses(webElement)
             .contains("calendar-occurrence-archived");
+    }
+
+    public boolean isShared() {
+        return getTitle().endsWith(Constants.SHARED_SUFFIX);
     }
 }

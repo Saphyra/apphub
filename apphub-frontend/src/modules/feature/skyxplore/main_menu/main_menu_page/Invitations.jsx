@@ -3,9 +3,9 @@ import WebSocketEventName from "common/hook/ws/WebSocketEventName";
 import useConnectToWebSocket from "common/hook/ws/WebSocketFacade";
 import MapStream from "common/js/collection/MapStream";
 import { useState } from "react";
-import Invitaion from "./invitations/Invitation";
+import Invitation from "./invitations/Invitation";
 
-const Invitations = ({ localizationHandler }) => {
+const Invitations = ({ localizationHandler, setDisplaySpinner }) => {
     const [invitations, setInvitations] = useState({});
 
     useConnectToWebSocket(
@@ -42,12 +42,13 @@ const Invitations = ({ localizationHandler }) => {
     const getInvitations = () => {
         return new MapStream(invitations)
             .map((senderId, senderName) =>
-                <Invitaion
+                <Invitation
                     key={senderId}
                     localizationHandler={localizationHandler}
                     senderId={senderId}
                     senderName={senderName}
                     declineInvitation={declineInvitation}
+                    setDisplaySpinner={setDisplaySpinner}
                 />)
             .toList();
     }

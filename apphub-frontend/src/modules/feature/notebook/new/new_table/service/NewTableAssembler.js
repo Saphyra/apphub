@@ -9,7 +9,7 @@ import Stream from "common/js/collection/Stream";
 import TableHead from "modules/feature/notebook/common/table/table_head/TableHead";
 import TableRow from "modules/feature/notebook/common/table/row/TableRow";
 
-const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile) => {
+const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, rows, setRows, custom, addFile, setDisplaySpinner) => {
     return (
         <table id="notebook-new-table-content" className="formatted-table">
             <thead>
@@ -25,7 +25,7 @@ const getTable = (checklist, localizationHandler, tableHeads, setTableHeads, row
                     callback={() => newRow(rows, tableHeads, setRows, RowIndexRange.MIN, custom)}
                 />
 
-                {getTableRows(rows, setRows, checklist, custom, addFile)}
+                {getTableRows(rows, setRows, checklist, custom, addFile, setDisplaySpinner)}
 
                 <AddRowButton
                     id="notebook-new-table-add-row-to-end"
@@ -97,7 +97,7 @@ const getTableHeads = (checklist, localizationHandler, tableHeads, setTableHeads
     )
 }
 
-const getTableRows = (rows, setRows, checklist, custom, addFile) => {
+const getTableRows = (rows, setRows, checklist, custom, addFile, setDisplaySpinner) => {
     const updateRows = () => {
         copyAndSet(rows, setRows);
     }
@@ -124,6 +124,7 @@ const getTableRows = (rows, setRows, checklist, custom, addFile) => {
                 checklist={checklist}
                 custom={custom}
                 addFile={addFile}
+                setDisplaySpinner={setDisplaySpinner}
             />
         )
         .toList();

@@ -2,10 +2,10 @@ import Button from "common/component/input/Button";
 import "./invitations.css";
 import { SKYXPLORE_LOBBY_ACCEPT_INVITATION, SKYXPLORE_LOBBY_PAGE } from "modules/feature/skyxplore/lobby/SkyXploreLobbyEndpoints";
 
-const Invitaion = ({ senderId, senderName, localizationHandler, declineInvitation }) => {
+const Invitation = ({ senderId, senderName, localizationHandler, declineInvitation, setDisplaySpinner }) => {
     const acceptInvitation = async () => {
         await SKYXPLORE_LOBBY_ACCEPT_INVITATION.createRequest(null, { invitorId: senderId })
-            .send();
+            .send(setDisplaySpinner);
 
         window.location.href = SKYXPLORE_LOBBY_PAGE;
     }
@@ -34,4 +34,4 @@ const Invitaion = ({ senderId, senderName, localizationHandler, declineInvitatio
     );
 }
 
-export default Invitaion;
+export default Invitation;

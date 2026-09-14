@@ -1,0 +1,32 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-powerplay_conflict_v2" author="Saphyra">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="powerplay_conflict_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="powerplay_conflict_v2">
+            <column name="star_system_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="power" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="conflict_progress" type="numeric"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="powerplay_conflict_v2" columnNames="star_system_id,power" constraintName="pk-powerplay_conflict_v2"/>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="powerplay_conflict_v2"
+                baseColumnNames="star_system_id"
+                constraintName="fk-powerplay_conflict_v2-star_system_id"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="star_system"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet>
+</databaseChangeLog>

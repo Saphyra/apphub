@@ -57,7 +57,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_Y_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_Z_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY_V2;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_MATERIAL_TRADER_OVERRIDE;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STATION;
@@ -101,7 +101,7 @@ public class NearestMaterialTraderService {
             ))
             .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM))
             .innerJoin(new QualifiedTable(SCHEMA, TABLE_STATION), new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID), new QualifiedColumn(TABLE_STATION, COLUMN_STAR_SYSTEM_ID))
-            .leftJoin(new QualifiedTable(SCHEMA, TABLE_BODY), new QualifiedColumn(TABLE_STATION, COLUMN_BODY_ID), new QualifiedColumn(TABLE_BODY, COLUMN_ID))
+            .leftJoin(new QualifiedTable(SCHEMA, TABLE_BODY_V2), new QualifiedColumn(TABLE_STATION, COLUMN_BODY_ID), new QualifiedColumn(TABLE_BODY_V2, COLUMN_ID))
             .leftJoin(new QualifiedTable(SCHEMA, TABLE_MATERIAL_TRADER_OVERRIDE), new QualifiedColumn(TABLE_STATION, COLUMN_ID), new QualifiedColumn(TABLE_MATERIAL_TRADER_OVERRIDE, COLUMN_STATION_ID))
             .condition(new InCondition(
                 new QualifiedColumn(TABLE_STATION, COLUMN_ID),

@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction;
 
-import com.github.saphyra.apphub.lib.common_util.DateTimeConverter;
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.lib.common_util.converter.ConverterBase;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
@@ -18,7 +17,6 @@ import java.util.UUID;
 @Slf4j
 class MinorFactionConverter extends ConverterBase<MinorFactionEntity, MinorFaction> {
     private final UuidConverter uuidConverter;
-    private final DateTimeConverter dateTimeConverter;
     private final MinorFactionStateDao minorFactionStateDao;
     private final MinorFactionStateSyncService minorFactionStateSyncService;
 
@@ -28,7 +26,6 @@ class MinorFactionConverter extends ConverterBase<MinorFactionEntity, MinorFacti
 
         return MinorFactionEntity.builder()
             .id(uuidConverter.convertDomain(domain.getId()))
-            .lastUpdate(dateTimeConverter.convertDomain(domain.getLastUpdate()))
             .factionName(domain.getFactionName())
             .state(domain.getState())
             .influence(domain.getInfluence())
@@ -41,7 +38,6 @@ class MinorFactionConverter extends ConverterBase<MinorFactionEntity, MinorFacti
         UUID minorFactionId = uuidConverter.convertEntity(entity.getId());
         return MinorFaction.builder()
             .id(minorFactionId)
-            .lastUpdate(dateTimeConverter.convertToLocalDateTime(entity.getLastUpdate()))
             .factionName(entity.getFactionName())
             .state(entity.getState())
             .influence(entity.getInfluence())

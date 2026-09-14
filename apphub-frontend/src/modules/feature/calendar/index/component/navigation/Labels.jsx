@@ -6,8 +6,8 @@ import Stream from "common/js/collection/Stream";
 import { CALENDAR_GET_LABELS, CALENDAR_LABELS_PAGE } from "modules/feature/calendar/CalendarEndpoints";
 import { useState } from "react";
 import { useUpdateEffect } from "react-use";
-
-const Labels = ({ activeLabel, setActiveLabel }) => {
+import Constants from "common/js/Constants";
+const Labels = ({ activeLabel, setActiveLabel, setDisplaySpinner }) => {
     const [labels, setLabels] = useState([]);
 
     const [refreshCounter, refresh] = useRefresh();
@@ -18,7 +18,7 @@ const Labels = ({ activeLabel, setActiveLabel }) => {
         }
     }, [isInFocus]);
 
-    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: setLabels, listener: [refreshCounter] });
+    useLoader({ request: CALENDAR_GET_LABELS.createRequest(), mapper: setLabels, listener: [refreshCounter], setDisplaySpinner });
 
     return (
         <div id="calendar-labels">
@@ -40,12 +40,13 @@ const Labels = ({ activeLabel, setActiveLabel }) => {
 
     function getLabels() {
         return new Stream(labels)
+            .sorted((a, b) => a.label.localeCompare(b.label))
             .map(label =>
                 <Button
                     key={label.labelId}
                     className={"calendar-label" + (activeLabel === label.labelId ? " active" : "")}
                     onclick={() => setActiveLabel(label.labelId)}
-                    label={label.label}
+                    label={label.label + (label.shared ? " " + Constants.ICON_SHARED : "")}
                 />
             )
             .toList();

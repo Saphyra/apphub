@@ -3,8 +3,8 @@ package com.github.saphyra.apphub.integration.backend.index;
 import com.github.saphyra.apphub.integration.action.backend.IndexPageActions;
 import com.github.saphyra.apphub.integration.action.backend.ModulesActions;
 import com.github.saphyra.apphub.integration.core.BackEndTest;
-import com.github.saphyra.apphub.integration.framework.DynamoDbUtil;
 import com.github.saphyra.apphub.integration.framework.ErrorCode;
+import com.github.saphyra.apphub.integration.framework.db.dynamodb.UserDynamoDbRepository;
 import com.github.saphyra.apphub.integration.structure.api.ErrorResponse;
 import com.github.saphyra.apphub.integration.structure.api.authorization.TokenResponse;
 import com.github.saphyra.apphub.integration.structure.api.user.LoginRequest;
@@ -108,7 +108,7 @@ public class LoginTest extends BackEndTest {
         lockedLoginResponse = IndexPageActions.getLoginResponse(getServerPort(), oneTimeLoginRequest);
         verifyErrorResponse(lockedLoginResponse, 401, ErrorCode.ACCOUNT_LOCKED);
 
-        DynamoDbUtil.unlockUserByEmail(userData.getEmail());
+        UserDynamoDbRepository.unlockUserByEmail(userData.getEmail());
 
         IndexPageActions.getSuccessfulLoginResponse(getServerPort(), oneTimeLoginRequest);
     }

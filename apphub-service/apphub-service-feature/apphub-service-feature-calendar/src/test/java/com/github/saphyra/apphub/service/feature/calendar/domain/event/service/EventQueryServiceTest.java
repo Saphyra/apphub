@@ -1,90 +1,78 @@
 package com.github.saphyra.apphub.service.feature.calendar.domain.event.service;
 
 import com.github.saphyra.apphub.api.feature.calendar.model.response.EventResponse;
+import com.github.saphyra.apphub.service.feature.calendar.domain.event.service.object_query.EventObjectQueryService;
 import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.Event;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event.dao.EventDao;
-import com.github.saphyra.apphub.service.feature.calendar.domain.event_label_mapping.dao.EventLabelMappingDao;
+import com.github.saphyra.apphub.test.common.ExceptionValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 class EventQueryServiceTest {
-	private static final UUID USER_ID = UUID.randomUUID();
-	private static final UUID LABEL_ID = UUID.randomUUID();
-	private static final UUID EVENT_ID = UUID.randomUUID();
+    private static final UUID USER_ID = UUID.randomUUID();
+    private static final UUID LABEL_ID = UUID.randomUUID();
 
-	@Mock
-	private EventDao eventDao;
+    @Mock
+    private EventResponseMapper eventResponseMapper;
 
-	@Mock
-	private EventLabelMappingDao eventLabelMappingDao;
+    @Mock
+    private EventObjectQueryService eventObjectQueryService;
 
-	@Mock
-	private EventResponseMapper eventResponseMapper;
+    @InjectMocks
+    private EventQueryService underTest;
 
-	@InjectMocks
-	private EventQueryService underTest;
+    @Mock
+    private Event event;
 
-	@Mock
-	private Event event;
+    @Mock
+    private EventResponse eventResponse;
 
-	@Mock
-	private EventResponse eventResponse;
+    @Test
+    void getEvents_nullLabelId() {
+        given(eventObjectQueryService.getEvents(USER_ID)).willReturn(List.of(event));
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
-	@Test
-	void getEvents_nullLabelId() {
-		given(eventDao.getByUserId(USER_ID)).willReturn(List.of(event));
-		given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
+        assertThat(underTest.getEvents(USER_ID, null)).containsExactly(eventResponse);
+    }
 
-		List<EventResponse> result = underTest.getEvents(USER_ID, null);
+    @Test
+    void getEvents_withLabelId() {
+        given(eventObjectQueryService.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(List.of(event));
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
-		assertThat(result).containsExactly(eventResponse);
-	}
+        assertThat(underTest.getEvents(USER_ID, LABEL_ID)).containsExactly(eventResponse);
+    }
 
-	@Test
-	void getEvents_withLabelId() {
-		given(eventLabelMappingDao.getEventsOfLabel(USER_ID, LABEL_ID)).willReturn(List.of(EVENT_ID));
-		given(eventDao.getByIds(USER_ID, List.of(EVENT_ID))).willReturn(List.of(event));
-		given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
+    @Test
+    void getLabellessEvents() {
+        given(eventObjectQueryService.getLabellessEvents(USER_ID)).willReturn(Stream.of(event));
+        given(eventResponseMapper.toResponse(USER_ID, List.of(event))).willReturn(List.of(eventResponse));
 
-		List<EventResponse> result = underTest.getEvents(USER_ID, LABEL_ID);
+        assertThat(underTest.getLabellessEvents(USER_ID)).containsExactly(eventResponse);
+    }
 
-		assertThat(result).containsExactly(eventResponse);
-	}
+    @Test
+    void getEvent_found() {
+        given(eventObjectQueryService.findEvent(USER_ID, LABEL_ID)).willReturn(java.util.Optional.of(event));
+        given(eventResponseMapper.toResponse(USER_ID, event)).willReturn(eventResponse);
 
-	@Test
-	void getLabellessEvents() {
-		Map<UUID, List<UUID>> labelsOfEvents = new LinkedHashMap<>();
-		labelsOfEvents.put(EVENT_ID, List.of());
+        assertThat(underTest.getEvent(USER_ID, LABEL_ID)).isEqualTo(eventResponse);
+    }
 
-		given(eventLabelMappingDao.getLabelsOfEventsByUserId(USER_ID)).willReturn(labelsOfEvents);
-		given(eventDao.getByIds(USER_ID, List.of(EVENT_ID))).willReturn(List.of(event));
-		given(eventResponseMapper.toResponse(event, List.of())).willReturn(eventResponse);
+    @Test
+    void getEvent_notFound() {
+        given(eventObjectQueryService.findEvent(USER_ID, LABEL_ID)).willReturn(java.util.Optional.empty());
 
-		List<EventResponse> result = underTest.getLabellessEvents(USER_ID);
-
-		assertThat(result).containsExactly(eventResponse);
-	}
-
-	@Test
-	void getEvent() {
-		given(eventDao.findByIdValidated(USER_ID, EVENT_ID)).willReturn(event);
-		given(eventResponseMapper.toResponse(event)).willReturn(eventResponse);
-
-		EventResponse result = underTest.getEvent(USER_ID, EVENT_ID);
-
-		assertThat(result).isEqualTo(eventResponse);
-	}
-
+        ExceptionValidator.validateNotFoundException(() -> underTest.getEvent(USER_ID, LABEL_ID));
+    }
 }

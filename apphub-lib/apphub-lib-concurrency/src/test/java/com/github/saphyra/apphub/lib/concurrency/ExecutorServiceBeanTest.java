@@ -103,7 +103,7 @@ public class ExecutorServiceBeanTest {
             throw cause;
         }, 1));
 
-        assertThat(ex).isEqualTo(cause);
+        assertThat(ex.getCause()).isEqualTo(cause);
         then(errorReporterService).should().report(anyString(), eq(cause));
     }
 

@@ -64,7 +64,7 @@ class SearchServiceTest {
     void search_titleMatches() throws Exception {
         ListItem listItem = createListItem("AbCdEf", null);
         given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem))).willReturn(List.of(notebookView));
         given(accessTokenProvider.set(AccessToken.builder().userId(USER_ID).build())).willReturn(accessTokenProvider);
 
         List<NotebookView> result = underTest.search(USER_ID, "cde");
@@ -78,7 +78,7 @@ class SearchServiceTest {
     void search_dataMatches() throws Exception {
         ListItem listItem = createListItem("title", "AaBbCc");
         given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem))).willReturn(List.of(notebookView));
         given(accessTokenProvider.set(AccessToken.builder().userId(USER_ID).build())).willReturn(accessTokenProvider);
 
         List<NotebookView> result = underTest.search(USER_ID, "bbc");
@@ -98,7 +98,7 @@ class SearchServiceTest {
             .build();
         given(listItemDao.getByUserId(USER_ID)).willReturn(List.of(listItem));
         given(contentDao.getByListItemId(LIST_ITEM_ID)).willReturn(List.of(content));
-        given(notebookViewFactory.create(listItem)).willReturn(notebookView);
+        given(notebookViewFactory.create(List.of(listItem))).willReturn(List.of(notebookView));
         given(accessTokenProvider.set(AccessToken.builder().userId(USER_ID).build())).willReturn(accessTokenProvider);
 
         List<NotebookView> result = underTest.search(USER_ID, "cde");
@@ -123,7 +123,7 @@ class SearchServiceTest {
         List<NotebookView> result = underTest.search(USER_ID, "match");
 
         assertThat(result).isEmpty();
-        then(notebookViewFactory).shouldHaveNoInteractions();
+        then(notebookViewFactory).should().create(List.of());
         then(accessTokenProvider).should().close();
     }
 

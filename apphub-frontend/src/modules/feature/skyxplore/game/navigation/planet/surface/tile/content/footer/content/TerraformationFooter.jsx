@@ -3,7 +3,7 @@ import surfaceLocalizationData from "../../../../../../../common/localization/su
 import SurfaceTileContentFooterProgressBar from "../progress_bar/SurfaceTileContentFooterProgressBar";
 import confirmCancelTerraformation from "./CancelTerraformationService";
 
-const TerraformationFooter = ({ surface, localizationHandler, setConfirmationDialogData, planetId}) => {
+const TerraformationFooter = ({ surface, localizationHandler, setConfirmationDialogData, planetId, setDisplaySpinner }) => {
     const surfaceLocalizationHandler = new LocalizationHandler(surfaceLocalizationData);
 
     const terraformation = surface.terraformation;
@@ -17,7 +17,8 @@ const TerraformationFooter = ({ surface, localizationHandler, setConfirmationDia
             surfaceLocalizationHandler,
             surface,
             setConfirmationDialogData,
-            planetId
+            planetId,
+            setDisplaySpinner
         )}
     />
 }

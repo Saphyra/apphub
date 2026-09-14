@@ -17,6 +17,7 @@ public enum Allegiance {
     PILOTS_FEDERATION("PilotsFederation"),
     GUARDIAN("Guardian"),
     PLAYER_PILOTS("PlayerPilots"),
+    FRONTLINE_SOLUTIONS("FrontlineSolutions"),
     NONE(""),
     ;
 

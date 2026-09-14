@@ -47,7 +47,7 @@ public class EditOccurrenceTest extends SeleniumTest {
         AwaitilityWrapper.getWithWait(() -> CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate(), event.getTitle()))
             .orElseThrow(() -> new IllegalStateException("Occurrence not found"))
             .open(driver);
-        CalendarIndexPageActions.editOccurrence(driver);
+        CalendarIndexPageActions.editOpenedOccurrence(driver);
 
         OccurrenceParameters occurrence = OccurrenceParameters.builder()
             .date(event.getStartDate().plusDays(1))

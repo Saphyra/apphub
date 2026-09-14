@@ -2,11 +2,9 @@ package com.github.saphyra.apphub.service.feature.elite_base.common;
 
 import com.github.saphyra.apphub.lib.common_util.DateTimeUtil;
 import com.github.saphyra.apphub.lib.concurrency.ExecutorServiceBean;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.OrphanedRecordCleanerScheduler;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.MessageDao;
 import com.github.saphyra.apphub.service.feature.elite_base.message_handling.dao.MessageStatus;
 import com.github.saphyra.apphub.service.feature.elite_base.message_processing.processor.EdMessageProcessor;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,10 +41,6 @@ class EliteBaseEventControllerImplTest {
 
     @Mock
     private ExecutorServiceBean executorServiceBean;
-
-    @Mock
-    private OrphanedRecordCleanerScheduler orphanedRecordCleanerScheduler;
-
 
     @InjectMocks
     private EliteBaseEventControllerImpl underTest;
@@ -87,18 +81,5 @@ class EliteBaseEventControllerImplTest {
         underTest.resetError();
 
         then(messageDao).should().resetError();
-    }
-
-    @Test
-    @Disabled
-    void cleanupOrphanedRecords() {
-        given(executorServiceBean.execute(any(Runnable.class))).willAnswer(invocation -> {
-            invocation.getArgument(0, Runnable.class).run();
-            return null;
-        });
-
-        underTest.cleanupOrphanedRecords();
-
-        then(orphanedRecordCleanerScheduler).should().cleanup();
     }
 }

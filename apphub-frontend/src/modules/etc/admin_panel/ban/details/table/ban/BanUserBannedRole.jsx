@@ -10,7 +10,7 @@ import ConfirmationDialog from "common/component/confirmation_dialog/Confirmatio
 import Button from "common/component/input/Button";
 import { ACCOUNT_REVOKE_BAN } from "modules/etc/admin_panel/AdminPanelEndpoints";
 
-const BanUserBannedRole = ({ userData, ban, setUserData }) => {
+const BanUserBannedRole = ({ userData, ban, setUserData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
     const roleLocalizationHandler = new LocalizationHandler(roleLocalizationData);
 
@@ -72,7 +72,7 @@ const BanUserBannedRole = ({ userData, ban, setUserData }) => {
         setPassword("");
 
         const response = await ACCOUNT_REVOKE_BAN.createRequest({ value: password }, { banId: ban.id })
-            .send();
+            .send(setDisplaySpinner);
 
         setUserData(response);
     }

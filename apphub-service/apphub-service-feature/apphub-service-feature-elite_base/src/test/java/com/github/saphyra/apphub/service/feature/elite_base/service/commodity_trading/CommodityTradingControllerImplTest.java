@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.
 import com.github.saphyra.apphub.api.feature.elite_base.model.commodity_trading.CommodityTradingResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.monitoring.instrument.MonitoringInstruments;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.item.ItemType;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.ObjectType;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePrice;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.trading.commodity.avg_price.CommodityAveragePriceDao;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.item.type.ItemTypeDao;
@@ -63,7 +63,7 @@ class CommodityTradingControllerImplTest {
 
     @Test
     void getCommodities() {
-        given(itemTypeDao.getItemNames(ItemType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
+        given(itemTypeDao.getItemNames(ObjectType.TRADING_TYPES)).willReturn(List.of(COMMODITY_NAME));
 
         assertThat(underTest.getCommodities(accessToken)).containsExactly(COMMODITY_NAME);
     }

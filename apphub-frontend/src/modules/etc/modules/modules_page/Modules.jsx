@@ -6,7 +6,7 @@ import Stream from "common/js/collection/Stream";
 import Category from "./modules/Category";
 import InputField from "common/component/input/InputField";
 
-const Modules = ({ pageLocalizationHandler, modules, updateModules }) => {
+const Modules = ({ pageLocalizationHandler, modules, updateModules, setDisplaySpinner }) => {
     const [query, setQuery] = useState([]);
 
     const categoryLocalizationHandler = new LocalizationHandler(categoryLocalization);
@@ -36,6 +36,7 @@ const Modules = ({ pageLocalizationHandler, modules, updateModules }) => {
                 modules={modules[category]}
                 query={query}
                 updateModules={updateModules}
+                setDisplaySpinner={setDisplaySpinner}
             />
         )
         .toList();

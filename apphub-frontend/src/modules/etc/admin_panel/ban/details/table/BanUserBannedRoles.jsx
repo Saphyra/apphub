@@ -4,7 +4,7 @@ import Stream from "common/js/collection/Stream";
 import BanUserBannedRole from "./ban/BanUserBannedRole";
 import "./ban_user_banned_roles.css";
 
-const BanUserBannedRoles = ({ userData, setUserData }) => {
+const BanUserBannedRoles = ({ userData, setUserData, setDisplaySpinner }) => {
     const localizationHandler = new LocalizationHandler(localizationData);
 
     const getTableBody = () => {
@@ -22,6 +22,7 @@ const BanUserBannedRoles = ({ userData, setUserData }) => {
                 ban={ban}
                 userData={userData}
                 setUserData={setUserData}
+                setDisplaySpinner={setDisplaySpinner}
             />)
             .toList();
     }

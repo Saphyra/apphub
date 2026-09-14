@@ -2,14 +2,13 @@ package com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction;
 
 import com.github.saphyra.apphub.lib.common_util.LazyLoadedField;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.Allegiance;
-import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.state.MinorFactionState;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.FactionStateEnum;
+import com.github.saphyra.apphub.service.feature.elite_base.dao.minor_faction.state.MinorFactionState;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +17,6 @@ import java.util.UUID;
 @Builder
 public class MinorFaction {
     private final UUID id;
-    private LocalDateTime lastUpdate;
     private String factionName;
     private FactionStateEnum state;
     private Double influence;
