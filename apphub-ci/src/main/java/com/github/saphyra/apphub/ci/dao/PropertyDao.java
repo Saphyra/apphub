@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -185,5 +186,10 @@ public class PropertyDao {
             .map(Property::getValue)
             .map(value -> objectMapper.readValue(value, Map.class))
             .orElseGet(HashMap::new);
+    }
+
+    public Optional<String> getProperty(PropertyName propertyName) {
+        return propertyRepository.findById(propertyName)
+            .map(Property::getValue);
     }
 }

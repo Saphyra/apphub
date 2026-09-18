@@ -48,6 +48,16 @@
     <fieldset>
         <legend>AWS DynamoDB</legend>
 
+        <fieldset>
+            <legend>Local directory path</legend>
+
+            <form method="POST" action="/settings/dynamo-db-local-directory">
+                <input type="text" name="dynamodb_local_directory" th:value="${dynamodb_local_directory}"/>
+
+                <button type="submit">Save</button>
+            </form>
+        </fieldset>
+
         <ul th:each="environment: ${environments}">
             <li><a th:href="@{|/settings/dynamo-db/${environment}|}" th:text="${environment}"></a></li>
         </ul>

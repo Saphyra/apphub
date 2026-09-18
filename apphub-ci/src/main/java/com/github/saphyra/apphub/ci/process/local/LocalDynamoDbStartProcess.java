@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.ci.process.local;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,9 +16,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class LocalDynamoDbStartProcess {
     private final PlatformProperties platformProperties;
-    private final ProcessKiller processKiller;
+    private final DeprecatedProcessKiller processKiller;
     private final PropertyDao propertyDao;
 
     @SneakyThrows

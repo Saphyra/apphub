@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.process.local;
 
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
-import com.github.saphyra.apphub.ci.utils.ServicePinger;
+import com.github.saphyra.apphub.ci.tool.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.google.common.base.Stopwatch;
@@ -17,6 +17,7 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
+@Deprecated
 public class LocalStartTask implements Runnable {
     private final ServicePinger servicePinger;
     private final Service service;

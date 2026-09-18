@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.ci.process.minikube.production;
 
-import com.github.saphyra.apphub.ci.process.IntegrationServerStarter;
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.process.DeprecatedIntegrationServerStarter;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
 import com.github.saphyra.apphub.ci.process.RunTestsTask;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
-import com.github.saphyra.apphub.ci.utils.ServicePinger;
+import com.github.saphyra.apphub.ci.tool.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ public class ProductionRunTestsProcess {
     private final PortForwardTask portForwardTask;
     private final PlatformProperties platformProperties;
     private final ServicePinger servicePinger;
-    private final IntegrationServerStarter integrationServerStarter;
+    private final DeprecatedIntegrationServerStarter integrationServerStarter;
     private final RunTestsTask runTestsTask;
-    private final ProcessKiller processKiller;
+    private final DeprecatedProcessKiller processKiller;
 
     public void runTests() {
         try {

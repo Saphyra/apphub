@@ -7,24 +7,37 @@ public enum PropertyName {
     GUI_ENABLED,
 
     //Local run
+    @Deprecated
     LOCAL_DEPLOY_MODE,
+    @Deprecated
     BUILD_THREAD_COUNT_DEFAULT,
+    @Deprecated
     BUILD_THREAD_COUNT_SKIP_TESTS,
+    @Deprecated
     LOCAL_RUN_INTEGRATION_TESTS_THREAD_COUNT,
+    @Deprecated
     LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT,
-    DISABLED_SERVICES,
+    @Deprecated
     LOCAL_RUN_TESTS_PRE_CREATE_DRIVER_COUNT,
+    @Deprecated
     LATEST_SERVICES,
+    @Deprecated
     LATEST_TEST_GROUPS,
+    @Deprecated
     LOCAL_INTEGRATION_RETRY_COUNT,
     DYNAMO_DB_LOCAL_DIRECTORY,
 
     //Remote
+    @Deprecated
     REMOTE_DEPLOY_MODE,
+    @Deprecated
     REMOTE_INTEGRATION_TESTS_THREAD_COUNT,
+    @Deprecated
     REMOTE_RUN_TESTS_PRE_CREATE_DRIVER_COUNT,
     BASH_FILE_LOCATION,
+    @Deprecated
     REMOTE_SERVICE_STARTUP_COUNT_LIMIT,
+    @Deprecated
     REMOTE_INTEGRATION_RETRY_COUNT,
 
     //Service properties
@@ -34,4 +47,14 @@ public enum PropertyName {
     PSQL_HOST,
     FTP_HOST,
     DB_BACKUP,
+
+    //API params
+    DISABLED_SERVICES,
+    USER_DEFINED_SERVICES,
+    BUILD_THREAD_COUNT,
+    STARTUP_COUNT_LIMIT,
+    TEST_FILTER,
+    TEST_THREAD_COUNT,
+    PRE_CREATE_DRIVER_COUNT,
+    TEST_RETRY_COUNT,
 }

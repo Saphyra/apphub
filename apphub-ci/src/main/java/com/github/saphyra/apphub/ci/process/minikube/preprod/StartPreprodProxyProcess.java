@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.ci.process.minikube.preprod;
 
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
 import com.github.saphyra.apphub.ci.process.local.LocalStartTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubePodStartupWaiter;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
-import com.github.saphyra.apphub.ci.utils.ServicePinger;
+import com.github.saphyra.apphub.ci.tool.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class StartPreprodProxyProcess {
-    private final ProcessKiller processKiller;
+    private final DeprecatedProcessKiller processKiller;
     private final PlatformProperties platformProperties;
     private final ServicePinger servicePinger;
     private final PortForwardTask portForwardTask;

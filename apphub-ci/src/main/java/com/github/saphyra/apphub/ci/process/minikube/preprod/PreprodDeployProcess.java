@@ -6,7 +6,7 @@ import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
 import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
-import com.github.saphyra.apphub.ci.utils.DatabaseUtil;
+import com.github.saphyra.apphub.ci.util.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DeployMode;
 import com.github.saphyra.apphub.ci.value.Environment;

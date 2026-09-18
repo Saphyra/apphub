@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.process.minikube;
 
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class PortForwardTask {
-    private final ProcessKiller processKiller;
+    private final DeprecatedProcessKiller processKiller;
 
     /**
      * @param namespaceName namespace name

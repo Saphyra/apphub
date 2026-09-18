@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.ci.process.local.stop;
 
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
-import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
-import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
+import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class LocalStopProcess {
     private final Services services;
-    private final ProcessKiller processKiller;
+    private final DeprecatedProcessKiller processKiller;
     private final PlatformProperties properties;
     private final ExecutorServiceBean executorServiceBean;
 

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.process.local.start;
 
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
 import com.github.saphyra.apphub.ci.process.local.LocalDynamoDbStartProcess;
 import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +12,12 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class LocalStartProcess {
     private final LocalStopProcess localStopProcess;
     private final LocalBuildTask localBuildTask;
-    private final ServiceStarter serviceStarter;
-    private final ProcessKiller processKiller;
+    private final DeprecatedServiceStarter serviceStarter;
+    private final DeprecatedProcessKiller processKiller;
     private final LocalDynamoDbStartProcess localDynamoDbStartProcess;
 
     public void run() {

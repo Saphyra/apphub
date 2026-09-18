@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.ui.startup;
 
-import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import lombok.Getter;
 
 import javax.swing.JLabel;

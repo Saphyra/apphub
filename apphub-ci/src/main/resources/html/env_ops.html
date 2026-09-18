@@ -1,0 +1,131 @@
+<html>
+<head>
+    <title th:text="${environment} +  ' environment - CI - Apphub'"></title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1 th:text="${environment} + ' environment (Task queue size: ' + ${task_queue_size} + ')'"></h1>
+
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
+<main class="menu">
+    <a href="/v2">Back</a>
+
+    <fieldset>
+        <legend>Deployment</legend>
+
+        <form method="POST" th:action="@{|/v2/env-ops/${environment}/build-and-deploy|}">
+            <fieldset>
+                <legend>Services</legend>
+
+                <div>
+                    <label class="inline">
+                        <input type="checkbox" name="start_user_defined_services" value="true"/>
+                        Start only services:
+                    </label>
+
+                    <input type="text" name="user_defined_services" placeholder="Comma-separated list of service names" th:value="${user_defined_services}"/>
+                </div>
+
+                <div>
+                    <fieldset>
+                        <legend>Optional services:</legend>
+
+                        <span th:each="service : ${services}">
+                        <label class="inline-block nowrap" style="border: 1px solid white; margin: 3px; padding: 3px;">
+                            <input type="checkbox" th:name="'enabled_service_' + ${service}" th:checked="${!disabled_services.contains(service)}" th:value="${service}"/>
+                            <span th:text="${service}"></span>
+                        </label>
+                    </span>
+                    </fieldset>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Execution</legend>
+
+                <label class="inline">
+                    Build thread count:
+                    <input type="number" class="number-input-2-digit" name="build_thread_count" required min="1" placeholder="Build thread count" th:value="${build_thread_count}"/>
+                </label>
+
+                <label class="inline">
+                    Service startup count limit:
+                    <input type="number" class="number-input-2-digit" name="startup_count_limit" required min="1" placeholder="Service startup count limit" th:value="${startup_count_limit}"/>
+                </label>
+
+                <label class="inline">
+                    <input type="checkbox" name="skip_tests" value="true">
+                    Skip tests
+                </label>
+            </fieldset>
+
+            <div>
+                <fieldset>
+                    <legend>Actions</legend>
+
+                    <button type="submit" name="action" value="build_and_deploy">Build and Deploy</button>
+                    <button type="submit" name="action" value="build">Build</button>
+                    <button type="submit" name="action" value="deploy">Deploy</button>
+                </fieldset>
+            </div>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>Testing</legend>
+
+        <form method="POST" th:action="@{|/v2/env-ops/${environment}/run-tests|}">
+            <fieldset>
+                <legend>Config</legend>
+
+                <label class="inline">
+                    Thread count:
+                    <input type="number" class="number-input-2-digit" name="test_thread_count" required min="1" placeholder="Thread count" th:value="${test_thread_count}"/>
+                </label>
+
+                <label class="inline">
+                    Pre-create
+                    <input type="number" class="number-input-2-digit" name="pre_create_driver_count" required min="1" placeholder="Pre-create drivers" th:value="${pre_create_driver_count}"/>
+                    WebDrivers
+                </label>
+
+                <label class="inline">
+                    Retry limit:
+                    <input type="number" class="number-input-2-digit" name="retry_count" required min="1" placeholder="Retry limit" th:value="${retry_count}"/>
+                </label>
+            </fieldset>
+
+            <div>
+                <label class="inline">
+                    <input type="checkbox" name="filter_tests" th:value="true"/>
+                    Filter tests:
+                </label>
+
+                <input type="text" name="test_filter" placeholder="Comma-separated list of tests" th:value="${test_filter}"/>
+            </div>
+
+            <button type="submit">Run tests</button>
+        </form>
+    </fieldset>
+
+    <fieldset>
+        <legend>Stop environment</legend>
+
+        <form method="POST" th:action="@{|/v2/env-ops/${environment}/stop|}">
+            <div>
+                <label class="inline">
+                    <input type="checkbox" name="stop_user_defined_services" value="true"/>
+                    Stop only services:
+                </label>
+
+                <input type="text" name="user_defined_services" placeholder="Comma-separated list of service names" th:value="${user_defined_services}"/>
+            </div>
+
+            <button type="submit">Stop</button>
+        </form>
+    </fieldset>
+</main>
+</body>
+</html>

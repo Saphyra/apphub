@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.process.minikube;
 
 import com.github.saphyra.apphub.ci.process.KillKubectlTask;
-import com.github.saphyra.apphub.ci.process.ProcessKiller;
+import com.github.saphyra.apphub.ci.process.DeprecatedProcessKiller;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class MinikubeStopProcess {
     private final KillKubectlTask killKubectlTask;
     private final PlatformProperties platformProperties;
-    private final ProcessKiller processKiller;
+    private final DeprecatedProcessKiller processKiller;
 
     @SneakyThrows
     public void stopMinikube() {
