@@ -5,6 +5,8 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.saphyra.apphub.lib.monitoring.core.MetricRegistry;
 import com.github.saphyra.apphub.service.feature.calendar.common.MonitoredCache;
 import com.github.saphyra.apphub.service.feature.calendar.config.CalendarProperties;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -15,6 +17,7 @@ import java.util.UUID;
  * Cache<EventId, Map<OccurrenceId, Occurrence>>
  */
 @Component
+@Slf4j
 class OccurrenceCache extends MonitoredCache<UUID, Map<UUID, Occurrence>> {
     OccurrenceCache(CalendarProperties properties, MetricRegistry metricRegistry) {
         super(OCCURRENCE_CACHE_NAME, buildCache(properties.getCacheExpirationDuration()), metricRegistry);
@@ -24,5 +27,12 @@ class OccurrenceCache extends MonitoredCache<UUID, Map<UUID, Occurrence>> {
         return Caffeine.newBuilder()
             .expireAfterAccess(expiration)
             .build();
+    }
+
+    @Scheduled(cron = "0 0 0 * * *")
+    void clearCache(){
+        log.info("Clearing cache {}", OCCURRENCE_CACHE_NAME);
+
+        cache.invalidateAll();
     }
 }
