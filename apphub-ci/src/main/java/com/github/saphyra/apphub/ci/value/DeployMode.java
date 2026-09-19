@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Getter
+@Deprecated
 public enum DeployMode {
     DEFAULT(LocalizedText.DEFAULT),
     SKIP_BUILD(LocalizedText.DEPLOY_MODE_SKIP_BUILD),

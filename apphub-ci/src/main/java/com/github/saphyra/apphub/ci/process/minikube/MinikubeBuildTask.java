@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class MinikubeBuildTask {
     private final PropertyDao propertyDao;
     private final Services services;

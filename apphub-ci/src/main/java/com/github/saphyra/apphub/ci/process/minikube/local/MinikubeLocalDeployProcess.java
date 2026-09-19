@@ -2,11 +2,11 @@ package com.github.saphyra.apphub.ci.process.minikube.local;
 
 import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeBuildTask;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
-import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
-import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceSetupper;
+import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -22,10 +22,10 @@ import java.util.List;
 public class MinikubeLocalDeployProcess {
     private final LocalStopProcess localStopProcess;
     private final MinikubeBuildTask minikubeBuildTask;
-    private final MinikubeScaleProcess minikubeScaleProcess;
-    private final MinikubeNamespaceSetupTask minikubeNamespaceSetupTask;
-    private final MinikubeServiceDeployer minikubeServiceDeployer;
-    private final PortForwardTask portForwardTask;
+    private final KubernetesPodScaler kubernetesPodScaler;
+    private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
+    private final KubernetesServiceDeployer kubernetesServiceDeployer;
+    private final KubernetesPortForwarder kubernetesPortForwarder;
     private final NamespaceNameProvider namespaceNameProvider;
     private final PlatformProperties platformProperties;
 
@@ -39,11 +39,11 @@ public class MinikubeLocalDeployProcess {
 
         String namespaceName = namespaceNameProvider.getNamespaceName();
 
-        minikubeServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, servicesToStart, 15);
+        kubernetesServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, List.of(), 15, 1);
 
-        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
-        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
 
         log.info("Deployment finished.");
     }
@@ -58,17 +58,15 @@ public class MinikubeLocalDeployProcess {
 
         String namespaceName = namespaceNameProvider.getNamespaceName();
 
-        minikubeScaleProcess.scale(namespaceName, 0);
+        kubernetesPodScaler.scaleAll(namespaceName, 0);
 
-        minikubeNamespaceSetupTask.setupNamespace(Environment.MINIKUBE, namespaceName);
-        minikubeNamespaceSetupTask.deployPostgres(namespaceName);
-        minikubeNamespaceSetupTask.deployDynamoDb(namespaceName);
+        kubernetesNamespaceSetupper.setupNamespace(Environment.MINIKUBE, namespaceName);
+        kubernetesNamespaceSetupper.deployPostgres(namespaceName);
+        kubernetesNamespaceSetupper.deployDynamoDb(namespaceName);
 
-        minikubeServiceDeployer.deploy(namespaceName, "develop", 15);
-
-        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
-        portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
 
         log.info("Deployment finished.");
     }

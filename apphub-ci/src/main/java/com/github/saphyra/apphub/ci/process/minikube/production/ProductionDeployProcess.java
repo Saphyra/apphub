@@ -2,9 +2,9 @@ package com.github.saphyra.apphub.ci.process.minikube.production;
 
 import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeBuildTask;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceSetupper;
+import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ProductionDeployProcess {
     private final MinikubeBuildTask minikubeBuildTask;
-    private final MinikubeServiceDeployer minikubeServiceDeployer;
-    private final MinikubeScaleProcess minikubeScaleProcess;
-    private final MinikubeNamespaceSetupTask minikubeNamespaceSetupTask;
+    private final KubernetesServiceDeployer kubernetesServiceDeployer;
+    private final KubernetesPodScaler kubernetesPodScaler;
+    private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final LocalStopProcess localStopProcess;
     private final StartProductionProxyProcess startProductionProxyProcess;
 
@@ -30,11 +30,11 @@ public class ProductionDeployProcess {
             return;
         }
 
-        minikubeScaleProcess.scale(Constants.NAMESPACE_NAME_PRODUCTION, 0);
+        kubernetesPodScaler.scaleAll(Constants.NAMESPACE_NAME_PRODUCTION, 0);
 
-        minikubeNamespaceSetupTask.setupNamespace(Environment.PRODUCTION, Constants.NAMESPACE_NAME_PRODUCTION);
+        kubernetesNamespaceSetupper.setupNamespace(Environment.PRODUCTION, Constants.NAMESPACE_NAME_PRODUCTION);
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
+        //kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
 
         startProductionProxyProcess.startProductionProxy();
     }

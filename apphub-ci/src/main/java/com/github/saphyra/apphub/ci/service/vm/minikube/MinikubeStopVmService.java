@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.process.minikube.local;
+package com.github.saphyra.apphub.ci.service.vm.minikube;
 
 import com.github.saphyra.apphub.ci.tool.KubernetesStopper;
 import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class MinikubeLocalStopProcess {
+public class MinikubeStopVmService {
     private final KubernetesPodScaler kubernetesPodScaler;
     private final KubernetesStopper kubernetesStopper;
     private final NamespaceNameProvider namespaceNameProvider;
 
-    public void stopMinikube() {
+    public void stop() {
         kubernetesPodScaler.scaleAll(namespaceNameProvider.getNamespaceName(), 0);
 
         kubernetesStopper.stopMinikube();

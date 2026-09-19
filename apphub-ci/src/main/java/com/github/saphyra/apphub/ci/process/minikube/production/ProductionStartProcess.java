@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.ci.process.minikube.production;
 
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeStartProcess;
+import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.KubernetesStarter;
 import com.github.saphyra.apphub.ci.value.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class ProductionStartProcess {
-    private final MinikubeStartProcess minikubeStartProcess;
-    private final MinikubeServiceDeployer minikubeServiceDeployer;
+    private final KubernetesStarter kubernetesStarter;
+    private final KubernetesServiceDeployer kubernetesServiceDeployer;
     private final StartProductionProxyProcess startProductionProxyProcess;
-    private final MinikubeScaleProcess minikubeScaleProcess;
+    private final KubernetesPodScaler kubernetesPodScaler;
 
     public void startServer() {
-        minikubeStartProcess.startMinikube();
+        kubernetesStarter.start();
 
-        minikubeScaleProcess.scale(Constants.NAMESPACE_NAME_PRODUCTION, 0);
+        kubernetesPodScaler.scaleAll(Constants.NAMESPACE_NAME_PRODUCTION, 0);
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
+        //kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PRODUCTION, Constants.DIR_NAME_PRODUCTION, 60);
 
         startProductionProxyProcess.startProductionProxy();
     }

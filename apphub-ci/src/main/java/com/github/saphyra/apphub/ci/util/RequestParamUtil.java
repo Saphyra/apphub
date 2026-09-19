@@ -15,18 +15,18 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_BUILD_THREAD_COUNT;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_FILTER_TESTS;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_PREFIX_ENABLED_SERVICE;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_PRE_CREATE_DRIVER_COUNT;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_RETRY_COUNT;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_SKIP_TESTS;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_STARTUP_COUNT_LIMIT;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_START_USER_DEFINED_SERVICES;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_STOP_USER_DEFINED_SERVICES;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_TEST_FILTER;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_TEST_THREAD_COUNT;
-import static com.github.saphyra.apphub.ci.api.ParameterNames.PARAM_USER_DEFINED_SERVICES;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_BUILD_THREAD_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_FILTER_TESTS;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PREFIX_ENABLED_SERVICE;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVER_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RETRY_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SKIP_TESTS;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_STARTUP_COUNT_LIMIT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_START_USER_DEFINED_SERVICES;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_STOP_USER_DEFINED_SERVICES;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_TEST_FILTER;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_TEST_THREAD_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_USER_DEFINED_SERVICES;
 import static java.util.Objects.isNull;
 
 @Component

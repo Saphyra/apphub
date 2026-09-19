@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.ci.api.controller;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
-import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodDeployProcess;
 import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodRunTestsProcess;
 import com.github.saphyra.apphub.ci.process.minikube.preprod.PreprodScaleDownProcess;
@@ -38,7 +38,7 @@ class PreprodMenuController {
     private final PreprodDeployProcess preprodDeployProcess;
     private final Services services;
     private final PreprodRunTestsProcess preprodRunTestsProcess;
-    private final PortForwardTask  portForwardTask;
+    private final KubernetesPortForwarder kubernetesPortForwarder;
     private final StartPreprodProxyProcess startPreprodProxyProcess;
     private final PreprodScaleDownProcess preprodScaleDownProcess;
     private final PreprodStopProcess preprodStopProcess;
@@ -115,7 +115,7 @@ class PreprodMenuController {
     @GetMapping("/port-forward")
     String portForward() {
         taskQueue.add(() -> {
-            portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+            kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
         });
 
         return "redirect:/preprod?success=port_forwarding_started";

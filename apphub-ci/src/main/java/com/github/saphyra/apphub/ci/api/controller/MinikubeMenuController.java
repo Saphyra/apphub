@@ -2,14 +2,14 @@ package com.github.saphyra.apphub.ci.api.controller;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeStartProcess;
-import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
-import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.KubernetesStarter;
+import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalDeployProcess;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalRunTestsProcess;
 import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeLocalStopProcess;
-import com.github.saphyra.apphub.ci.process.minikube.local.MinikubeNamespaceDeletionProcess;
+import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceDeleter;
 import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -35,14 +35,14 @@ class MinikubeMenuController {
     private final PropertyDao propertyDao;
     private final TaskQueue taskQueue;
     private final PlatformProperties platformProperties;
-    private final MinikubeStartProcess minikubeStartProcess;
+    private final KubernetesStarter kubernetesStarter;
     private final MinikubeLocalDeployProcess minikubeLocalDeployProcess;
     private final Services services;
     private final MinikubeLocalRunTestsProcess minikubeLocalRunTestsProcess;
-    private final PortForwardTask portForwardTask;
+    private final KubernetesPortForwarder kubernetesPortForwarder;
     private final NamespaceNameProvider namespaceNameProvider;
-    private final MinikubeScaleProcess minikubeScaleProcess;
-    private final MinikubeNamespaceDeletionProcess namespaceDeletionProcess;
+    private final KubernetesPodScaler kubernetesPodScaler;
+    private final KubernetesNamespaceDeleter namespaceDeletionProcess;
     private final MinikubeLocalStopProcess minikubeLocalStopProcess;
 
     @GetMapping
@@ -71,7 +71,7 @@ class MinikubeMenuController {
 
     @GetMapping("/start-vm")
     String startVm() {
-        taskQueue.add(minikubeStartProcess::startMinikube);
+        taskQueue.add(kubernetesStarter::start);
 
         return "redirect:/minikube?success=minikube_is_starting";
     }
@@ -121,9 +121,9 @@ class MinikubeMenuController {
         taskQueue.add(() -> {
             String namespaceName = namespaceNameProvider.getNamespaceName();
 
-            portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-            portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
-            portForwardTask.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+            kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+            kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+            kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
         });
 
         return "redirect:/minikube?success=port_forwarding_started";
@@ -131,7 +131,7 @@ class MinikubeMenuController {
 
     @GetMapping("/scale")
     String scale() {
-        taskQueue.add(() -> minikubeScaleProcess.scale(namespaceNameProvider.getNamespaceName(), 0));
+        taskQueue.add(() -> kubernetesPodScaler.scaleAll(namespaceNameProvider.getNamespaceName(), 0));
 
         return "redirect:/minikube?success=namespace_is_scaling_down";
     }

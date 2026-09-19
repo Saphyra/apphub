@@ -2,10 +2,10 @@ package com.github.saphyra.apphub.ci.process.minikube.preprod;
 
 import com.github.saphyra.apphub.ci.process.local.stop.LocalStopProcess;
 import com.github.saphyra.apphub.ci.process.minikube.MinikubeBuildTask;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeNamespaceSetupTask;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeScaleProcess;
-import com.github.saphyra.apphub.ci.process.minikube.MinikubeServiceDeployer;
-import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceSetupper;
+import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.util.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DeployMode;
@@ -24,11 +24,11 @@ import java.util.List;
 @Slf4j
 public class PreprodDeployProcess {
     private final MinikubeBuildTask minikubeBuildTask;
-    private final MinikubeServiceDeployer minikubeServiceDeployer;
-    private final MinikubeScaleProcess minikubeScaleProcess;
-    private final MinikubeNamespaceSetupTask minikubeNamespaceSetupTask;
+    private final KubernetesServiceDeployer kubernetesServiceDeployer;
+    private final KubernetesPodScaler kubernetesPodScaler;
+    private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final LocalStopProcess localStopProcess;
-    private final PortForwardTask portForwardTask;
+    private final KubernetesPortForwarder kubernetesPortForwarder;
     private final PlatformProperties platformProperties;
 
     public void deploy() {
@@ -39,13 +39,13 @@ public class PreprodDeployProcess {
             return;
         }
 
-        minikubeScaleProcess.scale(Constants.NAMESPACE_NAME_PREPROD, 0);
+        kubernetesPodScaler.scaleAll(Constants.NAMESPACE_NAME_PREPROD, 0);
 
-        minikubeNamespaceSetupTask.setupNamespace(Environment.PREPROD, Constants.NAMESPACE_NAME_PREPROD);
+        kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, Constants.NAMESPACE_NAME_PREPROD);
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, 30);
+        //kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, 30);
 
-        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
+        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
 
         addDisabledRolesIfMissing();
     }
@@ -66,9 +66,9 @@ public class PreprodDeployProcess {
             return;
         }
 
-        minikubeServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, serviceNames, 15);
+        //kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, serviceNames, 15);
 
-        portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
+        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
 
         log.info("Deployment finished.");
     }

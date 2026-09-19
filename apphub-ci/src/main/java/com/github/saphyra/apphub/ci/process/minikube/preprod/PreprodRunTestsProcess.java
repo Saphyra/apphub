@@ -2,7 +2,7 @@ package com.github.saphyra.apphub.ci.process.minikube.preprod;
 
 import com.github.saphyra.apphub.ci.process.DeprecatedIntegrationServerStarter;
 import com.github.saphyra.apphub.ci.process.RunTestsTask;
-import com.github.saphyra.apphub.ci.process.minikube.PortForwardTask;
+import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ServicePinger;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -16,7 +16,7 @@ import static java.util.Objects.isNull;
 @RequiredArgsConstructor
 @Slf4j
 public class PreprodRunTestsProcess {
-    private final PortForwardTask portForwardTask;
+    private final KubernetesPortForwarder kubernetesPortForwarder;
     private final PlatformProperties platformProperties;
     private final ServicePinger servicePinger;
     private final DeprecatedIntegrationServerStarter integrationServerStarter;
@@ -30,7 +30,7 @@ public class PreprodRunTestsProcess {
         try {
             log.info("");
 
-            portForwardTask.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeTestServerPort(), Constants.SERVICE_PORT);
+            kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeTestServerPort(), Constants.SERVICE_PORT);
 
             Exception exception = servicePinger.pingRemote(platformProperties.getMinikubeTestServerPort(), 10).orElse(null);
             if (!isNull(exception)) {

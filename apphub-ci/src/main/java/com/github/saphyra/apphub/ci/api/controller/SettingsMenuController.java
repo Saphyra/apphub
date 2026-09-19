@@ -37,9 +37,11 @@ class SettingsMenuController {
     ) {
         ModelAndView modelAndView = new ModelAndView("settings");
 
+        modelAndView.addObject("environments", Arrays.stream(Environment.values()).map(Environment::name).toList());
         modelAndView.addObject("browser_startup_limit", propertyDao.getBrowserStartupLimit());
         modelAndView.addObject("gui_enabled", propertyDao.isGuiEnabled());
-        modelAndView.addObject("environments", Arrays.stream(Environment.values()).map(Environment::name).toList());
+        modelAndView.addObject("bash_file_location", propertyDao.getStringProperty(PropertyName.BASH_FILE_LOCATION));
+
 
         EnvironmentSpecificProperties psqlConfig = propertyDao.getEnvironmentSpecificProperties(PropertyName.PSQL_HOST);
         modelAndView.addObject("PSQL_LOCAL", psqlConfig.getForEnvironmentOrDefault(Environment.LOCAL, PSQL_HOST, ""));
@@ -68,6 +70,7 @@ class SettingsMenuController {
     String saveSettings(HttpServletRequest request) {
         propertyDao.save(PropertyName.BROWSER_STARTUP_LIMIT, Integer.parseInt(request.getParameter("browser_startup_limit")));
         propertyDao.save(PropertyName.GUI_ENABLED, Boolean.parseBoolean(request.getParameter("gui_enabled")));
+        propertyDao.save(PropertyName.BASH_FILE_LOCATION, request.getParameter("bash_file_location"));
 
         return "redirect:/settings?success=saved";
     }
@@ -126,7 +129,7 @@ class SettingsMenuController {
     }
 
     @PostMapping("/dynamo-db-local-directory")
-    String saveDynamoDbLocalDirectory(@RequestParam("dynamodb_local_directory") String directory){
+    String saveDynamoDbLocalDirectory(@RequestParam("dynamodb_local_directory") String directory) {
         propertyDao.save(DYNAMO_DB_LOCAL_DIRECTORY, directory);
 
         return "redirect:/settings?success=dynamodb_local_directory_saved";

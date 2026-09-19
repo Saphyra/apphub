@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 public class TestRunner {
     private final PropertyDao propertyDao;
+    private final ChromeDriverKiller chromeDriverKiller;
 
     public void runTests(
         Environment environment,
@@ -98,6 +99,8 @@ public class TestRunner {
             }
         } catch (Exception e) {
             log.error("Tests failed with exception", e);
+        } finally {
+            chromeDriverKiller.kill();
         }
     }
 }

@@ -2,7 +2,8 @@ package com.github.saphyra.apphub.ci.process;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
-import com.github.saphyra.apphub.ci.process.minikube.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.ChromeDriverKiller;
+import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -22,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class RunTestsTask {
     private final PropertyDao propertyDao;
     private final PlatformProperties platformProperties;
-    private final KillChromeDriverTask killChromeDriverTask;
+    private final ChromeDriverKiller chromeDriverKiller;
     private final NamespaceNameProvider namespaceNameProvider;
 
     public void localRunTests(String testGroups) {
@@ -43,7 +44,7 @@ public class RunTestsTask {
                 "localhost:" + platformProperties.getLocalDynamoDbPort()
             );
         } finally {
-            killChromeDriverTask.run();
+            chromeDriverKiller.kill();
         }
 
     }
@@ -67,7 +68,7 @@ public class RunTestsTask {
                 "localhost:" + platformProperties.getMinikubeDynamoDbPort()
             );
         } finally {
-            killChromeDriverTask.run();
+            chromeDriverKiller.kill();
         }
     }
 
@@ -90,7 +91,7 @@ public class RunTestsTask {
                 "0"
             );
         } finally {
-            killChromeDriverTask.run();
+            chromeDriverKiller.kill();
         }
     }
 
@@ -113,7 +114,7 @@ public class RunTestsTask {
                 "0"
             );
         } finally {
-            killChromeDriverTask.run();
+            chromeDriverKiller.kill();
         }
     }
 
