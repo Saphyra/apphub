@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.ci.service.env_ops.minikube;
 
 import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
-import com.github.saphyra.apphub.ci.tool.KubernetesPodStartupWaiter;
-import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
-import com.github.saphyra.apphub.ci.tool.TestRunner;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;

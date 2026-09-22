@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.ci.service.operations.production;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesPodStartupWaiter;
-import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
-import com.github.saphyra.apphub.ci.tool.ServiceStarter;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStarter;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -32,7 +32,7 @@ public class ProductionProxyService {
 
         process.waitFor();
 
-        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeProdMainGatewayPort(), Constants.SERVICE_PORT);
+        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeProductionMainGatewayPort(), Constants.SERVICE_PORT);
 
 
         serviceStarter.startService(platformProperties.getProductionProxy(), startupIndicatorFactory.noOpIndicator());

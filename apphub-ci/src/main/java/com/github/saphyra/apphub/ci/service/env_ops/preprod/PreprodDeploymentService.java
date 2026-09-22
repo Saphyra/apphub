@@ -1,12 +1,12 @@
 package com.github.saphyra.apphub.ci.service.env_ops.preprod;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceSetupper;
-import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
-import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
-import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
-import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
-import com.github.saphyra.apphub.ci.tool.ServiceBuilder;
-import com.github.saphyra.apphub.ci.tool.ServiceStopper;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesNamespaceSetupper;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
 import com.github.saphyra.apphub.ci.util.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.Constants;

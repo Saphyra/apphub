@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.service.operations.minikube;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
-import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
+import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;

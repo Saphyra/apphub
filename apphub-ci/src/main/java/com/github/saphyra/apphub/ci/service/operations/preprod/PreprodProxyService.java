@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.ci.service.operations.preprod;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesPodStartupWaiter;
-import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
-import com.github.saphyra.apphub.ci.tool.ServiceStarter;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStarter;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;

@@ -1,11 +1,10 @@
 package com.github.saphyra.apphub.ci.service.vm;
 
 import com.github.saphyra.apphub.ci.service.vm.minikube.MinikubeNamespaceDeletionService;
-import com.github.saphyra.apphub.ci.service.vm.minikube.MinikubeStopVmService;
-import com.github.saphyra.apphub.ci.service.vm.preprod.PreprodStopVmService;
 import com.github.saphyra.apphub.ci.service.vm.production.ProductionStartVmService;
-import com.github.saphyra.apphub.ci.service.vm.production.ProductionStopVmService;
-import com.github.saphyra.apphub.ci.tool.KubernetesStarter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesStarter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,11 +13,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class VmFacade {
     private final KubernetesStarter kubernetesStarter;
-    private final MinikubeStopVmService minikubeStopVmService;
     private final MinikubeNamespaceDeletionService minikubeNamespaceDeletionService;
-    private final PreprodStopVmService preprodStopVmService;
     private final ProductionStartVmService productionStartVmService;
-    private final ProductionStopVmService productionStopVmService;
+    private final NamespaceNameProvider namespaceNameProvider;
+    private final StopVmService stopVmService;
 
     public void start(Environment environment) {
         switch (environment) {
@@ -30,9 +28,9 @@ public class VmFacade {
 
     public void stop(Environment environment) {
         switch (environment) {
-            case MINIKUBE -> minikubeStopVmService.stop();
-            case PREPROD -> preprodStopVmService.stop();
-            case PRODUCTION -> productionStopVmService.stop();
+            case MINIKUBE -> stopVmService.stop(namespaceNameProvider.getNamespaceName());
+            case PREPROD -> stopVmService.stop(Constants.NAMESPACE_NAME_PREPROD);
+            case PRODUCTION -> stopVmService.stop(Constants.NAMESPACE_NAME_PRODUCTION);
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }

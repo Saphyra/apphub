@@ -1,10 +1,10 @@
 package com.github.saphyra.apphub.ci.service.env_ops.production;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceSetupper;
-import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
-import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
-import com.github.saphyra.apphub.ci.tool.ServiceBuilder;
-import com.github.saphyra.apphub.ci.tool.ServiceStopper;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesNamespaceSetupper;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DockerTag;
@@ -32,7 +32,7 @@ public class ProductionDeploymentService {
         serviceBuilder.build(BuildCommand.DEPLOY, services, buildThreadCount, skipTests);
 
         if (!startUserDefinedServices) {
-            serviceBuilder.buildFrontend(DockerTag.LATEST);
+            serviceBuilder.buildFrontend(DockerTag.RELEASE);
             kubernetesPodScaler.scaleAll(Constants.NAMESPACE_NAME_PRODUCTION, 0);
 
             services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))

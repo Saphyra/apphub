@@ -1,9 +1,9 @@
 package com.github.saphyra.apphub.ci.service.vm.production;
 
 import com.github.saphyra.apphub.ci.service.operations.production.ProductionProxyService;
-import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
-import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
-import com.github.saphyra.apphub.ci.tool.KubernetesStarter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesStarter;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;

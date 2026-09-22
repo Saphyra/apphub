@@ -1,36 +1,17 @@
 package com.github.saphyra.apphub.ci.value;
 
 import lombok.Data;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
-@ConfigurationProperties(prefix = "defaults")
+@Component
 @Data
 public class DefaultProperties {
-    private String defaultLocale;
-    @Deprecated
-    private DeployMode localDeployMode;
-    @Deprecated
-    private DeployMode remoteDeployMode;
-    //TODO rename to buildThreadCount
-    private Integer buildThreadCountDefault;
-    @Deprecated
-    private Integer buildThreadCountSkipTests;
-    //TODO rename to testThreadCount
-    private Integer localRunTestsThreadCount;
-    private Integer remoteTestsThreadCount;
-    //TODO rename to serviceStartupCountLimit
-    private Integer localServiceStartupCountLimit;
-    @Deprecated
-    private Integer remoteServiceStartupCountLimit;
-    //TODO rename to preCreateDriverCount
-    private Integer localRunTestsPreCreateDriverCount;
-    @Deprecated
-    private Integer remoteRunTestsPreCreateDriverCount;
-    private String bashFileLocation;
-    private Integer browserStartupLimit;
-    private Boolean guiEnabled;
-    //TODO rename to testRetryCount
-    private Integer integrationRetryCount;
+    private final int buildThreadCount = 6;
+    private final int testsThreadCount = 20;
+    private final int serviceStartupCountLimit = 5;
+    private final int preCreateDriverCount = 0;
+    private final String bashFileLocation = "bash";
+    private final int browserStartupLimit = 5;
+    private boolean guiEnabled = true;
+    private final int testRetryCount = 2;
 }

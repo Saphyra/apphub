@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.service.operations.preprod;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;

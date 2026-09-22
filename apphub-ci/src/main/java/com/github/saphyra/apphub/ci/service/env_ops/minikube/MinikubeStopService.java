@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.service.env_ops.minikube;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
-import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.value.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.service.env_ops.preprod;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Service;
 import lombok.RequiredArgsConstructor;

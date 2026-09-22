@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.service.vm.minikube;
 
-import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceDeleter;
-import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesNamespaceDeleter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.service.env_ops;
 
-import com.github.saphyra.apphub.ci.tool.ServicePinger;
-import com.github.saphyra.apphub.ci.tool.ServiceStarter;
+import com.github.saphyra.apphub.ci.tool.service.ServicePinger;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStarter;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;

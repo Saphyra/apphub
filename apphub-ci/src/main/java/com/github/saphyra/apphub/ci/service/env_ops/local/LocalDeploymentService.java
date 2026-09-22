@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.ci.service.env_ops.local;
 
-import com.github.saphyra.apphub.ci.tool.ServiceBuilder;
-import com.github.saphyra.apphub.ci.tool.ServiceStarter;
-import com.github.saphyra.apphub.ci.tool.ServiceStopper;
+import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStarter;
+import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Service;
 import lombok.RequiredArgsConstructor;

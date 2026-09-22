@@ -1,11 +1,11 @@
 package com.github.saphyra.apphub.ci.service.env_ops.production;
 
 import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
-import com.github.saphyra.apphub.ci.tool.KubernetesPodStartupWaiter;
-import com.github.saphyra.apphub.ci.tool.KubernetesPortForwarder;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
-import com.github.saphyra.apphub.ci.tool.ServicePinger;
-import com.github.saphyra.apphub.ci.tool.TestRunner;
+import com.github.saphyra.apphub.ci.tool.service.ServicePinger;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;

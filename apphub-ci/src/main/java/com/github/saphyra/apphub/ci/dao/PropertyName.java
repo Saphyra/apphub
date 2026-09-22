@@ -2,43 +2,10 @@ package com.github.saphyra.apphub.ci.dao;
 
 public enum PropertyName {
     //Platform
-    LANGUAGE,
     BROWSER_STARTUP_LIMIT,
     GUI_ENABLED,
-
-    //Local run
-    @Deprecated
-    LOCAL_DEPLOY_MODE,
-    @Deprecated
-    BUILD_THREAD_COUNT_DEFAULT,
-    @Deprecated
-    BUILD_THREAD_COUNT_SKIP_TESTS,
-    @Deprecated
-    LOCAL_RUN_INTEGRATION_TESTS_THREAD_COUNT,
-    @Deprecated
-    LOCAL_RUN_SERVICE_STARTUP_COUNT_LIMIT,
-    @Deprecated
-    LOCAL_RUN_TESTS_PRE_CREATE_DRIVER_COUNT,
-    @Deprecated
-    LATEST_SERVICES,
-    @Deprecated
-    LATEST_TEST_GROUPS,
-    @Deprecated
-    LOCAL_INTEGRATION_RETRY_COUNT,
     DYNAMO_DB_LOCAL_DIRECTORY,
-
-    //Remote
-    @Deprecated
-    REMOTE_DEPLOY_MODE,
-    @Deprecated
-    REMOTE_INTEGRATION_TESTS_THREAD_COUNT,
-    @Deprecated
-    REMOTE_RUN_TESTS_PRE_CREATE_DRIVER_COUNT,
     BASH_FILE_LOCATION,
-    @Deprecated
-    REMOTE_SERVICE_STARTUP_COUNT_LIMIT,
-    @Deprecated
-    REMOTE_INTEGRATION_RETRY_COUNT,
 
     //Service properties
     S3_CONFIGURATION,

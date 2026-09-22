@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.service.env_ops.EnvOpsFacade;
 import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
-import com.github.saphyra.apphub.ci.util.RequestParamUtil;
+import com.github.saphyra.apphub.ci.api.RequestParamUtil;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -91,12 +91,12 @@ class EnvOpsController {
 
         int buildThreadCount = propertyDao.getProperty(PropertyName.BUILD_THREAD_COUNT)
             .map(Integer::parseInt)
-            .orElse(defaultProperties.getBuildThreadCountDefault());
+            .orElse(defaultProperties.getBuildThreadCount());
         mav.addObject(PARAM_BUILD_THREAD_COUNT, buildThreadCount);
 
         int startupCountLimit = propertyDao.getProperty(PropertyName.STARTUP_COUNT_LIMIT)
             .map(Integer::parseInt)
-            .orElse(defaultProperties.getLocalServiceStartupCountLimit());
+            .orElse(defaultProperties.getServiceStartupCountLimit());
         mav.addObject(PARAM_STARTUP_COUNT_LIMIT, startupCountLimit);
 
         //Operations
@@ -110,16 +110,16 @@ class EnvOpsController {
 
         //Testing
         mav.addObject(PARAM_TEST_FILTER, propertyDao.getStringProperty(PropertyName.TEST_FILTER));
-        mav.addObject(PARAM_RETRY_COUNT, propertyDao.getProperty(PropertyName.TEST_RETRY_COUNT).map(Integer::parseInt).orElse(defaultProperties.getIntegrationRetryCount()));
+        mav.addObject(PARAM_RETRY_COUNT, propertyDao.getProperty(PropertyName.TEST_RETRY_COUNT).map(Integer::parseInt).orElse(defaultProperties.getTestRetryCount()));
         String testThreadCount = propertyDao.getEnvironmentSpecificProperties(PropertyName.TEST_THREAD_COUNT)
-            .getForEnvironmentOrDefault(environment, PropertyName.TEST_THREAD_COUNT.name(), String.valueOf(defaultProperties.getLocalRunTestsThreadCount()));
+            .getForEnvironmentOrDefault(environment, PropertyName.TEST_THREAD_COUNT.name(), String.valueOf(defaultProperties.getTestsThreadCount()));
         mav.addObject(PARAM_TEST_THREAD_COUNT, Integer.parseInt(testThreadCount));
         String preCreateDriverCount = propertyDao.getEnvironmentSpecificProperties(PropertyName.PRE_CREATE_DRIVER_COUNT)
-            .getForEnvironmentOrDefault(environment, PropertyName.PRE_CREATE_DRIVER_COUNT.name(), String.valueOf(defaultProperties.getLocalRunTestsPreCreateDriverCount()));
+            .getForEnvironmentOrDefault(environment, PropertyName.PRE_CREATE_DRIVER_COUNT.name(), String.valueOf(defaultProperties.getPreCreateDriverCount()));
         mav.addObject(PARAM_PRE_CREATE_DRIVER_COUNT, Integer.parseInt(preCreateDriverCount));
 
 
-        log.info("{}", mav); //TODO debug
+        log.debug("{}", mav);
 
         return mav;
     }

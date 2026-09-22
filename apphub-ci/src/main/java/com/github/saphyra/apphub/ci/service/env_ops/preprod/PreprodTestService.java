@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.ci.service.env_ops.preprod;
 
 import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
-import com.github.saphyra.apphub.ci.tool.KubernetesPodStartupWaiter;
-import com.github.saphyra.apphub.ci.tool.TestRunner;
+import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -30,7 +30,7 @@ public class PreprodTestService {
             threadCount,
             platformProperties.getMinikubeTestServerPort(),
             platformProperties.getLocalDatabasePort(),
-            "apphub_preprod", //TODO move to config / constants
+            platformProperties.getPreprodDatabaseName(),
             "",
             preCreatedDriverCount,
             true,

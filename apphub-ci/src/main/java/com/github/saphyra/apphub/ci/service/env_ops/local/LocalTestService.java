@@ -2,8 +2,8 @@ package com.github.saphyra.apphub.ci.service.env_ops.local;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
-import com.github.saphyra.apphub.ci.tool.ServicePinger;
-import com.github.saphyra.apphub.ci.tool.TestRunner;
+import com.github.saphyra.apphub.ci.tool.service.ServicePinger;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Services;
