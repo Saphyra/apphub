@@ -1,0 +1,24 @@
+package com.github.saphyra.apphub.ci.tool.kubernetes;
+
+import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class KubernetesPodStartupWaiter {
+    private final PropertyDao propertyDao;
+
+    @SneakyThrows
+    public void waitForPods(String namespaceName, int waitCount) {
+        int status = new ProcessBuilder(propertyDao.getBashFileLocation(), "-c", "./infra/wait_for_pods_ready.sh %s %s %s %s".formatted(namespaceName, waitCount, 2, 5))
+            .inheritIO()
+            .start()
+            .waitFor();
+
+        if (status != 0) {
+            throw new IllegalStateException("Pods did not start up in time.");
+        }
+    }
+}

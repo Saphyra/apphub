@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
-import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

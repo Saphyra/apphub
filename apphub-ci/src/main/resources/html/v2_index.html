@@ -1,0 +1,39 @@
+<html>
+<head>
+    <title>Main Menu - CI - Apphub</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<h1>Main Menu</h1>
+
+<main>
+    <fieldset>
+        <legend>Environments</legend>
+
+        <ul class="menu">
+            <li><a href="/v2/env-ops/LOCAL">Local run</a> - Run the application directly on your host machine.</li>
+            <li><a href="/v2/env-ops/MINIKUBE">Minikube</a> - Deploy the application to the local Minikube server on disposable namespace.</li>
+            <li><a href="/v2/env-ops/PREPROD">Preprod server</a> - Deploy the application to the local Minikube server on a production-like namespace.</li>
+            <li><a href="/v2/env-ops/PRODUCTION">Production server</a> - Deploy the application to the local Minikube server on the production namespace.</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Tools</legend>
+
+        <ul class="menu">
+            <li><a href="/db-backup">Database backup</a> - Backup and restore database tables</li>
+        </ul>
+    </fieldset>
+
+    <fieldset>
+        <legend>Other</legend>
+
+        <ul class="menu">
+            <li><a href="/settings">Settings</a></li>
+        </ul>
+    </fieldset>
+</main>
+
+</body>
+</html>
