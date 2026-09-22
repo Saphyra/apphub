@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.ci.service.env_ops.preprod;
 import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -25,19 +26,21 @@ public class PreprodTestService {
         integrationServerStarter.start();
 
         testRunner.runTests(
-            Environment.PREPROD,
-            testFilter,
-            threadCount,
-            platformProperties.getMinikubeTestServerPort(),
-            platformProperties.getLocalDatabasePort(),
-            platformProperties.getPreprodDatabaseName(),
-            "",
-            preCreatedDriverCount,
-            true,
-            false,
-            Constants.NAMESPACE_NAME_PREPROD,
-            retryCount,
-            "0"
+            TestConfiguration.builder()
+                .environment(Environment.PREPROD)
+                .testFilter(testFilter)
+                .threadCount(threadCount)
+                .serverPort(platformProperties.getMinikubeMainGatewayPort())
+                .databasePort(platformProperties.getLocalDatabasePort())
+                .databaseName(platformProperties.getPreprodDatabaseName())
+                .disabledGroups("")
+                .preCreateDrivers(preCreatedDriverCount)
+                .serverConnectionCacheEnabled(true)
+                .databaseConnectionCacheEnabled(false)
+                .namespace(Constants.NAMESPACE_NAME_PREPROD)
+                .retryCount(retryCount)
+                .dynamoDbHost("0")
+                .build()
         );
     }
 }

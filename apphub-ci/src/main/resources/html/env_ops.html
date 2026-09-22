@@ -87,9 +87,9 @@
                 <fieldset>
                     <legend>Actions</legend>
 
-                    <button type="submit" name="action" value="build_and_deploy">Build and Deploy</button>
-                    <button type="submit" name="action" value="build">Build</button>
-                    <button type="submit" name="action" value="deploy">Deploy</button>
+                    <button type="submit" name="action" value="BUILD_AND_DEPLOY">Build and Deploy</button>
+                    <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="BUILD">Build</button>
+                    <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="DEPLOY">Deploy</button>
                 </fieldset>
             </div>
         </form>

@@ -6,6 +6,7 @@ import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
 import com.github.saphyra.apphub.ci.tool.service.ServicePinger;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -29,9 +30,9 @@ public class ProductionTestService {
         try {
             kubernetesPodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PREPROD, 5);
 
-            kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeTestServerPort(), Constants.SERVICE_PORT);
+            kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeMainGatewayPort(), Constants.SERVICE_PORT);
 
-            servicePinger.pingRemote(platformProperties.getMinikubeTestServerPort(), 10)
+            servicePinger.pingRemote(platformProperties.getMinikubeMainGatewayPort(), 10)
                 .ifPresentOrElse(
                     e -> {
                         throw new RuntimeException(e);
@@ -42,22 +43,24 @@ public class ProductionTestService {
             integrationServerStarter.start();
 
             testRunner.runTests(
-                Environment.PRODUCTION,
-                testFilter,
-                threadCount,
-                platformProperties.getMinikubeTestServerPort(),
-                platformProperties.getLocalDatabasePort(),
-                platformProperties.getProdDatabaseName(),
-                String.join(",", platformProperties.getProdDisabledTestGroups()),
-                preCreatedDriverCount,
-                true,
-                false,
-                Constants.NAMESPACE_NAME_PRODUCTION,
-                retryCount,
-                "0"
+                TestConfiguration.builder()
+                    .environment(Environment.PRODUCTION)
+                    .testFilter(testFilter)
+                    .threadCount(threadCount)
+                    .serverPort(platformProperties.getMinikubeMainGatewayPort())
+                    .databasePort(platformProperties.getLocalDatabasePort())
+                    .databaseName(platformProperties.getProdDatabaseName())
+                    .disabledGroups(String.join(",", platformProperties.getProdDisabledTestGroups()))
+                    .preCreateDrivers(preCreatedDriverCount)
+                    .serverConnectionCacheEnabled(true)
+                    .databaseConnectionCacheEnabled(false)
+                    .namespace(Constants.NAMESPACE_NAME_PRODUCTION)
+                    .retryCount(retryCount)
+                    .dynamoDbHost("0")
+                    .build()
             );
         } finally {
-            processKiller.killByPort(platformProperties.getMinikubeTestServerPort());
+            processKiller.killByPort(platformProperties.getMinikubeMainGatewayPort());
         }
     }
 }

@@ -8,6 +8,7 @@ import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
 import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
 import com.github.saphyra.apphub.ci.util.DatabaseUtil;
+import com.github.saphyra.apphub.ci.value.Action;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DockerTag;
@@ -35,28 +36,32 @@ public class PreprodDeploymentService {
     private final KubernetesPortForwarder kubernetesPortForwarder;
     private final PlatformProperties platformProperties;
 
-    public void deploy(boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
-        serviceStopper.stopLocalEnv();
+    public void deploy(Action action, boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
+        if(action == Action.BUILD_AND_DEPLOY || action == Action.BUILD){
+            serviceStopper.stopLocalEnv();
 
-        serviceBuilder.build(BuildCommand.INSTALL, services, buildThreadCount, skipTests);
-
-        String namespaceName = namespaceNameProvider.getNamespaceName();
-
-        if (!startUserDefinedServices) {
-            serviceBuilder.buildFrontend(DockerTag.LATEST);
-            kubernetesPodScaler.scaleAll(namespaceName, 0);
-
-            services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
-                .toList();
-
-            kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, namespaceName);
+            serviceBuilder.build(BuildCommand.INSTALL, services, buildThreadCount, skipTests);
         }
 
-        kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, services, 30, startupCountLimit);
+        if(action == Action.BUILD_AND_DEPLOY || action == Action.DEPLOY){
+            String namespaceName = namespaceNameProvider.getNamespaceName();
 
-        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
+            if (!startUserDefinedServices) {
+                serviceBuilder.buildFrontend(DockerTag.LATEST);
+                kubernetesPodScaler.scaleAll(namespaceName, 0);
 
-        addDisabledRolesIfMissing();
+                services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
+                    .toList();
+
+                kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, namespaceName);
+            }
+
+            kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, services, 30, startupCountLimit);
+
+            kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
+
+            addDisabledRolesIfMissing();
+        }
     }
 
     @SneakyThrows

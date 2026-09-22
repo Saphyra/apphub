@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
 import com.github.saphyra.apphub.ci.tool.service.ServicePinger;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -46,19 +47,21 @@ public class LocalTestService {
 
         integrationServerStarter.start();
         testRunner.runTests(
-            Environment.LOCAL,
-            testFilter,
-            threadCount,
-            platformProperties.getLocalServerPort(),
-            platformProperties.getLocalDatabasePort(),
-            platformProperties.getLocalDatabaseName(),
-            "",
-            preCreatedDriverCount,
-            false,
-            false,
-            "",
-            retryCount,
-            "localhost:" + platformProperties.getLocalDynamoDbPort()
+            TestConfiguration.builder()
+                .environment(Environment.LOCAL)
+                .testFilter(testFilter)
+                .threadCount(threadCount)
+                .serverPort(platformProperties.getLocalServerPort())
+                .databasePort(platformProperties.getLocalDatabasePort())
+                .databaseName(platformProperties.getLocalDatabaseName())
+                .disabledGroups("")
+                .preCreateDrivers(preCreatedDriverCount)
+                .serverConnectionCacheEnabled(false)
+                .databaseConnectionCacheEnabled(false)
+                .namespace("")
+                .retryCount(retryCount)
+                .dynamoDbHost("localhost:" + platformProperties.getLocalDynamoDbPort())
+                .build()
         );
     }
 

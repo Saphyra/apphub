@@ -5,6 +5,7 @@ import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
 import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
 import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
+import com.github.saphyra.apphub.ci.value.Action;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DockerTag;
@@ -26,7 +27,11 @@ public class ProductionDeploymentService {
     private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final KubernetesServiceDeployer kubernetesServiceDeployer;
 
-    public void deploy(boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
+    public void deploy(Action action, boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
+        if(action != Action.BUILD_AND_DEPLOY){
+            throw new IllegalArgumentException("Unsupported action: " + action);
+        }
+
         serviceStopper.stopLocalEnv();
 
         serviceBuilder.build(BuildCommand.DEPLOY, services, buildThreadCount, skipTests);

@@ -2,6 +2,7 @@ package com.github.saphyra.apphub.ci.api;
 
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.value.Action;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.EnvironmentSpecificProperties;
 import com.github.saphyra.apphub.ci.value.Service;
@@ -15,6 +16,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ACTION;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_BUILD_THREAD_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_FILTER_TESTS;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PREFIX_ENABLED_SERVICE;
@@ -166,5 +168,14 @@ public class RequestParamUtil {
 
     public boolean extractStopUserDefinedServices(HttpServletRequest request) {
         return Boolean.parseBoolean(request.getParameter(PARAM_STOP_USER_DEFINED_SERVICES));
+    }
+
+    public Action extractAction(HttpServletRequest request) {
+        String actionString = request.getParameter(PARAM_ACTION);
+        if(isNull(actionString)){
+            throw new IllegalArgumentException("Missing parameter: " + PARAM_ACTION);
+        }
+
+        return Action.valueOf(actionString);
     }
 }

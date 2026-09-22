@@ -29,6 +29,7 @@ public class ApiConstants {
     public static final String PARAM_SERVER_PORT = "server_port";
     public static final String PARAM_PSQL_PORT = "psql_port";
     public static final String PARAM_DYNAMODB_PORT = "dynamodb_port";
+    public static final String PARAM_ACTION = "action";
 
     public static final String PARAM_PREFIX_ENABLED_SERVICE = "enabled_service_";
 }

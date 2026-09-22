@@ -36,9 +36,9 @@ public class PlatformProperties {
     private final int minikubeDevServerPort = 9001;
 
     /**
-     * TODO
+     * Port main-gateway's pod listens to. Integration test's ConnectionProvider will forward this port to a random port on localhost.
      */
-    private final int minikubeTestServerPort = 8080;
+    private final int minikubeMainGatewayPort = 8080;
 
     /**
      * Local server's main-gateway listens to this port
@@ -68,7 +68,7 @@ public class PlatformProperties {
     /**
      * Local DynamoDB listens to this port
      */
-    private final int localDynamoDbPort = 9000;
+    private final int localDynamoDbPort = 8000;
 
     /**
      * Minikube dev server's database name

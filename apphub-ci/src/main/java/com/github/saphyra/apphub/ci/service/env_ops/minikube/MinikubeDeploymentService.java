@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
 import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
 import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
+import com.github.saphyra.apphub.ci.value.Action;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DockerTag;
@@ -34,31 +35,35 @@ public class MinikubeDeploymentService {
     private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final KubernetesPodScaler kubernetesPodScaler;
 
-    public void deploy(boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
-        serviceStopper.stopLocalEnv();
+    public void deploy(Action action, boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
+        if (action == Action.BUILD_AND_DEPLOY || action == Action.BUILD) {
+            serviceStopper.stopLocalEnv();
 
-        serviceBuilder.build(BuildCommand.INSTALL, services, buildThreadCount, skipTests);
-
-        String namespaceName = namespaceNameProvider.getNamespaceName();
-
-        if (!startUserDefinedServices) {
-            serviceBuilder.buildFrontend(DockerTag.LATEST);
-            kubernetesPodScaler.scaleAll(namespaceName, 0);
-
-            services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
-                .toList();
+            serviceBuilder.build(BuildCommand.INSTALL, services, buildThreadCount, skipTests);
         }
 
-        kubernetesNamespaceSetupper.setupNamespace(Environment.MINIKUBE, namespaceName);
-        kubernetesNamespaceSetupper.deployPostgres(namespaceName);
-        kubernetesNamespaceSetupper.deployDynamoDb(namespaceName);
+        if (action == Action.BUILD_AND_DEPLOY || action == Action.DEPLOY) {
+            String namespaceName = namespaceNameProvider.getNamespaceName();
 
-        kubernetesServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, services, 15, startupCountLimit);
+            if (!startUserDefinedServices) {
+                serviceBuilder.buildFrontend(DockerTag.LATEST);
+                kubernetesPodScaler.scaleAll(namespaceName, 0);
 
-        portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-        portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
-        portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+                services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
+                    .toList();
+            }
 
-        log.info("Deployment finished.");
+            kubernetesNamespaceSetupper.setupNamespace(Environment.MINIKUBE, namespaceName);
+            kubernetesNamespaceSetupper.deployPostgres(namespaceName);
+            kubernetesNamespaceSetupper.deployDynamoDb(namespaceName);
+
+            kubernetesServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, services, 15, startupCountLimit);
+
+            portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+            portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
+            portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+
+            log.info("Deployment finished.");
+        }
     }
 }

@@ -11,6 +11,7 @@ import com.github.saphyra.apphub.ci.service.env_ops.preprod.PreprodStopService;
 import com.github.saphyra.apphub.ci.service.env_ops.preprod.PreprodTestService;
 import com.github.saphyra.apphub.ci.service.env_ops.production.ProductionDeploymentService;
 import com.github.saphyra.apphub.ci.service.env_ops.production.ProductionTestService;
+import com.github.saphyra.apphub.ci.value.Action;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -36,6 +37,7 @@ public class EnvOpsFacade {
     private final ProductionTestService productionTestService;
 
     public void buildAndDeploy(
+        Action action,
         Environment environment,
         List<String> enabledServiceNames,
         boolean startUserDefinedServices,
@@ -46,6 +48,7 @@ public class EnvOpsFacade {
     ) {
         switch (environment) {
             case LOCAL -> localDeploymentService.deploy(
+                action,
                 startUserDefinedServices,
                 getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
                 buildThreadCount,
@@ -53,6 +56,7 @@ public class EnvOpsFacade {
                 skipTests
             );
             case MINIKUBE -> minikubeDeploymentService.deploy(
+                action,
                 startUserDefinedServices,
                 getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
                 buildThreadCount,
@@ -60,6 +64,7 @@ public class EnvOpsFacade {
                 skipTests
             );
             case PREPROD -> preprodDeploymentService.deploy(
+                action,
                 startUserDefinedServices,
                 getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
                 buildThreadCount,
@@ -67,6 +72,7 @@ public class EnvOpsFacade {
                 skipTests
             );
             case PRODUCTION -> productionDeploymentService.deploy(
+                action,
                 startUserDefinedServices,
                 getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
                 buildThreadCount,

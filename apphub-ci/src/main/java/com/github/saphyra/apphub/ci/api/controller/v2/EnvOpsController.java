@@ -1,10 +1,11 @@
 package com.github.saphyra.apphub.ci.api.controller.v2;
 
+import com.github.saphyra.apphub.ci.api.RequestParamUtil;
 import com.github.saphyra.apphub.ci.dao.PropertyDao;
 import com.github.saphyra.apphub.ci.dao.PropertyName;
 import com.github.saphyra.apphub.ci.service.env_ops.EnvOpsFacade;
 import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
-import com.github.saphyra.apphub.ci.api.RequestParamUtil;
+import com.github.saphyra.apphub.ci.value.Action;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
@@ -127,7 +128,7 @@ class EnvOpsController {
     @PostMapping("/build-and-deploy")
     String buildAndDeploy(@PathVariable(PARAM_ENVIRONMENT) Environment environment, HttpServletRequest request) {
         try {
-            //Action action =
+            Action action = requestParamUtil.extractAction(request);
             List<String> enabledServiceNames = requestParamUtil.extractEnabledServices(request);
             boolean startUserDefinedServices = requestParamUtil.extractStartUserDefinedServices(request);
             List<String> userDefinedServiceNames = requestParamUtil.extractUserDefinedServices(request);
@@ -135,8 +136,8 @@ class EnvOpsController {
             int startupCountLimit = requestParamUtil.extractStartupCountLimit(request);
             boolean skipTests = requestParamUtil.extractSkipTests(request);
 
-            //TODO support build / deploy only
             taskQueue.add(() -> envOpsFacade.buildAndDeploy(
+                action,
                 environment,
                 enabledServiceNames,
                 startUserDefinedServices,

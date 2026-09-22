@@ -4,6 +4,7 @@ import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
+import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +28,21 @@ public class MinikubeTestService {
         integrationServerStarter.start();
 
         testRunner.runTests(
-            Environment.MINIKUBE,
-            testFilter,
-            threadCount,
-            platformProperties.getMinikubeTestServerPort(),
-            platformProperties.getMinikubeTestDatabasePort(),
-            platformProperties.getMinikubeDatabaseName(),
-            "",
-            preCreatedDriverCount,
-            true,
-            true,
-            namespace,
-            retryCount,
-            "localhost:" + platformProperties.getMinikubeDynamoDbPort()
+            TestConfiguration.builder()
+                .environment(Environment.MINIKUBE)
+                .testFilter(testFilter)
+                .threadCount(threadCount)
+                .serverPort(platformProperties.getMinikubeMainGatewayPort())
+                .databasePort(platformProperties.getMinikubeTestDatabasePort())
+                .databaseName(platformProperties.getMinikubeDatabaseName())
+                .disabledGroups("")
+                .preCreateDrivers(preCreatedDriverCount)
+                .serverConnectionCacheEnabled(true)
+                .databaseConnectionCacheEnabled(true)
+                .namespace(namespace)
+                .retryCount(retryCount)
+                .dynamoDbHost("localhost:" + platformProperties.getMinikubeDynamoDbPort())
+                .build()
         );
     }
 }
