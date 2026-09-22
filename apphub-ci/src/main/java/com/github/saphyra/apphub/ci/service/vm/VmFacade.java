@@ -2,6 +2,9 @@ package com.github.saphyra.apphub.ci.service.vm;
 
 import com.github.saphyra.apphub.ci.service.vm.minikube.MinikubeNamespaceDeletionService;
 import com.github.saphyra.apphub.ci.service.vm.minikube.MinikubeStopVmService;
+import com.github.saphyra.apphub.ci.service.vm.preprod.PreprodStopVmService;
+import com.github.saphyra.apphub.ci.service.vm.production.ProductionStartVmService;
+import com.github.saphyra.apphub.ci.service.vm.production.ProductionStopVmService;
 import com.github.saphyra.apphub.ci.tool.KubernetesStarter;
 import com.github.saphyra.apphub.ci.value.Environment;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +16,14 @@ public class VmFacade {
     private final KubernetesStarter kubernetesStarter;
     private final MinikubeStopVmService minikubeStopVmService;
     private final MinikubeNamespaceDeletionService minikubeNamespaceDeletionService;
+    private final PreprodStopVmService preprodStopVmService;
+    private final ProductionStartVmService productionStartVmService;
+    private final ProductionStopVmService productionStopVmService;
 
     public void start(Environment environment) {
         switch (environment) {
-            case MINIKUBE -> kubernetesStarter.start();
+            case MINIKUBE, PREPROD -> kubernetesStarter.start();
+            case PRODUCTION -> productionStartVmService.start();
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }
@@ -24,6 +31,8 @@ public class VmFacade {
     public void stop(Environment environment) {
         switch (environment) {
             case MINIKUBE -> minikubeStopVmService.stop();
+            case PREPROD -> preprodStopVmService.stop();
+            case PRODUCTION -> productionStopVmService.stop();
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }

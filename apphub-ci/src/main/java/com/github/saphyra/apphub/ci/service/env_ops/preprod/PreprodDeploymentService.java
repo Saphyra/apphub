@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.ci.service.env_ops.minikube;
+package com.github.saphyra.apphub.ci.service.env_ops.preprod;
 
 import com.github.saphyra.apphub.ci.tool.KubernetesNamespaceSetupper;
 import com.github.saphyra.apphub.ci.tool.KubernetesPodScaler;
@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.tool.KubernetesServiceDeployer;
 import com.github.saphyra.apphub.ci.tool.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.tool.ServiceBuilder;
 import com.github.saphyra.apphub.ci.tool.ServiceStopper;
+import com.github.saphyra.apphub.ci.util.DatabaseUtil;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.Constants;
 import com.github.saphyra.apphub.ci.value.DockerTag;
@@ -15,24 +16,24 @@ import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 
+import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
-public class MinikubeDeploymentService {
+public class PreprodDeploymentService {
     private final ServiceStopper serviceStopper;
     private final ServiceBuilder serviceBuilder;
     private final NamespaceNameProvider namespaceNameProvider;
-    private final KubernetesServiceDeployer kubernetesServiceDeployer;
-    private final PlatformProperties platformProperties;
-    private final KubernetesPortForwarder portForwarder;
-    private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final KubernetesPodScaler kubernetesPodScaler;
+    private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
+    private final KubernetesServiceDeployer kubernetesServiceDeployer;
+    private final KubernetesPortForwarder kubernetesPortForwarder;
+    private final PlatformProperties platformProperties;
 
     public void deploy(boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
         serviceStopper.stopLocalEnv();
@@ -47,18 +48,22 @@ public class MinikubeDeploymentService {
 
             services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
                 .toList();
+
+            kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, namespaceName);
         }
 
-        kubernetesNamespaceSetupper.setupNamespace(Environment.MINIKUBE, namespaceName);
-        kubernetesNamespaceSetupper.deployPostgres(namespaceName);
-        kubernetesNamespaceSetupper.deployDynamoDb(namespaceName);
+        kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, services, 30, startupCountLimit);
 
-        kubernetesServiceDeployer.deploy(namespaceName, Constants.DIR_NAME_DEVELOP, services, 15, startupCountLimit);
+        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
 
-        portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
-        portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
-        portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+        addDisabledRolesIfMissing();
+    }
 
-        log.info("Deployment finished.");
+    @SneakyThrows
+    private void addDisabledRolesIfMissing() {
+        try (Connection connection = DatabaseUtil.getConnection(platformProperties.getLocalDatabasePort(), "apphub_preprod")) {
+            platformProperties.getProdDisabledRoles()
+                .forEach(role -> DatabaseUtil.insertDisabledRoleIfNotPresent(connection, role));
+        }
     }
 }

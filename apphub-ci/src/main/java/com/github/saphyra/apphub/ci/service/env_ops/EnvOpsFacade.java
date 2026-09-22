@@ -6,6 +6,11 @@ import com.github.saphyra.apphub.ci.service.env_ops.local.LocalTestService;
 import com.github.saphyra.apphub.ci.service.env_ops.minikube.MinikubeDeploymentService;
 import com.github.saphyra.apphub.ci.service.env_ops.minikube.MinikubeStopService;
 import com.github.saphyra.apphub.ci.service.env_ops.minikube.MinikubeTestService;
+import com.github.saphyra.apphub.ci.service.env_ops.preprod.PreprodDeploymentService;
+import com.github.saphyra.apphub.ci.service.env_ops.preprod.PreprodStopService;
+import com.github.saphyra.apphub.ci.service.env_ops.preprod.PreprodTestService;
+import com.github.saphyra.apphub.ci.service.env_ops.production.ProductionDeploymentService;
+import com.github.saphyra.apphub.ci.service.env_ops.production.ProductionTestService;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
@@ -24,6 +29,11 @@ public class EnvOpsFacade {
     private final MinikubeDeploymentService minikubeDeploymentService;
     private final MinikubeTestService minikubeTestService;
     private final MinikubeStopService minikubeStopService;
+    private final PreprodDeploymentService preprodDeploymentService;
+    private final PreprodTestService preprodTestService;
+    private final PreprodStopService preprodStopService;
+    private final ProductionDeploymentService productionDeploymentService;
+    private final ProductionTestService productionTestService;
 
     public void buildAndDeploy(
         Environment environment,
@@ -49,6 +59,20 @@ public class EnvOpsFacade {
                 startupCountLimit,
                 skipTests
             );
+            case PREPROD -> preprodDeploymentService.deploy(
+                startUserDefinedServices,
+                getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
+                buildThreadCount,
+                startupCountLimit,
+                skipTests
+            );
+            case PRODUCTION -> productionDeploymentService.deploy(
+                startUserDefinedServices,
+                getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
+                buildThreadCount,
+                startupCountLimit,
+                skipTests
+            );
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }
@@ -57,14 +81,17 @@ public class EnvOpsFacade {
         switch (environment) {
             case LOCAL -> localTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
             case MINIKUBE -> minikubeTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
+            case PREPROD -> preprodTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
+            case PRODUCTION -> productionTestService.runTests(testFilter, threadCount, preCreatedDriverCount, retryCount);
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }
 
-    public void stop(Environment environment, boolean stopUserDefinedServices, List<String> userDefinedServiceNames){
-        switch (environment){
+    public void stop(Environment environment, boolean stopUserDefinedServices, List<String> userDefinedServiceNames) {
+        switch (environment) {
             case LOCAL -> localStopService.stopServices(stopUserDefinedServices, getServicesToStop(stopUserDefinedServices, userDefinedServiceNames));
             case MINIKUBE -> minikubeStopService.stopServices(stopUserDefinedServices, getServicesToStop(stopUserDefinedServices, userDefinedServiceNames));
+            case PREPROD -> preprodStopService.stopServices(stopUserDefinedServices, getServicesToStop(stopUserDefinedServices, userDefinedServiceNames));
             default -> throw new IllegalArgumentException("Unsupported environment: " + environment);
         }
     }

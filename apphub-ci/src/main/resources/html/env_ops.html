@@ -64,7 +64,6 @@
                 </div>
             </fieldset>
 
-
             <fieldset>
                 <legend>Execution</legend>
 
@@ -94,6 +93,29 @@
                 </fieldset>
             </div>
         </form>
+    </fieldset>
+
+    <fieldset th:if="${environment != 'LOCAL'}">
+        <legend>Operations</legend>
+        <div style="display: flex; gap: 10px; align-items: center;">
+            <fieldset th:if="${environment} != 'PRODUCTION'">
+                <legend>Port forward</legend>
+
+                <ul>
+                    <li th:if="${server_port} != null">main-gateway -> localhost:<span th:text="${server_port}"></span></li>
+                    <li th:if="${psql_port} != null">PostgreSQL -> localhost:<span th:text="${psql_port}"></span></li>
+                    <li th:if="${dynamodb_port} != null">DynamoDB -> localhost:<span th:text="${dynamodb_port}"></span></li>
+                </ul>
+
+                <form th:action="@{|/v2/env-ops/${environment}/operations/port-forward|}" method="POST">
+                    <button type="submit">Port forward</button>
+                </form>
+            </fieldset>
+
+            <form th:if="${environment == 'PREPROD' or environment == 'PRODUCTION'}" th:action="@{|/v2/env-ops/${environment}/operations/proxy|}" method="POST">
+                <button type="submit">Start proxy</button>
+            </form>
+        </div>
     </fieldset>
 
     <fieldset>
@@ -133,7 +155,7 @@
         </form>
     </fieldset>
 
-    <fieldset>
+    <fieldset th:if="${environment != 'PRODUCTION'}">
         <legend>Stop environment</legend>
 
         <form method="POST" th:action="@{|/v2/env-ops/${environment}/stop|}">

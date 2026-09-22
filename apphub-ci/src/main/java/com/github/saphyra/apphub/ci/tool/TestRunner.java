@@ -21,6 +21,7 @@ public class TestRunner {
     private final PropertyDao propertyDao;
     private final ChromeDriverKiller chromeDriverKiller;
 
+    //TODO use config class instead of this many params
     public void runTests(
         Environment environment,
         String testFilter,

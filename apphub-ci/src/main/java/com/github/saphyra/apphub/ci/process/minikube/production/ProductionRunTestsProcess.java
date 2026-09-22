@@ -16,6 +16,7 @@ import static java.util.Objects.isNull;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class ProductionRunTestsProcess {
     private final KubernetesPortForwarder kubernetesPortForwarder;
     private final PlatformProperties platformProperties;
@@ -30,7 +31,8 @@ public class ProductionRunTestsProcess {
 
             kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PRODUCTION, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeTestServerPort(), Constants.SERVICE_PORT);
 
-            Exception exception = servicePinger.pingRemote(platformProperties.getMinikubeTestServerPort(), 10).orElse(null);
+            Exception exception = servicePinger.pingRemote(platformProperties.getMinikubeTestServerPort(), 10)
+                .orElse(null);
             if (!isNull(exception)) {
                 throw exception;
             }

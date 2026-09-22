@@ -9,11 +9,13 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties(prefix = "platform")
 @Data
+//TODO use constant values instead of reading from config
+//TODO check naming
 public class PlatformProperties {
     private Integer minikubePreprodServerPort;
     private Integer minikubeProdServerPort;
-    private Integer minikubePreprodMainGatewayPort;
-    private Integer minikubeProdMainGatewayPort;
+    private Integer minikubePreprodMainGatewayPort; //preprod-proxy proxies this port
+    private Integer minikubeProdMainGatewayPort; //production-proxy proxies this port
     private Integer minikubeDevServerPort;
     private Integer minikubeTestServerPort;
     private Integer localServerPort;

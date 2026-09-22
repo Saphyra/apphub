@@ -7,6 +7,7 @@ public class ApiConstants {
 
     public static final String PATH_ENV_OPS = "/v2/env-ops/" + PATH_VARIABLE_ENVIRONMENT;
     public static final String PATH_ENV_OPS_VM = PATH_ENV_OPS + "/vm";
+    public static final String PATH_ENV_OPS_OPERATIONS = PATH_ENV_OPS + "/operations";
 
     public static final String PARAM_ENVIRONMENT = "environment";
     public static final String PARAM_TASK_QUEUE_SIZE = "task_queue_size";
@@ -25,6 +26,9 @@ public class ApiConstants {
     public static final String PARAM_PRE_CREATE_DRIVER_COUNT = "pre_create_driver_count";
     public static final String PARAM_RETRY_COUNT = "retry_count";
     public static final String PARAM_STOP_USER_DEFINED_SERVICES = "stop_user_defined_services";
+    public static final String PARAM_SERVER_PORT = "server_port";
+    public static final String PARAM_PSQL_PORT = "psql_port";
+    public static final String PARAM_DYNAMODB_PORT = "dynamodb_port";
 
     public static final String PARAM_PREFIX_ENABLED_SERVICE = "enabled_service_";
 }

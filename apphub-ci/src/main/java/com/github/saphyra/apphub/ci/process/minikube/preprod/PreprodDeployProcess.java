@@ -22,6 +22,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Deprecated
 public class PreprodDeployProcess {
     private final MinikubeBuildTask minikubeBuildTask;
     private final KubernetesServiceDeployer kubernetesServiceDeployer;

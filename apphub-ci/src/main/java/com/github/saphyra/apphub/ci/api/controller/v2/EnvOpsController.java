@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
 import com.github.saphyra.apphub.ci.util.RequestParamUtil;
 import com.github.saphyra.apphub.ci.value.DefaultProperties;
 import com.github.saphyra.apphub.ci.value.Environment;
+import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import com.github.saphyra.apphub.ci.value.Service;
 import com.github.saphyra.apphub.ci.value.Services;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +26,13 @@ import java.util.List;
 
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_BUILD_THREAD_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_DISABLED_SERVICES;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_DYNAMODB_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ENVIRONMENT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ERROR;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVER_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PSQL_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RETRY_COUNT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SERVER_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SERVICES;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_STARTUP_COUNT_LIMIT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SUCCESS;
@@ -52,6 +56,7 @@ class EnvOpsController {
     private final PropertyDao propertyDao;
     private final Services services;
     private final DefaultProperties defaultProperties;
+    private final PlatformProperties platformProperties;
 
     @GetMapping
     ModelAndView deploymentPage(
@@ -94,6 +99,15 @@ class EnvOpsController {
             .orElse(defaultProperties.getLocalServiceStartupCountLimit());
         mav.addObject(PARAM_STARTUP_COUNT_LIMIT, startupCountLimit);
 
+        //Operations
+        if (environment == Environment.MINIKUBE) {
+            mav.addObject(PARAM_SERVER_PORT, platformProperties.getMinikubeDevServerPort());
+            mav.addObject(PARAM_PSQL_PORT, platformProperties.getMinikubeDatabasePort());
+            mav.addObject(PARAM_DYNAMODB_PORT, platformProperties.getMinikubeDynamoDbPort());
+        } else if (environment == Environment.PREPROD) {
+            mav.addObject(PARAM_SERVER_PORT, platformProperties.getMinikubePreprodServerPort());
+        }
+
         //Testing
         mav.addObject(PARAM_TEST_FILTER, propertyDao.getStringProperty(PropertyName.TEST_FILTER));
         mav.addObject(PARAM_RETRY_COUNT, propertyDao.getProperty(PropertyName.TEST_RETRY_COUNT).map(Integer::parseInt).orElse(defaultProperties.getIntegrationRetryCount()));
@@ -105,7 +119,7 @@ class EnvOpsController {
         mav.addObject(PARAM_PRE_CREATE_DRIVER_COUNT, Integer.parseInt(preCreateDriverCount));
 
 
-        log.info("{}", mav);
+        log.info("{}", mav); //TODO debug
 
         return mav;
     }
