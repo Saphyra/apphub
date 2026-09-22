@@ -27,9 +27,9 @@ public class MonitoredCache<K, V> {
     protected static final String PRINCIPAL_ALM_CACHE_NAME = "principalAlmCache";
     protected static final String OBJECT_ALM_CACHE_NAME = "objectAlmCache";
 
-    private final String cacheName;
-    private final Cache<K, V> cache;
-    private final MetricRegistry metricRegistry;
+    protected final String cacheName;
+    protected final Cache<K, V> cache;
+    protected final MetricRegistry metricRegistry;
 
     public V get(K key, Supplier<V> loader) {
         @Nullable V cached = cache.getIfPresent(key);
