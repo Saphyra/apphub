@@ -17,6 +17,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 
 @ExtendWith(MockitoExtension.class)
 class OccurrenceQueryServiceHelperTest {
@@ -74,6 +75,30 @@ class OccurrenceQueryServiceHelperTest {
         Occurrence occurrence = createOccurrence(CURRENT_DATE.minusDays(1), OccurrenceStatus.DONE, 0, false);
 
         assertThat(underTest.getOccurrencesToAdd(event, occurrence, CURRENT_DATE, START_DATE, END_DATE)).containsExactlyInAnyOrder(occurrence);
+    }
+
+    @Test
+    void getOccurrencesToAdd_autoDoneOccurrence() {
+        Occurrence occurrence = createOccurrence(CURRENT_DATE.minusDays(1), OccurrenceStatus.EXPIRED, 0, false)
+            .toBuilder()
+            .autoDone(true)
+            .build();
+
+        assertThat(underTest.getOccurrencesToAdd(event, occurrence, CURRENT_DATE, START_DATE, END_DATE)).containsExactlyInAnyOrder(occurrence);
+
+        assertThat(occurrence.getStatus()).isEqualTo(OccurrenceStatus.DONE);
+        then(occurrenceDao).should().save(occurrence);
+    }
+
+    @Test
+    void getOccurrencesToAdd_autoDoneOccurrenceByEvent() {
+        Occurrence occurrence = createOccurrence(CURRENT_DATE.minusDays(1), OccurrenceStatus.EXPIRED, 0, false);
+        given(event.isAutoDone()).willReturn(true);
+
+        assertThat(underTest.getOccurrencesToAdd(event, occurrence, CURRENT_DATE, START_DATE, END_DATE)).containsExactlyInAnyOrder(occurrence);
+
+        assertThat(occurrence.getStatus()).isEqualTo(OccurrenceStatus.DONE);
+        then(occurrenceDao).should().save(occurrence);
     }
 
     @Test
