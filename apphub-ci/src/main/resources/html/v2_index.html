@@ -6,6 +6,9 @@
 <body>
 <h1>Main Menu</h1>
 
+<h1 class="error" th:if="${error != null}" th:text="${error}"></h1>
+<h1 class="success" th:if="${success != null}" th:text="${success}"></h1>
+
 <main>
     <fieldset>
         <legend>Environments</legend>
@@ -31,6 +34,7 @@
 
         <ul class="menu">
             <li><a href="/settings">Settings</a></li>
+            <li><a href="/exit">Schedule shutdown</a></li>
         </ul>
     </fieldset>
 </main>
