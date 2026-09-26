@@ -42,8 +42,15 @@ class OccurrenceQueryServiceHelper {
         return buckets;
     }
 
-     List<Occurrence> getOccurrencesToAdd(Event event, Occurrence occurrence, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
+    List<Occurrence> getOccurrencesToAdd(Event event, Occurrence occurrence, LocalDate currentDate, LocalDate startDate, LocalDate endDate) {
         List<Occurrence> result = new ArrayList<>();
+
+        boolean autoDone = Optional.ofNullable(occurrence.getAutoDone())
+            .orElse(event.isAutoDone());
+        if (occurrence.getStatus() == OccurrenceStatus.EXPIRED && autoDone) {
+            occurrence.setStatus(OccurrenceStatus.DONE);
+            occurrenceDao.save(occurrence);
+        }
 
         //Add occurrence if it is in boundaries
         if (isBetween(occurrence.getDate(), startDate, endDate)) {
