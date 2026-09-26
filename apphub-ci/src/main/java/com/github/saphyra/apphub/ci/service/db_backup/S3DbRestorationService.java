@@ -24,7 +24,7 @@ import java.util.zip.GZIPInputStream;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-class DbRestorationService {
+class S3DbRestorationService {
     private final ExecutorServiceBean workerPool = new ExecutorServiceBean(Executors.newFixedThreadPool(4));
 
     private final TableBatcher tableBatcher;
@@ -38,7 +38,7 @@ class DbRestorationService {
         List<List<String>> tableBatches = tableBatcher.splitIntoDependencyBatches(dbUrl, username, password, tables);
         log.info("Batches: {}", objectMapper.writeValueAsString(tableBatches));
 
-            tableBatches.forEach(batch -> restoreBatch(dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, batch));
+        tableBatches.forEach(batch -> restoreBatch(dbUrl, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, batch));
 
         stopwatch.stop();
         log.info("{} tables restored in {} seconds", tables.size(), stopwatch.elapsed(TimeUnit.SECONDS));
@@ -53,7 +53,7 @@ class DbRestorationService {
     }
 
     private void restore(String dbUrl, String username, String password, String s3AccessKey, String s3SecretKey, String s3Bucket, String database, String version, String backup, String table) {
-        log.info("Restoring {}/{}/{}/{} to {} from bucket {}", database, version,  backup, table, dbUrl, s3Bucket);
+        log.info("Restoring {}/{}/{}/{} to {} from bucket {}", database, version, backup, table, dbUrl, s3Bucket);
         Stopwatch stopwatch = Stopwatch.createStarted();
         String key = database + "/" + version + "/" + backup + "/" + table + ".bin.gz";
 

@@ -1,6 +1,7 @@
 ===FEATURES===
     ApphubCI
         Common parameterized page for all the envs
+        Backup and restore from local directories
 
 ===BUGFIXES===
 

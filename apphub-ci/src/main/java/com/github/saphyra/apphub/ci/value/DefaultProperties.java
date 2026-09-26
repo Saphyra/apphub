@@ -14,4 +14,5 @@ public class DefaultProperties {
     private final int browserStartupLimit = 5;
     private boolean guiEnabled = true;
     private final int testRetryCount = 2;
+    private final String backupDirectory = "C:/apphub-backup";
 }

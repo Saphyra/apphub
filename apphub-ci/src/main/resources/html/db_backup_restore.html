@@ -22,6 +22,21 @@
 
     <div>
         <fieldset>
+            <legend>Restore from local</legend>
+            <form action="/db-backup/restore/local" method="POST">
+                <input type="text" name="backup_directory" placeholder="Directory" required />
+                <label class="red">
+                    <input type="checkbox" required>
+                        Restoration truncates the selected (and dependent) tables, and requires downtime.
+                </label>
+
+                <button type="submit">Restore</button>
+            </form>
+        </fieldset>
+    </div>
+
+    <div>
+        <fieldset>
             <legend>Databases</legend>
 
             <ul class="menu">
