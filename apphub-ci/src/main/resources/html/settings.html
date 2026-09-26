@@ -31,6 +31,12 @@
                         GUI enabled
                     </label>
                 </li>
+                <li>
+                    <label>
+                        <input type="text" name="bash_file_location" th:value="${bash_file_location}" required/>
+                        Bash file location
+                    </label>
+                </li>
             </ul>
 
             <input type="submit" value="Save"/>
@@ -47,6 +53,16 @@
 
     <fieldset>
         <legend>AWS DynamoDB</legend>
+
+        <fieldset>
+            <legend>Local directory path</legend>
+
+            <form method="POST" action="/settings/dynamo-db-local-directory">
+                <input type="text" name="dynamodb_local_directory" th:value="${dynamodb_local_directory}"/>
+
+                <button type="submit">Save</button>
+            </form>
+        </fieldset>
 
         <ul th:each="environment: ${environments}">
             <li><a th:href="@{|/settings/dynamo-db/${environment}|}" th:text="${environment}"></a></li>

@@ -1,0 +1,29 @@
+package com.github.saphyra.apphub.ci.tool.kubernetes;
+
+import com.github.saphyra.apphub.ci.tool.ProcessKiller;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class KubernetesPortForwarder {
+    private final ProcessKiller processKiller;
+
+    /**
+     * @param namespaceName namespace name
+     * @param serviceName   service name
+     * @param localPort     port of the host machine
+     * @param servicePort   port of the service in minikube
+     */
+    @SneakyThrows
+    public void portForward(String namespaceName, String serviceName, Integer localPort, Integer servicePort) {
+        log.info("Forwarding port {} of service {} in namespace {} to local port {}", servicePort, serviceName, namespaceName, localPort);
+        processKiller.killByPort(localPort);
+
+        new ProcessBuilder("kubectl", "port-forward", "deployment/%s".formatted(serviceName), "%s:%s".formatted(localPort, servicePort), "-n", namespaceName)
+            .start();
+    }
+}

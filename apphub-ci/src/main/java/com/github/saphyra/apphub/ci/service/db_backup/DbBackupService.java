@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.service.db_backup;
 
-import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
-import com.github.saphyra.apphub.ci.utils.concurrent.FutureWrapper;
+import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.ci.util.concurrent.FutureWrapper;
 import com.google.common.base.Stopwatch;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;

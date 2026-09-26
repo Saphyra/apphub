@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.task_queue;
 
-import com.github.saphyra.apphub.ci.utils.concurrent.ExecutorServiceBean;
+import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
