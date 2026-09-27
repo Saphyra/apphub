@@ -31,7 +31,6 @@ public class LocalStopService {
         log.info("Stopping local server...");
 
         if(!stopUserDefinedServices){
-            stop(properties.getIntegrationServer());
             processKiller.killByPort(properties.getLocalDynamoDbPort());
         }
 

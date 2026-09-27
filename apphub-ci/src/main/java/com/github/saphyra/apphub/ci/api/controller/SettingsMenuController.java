@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.api.controller;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.service.CertificateService;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.EnvironmentSpecificProperties;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import static com.github.saphyra.apphub.ci.dao.PropertyName.DYNAMO_DB_LOCAL_DIRECTORY;
+import static com.github.saphyra.apphub.ci.dao.property.PropertyName.DYNAMO_DB_LOCAL_DIRECTORY;
 import static com.github.saphyra.apphub.ci.value.Constants.FTP_HOST;
 import static com.github.saphyra.apphub.ci.value.Constants.PSQL_HOST;
 import static java.util.Objects.nonNull;

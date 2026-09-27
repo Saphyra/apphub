@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.ci.service.env_ops.preprod;
 
-import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
@@ -16,14 +15,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class PreprodTestService {
     private final KubernetesPodStartupWaiter kubernetesPodStartupWaiter;
-    private final IntegrationServerStarter integrationServerStarter;
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
     public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
         kubernetesPodStartupWaiter.waitForPods(Constants.NAMESPACE_NAME_PREPROD, 5);
-
-        integrationServerStarter.start();
 
         testRunner.runTests(
             TestConfiguration.builder()

@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.tool.kubernetes;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;

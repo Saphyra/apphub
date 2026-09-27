@@ -1,8 +1,8 @@
 package com.github.saphyra.apphub.ci.api.controller.v2;
 
 import com.github.saphyra.apphub.ci.api.RequestParamUtil;
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.service.env_ops.EnvOpsFacade;
 import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
 import com.github.saphyra.apphub.ci.value.Action;

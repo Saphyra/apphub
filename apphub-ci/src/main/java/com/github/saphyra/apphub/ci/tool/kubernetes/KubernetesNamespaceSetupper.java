@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.tool.kubernetes;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.value.Environment;
 import com.github.saphyra.apphub.ci.value.Services;
 import lombok.RequiredArgsConstructor;

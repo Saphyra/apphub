@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.tool.service;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
 import com.github.saphyra.apphub.ci.value.BuildCommand;
 import com.github.saphyra.apphub.ci.value.DockerTag;
 import com.github.saphyra.apphub.ci.value.Service;

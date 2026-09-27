@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.service.env_ops.local;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
 import com.github.saphyra.apphub.ci.value.PlatformProperties;
 import lombok.RequiredArgsConstructor;

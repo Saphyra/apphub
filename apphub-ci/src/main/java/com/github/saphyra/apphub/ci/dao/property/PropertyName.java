@@ -1,0 +1,27 @@
+package com.github.saphyra.apphub.ci.dao.property;
+
+public enum PropertyName {
+    //Platform
+    BROWSER_STARTUP_LIMIT,
+    GUI_ENABLED,
+    DYNAMO_DB_LOCAL_DIRECTORY,
+    BASH_FILE_LOCATION,
+
+    //Service properties
+    S3_CONFIGURATION,
+    DYNAMO_DB_CONFIGURATION,
+    AUTHORIZATION_CERTIFICATE,
+    PSQL_HOST,
+    FTP_HOST,
+    DB_BACKUP,
+
+    //API params
+    DISABLED_SERVICES,
+    USER_DEFINED_SERVICES,
+    BUILD_THREAD_COUNT,
+    STARTUP_COUNT_LIMIT,
+    TEST_FILTER,
+    TEST_THREAD_COUNT,
+    PRE_CREATE_DRIVER_COUNT,
+    TEST_RETRY_COUNT,
+}

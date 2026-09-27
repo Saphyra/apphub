@@ -1,7 +1,6 @@
 package com.github.saphyra.apphub.ci.service.env_ops.local;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
 import com.github.saphyra.apphub.ci.tool.service.ServicePinger;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner.TestConfiguration;
@@ -22,7 +21,6 @@ public class LocalTestService {
     private final Services services;
     private final ServicePinger servicePinger;
     private final PropertyDao propertyDao;
-    private final IntegrationServerStarter integrationServerStarter;
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
@@ -45,7 +43,6 @@ public class LocalTestService {
             log.info("Frontend is running.");
         }
 
-        integrationServerStarter.start();
         testRunner.runTests(
             TestConfiguration.builder()
                 .environment(Environment.LOCAL)

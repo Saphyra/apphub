@@ -90,12 +90,6 @@ public class PlatformProperties {
      */
     private final String prodDatabaseName = "apphub_production";
 
-    private final Service integrationServer = Service.builder()
-        .name("integration-server")
-        .port(8072)
-        .location("./apphub-integration-server/target/application.jar")
-        .moduleName("apphub-integration-server")
-        .build();
     private final Service productionProxy = Service.builder()
         .name("production-proxy")
         .port(9000)

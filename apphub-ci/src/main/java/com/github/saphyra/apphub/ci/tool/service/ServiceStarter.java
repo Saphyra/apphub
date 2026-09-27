@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.tool.service;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicator;
 import com.github.saphyra.apphub.ci.ui.startup.StartupIndicatorFactory;
 import com.github.saphyra.apphub.ci.util.concurrent.ExecutorServiceBean;

@@ -17,7 +17,6 @@ public class ServiceStopper {
     private final Services services;
 
     public void stopLocalEnv() {
-        stopLocalService(properties.getIntegrationServer());
         processKiller.killByPort(properties.getLocalDynamoDbPort());
         services.getServices()
             .forEach(this::stopLocalService);

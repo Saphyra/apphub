@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.ci.service.env_ops.minikube;
 
-import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.tool.test.TestRunner;
@@ -17,15 +16,12 @@ import org.springframework.stereotype.Component;
 public class MinikubeTestService {
     private final NamespaceNameProvider namespaceNameProvider;
     private final KubernetesPodStartupWaiter kubernetesPodStartupWaiter;
-    private final IntegrationServerStarter integrationServerStarter;
     private final TestRunner testRunner;
     private final PlatformProperties platformProperties;
 
     public void runTests(String testFilter, int threadCount, int preCreatedDriverCount, int retryCount) {
         String namespace = namespaceNameProvider.getNamespaceName();
         kubernetesPodStartupWaiter.waitForPods(namespace, 5);
-
-        integrationServerStarter.start();
 
         testRunner.runTests(
             TestConfiguration.builder()

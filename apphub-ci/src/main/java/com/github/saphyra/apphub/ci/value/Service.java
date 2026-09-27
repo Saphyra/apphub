@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.value;
 
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

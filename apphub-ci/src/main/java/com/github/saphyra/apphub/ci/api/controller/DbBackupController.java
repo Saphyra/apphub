@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.ci.api.controller;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
-import com.github.saphyra.apphub.ci.dao.PropertyName;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
 import com.github.saphyra.apphub.ci.service.db_backup.DbBackupFacade;
 import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
 import com.github.saphyra.apphub.ci.value.BackupLocation;

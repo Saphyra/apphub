@@ -1,5 +1,6 @@
 package com.github.saphyra.apphub.ci.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -8,6 +9,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import tools.jackson.databind.ObjectMapper;
 
 @Configuration
+@Slf4j
 class ApphubCiBeanConfig {
     @Bean
     ObjectMapper objectMapper() {

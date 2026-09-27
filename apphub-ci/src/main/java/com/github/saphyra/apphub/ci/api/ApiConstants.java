@@ -9,6 +9,11 @@ public class ApiConstants {
     public static final String PATH_ENV_OPS_VM = PATH_ENV_OPS + "/vm";
     public static final String PATH_ENV_OPS_OPERATIONS = PATH_ENV_OPS + "/operations";
 
+    public static final String PATH_CREATE_TEST_RUN = "/test-run";
+    public static final String PATH_REPORT_TEST_CASE = "/test-case/{testRunId}";
+    public static final String PATH_GET_AVERAGE_RUN_TIME = "/test-case/run-time/average";
+    public static final String PATH_FINISH_TEST_RUN = "/test-run/{testRunId}";
+
     public static final String PARAM_ENVIRONMENT = "environment";
     public static final String PARAM_TASK_QUEUE_SIZE = "task_queue_size";
     public static final String PARAM_ERROR = "error";

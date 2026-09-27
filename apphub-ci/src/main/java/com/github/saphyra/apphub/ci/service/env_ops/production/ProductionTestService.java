@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.ci.service.env_ops.production;
 
-import com.github.saphyra.apphub.ci.service.env_ops.IntegrationServerStarter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodStartupWaiter;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.ProcessKiller;
@@ -22,7 +21,6 @@ public class ProductionTestService {
     private final PlatformProperties platformProperties;
     private final ProcessKiller processKiller;
     private final ServicePinger servicePinger;
-    private final IntegrationServerStarter integrationServerStarter;
     private final KubernetesPodStartupWaiter kubernetesPodStartupWaiter;
     private final TestRunner testRunner;
 
@@ -39,8 +37,6 @@ public class ProductionTestService {
                     },
                     () -> log.info("Ping successful.")
                 );
-
-            integrationServerStarter.start();
 
             testRunner.runTests(
                 TestConfiguration.builder()
