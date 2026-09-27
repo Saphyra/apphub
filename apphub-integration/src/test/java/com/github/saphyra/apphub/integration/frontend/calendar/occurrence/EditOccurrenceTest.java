@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.calendar;
+package com.github.saphyra.apphub.integration.frontend.calendar.occurrence;
 
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;

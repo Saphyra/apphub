@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.integration.frontend.calendar;
+package com.github.saphyra.apphub.integration.frontend.calendar.occurrence;
 
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarEventPageActions;
 import com.github.saphyra.apphub.integration.action.frontend.calendar.CalendarIndexPageActions;
@@ -18,7 +18,11 @@ import com.github.saphyra.apphub.integration.structure.api.user.RegistrationPara
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class CreateOccurrenceTest extends SeleniumTest {
+    private static final String NOTE = "note";
+
     @Test(groups = {"fe", "calendar"})
     public void createOccurrence() {
         WebDriver driver = extractDriver();
@@ -43,11 +47,15 @@ public class CreateOccurrenceTest extends SeleniumTest {
         WebElementUtils.waitForSpinnerToDisappear(driver);
 
         CalendarEventPageActions.setCreateOccurrenceDate(driver, event.getStartDate().plusDays(1));
+        CalendarEventPageActions.setCreateOccurrenceNote(driver, NOTE);
         CalendarEventPageActions.createOccurrence(driver);
         ToastMessageUtil.verifySuccessToast(driver, LocalizedText.CALENDAR_OCCURRENCE_CREATED);
         CalendarEventPageActions.backFromEdit(driver);
 
         AwaitilityWrapper.getWithWait(() -> CalendarIndexPageActions.findOccurrenceByTitleOnDateValidated(driver, event.getStartDate().plusDays(1), event.getTitle()))
-            .orElseThrow(() -> new IllegalStateException("Occurrence not found"));
+            .orElseThrow(() -> new IllegalStateException("Occurrence not found"))
+            .open(driver);
+
+        AwaitilityWrapper.awaitAssert(() -> assertThat(CalendarIndexPageActions.getOpenedOccurrenceNote(driver)).contains(NOTE));
     }
 }

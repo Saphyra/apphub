@@ -35,6 +35,7 @@ import Optional from "common/js/collection/Optional";
 import { CALENDAR_GET_EVENT, CALENDAR_PAGE, CALENDAR_SHARE_PAGE } from "../CalendarEndpoints";
 import EventAutoDone from "../common/event/EventAutoDone";
 import { TYPE_EVENT } from "../CalendarConstants";
+import Textarea from "common/component/input/Textarea";
 
 const CalendarEditEventPage = () => {
     const { eventId } = useParams();
@@ -52,6 +53,7 @@ const CalendarEditEventPage = () => {
     const [event, setEvent] = useState(null);
     const [newLabels, setNewLabels] = useState([]);
     const [newOccurrenceDate, setNewOccurrenceDate] = useState(null);
+    const [newOccurrenceNote, setNewOccurrenceNote] = useState("");
 
     const [title, setTitle] = useExtractAsync(o => o.title, event, "");
     const [content, setContent] = useExtractAsync(o => o.content, event, "");
@@ -184,6 +186,16 @@ const CalendarEditEventPage = () => {
                         />}
                     />
 
+                    <div>
+                        <Textarea
+                            id="calendar-edit-event-new-occurrence-note"
+                            value={newOccurrenceNote}
+                            onchangeCallback={setNewOccurrenceNote}
+                            spacesInsteadOfTab={true}
+                            autoResize={true}
+                        />
+                    </div>
+
                     <Button
                         id="calendar-edit-event-create-occurrence-button"
                         label={localizationHandler.get("create-occurrence")}
@@ -191,6 +203,8 @@ const CalendarEditEventPage = () => {
                             eventId,
                             newOccurrenceDate,
                             setNewOccurrenceDate,
+                            newOccurrenceNote,
+                            setNewOccurrenceNote,
                             setDisplaySpinner,
                             localizationHandler
                         )}
