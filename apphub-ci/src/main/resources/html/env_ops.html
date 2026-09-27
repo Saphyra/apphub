@@ -90,6 +90,7 @@
                     <button type="submit" name="action" value="BUILD_AND_DEPLOY">Build and Deploy</button>
                     <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="BUILD">Build</button>
                     <button th:if="${environment} != 'PRODUCTION'" type="submit" name="action" value="DEPLOY">Deploy</button>
+                    <button th:if="${environment} == 'LOCAL' or ${environment} == 'MINIKUBE'" type="submit" name="action" value="DEPLOY_PLATFORM">Deploy platform</button>
                 </fieldset>
             </div>
         </form>

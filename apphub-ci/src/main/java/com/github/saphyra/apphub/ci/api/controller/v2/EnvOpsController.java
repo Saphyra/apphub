@@ -84,7 +84,7 @@ class EnvOpsController {
 
         List<String> serviceNames = services.getServices()
             .stream()
-            .filter(Service::getOptional)
+            .filter(Service::isOptional)
             .map(Service::getName)
             .sorted(Comparator.naturalOrder())
             .toList();

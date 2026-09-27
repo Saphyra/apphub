@@ -28,7 +28,7 @@ public class ProductionDeploymentService {
     private final KubernetesServiceDeployer kubernetesServiceDeployer;
 
     public void deploy(Action action, boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
-        if(action != Action.BUILD_AND_DEPLOY){
+        if (action != Action.BUILD_AND_DEPLOY) {
             throw new IllegalArgumentException("Unsupported action: " + action);
         }
 

@@ -46,11 +46,27 @@ public class EnvOpsFacade {
         int startupCountLimit,
         boolean skipTests
     ) {
+
+        List<Service> servicesToStart;
+        if (action == Action.DEPLOY_PLATFORM) {
+            if (environment != Environment.LOCAL && environment != Environment.MINIKUBE) {
+                throw new IllegalArgumentException("DEPLOY_PLATFORM action is only supported for LOCAL and MINIKUBE environments.");
+            }
+
+            servicesToStart = services.getServices()
+                .stream()
+                .filter(service -> !service.isOptional())
+                .toList();
+            action = Action.BUILD_AND_DEPLOY;
+        } else {
+            servicesToStart = getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames);
+        }
+
         switch (environment) {
             case LOCAL -> localDeploymentService.deploy(
                 action,
                 startUserDefinedServices,
-                getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
+                servicesToStart,
                 buildThreadCount,
                 startupCountLimit,
                 skipTests
@@ -58,7 +74,7 @@ public class EnvOpsFacade {
             case MINIKUBE -> minikubeDeploymentService.deploy(
                 action,
                 startUserDefinedServices,
-                getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
+                servicesToStart,
                 buildThreadCount,
                 startupCountLimit,
                 skipTests
@@ -66,7 +82,7 @@ public class EnvOpsFacade {
             case PREPROD -> preprodDeploymentService.deploy(
                 action,
                 startUserDefinedServices,
-                getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
+                servicesToStart,
                 buildThreadCount,
                 startupCountLimit,
                 skipTests
@@ -74,7 +90,7 @@ public class EnvOpsFacade {
             case PRODUCTION -> productionDeploymentService.deploy(
                 action,
                 startUserDefinedServices,
-                getServicesToStart(enabledServiceNames, startUserDefinedServices, userDefinedServiceNames),
+                servicesToStart,
                 buildThreadCount,
                 startupCountLimit,
                 skipTests
@@ -124,7 +140,7 @@ public class EnvOpsFacade {
         } else {
             return services.getServices()
                 .stream()
-                .filter(service -> !service.getOptional() || enabledServiceNames.contains(service.getName()))
+                .filter(service -> !service.isOptional() || enabledServiceNames.contains(service.getName()))
                 .toList();
         }
     }

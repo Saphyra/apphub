@@ -2,6 +2,7 @@
     ApphubCI
         Backup and restore from local directories
         Schedule shutdown
+        Deploy platform option for LOCAL and MINIKUBE envs
 
 ===BUGFIXES===
 

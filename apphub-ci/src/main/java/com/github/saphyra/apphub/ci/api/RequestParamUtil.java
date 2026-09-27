@@ -53,7 +53,7 @@ public class RequestParamUtil {
         // Get the list of all optional services and filter out those that are not in the list of enabled services
         List<String> disabledServices = services.getServices()
             .stream()
-            .filter(Service::getOptional)
+            .filter(Service::isOptional)
             .map(Service::getName)
             .filter(name -> !enabledServices.contains(name))
             .toList();

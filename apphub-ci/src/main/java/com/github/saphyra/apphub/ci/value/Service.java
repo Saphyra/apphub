@@ -20,7 +20,7 @@ public class Service {
     private String moduleName;
     private Integer group;
     @Builder.Default
-    private Boolean optional = false;
+    private boolean optional = false;
     private Integer healthCheckPort;
     @Builder.Default
     private List<PropertyName> properties = new ArrayList<>();
