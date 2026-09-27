@@ -13,6 +13,8 @@
     Merge IntegrationServer to ApphubCI
 
 ===TECHNICAL DEBTS===
+    Calendar
+        Delete migration scripts and remnants of encryption
 
 ===ETC===
     ApphubCI
