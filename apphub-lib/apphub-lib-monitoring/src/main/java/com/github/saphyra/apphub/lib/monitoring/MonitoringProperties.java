@@ -18,6 +18,7 @@ public class MonitoringProperties {
     public static final String KEY_CACHE_ACCESS_COUNT = "cacheAccessCount";
     public static final String KEY_CACHE_HIT_COUNT = "cacheHitCount";
     public static final String KEY_CACHE_MISS_COUNT = "cacheMissCount";
+    public static final String KEY_CACHE_SIZE = "cacheSize";
 
     public static final String FUNCTIONALITY_METRIC_COUNT = "metricCount";
 }

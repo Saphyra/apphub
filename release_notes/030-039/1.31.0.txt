@@ -5,6 +5,7 @@
         Deploy platform option for LOCAL and MINIKUBE envs
     Calendar
         Set note when creating occurrence
+        Add cache size to monitoring
 
 ===BUGFIXES===
 
