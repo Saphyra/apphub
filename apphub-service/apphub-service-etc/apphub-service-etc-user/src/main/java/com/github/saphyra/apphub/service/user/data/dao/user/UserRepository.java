@@ -4,12 +4,15 @@ import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_domain.TriWrapper;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepository;
 import com.github.saphyra.apphub.lib.dynamodb.DynamoDbRepositoryContext;
+import com.github.saphyra.apphub.lib.dynamodb.MonitoringFunctionality;
 import com.github.saphyra.apphub.service.user.common.UserMonitoringFunctionality;
 import com.github.saphyra.apphub.service.user.config.UserDynamoDbConfiguration;
 import com.github.saphyra.apphub.service.user.config.properties.UserProperties;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.dynamodb.model.AttributeDefinition;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
@@ -30,6 +33,7 @@ import software.amazon.awssdk.services.dynamodb.model.ScanRequest;
 import software.amazon.awssdk.services.dynamodb.model.WriteRequest;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -315,6 +319,85 @@ class UserRepository extends DynamoDbRepository {
         });
 
         return Optional.of(result);
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    void normalizeCredentials() {
+        log.info("Credential normalization started.");
+
+        ScanRequest scanRequest = ScanRequest.builder()
+            .tableName(tableName)
+            .filterExpression("#sk = :value")
+            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+            .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(TYPE_CREDENTIAL).build()))
+            .build();
+
+        List<Map<String, AttributeValue>> credentials = scan(scanRequest, MonitoringFunctionality.UNMONITORED);
+
+        credentials.forEach(record -> {
+            String credential = record.get(COLUMN_PK).s().split("#")[1];
+            String normalizedCredential = credential.toLowerCase()
+                .trim();
+
+            if (!credential.equals(normalizedCredential)) {
+                log.info("Normalizing credential: {} -> {}", credential, normalizedCredential);
+                PutItemRequest request = PutItemRequest.builder()
+                    .tableName(tableName)
+                    .item(Map.of(
+                        COLUMN_PK, AttributeValue.builder().s(String.join("#", TYPE_CREDENTIAL, normalizedCredential)).build(),
+                        COLUMN_SK, AttributeValue.builder().s(TYPE_CREDENTIAL).build(),
+                        COLUMN_USER_ID, record.get(COLUMN_USER_ID)
+                    ))
+                    .build();
+
+                putItem(request, UserMonitoringFunctionality.UNMONITORED);
+            } else {
+                log.info("Credential {} is already normalized.", credential);
+            }
+        });
+
+        log.info("Credential normalization completed.");
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    void normalizeUsers() {
+        log.info("User normalization started.");
+
+        ScanRequest scanRequest = ScanRequest.builder()
+            .tableName(tableName)
+            .filterExpression("#sk = :value")
+            .expressionAttributeNames(Map.of("#sk", COLUMN_SK))
+            .expressionAttributeValues(Map.of(":value", AttributeValue.builder().s(TYPE_PROFILE).build()))
+            .build();
+
+        List<Map<String, AttributeValue>> users = scan(scanRequest, MonitoringFunctionality.UNMONITORED);
+
+        users.forEach(record -> {
+            String userId = record.get(COLUMN_PK).s().split("#")[1];
+            String username = record.get(COLUMN_USERNAME).s();
+            String normalizedUsername = username.trim();
+            String email = record.get(COLUMN_EMAIL).s();
+            String normalizedEmail = email.trim()
+                .toLowerCase();
+
+            if (!username.equals(normalizedUsername) || !email.equals(normalizedEmail)) {
+                log.info("Normalizing username and/or email for user {}: {} -> {}, {} -> {}", userId, username, normalizedUsername, email, normalizedEmail);
+                Map<String, AttributeValue> item = new HashMap<>(record);
+                item.put(COLUMN_EMAIL, AttributeValue.builder().s(normalizedEmail).build());
+                item.put(COLUMN_USERNAME, AttributeValue.builder().s(normalizedUsername).build());
+
+                PutItemRequest request = PutItemRequest.builder()
+                    .tableName(tableName)
+                    .item(item)
+                    .build();
+
+                putItem(request, UserMonitoringFunctionality.UNMONITORED);
+            } else {
+                log.info("Username and email for user {} is already normalized.", userId);
+            }
+        });
+
+        log.info("User normalization completed.");
     }
 
     @PostConstruct

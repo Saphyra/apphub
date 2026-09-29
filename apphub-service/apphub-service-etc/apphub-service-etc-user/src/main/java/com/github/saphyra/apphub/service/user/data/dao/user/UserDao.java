@@ -29,7 +29,8 @@ public class UserDao implements DeleteByUserIdDao {
     private final DateTimeUtil dateTimeUtil;
 
     public void saveNew(User user) {
-        String username = user.getUsername().toLowerCase();
+        String username = user.getUsername()
+            .toLowerCase();
         try {
             repository.trySaveCredential(uuidConverter.convertDomain(user.getUserId()), username);
         } catch (ConditionalCheckFailedException e) {
@@ -54,13 +55,11 @@ public class UserDao implements DeleteByUserIdDao {
     }
 
     /**
-     * @param userIdentifier username (ignore case) or e-mail
+     * @param userIdentifier username (lowercase) or e-mail
      * @return the single user matching with the provided userIdentifier
      */
     public Optional<User> findByUserIdentifier(String userIdentifier) {
-        String lower = userIdentifier.toLowerCase();
-
-        return repository.findByCredential(lower)
+        return repository.findByCredential(userIdentifier)
             .map(CredentialEntity::getUserId)
             .map(uuidConverter::convertEntity)
             .flatMap(this::findByUserId);

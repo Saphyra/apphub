@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -23,7 +24,10 @@ public class ChangeUsernameService {
     private final UsernameValidator usernameValidator;
 
     public void changeUsername(UUID userId, ChangeUsernameRequest request) {
-        usernameValidator.validateUsername(request.getUsername());
+        String username = Optional.ofNullable(request.getUsername())
+            .map(String::trim)
+            .orElse(null);
+        usernameValidator.validateUsername(username);
 
         if (isNull(request.getPassword())) {
             throw ExceptionFactory.invalidParam("password", "must not be null");
@@ -31,7 +35,7 @@ public class ChangeUsernameService {
 
         User user = checkPasswordService.checkPassword(userId, request.getPassword());
         String originalUsername = user.getUsername();
-        user.setUsername(request.getUsername());
+        user.setUsername(username);
 
         userDao.changeUsername(originalUsername, user);
     }

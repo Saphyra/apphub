@@ -38,12 +38,16 @@ public class AuthorizationController implements UserAuthorizationController {
 
     @Override
     public AuthorizationResponse authorize(AuthorizationRequest request) {
-        log.info("Authorizing user {}", request.getUserIdentifier());
+        String userIdentifier = Optional.ofNullable(request.getUserIdentifier())
+            .map(String::toLowerCase)
+            .map(String::trim)
+            .orElse(null);
+        log.info("Authorizing user {}", userIdentifier);
 
-        Optional<User> maybeUser = userDao.findByUserIdentifier(request.getUserIdentifier())
+        Optional<User> maybeUser = userDao.findByUserIdentifier(userIdentifier)
             .filter(u -> !u.isMarkedForDeletion());
         if (maybeUser.isEmpty()) {
-            log.info("User not found by {}", request.getUserIdentifier());
+            log.info("User not found by {}", userIdentifier);
 
             return AuthorizationResponse.builder()
                 .authorizationResult(AuthorizationResult.USER_NOT_FOUND)

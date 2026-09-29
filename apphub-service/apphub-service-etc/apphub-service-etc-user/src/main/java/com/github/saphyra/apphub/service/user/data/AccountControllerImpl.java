@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,11 @@ public class AccountControllerImpl implements AccountController {
 
     @Override
     public List<AccountResponse> searchAccount(OneParamRequest<String> search, Boolean includeMarkedForDeletion, Boolean includeSelf, AccessToken accessToken) {
-        String searchText = search.getValue();
+        String searchText = Optional.ofNullable(search.getValue())
+            .map(String::toLowerCase)
+            .map(String::trim)
+            .orElse(null);
+
         log.info("{} wants to query users by {}", accessToken.getUserId(), searchText);
         ValidationUtil.minLength(searchText, 3, "value");
 

@@ -1,0 +1,18 @@
+===FEATURES===
+
+===BUGFIXES===
+    User
+        Normalize username and email so search is case insensitive and ignores leading and trailing spaces
+
+===PLATFORM CHANGES===
+
+===TECHNICAL DEBTS===
+
+===ETC===
+
+===Manual Release Steps===
+    Pre deployment
+        Backup Database
+        Restart ApphubCI
+    Post deployment
+        Backup Database
