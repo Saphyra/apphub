@@ -46,7 +46,7 @@ class UserDaoTest {
     private static final int PASSWORD_FAILURE_COUNT = 3;
     private static final List<Role> ROLES = List.of(Role.ACCESS);
 
-    private static final String USER_IDENTIFIER = "Test@Email.Com";
+    private static final String USER_IDENTIFIER = "test@email.com";
     private static final String ORIGINAL_USERNAME = "old-username";
     private static final String ORIGINAL_EMAIL = "old@email.com";
     private static final long MARKED_FOR_DELETION_AT_EPOCH = MARKED_FOR_DELETION_AT.toEpochSecond(ZoneOffset.UTC);

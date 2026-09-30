@@ -1,6 +1,5 @@
 package com.github.saphyra.apphub.service.user.data.service.validator;
 
-import com.github.saphyra.apphub.api.etc.user.model.account.RegistrationRequest;
 import com.github.saphyra.apphub.lib.common_util.CommonConfigProperties;
 import com.github.saphyra.apphub.lib.common_util.ValidationUtil;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +12,9 @@ public class RegistrationRequestValidator {
     private final PasswordValidator passwordValidator;
     private final UsernameValidator usernameValidator;
     private final CommonConfigProperties commonConfigProperties;
-    public void validate(RegistrationRequest registrationRequest) {
-        String email = registrationRequest.getEmail();
-        String username = registrationRequest.getUsername();
-        String password = registrationRequest.getPassword();
 
-        ValidationUtil.contains(registrationRequest.getLanguage(), commonConfigProperties.getSupportedLocales(), "language");
+    public void validate(String email, String username, String password, String language) {
+        ValidationUtil.contains(language, commonConfigProperties.getSupportedLocales(), "language");
 
         emailValidator.validateEmail(email);
         usernameValidator.validateUsername(username);

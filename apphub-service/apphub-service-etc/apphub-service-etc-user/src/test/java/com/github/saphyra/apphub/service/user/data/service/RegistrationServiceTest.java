@@ -52,7 +52,7 @@ public class RegistrationServiceTest {
 
         underTest.register(registrationRequest);
 
-        verify(registrationRequestValidator).validate(registrationRequest);
+        verify(registrationRequestValidator).validate(EMAIL, USERNAME, PASSWORD, LOCALE);
         verify(userDao).saveNew(user);
     }
 }

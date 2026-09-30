@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -17,6 +18,11 @@ public class UserQueryService {
     private final UserDao userDao;
 
     public List<User> getUsers(String queryString) {
+        queryString = Optional.ofNullable(queryString)
+            .map(String::toLowerCase)
+            .map(String::trim)
+            .orElse(null);
+
         userQueryValidator.validateQuery(queryString);
 
         return userDao.findByUserIdentifier(queryString)

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -18,9 +20,17 @@ public class RegistrationService {
     private final UserDao userDao;
 
     public void register(RegistrationRequest registrationRequest) {
-        registrationRequestValidator.validate(registrationRequest);
+        String username = Optional.ofNullable(registrationRequest.getUsername())
+                .map(String::trim)
+                .orElse(null);
+        String email = Optional.ofNullable(registrationRequest.getEmail())
+                .map(String::toLowerCase)
+                .map(String::trim)
+                .orElse(null);
 
-        User user = userFactory.create(registrationRequest.getEmail(), registrationRequest.getUsername(), registrationRequest.getPassword(), registrationRequest.getLanguage());
+        registrationRequestValidator.validate(email, username, registrationRequest.getPassword(), registrationRequest.getLanguage());
+
+        User user = userFactory.create(email, username, registrationRequest.getPassword(), registrationRequest.getLanguage());
         userDao.saveNew(user);
         log.info("User successfully registered with userId {}", user.getUserId());
     }

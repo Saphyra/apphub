@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
@@ -23,7 +24,11 @@ public class ChangeEmailService {
     private final UserDao userDao;
 
     public void changeEmail(UUID userId, ChangeEmailRequest request) {
-        emailValidator.validateEmail(request.getEmail());
+        String email = Optional.ofNullable(request.getEmail())
+            .map(String::trim)
+            .map(String::toLowerCase)
+            .orElse(null);
+        emailValidator.validateEmail(email);
 
         if (isNull(request.getPassword())) {
             throw ExceptionFactory.invalidParam("password", "must not be null");
@@ -31,7 +36,7 @@ public class ChangeEmailService {
 
         User user = checkPasswordService.checkPassword(userId, request.getPassword());
         String originalEmail = user.getEmail();
-        user.setEmail(request.getEmail().toLowerCase());
+        user.setEmail(email);
 
         userDao.changeEmail(originalEmail, user);
     }
