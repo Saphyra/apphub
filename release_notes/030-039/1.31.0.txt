@@ -8,6 +8,8 @@
         Add cache size to monitoring
 
 ===BUGFIXES===
+    Integration
+        Swallow WebSocket connection errors
 
 ===PLATFORM CHANGES===
     Merge IntegrationServer to ApphubCI

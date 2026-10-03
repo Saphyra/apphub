@@ -15,6 +15,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
@@ -122,7 +123,11 @@ public class ApphubWsClient extends WebSocketClient {
             log.info("{} - WebSocketMessage sent to {}: {}", name, endpoint, event);
         }
 
-        send(payload);
+        try {
+            send(payload);
+        } catch (WebsocketNotConnectedException e) {
+            log.debug("WebSocket connection error:", e);
+        }
     }
 
     @Override
