@@ -79,4 +79,12 @@
     <changeSet id="remove-unique-constraint-from-star_system-star_id" author="Saphyra" dbms="postgresql">
         <dropUniqueConstraint schemaName="elite_base" tableName="star_system" uniqueColumns="star_id" constraintName="star_system_star_id_key"/>
     </changeSet>
+
+    <changeSet id="drop-column-star_system-last_update" author="Saphyra">
+        <preConditions>
+            <columnExists schemaName="elite_base" tableName="star_system" columnName="last_update"/>
+        </preConditions>
+
+        <dropColumn schemaName="elite_base" tableName="star_system" columnName="last_update"/>
+    </changeSet>
 </databaseChangeLog>

@@ -10,9 +10,13 @@ public class DatabaseConstants {
     public static final String TABLE_STATION_ECONOMY = "station_economy";
     @Deprecated
     public static final String TABLE_BODY = "body";
+    @Deprecated
     public static final String TABLE_BODY_V2 = "body_v2";
+    public static final String TABLE_BODY_V3 = "body_v3";
     public static final String TABLE_MATERIAL_TRADER_OVERRIDE = "material_trader_override";
+    @Deprecated
     public static final String TABLE_BODY_DATA = "body_data";
+    public static final String TABLE_BODY_DATA_V2 = "body_data_v2";
     public static final String TABLE_BODY_MATERIAL = "body_material";
     public static final String TABLE_BODY_RING = "body_ring";
     @Deprecated

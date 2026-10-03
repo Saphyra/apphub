@@ -45,4 +45,12 @@
             <column name="star_system_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-body" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="elite_base" tableName="body"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="body"/>
+    </changeSet>
 </databaseChangeLog>

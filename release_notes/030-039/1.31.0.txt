@@ -19,6 +19,11 @@
 ===ETC===
     ApphubCI
         Common parameterized page for all the envs
+    EliteBase
+        Partitioned BodyData
+        Foreign key constraint to body_data.body_id
+        Move LastUpdate from BodyData
+        Partition Body
 
 ===Manual Release Steps===
     Pre deployment

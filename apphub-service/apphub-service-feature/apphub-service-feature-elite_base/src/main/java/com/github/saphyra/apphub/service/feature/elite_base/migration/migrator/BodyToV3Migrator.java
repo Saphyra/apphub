@@ -1,9 +1,11 @@
-package com.github.saphyra.apphub.service.feature.elite_base.migration;
+package com.github.saphyra.apphub.service.feature.elite_base.migration.migrator;
 
 import com.github.saphyra.apphub.lib.common_domain.BiWrapper;
 import com.github.saphyra.apphub.lib.common_util.collection.CollectionUtils;
 import com.github.saphyra.apphub.lib.error_report.ErrorReporterService;
 import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
+import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
+import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
 import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.last_update.LastUpdatePartitionCreator;
 import jakarta.annotation.PostConstruct;
@@ -17,20 +19,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_BODY_ID;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_BODY_NAME;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_DISTANCE_FROM_STAR;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_ID;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_STAR_SYSTEM_ID;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_STATUS;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_WAR_TYPE;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_TYPE;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_MINOR_FACTION_CONFLICT;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_MINOR_FACTION_CONFLICT_V2;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY_V2;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY_V3;
 import static com.github.saphyra.apphub.service.feature.elite_base.migration.MigratorConstants.MAX_BATCH_SIZE;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 @Profile("!test")
-class MinorFactionConflictMigrator {
+class BodyToV3Migrator {
     //Ensure migration runs after partitions are created
     @SuppressWarnings("unused")
     private final LastUpdatePartitionCreator lastUpdatePartitionCreator;
@@ -39,10 +43,10 @@ class MinorFactionConflictMigrator {
 
     @PostConstruct
     void migrate() {
-        log.info("Migrating MinorFactionConflicts to V2...");
+        log.info("Migrating Body to V3...");
 
         int totalCount = 0;
-        List<Map<String, String>> batch;
+        List<Map<String, Object>> batch;
         do {
             batch = fetchBatch();
             totalCount += batch.size();
@@ -52,63 +56,65 @@ class MinorFactionConflictMigrator {
             log.info("Processed batch of size {}. Total: {}", batch.size(), totalCount);
         } while (!batch.isEmpty());
 
-        log.info("{} records are migrated to MinorFactionConflictV2", totalCount);
+        log.info("{} records are migrated to BodyV3", totalCount);
     }
 
-    private void delete(List<Map<String, String>> batch) {
-        String sql = "DELETE FROM %s.%s WHERE %s = :%s".formatted(
-            SCHEMA,
-            TABLE_MINOR_FACTION_CONFLICT,
-            COLUMN_ID,
-            COLUMN_ID
-        );
-
-        try {
-            jdbcTemplate.batchUpdate(
-                sql,
-                batch.toArray(Map[]::new)
-            );
-        } catch (Exception e) {
-            errorReporterService.report("Failed to execute SQL: " + sql, e);
-        }
-    }
-
-    private void save(List<Map<String, String>> batch) {
+    private void save(List<Map<String, Object>> batch) {
         if (batch.isEmpty()) {
             return;
         }
 
-        String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_MINOR_FACTION_CONFLICT_V2), batch.getFirst().keySet()).build();
+        String sql = SqlBuilder.insert(new QualifiedTable(SCHEMA, TABLE_BODY_V3), batch.getFirst().keySet()).build();
+        Map<String, Object>[] params = batch.toArray(Map[]::new);
 
         try {
-            jdbcTemplate.batchUpdate(
-                sql,
-                batch.toArray(Map[]::new)
-            );
+            jdbcTemplate.batchUpdate(sql, params);
         } catch (Exception e) {
             errorReporterService.report("Failed to execute SQL: " + sql, e);
         }
     }
 
-    private List<Map<String, String>> fetchBatch() {
+    private void delete(List<Map<String, Object>> batch) {
+        if (batch.isEmpty()) {
+            return;
+        }
+
+        String sql = SqlBuilder.delete()
+            .from(new QualifiedTable(SCHEMA, TABLE_BODY_V2))
+            .condition(new Equation(new DefaultColumn(COLUMN_ID), () -> ":id"))
+            .build();
+
+        Map<String, Object>[] params = batch.stream()
+            .map(row -> Map.of("id", row.get(COLUMN_ID)))
+            .toArray(Map[]::new);
+
+        try {
+            jdbcTemplate.batchUpdate(sql, params);
+        } catch (Exception e) {
+            errorReporterService.report("Failed to execute SQL: " + sql, e);
+        }
+    }
+
+    private List<Map<String, Object>> fetchBatch() {
         String sql = SqlBuilder.select()
-            .columns(COLUMN_ID, COLUMN_STAR_SYSTEM_ID, COLUMN_STATUS, COLUMN_WAR_TYPE)
-            .from(new QualifiedTable(SCHEMA, TABLE_MINOR_FACTION_CONFLICT))
+            .columns(COLUMN_ID, COLUMN_STAR_SYSTEM_ID, COLUMN_TYPE, COLUMN_BODY_ID, COLUMN_BODY_NAME, COLUMN_DISTANCE_FROM_STAR)
+            .from(new QualifiedTable(SCHEMA, TABLE_BODY_V2))
             .limit(MAX_BATCH_SIZE)
             .build();
 
         return jdbcTemplate.query(
             sql,
             rs -> {
-                List<Map<String, String>> result = new ArrayList<>();
+                List<Map<String, Object>> result = new ArrayList<>();
                 while (rs.next()) {
-                    Map<String, String> map = CollectionUtils.toMap(
+                    result.add(CollectionUtils.toMap(
                         new BiWrapper<>(COLUMN_ID, rs.getString(COLUMN_ID)),
                         new BiWrapper<>(COLUMN_STAR_SYSTEM_ID, rs.getString(COLUMN_STAR_SYSTEM_ID)),
-                        new BiWrapper<>(COLUMN_STATUS, rs.getString(COLUMN_STATUS)),
-                        new BiWrapper<>(COLUMN_WAR_TYPE, rs.getString(COLUMN_WAR_TYPE))
-                    );
-                    result.add(map);
+                        new BiWrapper<>(COLUMN_TYPE, rs.getString(COLUMN_TYPE)),
+                        new BiWrapper<>(COLUMN_BODY_ID, rs.getObject(COLUMN_BODY_ID, Long.class)),
+                        new BiWrapper<>(COLUMN_BODY_NAME, rs.getString(COLUMN_BODY_NAME)),
+                        new BiWrapper<>(COLUMN_DISTANCE_FROM_STAR, rs.getObject(COLUMN_DISTANCE_FROM_STAR, Double.class))
+                    ));
                 }
                 return result;
             }

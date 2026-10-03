@@ -32,4 +32,12 @@
             <column name="last_update"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-table-last_update" author="Saphyra">
+        <preConditions>
+            <tableExists schemaName="elite_base" tableName="last_update"/>
+        </preConditions>
+
+        <dropTable schemaName="elite_base" tableName="last_update"/>
+    </changeSet>
 </databaseChangeLog>
