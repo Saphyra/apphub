@@ -7,6 +7,10 @@ body {
     font-size: 24px;
 }
 
+button {
+    cursor: pointer;
+}
+
 .menu > * {
     margin: 10px;
 }
@@ -67,6 +71,7 @@ form {
 label {
     display: block;
     margin: 5px;
+    cursor: pointer;
 }
 
 .menu input[type=checkbox] {
@@ -88,4 +93,26 @@ fieldset {
 
 .red {
     color: red;
+}
+
+main > fieldset {
+    display: block;
+}
+
+legend {
+    font-size: 24px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.number-input-2-digit {
+    padding-left: 6px;
+    width: 3em;
+    box-sizing: border-box;
 }

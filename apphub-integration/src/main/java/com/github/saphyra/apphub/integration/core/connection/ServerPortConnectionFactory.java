@@ -36,7 +36,7 @@ public class ServerPortConnectionFactory implements PooledObjectFactory<CacheIte
 
         PortForwardTask.portForwardService(port);
 
-        log.debug("ServerPort {} forwarded.", port);
+        log.info("ServerPort {} forwarded.", port);
 
         return new DefaultPooledObject<>(new CacheItemWrapper<>(port));
     }

@@ -1,0 +1,333 @@
+package com.github.saphyra.apphub.ci.api.controller;
+
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyName;
+import com.github.saphyra.apphub.ci.service.db_backup.DbBackupFacade;
+import com.github.saphyra.apphub.ci.task_queue.TaskQueue;
+import com.github.saphyra.apphub.ci.value.BackupLocation;
+import com.github.saphyra.apphub.ci.value.BiWrapper;
+import com.github.saphyra.apphub.ci.value.DefaultProperties;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
+
+import static com.github.saphyra.apphub.ci.api.ApiConstants.REDIRECT;
+import static java.util.Objects.nonNull;
+
+@RequestMapping(DbBackupController.PAGE_DB_BACKUP_INDEX)
+@Controller
+@RequiredArgsConstructor
+@Slf4j
+class DbBackupController {
+    public static final String PAGE_DB_BACKUP_INDEX = "/db-backup";
+    private static final String PAGE_BACKUP = "/backup";
+    private static final String PAGE_RESTORE = "/restore";
+    private static final String PAGE_RESTORE_DATABASE = "/restore/{database}";
+    private static final String PAGE_RESTORE_DATABASE_VERSION = "/restore/{database}/{version}";
+    private static final String PAGE_RESTORE_DATABASE_VERSION_BACKUP = "/restore/{database}/{version}/{backup}";
+    private static final String PAGE_RESTORE_DATABASE_FROM_LOCAL = "/restore/local";
+
+    private static final String REQUEST_PARAM_DB_HOST = "dbhost";
+    private static final String REQUEST_PARAM_DB_NAME = "dbname";
+    private static final String REQUEST_PARAM_USERNAME = "username";
+    private static final String REQUEST_PARAM_PASSWORD = "password";
+    private static final String REQUEST_PARAM_TABLES = "tables";
+    private static final String REQUEST_PARAM_S3_ACCESS_KEY = "s3accesskey";
+    private static final String REQUEST_PARAM_S3_SECRET_KEY = "s3secretkey";
+    private static final String REQUEST_PARAM_S3_BUCKET = "s3bucket";
+    private static final String REQUEST_PARAM_DATABASE = "database";
+    private static final String REQUEST_PARAM_DATABASES = "databases";
+    private static final String REQUEST_PARAM_BACKUPS = "backups";
+    private static final String REQUEST_PARAM_BACKUP = "backup";
+    private static final String REQUEST_PARAM_VERSION = "version";
+    private static final String REQUEST_PARAM_VERSIONS = "versions";
+    private static final String REQUEST_PARAM_BACKUP_DIRECTORY = "backup_directory";
+    private static final String REQUEST_PARAM_BACKUP_LOCATION_S3 = "backup_location_s3";
+    private static final String REQUEST_PARAM_BACKUP_LOCATION_LOCAL = "backup_location_local";
+
+    private final DbBackupFacade dbBackupFacade;
+    private final PropertyDao propertyDao;
+    private final TaskQueue taskQueue;
+    private final DefaultProperties defaultProperties;
+
+    @GetMapping
+    ModelAndView dbBackupPage(
+        @RequestParam(name = "success", required = false) String success,
+        @RequestParam(name = "error", required = false) String error
+    ) {
+        ModelAndView mav = new ModelAndView("db_backup");
+
+        Map<String, String> params = propertyDao.getDbBackupParams();
+        mav.addObject(REQUEST_PARAM_DB_HOST, params.get(REQUEST_PARAM_DB_HOST));
+        mav.addObject(REQUEST_PARAM_DB_NAME, params.get(REQUEST_PARAM_DB_NAME));
+        mav.addObject(REQUEST_PARAM_USERNAME, params.get(REQUEST_PARAM_USERNAME));
+        mav.addObject(REQUEST_PARAM_PASSWORD, params.get(REQUEST_PARAM_PASSWORD));
+        mav.addObject(REQUEST_PARAM_S3_ACCESS_KEY, params.get(REQUEST_PARAM_S3_ACCESS_KEY));
+        mav.addObject(REQUEST_PARAM_S3_SECRET_KEY, params.get(REQUEST_PARAM_S3_SECRET_KEY));
+        mav.addObject(REQUEST_PARAM_S3_BUCKET, params.get(REQUEST_PARAM_S3_BUCKET));
+        mav.addObject(REQUEST_PARAM_BACKUP_DIRECTORY, params.getOrDefault(REQUEST_PARAM_BACKUP_DIRECTORY, defaultProperties.getBackupDirectory()));
+
+        if (nonNull(success)) {
+            mav.addObject("success", success);
+        }
+
+        if (nonNull(error)) {
+            mav.addObject("error", error);
+        }
+
+        return mav;
+    }
+
+    @PostMapping
+    String dbBackupSettings(
+        @RequestParam(REQUEST_PARAM_DB_HOST) String dbHost,
+        @RequestParam(REQUEST_PARAM_DB_NAME) String dbName,
+        @RequestParam(REQUEST_PARAM_USERNAME) String username,
+        @RequestParam(REQUEST_PARAM_PASSWORD) String password,
+        @RequestParam(REQUEST_PARAM_S3_ACCESS_KEY) String s3AccessKey,
+        @RequestParam(REQUEST_PARAM_S3_SECRET_KEY) String s3SecretKey,
+        @RequestParam(REQUEST_PARAM_S3_BUCKET) String s3Bucket,
+        @RequestParam(REQUEST_PARAM_BACKUP_DIRECTORY) String backupDirectory
+    ) {
+        Map<String, String> params = Map.of(
+            REQUEST_PARAM_DB_HOST, dbHost,
+            REQUEST_PARAM_DB_NAME, dbName,
+            REQUEST_PARAM_USERNAME, username,
+            REQUEST_PARAM_PASSWORD, password,
+            REQUEST_PARAM_S3_ACCESS_KEY, s3AccessKey,
+            REQUEST_PARAM_S3_SECRET_KEY, s3SecretKey,
+            REQUEST_PARAM_S3_BUCKET, s3Bucket,
+            REQUEST_PARAM_BACKUP_DIRECTORY, backupDirectory
+        );
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+        storedParams.putAll(params);
+        propertyDao.save(PropertyName.DB_BACKUP, storedParams);
+
+        return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=saved";
+    }
+
+    @GetMapping(PAGE_BACKUP)
+    ModelAndView backupPage(
+        @RequestParam(name = "success", required = false) String success,
+        @RequestParam(name = "error", required = false) String error
+    ) {
+        ModelAndView mav = new ModelAndView("db_backup_backup");
+
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String username = storedParams.get(REQUEST_PARAM_USERNAME);
+        String password = storedParams.get(REQUEST_PARAM_PASSWORD);
+        String backupDirectory = storedParams.getOrDefault(REQUEST_PARAM_BACKUP_DIRECTORY, defaultProperties.getBackupDirectory());
+
+        mav.addObject(REQUEST_PARAM_DB_HOST, dbHost);
+        mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
+        mav.addObject(REQUEST_PARAM_S3_BUCKET, storedParams.get(REQUEST_PARAM_S3_BUCKET));
+        mav.addObject(REQUEST_PARAM_BACKUP_DIRECTORY, backupDirectory);
+
+        List<String> tables = dbBackupFacade.getTables(dbHost, dbName, username, password);
+        mav.addObject(REQUEST_PARAM_TABLES, tables);
+
+        if (nonNull(success)) {
+            mav.addObject("success", success);
+        }
+
+        if (nonNull(error)) {
+            mav.addObject("error", error);
+        }
+
+        return mav;
+    }
+
+    @PostMapping(PAGE_BACKUP)
+    String backup(
+        @RequestParam(name = REQUEST_PARAM_TABLES, required = false, defaultValue = "") List<String> tables,
+        @RequestParam(REQUEST_PARAM_VERSION) String version,
+        @RequestParam(name = REQUEST_PARAM_BACKUP_LOCATION_S3, required = false, defaultValue = "false") boolean backupToS3,
+        @RequestParam(name = REQUEST_PARAM_BACKUP_LOCATION_LOCAL, required = false, defaultValue = "false") boolean backupToLocal
+
+    ) {
+        if (!backupToS3 && !backupToLocal) {
+            return REDIRECT + PAGE_DB_BACKUP_INDEX + PAGE_BACKUP + "?error=backup_location_not_selected";
+        }
+
+        if (tables.isEmpty()) {
+            return REDIRECT + PAGE_DB_BACKUP_INDEX + PAGE_BACKUP + "?error=no_tables_selected";
+        }
+
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String username = storedParams.get(REQUEST_PARAM_USERNAME);
+        String password = storedParams.get(REQUEST_PARAM_PASSWORD);
+        String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
+        String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+        String s3Bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+        String backupDirectory = storedParams.getOrDefault(REQUEST_PARAM_BACKUP_DIRECTORY, defaultProperties.getBackupDirectory());
+
+        List<BackupLocation> backupLocations = Stream.of(
+                new BiWrapper<>(backupToS3, BackupLocation.S3),
+                new BiWrapper<>(backupToLocal, BackupLocation.LOCAL)
+            )
+            .filter(BiWrapper::getEntity1)
+            .map(BiWrapper::getEntity2)
+            .toList();
+
+
+        taskQueue.add(() -> dbBackupFacade.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version, backupDirectory, backupLocations));
+
+        return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=backup_started";
+    }
+
+    //Lists databases
+    @GetMapping(PAGE_RESTORE)
+    ModelAndView restorePage() {
+        ModelAndView mav = new ModelAndView("db_backup_restore");
+
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+        String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
+        String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+
+        mav.addObject(REQUEST_PARAM_DB_HOST, dbHost);
+        mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
+        mav.addObject(REQUEST_PARAM_S3_BUCKET, bucket);
+
+        List<String> databases = dbBackupFacade.getDatabases(s3AccessKey, s3SecretKey, bucket);
+        mav.addObject(REQUEST_PARAM_DATABASES, databases);
+        mav.addObject(REQUEST_PARAM_BACKUP_DIRECTORY, storedParams.getOrDefault(REQUEST_PARAM_BACKUP_DIRECTORY, defaultProperties.getBackupDirectory()));
+
+        return mav;
+    }
+
+    //Lists versions of selected database
+    @GetMapping(PAGE_RESTORE_DATABASE)
+    ModelAndView restoreDatabasePage(@PathVariable("database") String database) {
+        log.info("Reading versions of database {}", database);
+        ModelAndView mav = new ModelAndView("db_backup_restore_database");
+
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+        String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
+        String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+
+        mav.addObject(REQUEST_PARAM_DB_HOST, dbHost);
+        mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
+        mav.addObject(REQUEST_PARAM_S3_BUCKET, bucket);
+        mav.addObject(REQUEST_PARAM_DATABASE, database);
+
+        List<String> backups = dbBackupFacade.getVersions(s3AccessKey, s3SecretKey, bucket, database);
+        mav.addObject(REQUEST_PARAM_VERSIONS, backups);
+
+        return mav;
+    }
+
+    //Lists backups of selected database and version
+    @GetMapping(PAGE_RESTORE_DATABASE_VERSION)
+    ModelAndView restoreDatabaseVersionPage(
+        @PathVariable(REQUEST_PARAM_DATABASE) String database,
+        @PathVariable(REQUEST_PARAM_VERSION) String version
+    ) {
+        log.info("Reading backups of database {} and version {}", database, version);
+        ModelAndView mav = new ModelAndView("db_backup_restore_database_version");
+
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+        String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
+        String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+
+        mav.addObject(REQUEST_PARAM_DB_HOST, dbHost);
+        mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
+        mav.addObject(REQUEST_PARAM_S3_BUCKET, bucket);
+        mav.addObject(REQUEST_PARAM_DATABASE, database);
+        mav.addObject(REQUEST_PARAM_VERSION, version);
+
+        List<String> backups = dbBackupFacade.getBackups(s3AccessKey, s3SecretKey, bucket, database, version);
+        mav.addObject(REQUEST_PARAM_BACKUPS, backups);
+
+        return mav;
+    }
+
+    //Lists backups of selected database and version
+    @GetMapping(PAGE_RESTORE_DATABASE_VERSION_BACKUP)
+    ModelAndView restoreDatabaseVersionPage(
+        @PathVariable(REQUEST_PARAM_DATABASE) String database,
+        @PathVariable(REQUEST_PARAM_VERSION) String version,
+        @PathVariable(REQUEST_PARAM_BACKUP) String backup
+    ) {
+        log.info("Reading tables of database {} and version {} and backup {}", database, version, backup);
+        ModelAndView mav = new ModelAndView("db_backup_restore_database_version_backup");
+
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+        String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
+        String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+
+        mav.addObject(REQUEST_PARAM_DB_HOST, dbHost);
+        mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
+        mav.addObject(REQUEST_PARAM_S3_BUCKET, bucket);
+        mav.addObject(REQUEST_PARAM_DATABASE, database);
+        mav.addObject(REQUEST_PARAM_VERSION, version);
+
+        List<String> tables = dbBackupFacade.getTables(s3AccessKey, s3SecretKey, bucket, database, version, backup);
+        mav.addObject(REQUEST_PARAM_TABLES, tables);
+
+        return mav;
+    }
+
+    @PostMapping(PAGE_RESTORE_DATABASE_VERSION_BACKUP)
+    String restoreDatabase(
+        @PathVariable(REQUEST_PARAM_DATABASE) String database,
+        @PathVariable(REQUEST_PARAM_VERSION) String version,
+        @PathVariable(REQUEST_PARAM_BACKUP) String backup,
+        @RequestParam(REQUEST_PARAM_TABLES) List<String> tables
+    ) {
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String username = storedParams.get(REQUEST_PARAM_USERNAME);
+        String password = storedParams.get(REQUEST_PARAM_PASSWORD);
+        String s3AccessKey = storedParams.get(REQUEST_PARAM_S3_ACCESS_KEY);
+        String s3SecretKey = storedParams.get(REQUEST_PARAM_S3_SECRET_KEY);
+        String s3Bucket = storedParams.get(REQUEST_PARAM_S3_BUCKET);
+
+        taskQueue.add(() -> dbBackupFacade.restore(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, database, version, backup, tables));
+
+        return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=restoration_started";
+    }
+
+    @PostMapping(PAGE_RESTORE_DATABASE_FROM_LOCAL)
+    String restoreLocal(@RequestParam(REQUEST_PARAM_BACKUP_DIRECTORY) String directory) {
+        Map<String, String> storedParams = propertyDao.getDbBackupParams();
+        String dbHost = storedParams.get(REQUEST_PARAM_DB_HOST);
+        String dbName = storedParams.get(REQUEST_PARAM_DB_NAME);
+        String username = storedParams.get(REQUEST_PARAM_USERNAME);
+        String password = storedParams.get(REQUEST_PARAM_PASSWORD);
+
+        taskQueue.add(() -> dbBackupFacade.restoreLocal(directory, dbHost, dbName, username, password));
+
+        return "redirect:" + PAGE_DB_BACKUP_INDEX + "?success=restoration_started";
+    }
+}

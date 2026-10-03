@@ -133,4 +133,8 @@ public class CalendarEventPageActions {
         driver.findElement(By.id("calendar-edit-event-share"))
             .click();
     }
+
+    public static void setCreateOccurrenceNote(WebDriver driver, String note) {
+        WebElementUtils.clearAndFill(driver.findElement(By.id("calendar-edit-event-new-occurrence-note")), note);
+    }
 }

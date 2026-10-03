@@ -23,4 +23,12 @@
             <column name="faction_name"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="drop-column-minor_faction-last_update" author="Saphyra">
+        <preConditions>
+            <columnExists schemaName="elite_base" tableName="minor_faction" columnName="last_update"/>
+        </preConditions>
+
+        <dropColumn schemaName="elite_base" tableName="minor_faction" columnName="last_update"/>
+    </changeSet>
 </databaseChangeLog>

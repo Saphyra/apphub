@@ -95,7 +95,7 @@ public class GetSharedEventTest extends BackEndTest {
         assertThat(event.getLabels()).hasSize(expectedLabelSize);
     }
 
-    @DataProvider
+    @DataProvider(parallel = true)
     public static Object[][] getSharedEventData() {
         return new Object[][]{
             new Object[]{Set.of(), Set.of(Grant.VIEW), DEFAULT_TITLE, DEFAULT_CONTENT, 0, false, false, 1},

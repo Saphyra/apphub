@@ -1,6 +1,6 @@
 package com.github.saphyra.apphub.ci.ui.startup;
 
-import com.github.saphyra.apphub.ci.dao.PropertyDao;
+import com.github.saphyra.apphub.ci.dao.property.PropertyDao;
 import com.github.saphyra.apphub.ci.value.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

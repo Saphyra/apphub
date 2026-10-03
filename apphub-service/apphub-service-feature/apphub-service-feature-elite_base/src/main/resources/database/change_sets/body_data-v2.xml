@@ -1,0 +1,82 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="create-table-body_data_v2" author="saphyra" dbms="h2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_data_v2"/>
+            </not>
+        </preConditions>
+
+        <createTable schemaName="elite_base" tableName="body_data_v2">
+            <column name="body_id" type="varchar(37)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="landable" type="boolean"/>
+            <column name="surface_gravity" type="numeric"/>
+            <column name="reserve_level" type="varchar(255)"/>
+            <column name="has_ring" type="boolean"/>
+        </createTable>
+
+        <addPrimaryKey schemaName="elite_base" tableName="body_data_v2" columnNames="body_id" constraintName="body_data_v2_pk"/>
+    </changeSet>
+
+    <changeSet id="create-table-body_data_v2" author="saphyra" dbms="postgresql">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists schemaName="elite_base" tableName="body_data_v2"/>
+            </not>
+        </preConditions>
+
+        <sql>
+            CREATE TABLE elite_base.body_data_v2 (
+            body_id varchar(37) NOT NULL,
+            landable boolean,
+            surface_gravity numeric,
+            reserve_level varchar(255),
+            has_ring boolean,
+            CONSTRAINT body_data_v2_pk PRIMARY KEY (body_id)
+            ) PARTITION BY HASH (body_id);
+        </sql>
+
+        <sql>
+            CREATE TABLE elite_base.body_data_v2_p0 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 0);
+            CREATE TABLE elite_base.body_data_v2_p1 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 1);
+            CREATE TABLE elite_base.body_data_v2_p2 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 2);
+            CREATE TABLE elite_base.body_data_v2_p3 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 3);
+            CREATE TABLE elite_base.body_data_v2_p4 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 4);
+            CREATE TABLE elite_base.body_data_v2_p5 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 5);
+            CREATE TABLE elite_base.body_data_v2_p6 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 6);
+            CREATE TABLE elite_base.body_data_v2_p7 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 7);
+            CREATE TABLE elite_base.body_data_v2_p8 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 8);
+            CREATE TABLE elite_base.body_data_v2_p9 PARTITION OF elite_base.body_data_v2
+            FOR VALUES WITH (MODULUS 10, REMAINDER 9);
+        </sql>
+    </changeSet>
+
+    <!--changeSet id="add-foreign-key-body_data_v2" author="Saphyra">
+        <preConditions>
+            <not>
+                <foreignKeyConstraintExists schemaName="elite_base" foreignKeyName="body_data_v2-body_id-fk"/>
+            </not>
+        </preConditions>
+
+        <addForeignKeyConstraint
+                baseTableSchemaName="elite_base"
+                baseTableName="body_data_v2"
+                baseColumnNames="body_id"
+                constraintName="fk-body_data_v2-body_id"
+                referencedTableSchemaName="elite_base"
+                referencedTableName="body_v2"
+                referencedColumnNames="id"
+                onDelete="CASCADE"
+        />
+    </changeSet-->
+</databaseChangeLog>

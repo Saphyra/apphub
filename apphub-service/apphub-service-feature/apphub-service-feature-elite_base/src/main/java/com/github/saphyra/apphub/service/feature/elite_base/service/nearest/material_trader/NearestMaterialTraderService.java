@@ -3,26 +3,26 @@ package com.github.saphyra.apphub.service.feature.elite_base.service.nearest.mat
 import com.github.saphyra.apphub.api.feature.elite_base.model.MaterialType;
 import com.github.saphyra.apphub.api.feature.elite_base.model.material_trader.NearestMaterialTraderResponse;
 import com.github.saphyra.apphub.lib.common_util.converter.UuidConverter;
+import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
+import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
+import com.github.saphyra.apphub.lib.sql_builder.column.NamedColumn;
+import com.github.saphyra.apphub.lib.sql_builder.column.QualifiedColumn;
 import com.github.saphyra.apphub.lib.sql_builder.condition.Condition;
 import com.github.saphyra.apphub.lib.sql_builder.condition.ConditionGroup;
-import com.github.saphyra.apphub.lib.sql_builder.column.DefaultColumn;
-import com.github.saphyra.apphub.lib.sql_builder.core.DefaultSegmentProvider;
-import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
 import com.github.saphyra.apphub.lib.sql_builder.condition.InCondition;
-import com.github.saphyra.apphub.lib.sql_builder.operation.IsNullEquation;
-import com.github.saphyra.apphub.lib.sql_builder.value.ListValue;
-import com.github.saphyra.apphub.lib.sql_builder.column.NamedColumn;
 import com.github.saphyra.apphub.lib.sql_builder.condition.NotEqualCondition;
 import com.github.saphyra.apphub.lib.sql_builder.condition.NullCondition;
+import com.github.saphyra.apphub.lib.sql_builder.condition.TrueCondition;
+import com.github.saphyra.apphub.lib.sql_builder.core.DefaultSegmentProvider;
 import com.github.saphyra.apphub.lib.sql_builder.keyword.OrderType;
 import com.github.saphyra.apphub.lib.sql_builder.keyword.PowerSegment;
-import com.github.saphyra.apphub.lib.sql_builder.column.QualifiedColumn;
-import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
-import com.github.saphyra.apphub.lib.sql_builder.SqlBuilder;
+import com.github.saphyra.apphub.lib.sql_builder.operation.Equation;
+import com.github.saphyra.apphub.lib.sql_builder.operation.IsNullEquation;
 import com.github.saphyra.apphub.lib.sql_builder.operation.SquareRootSegment;
 import com.github.saphyra.apphub.lib.sql_builder.operation.SubtractSegment;
 import com.github.saphyra.apphub.lib.sql_builder.operation.SumSegment;
-import com.github.saphyra.apphub.lib.sql_builder.condition.TrueCondition;
+import com.github.saphyra.apphub.lib.sql_builder.table.QualifiedTable;
+import com.github.saphyra.apphub.lib.sql_builder.value.ListValue;
 import com.github.saphyra.apphub.lib.sql_builder.value.WrappedValue;
 import com.github.saphyra.apphub.service.feature.elite_base.common.EliteBaseProperties;
 import com.github.saphyra.apphub.service.feature.elite_base.dao.EconomyEnum;
@@ -57,7 +57,7 @@ import static com.github.saphyra.apphub.service.feature.elite_base.common.Databa
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_Y_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.COLUMN_Z_POS;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.SCHEMA;
-import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY_V2;
+import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_BODY_V3;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_MATERIAL_TRADER_OVERRIDE;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STAR_SYSTEM;
 import static com.github.saphyra.apphub.service.feature.elite_base.common.DatabaseConstants.TABLE_STATION;
@@ -101,7 +101,7 @@ public class NearestMaterialTraderService {
             ))
             .from(new QualifiedTable(SCHEMA, TABLE_STAR_SYSTEM))
             .innerJoin(new QualifiedTable(SCHEMA, TABLE_STATION), new QualifiedColumn(TABLE_STAR_SYSTEM, COLUMN_ID), new QualifiedColumn(TABLE_STATION, COLUMN_STAR_SYSTEM_ID))
-            .leftJoin(new QualifiedTable(SCHEMA, TABLE_BODY_V2), new QualifiedColumn(TABLE_STATION, COLUMN_BODY_ID), new QualifiedColumn(TABLE_BODY_V2, COLUMN_ID))
+            .leftJoin(new QualifiedTable(SCHEMA, TABLE_BODY_V3), new QualifiedColumn(TABLE_STATION, COLUMN_BODY_ID), new QualifiedColumn(TABLE_BODY_V3, COLUMN_ID))
             .leftJoin(new QualifiedTable(SCHEMA, TABLE_MATERIAL_TRADER_OVERRIDE), new QualifiedColumn(TABLE_STATION, COLUMN_ID), new QualifiedColumn(TABLE_MATERIAL_TRADER_OVERRIDE, COLUMN_STATION_ID))
             .condition(new InCondition(
                 new QualifiedColumn(TABLE_STATION, COLUMN_ID),
