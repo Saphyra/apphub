@@ -1,10 +1,13 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
+import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
+import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.api.etc.user.server.DisabledRoleController;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
@@ -24,6 +27,7 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
     private final DisabledRoleRepository repository;
     private final DisabledRoleProperties properties;
     private final CheckPasswordService checkPasswordService;
+    private final EventGatewayApiClient eventGatewayApiClient;
 
     @Override
     public List<DisabledRoleResponse> disableRole(OneParamRequest<String> password, Role role, AccessToken accessToken) {
@@ -35,6 +39,8 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
         checkPasswordService.checkPassword(accessToken.getUserId(), password.getValue());
 
         repository.save(new DisabledRoleEntity(role));
+
+        sendDisabledRolesChangedEvent();
 
         return getDisabledRoles();
     }
@@ -49,7 +55,13 @@ public class DisabledRoleControllerImpl implements DisabledRoleController {
             repository.deleteById(role);
         }
 
+        sendDisabledRolesChangedEvent();
+
         return getDisabledRoles();
+    }
+
+    private void sendDisabledRolesChangedEvent() {
+        eventGatewayApiClient.sendEvent(SendEventRequest.builder().eventName(EmptyEvent.PLATFORM_DISABLED_ROLES_CHANGED).build());
     }
 
     @Override

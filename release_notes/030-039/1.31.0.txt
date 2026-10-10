@@ -8,8 +8,9 @@
         Add cache size to monitoring
 
 ===BUGFIXES===
-    Integration
-        Swallow WebSocket connection errors
+    Swallow WebSocket connection errors during integration tests
+    Modules page displayed module despite required role is disabled
+    Authentication did not consider disabled roles
 
 ===PLATFORM CHANGES===
     Merge IntegrationServer to ApphubCI

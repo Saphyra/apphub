@@ -34,6 +34,7 @@ public class ModulesQueryServiceTest {
     private static final String MODULE_2 = "module-2";
     private static final String MODULE_3 = "module-3";
     private static final String MODULE_4 = "module-4";
+    private static final String MODULE_5 = "module-5";
     private static final UUID USER_ID = UUID.randomUUID();
 
     @Mock
@@ -44,6 +45,9 @@ public class ModulesQueryServiceTest {
 
     @Mock
     private ModulesProperties modulesProperties;
+
+    @Mock
+    private DisabledRoleCache disabledRoleCache;
 
     @InjectMocks
     private ModulesQueryService underTest;
@@ -67,18 +71,20 @@ public class ModulesQueryServiceTest {
         ));
         modules.put(CATEGORY_3, Arrays.asList(
             createModule(MODULE_3, Role.TEST),
-            createModule(MODULE_4, Role.NOTEBOOK)
+            createModule(MODULE_4, Role.NOTEBOOK),
+            createModule(MODULE_5, Role.ADMIN)
         ));
         given(modulesProperties.getModules()).willReturn(modules);
+        given(disabledRoleCache.get()).willReturn(List.of(Role.ADMIN));
 
         Map<String, List<ModuleResponse>> result = underTest.getModules(USER_ID, true);
 
         assertThat(result).containsOnlyKeys(CATEGORY_1, CATEGORY_3);
-        assertThat(result.get(CATEGORY_1)).contains(
+        assertThat(result.get(CATEGORY_1)).containsOnly(
             ModuleResponse.builder().name(MODULE_1).favorite(true).build(),
             ModuleResponse.builder().name(MODULE_2).favorite(false).build()
         );
-        assertThat(result.get(CATEGORY_3)).contains(
+        assertThat(result.get(CATEGORY_3)).containsOnly(
             ModuleResponse.builder().name(MODULE_3).favorite(false).build()
         );
     }

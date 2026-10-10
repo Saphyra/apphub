@@ -13,6 +13,8 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -28,8 +30,13 @@ public class AuthenticationService {
      * @return empty Mono if authentication was successful, Mono<AuthResultHandler> if authentication failed.
      */
     public Mono<AuthResultHandler> authenticate(ServerHttpRequest request, AccessToken accessToken) {
+        //Find RoleSettings matching the request
         return Mono.just(matchingRoleProvider.getMatchingSettings(request))
-            .filter(roleSettings -> !roleSettings.isEmpty() && !requiredRoleChecker.hasRequiredRoles(roleSettings, accessToken))
+            //Collect required roles
+            .map(roleSettings -> roleSettings.stream().flatMap(roleSetting -> roleSetting.getRequiredRoles().stream()).collect(Collectors.toSet()))
+            //Check if user has all the required roles
+            .filter(requiredRoles -> !requiredRoles.isEmpty() && !requiredRoleChecker.hasRequiredRoles(requiredRoles, accessToken))
+            //Return error if required role is not granted
             .map(roleSettings -> authResultHandlerFactory.authenticationFailed(request.getHeaders(), createErrorResponse(), redirectUrlProvider.getRedirectUrl(roleSettings, accessToken)));
     }
 

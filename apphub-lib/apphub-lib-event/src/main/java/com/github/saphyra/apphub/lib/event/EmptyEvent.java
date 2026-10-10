@@ -13,4 +13,5 @@ public class EmptyEvent {
     public static final String ELITE_BASE_DELETE_EXPIRED_MESSAGES = "elite-base-delete-expired-messages";
 
     public static final String MIGRATION_ELITE_BASE_RESET_MESSAGE_STATUS_ERROR = "ELITE_BASE_RESET_MESSAGE_STATUS_ERROR";
+    public static final String PLATFORM_DISABLED_ROLES_CHANGED = "platform-disabled-roles-changed";
 }

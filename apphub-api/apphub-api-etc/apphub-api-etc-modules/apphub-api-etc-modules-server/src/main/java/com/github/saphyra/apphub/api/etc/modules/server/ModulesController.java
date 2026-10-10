@@ -10,6 +10,7 @@ import com.github.saphyra.apphub.api.etc.modules.model.response.ModulesEndpoints
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,4 +34,7 @@ public interface ModulesController {
         @PathVariable("module") String module,
         @RequestBody OneParamRequest<Boolean> favorite
     );
+
+    @PostMapping(ModulesEndpoints.EVENT_DISABLED_ROLES_CHANGED)
+    void disabledRolesChanged(@RequestBody SendEventRequest<Void> request);
 }

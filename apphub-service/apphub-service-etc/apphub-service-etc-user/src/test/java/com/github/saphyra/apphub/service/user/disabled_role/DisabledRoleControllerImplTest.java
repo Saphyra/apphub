@@ -1,9 +1,12 @@
 package com.github.saphyra.apphub.service.user.disabled_role;
 
 import com.github.saphyra.apphub.api.etc.user.model.role.DisabledRoleResponse;
-import com.github.saphyra.apphub.lib.common_domain.Role;
+import com.github.saphyra.apphub.api.platform.event_gateway.client.EventGatewayApiClient;
+import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEventRequest;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
+import com.github.saphyra.apphub.lib.common_domain.Role;
+import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.user.common.CheckPasswordService;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleEntity;
 import com.github.saphyra.apphub.service.user.disabled_role.dao.DisabledRoleRepository;
@@ -35,6 +38,9 @@ public class DisabledRoleControllerImplTest {
     @Mock
     private CheckPasswordService checkPasswordService;
 
+    @Mock
+    private EventGatewayApiClient eventGatewayApiClient;
+
     @InjectMocks
     private DisabledRoleControllerImpl underTest;
 
@@ -52,6 +58,7 @@ public class DisabledRoleControllerImplTest {
         verify(repository).save(new DisabledRoleEntity(Role.TEST));
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
         assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
+        verify(eventGatewayApiClient).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.PLATFORM_DISABLED_ROLES_CHANGED).build());
     }
 
     @Test
@@ -65,6 +72,7 @@ public class DisabledRoleControllerImplTest {
 
         verify(repository).deleteById(Role.TEST);
         verify(checkPasswordService).checkPassword(USER_ID, PASSWORD);
+        verify(eventGatewayApiClient).sendEvent(SendEventRequest.builder().eventName(EmptyEvent.PLATFORM_DISABLED_ROLES_CHANGED).build());
 
         assertThat(result).containsExactlyInAnyOrder(new DisabledRoleResponse(Role.TEST, true), new DisabledRoleResponse(Role.ADMIN, false));
     }

@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 @RequiredArgsConstructor
 public enum ModuleLocation {
     COMMUNITY("community", "community", CommunityEndpoints.COMMUNITY_PAGE, "Közösség"),
+    MODULES("modules", "modules", CommunityEndpoints.MODULES_PAGE, "Modules"),
     CALENDAR("office", "calendar", CalendarEndpoints.CALENDAR_PAGE, "Határidőnapló"),
     BAN("admin-panel", "ban", AdminPanelEndpoints.ADMIN_PANEL_BAN_PAGE, "Felhasználók tiltása"),
     DISABLED_ROLE_MANAGEMENT("admin-panel", "disabled-role-management", AdminPanelEndpoints.ADMIN_PANEL_DISABLED_ROLE_MANAGEMENT_PAGE, "Jobosultságok letiltása / engedélyezése"),

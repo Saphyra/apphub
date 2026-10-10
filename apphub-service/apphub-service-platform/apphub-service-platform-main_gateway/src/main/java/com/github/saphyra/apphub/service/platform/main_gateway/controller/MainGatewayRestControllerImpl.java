@@ -7,6 +7,7 @@ import com.github.saphyra.apphub.lib.exception.RestException;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedAccessTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.InvalidatedRefreshTokenService;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.TokenParser;
+import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.authentication.DisabledRoleCache;
 import com.github.saphyra.apphub.service.platform.main_gateway.util.ErrorLogger;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ class MainGatewayRestControllerImpl implements MainGatewayRestController {
     private final InvalidatedRefreshTokenService invalidatedRefreshTokenService;
     private final TokenParser tokenParser;
     private final ErrorLogger errorLogger;
+    private final DisabledRoleCache disabledRoleCache;
 
     @Override
     public Mono<Void> invalidateAccessToken(UUID accessTokenId) {
@@ -66,6 +68,13 @@ class MainGatewayRestControllerImpl implements MainGatewayRestController {
             .map(_ -> ResponseEntity.ok().build())
             .onErrorResume(this::handleError)
             .switchIfEmpty(Mono.fromSupplier(() -> new ResponseEntity<>(HttpStatus.UNAUTHORIZED)));
+    }
+
+    @Override
+    public Mono<Void> disabledRolesChanged() {
+        disabledRoleCache.clear();
+
+        return Mono.empty();
     }
 
     @Override

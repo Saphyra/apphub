@@ -6,9 +6,11 @@ import com.github.saphyra.apphub.api.platform.event_gateway.model.request.SendEv
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.OneParamRequest;
 import com.github.saphyra.apphub.lib.event.DeleteAccountEvent;
+import com.github.saphyra.apphub.lib.event.EmptyEvent;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
 import com.github.saphyra.apphub.service.etc.modules.service.FavoriteUpdateService;
 import com.github.saphyra.apphub.service.etc.modules.service.ModulesQueryService;
+import com.github.saphyra.apphub.service.etc.modules.service.DisabledRoleCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +25,7 @@ public class ModulesControllerImpl implements ModulesController {
     private final FavoriteService favoriteService;
     private final FavoriteUpdateService favoriteUpdateService;
     private final ModulesQueryService modulesQueryService;
+    private final DisabledRoleCache disabledRoleCache;
 
     @Override
     public void deleteAccountEvent(SendEventRequest<DeleteAccountEvent> request) {
@@ -44,5 +47,12 @@ public class ModulesControllerImpl implements ModulesController {
         log.info("Setting favorite status of module {} for user {}", module, accessToken.getUserId());
         favoriteUpdateService.updateFavorite(accessToken.getUserId(), module, favorite.getValue());
         return modulesQueryService.getModules(accessToken.getUserId(), false);
+    }
+
+    @Override
+    public void disabledRolesChanged(SendEventRequest<Void> request) {
+        log.info("Processing {} event", EmptyEvent.PLATFORM_DISABLED_ROLES_CHANGED);
+
+        disabledRoleCache.clear();
     }
 }

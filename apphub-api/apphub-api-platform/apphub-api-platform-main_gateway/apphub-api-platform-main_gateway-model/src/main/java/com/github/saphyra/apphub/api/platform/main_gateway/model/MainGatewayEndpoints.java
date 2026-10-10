@@ -5,6 +5,9 @@ public class MainGatewayEndpoints {
     public static final String MAIN_GATEWAY_INTERNAL_INVALIDATE_ACCESS_TOKEN = "/internal/main-gateway/access-tokens/{accessTokenId}";
     public static final String MAIN_GATEWAY_INVALIDATE_REFRESH_TOKENS = "/internal/main-gateway/refresh-tokens";
 
+    //Event
+    public static final String EVENT_DISABLED_ROLES_CHANGED = "/event/disabled-roles";
+
     public static final String MAIN_GATEWAY_GET_WEBSOCKET_PROTOCOL = "/api/ws/protocol";
     public static final String MAIN_GATEWAY_CHECK_SESSION = "/api/session";
 

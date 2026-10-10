@@ -3,6 +3,7 @@ package com.github.saphyra.apphub.service.platform.main_gateway.service.authoriz
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.ErrorCode;
 import com.github.saphyra.apphub.lib.common_domain.ErrorResponseWrapper;
+import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.ErrorResponseFactory;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.AuthResultHandler;
 import com.github.saphyra.apphub.service.platform.main_gateway.service.authorization.AuthResultHandlerFactory;
@@ -17,6 +18,7 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import reactor.test.StepVerifier;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.BDDMockito.given;
 
@@ -72,7 +74,8 @@ class AuthenticationServiceTest {
     @Test
     void hasRequiredRole(){
         given(matchingRoleProvider.getMatchingSettings(request)).willReturn(List.of(roleSetting));
-        given(requiredRoleChecker.hasRequiredRoles(List.of(roleSetting), accessToken)).willReturn(true);
+        given(roleSetting.getRequiredRoles()).willReturn(List.of(Role.SKYXPLORE));
+        given(requiredRoleChecker.hasRequiredRoles(Set.of(Role.SKYXPLORE), accessToken)).willReturn(true);
 
         StepVerifier.create(underTest.authenticate(request, accessToken))
             .expectNextCount(0)
@@ -82,10 +85,11 @@ class AuthenticationServiceTest {
     @Test
     void authenticationFailed(){
         given(matchingRoleProvider.getMatchingSettings(request)).willReturn(List.of(roleSetting));
-        given(requiredRoleChecker.hasRequiredRoles(List.of(roleSetting), accessToken)).willReturn(false);
+        given(roleSetting.getRequiredRoles()).willReturn(List.of(Role.SKYXPLORE));
+        given(requiredRoleChecker.hasRequiredRoles(Set.of(Role.SKYXPLORE), accessToken)).willReturn(false);
         given(request.getHeaders()).willReturn(httpHeaders);
         given(errorResponseFactory.create(HttpStatus.FORBIDDEN, ErrorCode.MISSING_ROLE)).willReturn(errorResponseWrapper);
-        given(redirectUrlProvider.getRedirectUrl(List.of(roleSetting), accessToken)).willReturn(REDIRECT_URL);
+        given(redirectUrlProvider.getRedirectUrl(Set.of(Role.SKYXPLORE), accessToken)).willReturn(REDIRECT_URL);
         given(authResultHandlerFactory.authenticationFailed(httpHeaders, errorResponseWrapper, REDIRECT_URL)).willReturn(authResultHandler);
 
         StepVerifier.create(underTest.authenticate(request, accessToken))
