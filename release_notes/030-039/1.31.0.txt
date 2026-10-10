@@ -26,6 +26,8 @@
         Foreign key constraint to body_data.body_id
         Move LastUpdate from BodyData
         Partition Body
+    Integration
+        Filter test cases based on class or package
 
 ===Manual Release Steps===
     Pre deployment

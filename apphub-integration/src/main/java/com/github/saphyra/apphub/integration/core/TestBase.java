@@ -129,7 +129,9 @@ public abstract class TestBase {
         List<String> groups = Arrays.asList(method.getGroups());
 
         String methodName = method.getMethodName();
-        if (ENABLED_TEST_GROUPS.contains(methodName)) {
+        String className = method.getRealClass().getSimpleName();
+        String packageName = method.getRealClass().getPackageName();
+        if (ENABLED_TEST_GROUPS.contains(methodName) || ENABLED_TEST_GROUPS.contains(className) || ENABLED_TEST_GROUPS.contains(packageName)) {
             return true;
         }
 
