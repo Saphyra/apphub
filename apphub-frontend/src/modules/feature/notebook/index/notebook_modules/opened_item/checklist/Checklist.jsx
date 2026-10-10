@@ -14,7 +14,7 @@ import getItems from "./service/ChecklistAssembler";
 import Stream from "common/js/collection/Stream";
 import { hasValue } from "common/js/Utils";
 
-const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, setDisplaySpinner}) => {
+const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, setLastEvent, setConfirmationDialogData, setDisplaySpinner }) => {
     const [editingEnabled, setEditingEnabled] = useState(false);
     const [parent, setParent] = useState(null);
     const [title, setTitle] = useState("");
@@ -25,6 +25,7 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
     const [searchText, setSearchText] = useState("");
 
     useEffect(() => loadChecklist(openedListItem.id, setDataFromResponse, setDisplaySpinner), [openedListItem]);
+    useEffect(() => setSearchText(""), [openedListItem]);
 
     const isInFocus = useHasFocus();
     useUpdateEffect(() => {
@@ -116,13 +117,19 @@ const Checklist = ({ localizationHandler, openedListItem, setOpenedListItem, set
             />
 
             <div id="notebook-content-checklist-content" className="notebook-content-view-main">
-                <InputField
-                    id="notebook-content-checklist-search"
-                    type="text"
-                    placeholder={localizationHandler.get("search")}
-                    value={searchText}
-                    onchangeCallback={setSearchText}
-                />
+                <div style={{ display: "flex", marginBottom: "10px" }}>
+                    <InputField
+                        id="notebook-content-checklist-search"
+                        type="text"
+                        placeholder={localizationHandler.get("search")}
+                        value={searchText}
+                        onchangeCallback={setSearchText}
+                    />
+                    <Button
+                        label="X"
+                        onclick={() => setSearchText("")}
+                    />
+                </div>
 
                 {addButton(IndexRange.MIN, "notebook-content-checklist-add-item-to-start")}
 

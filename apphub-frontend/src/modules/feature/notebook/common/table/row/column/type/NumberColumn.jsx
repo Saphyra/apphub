@@ -62,7 +62,7 @@ const NumberColumn = ({
     } else {
         return (
             <td className={"table-column notebook-table-column-type-" + columnData.columnType.toLowerCase()}>
-                <div className="notebook-table-column-wrapper">
+                <div className="notebook-table-column-wrapper" style={{ justifyContent: "right" }}>
                     {columnData.data.value}
                 </div>
             </td>
