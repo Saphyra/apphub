@@ -34,7 +34,6 @@ public class DisabledRoleCrudTest extends BackEndTest {
         String accessToken = tokenResponse.getAccessToken()
             .getJwt();
 
-
         UserDynamoDbRepository.addRoleByEmail(userData.getEmail(), Constants.ROLE_ADMIN);
 
         //Initial check

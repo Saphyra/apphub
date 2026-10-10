@@ -50,6 +50,7 @@ spring:
                 /web/calendar/**,\
                 /web/task-manager,\
                 /web/task-manager/**,\
+                /web/test,\
                 /web/user/account"
               filters:
                 - StripPrefix=${stripPrefix.web}
@@ -196,6 +197,12 @@ role:
           method: POST
         - pattern: /api/user/ban/details
           method: POST
+    #Test
+    - pattern: /web/test
+      methods:
+        - GET
+      requiredRoles:
+        - TEST
     #Training
     - pattern: /web/training/**
       methods:
