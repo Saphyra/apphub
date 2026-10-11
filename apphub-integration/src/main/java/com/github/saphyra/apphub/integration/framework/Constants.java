@@ -1,9 +1,6 @@
 package com.github.saphyra.apphub.integration.framework;
 
-import com.google.common.collect.ImmutableList;
 import lombok.experimental.UtilityClass;
-
-import java.util.List;
 
 @UtilityClass
 public class Constants {
@@ -80,28 +77,6 @@ public class Constants {
 
     public final String USER_SETTING_KEY_SHOW_ARCHIVED = "show-archived";
 
-    public static final String SERVICE_NAME_USER = "user";
-    public static final List<String> SERVICES = ImmutableList.of(
-        "event-gateway",
-        "admin-panel",
-        "main-gateway",
-        "modules",
-        "notebook",
-        "scheduler",
-        "skyxplore-data",
-        "skyxplore-game",
-        "skyxplore-lobby",
-        "training",
-        SERVICE_NAME_USER,
-        "community",
-        "calendar",
-        "storage",
-        "elite-base",
-        "monitoring",
-        "authorization",
-        "task-manager"
-    );
-
     public static final String CITIZEN_PROPERTY_MORALE = "MORALE";
 
     //SkyXplore skills
@@ -123,4 +98,10 @@ public class Constants {
     //Monitoring
     public static final String MONITORING_FUNCTIONALITY_MEMORY_STATUS = "MEMORY_STATUS";
     public static final String MONITORING_METRIC_TYPE_SECOND = "SECOND";
+
+    //Environments
+    public static final String ENVIRONMENT_LOCAL = "local";
+    public static final String ENVIRONMENT_MINIKUBE = "minikube";
+    public static final String ENVIRONMENT_PREPROD = "preprod";
+    public static final String ENVIRONMENT_PRODUCTION = "production";
 }

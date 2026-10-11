@@ -106,7 +106,8 @@ public class PlatformProperties {
     private final List<String> prodDisabledTestGroups = List.of(
         "skyxplore",
         "community",
-        "task-manager"
+        "task-manager",
+        "training"
     );
     private final List<String> prodDisabledRoles = List.of(
         "SKYXPLORE",

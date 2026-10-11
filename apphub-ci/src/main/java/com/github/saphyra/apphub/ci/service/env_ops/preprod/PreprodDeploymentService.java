@@ -37,23 +37,21 @@ public class PreprodDeploymentService {
     private final PlatformProperties platformProperties;
 
     public void deploy(Action action, boolean startUserDefinedServices, List<Service> services, int buildThreadCount, int startupCountLimit, boolean skipTests) {
-        if(action == Action.BUILD_AND_DEPLOY || action == Action.BUILD){
+        if (action == Action.BUILD_AND_DEPLOY || action == Action.BUILD) {
             serviceStopper.stopLocalEnv();
 
             serviceBuilder.build(BuildCommand.INSTALL, services, buildThreadCount, skipTests);
         }
 
-        if(action == Action.BUILD_AND_DEPLOY || action == Action.DEPLOY){
-            String namespaceName = namespaceNameProvider.getNamespaceName();
-
+        if (action == Action.BUILD_AND_DEPLOY || action == Action.DEPLOY) {
             if (!startUserDefinedServices) {
                 serviceBuilder.buildFrontend(DockerTag.LATEST);
-                kubernetesPodScaler.scaleAll(namespaceName, 0);
+                kubernetesPodScaler.scaleAll(Constants.NAMESPACE_NAME_PREPROD, 0);
 
                 services = Stream.concat(services.stream(), Stream.of(Services.FRONTEND))
                     .toList();
 
-                kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, namespaceName);
+                kubernetesNamespaceSetupper.setupNamespace(Environment.PREPROD, Constants.NAMESPACE_NAME_PREPROD);
             }
 
             kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, services, 30, startupCountLimit);

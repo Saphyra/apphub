@@ -29,7 +29,7 @@ public class PreprodTestService {
                 .serverPort(platformProperties.getMinikubeMainGatewayPort())
                 .databasePort(platformProperties.getLocalDatabasePort())
                 .databaseName(platformProperties.getPreprodDatabaseName())
-                .disabledGroups("")
+                .disabledGroups(String.join(",", platformProperties.getProdDisabledTestGroups()))
                 .preCreateDrivers(preCreatedDriverCount)
                 .serverConnectionCacheEnabled(true)
                 .databaseConnectionCacheEnabled(false)
