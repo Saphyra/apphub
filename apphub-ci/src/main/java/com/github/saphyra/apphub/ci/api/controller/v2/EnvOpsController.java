@@ -32,6 +32,7 @@ import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ENVIRONMENT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_ERROR;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PRE_CREATE_DRIVER_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_PSQL_PORT;
+import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RABBITMQ_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_RETRY_COUNT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SERVER_PORT;
 import static com.github.saphyra.apphub.ci.api.ApiConstants.PARAM_SERVICES;
@@ -105,8 +106,10 @@ class EnvOpsController {
             mav.addObject(PARAM_SERVER_PORT, platformProperties.getMinikubeDevServerPort());
             mav.addObject(PARAM_PSQL_PORT, platformProperties.getMinikubeDatabasePort());
             mav.addObject(PARAM_DYNAMODB_PORT, platformProperties.getMinikubeDynamoDbPort());
+            mav.addObject(PARAM_RABBITMQ_PORT, platformProperties.getRabbitMqAdminPort());
         } else if (environment == Environment.PREPROD) {
             mav.addObject(PARAM_SERVER_PORT, platformProperties.getMinikubePreprodServerPort());
+            mav.addObject(PARAM_RABBITMQ_PORT, platformProperties.getRabbitMqAdminPort());
         }
 
         //Testing

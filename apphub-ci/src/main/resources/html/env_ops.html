@@ -106,6 +106,7 @@
                     <li th:if="${server_port} != null">main-gateway -> localhost:<span th:text="${server_port}"></span></li>
                     <li th:if="${psql_port} != null">PostgreSQL -> localhost:<span th:text="${psql_port}"></span></li>
                     <li th:if="${dynamodb_port} != null">DynamoDB -> localhost:<span th:text="${dynamodb_port}"></span></li>
+                    <li th:if="${rabbitmq_port} != null">RabbitMQ -> localhost:<span th:text="${rabbitmq_port}"></span></li>
                 </ul>
 
                 <form th:action="@{|/v2/env-ops/${environment}/operations/port-forward|}" method="POST">

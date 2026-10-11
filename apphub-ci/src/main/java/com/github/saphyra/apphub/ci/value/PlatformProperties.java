@@ -114,4 +114,14 @@ public class PlatformProperties {
         "COMMUNITY",
         "TASK_MANAGER"
     );
+
+    /**
+     * RabbitMQ running on minikube serves admin UI on this port
+     */
+    private final int rabbitMqAdminPort = 15672;
+    /**
+     * RabbitMQ's admin port running on minikube is forwarded to this local port
+     */
+    private final int localRabbitMqAdminPort = 15673;
+
 }

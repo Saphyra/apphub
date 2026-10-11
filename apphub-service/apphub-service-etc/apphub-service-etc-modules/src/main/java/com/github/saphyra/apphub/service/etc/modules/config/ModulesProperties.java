@@ -1,4 +1,4 @@
-package com.github.saphyra.apphub.service.etc.modules;
+package com.github.saphyra.apphub.service.etc.modules.config;
 
 import com.github.saphyra.apphub.service.etc.modules.domain.Module;
 import lombok.Data;

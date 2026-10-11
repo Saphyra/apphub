@@ -5,6 +5,7 @@ public class Constants {
     public static final String SERVICE_NAME_MAIN_GATEWAY = "main-gateway";
     public static final String SERVICE_NAME_POSTGRES = "postgres";
     public static final String SERVICE_NAME_DYNAMO_DB = "dynamodb";
+    public static final String SERVICE_NAME_RABBIT_MQ = "rabbitmq";
 
     //Ports
     public static final int SERVICE_PORT = 8080;

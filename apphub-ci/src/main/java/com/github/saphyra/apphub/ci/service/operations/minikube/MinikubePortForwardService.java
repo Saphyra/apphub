@@ -22,5 +22,6 @@ public class MinikubePortForwardService {
         kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
         kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
         kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+        kubernetesPortForwarder.portForward(namespaceName, Constants.SERVICE_NAME_RABBIT_MQ, platformProperties.getLocalRabbitMqAdminPort(), platformProperties.getRabbitMqAdminPort());
     }
 }

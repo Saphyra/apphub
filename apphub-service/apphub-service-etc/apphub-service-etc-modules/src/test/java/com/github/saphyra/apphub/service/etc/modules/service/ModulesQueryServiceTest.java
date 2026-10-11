@@ -4,7 +4,7 @@ import com.github.saphyra.apphub.api.etc.modules.model.response.ModuleResponse;
 import com.github.saphyra.apphub.lib.common_domain.AccessToken;
 import com.github.saphyra.apphub.lib.common_domain.Role;
 import com.github.saphyra.apphub.lib.security.access_token.AccessTokenProvider;
-import com.github.saphyra.apphub.service.etc.modules.ModulesProperties;
+import com.github.saphyra.apphub.service.etc.modules.config.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
 import com.github.saphyra.apphub.service.etc.modules.domain.Module;

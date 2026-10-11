@@ -16,6 +16,7 @@
 ===PLATFORM CHANGES===
     Merge IntegrationServer to ApphubCI
     Start only the required services on prod/preprod
+    RabbitMQ integration
 
 ===TECHNICAL DEBTS===
     Calendar

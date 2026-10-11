@@ -85,11 +85,4 @@ public class ModulesControllerImplTest {
         verify(favoriteUpdateService).updateFavorite(USER_ID, MODULE, true);
         assertThat(result).isEqualTo(responseMap);
     }
-
-    @Test
-    void disabledRolesChanged(){
-        underTest.disabledRolesChanged(null);
-
-        verify(disabledRoleCache).clear();
-    }
 }

@@ -22,6 +22,7 @@ public class KubernetesNamespaceSetupper {
     public void setupNamespace(Environment environment, String namespaceName) {
         createNamespace(namespaceName);
         createSecrets(environment, namespaceName);
+        deployRabbitMq(namespaceName);
     }
 
     private void createSecrets(Environment environment, String namespaceName) {
@@ -48,11 +49,6 @@ public class KubernetesNamespaceSetupper {
 
     @SneakyThrows
     public void deployPostgres(String namespaceName) {
-        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/persistent-volume.yaml")
-            .inheritIO()
-            .start()
-            .waitFor();
-
         new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-postgres.yaml")
             .inheritIO()
             .start()
@@ -64,6 +60,16 @@ public class KubernetesNamespaceSetupper {
     @SneakyThrows
     public void deployDynamoDb(String namespaceName) {
         new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-dynamo-db.yaml")
+            .inheritIO()
+            .start()
+            .waitFor();
+
+        kubernetesPodStartupWaiter.waitForPods(namespaceName, 10);
+    }
+
+    @SneakyThrows
+    public void deployRabbitMq(String namespaceName) {
+        new ProcessBuilder("kubectl", "apply", "-n", namespaceName, "-f", "infra/deploy-rabbitmq.yaml")
             .inheritIO()
             .start()
             .waitFor();

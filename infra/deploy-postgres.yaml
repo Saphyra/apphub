@@ -37,9 +37,7 @@ spec:
         - name: postgresdb
           emptyDir:
             medium: Memory
-        #- name: postgredb
-        #  persistentVolumeClaim:
-        #    claimName: data-disk
+            sizeLimit: 1024Mi
 ---
 apiVersion: v1
 kind: Service

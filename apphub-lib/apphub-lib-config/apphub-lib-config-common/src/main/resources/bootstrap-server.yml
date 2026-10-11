@@ -24,6 +24,13 @@ serviceHosts:
 event:
   serviceHost: ${spring.application.name}:${server.port}
 
+spring:
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
 logging:
   level:
     com:

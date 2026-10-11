@@ -119,6 +119,7 @@ The app's purpose is to provide an easy-to extend frame for multiple application
 * PostgreSQL installed and running
 * PgAdmin (or any PostgreSQL-compatible database manager) installed
 * Local DynamoDB downloaded
+* RabbitMQ installed and running
 
 # Usage
 
@@ -133,7 +134,6 @@ It is recommended/required to create them before first start of the application
 
 * apphub: Used by the services run on the host machine (Local Run)
 * apphub_ci: Used by the CI app
-* apphub_integration: Used by integration tests
 * apphub_preprod: Used by the preproduction server
 * apphub_production: Used by the production server
 

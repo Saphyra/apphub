@@ -16,5 +16,6 @@ public class PreprodPortForwardService {
 
     public void portForward() {
         kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
+        kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_RABBIT_MQ, platformProperties.getLocalRabbitMqAdminPort(), platformProperties.getRabbitMqAdminPort());
     }
 }

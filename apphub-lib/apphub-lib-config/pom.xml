@@ -8,8 +8,6 @@
     </parent>
 
     <artifactId>apphub-lib-config</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
     <name>apphub-lib-config</name>
     <packaging>pom</packaging>
 
@@ -42,5 +40,6 @@
         <module>apphub-lib-config-feign</module>
         <module>apphub-lib-config-health</module>
         <module>apphub-lib-config-liquibase</module>
+      <module>apphub-lib-config-rabbitmq</module>
     </modules>
 </project>

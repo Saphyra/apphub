@@ -71,13 +71,6 @@ class MainGatewayRestControllerImpl implements MainGatewayRestController {
     }
 
     @Override
-    public Mono<Void> disabledRolesChanged() {
-        disabledRoleCache.clear();
-
-        return Mono.empty();
-    }
-
-    @Override
     public Mono<OneParamResponse<String>> getWebSocketProtocol() {
         return Mono.just(new OneParamResponse<>("ws"));
     }

@@ -62,6 +62,7 @@ public class MinikubeDeploymentService {
             portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubeDevServerPort(), Constants.SERVICE_PORT);
             portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_POSTGRES, platformProperties.getMinikubeDatabasePort(), Constants.POSTGRES_PORT);
             portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_DYNAMO_DB, platformProperties.getMinikubeDynamoDbPort(), platformProperties.getLocalDynamoDbPort());
+            portForwarder.portForward(namespaceName, Constants.SERVICE_NAME_RABBIT_MQ, platformProperties.getLocalRabbitMqAdminPort(), platformProperties.getRabbitMqAdminPort());
 
             log.info("Deployment finished.");
         }

@@ -4,7 +4,6 @@ import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesNamespaceSetupper;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPodScaler;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesPortForwarder;
 import com.github.saphyra.apphub.ci.tool.kubernetes.KubernetesServiceDeployer;
-import com.github.saphyra.apphub.ci.tool.kubernetes.NamespaceNameProvider;
 import com.github.saphyra.apphub.ci.tool.service.ServiceBuilder;
 import com.github.saphyra.apphub.ci.tool.service.ServiceStopper;
 import com.github.saphyra.apphub.ci.util.DatabaseUtil;
@@ -29,7 +28,6 @@ import java.util.stream.Stream;
 public class PreprodDeploymentService {
     private final ServiceStopper serviceStopper;
     private final ServiceBuilder serviceBuilder;
-    private final NamespaceNameProvider namespaceNameProvider;
     private final KubernetesPodScaler kubernetesPodScaler;
     private final KubernetesNamespaceSetupper kubernetesNamespaceSetupper;
     private final KubernetesServiceDeployer kubernetesServiceDeployer;
@@ -57,6 +55,7 @@ public class PreprodDeploymentService {
             kubernetesServiceDeployer.deploy(Constants.NAMESPACE_NAME_PREPROD, Constants.DIR_NAME_PREPROD, services, 30, startupCountLimit);
 
             kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_MAIN_GATEWAY, platformProperties.getMinikubePreprodServerPort(), Constants.SERVICE_PORT);
+            kubernetesPortForwarder.portForward(Constants.NAMESPACE_NAME_PREPROD, Constants.SERVICE_NAME_RABBIT_MQ, platformProperties.getLocalRabbitMqAdminPort(), platformProperties.getRabbitMqAdminPort());
 
             addDisabledRolesIfMissing();
         }

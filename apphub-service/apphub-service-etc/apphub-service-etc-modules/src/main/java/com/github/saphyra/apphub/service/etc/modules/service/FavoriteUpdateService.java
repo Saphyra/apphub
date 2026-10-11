@@ -1,7 +1,7 @@
 package com.github.saphyra.apphub.service.etc.modules.service;
 
 import com.github.saphyra.apphub.lib.exception.ExceptionFactory;
-import com.github.saphyra.apphub.service.etc.modules.ModulesProperties;
+import com.github.saphyra.apphub.service.etc.modules.config.ModulesProperties;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.Favorite;
 import com.github.saphyra.apphub.service.etc.modules.dao.favorite.FavoriteService;
 import lombok.RequiredArgsConstructor;

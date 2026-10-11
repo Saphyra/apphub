@@ -207,13 +207,6 @@ class MainGatewayRestControllerImplTest {
         assertThat(result.getBody().getValue()).isEqualTo(USER_ID);
     }
 
-    @Test
-    void disabledRolesChanged() {
-        underTest.disabledRolesChanged();
-
-        then(disabledRoleCache).should().clear();
-    }
-
     private AccessToken accessToken() {
         return AccessToken.builder()
             .accessTokenId(ACCESS_TOKEN_ID)

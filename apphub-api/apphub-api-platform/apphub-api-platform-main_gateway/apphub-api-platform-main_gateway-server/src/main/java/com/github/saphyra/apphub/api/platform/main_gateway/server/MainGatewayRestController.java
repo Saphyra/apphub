@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Mono;
 
@@ -33,7 +32,4 @@ public interface MainGatewayRestController {
 
     @GetMapping(MainGatewayEndpoints.MAIN_GATEWAY_CHECK_SESSION)
     Mono<ResponseEntity<Object>> checkSession(@CookieValue(value = Constants.ACCESS_TOKEN_COOKIE, required = false) String accessToken);
-
-    @PostMapping(MainGatewayEndpoints.EVENT_DISABLED_ROLES_CHANGED)
-    Mono<Void> disabledRolesChanged();
 }
