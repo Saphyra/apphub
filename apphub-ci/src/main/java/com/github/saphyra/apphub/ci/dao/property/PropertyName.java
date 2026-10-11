@@ -14,6 +14,7 @@ public enum PropertyName {
     PSQL_HOST,
     FTP_HOST,
     DB_BACKUP,
+    DB_BACKUP_PROJECT_VERSION,
 
     //API params
     DISABLED_SERVICES,

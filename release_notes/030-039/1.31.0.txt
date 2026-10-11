@@ -3,6 +3,7 @@
         Backup and restore from local directories
         Schedule shutdown
         Deploy platform option for LOCAL and MINIKUBE envs
+        Remember last backed up version
     Calendar
         Set note when creating occurrence
         Add cache size to monitoring

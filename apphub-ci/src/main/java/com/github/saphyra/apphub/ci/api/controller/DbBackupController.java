@@ -134,6 +134,7 @@ class DbBackupController {
         mav.addObject(REQUEST_PARAM_DB_NAME, dbName);
         mav.addObject(REQUEST_PARAM_S3_BUCKET, storedParams.get(REQUEST_PARAM_S3_BUCKET));
         mav.addObject(REQUEST_PARAM_BACKUP_DIRECTORY, backupDirectory);
+        mav.addObject(REQUEST_PARAM_VERSION, propertyDao.getStringProperty(PropertyName.DB_BACKUP_PROJECT_VERSION));
 
         List<String> tables = dbBackupFacade.getTables(dbHost, dbName, username, password);
         mav.addObject(REQUEST_PARAM_TABLES, tables);
@@ -183,6 +184,7 @@ class DbBackupController {
             .map(BiWrapper::getEntity2)
             .toList();
 
+        propertyDao.save(PropertyName.DB_BACKUP_PROJECT_VERSION, version);
 
         taskQueue.add(() -> dbBackupFacade.backup(dbHost, dbName, username, password, s3AccessKey, s3SecretKey, s3Bucket, tables, version, backupDirectory, backupLocations));
 
